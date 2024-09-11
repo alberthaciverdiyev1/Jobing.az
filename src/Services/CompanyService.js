@@ -1,20 +1,20 @@
-import Site from '../Models/site.js';
 
-const SiteService = {
-    // Create a new site
-    createSite: async (data) => {
+import Company from '../Models/Company.js';
+
+const CompanyService = {
+    create: async (data) => {
         try {
-            const site = await Site.create(data);
-            return site;
+            const res = await Company.create(data);
+            return res;
         } catch (error) {
             throw new Error('Error creating site: ' + error.message);
         }
     },
 
-    // Get all sites
-    getAllSites: async () => {
+    // Get all
+    getAll: async () => {
         try {
-            const sites = await Site.findAll();
+            const sites = await Company.findAll();
             return sites;
         } catch (error) {
             throw new Error('Error retrieving sites: ' + error.message);
@@ -22,9 +22,9 @@ const SiteService = {
     },
 
     // Get a site by ID
-    findSiteById: async (id) => {
+    findById: async (id) => {
         try {
-            const site = await Site.findByPk(id);
+            const site = await Company.findByPk(id);
             if (!site) {
                 throw new Error('Site not found');
             }
@@ -35,9 +35,9 @@ const SiteService = {
     },
 
     // Update a site
-    updateSite: async (id, updateData) => {
+    update: async (id, updateData) => {
         try {
-            const site = await Site.findByPk(id);
+            const site = await Company.findByPk(id);
             if (!site) {
                 throw new Error('Site not found');
             }
@@ -49,9 +49,9 @@ const SiteService = {
     },
 
     // Delete a site
-    deleteSite: async (id) => {
+    delete: async (id) => {
         try {
-            const site = await Site.findByPk(id);
+            const site = await Company.findByPk(id);
             if (!site) {
                 throw new Error('Site not found');
             }
@@ -63,4 +63,4 @@ const SiteService = {
     }
 };
 
-export default SiteService;
+export default CompanyService;

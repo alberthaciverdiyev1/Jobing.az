@@ -1,7 +1,7 @@
 import express from 'express';
 //import bodyParser from 'body-parser';
-import routes from './src/Routes/main.js';
-import sequelize from './src/Config/database.js';
+import routes from './src/Routes/Main.js';
+import sequelize from './src/Config/Database.js';
 
 const app = express();
 const port = process.env.PORT || 3000;
