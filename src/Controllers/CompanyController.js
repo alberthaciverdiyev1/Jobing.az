@@ -12,8 +12,8 @@ const CompanyController = {
 
     getAll: async (req, res) => {
         try {
-            const companys = await CompanyService.getAll();
-            res.status(200).json(companys);
+            const companies = await CompanyService.getAll();
+            res.status(200).json(companies);
         } catch (error) {
             res.status(500).json({ message: 'Error retrieving company: ' + error.message });
         }
