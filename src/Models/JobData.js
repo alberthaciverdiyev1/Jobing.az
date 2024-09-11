@@ -22,25 +22,37 @@ const JobData = sequelize.define('JobData', {
         allowNull: true
     },
     salary: {
+        type: DataTypes.FLOAT,
+        allowNull: true,
+    },
+    companyId: {
+        type: DataTypes.INTEGER,
+        references: {
+            model: Company,
+            key: 'id'
+        },
+        onDelete: 'CASCADE',
+        allowNull: true,
+    },
+    companyName: {
+        type: DataTypes.STRING,
+        defaultValue: null
+    },
+    userName: {
         type: DataTypes.STRING,
         allowNull: true
     },
-    // companyId: {
-    //     type: DataTypes.INTEGER,
-    //     references: {
-    //         model: Company,
-    //         key: 'id'
-    //     },
-    //     onDelete: 'CASCADE',
-    //     allowNull: false
-    // },
+    isPremium: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false
+    },
     jobType: {
         type: DataTypes.STRING(Object.values(Enums.JobTypes)),
         allowNull: false
     },
     postedAt: {
         type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW
+        defaultValue: DataTypes.NOW,
     },
     sourceUrl: {
         type: DataTypes.STRING,
@@ -59,6 +71,6 @@ const JobData = sequelize.define('JobData', {
     timestamps: true
 });
 
-// JobData.belongsTo(Company, { foreignKey: 'companyId' });
+JobData.belongsTo(Company, { foreignKey: 'companyId' });
 
 export default JobData;
