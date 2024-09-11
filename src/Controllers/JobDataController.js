@@ -1,9 +1,9 @@
-import SiteService from '../Services/siteService.js';
+import JobService from '../Services/JobDataService.js';
 
-const siteController = {
+const jobDataController = {
     createSite: async (req, res) => {
         try {
-            const site = await SiteService.createSite(req.body);
+            const site = await JobService.createSite(req.body);
             res.status(201).json(site);
         } catch (error) {
             res.status(500).json({ message: 'Error creating site: ' + error.message });
@@ -12,7 +12,7 @@ const siteController = {
 
     getSites: async (req, res) => {
         try {
-            const sites = await SiteService.getAllSites();
+            const sites = await JobService.getAllSites();
             res.status(200).json(sites);
         } catch (error) {
             res.status(500).json({ message: 'Error retrieving sites: ' + error.message });
@@ -21,7 +21,7 @@ const siteController = {
 
     getSiteById: async (req, res) => {
         try {
-            const site = await SiteService.findSiteById(req.params.id);
+            const site = await JobService.findSiteById(req.params.id);
             if (!site) {
                 return res.status(404).json({ message: 'Site not found' });
             }
@@ -33,7 +33,7 @@ const siteController = {
 
     updateSite: async (req, res) => {
         try {
-            const site = await SiteService.updateSite(req.params.id, req.body);
+            const site = await JobService.updateSite(req.params.id, req.body);
             if (!site) {
                 return res.status(404).json({ message: 'Site not found' });
             }
@@ -45,7 +45,7 @@ const siteController = {
 
     deleteSite: async (req, res) => {
         try {
-            await SiteService.deleteSite(req.params.id);
+            await JobService.deleteSite(req.params.id);
             res.status(200).json({ message: 'Site successfully deleted' });
         } catch (error) {
             res.status(500).json({ message: 'Error deleting site: ' + error.message });
@@ -53,4 +53,4 @@ const siteController = {
     }
 };
 
-export default siteController;
+export default jobDataController;
