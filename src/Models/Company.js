@@ -30,6 +30,10 @@ const Company = sequelize.define('Company', {
     description: {
         type: DataTypes.TEXT,
         allowNull: true
+    },
+    deletedAt:{
+        type: DataTypes.DATE,
+        defaultValue: null
     }
 }, {
     tableName: 'companies',
