@@ -2,8 +2,9 @@ import { DataTypes } from "sequelize";
 import sequelize from '../Config/Database.js';
 import Company from './Company.js';
 import Enums from '../Config/Enums.js';
+import Category from "./Category.js";
 
-const JobData = sequelize.define('JobData', {
+const Job = sequelize.define('Job', {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -21,18 +22,33 @@ const JobData = sequelize.define('JobData', {
         type: DataTypes.STRING,
         allowNull: true
     },
-    salary: {
-        type: DataTypes.FLOAT,
+    minSalary: {
+        type: DataTypes.INTEGER,
         allowNull: true,
     },
-    companyId: {
+    maxSalary: {
         type: DataTypes.INTEGER,
+        allowNull: true,
+    },
+    categoryId: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
         references: {
-            model: Company,
-            key: 'id'
+            model: Category,
+            key: 'value'
         },
         onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
+    },
+    subCategoryId: {
+        type: DataTypes.INTEGER,
         allowNull: true,
+        references: {
+            model: Category,
+            key: 'value'
+        },
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
     },
     companyName: {
         type: DataTypes.STRING,
@@ -61,16 +77,14 @@ const JobData = sequelize.define('JobData', {
     redirectUrl: {
         type: DataTypes.STRING,
         allowNull: false
-    },
-    deletedAt:{
-        type: DataTypes.DATE,
-        defaultValue: null
     }
 }, {
-    tableName: 'JobData',
-    timestamps: true
+    tableName: 'jobs',
+    timestamps: true,
+    paranoid: true,
 });
 
-JobData.belongsTo(Company, { foreignKey: 'companyId' });
+Job.belongsTo(Category, { foreignKey: 'categoryId', as: 'Category' });
+Job.belongsTo(Category, { foreignKey: 'subCategoryId', as: 'SubCategory' });
 
-export default JobData;
+export default Job;

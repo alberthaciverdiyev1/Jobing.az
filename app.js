@@ -9,8 +9,17 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(express.json());
-//app.use(bodyParser.urlencoded({ extended: true }));
 
+if (process.env.NODE_ENV !== 'production') {
+    (async () => {
+        try {
+            const { default: loggerMiddleware } = await import('./src/Middlewares/Logger.js');
+            app.use(loggerMiddleware);
+        } catch (error) {
+            console.error('Error loading logger middleware:', error);
+        }
+    })();
+}
 app.use('/api', routes);
 swaggerDocs(app);
 

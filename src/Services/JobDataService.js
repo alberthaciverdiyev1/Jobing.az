@@ -2,12 +2,20 @@ import JobData from '../Models/JobData.js';
 
 const JobDataService = {
     // Create a new site
-    createSite: async (data) => {
-        try {
-            const res = await JobData.create(data);
-            return res;
-        } catch (error) {
-            throw new Error('Error creating site: ' + error.message);
+    create: async (data) => {
+        if (!Array.isArray(data)) {
+            throw new Error('Data must be an array');
+        }
+        const results = await JobData.bulkCreate(data);
+
+        if (results && Array.isArray(results) && results.length > 0) {
+            return {
+                status: 201,
+                message: `Insertion completed. Number of records inserted:${results.length}`,
+                count: results.length,
+            };
+        } else {
+            throw new Error('No records were inserted.');
         }
     },
 
