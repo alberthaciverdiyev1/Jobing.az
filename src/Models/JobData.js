@@ -35,7 +35,7 @@ const Job = sequelize.define('Job', {
         allowNull: true,
         references: {
             model: Category,
-            key: 'value'
+            key: 'id'
         },
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE',
@@ -45,14 +45,13 @@ const Job = sequelize.define('Job', {
         allowNull: true,
         references: {
             model: Category,
-            key: 'value'
+            key: 'id'
         },
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE',
     },
     companyName: {
         type: DataTypes.STRING,
-        defaultValue: null
     },
     userName: {
         type: DataTypes.STRING,
@@ -84,7 +83,7 @@ const Job = sequelize.define('Job', {
     paranoid: true,
 });
 
-Job.belongsTo(Category, { foreignKey: 'categoryId', as: 'Category' });
-Job.belongsTo(Category, { foreignKey: 'subCategoryId', as: 'SubCategory' });
+Job.belongsTo(Category, { foreignKey: 'categoryId', as: 'category' });
+Job.belongsTo(Category, { foreignKey: 'subCategoryId', as: 'subCategory' });
 
 export default Job;

@@ -11,37 +11,33 @@ const Category = sequelize.define('Category', {
         type: DataTypes.STRING,
         allowNull: false
     },
-    value: {
+    categoryId: {
+        type: DataTypes.INTEGER,
+        allowNull: true
+    },
+    parentId: {
         type: DataTypes.INTEGER,
         allowNull: true,
-        unique: true
+        // references: {
+        //     model: 'Category',
+        //     key: 'id'
+        // }
     },
     website: {
         type: DataTypes.STRING,
         allowNull: false
     },
-    parentId: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-        references: {
-            model: 'category',
-            key: 'value'
-        },
-        onDelete: 'CASCADE',
-        onUpdate: 'CASCADE',
-    },
 }, {
     tableName: 'category',
     timestamps: true,
     paranoid: true,
-    indexes: [
-        {
-            unique: true,
-            fields: ['value']
-        }
-    ]
+    // indexes: [
+    //     {
+    //         fields: ['parentId'],
+    //     }
+    // ]
 });
 
-Category.belongsTo(Category, { foreignKey: 'parentId' });
+// Category.belongsTo(Category, { foreignKey: 'parentId', as: 'Parent' });
 
 export default Category;
