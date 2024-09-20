@@ -1,19 +1,13 @@
-import CategoryService from '../Services/CategoryService.js';
+import CityService from '../Services/CityService.js';
 import BossAz from "../Helpers/SiteBasedScrapes/BossAz.js";
-import SmartJobAz from "../Helpers/SiteBasedScrapes/SmartJobAz.js";
 
-const CategoryController = {
+const CityController = {
     create: async (req, res) => {
         try {
-            const boss = new BossAz();
-            const smartJob = new SmartJobAz();
-
-            const bossAzCategories = await boss.Categories();
-            const smartJobCategories = await smartJob.Categories();
-            let categories = [...smartJobCategories, ...bossAzCategories];
-
-            const response = await CategoryService.create(categories);
-            res.status(response.status).json({message: response.message, count: response.count});
+           const b = new BossAz();
+            const options = await b.Categories();
+            const response = await CityService.create(options);
+            res.status(response.status).json({ message: response.message, count: response.count });
         } catch (error) {
             res.status(500).json({message: 'Error creating category: ' + error.message});
         }
@@ -21,7 +15,7 @@ const CategoryController = {
 
     getAll: async (req, res) => {
         try {
-            const companies = await CategoryService.getAll();
+            const companies = await CityService.getAll();
             res.status(200).json(companies);
         } catch (error) {
             res.status(500).json({message: 'Error retrieving company: ' + error.message});
@@ -30,7 +24,7 @@ const CategoryController = {
 
     findById: async (req, res) => {
         try {
-            const company = await CategoryService.findById(req.params.id);
+            const company = await CityService.findById(req.params.id);
             if (!company) {
                 return res.status(404).json({message: 'Company not found'});
             }
@@ -42,7 +36,7 @@ const CategoryController = {
 
     update: async (req, res) => {
         try {
-            const company = await CategoryService.update(req.params.id, req.body);
+            const company = await CityService.update(req.params.id, req.body);
             if (!company) {
                 return res.status(404).json({message: 'Company not found'});
             }
@@ -54,7 +48,7 @@ const CategoryController = {
 
     delete: async (req, res) => {
         try {
-            await CategoryService.delete(req.params.id);
+            await CityService.delete(req.params.id);
             res.status(200).json({message: 'Company successfully deleted'});
         } catch (error) {
             res.status(500).json({message: 'Error deleting company: ' + error.message});
@@ -62,4 +56,4 @@ const CategoryController = {
     }
 };
 
-export default CategoryController;
+export default CityController;

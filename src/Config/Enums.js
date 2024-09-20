@@ -24,6 +24,7 @@ const Enums = Object.freeze({
     Sites:{
         BossAz:'https://boss.az',
         BusyAz:'https://busy.az',
+        SmartJobAz:'https://smartjob.az',
     }
 
 

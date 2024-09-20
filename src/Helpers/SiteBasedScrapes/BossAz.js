@@ -11,21 +11,31 @@ class BossAz {
     async Categories() {
         try {
             const $ = await Scrape(this.url);
-            const options = [];
+            const categories = [];
 
-            $('#search_category_id option').each((i, el) => {
-                const value = $(el).attr('value');
-                const name = $(el).text().trim();
+            $('#search_category_id option').each((i, option) => {
+                const value = $(option).val();
+                const text = $(option).text().trim();
                 if (value) {
-                    options.push({
-                        value,
-                        name,
-                        website: this.url
-                    });
+                    if (!text.startsWith('—')) {
+                        categories.push({
+                            name: text,
+                            categoryId: +value,
+                            parentId: null,
+                            website: this.url
+                        });
+                    } else {
+                        const parentCategoryValue = categories[categories.length - 1].value;
+                        categories.push({
+                            name: text.replace('— ', ''),
+                            categoryId: +value,
+                            parentId: parentCategoryValue,
+                            website: this.url
+                        });
+                    }
                 }
             });
-
-            return options;
+            return categories;
         } catch (error) {
             console.error('Error fetching categories:', error);
             throw new Error('Error fetching categories');
@@ -37,7 +47,7 @@ class BossAz {
             const data = [];
             for (let category of categories) {
                 for (let i = 0; i <= 50; i++) {
-                    const $ = await Scrape(`https://boss.az/vacancies?action=index&controller=vacancies&only_path=true&page=${i}&search%5Bcategory_id%5D=${category}&type=vacancies`);
+                    const $ = await Scrape(`${this.url}/vacancies?action=index&controller=vacancies&only_path=true&page=${1}&search%5Bcategory_id%5D=${38}&search%5Bcompany_id%5D=&search%5Beducation_id%5D=&search%5Bexperience_id%5D=&search%5Bkeyword%5D=&search%5Bregion_id%5D=&search%5Bsalary%5D=&type=vacancies`);
 
                     $('.results-i').each((i, el) => {
                         const urlAndId = $(el).find('.results-i-link');
@@ -96,7 +106,7 @@ class BossAz {
                             categoryId,
                             subCategoryId,
                             sourceUrl: this.url,
-                            redirectUrl:this.url + redirectUrl,
+                            redirectUrl: this.url + redirectUrl,
                             jobType: '0x001'
                         });
                     });

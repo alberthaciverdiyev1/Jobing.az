@@ -3,12 +3,16 @@ import CategoryService from '../Services/CategoryService.js';
 
 import BossAz from "../Helpers/SiteBasedScrapes/BossAz.js";
 import Category from "../Models/Category.js";
+import SmartJobAz from "../Helpers/SiteBasedScrapes/SmartJobAz.js";
 
 const jobDataController = {
     create: async (req, res) => {
         try {
             const categories = await CategoryService.getAll();
             const bossAz = new BossAz();
+            const smatJobAz = new SmartJobAz();
+            const smartJobAzJobs = await smatJobAz.Jobs();
+            return smartJobAzJobs;
             const jobs = await bossAz.Jobs(categories);
             console.log({jobs});
             const response = await JobService.create(jobs);

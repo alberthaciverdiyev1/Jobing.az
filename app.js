@@ -23,14 +23,14 @@ if (process.env.NODE_ENV !== 'production') {
 app.use('/api', routes);
 swaggerDocs(app);
 
-app.listen(port, () => {
-    console.log(`Server is running at http://localhost:${port}`);
-});
-
-// sequelize.sync({ alter: true }).then(() => {
-//     app.listen(port, () => {
-//         console.log(`Server is running at http://localhost:${port}`);
-//     });
-// }).catch((error) => {
-//     console.error('Unable to connect to the database:', error);
+// app.listen(port, () => {
+//     console.log(`Server is running at http://localhost:${port}`);
 // });
+
+sequelize.sync({ alter: true }).then(() => {
+    app.listen(port, () => {
+        console.log(`Server is running at http://localhost:${port}`);
+    });
+}).catch((error) => {
+    console.error('Unable to connect to the database:', error);
+});
