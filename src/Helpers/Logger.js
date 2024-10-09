@@ -15,7 +15,7 @@ const configureLogger = async () => {
                 format: combine(timestamp(), json()),
                 transports: [
                     new DailyRotateFile({
-                        filename: 'app/logs/combined-%DATE%.log',
+                        filename: 'src/Logs/combined-%DATE%.log',
                         datePattern: 'YYYY-MM-DD',
                         maxFiles: '14d',
                     }),

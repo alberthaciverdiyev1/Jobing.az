@@ -12,7 +12,7 @@ const jobDataController = {
             const bossAz = new BossAz();
             const smatJobAz = new SmartJobAz();
             const smartJobAzJobs = await smatJobAz.Jobs();
-            return smartJobAzJobs;
+            // return smartJobAzJobs;
             const jobs = await bossAz.Jobs(categories);
             console.log({jobs});
             const response = await JobService.create(jobs);
