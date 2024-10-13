@@ -52,5 +52,6 @@ router.get('/api/scrape', scrapeController.getData);                            
 //Load Views
 router.get('/',viewController.home);
 router.get('/auth',viewController.auth);
+router.get('/jobs',viewController.jobs);
 
 export default router;
