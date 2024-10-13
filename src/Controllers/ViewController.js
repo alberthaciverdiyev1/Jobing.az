@@ -1,8 +1,9 @@
 const ViewController = {
     home: async (req, res) => {
-        res.render("../views/home/index.ejs");
-    }, auth: async (req, res) => {
-        res.render("../views/home/index.ejs");
+        res.render("home/index.hbs");
+    }, 
+    auth: async (req, res) => {
+        res.render("auth/index.hbs");
     },
 };
 

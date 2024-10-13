@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Responsive Navbar with Sidebar Menu</title>
+
+    <!-- FontAwesome CDN -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
+
+    <!-- Tailwind CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+
+    <style>
+        .global-background-color {
+            background-color: #1f1b2d;
+        }
+
+        .filled-button-color {
+            background-color: #ff5c35;
+        }
+
+        .empty-button-color {
+            background-color: #e04826;
+        }
+
+        .hover\:filled-button-color:hover {
+            background-color: #ff5c35;
+        }
+
+        .first-color {
+            background-color: #ff5c35;
+        }
+
+        .second-color {
+            background-color: #1f1b2d;
+        }
+
+        /* Sidebar menu başlangıçta gizli */
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            height: 100%;
+            width: 75%;
+            background-color: white;
+            box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+            transition: right 0.3s ease;
+            z-index: 50;
+        }
+
+        /* Açılınca sağ tərəfə gelir */
+        .mobile-menu.open {
+            right: 0;
+        }
+
+        /* Menü arxa fon bulanıq */
+        .mobile-menu-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            /* Sözlər üçün bulanık fon */
+            backdrop-filter: blur(5px);
+            /* Bulanık effekt */
+            display: none;
+            /* Başlanğıcda gizli */
+            z-index: 40;
+        }
+
+        .mobile-menu.open+.mobile-menu-backdrop {
+            display: block;
+            /* Menyu açılınca göstər */
+        }
+
+        /* Menü bağlantılarının görünüşü */
+        .mobile-menu a {
+            padding: 15px 20px;
+            border-bottom: 1px solid #eaeaea;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .mobile-menu a:hover {
+            background-color: #f5f5f5;
+        }
+
+        .mobile-menu i {
+            color: gray;
+        }
+
+        /* Menü başlıq sahəsi */
+        .menu-header {
+            padding: 15px 20px;
+            font-weight: bold;
+            font-size: 1.5rem;
+            border-bottom: 1px solid #eaeaea;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .menu-header i {
+            font-size: 1.25rem;
+            cursor: pointer;
+        }
+
+        /* Home section styles */
+        .bg-home {
+            background-image: url("your-image-url.jpg");
+            /* A background image if needed */
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            padding: 100px 0;
+            /* Adjust for your layout */
+            color: white;
+        }
+
+        .bg-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            /* Dark overlay */
+            z-index: 1;
+        }
+
+        .container {
+            position: relative;
+            z-index: 2;
+        }
+
+        .dis-li {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+
+<body class="bg-white flex flex-col min-h-screen">
+<!-- Mobil Menyu -->
+<div id="mobile-menu" class="mobile-menu">
+    <div class="menu-header">
+        <span class="font-bold text-lg hover:cursor-pointer">EasyCV</span>
+        <i id="menuClose" class="fas fa-times cursor-pointer"></i>
+    </div>
+    <a href="index.php" class="flex items-center p-4 border-b border-gray-200 hover:bg-gray-100">
+        <i class="fas fa-home text-gray-500"></i> Home
+    </a>
+    <a href="about.php" class="flex items-center p-4 border-b border-gray-200 hover:bg-gray-100">
+        <i class="fas fa-briefcase text-gray-500"></i> All Jobs
+    </a>
+    <a href="contact.php" class="flex items-center p-4 border-b border-gray-200 hover:bg-gray-100">
+        <i class="fas fa-envelope text-gray-500"></i> Contact
+    </a>
+</div>
+
+<!-- Mobil Menyu Arxa Fon Bulanıq -->
+<div class="mobile-menu-backdrop" id="menuBackdrop"></div>
+
+<!-- Navbar -->
+<nav class="bg-white fixed w-full z-10 shadow-md">
+    <div class="container mx-auto flex justify-between items-center py-3 px-8">
+        <div class="text-gray-800 text-xl font-bold">
+            <a href="#" class="text-2xl md:text-xl">Jobing.az</a>
+        </div>
+
+        <!-- Masaüstü Menü -->
+        <div class="desktop-menu space-x-4 hidden md:flex">
+            <a href="navbar_test.html"
+               class="text-gray-800 hover:filled-button-color hover:text-white px-3 py-2 rounded transition duration-300">Home</a>
+
+            <a href="all_jobs.html"
+               class="text-gray-800 hover:filled-button-color hover:text-white px-3 py-2 rounded transition duration-300">All
+                Jobs</a>
+            <a href="contact.php"
+               class="text-gray-800 hover:filled-button-color hover:text-white px-3 py-2 rounded transition duration-300">Contact</a>
+            <a href="login.php"
+               class="text-gray-800 hover:filled-button-color hover:text-white px-3 py-2 rounded transition duration-300">About
+                Us</a>
+        </div>
+
+        <!-- Login Butonu -->
+        <div class="hidden md:block">
+            <a href="login.php"
+               class="filled-button-color text-white px-6 py-2 rounded-full ml-2 hover:filled-button-color duration-300">Login</a>
+        </div>
+
+        <!-- Mobil Hamburger Menü Butonu -->
+        <div class="md:hidden">
+            <button id="menuToggle" class="text-gray-800 focus:outline-none">
+                <i class="fas fa-bars fa-2x"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+
+<!-- Home Section -->
+<section class="global-background-color h-screen flex flex-col items-center justify-center">
+    <div class="text-center text-white mb-10 px-4">
+        <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
+            Search Between More Than
+            <span class="text-yellow-400">10,000+</span> Open Jobs.
+        </h1>
+        <p class="text-sm md:text-lg">
+            Find jobs, create trackable resumes and enrich your applications.
+        </p>
+    </div>
+
+    <div
+            class="bg-white p-6 rounded-lg shadow-lg flex flex-col md:flex-row items-center justify-between max-w-5xl mx-auto w-full gap-4">
+        <!-- Job Title Input -->
+        <div class="flex items-center bg-gray-100 border border-gray-300 rounded-lg p-2 w-full md:w-1/4">
+            <svg class="w-6 h-6 text-gray-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                 xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16">
+                </path>
+            </svg>
+            <input type="text" class="bg-transparent focus:outline-none w-full" placeholder="Job, Company name..." />
+        </div>
+
+        <!-- Country Dropdown -->
+        <div class="flex items-center bg-gray-100 border border-gray-300 rounded-lg p-2 w-full md:w-1/4">
+            <svg class="w-6 h-6 text-gray-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                 xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4"></path>
+            </svg>
+            <select class="bg-transparent focus:outline-none w-full">
+                <option>Afghanistan</option>
+                <option>USA</option>
+                <option>Canada</option>
+                <option>Germany</option>
+            </select>
+        </div>
+
+        <!-- Category Dropdown -->
+        <div class="flex items-center bg-gray-100 border border-gray-300 rounded-lg p-2 w-full md:w-1/4">
+            <svg class="w-6 h-6 text-gray-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                 xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16">
+                </path>
+            </svg>
+            <select class="bg-transparent focus:outline-none w-full">
+                <option>Accounting</option>
+                <option>Engineering</option>
+                <option>Design</option>
+                <option>Development</option>
+            </select>
+        </div>
+
+        <!-- Find Job Button -->
+        <div class="w-full md:w-auto">
+            <button class="filled-button-color text-white py-3 px-6 rounded-lg w-full md:w-auto">
+                <svg class="w-6 h-6 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                     xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M8 7V4a2 2 0 00-2-2H4a2 2 0 00-2 2v2a2 2 0 002 2h2m0 4v8a2 2 0 002 2h4a2 2 0 002-2v-8m-6 8h6m0 0V10m0 12V10m0 12H9m3-10a2 2 0 11-4 0 2 2 0 014 0z">
+                    </path>
+                </svg>
+                Find Job
+            </button>
+        </div>
+    </div>
+
+    <div class="mt-4 text-white text-sm md:text-base">
+        <p>
+            Trending Keywords:
+            <span class="font-semibold">Design, Development, Manager, Senior</span>
+        </p>
+    </div>
+</section>
+<!-- Job Count Section -->
+<section class="">
+    <div
+            class="container mx-auto px-4 py-5 flex justify-between text-center text-2xl sm:text-5xl font-semibold lg:px-72">
+        <div>
+            <span>1,548K+</span>
+            <p class="text-sm sm:text-base mt-1 text-gray-500 uppercase">
+                Job Fulfillment
+            </p>
+        </div>
+        <div>
+            <span>25+</span>
+            <p class="text-sm sm:text-base mt-1 text-gray-500 uppercase">
+                Branches
+            </p>
+        </div>
+        <div>
+            <span>9+</span>
+            <p class="text-sm sm:text-base mt-1 text-gray-500 uppercase">
+                Years Experience
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- Card section -->
+<section>
+    <div class="p-4 global-background-color">
+        <div class="container mx-auto sm:px-16">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div
+                        class="bg-white p-3 rounded-xl shadow-md mb-2 hover:bg-gray-50 cursor-pointer duration-300 border border-red-500">
+                    <div class="content flex items-center">
+                        <div class="pr-2 mt-1">
+                <span class="mr-2">
+                  <img src="https://smartjob.az/storage/avatars/uWNlbVC0KZZPmwViAMFHpjORTNQqxAFB5vEdDXCH.jpg"
+                       alt="Company Logo" class="w-8 h-8 rounded-full" />
+                </span>
+                            <span class="mr-2">
+                  <img src="https://smartjob.az/storage/avatars/g8QEttbtJjCDKMlk9iguXKYzDl56fSEacTfjeyH9.png"
+                       alt="Company Logo" class="w-8 h-8 rounded-full" />
+                </span>
+                        </div>
+                        <div>
+                            <div class="flex">
+                                <h4 class="text-base font-bold grid justify-items-start dis-li">
+                                    Software Engineer (Android), Libraries
+                                </h4>
+                            </div>
+                            <ul class="flex flex-col text-gray-600 mt-1 dis-li">
+                                <li class="flex items-center text-xs">
+                                    <span class="mr-1"><i class="fa-solid fa-clock"></i> 04.06.2024</span><i
+                                            class="fa-solid fa-location-dot"></i> London, UK
+                                </li>
+                            </ul>
+                            <div class="flex justify-between">
+                                <ul class="flex mt-1 space-x-1">
+                                    <li class="bg-blue-100 text-blue-700 px-1 py-0.5 rounded-lg">
+                                        Full Time
+                                    </li>
+                                    <li class="bg-green-100 text-green-700 px-1 py-0.5 rounded-lg">
+                                        Private
+                                    </li>
+                                    <li class="bg-yellow-100 text-yellow-700 px-1 py-0.5 rounded-lg">
+                                        Smartjob
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="flex flex-col justify-between h-full flex-grow">
+                            <div class="text-right">
+                                <button class="text-base text-gray-600 font-bold mb-2 w-8 h-8">
+                                    <i class="fa-solid fa-heart text-xl"></i>
+                                </button>
+                                <h4 class="text-base text-gray-600 font-bold mb-2">300$</h4>
+                            </div>
+                            <div class="flex justify-end items-end mt-auto">
+                                <button class="bg-blue-700 text-white px-3 py-1 rounded-lg">
+                                    Visit
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div
+                        class="bg-white p-3 rounded-xl shadow-md mb-2 hover:bg-gray-50 cursor-pointer duration-300 border border-red-500">
+                    <div class="content flex items-center">
+                        <div class="pr-2 mt-1">
+                <span class="mr-2">
+                  <img src="https://smartjob.az/storage/avatars/uWNlbVC0KZZPmwViAMFHpjORTNQqxAFB5vEdDXCH.jpg"
+                       alt="Company Logo" class="w-8 h-8 rounded-full" />
+                </span>
+                            <span class="mr-2">
+                  <img src="https://smartjob.az/storage/avatars/g8QEttbtJjCDKMlk9iguXKYzDl56fSEacTfjeyH9.png"
+                       alt="Company Logo" class="w-8 h-8 rounded-full" />
+                </span>
+                        </div>
+                        <div>
+                            <div class="flex">
+                                <h4 class="text-base font-bold grid justify-items-start dis-li">
+                                    Software Engineer (Android), Libraries
+                                </h4>
+                            </div>
+                            <ul class="flex flex-col text-gray-600 mt-1 dis-li">
+                                <li class="flex items-center text-xs">
+                                    <span class="mr-1"><i class="fa-solid fa-clock"></i> 04.06.2024</span><i
+                                            class="fa-solid fa-location-dot"></i> London, UK
+                                </li>
+                            </ul>
+                            <div class="flex justify-between">
+                                <ul class="flex mt-1 space-x-1">
+                                    <li class="bg-blue-100 text-blue-700 px-1 py-0.5 rounded-lg">
+                                        Full Time
+                                    </li>
+                                    <li class="bg-green-100 text-green-700 px-1 py-0.5 rounded-lg">
+                                        Private
+                                    </li>
+                                    <li class="bg-yellow-100 text-yellow-700 px-1 py-0.5 rounded-lg">
+                                        Smartjob
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="flex flex-col justify-between h-full flex-grow">
+                            <div class="text-right">
+                                <button class="text-base text-gray-600 font-bold mb-2 w-8 h-8">
+                                    <i class="fa-solid fa-heart text-xl"></i>
+                                </button>
+                                <h4 class="text-base text-gray-600 font-bold mb-2">300$</h4>
+                            </div>
+                            <div class="flex justify-end items-end mt-auto">
+                                <button class="bg-blue-700 text-white px-3 py-1 rounded-lg">
+                                    Visit
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div
+                        class="bg-white p-3 rounded-xl shadow-md mb-2 hover:bg-gray-50 cursor-pointer duration-300 border border-red-500">
+                    <div class="content flex items-center">
+                        <div class="pr-2 mt-1">
+                <span class="mr-2">
+                  <img src="https://smartjob.az/storage/avatars/uWNlbVC0KZZPmwViAMFHpjORTNQqxAFB5vEdDXCH.jpg"
+                       alt="Company Logo" class="w-8 h-8 rounded-full" />
+                </span>
+                            <span class="mr-2">
+                  <img src="https://smartjob.az/storage/avatars/g8QEttbtJjCDKMlk9iguXKYzDl56fSEacTfjeyH9.png"
+                       alt="Company Logo" class="w-8 h-8 rounded-full" />
+                </span>
+                        </div>
+                        <div>
+                            <div class="flex">
+                                <h4 class="text-base font-bold grid justify-items-start dis-li">
+                                    Software Engineer (Android), Libraries
+                                </h4>
+                            </div>
+                            <ul class="flex flex-col text-gray-600 mt-1 dis-li">
+                                <li class="flex items-center text-xs">
+                                    <span class="mr-1"><i class="fa-solid fa-clock"></i> 04.06.2024</span><i
+                                            class="fa-solid fa-location-dot"></i> London, UK
+                                </li>
+                            </ul>
+                            <div class="flex justify-between">
+                                <ul class="flex mt-1 space-x-1">
+                                    <li class="bg-blue-100 text-blue-700 px-1 py-0.5 rounded-lg">
+                                        Full Time
+                                    </li>
+                                    <li class="bg-green-100 text-green-700 px-1 py-0.5 rounded-lg">
+                                        Private
+                                    </li>
+                                    <li class="bg-yellow-100 text-yellow-700 px-1 py-0.5 rounded-lg">
+                                        Smartjob
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="flex flex-col justify-between h-full flex-grow">
+                            <div class="text-right">
+                                <button class="text-base text-gray-600 font-bold mb-2 w-8 h-8">
+                                    <i class="fa-solid fa-heart text-xl"></i>
+                                </button>
+                                <h4 class="text-base text-gray-600 font-bold mb-2">300$</h4>
+                            </div>
+                            <div class="flex justify-end items-end mt-auto">
+                                <button class="bg-blue-700 text-white px-3 py-1 rounded-lg">
+                                    Visit
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div
+                        class="bg-white p-3 rounded-xl shadow-md mb-2 hover:bg-gray-50 cursor-pointer duration-300 border border-red-500">
+                    <div class="content flex items-center">
+                        <div class="pr-2 mt-1">
+                <span class="mr-2">
+                  <img src="https://smartjob.az/storage/avatars/uWNlbVC0KZZPmwViAMFHpjORTNQqxAFB5vEdDXCH.jpg"
+                       alt="Company Logo" class="w-8 h-8 rounded-full" />
+                </span>
+                            <span class="mr-2">
+                  <img src="https://smartjob.az/storage/avatars/g8QEttbtJjCDKMlk9iguXKYzDl56fSEacTfjeyH9.png"
+                       alt="Company Logo" class="w-8 h-8 rounded-full" />
+                </span>
+                        </div>
+                        <div>
+                            <div class="flex">
+                                <h4 class="text-base font-bold grid justify-items-start dis-li">
+                                    Software Engineer (Android), Libraries
+                                </h4>
+                            </div>
+                            <ul class="flex flex-col text-gray-600 mt-1 dis-li">
+                                <li class="flex items-center text-xs">
+                                    <span class="mr-1"><i class="fa-solid fa-clock"></i> 04.06.2024</span><i
+                                            class="fa-solid fa-location-dot"></i> London, UK
+                                </li>
+                            </ul>
+                            <div class="flex justify-between">
+                                <ul class="flex mt-1 space-x-1">
+                                    <li class="bg-blue-100 text-blue-700 px-1 py-0.5 rounded-lg">
+                                        Full Time
+                                    </li>
+                                    <li class="bg-green-100 text-green-700 px-1 py-0.5 rounded-lg">
+                                        Private
+                                    </li>
+                                    <li class="bg-yellow-100 text-yellow-700 px-1 py-0.5 rounded-lg">
+                                        Smartjob
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="flex flex-col justify-between h-full flex-grow">
+                            <div class="text-right">
+                                <button class="text-base text-gray-600 font-bold mb-2 w-8 h-8">
+                                    <i class="fa-solid fa-heart text-xl"></i>
+                                </button>
+                                <h4 class="text-base text-gray-600 font-bold mb-2">300$</h4>
+                            </div>
+                            <div class="flex justify-end items-end mt-auto">
+                                <button class="bg-blue-700 text-white px-3 py-1 rounded-lg">
+                                    Visit
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div
+                        class="bg-white p-3 rounded-xl shadow-md mb-2 hover:bg-gray-50 cursor-pointer duration-300 border border-red-500">
+                    <div class="content flex items-center">
+                        <div class="pr-2 mt-1">
+                <span class="mr-2">
+                  <img src="https://smartjob.az/storage/avatars/uWNlbVC0KZZPmwViAMFHpjORTNQqxAFB5vEdDXCH.jpg"
+                       alt="Company Logo" class="w-8 h-8 rounded-full" />
+                </span>
+                            <span class="mr-2">
+                  <img src="https://smartjob.az/storage/avatars/g8QEttbtJjCDKMlk9iguXKYzDl56fSEacTfjeyH9.png"
+                       alt="Company Logo" class="w-8 h-8 rounded-full" />
+                </span>
+                        </div>
+                        <div>
+                            <div class="flex">
+                                <h4 class="text-base font-bold grid justify-items-start dis-li">
+                                    Software Engineer (Android), Libraries
+                                </h4>
+                            </div>
+                            <ul class="flex flex-col text-gray-600 mt-1 dis-li">
+                                <li class="flex items-center text-xs">
+                                    <span class="mr-1"><i class="fa-solid fa-clock"></i> 04.06.2024</span><i
+                                            class="fa-solid fa-location-dot"></i> London, UK
+                                </li>
+                            </ul>
+                            <div class="flex justify-between">
+                                <ul class="flex mt-1 space-x-1">
+                                    <li class="bg-blue-100 text-blue-700 px-1 py-0.5 rounded-lg">
+                                        Full Time
+                                    </li>
+                                    <li class="bg-green-100 text-green-700 px-1 py-0.5 rounded-lg">
+                                        Private
+                                    </li>
+                                    <li class="bg-yellow-100 text-yellow-700 px-1 py-0.5 rounded-lg">
+                                        Smartjob
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="flex flex-col justify-between h-full flex-grow">
+                            <div class="text-right">
+                                <button class="text-base text-gray-600 font-bold mb-2 w-8 h-8">
+                                    <i class="fa-solid fa-heart text-xl"></i>
+                                </button>
+                                <h4 class="text-base text-gray-600 font-bold mb-2">300$</h4>
+                            </div>
+                            <div class="flex justify-end items-end mt-auto">
+                                <button class="bg-blue-700 text-white px-3 py-1 rounded-lg">
+                                    Visit
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div
+                        class="bg-white p-3 rounded-xl shadow-md mb-2 hover:bg-gray-50 cursor-pointer duration-300 border border-red-500">
+                    <div class="content flex items-center">
+                        <div class="pr-2 mt-1">
+                <span class="mr-2">
+                  <img src="https://smartjob.az/storage/avatars/uWNlbVC0KZZPmwViAMFHpjORTNQqxAFB5vEdDXCH.jpg"
+                       alt="Company Logo" class="w-8 h-8 rounded-full" />
+                </span>
+                            <span class="mr-2">
+                  <img src="https://smartjob.az/storage/avatars/g8QEttbtJjCDKMlk9iguXKYzDl56fSEacTfjeyH9.png"
+                       alt="Company Logo" class="w-8 h-8 rounded-full" />
+                </span>
+                        </div>
+                        <div>
+                            <div class="flex">
+                                <h4 class="text-base font-bold grid justify-items-start dis-li">
+                                    Software Engineer (Android), Libraries
+                                </h4>
+                            </div>
+                            <ul class="flex flex-col text-gray-600 mt-1 dis-li">
+                                <li class="flex items-center text-xs">
+                                    <span class="mr-1"><i class="fa-solid fa-clock"></i> 04.06.2024</span><i
+                                            class="fa-solid fa-location-dot"></i> London, UK
+                                </li>
+                            </ul>
+                            <div class="flex justify-between">
+                                <ul class="flex mt-1 space-x-1">
+                                    <li class="bg-blue-100 text-blue-700 px-1 py-0.5 rounded-lg">
+                                        Full Time
+                                    </li>
+                                    <li class="bg-green-100 text-green-700 px-1 py-0.5 rounded-lg">
+                                        Private
+                                    </li>
+                                    <li class="bg-yellow-100 text-yellow-700 px-1 py-0.5 rounded-lg">
+                                        Smartjob
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="flex flex-col justify-between h-full flex-grow">
+                            <div class="text-right">
+                                <button class="text-base text-gray-600 font-bold mb-2 w-8 h-8">
+                                    <i class="fa-solid fa-heart text-xl"></i>
+                                </button>
+                                <h4 class="text-base text-gray-600 font-bold mb-2">300$</h4>
+                            </div>
+                            <div class="flex justify-end items-end mt-auto">
+                                <button class="bg-blue-700 text-white px-3 py-1 rounded-lg">
+                                    Visit
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="flex items-center justify-center mt-2">
+                <button class="rounded-full bg-green-100 px-6 py-3">
+                    Load More
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Join Us In Telegram Section -->
+<section class="bg-gray-100 py-10">
+    <div class="container mx-auto flex flex-col px-3">
+        <div class="flex justify-between ">
+            <!-- Flex row for side by side -->
+            <!-- Telegram Image -->
+            <div>
+                <img src="https://assets.zabbix.com/img/brands/telegram.svg" alt="Telegram"
+                     class="w-40 h-40 rounded-full shadow-lg" />
+            </div>
+            <!-- Join Now Button -->
+            <div>
+                <button
+                        class="bg-blue-500 text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-blue-600 transition duration-300">
+                    Join Now
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Script for the menu toggle -->
+<script>
+    document.getElementById("menuToggle").onclick = function () {
+        document.getElementById("mobile-menu").classList.toggle("open");
+        document.getElementById("menuBackdrop").classList.toggle("open");
+    };
+
+    document.getElementById("menuClose").onclick = function () {
+        document.getElementById("mobile-menu").classList.remove("open");
+        document.getElementById("menuBackdrop").classList.remove("open");
+    };
+
+    document.getElementById("menuBackdrop").onclick = function () {
+        document.getElementById("mobile-menu").classList.remove("open");
+        document.getElementById("menuBackdrop").classList.remove("open");
+    };
+</script>
+</body>
+
+</html>
