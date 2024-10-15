@@ -1,1 +1,111 @@
-auth
+<div class="flex flex-col justify-center py-3 sm:py-8 px-4 lg:px-8 bg-white rounded-2xl max-w-full sm:max-w-md sm:mx-auto mt-28 mx-4"
+    id="loginModal">
+    <div class="">
+        <img class="mx-auto h-10 w-auto" src="https://tailwindui.com/plus/img/logos/mark.svg?color=orange&shade=600"
+            alt="Your Company">
+        <h2 class="mt-8 text-center text-2xl font-bold leading-9 tracking-tight text-gray-700">Login to your account
+        </h2>
+    </div>
+
+    <div class="mt-8 sm:mx-auto w-full sm:w-96">
+        <div class="space-y-6">
+            <div>
+                <label for="email" class="block text-sm font-medium leading-6 text-gray-700">Email address</label>
+                <div class="mt-2">
+                    <input id="email" name="email" type="email" autocomplete="email" required
+                        class="block w-full h-12 rounded-md border-0 py-2 px-3 text-gray-700 shadow-sm ring-1 ring-inset ring-orange-500 focus:ring-2 focus:ring-inset focus:ring-orange-600 sm:text-sm sm:leading-6">
+                </div>
+            </div>
+
+            <div>
+                <div class="flex items-center justify-between">
+                    <label for="password" class="block text-sm font-medium leading-6 text-gray-700">Password</label>
+                </div>
+                <div class="mt-2">
+                    <input id="password" name="password" type="password" autocomplete="current-password" required
+                        class="block w-full h-12 rounded-md border-0 py-2 px-3 text-gray-700 shadow-sm ring-1 ring-inset ring-orange-500 focus:ring-2 focus:ring-inset focus:ring-orange-500 sm:text-sm sm:leading-6">
+                </div>
+            </div>
+
+            <div>
+                <button type="submit"
+                    class="flex w-full justify-center rounded-md filled-button-color px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-orange-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-500">Sign
+                    in</button>
+            </div>
+        </div>
+
+        <div class="text-sm flex justify-between mt-6">
+            <a href="#" class="font-semibold hover:text-orange-500">Forgot password?</a>
+            <a href="#" class="font-semibold leading-6 hover:text-orange-500" id="register-now">Register now</a>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="flex-col justify-center py-3 sm:py-8 px-4 lg:px-8 bg-white rounded-2xl max-w-full sm:max-w-md sm:mx-auto mt-20 mx-4 hidden"
+    id="registerModal">
+    <div class="">
+        <img class="mx-auto h-10 w-auto" src="https://tailwindui.com/plus/img/logos/mark.svg?color=orange&shade=600"
+            alt="Your Company">
+        <h2 class="mt-8 text-center text-2xl font-bold leading-9 tracking-tight text-gray-700">Register
+        </h2>
+    </div>
+
+    <div class="mt-8 sm:mx-auto w-full sm:w-96">
+        <div class="space-y-6">
+            <div>
+                <label for="email" class="block text-sm font-medium leading-6 text-gray-700">Email address</label>
+                <div class="mt-2">
+                    <input id="email" name="email" type="email" autocomplete="email" required
+                        class="block w-full h-12 rounded-md border-0 py-2 px-3 text-gray-700 shadow-sm ring-1 ring-inset ring-orange-500 focus:ring-2 focus:ring-inset focus:ring-orange-600 sm:text-sm sm:leading-6">
+                </div>
+            </div>
+
+            <div>
+                <div class="flex items-center justify-between">
+                    <label for="password" class="block text-sm font-medium leading-6 text-gray-700">Password</label>
+                </div>
+                <div class="mt-2">
+                    <input id="password" name="password" type="password" autocomplete="current-password" required
+                        class="block w-full h-12 rounded-md border-0 py-2 px-3 text-gray-700 shadow-sm ring-1 ring-inset ring-orange-500 focus:ring-2 focus:ring-inset focus:ring-orange-500 sm:text-sm sm:leading-6">
+                </div>
+            </div>
+
+            <div>
+                <div class="flex items-center justify-between">
+                    <label for="confirmPassword" class="block text-sm font-medium leading-6 text-gray-700">Confirm
+                        Password</label>
+                </div>
+                <div class="mt-2">
+                    <input id="confirmPassword" name="confirmPassword" type="password" autocomplete="current-password"
+                        required
+                        class="block w-full h-12 rounded-md border-0 py-2 px-3 text-gray-700 shadow-sm ring-1 ring-inset ring-orange-500 focus:ring-2 focus:ring-inset focus:ring-orange-500 sm:text-sm sm:leading-6">
+                </div>
+            </div>
+
+            <div>
+                <button type="submit"
+                    class="flex w-full justify-center rounded-md filled-button-color px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-orange-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-500">Sign
+                    in</button>
+            </div>
+        </div>
+
+        <div class="text-sm flex justify-end mt-6">
+            <a href="#" class="font-semibold leading-6 hover:text-orange-500" id="login-now">Login now</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById("register-now").addEventListener("click", function () {
+        document.getElementById("loginModal").classList.add("hidden");
+        document.getElementById("registerModal").classList.remove("hidden");
+    });
+    
+    document.getElementById("login-now").addEventListener("click", function () {
+        document.getElementById("loginModal").classList.remove("hidden");
+        document.getElementById("registerModal").classList.add("hidden");
+    });
+</script>
