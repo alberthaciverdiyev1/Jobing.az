@@ -1,6 +1,37 @@
+// import axios from 'axios';
 document.addEventListener("DOMContentLoaded", (event) => {
 
     var thumbsize = 14;
+
+    function getCategories() {
+        axios.get('/api/categories')
+            .then(res => {
+                if (res.status === 200) {
+                    let htmlContent = "";
+                    res.data.forEach(element => {
+                        htmlContent += `
+                        <div class="flex items-center">
+                            <input type="checkbox" id="${element.id}" class="custom-checkbox" />
+                            <label for="${element.id}" class="text-gray-800">
+                                ${element.name}
+                                <span class="text-gray-400">(34)</span>
+                            </label>
+                        </div>`;
+                    });
+
+                    document.getElementById("categoryList").innerHTML = htmlContent;
+                }
+                console.log(res);
+            })
+            .catch(error => {
+                console.error("Error fetching categories:", error);
+            });
+
+
+
+    }
+    getCategories();
+
 
     function draw(slider, splitvalue) {
         /* set function vars */
