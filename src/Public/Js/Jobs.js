@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
     var thumbsize = 14;
     let categoryArray = [];
+    let showMoreCategories = true;
 
     function categoryHTML(data, limit = null) {
         let htmlContent = "";
@@ -34,18 +35,22 @@ document.addEventListener("DOMContentLoaded", (event) => {
                 console.error("Error fetching categories:", error);
             });
 
-
-
     }
     getCategories();
 
 
-    document.querySelector('[data-role="show-more-categories"]').addEventListener("click", function () {
-        console.log(categoryArray);
-        
-        document.getElementById("categoryList").innerHTML = categoryHTML(categoryArray);
+    document.getElementById("show-more-categories").addEventListener("click", function () {
+        if (showMoreCategories) {
+            document.getElementById("categoryList").innerHTML = categoryHTML(categoryArray);
+            this.textContent = "Show Less";
+            showMoreCategories = false;
+        } else {
+            document.getElementById("categoryList").innerHTML = categoryHTML(categoryArray, 10);
+            this.textContent = "Show More";
+            showMoreCategories = true;
+        }
     });
-    
+
 
     function draw(slider, splitvalue) {
         /* set function vars */
