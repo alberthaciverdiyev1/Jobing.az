@@ -6,7 +6,6 @@ import swaggerDocs from './src/Config/Swagger.js';
 
 const app = express();
 const port = process.env.PORT || 3001;
-
 app.set('view engine', 'ejs');
 app.set('views', './src/Views');
 app.use(express.static(path.resolve('./src/Public')));

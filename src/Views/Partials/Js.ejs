@@ -1,4 +1,6 @@
 <% if (js) { %>
-    <script src="/Js/<%= js %>"></script>
+    <script type="module" src="/Js/<%= js %>"></script>
 <% } %>
-<script src="/Js/Global.js"></script>
+<script type="module" src="/Js/Global.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios@1.6.7/dist/axios.min.js"></script>
+
