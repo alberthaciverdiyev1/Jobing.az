@@ -2,8 +2,9 @@
 document.addEventListener("DOMContentLoaded", (event) => {
 
     var thumbsize = 14;
-    let categoryArray = [];
+    let categoryArray = [], cityArray = [];
     let showMoreCategories = true;
+    let showMoreCities = true;
 
     function categoryHTML(data, limit = null) {
         let htmlContent = "";
@@ -23,6 +24,21 @@ document.addEventListener("DOMContentLoaded", (event) => {
         return htmlContent;
     }
 
+    function cityHTML(data, limit = null) {
+        let htmlContent = "";
+        if (limit) {
+            data = data.slice(0, limit);
+        }
+        data.forEach(element => {
+            htmlContent += ` <div class="flex items-center">
+                            <input type="checkbox" id="${element.id}" class="custom-checkbox" />
+                            <label for="${element.id}" class="text-gray-800">${element.name} <span class="text-gray-400">(145)</span></label>
+                        </div>`;
+        });
+        return htmlContent;
+    }
+
+
     function getCategories() {
         axios.get('/api/categories')
             .then(res => {
@@ -38,6 +54,21 @@ document.addEventListener("DOMContentLoaded", (event) => {
     }
     getCategories();
 
+    async function getCities() {
+        await axios.get('/api/cities')
+            .then(res => {
+                if (res.status === 200) {
+                    cityArray = res.data;
+                    document.getElementById("cityList").innerHTML = cityHTML(res.data, 7);
+                }
+            })
+            .catch(error => {
+                console.error("Error fetching categories:", error);
+            });
+
+    }
+    getCities();
+
 
     document.getElementById("show-more-categories").addEventListener("click", function () {
         if (showMoreCategories) {
@@ -48,6 +79,18 @@ document.addEventListener("DOMContentLoaded", (event) => {
             document.getElementById("categoryList").innerHTML = categoryHTML(categoryArray, 10);
             this.textContent = "Show More";
             showMoreCategories = true;
+        }
+    });
+
+    document.getElementById("show-more-cities").addEventListener("click", function () {
+        if (showMoreCities) {
+            document.getElementById("cityList").innerHTML = cityHTML(cityArray);
+            this.textContent = "Show Less";
+            showMoreCities = false;
+        } else {
+            document.getElementById("cityList").innerHTML = cityHTML(cityArray, 10);
+            this.textContent = "Show More";
+            showMoreCities = true;
         }
     });
 

@@ -3,9 +3,10 @@ import userController from '../Controllers/UserController.js';
 import companyController from '../Controllers/CompanyController.js';
 import categoryController from '../Controllers/CategoryController.js';
 import jobDataController from '../Controllers/JobDataController.js';
-import siteController from '../Controllers/siteController.js';
-import scrapeController from '../Controllers/scrapeController.js';
+import siteController from '../Controllers/SiteController.js';
+import scrapeController from '../Controllers/ScrapeController.js';
 import viewController from "../Controllers/ViewController.js";
+import cityController from '../Controllers/CityController.js';
 
 import validator from '../Validators/Main.js'
 const router = express.Router();
@@ -44,6 +45,13 @@ router.get('/api/categories', categoryController.getAll);                       
 // router.put('/categories/:id',validator.companyValidator, categoryController.update);     // UPDATE
 // router.delete('/categories/:id', categoryController.delete);                             // DELETE
 
+
+// CRUD operations for Cities
+router.post('/api/cities', cityController.create);                                           // CREATE
+router.get('/api/cities', cityController.getAll);                                           // READ ALL
+// router.get('/categories/:id', categoryController.findById);                              // READ ONE
+// router.put('/categories/:id',validator.companyValidator, categoryController.update);     // UPDATE
+// router.delete('/categories/:id', categoryController.delete);                             // DELETE
 
 // CRUD operations for scrape
 router.get('/api/scrape', scrapeController.getData);                                    // READ ALL
