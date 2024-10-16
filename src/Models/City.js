@@ -20,7 +20,7 @@ const City = sequelize.define('City', {
         allowNull: true
     }
 }, {
-    tableName: 'companies',
+    tableName: 'City',
     timestamps: true,
     paranoid: true,
 });

@@ -22,7 +22,6 @@ const CityService = {
         }
     },
 
-    // Get all
     delete: async (id) => {
         try {
             const category = await City.findByPk(id);
@@ -36,7 +35,6 @@ const CityService = {
         }
     },
 
-    // Get a category by ID
     findById: async (id) => {
         try {
             const category = await City.findByPk(id);
@@ -49,7 +47,6 @@ const CityService = {
         }
     },
 
-    // Update a category
     getAll: async () => {
         try {
             return await City.findAll();
@@ -58,7 +55,6 @@ const CityService = {
         }
     },
 
-    // Delete a category
     update: async (id, updateData) => {
         try {
             const category = await City.findByPk(id);
