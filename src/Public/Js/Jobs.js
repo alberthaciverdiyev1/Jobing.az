@@ -2,26 +2,33 @@
 document.addEventListener("DOMContentLoaded", (event) => {
 
     var thumbsize = 14;
+    let categoryArray = [];
+
+    function categoryHTML(data, limit = null) {
+        let htmlContent = "";
+        if (limit) {
+            data = data.slice(0, limit);
+        }
+        data.forEach(element => {
+            htmlContent += `
+            <div class="flex items-center">
+                <input type="checkbox" id="${element.id}" class="custom-checkbox" />
+                <label for="${element.id}" class="text-gray-800">
+                    ${element.name}
+                    <span class="text-gray-400">(34)</span>
+                </label>
+            </div>`;
+        });
+        return htmlContent;
+    }
 
     function getCategories() {
         axios.get('/api/categories')
             .then(res => {
                 if (res.status === 200) {
-                    let htmlContent = "";
-                    res.data.forEach(element => {
-                        htmlContent += `
-                        <div class="flex items-center">
-                            <input type="checkbox" id="${element.id}" class="custom-checkbox" />
-                            <label for="${element.id}" class="text-gray-800">
-                                ${element.name}
-                                <span class="text-gray-400">(34)</span>
-                            </label>
-                        </div>`;
-                    });
-
-                    document.getElementById("categoryList").innerHTML = htmlContent;
+                    categoryArray = res.data;
+                    document.getElementById("categoryList").innerHTML = categoryHTML(res.data, 10);
                 }
-                console.log(res);
             })
             .catch(error => {
                 console.error("Error fetching categories:", error);
@@ -32,6 +39,13 @@ document.addEventListener("DOMContentLoaded", (event) => {
     }
     getCategories();
 
+
+    document.querySelector('[data-role="show-more-categories"]').addEventListener("click", function () {
+        console.log(categoryArray);
+        
+        document.getElementById("categoryList").innerHTML = categoryHTML(categoryArray);
+    });
+    
 
     function draw(slider, splitvalue) {
         /* set function vars */
