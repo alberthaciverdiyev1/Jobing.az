@@ -18,10 +18,6 @@ const Category = sequelize.define('Category', {
     parentId: {
         type: DataTypes.INTEGER,
         allowNull: true,
-        // references: {
-        //     model: 'Category',
-        //     key: 'id'
-        // }
     },
     website: {
         type: DataTypes.STRING,

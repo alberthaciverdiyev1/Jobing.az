@@ -7,7 +7,7 @@ const ViewController = {
             body: "home/index.ejs",
             js: "Home.js"
         };
-        res.render('main', view);
+        res.render('Main', view);
     },
     auth: async (req, res) => {
         const view = {
@@ -15,7 +15,7 @@ const ViewController = {
             body: "auth/index.ejs",
             js: "Auth.js"
         };
-        res.render('main', view);
+        res.render('Main', view);
     },
     jobs: async (req, res) => {
         const view = {
@@ -23,9 +23,16 @@ const ViewController = {
             body: "jobs/index.ejs",
             js: "Jobs.js"
         };
-        res.render('main', view);
+        res.render('Main', view);
     },
-
+    adminIndex: async (req,res) => {
+        const view = {
+            title: 'Admin Panel',
+            body: "Admin/Index.ejs",
+            js: "Admin/Index.js"
+        };
+        res.render('Admin', view);
+    },
     education:(req,res) => {
         const educationData = Enums.Education;
 

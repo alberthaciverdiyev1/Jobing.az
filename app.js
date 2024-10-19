@@ -28,7 +28,6 @@ app.use('/', routes);
 // Uncomment for Swagger if needed
 // swaggerDocs(app);
 
-// Sync database and start server
 
 // Sync database and start server
 // sequelize.sync({ alter: true }).then(() => {
