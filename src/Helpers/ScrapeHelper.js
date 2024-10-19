@@ -19,9 +19,8 @@ const scrapeHelper = async (url, html = null, res,) => {
             return cheerio.load(data);
         }
     } catch (error) {
-        console.error(error);
-        res.status(500).send('Scraping error');
-        return null;
+        console.error(error); 
+        throw new Error('Error fetching jobs' + error);
     }
 };
 

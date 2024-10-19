@@ -19,13 +19,13 @@ const JobDataService = {
         }
     },
 
-    // Get all sites
-    getAllSites: async () => {
+    // Get all jobs
+    getAllJobs: async () => {
         try {
-            const sites = await JobData.findAll();
-            return sites;
+            const jobs = await JobData.findAll();
+            return jobs;
         } catch (error) {
-            throw new Error('Error retrieving sites: ' + error.message);
+            throw new Error('Error retrieving jobs: ' + error.message);
         }
     },
 

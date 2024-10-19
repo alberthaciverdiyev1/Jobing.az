@@ -10,11 +10,12 @@ const jobDataController = {
         try {
             const categories = await CategoryService.getAll();
             const bossAz = new BossAz();
-            const smatJobAz = new SmartJobAz();
-            const smartJobAzJobs = await smatJobAz.Jobs();
+            // const smatJobAz = new SmartJobAz();
+            // const smartJobAzJobs = await smatJobAz.Jobs();
             // return smartJobAzJobs;
             const jobs = await bossAz.Jobs(categories);
-            console.log({jobs});
+            // console.log(jobs);
+            // return; 
             const response = await JobService.create(jobs);
             res.status(response.status).json({message:response.message});
         } catch (error) {
@@ -22,12 +23,12 @@ const jobDataController = {
         }
     },
 
-    getSites: async (req, res) => {
+    getAll: async (req, res) => {
         try {
-            const sites = await JobService.getAllSites();
-            res.status(200).json(sites);
+            const jobs = await JobService.getAllJobs();
+            res.status(200).json(jobs);
         } catch (error) {
-            res.status(500).json({message: 'Error retrieving sites: ' + error.message});
+            res.status(500).json({message: 'Error retrieving jobs: ' + error.message});
         }
     },
 

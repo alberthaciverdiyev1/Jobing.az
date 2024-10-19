@@ -1,3 +1,5 @@
+import Enums from "../Config/Enums.js";
+
 const ViewController = {
     home: async (req, res) => {
         const view = {
@@ -23,6 +25,11 @@ const ViewController = {
         };
         res.render('main', view);
     },
+
+    education:(req,res) => {
+        const educationData = Enums.Education;
+
+        res.status(200).json({ data: educationData });    }
 };
 
 export default ViewController;

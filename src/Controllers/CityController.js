@@ -8,7 +8,7 @@ const CityController = {
             const options = await b.Cities();
             const response = await CityService.create(options);
             res.status(response.status).json({ message: response.message, count: response.count });
-        } catch (error) { 
+        } catch (error) {
             res.status(500).json({message: 'Error creating category: ' + error.message});
         }
     },
