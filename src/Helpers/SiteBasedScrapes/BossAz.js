@@ -45,8 +45,8 @@ class BossAz {
     async Jobs(categories) {
         try {
             const data = [];
-            for (let category of categories) {
-                for (let i = 0; i <= 50; i++) {
+            // for (let category of categories) {
+                // for (let i = 0; i <= 50; i++) { 
                     const $ = await Scrape(`${this.url}/vacancies?action=index&controller=vacancies&only_path=true&page=${1}&search%5Bcategory_id%5D=${38}&search%5Bcompany_id%5D=&search%5Beducation_id%5D=&search%5Bexperience_id%5D=&search%5Bkeyword%5D=&search%5Bregion_id%5D=&search%5Bsalary%5D=&type=vacancies`);
 
                     $('.results-i').each((i, el) => {
@@ -109,9 +109,11 @@ class BossAz {
                             redirectUrl: this.url + redirectUrl,
                             jobType: '0x001'
                         });
+                        console.log({data});
+                        
                     });
-                }
-            }
+                // }
+            // }
             return data;
         } catch (error) {
             console.error('Error fetching jobs:', error);

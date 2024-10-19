@@ -19,7 +19,7 @@ router.delete('/api/users/:id', userController.deleteUser);                     
 
 // CRUD operations for job sites (JobDataController)
 router.post('/api/jobs', jobDataController.create);                                        // CREATE
-router.get('/api/jobs', jobDataController.getSites);                                       // READ ALL
+router.get('/api/jobs', jobDataController.getAll);                                        // READ ALL
 router.get('/api/jobs/:id', jobDataController.getSiteById);                                // READ ONE
 router.put('/api/jobs/:id', jobDataController.updateSite);                                 // UPDATE
 router.delete('/api/jobs/:id', jobDataController.deleteSite);                              // DELETE
@@ -61,5 +61,8 @@ router.get('/api/scrape', scrapeController.getData);                            
 router.get('/',viewController.home);
 router.get('/auth',viewController.auth);
 router.get('/jobs',viewController.jobs);
+//Enums
+router.get('/education',viewController.education);
+
 
 export default router;
