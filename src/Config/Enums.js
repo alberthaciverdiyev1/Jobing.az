@@ -22,7 +22,7 @@ const Enums = Object.freeze({
         MoreThanSeven : 0x004
     },
     Sites:{
-        BossAz:'https://boss.az',
+        BossAz:'boss.az', 
         BusyAz:'https://busy.az',
         SmartJobAz:'https://smartjob.az',
     }

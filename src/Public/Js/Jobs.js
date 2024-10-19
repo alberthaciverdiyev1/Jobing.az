@@ -5,6 +5,13 @@ document.addEventListener("DOMContentLoaded", (event) => {
     let categoryArray = [], cityArray = [];
     let showMoreCategories = true;
     let showMoreCities = true;
+    let categoryId = null,
+        cityId = null,
+        educationId = null,
+        jobType = null,
+        salaryMin = null,
+        salaryMax = null,
+        experienceLevel = null;
 
     function categoryHTML(data, limit = null) {
         let htmlContent = "";
@@ -13,13 +20,13 @@ document.addEventListener("DOMContentLoaded", (event) => {
         }
         data.forEach(element => {
             htmlContent += `
-            <div class="flex items-center">
-                <input type="checkbox" id="${element.id}" class="custom-checkbox" />
-                <label for="${element.id}" class="text-gray-800">
-                    ${element.name}
-                    <span class="text-gray-400">(34)</span>
-                </label>
-            </div>`;
+                <div class="flex items-center"> 
+                    <input type="radio" name="category" id="${element.id}" class="custom-checkbox" />
+                    <label for="${element.id}" class="text-gray-800">
+                        ${element.name}
+                        <span class="text-gray-400">(34)</span>
+                    </label>
+                </div>`;
         });
         return htmlContent;
     }
@@ -30,13 +37,15 @@ document.addEventListener("DOMContentLoaded", (event) => {
             data = data.slice(0, limit);
         }
         data.forEach(element => {
-            htmlContent += ` <div class="flex items-center">
-                            <input type="checkbox" id="${element.id}" class="custom-checkbox" />
-                            <label for="${element.id}" class="text-gray-800">${element.name} <span class="text-gray-400">(145)</span></label>
-                        </div>`;
+            htmlContent += `
+                <div class="flex items-center">
+                    <input type="radio" name="city" id="city-${element.id}" data-id="${element.id}"" class="custom-checkbox" />
+                    <label for="city-${element.id}" class="text-gray-800">${element.name} <span class="text-gray-400">(145)</span></label>
+                </div>`;
         });
         return htmlContent;
     }
+
 
 
     function getCategories() {
@@ -45,6 +54,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
                 if (res.status === 200) {
                     categoryArray = res.data;
                     document.getElementById("categoryList").innerHTML = categoryHTML(res.data, 10);
+                    addRadioChangeListener("category");
                 }
             })
             .catch(error => {
@@ -54,12 +64,15 @@ document.addEventListener("DOMContentLoaded", (event) => {
     }
     getCategories();
 
+
+
     async function getCities() {
         await axios.get('/api/cities')
             .then(res => {
                 if (res.status === 200) {
                     cityArray = res.data;
                     document.getElementById("cityList").innerHTML = cityHTML(res.data, 7);
+                    addRadioChangeListener("city");
                 }
             })
             .catch(error => {
@@ -80,7 +93,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
                         console.log();
                         htmlContent += `
                     <div class="flex items-center">
-                        <input type="checkbox" id="${key}" class="custom-checkbox" />
+                        <input type="radio" id="${key}" class="custom-checkbox" />
                         <label for="${key}" class="text-gray-800">
                             ${val} <span class="text-gray-400">(145)</span>
                         </label>
@@ -99,17 +112,24 @@ document.addEventListener("DOMContentLoaded", (event) => {
     getEducation();
 
     async function getJobs(params) {
-        await axios.get('/api/jobs').then(res => {
+        console.log(params);
+
+        await axios.get('/api/jobs', {
+            params: params
+        }).then(res => {
             let htmlContent = '';
-            let headerContent = `<div class="flex justify-between mb-3 bg-white py-1 px-4 rounded-lg text-center items-center sm:py-2">
-                                    <span class="text-sm">500 results</span>
-                                    <select name="" id="" class="w-16 rounded-lg h-6 border-custom sm:8 sm:w-32 sm:h-8">
-                                        <option value="">aa</option>
-                                        <option value="">aa</option>
-                                        <option value="">aa</option>
-                                        <option value="">aa</option>
-                                    </select>
-                                </div>`;
+            let headerContent = '';
+            if (false) {
+                headerContent = `<div class="flex justify-between mb-3 bg-white py-1 px-4 rounded-lg text-center items-center sm:py-2">
+                                        <span class="text-sm">500 results</span>
+                                        <select name="" id="" class="w-16 rounded-lg h-6 border-custom sm:8 sm:w-32 sm:h-8">
+                                            <option value="">aa</option>
+                                            <option value="">aa</option>
+                                            <option value="">aa</option>
+                                            <option value="">aa</option>
+                                        </select>
+                                    </div>`;
+            }
 
             if (res.status === 200) {
                 res.data.forEach(element => {
@@ -117,7 +137,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
                                         <div class="content flex">
                                             <div class="mt-3 sm:mt-1">
                                                 <span class="mr-2">
-                                                    <img src="https://smartjob.az/storage/avatars/uWNlbVC0KZZPmwViAMFHpjORTNQqxAFB5vEdDXCH.jpg"
+                                                    <img src="../Images/${element.sourceUrl}.png" 
                                                         alt="Company Logo" class="w-12 h-12 rounded-lg sm:w-14 sm:h-14" />
                                                 </span>
                                                 <span class="mr-2">
@@ -212,11 +232,13 @@ document.addEventListener("DOMContentLoaded", (event) => {
     document.getElementById("show-more-categories").addEventListener("click", function () {
         if (showMoreCategories) {
             document.getElementById("categoryList").innerHTML = categoryHTML(categoryArray);
+            addRadioChangeListener("category");
             this.textContent = "Show Less";
             showMoreCategories = false;
         } else {
             document.getElementById("categoryList").innerHTML = categoryHTML(categoryArray, 10);
             this.textContent = "Show More";
+            addRadioChangeListener("category");
             showMoreCategories = true;
         }
     });
@@ -225,14 +247,48 @@ document.addEventListener("DOMContentLoaded", (event) => {
     document.getElementById("show-more-cities").addEventListener("click", function () {
         if (showMoreCities) {
             document.getElementById("cityList").innerHTML = cityHTML(cityArray);
+            addRadioChangeListener("city");
             this.textContent = "Show Less";
             showMoreCities = false;
         } else {
             document.getElementById("cityList").innerHTML = cityHTML(cityArray, 10);
             this.textContent = "Show More";
+            addRadioChangeListener("city");
             showMoreCities = true;
         }
     });
+
+    function addRadioChangeListener() {
+        document.querySelectorAll('input[name="category"]').forEach(radio => {
+            radio.addEventListener('change', function () {
+                const selectedId = this.id;
+                getJobs(selectedId);
+
+            });
+        });
+    }
+    function handleFilterChange() {
+        const params = {
+            categoryId: document.querySelector('input[name="category"]:checked')?.id || null,
+            cityId: document.querySelector('input[name="city"]:checked')?.getAttribute('data-id') || null,
+            educationId: document.querySelector('input[name="education"]:checked')?.id || null,
+            jobType: document.querySelector('input[name="jobType"]:checked')?.id || null,
+            salaryMin: document.querySelector('input[name="salaryMin"]')?.getAttribute('data-value') || null,
+            salaryMax: document.querySelector('input[name="salaryMax"]')?.getAttribute('data-value') || null,
+            experienceLevel: document.querySelector('input[name="experienceLevel"]:checked')?.id || null
+        };
+        console.log({ params });
+        getJobs(params);
+    }
+
+
+    function addRadioChangeListener(type) {
+        document.querySelectorAll(`input[name="${type}"]`).forEach(radio => {
+            radio.addEventListener('change', function () {
+                handleFilterChange();
+            });
+        });
+    }
 
 
     function draw(slider, splitvalue) {
