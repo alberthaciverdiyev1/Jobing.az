@@ -14,7 +14,6 @@ const scrapeController = {
                 const text = $(el).text();
                 options.push({ value, text });
             });
-
             res.json({
                 options: options
             });

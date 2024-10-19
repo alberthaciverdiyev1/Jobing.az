@@ -5,7 +5,7 @@ import Category from "../../Models/Category.js";
 
 class BossAz {
     constructor(url = enums.Sites.BossAz) {
-        this.url = url;
+        this.url = "https://"+url;
     }
 
     async Categories() {
@@ -25,7 +25,7 @@ class BossAz {
                             website: this.url
                         });
                     } else {
-                        const parentCategoryValue = categories[categories.length - 1].value;
+                        const parentCategoryValue = categories[categories.length - 1].categoryId; 
                         categories.push({
                             name: text.replace('— ', ''),
                             categoryId: +value,
@@ -34,6 +34,7 @@ class BossAz {
                         });
                     }
                 }
+                
             });
             return categories;
         } catch (error) {
