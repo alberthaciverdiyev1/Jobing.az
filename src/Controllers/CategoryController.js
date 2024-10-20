@@ -1,9 +1,10 @@
 import CategoryService from '../Services/CategoryService.js';
 import BossAz from "../Helpers/SiteBasedScrapes/BossAz.js";
 import SmartJobAz from "../Helpers/SiteBasedScrapes/SmartJobAz.js";
+import Enums from '../Config/Enums.js';
 
 const CategoryController = {
-    create: async (req, res) => {
+    addForeignCategories: async (req, res) => {
         try {
             const boss = new BossAz();
             const smartJob = new SmartJobAz();
@@ -12,19 +13,30 @@ const CategoryController = {
             const smartJobCategories = await smartJob.Categories();
             let categories = [...smartJobCategories, ...bossAzCategories];
 
-            const response = await CategoryService.create(categories);
-            res.status(response.status).json({message: response.message, count: response.count});
+            const response = await CategoryService.addForeignCategories(categories);
+            res.status(response.status).json({ message: response.message, count: response.count });
         } catch (error) {
-            res.status(500).json({message: 'Error creating category: ' + error.message});
+            res.status(500).json({ message: 'Error creating category: ' + error.message });
         }
-    }, 
+    },
 
-    getAll: async (req, res) => {
+    getForeignCategories: async (req, res) => {
         try {
-            const companies = await CategoryService.getAll();
-            res.status(200).json(companies);
+            const categories = await CategoryService.getForeignCategories();
+            res.status(200).json(categories);
         } catch (error) {
-            res.status(500).json({message: 'Error retrieving company: ' + error.message});
+            res.status(500).json({ message: 'Error retrieving categories: ' + error.message });
+        }
+    },
+
+    getLocalCategories: async (req, res) => {
+        try {
+            const localCategories = await CategoryService.getLocalCategories();
+            const foreignCategories = await CategoryService.getForeignCategories();
+            const siteWithId = Enums.SitesWithId;
+            res.status(200).json({ localCategories, foreignCategories, siteWithId });
+        } catch (error) {
+            res.status(500).json({ message: 'Error retrieving categories: ' + error.message });
         }
     },
 
@@ -32,11 +44,11 @@ const CategoryController = {
         try {
             const company = await CategoryService.findById(req.params.id);
             if (!company) {
-                return res.status(404).json({message: 'Company not found'});
+                return res.status(404).json({ message: 'Company not found' });
             }
             res.status(200).json(company);
         } catch (error) {
-            res.status(500).json({message: 'Error retrieving company: ' + error.message});
+            res.status(500).json({ message: 'Error retrieving company: ' + error.message });
         }
     },
 
@@ -44,20 +56,20 @@ const CategoryController = {
         try {
             const company = await CategoryService.update(req.params.id, req.body);
             if (!company) {
-                return res.status(404).json({message: 'Company not found'});
+                return res.status(404).json({ message: 'Company not found' });
             }
             res.status(200).json(company);
         } catch (error) {
-            res.status(500).json({message: 'Error updating company: ' + error.message});
+            res.status(500).json({ message: 'Error updating company: ' + error.message });
         }
     },
 
     delete: async (req, res) => {
         try {
             await CategoryService.delete(req.params.id);
-            res.status(200).json({message: 'Company successfully deleted'});
+            res.status(200).json({ message: 'Company successfully deleted' });
         } catch (error) {
-            res.status(500).json({message: 'Error deleting company: ' + error.message});
+            res.status(500).json({ message: 'Error deleting company: ' + error.message });
         }
     }
 };

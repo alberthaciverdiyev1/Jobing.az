@@ -1,5 +1,6 @@
 import Scrape from "../ScrapeHelper.js";
 import enums from "../../Config/Enums.js";
+import Enums from "../../Config/Enums.js";
 
 
 
@@ -8,9 +9,9 @@ class SmartJobAz {
         this.url = url;
     }
 
-    async  Categories() {
+    async Categories() {
         try {
-            const $ = await Scrape('StaticHtmls/SmartJobAz/CategoriesModal.html',true);
+            const $ = await Scrape('StaticHtmls/SmartJobAz/CategoriesModal.html', true);
 
             const categories = [];
 
@@ -22,7 +23,9 @@ class SmartJobAz {
                     name: CategoryName,
                     value: +CategoryValue,
                     parentId: null,
-                    website: this.url
+                    website: this.url,
+                    websiteId: Enums.SitesWithId.SmartJobAz
+
                 });
 
                 $(el).find('.cat-sub-root .sub-item-cat').each((j, subEl) => {
@@ -34,7 +37,9 @@ class SmartJobAz {
                             name: subCategoryName,
                             value: +subCategoryValue,
                             parentId: CategoryValue,
-                            website: this.url
+                            website: this.url,
+                            websiteId: Enums.SitesWithId.SmartJobAz
+
                         });
                     }
                 });
@@ -69,12 +74,12 @@ class SmartJobAz {
                     title,
                     company,
                     location,
-                    minSalary :salary.isNumeric ? salary : null,
+                    minSalary: salary.isNumeric ? salary : null,
                     jobId,
                     jobType,
                     postedAt,
-                    categoryId : 1,
-                    subCategoryId:2,
+                    categoryId: 1,
+                    subCategoryId: 2,
                     sourceUrl: this.url,
                     redirectUrl,
                     imageUrl
