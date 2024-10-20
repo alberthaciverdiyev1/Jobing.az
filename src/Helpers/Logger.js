@@ -3,7 +3,7 @@ import 'winston-daily-rotate-file';
 
 let logger;
 
-const configureLogger = async () => {
+const configureLogger = async (logger) => {
     console.log("Configuring logger...");
     
     if (process.env.NODE_ENV !== 'production') {

@@ -2,6 +2,7 @@ import Scrape from "../ScrapeHelper.js";
 import enums from "../../Config/Enums.js";
 import category from "../../Models/Category.js";
 import Category from "../../Models/Category.js";
+import Enums from "../../Config/Enums.js";
 
 class BossAz {
     constructor(url = enums.Sites.BossAz) {
@@ -12,31 +13,42 @@ class BossAz {
         try {
             const $ = await Scrape(this.url);
             const categories = [];
-
+    
             $('#search_category_id option').each((i, option) => {
                 const value = $(option).val();
                 const text = $(option).text().trim();
+                let mainCategoryId = null;
                 if (value) {
+                    console.log({value,text}); 
                     if (!text.startsWith('—')) {
+                        mainCategoryId = value;
                         categories.push({
                             name: text,
-                            categoryId: +value,
-                            parentId: null,
-                            website: this.url
+                            categoryId: mainCategoryId,
+                            parentId: null, 
+                            website: this.url,
+                            websiteId: Enums.SitesWithId.BossAz
                         });
-                    } else {
-                        const parentCategoryValue = categories[categories.length - 1].categoryId; 
-                        categories.push({
-                            name: text.replace('— ', ''),
-                            categoryId: +value,
-                            parentId: parentCategoryValue,
-                            website: this.url
-                        });
+                    } 
+                    else {
+                        if (categories.length > 0) {
+                            const parentCategoryValue = categories[categories.length - 1].categoryId; 
+                            console.log(value);
+                            
+                            categories.push({
+                                name: text.replace('— ', ''), 
+                                categoryId: +value,
+                                parentId: mainCategoryId,  
+                                website: this.url,
+                                websiteId: Enums.SitesWithId.BossAz
+                            });
+                        }
                     }
                 }
-                
             });
-            return categories;
+    
+            // Filter to ensure no categoryId is null
+            return categories.filter(category => category.categoryId !== null);
         } catch (error) {
             console.error('Error fetching categories:', error);
             throw new Error('Error fetching categories');
@@ -108,7 +120,7 @@ class BossAz {
                             subCategoryId,
                             sourceUrl : this.url,
                             redirectUrl: 'https://' + this.url + redirectUrl,
-                            jobType: '0x001'
+                            jobType: '0x001',
                         });
                         console.log({data});
                         

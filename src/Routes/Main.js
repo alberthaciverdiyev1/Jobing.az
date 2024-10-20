@@ -32,15 +32,16 @@ router.put('/api/site/:id', validator.siteValidator, siteController.update);    
 router.delete('/api/site/:id', siteController.delete);                                     // DELETE
 
 // CRUD operations for companies
-router.post('/api/companies',validator.companyValidator, companyController.create);        // CREATE
+router.post('/api/companies', validator.companyValidator, companyController.create);        // CREATE
 router.get('/api/companies', companyController.getAll);                                    // READ ALL
 router.get('/api/companies/:id', companyController.findById);                              // READ ONE
-router.put('/api/companies/:id',validator.companyValidator, companyController.update);     // UPDATE
+router.put('/api/companies/:id', validator.companyValidator, companyController.update);     // UPDATE
 router.delete('/api/companies/:id', companyController.delete);                             // DELETE
 
 // CRUD operations for categories
-router.post('/api/categories', categoryController.create);        // CREATE
-router.get('/api/categories', categoryController.getAll);                                    // READ ALL
+router.post('/api/foreign-categories', categoryController.addForeignCategories);                    // CREATE
+router.get('/api/foreign-categories', categoryController.getForeignCategories);                                   // READ ALL
+router.get('/api/categories', categoryController.getLocalCategories);                                   // READ ALL
 // router.get('/categories/:id', categoryController.findById);                              // READ ONE
 // router.put('/categories/:id',validator.companyValidator, categoryController.update);     // UPDATE
 // router.delete('/categories/:id', categoryController.delete);                             // DELETE
@@ -49,27 +50,24 @@ router.get('/api/categories', categoryController.getAll);                       
 // CRUD operations for Cities
 router.post('/api/cities', cityController.create);                                           // CREATE
 router.get('/api/cities', cityController.getAll);                                           // READ ALL
-// router.get('/categories/:id', categoryController.findById);                              // READ ONE
-// router.put('/categories/:id',validator.companyValidator, categoryController.update);     // UPDATE
-// router.delete('/categories/:id', categoryController.delete);                             // DELETE
+
 
 // CRUD operations for scrape
 router.get('/api/scrape', scrapeController.getData);                                    // READ ALL
 
 
 //Load Views
-router.get('/',viewController.home);
-router.get('/auth',viewController.auth);
-router.get('/jobs',viewController.jobs);
+router.get('/', viewController.home);
+router.get('/auth', viewController.auth);
+router.get('/jobs', viewController.jobs);
 //Enums
-router.get('/education',viewController.education);
+router.get('/education', viewController.education);
 
 
 
 //Admin Panel 
 
-router.get('/admin',viewController.adminIndex);
-router.get('/admin/categories',viewController.adminCategoryView);
+router.get('/admin', viewController.adminIndex);
+router.get('/admin/categories', viewController.adminCategoryView);
 
 export default router;
- 

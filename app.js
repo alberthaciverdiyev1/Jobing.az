@@ -3,6 +3,7 @@ import path from 'path';
 import routes from './src/Routes/Main.js';
 import sequelize from './src/Config/Database.js';
 import swaggerDocs from './src/Config/Swagger.js';
+import loggerMiddleware from './src/Middlewares/Logger.js';
 
 const app = express();
 const port = process.env.PORT || 3001;
@@ -11,17 +12,6 @@ app.set('view engine', 'ejs');
 app.set('views', './src/Views');
 app.use(express.static(path.resolve('./src/Public')));
 app.use(express.json());
-
-if (process.env.NODE_ENV !== 'production') {
-    (async () => {
-        try {
-            const { default: loggerMiddleware } = await import('./src/Middlewares/Logger.js');
-            app.use(loggerMiddleware());
-        } catch (error) {
-            console.error('Error loading logger middleware:', error);
-        }
-    })();
-}
 
 app.use('/', routes);
 
@@ -37,6 +27,12 @@ app.use('/', routes);
 //         console.error('Unable to connect to the database:', error);
 //     });
 
+
+app.use(loggerMiddleware);
+
+app.use((req, res, next) => {
+    res.status(404).send('404 Not Found');
+});
 
 
 app.listen(port, () => {

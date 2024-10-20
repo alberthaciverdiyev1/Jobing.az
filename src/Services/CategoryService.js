@@ -1,12 +1,15 @@
+import ForeignCategory from '../Models/ForeignCategory.js';
 import Category from '../Models/Category.js';
 
 const CategoryService = {
-    create: async (data) => {
+
+    addForeignCategories: async (data) => {
         try {
             if (!Array.isArray(data)) {
                 throw new Error('Data must be an array');
             }
-            const results = await Category.bulkCreate(data);
+            
+            const results = await ForeignCategory.bulkCreate(data);
 
             if (results && Array.isArray(results) && results.length > 0) {
                 return {
@@ -22,7 +25,39 @@ const CategoryService = {
         }
     },
 
-    // Get all
+    // Get categories
+    getForeignCategories: async () => {
+        try {
+            return await ForeignCategory.findAll();
+        } catch (error) {
+            throw new Error('Error retrieving categories: ' + error.message);
+        }
+    },
+
+    getLocalCategories: async () => {
+        try {
+            return await Category.findAll();
+        } catch (error) {
+            throw new Error('Error retrieving categories: ' + error.message);
+        }
+    },
+
+    addLocalCategory: async (data) => {
+        try {
+            const result = Category.create(data);
+            if (result) {
+                return {
+                    status: 201,
+                    message: `Success`,
+                };
+            }
+        } catch (error) {
+            throw new Error('Error creating categories: ' + error.message);
+        }
+    },
+
+    // Delete category
+
     delete: async (id) => {
         try {
             const category = await Category.findByPk(id);
@@ -30,7 +65,7 @@ const CategoryService = {
                 throw new Error('Category not found');
             }
             await category.destroy();
-            return {message: 'Category successfully deleted'};
+            return { message: 'Category successfully deleted' };
         } catch (error) {
             throw new Error('Error deleting category: ' + error.message);
         }
@@ -46,15 +81,6 @@ const CategoryService = {
             return category;
         } catch (error) {
             throw new Error('Error retrieving category: ' + error.message);
-        }
-    },
-
-    // Update a category
-    getAll: async () => {
-        try {
-            return await Category.findAll();
-        } catch (error) {
-            throw new Error('Error retrieving categories: ' + error.message);
         }
     },
 
