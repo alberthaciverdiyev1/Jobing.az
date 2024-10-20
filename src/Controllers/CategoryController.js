@@ -17,7 +17,7 @@ const CategoryController = {
         } catch (error) {
             res.status(500).json({message: 'Error creating category: ' + error.message});
         }
-    },
+    }, 
 
     getAll: async (req, res) => {
         try {

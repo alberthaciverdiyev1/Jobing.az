@@ -1,7 +1,10 @@
-const createLoggerMiddleware = async () => {
-    const { default: logger } = await import('../Helpers/Logger.js');
-
+const createLoggerMiddleware = () => {
     return (err, req, res, next) => {
+        if (!logger) {
+            console.error('Logger is not configured');
+            return res.status(500).json({ error: 'Logger is not configured' });
+        }
+        
         logger.error({
             message: err.message,
             stack: err.stack,
@@ -10,9 +13,8 @@ const createLoggerMiddleware = async () => {
             ip: req.ip,
         });
 
-        res.status(500).json({error: 'Internal Server Error'});
+        res.status(500).json({ error: 'Internal Server Error' });
     };
 };
-
 
 export default createLoggerMiddleware;

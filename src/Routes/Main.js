@@ -69,6 +69,7 @@ router.get('/education',viewController.education);
 //Admin Panel 
 
 router.get('/admin',viewController.adminIndex);
+router.get('/admin/categories',viewController.adminCategoryView);
 
 export default router;
  

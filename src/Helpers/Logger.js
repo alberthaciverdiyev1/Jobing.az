@@ -4,6 +4,8 @@ import 'winston-daily-rotate-file';
 let logger;
 
 const configureLogger = async () => {
+    console.log("Configuring logger...");
+    
     if (process.env.NODE_ENV !== 'production') {
         try {
             const { default: DailyRotateFile } = await import('winston-daily-rotate-file');

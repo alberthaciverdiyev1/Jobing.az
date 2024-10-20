@@ -34,6 +34,16 @@ const ViewController = {
         res.render('Admin/Main', view);
     }, 
 
+    adminCategoryView: async (req, res) => {
+        const view = {
+            title: 'Categories - Admin Panel',
+            body: "Category/Index.ejs",
+            js: "Category.js" 
+        };
+        res.render('Admin/Main', view); 
+    }, 
+
+
     education: (req, res) => {
         const educationData = Enums.Education;
 
