@@ -65,4 +65,10 @@ router.get('/jobs',viewController.jobs);
 router.get('/education',viewController.education);
 
 
+
+//Admin Panel 
+
+router.get('/admin',viewController.adminIndex);
+
 export default router;
+ 

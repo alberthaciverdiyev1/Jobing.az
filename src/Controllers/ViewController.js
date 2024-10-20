@@ -25,18 +25,20 @@ const ViewController = {
         };
         res.render('Main', view);
     },
-    adminIndex: async (req,res) => {
+    adminIndex: async (req, res) => {
         const view = {
             title: 'Admin Panel',
-            body: "Admin/Index.ejs",
-            js: "Admin/Index.js"
+            body: "Home/Index.ejs",
+            js: "Index.js"
         };
-        res.render('Admin', view);
-    },
-    education:(req,res) => {
+        res.render('Admin/Main', view);
+    }, 
+
+    education: (req, res) => {
         const educationData = Enums.Education;
 
-        res.status(200).json({ data: educationData });    }
+        res.status(200).json({ data: educationData });
+    }
 };
 
 export default ViewController;

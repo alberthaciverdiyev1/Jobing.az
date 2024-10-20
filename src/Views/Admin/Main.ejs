@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('Partials/Head') %>
+
+  <body>
+    <!-- ===== Preloader Start ===== -->
+    <%- include('Partials/Preloader') %>
+    <%- include('Partials/Navbar') %>
+      <!-- ===== Preloader End ===== -->
+
+      <!-- ===== Page Wrapper Start ===== -->
+      <div class="flex h-screen overflow-hidden">
+        <!-- ===== Sidebar Start ===== -->
+        <%- include('Partials/Sidebar') %>
+          <!-- ===== Sidebar End ===== -->
+
+          <!-- ===== Content Area Start ===== -->
+          <div class="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
+
+              <!-- ===== Main Content Start ===== -->
+              <%- include(body) %>
+
+                <!-- ===== Main Content End ===== -->
+          </div>
+          <!-- ===== Content Area End ===== -->
+      </div>
+      <!-- ===== Page Wrapper End ===== -->
+      <%- include('Partials/Js') %>
+
+  </body>
+
+</html>
