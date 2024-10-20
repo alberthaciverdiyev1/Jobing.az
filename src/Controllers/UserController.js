@@ -15,7 +15,7 @@ const getUsers = async (req, res) => {
         const users = await User.findAll();
         res.json(users);
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        res.status(500).json({ error: err.message }); 
     }
 };
 
