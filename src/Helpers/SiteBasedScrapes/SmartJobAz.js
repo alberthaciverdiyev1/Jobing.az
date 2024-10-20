@@ -21,7 +21,7 @@ class SmartJobAz {
 
                 categories.push({
                     name: CategoryName,
-                    value: +CategoryValue,
+                    categoryId: +CategoryValue,
                     parentId: null,
                     website: this.url,
                     websiteId: Enums.SitesWithId.SmartJobAz
@@ -35,7 +35,7 @@ class SmartJobAz {
                     if (subCategoryName && subCategoryValue) {
                         categories.push({
                             name: subCategoryName,
-                            value: +subCategoryValue,
+                            categoryId: +subCategoryValue,
                             parentId: CategoryValue,
                             website: this.url,
                             websiteId: Enums.SitesWithId.SmartJobAz
