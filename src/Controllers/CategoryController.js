@@ -10,7 +10,7 @@ const CategoryController = {
             const smartJob = new SmartJobAz();
 
             const bossAzCategories = await boss.Categories();
-            const smartJobCategories = await smartJob.Categories();
+            const smartJobCategories = await smartJob.Categories(); 
             let categories = [...smartJobCategories, ...bossAzCategories];
 
             const response = await CategoryService.addForeignCategories(categories);

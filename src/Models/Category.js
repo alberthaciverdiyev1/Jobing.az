@@ -1,5 +1,7 @@
 import { DataTypes } from 'sequelize';
 import sequelize from '../Config/Database.js';
+// import Enums from "../../Config/Enums.js";
+
 
 const Category = sequelize.define('Category', {
     id: {
@@ -7,23 +9,27 @@ const Category = sequelize.define('Category', {
         primaryKey: true,
         autoIncrement: true
     },
+    localCategoryId:{
+        type: DataTypes.INTEGER,
+        allowNull: false
+    },
     name: {
         type: DataTypes.STRING,
         allowNull: false
     },
-    categoryId: {
+    categoryId:{
         type: DataTypes.INTEGER,
         allowNull: true
     },
-    parentId: {
+    parentId:{
         type: DataTypes.INTEGER,
-        allowNull: true,
+        allowNull: true
     },
     website: {
         type: DataTypes.STRING,
         allowNull: false
     },
-}, {
+}, { 
     tableName: 'category',
     timestamps: true,
     paranoid: true,

@@ -31,7 +31,7 @@ class SmartJobAz {
                 $(el).find('.cat-sub-root .sub-item-cat').each((j, subEl) => {
                     const subCategoryName = $(subEl).find('.cat-sub-title').text().trim();
                     const subCategoryValue = $(subEl).find('.cat-sub-root-checkbox').val();
-
+ 
                     if (subCategoryName && subCategoryValue) {
                         categories.push({
                             name: subCategoryName,
