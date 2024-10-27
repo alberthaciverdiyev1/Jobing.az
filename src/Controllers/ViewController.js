@@ -4,7 +4,7 @@ const ViewController = {
     home: async (req, res) => {
         const view = {
             title: 'Home',
-            body: "home/index.ejs",
+            body: "Home/Index.ejs",
             js: "Home.js"
         };
         res.render('Main', view);
@@ -12,7 +12,7 @@ const ViewController = {
     auth: async (req, res) => {
         const view = {
             title: 'Auth',
-            body: "auth/index.ejs",
+            body: "Auth/Index.ejs",
             js: "Auth.js"
         };
         res.render('Main', view);
@@ -20,7 +20,7 @@ const ViewController = {
     jobs: async (req, res) => {
         const view = {
             title: 'Jobs',
-            body: "jobs/index.ejs",
+            body: "Jobs/Index.ejs",
             js: "Jobs.js"
         };
         res.render('Main', view);
