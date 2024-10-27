@@ -25,7 +25,7 @@ app.use('/', routes);
 //     })
 //     .catch((error) => {
 //         console.error('Unable to connect to the database:', error);
-//     });
+//     }); 
 
 
 app.use(loggerMiddleware);
@@ -37,4 +37,4 @@ app.use((req, res, next) => {
 
 app.listen(port, () => {
     console.log(`Server is running at http://localhost:${port}`);
-});
+}); 
