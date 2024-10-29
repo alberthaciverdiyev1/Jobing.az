@@ -2,19 +2,19 @@ import ForeignCategory from '../Models/ForeignCategory.js';
 import Category from '../Models/Category.js';
 
 const CategoryService = {
-
+    // Foreign Categories add
     addForeignCategories: async (data) => {
         try {
             if (!Array.isArray(data)) {
                 throw new Error('Data must be an array');
             }
-            
-            const results = await ForeignCategory.bulkCreate(data);
+
+            const results = await ForeignCategory.insertMany(data);
 
             if (results && Array.isArray(results) && results.length > 0) {
                 return {
                     status: 201,
-                    message: `Insertion completed. Number of records inserted:${results.length}`,
+                    message: `Insertion completed. Number of records inserted: ${results.length}`,
                     count: results.length,
                 };
             } else {
@@ -25,10 +25,10 @@ const CategoryService = {
         }
     },
 
-    // Get categories
+    // get all foreign categories
     getForeignCategories: async () => {
         try {
-            return await ForeignCategory.findAll();
+            return await ForeignCategory.find({});
         } catch (error) {
             throw new Error('Error retrieving categories: ' + error.message);
         }
@@ -36,7 +36,7 @@ const CategoryService = {
 
     getLocalCategories: async () => {
         try {
-            return await Category.findAll();
+            return await Category.find({});
         } catch (error) {
             throw new Error('Error retrieving categories: ' + error.message);
         }
@@ -44,37 +44,35 @@ const CategoryService = {
 
     addLocalCategory: async (data) => {
         try {
-            const result = Category.create(data);
-            if (result) {
-                return {
-                    status: 201,
-                    message: `Success`,
-                };
-            }
+            const result = await Category.create(data);
+            return {
+                status: 201,
+                message: `Success`,
+                category: result,
+            };
         } catch (error) {
-            throw new Error('Error creating categories: ' + error.message);
+            throw new Error('Error creating category: ' + error.message);
         }
     },
 
     // Delete category
-
     delete: async (id) => {
         try {
-            const category = await Category.findByPk(id);
+            const category = await Category.findById(id);
             if (!category) {
                 throw new Error('Category not found');
             }
-            await category.destroy();
+            await category.remove();
             return { message: 'Category successfully deleted' };
         } catch (error) {
             throw new Error('Error deleting category: ' + error.message);
         }
     },
 
-    // Get a category by ID
+    // Fing with id
     findById: async (id) => {
         try {
-            const category = await Category.findByPk(id);
+            const category = await Category.findById(id);
             if (!category) {
                 throw new Error('Category not found');
             }
@@ -84,14 +82,14 @@ const CategoryService = {
         }
     },
 
-    // Delete a category
+    // Update category
     update: async (id, updateData) => {
         try {
-            const category = await Category.findByPk(id);
+            const category = await Category.findById(id);
             if (!category) {
                 throw new Error('Category not found');
             }
-            await category.update(updateData);
+            await category.updateOne(updateData);
             return category;
         } catch (error) {
             throw new Error('Error updating category: ' + error.message);

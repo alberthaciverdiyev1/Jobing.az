@@ -8,7 +8,7 @@ import SmartJobAz from "../Helpers/SiteBasedScrapes/SmartJobAz.js";
 const jobDataController = {
     create: async (req, res) => {
         try {
-            const categories = await CategoryService.getAll();
+            const categories = await CategoryService.getLocalCategories();
             const bossAz = new BossAz();
             // const smatJobAz = new SmartJobAz();
             // const smartJobAzJobs = await smatJobAz.Jobs();

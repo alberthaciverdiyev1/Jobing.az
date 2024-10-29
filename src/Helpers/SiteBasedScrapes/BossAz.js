@@ -52,6 +52,8 @@ class BossAz {
 
     async Jobs(categories) {
         try {
+            console.log(categories);return;
+            
             const data = [];
             // for (let category of categories) {
             // for (let i = 0; i <= 50; i++) { 

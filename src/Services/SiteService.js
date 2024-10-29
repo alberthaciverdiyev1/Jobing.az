@@ -1,5 +1,5 @@
 import Site from '../Models/Site.js';
-import {where} from "sequelize";
+import { where } from "sequelize";
 
 const SiteService = {
     // Create a new site

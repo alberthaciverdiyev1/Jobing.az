@@ -1,43 +1,41 @@
-import {DataTypes} from 'sequelize';
-import sequelize from '../Config/Database.js';
+import mongoose from 'mongoose';
 
-const Company = sequelize.define('Company', {
-    id: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true
-    },
+const { Schema } = mongoose;
+
+const companySchema = new Schema({
     name: {
-        type: DataTypes.STRING,
-        allowNull: false
+        type: String,
+        required: true
     },
     website: {
-        type: DataTypes.STRING,
-        allowNull: true
+        type: String,
+        required: false
     },
     contactInfo: {
-        type: DataTypes.STRING,
-        allowNull: true
+        type: String,
+        required: false
     },
     location: {
-        type: DataTypes.STRING,
-        allowNull: true
+        type: String,
+        required: false
     },
     industry: {
-        type: DataTypes.STRING,
-        allowNull: true
+        type: String,
+        required: false
     },
     description: {
-        type: DataTypes.TEXT,
-        allowNull: true
+        type: String,
+        required: false
     },
-    deletedAt:{
-        type: DataTypes.DATE,
-        defaultValue: null
+    deletedAt: {
+        type: Date,
+        default: null
     }
 }, {
-    tableName: 'companies',
-    timestamps: true
+    timestamps: true,
+    versionKey: false
 });
+
+const Company = mongoose.model('Company', companySchema);
 
 export default Company;

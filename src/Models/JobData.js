@@ -1,89 +1,73 @@
-import { DataTypes } from "sequelize";
-import sequelize from '../Config/Database.js';
-import Company from './Company.js';
+import mongoose from 'mongoose';
 import Enums from '../Config/Enums.js';
-import Category from "./Category.js";
 
-const Job = sequelize.define('Job', {
-    id: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true
-    },
+const { Schema } = mongoose;
+
+const jobSchema = new Schema({
     title: {
-        type: DataTypes.STRING,
-        allowNull: false
+        type: String,
+        required: true
     },
     description: { 
-        type: DataTypes.TEXT,
-        allowNull: true
+        type: String,
+        required: false
     },
     location: {
-        type: DataTypes.STRING,
-        allowNull: true
+        type: String,
+        required: false
     },
     minSalary: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
+        type: Number,
+        required: false
     },
     maxSalary: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
+        type: Number,
+        required: false
     },
     categoryId: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-        references: {
-            model: Category,
-            key: 'id'
-        },
-        onDelete: 'CASCADE',
-        onUpdate: 'CASCADE',
+        type: Schema.Types.ObjectId,
+        ref: 'Category',
+        required: false
     },
     subCategoryId: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-        references: {
-            model: Category,
-            key: 'id'
-        },
-        onDelete: 'CASCADE',
-        onUpdate: 'CASCADE',
+        type: Schema.Types.ObjectId,
+        ref: 'Category',
+        required: false
     },
     companyName: {
-        type: DataTypes.STRING,
+        type: String,
+        required: false
     },
     userName: {
-        type: DataTypes.STRING,
-        allowNull: true
+        type: String,
+        required: false
     },
     isPremium: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: false
+        type: Boolean,
+        default: false
     },
     jobType: {
-        type: DataTypes.STRING(Object.values(Enums.JobTypes)),
-        allowNull: false
+        type: String,
+        enum: Object.values(Enums.JobTypes),
+        required: true
     },
     postedAt: {
-        type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW,
+        type: Date,
+        default: Date.now
     },
     sourceUrl: {
-        type: DataTypes.STRING,
-        allowNull: false
+        type: String,
+        required: true
     },
     redirectUrl: {
-        type: DataTypes.STRING,
-        allowNull: false
+        type: String,
+        required: true
     }
 }, {
-    tableName: 'jobs',
     timestamps: true,
-    paranoid: true,
+    versionKey: false
 });
 
-Job.belongsTo(Category, { foreignKey: 'categoryId', as: 'category' });
-Job.belongsTo(Category, { foreignKey: 'subCategoryId', as: 'subCategory' });
+const Job = mongoose.model('Job', jobSchema);
 
 export default Job;
