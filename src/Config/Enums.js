@@ -7,12 +7,12 @@ const Enums = Object.freeze({
         FREELANCE: 0x005,
     },
     Education: {
-        Secondary: 0x001,
-        Higher: 0x002,
-        Incomplete_education: 0x003,
-        Bachelor: 0x004,
-        Master: 0x005,
-        Doctor: 0x006
+        Secondary: 1,
+        Higher: 2,
+        Incomplete_education: 3,
+        Bachelor: 4,
+        Master: 5,
+        Doctor: 6
     },
     Experience: {
         Zero: 0x000,

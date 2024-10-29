@@ -39,8 +39,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
         data.forEach(element => {
             htmlContent += `
                 <div class="flex items-center">
-                    <input type="radio" name="city" id="city-${element.id}" data-id="${element.id}"" class="custom-checkbox" />
-                    <label for="city-${element.id}" class="text-gray-800">${element.name} <span class="text-gray-400">(145)</span></label>
+                    <input type="radio" name="city" id="city-${element.cityId}" data-id="${element.cityId}"" class="custom-checkbox" />
+                    <label for="city-${element.cityId}" class="text-gray-800">${element.name} <span class="text-gray-400">(145)</span></label>
                 </div>`;
         });
         return htmlContent;
@@ -89,16 +89,23 @@ document.addEventListener("DOMContentLoaded", (event) => {
                 if (res.status === 200) {
                     console.log(res.data);
 
-                    Object.entries(res.data).forEach(([key, val]) => {
-                        console.log();
-                        htmlContent += `
-                    <div class="flex items-center">
-                        <input type="radio" id="${key}" class="custom-checkbox" />
-                        <label for="${key}" class="text-gray-800">
-                            ${val} <span class="text-gray-400">(145)</span>
-                        </label>
-                    </div>`;
+                    Object.values(res.data).forEach((key, val) => {
+                        htmlContent += ` <div class="flex items-center">
+                                          <input type="radio" id="${key}" class="custom-checkbox" />
+                                            <label for="${key}" class="text-gray-800">
+                                                ${val} <span class="text-gray-400">(145)</span>
+                                            </label>
+                                         </div>`;
                     });
+
+                    // Object.values(res.data).forEach(([key, val]) => {
+                    //     htmlContent += `<div class="flex items-center">
+                    //                         <input type="radio" id="${key}" class="custom-checkbox" />
+                    //                         <label for="${key}" class="text-gray-800">
+                    //                             ${val} <span class="text-gray-400">(145)</span>
+                    //                         </label>
+                    //                     </div>`;
+                    // });
                 }
                 console.log(htmlContent);
 
@@ -117,6 +124,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
         await axios.get('/api/jobs', {
             params: params
         }).then(res => {
+            console.log(res);
+
             let htmlContent = '';
             let headerContent = '';
             if (false) {
@@ -163,7 +172,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
                                                             </span>
                                                         </p>
                                                         <h4 class="text-base font-semibold text-gray-700 mb-2 sm:font-bold">
-                                                            <i class="fa-solid fa-building"></i> Azersun
+                                                            <i class="fa-solid fa-building"></i> ${element.companyName}
                                                         </h4>
                                                     </div>
                                                     <div class="hidden sm:w-full">
@@ -192,7 +201,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
                                                 </div>
                                                 <div class="text-sm mt-2 flex justify-between sm:hidden">
                                                     <span class="bg-blue-100 text-blue-700 px-1 py-0.5 rounded-lg text-sm">${element.jobType}</span>
-                                                    <h4 class="text-lg text-gray-600 font-bold">${(element.minSalary ? element.minSalary + '-' : "") + element.maxSalary ?? (!element.minSalary && !element.maxSalary ? "Razilasma ile" : "")}</h4>
+                                                    <h4 class="text-lg text-gray-600 font-bold">${(+element.minSalary !== "null" ? +element.minSalary + '-' : "") + +element.maxSalary ?? (!element.minSalary && !element.maxSalary ? "Razilasma ile" : "")}</h4>
                                                 </div>
                                             </div>
                                             <div class="flex flex-col justify-between h-full flex-grow hidden sm:flex">
@@ -200,7 +209,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
                                                     <button class="text-base text-gray-600 font-bold mb-2 w-8 h-8">
                                                         <i class="fa-solid fa-heart text-2xl"></i>
                                                     </button>
-                                                    <h4 class="text-lg text-gray-600 font-bold mt-2">${(element.minSalary ? element.minSalary + '-' : "") + element.maxSalary ?? (!element.minSalary && !element.maxSalary ? "Razilasma ile" : "")}</h4>
+                                                    <h4 class="text-lg text-gray-600 font-bold mt-2">${(+element.minSalary ? element.minSalary + '-' : "") + +element.maxSalary ?? (!element.minSalary && !element.maxSalary ? "Razilasma ile" : "")}</h4>
                                                 </div>
                                                 <div class="flex justify-end items-end mt-auto pt-6">
                                                     <a href="${element.redirectUrl}" target="_blank" class="filled-button-color text-white py-2 px-8 rounded-full">
@@ -275,12 +284,15 @@ document.addEventListener("DOMContentLoaded", (event) => {
             jobType: document.querySelector('input[name="jobType"]:checked')?.id || null,
             salaryMin: document.querySelector('input[name="salaryMin"]')?.getAttribute('data-value') || null,
             salaryMax: document.querySelector('input[name="salaryMax"]')?.getAttribute('data-value') || null,
-            experienceLevel: document.querySelector('input[name="experienceLevel"]:checked')?.id || null
+            experienceLevel: document.querySelector('input[name="experienceLevel"]:checked')?.id || null,
+            keyword: document.getElementById("search")?.value || null
         };
-        console.log({ params });
         getJobs(params);
     }
 
+
+    document.getElementById("search-btn").addEventListener("click", handleFilterChange);
+    document.getElementById("search").addEventListener("keyup", handleFilterChange);
 
     function addRadioChangeListener(type) {
         document.querySelectorAll(`input[name="${type}"]`).forEach(radio => {
