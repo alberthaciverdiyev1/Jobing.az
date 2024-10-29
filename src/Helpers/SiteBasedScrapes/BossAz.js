@@ -6,7 +6,7 @@ import Enums from "../../Config/Enums.js";
 
 class BossAz {
     constructor(url = enums.Sites.BossAz) {
-        this.url = "https://" + url;
+        this.url = url;
     }
 
     async Categories() {
@@ -14,7 +14,7 @@ class BossAz {
             const $ = await Scrape(this.url);
             const categories = [];
 
-            let mainCategoryId = null; 
+            let mainCategoryId = null;
             $('#search_category_id option').each((i, option) => {
                 const value = $(option).val();
                 const text = $(option).text().trim();
@@ -50,80 +50,73 @@ class BossAz {
         }
     }
 
-    async Jobs(categories) {
+    async Jobs(categories, cities) {
         try {
-            console.log(categories);return;
-            
-            const data = [];
-            // for (let category of categories) {
-            // for (let i = 0; i <= 50; i++) { 
-            const $ = await Scrape(`https://${this.url}/vacancies?action=index&controller=vacancies&only_path=true&page=${1}&search%5Bcategory_id%5D=${38}&search%5Bcompany_id%5D=&search%5Beducation_id%5D=&search%5Bexperience_id%5D=&search%5Bkeyword%5D=&search%5Bregion_id%5D=&search%5Bsalary%5D=&type=vacancies`);
+            const filteredCategories = categories.filter(c => c.website === enums.SitesWithId.BossAz);
+            const filteredCities = cities.filter(c => c.website === enums.SitesWithId.BossAz);
 
-            $('.results-i').each((i, el) => {
-                const urlAndId = $(el).find('.results-i-link');
-                const htmlContent = $(el).find('.results-i-secondary').html();
-                const location = htmlContent.match(/^(.*?)<span/)[1].trim();
-                const title = $(el).find('.results-i-title').text().trim();
-                const company = $(el).find('.results-i-company').text().trim();
-                const description = $(el).find('.results-i-summary p').text().trim();
-                const redirectUrl = urlAndId.attr('href');
-                const jobId = redirectUrl.split('/').pop();
-                const categoryLinks = $(el).find('.results-i-secondary a');
+            const dataPromises = [];
 
-                const salaryText = $(el).find('.results-i-salary').text().trim();
-                const cleanSalaryText = salaryText.replace('AZN', '').trim();
-                const parts = cleanSalaryText.split(' - ');
+            for (const category of filteredCategories) {
+                for (let education = 0; education <= 7; education++) {
+                    for (let page = 0; page <= 3; page++) {
+                        dataPromises.push(
+                            Scrape(`https://${this.url}/vacancies?action=index&controller=vacancies&only_path=true&page=${page}&search%5Bcategory_id%5D=${category.categoryId}&search%5Bcompany_id%5D=&search%5Beducation_id%5D=${education}&search%5Bexperience_id%5D=&search%5Bkeyword%5D=&search%5Bregion_id%5D=&search%5Bsalary%5D=&type=vacancies`)
+                                .then($ => {
+                                    const jobData = [];
+                                    $('.results-i').each((i, el) => {
+                                        const urlAndId = $(el).find('.results-i-link');
+                                        const htmlContent = $(el).find('.results-i-secondary').html();
+                                        const location = htmlContent.match(/^(.*?)<span/)[1].trim();
+                                        const title = $(el).find('.results-i-title').text().trim();
+                                        const companyName = $(el).find('.results-i-company').text().trim();
+                                        const description = $(el).find('.results-i-summary p').text().trim();
+                                        const redirectUrl = urlAndId.attr('href');
+                                        const jobId = redirectUrl.split('/').pop();
+                                        const salaryText = $(el).find('.results-i-salary').text().trim();
+                                        const cleanSalaryText = salaryText.replace('AZN', '').trim();
+                                        const parts = cleanSalaryText.split(' - ');
+                                        const companyHref = $(el).find('.results-i-company').attr('href');
+                                        const companyUrlParams = new URLSearchParams(companyHref.split('?')[1]);
+                                        const companyId = companyUrlParams.get('search[company_id]');
 
-                let minSalary = null;
-                let maxSalary = null;
-                let categoryId = null;
-                let subCategoryId = null;
+                                        let [minSalary, maxSalary] = [null, null];
+                                        if (parts.length === 2) {
+                                            minSalary = parseInt(parts[0], 10);
+                                            maxSalary = parseInt(parts[1], 10);
+                                        } else if (parts.length === 1) {
+                                            minSalary = maxSalary = parseInt(parts[0], 10);
+                                        }
 
-                if (parts.length === 2) {
-                    minSalary = parseInt(parts[0], 10);
-                    maxSalary = parseInt(parts[1], 10);
-                } else if (parts.length === 1) {
-                    minSalary = parseInt(parts[0], 10);
-                    maxSalary = minSalary;
-                }
-                if (isNaN(minSalary)) {
-                    minSalary = null;
-                }
-                if (isNaN(maxSalary)) {
-                    maxSalary = null;
-                }
+                                        const locationCity = filteredCities.find(x => x.name === location);
+                                        const localCategoryId = filteredCategories.find(x => x.categoryId === category.categoryId)?.localCategoryId;
 
-                categoryLinks.each((index, link) => {
-                    const href = $(link).attr('href');
-                    const match = href.match(/search%5Bcategory_id%5D=(\d+)/);
-                    if (match) {
-                        if (index === 0) {
-                            categoryId = match[1];
-                        } else if (index === 1) {
-                            subCategoryId = match[1];
-                        }
+                                        jobData.push({
+                                            title,
+                                            companyName,
+                                            companyId,
+                                            minSalary: isNaN(minSalary) ? null : minSalary,
+                                            maxSalary: isNaN(maxSalary) ? null : maxSalary,
+                                            location,
+                                            cityId: locationCity ? +locationCity.cityId : null,
+                                            description,
+                                            jobId,
+                                            categoryId: localCategoryId || null,
+                                            sourceUrl: this.url,
+                                            redirectUrl: 'https://' + this.url + redirectUrl,
+                                            jobType: '0x001',
+                                            education
+                                        });
+                                    });
+                                    return jobData;
+                                })
+                        );
                     }
-                });
+                }
+            }
 
-                data.push({
-                    title,
-                    company,
-                    minSalary,
-                    maxSalary,
-                    description,
-                    location,
-                    jobId,
-                    categoryId,
-                    subCategoryId,
-                    sourceUrl: this.url,
-                    redirectUrl: 'https://' + this.url + redirectUrl,
-                    jobType: '0x001',
-                });
-                // console.log({ data });
-
-            });
-            // }
-            // }
+            const results = await Promise.all(dataPromises);
+            const data = results.flat();
             return data;
         } catch (error) {
             console.error('Error fetching jobs:', error);
@@ -131,19 +124,20 @@ class BossAz {
         }
     }
 
+
     async Cities() {
         try {
-            const $ = await Scrape(this.url);
+            const $ = await Scrape('https://' + this.url);
             const cities = [];
 
             $('#search_region_id option').each((i, el) => {
-                const value = $(el).attr('value');
+                const cityId = $(el).attr('value');
                 const name = $(el).text().trim();
-                if (value && name) {
+                if (cityId && name) {
                     cities.push({
-                        value,
+                        cityId,
                         name,
-                        website: this.url
+                        website: enums.SitesWithId.BossAz
                     });
                 }
             });

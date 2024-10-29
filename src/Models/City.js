@@ -7,11 +7,11 @@ const citySchema = new Schema({
         type: String,
         required: true
     },
-    sourceUrl: {
+    website: {
         type: String,
         required: false
     },
-    city_id: {
+    cityId: {
         type: Number,
         required: false
     }

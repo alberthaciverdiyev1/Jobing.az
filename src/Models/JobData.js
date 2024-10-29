@@ -25,17 +25,25 @@ const jobSchema = new Schema({
         required: false
     },
     categoryId: {
-        type: Schema.Types.ObjectId,
+        type: Number,
         ref: 'Category',
         required: false
     },
     subCategoryId: {
-        type: Schema.Types.ObjectId,
+        type: Number,
         ref: 'Category',
         required: false
     },
     companyName: {
         type: String,
+        required: false
+    },
+    companyId: {
+        type: Number,
+        required: false
+    },
+    cityId: {
+        type: Number,
         required: false
     },
     userName: {
@@ -48,7 +56,6 @@ const jobSchema = new Schema({
     },
     jobType: {
         type: String,
-        enum: Object.values(Enums.JobTypes),
         required: true
     },
     postedAt: {

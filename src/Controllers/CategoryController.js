@@ -31,10 +31,8 @@ const CategoryController = {
 
     getLocalCategories: async (req, res) => {
         try {
-            const localCategories = await CategoryService.getLocalCategories();
-            const foreignCategories = await CategoryService.getForeignCategories();
-            const siteWithId = Enums.SitesWithId;
-            res.status(200).json({ localCategories, foreignCategories, siteWithId });
+            const categories = await CategoryService.getLocalCategories();
+            res.status(200).json(categories);
         } catch (error) {
             res.status(500).json({ message: 'Error retrieving categories: ' + error.message });
         }
