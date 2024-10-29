@@ -1,28 +1,25 @@
-import {DataTypes} from 'sequelize';
-import sequelize from '../Config/Database.js';
+import mongoose from 'mongoose';
 
-const City = sequelize.define('City', {
-    id: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true
-    },
+const { Schema } = mongoose;
+
+const citySchema = new Schema({
     name: {
-        type: DataTypes.STRING,
-        allowNull: false
+        type: String,
+        required: true
     },
     sourceUrl: {
-        type: DataTypes.STRING,
-        allowNull: true
+        type: String,
+        required: false
     },
     city_id: {
-        type: DataTypes.INTEGER,
-        allowNull: true
+        type: Number,
+        required: false
     }
 }, {
-    tableName: 'City',
     timestamps: true,
-    paranoid: true,
+    versionKey: false
 });
+
+const City = mongoose.model('City', citySchema);
 
 export default City;

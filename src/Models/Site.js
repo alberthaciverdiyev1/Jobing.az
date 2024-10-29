@@ -1,37 +1,33 @@
-import {DataTypes} from "sequelize";
-import sequelize from '../Config/Database.js'
+import mongoose from 'mongoose';
 
-const Site = sequelize.define("Site", {
-        id: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            primaryKey: true,
-            autoIncrement: true
-        },
-        name: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-        url: {
-            type: DataTypes.STRING,
-            allowNull: false
-        },
-        icon: {
-            type: DataTypes.STRING,
-            allowNull: true,
-        },
-        isActive: {
-            type: DataTypes.BOOLEAN,
-            defaultValue: true
-        },
-        deletedAt: {
-            type: DataTypes.DATE,
-            defaultValue: null
-        }
+const { Schema } = mongoose;
+
+const siteSchema = new Schema({
+    name: {
+        type: String,
+        required: true
     },
-    {
-        tableName: 'Sites',
-        timestamps: true
-    });
+    url: {
+        type: String,
+        required: true
+    },
+    icon: {
+        type: String,
+        required: false
+    },
+    isActive: {
+        type: Boolean,
+        default: true
+    },
+    deletedAt: {
+        type: Date,
+        default: null
+    }
+}, {
+    timestamps: true,
+    versionKey: false
+});
+
+const Site = mongoose.model('Site', siteSchema);
 
 export default Site;

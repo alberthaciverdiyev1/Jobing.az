@@ -1,45 +1,40 @@
-import { DataTypes } from 'sequelize';
-import sequelize from '../Config/Database.js';
-// import Enums from "../../Config/Enums.js";
+import mongoose from 'mongoose';
 
+const { Schema } = mongoose;
 
-const Category = sequelize.define('Category', {
-    id: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true
-    },
-    localCategoryId:{
-        type: DataTypes.INTEGER,
-        allowNull: false
+const categorySchema = new Schema({
+    localCategoryId: {
+        type: Number,
+        required: true
     },
     name: {
-        type: DataTypes.STRING,
-        allowNull: false
+        type: String,
+        required: true
     },
-    categoryId:{
-        type: DataTypes.INTEGER,
-        allowNull: true
+    categoryId: {
+        type: Number,
+        required: false
     },
-    parentId:{
-        type: DataTypes.INTEGER,
-        allowNull: true
+    parentId: {
+        type: Number,
+        required: false
     },
     website: {
-        type: DataTypes.STRING,
-        allowNull: false
-    },
+        type: String,
+        required: true
+    }
 }, { 
-    tableName: 'category',
     timestamps: true,
-    paranoid: true,
-    // indexes: [
-    //     {
-    //         fields: ['parentId'],
-    //     }
-    // ]
+    versionKey: false
 });
 
-// Category.belongsTo(Category, { foreignKey: 'parentId', as: 'Parent' });
+categorySchema.virtual('Parent', {
+    ref: 'Category',
+    localField: 'parentId',
+    foreignField: 'id',
+    justOne: true
+});
+
+const Category = mongoose.model('Category', categorySchema);
 
 export default Category;

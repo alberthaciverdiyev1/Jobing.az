@@ -1,64 +1,64 @@
-
 import Company from '../Models/Company.js';
 
 const CompanyService = {
+    // Create a company
     create: async (data) => {
         try {
             const res = await Company.create(data);
             return res;
         } catch (error) {
-            throw new Error('Error creating site: ' + error.message);
+            throw new Error('Error creating company: ' + error.message);
         }
     },
 
-    // Get all
+    // Get all companies
     getAll: async () => {
         try {
-            const sites = await Company.findAll();
-            return sites;
+            const companies = await Company.find({});
+            return companies;
         } catch (error) {
-            throw new Error('Error retrieving sites: ' + error.message);
+            throw new Error('Error retrieving companies: ' + error.message);
         }
     },
 
-    // Get a site by ID
+    // Find a company by ID
     findById: async (id) => {
         try {
-            const site = await Company.findByPk(id);
-            if (!site) {
-                throw new Error('Site not found');
+            const company = await Company.findById(id);
+            if (!company) {
+                throw new Error('Company not found');
             }
-            return site;
+            return company;
         } catch (error) {
-            throw new Error('Error retrieving site: ' + error.message);
+            throw new Error('Error retrieving company: ' + error.message);
         }
     },
 
-    // Update a site
+    // Update a company
     update: async (id, updateData) => {
         try {
-            const site = await Company.findByPk(id);
-            if (!site) {
-                throw new Error('Site not found');
+            const company = await Company.findById(id);
+            if (!company) {
+                throw new Error('Company not found');
             }
-            await site.update(updateData);
-            return site;
+            await company.updateOne(updateData);
+            return company;
         } catch (error) {
-            throw new Error('Error updating site: ' + error.message);
+            throw new Error('Error updating company: ' + error.message);
         }
     },
 
-    // Delete a site
+    // Delete a company
     delete: async (id) => {
         try {
-            const site = await Company.findByPk(id);
-            if (!site) {
-                throw new Error('Site not found');
+            const company = await Company.findById(id);
+            if (!company) {
+                throw new Error('Company not found');
             }
-            await site.destroy();
-            return { message: 'Site successfully deleted' };
+            await company.remove();
+            return { message: 'Company successfully deleted' };
         } catch (error) {
-            throw new Error('Error deleting site: ' + error.message);
+            throw new Error('Error deleting company: ' + error.message);
         }
     }
 };

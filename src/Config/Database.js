@@ -1,16 +1,15 @@
 import dotenv from 'dotenv';
-import { Sequelize } from 'sequelize';
+import mongoose from 'mongoose';
+
 dotenv.config();
 
-const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASSWORD, {
-    host: process.env.DB_HOST,
-    dialect: process.env.DB_DIALECT,
-    port: process.env.PORT,
-    // logging: false,
-});
+const dbURI = `mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`;
 
-sequelize.authenticate()
-    .then(() => console.log('Successfully connected to the database.'))
-    .catch(err => console.error('Connection error:', err));
+mongoose.connect(dbURI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+})
+.then(() => console.log('Successfully connected to the database.'))
+.catch(err => console.error('Connection error:', err));
 
-export default sequelize;
+export default mongoose;

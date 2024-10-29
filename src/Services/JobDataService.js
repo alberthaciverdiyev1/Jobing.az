@@ -1,7 +1,7 @@
 import JobData from '../Models/JobData.js';
 
 const JobDataService = {
-    // Create a new site
+    // Create new job data
     create: async (data) => {
         if (!Array.isArray(data)) {
             throw new Error('Data must be an array');
@@ -11,7 +11,7 @@ const JobDataService = {
         if (results && Array.isArray(results) && results.length > 0) {
             return {
                 status: 201,
-                message: `Insertion completed. Number of records inserted:${results.length}`,
+                message: `Insertion completed. Number of records inserted: ${results.length}`,
                 count: results.length,
             };
         } else {
@@ -19,7 +19,7 @@ const JobDataService = {
         }
     },
 
-    // Get all jobs
+    // Get all job listings
     getAllJobs: async () => {
         try {
             const jobs = await JobData.findAll();
@@ -29,44 +29,44 @@ const JobDataService = {
         }
     },
 
-    // Get a site by ID
+    // Find a job by ID
     findSiteById: async (id) => {
         try {
-            const site = await JobData.findByPk(id);
-            if (!site) {
-                throw new Error('Site not found');
+            const job = await JobData.findByPk(id);
+            if (!job) {
+                throw new Error('Job not found');
             }
-            return site;
+            return job;
         } catch (error) {
-            throw new Error('Error retrieving site: ' + error.message);
+            throw new Error('Error retrieving job: ' + error.message);
         }
     },
 
-    // Update a site
+    // Update job data
     updateSite: async (id, updateData) => {
         try {
-            const site = await JobData.findByPk(id);
-            if (!site) {
-                throw new Error('Site not found');
+            const job = await JobData.findByPk(id);
+            if (!job) {
+                throw new Error('Job not found');
             }
-            await site.update(updateData);
-            return site;
+            await job.update(updateData);
+            return job;
         } catch (error) {
-            throw new Error('Error updating site: ' + error.message);
+            throw new Error('Error updating job: ' + error.message);
         }
     },
 
-    // Delete a site
+    // Delete job data
     deleteSite: async (id) => {
         try {
-            const site = await JobData.findByPk(id);
-            if (!site) {
-                throw new Error('Site not found');
+            const job = await JobData.findByPk(id);
+            if (!job) {
+                throw new Error('Job not found');
             }
-            await site.destroy();
-            return { message: 'Site successfully deleted' };
+            await job.destroy();
+            return { message: 'Job successfully deleted' };
         } catch (error) {
-            throw new Error('Error deleting site: ' + error.message);
+            throw new Error('Error deleting job: ' + error.message);
         }
     }
 };
