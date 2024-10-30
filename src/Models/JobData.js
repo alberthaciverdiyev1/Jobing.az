@@ -4,11 +4,15 @@ import Enums from '../Config/Enums.js';
 const { Schema } = mongoose;
 
 const jobSchema = new Schema({
+    uniqueKey: {
+        type: String,
+        required: true
+    },
     title: {
         type: String,
         required: true
     },
-    description: { 
+    description: {
         type: String,
         required: false
     },
@@ -43,6 +47,10 @@ const jobSchema = new Schema({
         required: false
     },
     cityId: {
+        type: Number,
+        required: false
+    },
+    educationId: {
         type: Number,
         required: false
     },
