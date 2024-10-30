@@ -34,9 +34,11 @@ const jobDataController = {
                 jobType: req.query.jobType,
                 minSalary: req.query.minSalary,
                 maxSalary: req.query.maxSalary,
-                experiencel: req.query.experienceLevel,
-                education: req.query.education,
+                experience: req.query.experience,
+                educationId: req.query.educationId,
             }
+            console.log(data);
+            
             const jobs = await JobService.getAllJobs(data);
             res.status(200).json(jobs);
         } catch (error) {

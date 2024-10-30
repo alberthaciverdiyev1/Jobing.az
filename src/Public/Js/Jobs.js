@@ -87,29 +87,19 @@ document.addEventListener("DOMContentLoaded", (event) => {
             .then(res => {
                 let htmlContent = '';
                 if (res.status === 200) {
-                    console.log(res.data);
+                    console.log(res);
 
-                    Object.values(res.data).forEach((key, val) => {
-                        htmlContent += ` <div class="flex items-center">
-                                          <input type="radio" id="${key}" class="custom-checkbox" />
-                                            <label for="${key}" class="text-gray-800">
-                                                ${val} <span class="text-gray-400">(145)</span>
-                                            </label>
-                                         </div>`;
+                    Object.entries(res.data).forEach((education) => {
+                        htmlContent += `
+                      <div class="flex items-center">
+                          <input type="radio" name="education" id="education-${education[1]}" data-id="${education[1]}"" class="custom-checkbox" />
+                          <label for="education-${education[1]}" class="text-gray-800">${education[0]} <span class="text-gray-400">(145)</span></label>
+                      </div>`;
                     });
-
-                    // Object.values(res.data).forEach(([key, val]) => {
-                    //     htmlContent += `<div class="flex items-center">
-                    //                         <input type="radio" id="${key}" class="custom-checkbox" />
-                    //                         <label for="${key}" class="text-gray-800">
-                    //                             ${val} <span class="text-gray-400">(145)</span>
-                    //                         </label>
-                    //                     </div>`;
-                    // });
                 }
-                console.log(htmlContent);
-
                 document.getElementById("educationList").innerHTML = htmlContent;
+                addRadioChangeListener("education");
+
             })
             .catch(error => {
                 console.error("Error fetching categories:", error);
@@ -278,15 +268,17 @@ document.addEventListener("DOMContentLoaded", (event) => {
     }
     function handleFilterChange() {
         const params = {
-            categoryId: document.querySelector('input[name="category"]:checked')?.id || null,
-            cityId: document.querySelector('input[name="city"]:checked')?.getAttribute('data-id') || null,
-            educationId: document.querySelector('input[name="education"]:checked')?.id || null,
+            categoryId: +document.querySelector('input[name="category"]:checked')?.id || null,
+            cityId: +document.querySelector('input[name="city"]:checked')?.getAttribute('data-id') || null,
+            educationId: +document.querySelector('input[name="education"]:checked')?.getAttribute('data-id') || null,
             jobType: document.querySelector('input[name="jobType"]:checked')?.id || null,
-            salaryMin: document.querySelector('input[name="salaryMin"]')?.getAttribute('data-value') || null,
-            salaryMax: document.querySelector('input[name="salaryMax"]')?.getAttribute('data-value') || null,
-            experienceLevel: document.querySelector('input[name="experienceLevel"]:checked')?.id || null,
+            salaryMin: +document.querySelector('input[name="salaryMin"]')?.getAttribute('data-value') || null,
+            salaryMax: +document.querySelector('input[name="salaryMax"]')?.getAttribute('data-value') || null,
+            experience: +document.querySelector('input[name="experienceLevel"]:checked')?.id || null,
             keyword: document.getElementById("search")?.value || null
         };
+        // console.log( params );return;
+
         getJobs(params);
     }
 
@@ -295,6 +287,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
     document.getElementById("search").addEventListener("keyup", handleFilterChange);
 
     function addRadioChangeListener(type) {
+        console.log({ type });
+
         document.querySelectorAll(`input[name="${type}"]`).forEach(radio => {
             radio.addEventListener('change', function () {
                 handleFilterChange();

@@ -7,30 +7,42 @@ const JobDataService = {
         if (!Array.isArray(data)) {
             throw new Error('Data must be an array');
         }
-
+    
         try {
-            // Use insertMany for bulk insertion in MongoDB
-            const results = await JobData.insertMany(data);
-
-            if (results && results.length > 0) {
+            const existingRecords = await JobData.find({
+                uniqueKey: { $in: data.map(job => job.uniqueKey) }
+            }).select('uniqueKey');
+            
+            const existingUniqueKeys = new Set(existingRecords.map(record => record.uniqueKey));
+            const newRecords = data.filter(job => !existingUniqueKeys.has(job.uniqueKey));
+    
+            if (newRecords.length > 0) {
+                const results = await JobData.insertMany(newRecords);
+    
                 return {
                     status: 201,
                     message: `Insertion completed. Number of records inserted: ${results.length}`,
                     count: results.length,
                 };
             } else {
-                throw new Error('No records were inserted.');
+                return {
+                    status: 200,
+                    message: 'No new records to insert. All provided records already exist in the database.',
+                    count: 0,
+                };
             }
         } catch (error) {
             throw new Error('Error inserting records: ' + error.message);
         }
     },
+    
 
     // Get all job listings
     getAllJobs: async (data) => {
         try {
             let query = {};
             if (data.cityId) query.cityId = data.cityId;
+            if (data.educationId) query.educationId = data.educationId;
             if (data.experience) query.experience = data.experience;
             if (data.jobType) query.jobType = data.jobType;
             if (data.minSalary || data.maxSalary) {

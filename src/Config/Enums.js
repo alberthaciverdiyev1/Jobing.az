@@ -9,7 +9,7 @@ const Enums = Object.freeze({
     Education: {
         Secondary: 1,
         Higher: 2,
-        Incomplete_education: 3,
+        IncompleteEducation: 3,
         Bachelor: 4,
         Master: 5,
         Doctor: 6

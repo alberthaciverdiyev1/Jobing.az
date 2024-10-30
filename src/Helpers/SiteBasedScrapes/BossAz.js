@@ -59,7 +59,7 @@ class BossAz {
 
             for (const category of filteredCategories) {
                 for (let education = 0; education <= 7; education++) {
-                    for (let page = 0; page <= 3; page++) {
+                    for (let page = 0; page <= 2; page++) {
                         dataPromises.push(
                             Scrape(`https://${this.url}/vacancies?action=index&controller=vacancies&only_path=true&page=${page}&search%5Bcategory_id%5D=${category.categoryId}&search%5Bcompany_id%5D=&search%5Beducation_id%5D=${education}&search%5Bexperience_id%5D=&search%5Bkeyword%5D=&search%5Bregion_id%5D=&search%5Bsalary%5D=&type=vacancies`)
                                 .then($ => {
@@ -105,10 +105,20 @@ class BossAz {
                                             sourceUrl: this.url,
                                             redirectUrl: 'https://' + this.url + redirectUrl,
                                             jobType: '0x001',
-                                            education
+                                            educationId: +education,
+                                            uniqueKey: `${title.replace(/ /g, '-')}-${companyName.replace(/ /g, '-')}-${location.replace(/ /g, '-')}`
                                         });
+
                                     });
-                                    return jobData;
+
+                                    const uniqueKeys = new Set();
+                                    return jobData.filter(item => {
+                                        if (!uniqueKeys.has(item.uniqueKey)) {
+                                            uniqueKeys.add(item.uniqueKey);
+                                            return true;
+                                        }
+                                        return false; 
+                                    });
                                 })
                         );
                     }
@@ -123,6 +133,7 @@ class BossAz {
             throw new Error('Error fetching jobs');
         }
     }
+
 
 
     async Cities() {
