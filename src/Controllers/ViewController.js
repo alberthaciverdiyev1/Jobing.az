@@ -48,6 +48,10 @@ const ViewController = {
         const educationData = Enums.Education;
 
         res.status(200).json(educationData);
+    },
+    experience: (req, res) => {
+        const experience = Enums.Experience;
+        res.status(200).json(experience);
     }
 };
 
