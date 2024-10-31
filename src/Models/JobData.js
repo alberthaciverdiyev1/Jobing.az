@@ -54,6 +54,10 @@ const jobSchema = new Schema({
         type: Number,
         required: false
     },
+    experienceId: {
+        type: Number,
+        required: false
+    },
     userName: {
         type: String,
         required: false

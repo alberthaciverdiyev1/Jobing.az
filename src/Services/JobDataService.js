@@ -7,18 +7,20 @@ const JobDataService = {
         if (!Array.isArray(data)) {
             throw new Error('Data must be an array');
         }
-    
+
         try {
             const existingRecords = await JobData.find({
                 uniqueKey: { $in: data.map(job => job.uniqueKey) }
             }).select('uniqueKey');
-            
-            const existingUniqueKeys = new Set(existingRecords.map(record => record.uniqueKey));
-            const newRecords = data.filter(job => !existingUniqueKeys.has(job.uniqueKey));
-    
-            if (newRecords.length > 0) {
-                const results = await JobData.insertMany(newRecords);
-    
+
+            if (existingRecords.length > 0) {
+                const existingUniqueKeys = new Set(existingRecords.map(record => record.uniqueKey));
+                let data = data.filter(job => !existingUniqueKeys.has(job.uniqueKey));
+            }
+
+            if (data.length > 0) {
+                const results = await JobData.insertMany(data);
+
                 return {
                     status: 201,
                     message: `Insertion completed. Number of records inserted: ${results.length}`,
@@ -35,7 +37,6 @@ const JobDataService = {
             throw new Error('Error inserting records: ' + error.message);
         }
     },
-    
 
     // Get all job listings
     getAllJobs: async (data) => {
@@ -43,13 +44,11 @@ const JobDataService = {
             let query = {};
             if (data.cityId) query.cityId = data.cityId;
             if (data.educationId) query.educationId = data.educationId;
-            if (data.experience) query.experience = data.experience;
+            if (data.experience) query.experienceId = +data.experience;
             if (data.jobType) query.jobType = data.jobType;
-            if (data.minSalary || data.maxSalary) {
-                query.salary = {};
-                if (data.minSalary) query.salary.$gte = data.minSalary;
-                if (data.maxSalary) query.salary.$lte = data.maxSalary;
-            }
+            if (data.minSalary) query.minSalary = { $gte: +data.minSalary };
+            if (data.maxSalary) query.maxSalary = { $lte: +data.maxSalary };
+
             if (data.categoryId) {
                 query.$or = [
                     { categoryId: data.categoryId },
@@ -64,12 +63,26 @@ const JobDataService = {
                 );
             }
 
-            const jobs = await JobData.find(query);
-            return jobs;
+            const limit = 50;
+            const offset = data.offset ?? 0;
+
+            const totalCount = await JobData.countDocuments(query);
+            const jobs = await JobData.find(query)
+                .skip(offset)
+                .limit(limit);
+
+            return {
+                totalCount: totalCount,
+                jobs: jobs,
+                hideLoadMore: (limit + offset > totalCount) 
+            };
         } catch (error) {
             throw new Error('Error retrieving jobs: ' + error.message);
         }
     },
+
+
+
 
     // Find a job by ID
     findSiteById: async (id) => {

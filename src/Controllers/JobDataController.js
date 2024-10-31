@@ -10,12 +10,14 @@ const jobDataController = {
     create: async (req, res) => {
         try {
             const categories = await CategoryService.getLocalCategories();
+            
             const cities = await CityService.getAll();
             const bossAz = new BossAz();
             // const smatJobAz = new SmartJobAz();
             // const smartJobAzJobs = await smatJobAz.Jobs();
             // return smartJobAzJobs;
             const jobs = await bossAz.Jobs(categories,cities);
+            console.log({jobs});
             // console.log(jobs);
             // return; 
             const response = await JobService.create(jobs);
@@ -36,8 +38,8 @@ const jobDataController = {
                 maxSalary: req.query.maxSalary,
                 experience: req.query.experience,
                 educationId: req.query.educationId,
+                offset: req.query.offset,
             }
-            console.log(data);
             
             const jobs = await JobService.getAllJobs(data);
             res.status(200).json(jobs);

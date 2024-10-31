@@ -62,6 +62,7 @@ router.get('/auth', viewController.auth);
 router.get('/jobs', viewController.jobs);
 //Enums
 router.get('/education', viewController.education);
+router.get('/experience', viewController.experience);
 
 
 

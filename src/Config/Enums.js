@@ -7,19 +7,18 @@ const Enums = Object.freeze({
         FREELANCE: 0x005,
     },
     Education: {
-        Secondary: 1,
-        Higher: 2,
-        IncompleteEducation: 3,
-        Bachelor: 4,
-        Master: 5,
-        Doctor: 6
+        Secondary: 6,
+        Higher: 5,
+        IncompleteEducation: 4,
+        Bachelor:3,
+        Master: 2,
+        Doctor: 1
     },
     Experience: {
-        Zero: 0x000,
-        ZeroToThree: 0x001,
-        ThereToFive: 0x002,
-        FiveToSeven: 0x003,
-        MoreThanSeven : 0x004
+        Entry: 1,
+        Middle: 2,
+        Senior: 3,
+        Director: 4,
     },
     Sites:{
         BossAz:'boss.az', 
@@ -30,7 +29,9 @@ const Enums = Object.freeze({
         BossAz:'0x001', 
         BusyAz:'0x002',
         SmartJobAz:'0x003',
-    }
+    },
+
+    LimitPerRequest:10
 
 
 });
