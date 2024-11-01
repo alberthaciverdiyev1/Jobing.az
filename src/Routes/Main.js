@@ -60,6 +60,7 @@ router.get('/api/scrape', scrapeController.getData);                            
 router.get('/', viewController.home);
 router.get('/auth', viewController.auth);
 router.get('/jobs', viewController.jobs);
+router.get('/about-us', viewController.aboutUs);
 //Enums
 router.get('/education', viewController.education);
 router.get('/experience', viewController.experience);
