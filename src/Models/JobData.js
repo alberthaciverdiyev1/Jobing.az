@@ -87,6 +87,13 @@ const jobSchema = new Schema({
     versionKey: false
 });
 
+jobSchema.virtual('companyDetails', {
+    ref: 'Company',
+    localField: 'companyId',
+    foreignField: 'companyId',
+    justOne: true
+});
+
 const Job = mongoose.model('Job', jobSchema);
 
 export default Job;

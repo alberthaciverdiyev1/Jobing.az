@@ -162,6 +162,35 @@ class BossAz {
         }
     }
 
+    async Companies() {
+        try {
+            const $ = await Scrape('https://' + this.url);
+            const companies = [];
+
+            $('.tab-list-i-link').each((i, el) => {
+                const href = $(el).attr('href');
+                const companyIdMatch = href.match(/company_id%5D=(\d+)/);
+                const companyId = companyIdMatch ? companyIdMatch[1] : null;
+                const name = $(el).text().trim();
+
+                if (companyId && name) {
+                    companies.push({
+                        companyId,
+                        name,
+                        uniqueKey: `${companyId}` + `${enums.SitesWithId.BossAz}`,
+                        website: enums.SitesWithId.BossAz
+                    });
+                }
+            });
+            return companies;
+        } catch (error) {
+            console.error('Error fetching companies:', error);
+            throw new Error('Error fetching companies');
+        }
+    }
+
+
+
 }
 
 export default BossAz;
