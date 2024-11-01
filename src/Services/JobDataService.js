@@ -42,13 +42,17 @@ const JobDataService = {
     getAllJobs: async (data) => {
         try {
             let query = {};
+            const currentDate = new Date();
+            const thirtyDaysAgo = new Date(currentDate.setDate(currentDate.getDate() - 30));
+            query.createdAt = { $gte: thirtyDaysAgo };
+    
             if (data.cityId) query.cityId = data.cityId;
             if (data.educationId) query.educationId = data.educationId;
             if (data.experience) query.experienceId = +data.experience;
             if (data.jobType) query.jobType = data.jobType;
             if (data.minSalary) query.minSalary = { $gte: +data.minSalary };
             if (data.maxSalary) query.maxSalary = { $lte: +data.maxSalary };
-
+    
             if (data.categoryId) {
                 query.$or = [
                     { categoryId: data.categoryId },
@@ -62,15 +66,15 @@ const JobDataService = {
                     { description: { $regex: data.keyword, $options: 'i' } }
                 );
             }
-
+    
             const limit = 50;
             const offset = data.offset ?? 0;
-
+    
             const totalCount = await JobData.countDocuments(query);
             const jobs = await JobData.find(query)
                 .skip(offset)
                 .limit(limit);
-
+    
             return {
                 totalCount: totalCount,
                 jobs: jobs,
@@ -80,6 +84,7 @@ const JobDataService = {
             throw new Error('Error retrieving jobs: ' + error.message);
         }
     },
+    
 
 
 
