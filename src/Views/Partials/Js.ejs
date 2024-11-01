@@ -1,4 +1,4 @@
-<% if (js) { %>
+<% if (typeof js !== "undefined" && js) { %>
     <script type="module" src="/Js/<%= js %>"></script>
 <% } %>
 <script type="module" src="/Js/Global.js"></script>

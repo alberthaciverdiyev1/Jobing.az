@@ -51,7 +51,9 @@ document.addEventListener("DOMContentLoaded", (event) => {
               </div>`
     }
 
-    function loader(start = false) {
+    function loader(start = false, noData = false) {
+        console.log({ noData });
+
         document.getElementById("card-section").innerHTML = start
             ? `<div class="flex items-center justify-center min-h-screen bg-white  border border-custom rounded-lg">
                     <div class="flex flex-col items-center justify-center w-full max-w-xs mx-auto">
@@ -59,6 +61,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
                     </div>
                </div>`
             : "";
+        noData ? noDataCard() : '';
     }
 
     function cityHTML(data, limit = null) {
@@ -161,11 +164,11 @@ document.addEventListener("DOMContentLoaded", (event) => {
     getExperience();
 
     async function getJobs(params) {
-        !offset ? loader(true) : "";
+        // !offset ? loader(true) : "";
         await axios.get('/api/jobs', {
             params: params
         }).then(res => {
-            console.error({res});
+            console.log({ res });
 
             let htmlContent = '';
             let headerContent = '';
@@ -183,10 +186,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
             }
 
             if (res.status === 200) {
-                // loader();
-                
-
-                if (res.data.totalCount > 0) {
+                // alert(res.data.jobs.length);
+                if (res.data.jobs.length > 0) {
                     res.data.jobs.forEach(element => {
                         htmlContent += `<div class="job-card bg-white px-3 pt-2 h-40 rounded-xl shadow-md mb-4 hover:hover-card-color cursor-pointer duration-300 border border-custom sm:px-5" data-original-link="${element.redirectUrl}">
                                             <div class="content flex">
@@ -267,18 +268,19 @@ document.addEventListener("DOMContentLoaded", (event) => {
                                         </div> `;
                     });
 
-                    loadMoreButton = res.data.totalCount > 50 && !res.data.hideLoadMore ? `<div class="flex justify-center items-center my-2">
+                    loadMoreButton = res.data.jobs.length > 50 && !res.data.hideLoadMore ? `<div class="flex justify-center items-center my-2">
                                         <button class="filled-button-color text-white py-2 px-8 rounded-full" id="loadMore">
                                             Load More 
                                         </button>
                                      </div>` : "";
                 } else {
-                    htmlContent = noDataCard();
+                    // loader(false, true);
+                    noDataCard();
                 }
 
-                if (offset && res.data.totalCount > 0) {
+                if (offset && res.data.jobs.length > 0) {
                     document.getElementById("card-section").insertAdjacentHTML('beforeend', htmlContent + loadMoreButton);
-                } else if (res.data.totalCount > 0) {
+                } else if (res.data.jobs.length > 0) {
                     document.getElementById("card-section").innerHTML = headerContent + htmlContent + loadMoreButton;
                 }
 
@@ -304,7 +306,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
         });
     }
 
-    getJobs();
+    // getJobs();
 
 
     document.getElementById("show-more-categories").addEventListener("click", function () {
@@ -339,8 +341,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     function addRadioChangeListener() {
         document.querySelectorAll('input[name="category"]').forEach(radio => {
             radio.addEventListener('change', function () {
-                const selectedId = this.id;
-                getJobs(selectedId);
+                handleFilterChange();
 
             });
         });
@@ -351,14 +352,13 @@ document.addEventListener("DOMContentLoaded", (event) => {
             cityId: +document.querySelector('input[name="city"]:checked')?.getAttribute('data-id') || null,
             educationId: +document.querySelector('input[name="education"]:checked')?.getAttribute('data-id') || null,
             jobType: document.querySelector('input[name="jobType"]:checked')?.id || null,
-            minSalary: +minSalary,
-            maxSalary: +maxSalary,
+            minSalary: !!+minSalary ? minSalary : 0,
+            maxSalary: !!+maxSalary ? maxSalary : 50000,
             experience: +document.querySelector('input[name="experience"]:checked')?.getAttribute('data-id') || null,
             keyword: document.getElementById("search")?.value || null,
             offset: +offset_value || 0
         };
-        // console.log( params );return;
-
+        // console.log(!!minSalary); return;
         getJobs(params);
     }
 

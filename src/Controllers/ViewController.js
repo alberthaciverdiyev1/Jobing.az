@@ -25,6 +25,14 @@ const ViewController = {
         };
         res.render('Main', view);
     },
+    aboutUs: async (req, res) => {
+        const view = {
+            title: 'About Us',
+            body: "AboutUs/Index.ejs",
+            js: null
+        };
+        res.render('Main', view);
+    },
     adminIndex: async (req, res) => {
         const view = {
             title: 'Admin Panel',
