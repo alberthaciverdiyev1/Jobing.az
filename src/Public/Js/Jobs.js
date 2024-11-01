@@ -51,7 +51,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
               </div>`
     }
 
-     function loader(start = false) {
+    function loader(start = false) {
         document.getElementById("card-section").innerHTML = start
             ? `<div class="flex items-center justify-center min-h-screen bg-white  border border-custom rounded-lg">
                     <div class="flex flex-col items-center justify-center w-full max-w-xs mx-auto">
