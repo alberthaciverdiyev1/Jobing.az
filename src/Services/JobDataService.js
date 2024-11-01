@@ -30,7 +30,7 @@ const JobDataService = {
                 return {
                     status: 200,
                     message: 'No new records to insert. All provided records already exist in the database.',
-                    count: 0,
+                     count: 0,
                 };
             }
         } catch (error) {

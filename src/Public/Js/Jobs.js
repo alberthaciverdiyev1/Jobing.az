@@ -51,6 +51,16 @@ document.addEventListener("DOMContentLoaded", (event) => {
               </div>`
     }
 
+     function loader(start = false) {
+        document.getElementById("card-section").innerHTML = start
+            ? `<div class="flex items-center justify-center min-h-screen bg-white  border border-custom rounded-lg">
+                    <div class="flex flex-col items-center justify-center w-full max-w-xs mx-auto">
+                            <span class="loader"></span>
+                    </div>
+               </div>`
+            : "";
+    }
+
     function cityHTML(data, limit = null) {
         let htmlContent = "";
         if (limit) {
@@ -151,6 +161,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     getExperience();
 
     async function getJobs(params) {
+        !offset ? loader(true) : "";
         await axios.get('/api/jobs', {
             params: params
         }).then(res => {
@@ -170,7 +181,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
             }
 
             if (res.status === 200) {
-                console.log(res.data);
+                // loader();
 
                 if (res.data.totalCount > 0) {
                     res.data.jobs.forEach(element => {
