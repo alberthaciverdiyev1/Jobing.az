@@ -4,10 +4,36 @@ const CompanyService = {
     // Create a company
     create: async (data) => {
         try {
-            const res = await Company.create(data);
-            return res;
+            if (!Array.isArray(data)) {
+                throw new Error('Data must be an array');
+            }
+
+            const existingRecords = await Company.find({
+                uniqueKey: { $in: data.map(c => c.uniqueKey) }
+            }).select('uniqueKey');
+
+            if (existingRecords.length > 0) {
+                const existingUniqueKeys = new Set(existingRecords.map(record => record.uniqueKey));
+                data = data.filter(c => !existingUniqueKeys.has(c.uniqueKey));
+            }
+
+
+            if (data.length > 0) {
+                const results = await Company.insertMany(data);
+                return {
+                    status: 201,
+                    message: `Insertion completed. Number of records inserted: ${results.length}`,
+                    count: results.length,
+                };
+            } else {
+                return {
+                    status: 200,
+                    message: 'No new records to insert. All provided records already exist in the database.',
+                    count: 0,
+                };
+            }
         } catch (error) {
-            throw new Error('Error creating company: ' + error.message);
+            throw new Error('Error creating companies: ' + error.message);
         }
     },
 

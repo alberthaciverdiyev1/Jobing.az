@@ -1,10 +1,19 @@
+import BossAz from '../Helpers/SiteBasedScrapes/BossAz.js';
+import SmartJobAz from '../Helpers/SiteBasedScrapes/SmartJobAz.js';
 import CompanyService from '../Services/CompanyService.js';
 
 const CompanyController = {
     create: async (req, res) => {
         try {
-            const company = await CompanyService.create(req.body);
-            res.status(201).json(company);
+            const boss = new BossAz;
+            const smartJob = new SmartJobAz;
+
+            const bossAzCompanies = await boss.Companies();
+            // const smartJobCategories = await smartJob.Categories(); 
+            // let categories = [...smartJobCategories, ...bossAzCategories];
+
+            const response = await CompanyService.create(bossAzCompanies);
+            res.status(response.status).json({ message: response.message, count: response.count })
         } catch (error) {
             res.status(500).json({ message: 'Error creating company: ' + error.message });
         }

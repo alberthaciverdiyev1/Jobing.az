@@ -165,6 +165,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
         await axios.get('/api/jobs', {
             params: params
         }).then(res => {
+            console.error({res});
+
             let htmlContent = '';
             let headerContent = '';
             let loadMoreButton = '';
@@ -182,19 +184,20 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
             if (res.status === 200) {
                 // loader();
+                
 
                 if (res.data.totalCount > 0) {
                     res.data.jobs.forEach(element => {
                         htmlContent += `<div class="job-card bg-white px-3 pt-2 h-40 rounded-xl shadow-md mb-4 hover:hover-card-color cursor-pointer duration-300 border border-custom sm:px-5" data-original-link="${element.redirectUrl}">
                                             <div class="content flex">
-                                                <div class="mt-3 sm:mt-1">
+                                                <div class="mt-3 sm:mt-1 ">
                                                     <span class="mr-2">
                                                         <img src="../Images/${element.sourceUrl}.png" 
-                                                            alt="Company Logo" class="w-12 h-12 rounded-lg sm:w-14 sm:h-14" />
+                                                            alt="Company Logo" class="w-12 h-12 rounded-lg border border-custom sm:w-14 sm:h-14" />
                                                     </span>
                                                     <span class="mr-2">
-                                                        <img src="https://smartjob.az/storage/avatars/g8QEttbtJjCDKMlk9iguXKYzDl56fSEacTfjeyH9.png"
-                                                            alt="Company Logo" class="w-12 h-12 rounded-lg sm:w-14 sm:h-14" />
+                                                        <img src="${element.companyImageUrl ?? "../Images/DefaultCompany.png"}"
+                                                            alt="Company Logo" class="w-12 h-12 rounded-lg sm:w-14 sm:h-14 border border-custom" />
                                                     </span>
                                                 </div>
                                                 <div class="ml-3 mt-2 pr-1 sm:mt-2 sm:w-auto">

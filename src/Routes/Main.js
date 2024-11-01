@@ -32,7 +32,7 @@ router.put('/api/site/:id', validator.siteValidator, siteController.update);    
 router.delete('/api/site/:id', siteController.delete);                                     // DELETE
 
 // CRUD operations for companies
-router.post('/api/companies', validator.companyValidator, companyController.create);        // CREATE
+router.post('/api/companies', companyController.create);        // CREATE
 router.get('/api/companies', companyController.getAll);                                    // READ ALL
 router.get('/api/companies/:id', companyController.findById);                              // READ ONE
 router.put('/api/companies/:id', validator.companyValidator, companyController.update);     // UPDATE

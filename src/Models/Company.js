@@ -7,23 +7,19 @@ const companySchema = new Schema({
         type: String,
         required: true
     },
+    imageUrl:{
+        type:String,
+        default: ""
+    },
     website: {
         type: String,
         required: false
     },
-    contactInfo: {
-        type: String,
+    companyId: {
+        type: Number,
         required: false
     },
-    location: {
-        type: String,
-        required: false
-    },
-    industry: {
-        type: String,
-        required: false
-    },
-    description: {
+    uniqueKey: {
         type: String,
         required: false
     },

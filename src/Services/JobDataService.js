@@ -15,7 +15,7 @@ const JobDataService = {
 
             if (existingRecords.length > 0) {
                 const existingUniqueKeys = new Set(existingRecords.map(record => record.uniqueKey));
-                let data = data.filter(job => !existingUniqueKeys.has(job.uniqueKey));
+                data = data.filter(job => !existingUniqueKeys.has(job.uniqueKey));
             }
 
             if (data.length > 0) {
@@ -72,18 +72,29 @@ const JobDataService = {
     
             const totalCount = await JobData.countDocuments(query);
             const jobs = await JobData.find(query)
+                .populate({
+                    path: 'companyDetails',
+                    select: 'imageUrl'
+                })
                 .skip(offset)
                 .limit(limit);
     
+            const jobsWithImageUrl = jobs.map(job => ({
+                ...job.toObject(),
+                companyImageUrl: job.companyDetails?.imageUrl || null
+            }));
+    console.log(jobsWithImageUrl);
+    
             return {
                 totalCount: totalCount,
-                jobs: jobs,
-                hideLoadMore: (limit + offset > totalCount) 
+                jobs: jobsWithImageUrl,
+                hideLoadMore: (limit + offset > totalCount)
             };
         } catch (error) {
             throw new Error('Error retrieving jobs: ' + error.message);
         }
     },
+    
     
 
 
