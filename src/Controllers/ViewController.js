@@ -33,6 +33,14 @@ const ViewController = {
         };
         res.render('Main', view);
     },
+    contactUs: async (req, res) => {
+        const view = {
+            title: 'Contact Us',
+            body: "ContactUs/Index.ejs",
+            js: 'ContactUs.js'
+        };
+        res.render('Main', view);
+    },
     adminIndex: async (req, res) => {
         const view = {
             title: 'Admin Panel',
