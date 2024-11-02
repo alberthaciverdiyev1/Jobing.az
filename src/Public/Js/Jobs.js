@@ -51,8 +51,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
               </div>`
     }
 
-    function loader(start = false, noData = false) {
-        console.log({ noData });
+    function loader(start = false) {
 
         document.getElementById("card-section").innerHTML = start
             ? `<div class="flex items-center justify-center min-h-screen bg-white  border border-custom rounded-lg">
@@ -61,7 +60,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
                     </div>
                </div>`
             : "";
-        noData ? noDataCard() : '';
     }
 
     function cityHTML(data, limit = null) {
@@ -164,12 +162,10 @@ document.addEventListener("DOMContentLoaded", (event) => {
     getExperience();
 
     async function getJobs(params) {
-        // !offset ? loader(true) : "";
+        !offset ? loader(true) : "";
         await axios.get('/api/jobs', {
             params: params
         }).then(res => {
-            console.log({ res });
-
             let htmlContent = '';
             let headerContent = '';
             let loadMoreButton = '';
@@ -187,7 +183,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
             if (res.status === 200) {
                 // alert(res.data.jobs.length);
-                if (res.data.jobs.length > 0) {
+                if (res.data.totalCount) {
                     res.data.jobs.forEach(element => {
                         htmlContent += `<div class="job-card bg-white px-3 pt-2 h-40 rounded-xl shadow-md mb-4 hover:hover-card-color cursor-pointer duration-300 border border-custom sm:px-5" data-original-link="${element.redirectUrl}">
                                             <div class="content flex">
@@ -272,8 +268,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
                                         </button>
                                      </div>` : "";
                 } else {
-                    // loader(false, true);
-                    noDataCard();
+                    document.getElementById("card-section").innerHTML = noDataCard();
                 }
 
                 if (offset && res.data.jobs.length > 0) {
