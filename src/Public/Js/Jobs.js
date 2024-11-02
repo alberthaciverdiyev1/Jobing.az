@@ -211,21 +211,19 @@ document.addEventListener("DOMContentLoaded", (event) => {
                                                                 <span class="hidden sm:inline sm:whitespace-normal"> 
                                                                     ${element.title} 
                                                                 </span>
-                                                                <span class="bg-blue-100 text-blue-700 px-1 ml-3 py-0.5 font-medium rounded-lg text-sm h-7 hidden sm:flex">
-                                                                    ${element.jobType}
-                                                                </span>
                                                                 <span class="bg-yellow-100 text-yellow-700 px-1 ml-2 py-0.5 font-medium rounded-lg text-sm h-7 hidden sm:flex">
                                                                     ${element.sourceUrl}
                                                                 </span>
                                                             </p>
                                                             <h4 class="text-base font-semibold text-gray-700 mb-2 sm:font-bold">
-                                                                <i class="fa-solid fa-building"></i> ${element.companyName}
+                                                                <i class="fa-solid fa-building"></i> ${element.companyName.slice(0, 17)}
                                                             </h4>
                                                         </div>
                                                         <div class="hidden sm:w-full">
-                                                            <span class="bg-blue-100 text-blue-700 px-1 ml-3 py-0.5 h-12 w-auto rounded-lg text-sm">
+                                                        ${true ? "" : ` <span class="bg-blue-100 text-blue-700 px-1 ml-3 py-0.5 h-12 w-auto rounded-lg text-sm">
                                                                 ${element.jobType}
-                                                            </span>
+                                                            </span>`}
+                                                           
                                                             <span class="bg-yellow-100 text-yellow-700 px-1 ml-2 py-0.5 rounded-lg text-sm w-auto">
                                                                 ${element.sourceUrl}
                                                             </span>
@@ -247,7 +245,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
                                                         <span class="bg-blue-100 text-blue-700 px-1 ml-1 py-0.5 rounded-lg">Mysql</span>
                                                     </div>
                                                     <div class="text-sm mt-2 flex justify-between sm:hidden">
-                                                        <span class="bg-blue-100 text-blue-700 px-1 py-0.5 rounded-lg text-sm">${element.jobType}</span>
+                                                       <span class="bg-blue-100 text-blue-700 px-1 py-0.5 rounded-lg text-sm">${element.sourceUrl}</span>
                                                         <h4 class="text-lg text-gray-600 font-bold">${(+element.minSalary !== "null" ? +element.minSalary + '-' : "") + +element.maxSalary ?? (!element.minSalary && !element.maxSalary ? "Razilasma ile" : "")}</h4>
                                                     </div>
                                                 </div>
