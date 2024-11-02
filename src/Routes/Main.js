@@ -19,7 +19,7 @@ router.delete('/api/users/:id', userController.deleteUser);                     
 
 // CRUD operations for job sites (JobDataController)
 router.post('/api/jobs', jobDataController.create);                                        // CREATE
-router.get('/api/jobs', jobDataController.getAll);                                        // READ ALL
+router.get('/api/jobs', jobDataController.getAll);                                         // READ ALL
 router.get('/api/jobs/:id', jobDataController.getSiteById);                                // READ ONE
 router.put('/api/jobs/:id', jobDataController.updateSite);                                 // UPDATE
 router.delete('/api/jobs/:id', jobDataController.deleteSite);                              // DELETE
@@ -32,19 +32,19 @@ router.put('/api/site/:id', validator.siteValidator, siteController.update);    
 router.delete('/api/site/:id', siteController.delete);                                     // DELETE
 
 // CRUD operations for companies
-router.post('/api/companies', companyController.create);        // CREATE
+router.post('/api/companies', companyController.create);                                    // CREATE
 router.get('/api/companies', companyController.getAll);                                    // READ ALL
 router.get('/api/companies/:id', companyController.findById);                              // READ ONE
-router.put('/api/companies/:id', validator.companyValidator, companyController.update);     // UPDATE
+router.put('/api/companies/:id', validator.companyValidator, companyController.update);    // UPDATE
 router.delete('/api/companies/:id', companyController.delete);                             // DELETE
 
 // CRUD operations for categories
-router.post('/api/foreign-categories', categoryController.addForeignCategories);                    // CREATE
-router.get('/api/foreign-categories', categoryController.getForeignCategories);                                   // READ ALL
-router.get('/api/categories', categoryController.getLocalCategories);                                   // READ ALL
-// router.get('/categories/:id', categoryController.findById);                              // READ ONE
-// router.put('/categories/:id',validator.companyValidator, categoryController.update);     // UPDATE
-// router.delete('/categories/:id', categoryController.delete);                             // DELETE
+router.post('/api/foreign-categories', categoryController.addForeignCategories);           // CREATE
+router.get('/api/foreign-categories', categoryController.getForeignCategories);            // READ ALL
+router.get('/api/categories', categoryController.getLocalCategories);                      // READ ALL
+// router.get('/categories/:id', categoryController.findById);                             // READ ONE
+// router.put('/categories/:id',validator.companyValidator, categoryController.update);    // UPDATE
+// router.delete('/categories/:id', categoryController.delete);                            // DELETE
 
 
 // CRUD operations for Cities
