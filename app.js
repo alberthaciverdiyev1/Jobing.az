@@ -6,6 +6,7 @@ import sequelize from './src/Config/Database.js';
 import swaggerDocs from './src/Config/Swagger.js';
 import loggerMiddleware from './src/Middlewares/Logger.js';
 import Production from './src/Helpers/Production.js';
+import axios from 'axios';
 
 const app = express();
 const port = process.env.PR_PORT || 3001;
@@ -27,8 +28,8 @@ app.use('/', routes);
 
 cron.schedule('0 */2 * * *', async () => {
     try {
-        await axios.post('/api/jobs');
         console.log("Crone Started");
+        await axios.post(`http://localhost:${port}/api/jobs`);
     } catch (error) {
         console.error('Error From Cron:', error);
     }
