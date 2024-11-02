@@ -219,14 +219,14 @@ document.addEventListener("DOMContentLoaded", (event) => {
                                                         ${true ? "" : ` <span class="bg-blue-100 text-blue-700 px-1 ml-3 py-0.5 h-12 w-auto rounded-lg text-sm">
                                                                 ${element.jobType}
                                                             </span>`}
-                                                           
                                                             <span class="bg-yellow-100 text-yellow-700 px-1 ml-2 py-0.5 rounded-lg text-sm w-auto">
                                                                 ${element.sourceUrl}
                                                             </span>
                                                         </div>
-                                                        <button class="text-base text-gray-600 font-bold mb-5 sm:hidden">
+                                                        ${false ? `<button class="text-base text-gray-600 font-bold mb-5 sm:hidden">
                                                             <i class="fa-solid fa-heart text-2xl"></i>
-                                                        </button>
+                                                        </button>` : ""}
+                                                        
                                                     </div>
                                                     <div class="flex text-sm text-gray-600">
                                                         <span><i class="fa-solid fa-clock mr-0.5"></i> ${element.postedAt.slice(0, 10)}</span>
@@ -247,12 +247,12 @@ document.addEventListener("DOMContentLoaded", (event) => {
                                                 </div>
                                                 <div class="flex flex-col justify-between h-full flex-grow hidden sm:flex">
                                                     <div class="text-right">
-                                                        <button class="text-base text-gray-600 font-bold mb-2 w-8 h-8">
+                                                    ${false ? ` <button class="text-base text-gray-600 font-bold mb-2 w-8 h-8">
                                                             <i class="fa-solid fa-heart text-2xl"></i>
-                                                        </button>
+                                                        </button>` : ""}
                                                         <h4 class="text-lg text-gray-600 font-bold mt-2">${(+element.minSalary ? element.minSalary + '-' : "") + +element.maxSalary ?? (!element.minSalary && !element.maxSalary ? "Razilasma ile" : "")}</h4>
                                                     </div>
-                                                    <div class="flex justify-end items-end mt-auto pt-6">
+                                                    <div class="flex justify-end items-end mt-auto pt-16">
                                                         <a href="${element.redirectUrl}" target="_blank" class="filled-button-color text-white py-2 px-8 rounded-full">
                                                             Visit 
                                                         </a>

@@ -1,5 +1,6 @@
 import express from 'express';
 import path from 'path';
+import cron from 'node-cron';
 import routes from './src/Routes/Main.js';
 import sequelize from './src/Config/Database.js';
 import swaggerDocs from './src/Config/Swagger.js';
@@ -24,15 +25,14 @@ app.use('/', routes);
 
 // swaggerDocs(app);
 
-// sequelize.sync({ alter: true })
-//     .then(() => {
-//         app.listen(port, () => {
-//             console.log(`Server is running at http://localhost:${port}`);
-//         });
-//     })
-//     .catch((error) => {
-//         console.error('Unable to connect to the database:', error);
-//     });
+cron.schedule('0 */2 * * *', async () => {
+    try {
+        await axios.post('/api/jobs');
+        console.log("Crone Started");
+    } catch (error) {
+        console.error('Error From Cron:', error);
+    }
+});
 
 app.use((req, res, next) => {
     res.status(404).send('404 Not Found');
