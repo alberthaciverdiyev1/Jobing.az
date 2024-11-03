@@ -1,4 +1,108 @@
+/* @import url("https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"); */
 
+* {
+    margin: 0px;
+    padding: 0px;
+    border: none;
+    outline: none;
+    font-size: 100%;
+}
+
+body {
+    font-size: 16px;
+    /* color: #363636; */
+    line-height: 28px;
+    font-weight: 400;
+    background: #ffffff;
+    /* -webkit-font-smoothing: antialiased;
+    -moz-font-smoothing: antialiased; */
+    /* font-family: 'Jost', sans-serif, Arial; */
+    /* font-family: Jost; */
+
+    font-style: normal;
+}
+
+/* how it works */
+
+.process-section {
+    position: relative;
+    padding: 100px 0;
+}
+
+.process-block {
+    position: relative;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.process-block .icon-box {
+    position: relative;
+    display: inline-block;
+    padding-top: 56px;
+    min-height: 113px;
+    margin-bottom: 30px;
+}
+
+.process-block .icon-box:before {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    margin: 0 auto;
+    height: 113px;
+    width: 105px;
+    background-image: url(../images/shape-3.png);
+    z-index: -1;
+    content: "";
+}
+
+.process-block .icon-box img {
+    display: block;
+}
+
+.process-block h4 {
+    position: relative;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 24px;
+    color: #202124;
+}
+
+.auto-container {
+    position: static;
+    max-width: 1310px;
+    padding: 0px 15px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.content-elements h4.title {
+    position: relative;
+    font-size: 18px;
+    line-height: 24px;
+    color: #202124;
+    font-weight: 500;
+    margin-bottom: 30px;
+}
+
+.sec-title h2 {
+    position: relative;
+    display: block;
+    font-size: 30px;
+    line-height: 1.2em;
+    color: #202124;
+    font-weight: 500;
+}
+
+
+/* how it works end */
+
+
+/* home card */
+.home-margin-bottom{
+    margin-bottom: -2px !important;
+}
+/* home card end */
 .global-background-color {
     background-color: #1f1b2d;
 }
@@ -24,8 +128,8 @@
 }
 
 .alertify-notifier {
-    background-color: #ff5c35 !important ;
-    color: white !important; 
+    background-color: #ff5c35 !important;
+    color: white !important;
 }
 
 
@@ -207,5 +311,3 @@ input[type="range"]::-moz-range-thumb {
     text-align: center;
     padding: 25px 0
 }
-
-

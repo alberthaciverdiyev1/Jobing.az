@@ -362,8 +362,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
 
     function addRadioChangeListener(type) {
-        console.log({ type });
-
         document.querySelectorAll(`input[name="${type}"]`).forEach(radio => {
             radio.addEventListener('change', function () {
                 handleFilterChange();

@@ -11,12 +11,13 @@
     </div>
 
     <div
-            class="bg-white p-6 rounded-lg shadow-lg flex flex-col md:flex-row items-center justify-between max-w-5xl mx-auto w-full gap-4">
+        class="bg-white p-6 rounded-lg shadow-lg flex flex-col md:flex-row items-center justify-between max-w-5xl mx-auto w-full gap-4">
         <!-- Job Title Input -->
         <div class="flex items-center bg-gray-100 border border-gray-300 rounded-lg p-2 w-full md:w-1/4">
             <svg class="w-6 h-6 text-gray-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                 xmlns="http://www.w3.org/2000/svg">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16">
+                xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M4 6h16M4 10h16M4 14h16M4 18h16">
                 </path>
             </svg>
             <input type="text" class="bg-transparent focus:outline-none w-full" placeholder="Job, Company name..." />
@@ -25,8 +26,9 @@
         <!-- Country Dropdown -->
         <div class="flex items-center bg-gray-100 border border-gray-300 rounded-lg p-2 w-full md:w-1/4">
             <svg class="w-6 h-6 text-gray-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                 xmlns="http://www.w3.org/2000/svg">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4"></path>
+                xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4">
+                </path>
             </svg>
             <select class="bg-transparent focus:outline-none w-full">
                 <option>Afghanistan</option>
@@ -39,8 +41,9 @@
         <!-- Category Dropdown -->
         <div class="flex items-center bg-gray-100 border border-gray-300 rounded-lg p-2 w-full md:w-1/4">
             <svg class="w-6 h-6 text-gray-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                 xmlns="http://www.w3.org/2000/svg">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16">
+                xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M4 6h16M4 10h16M4 14h16M4 18h16">
                 </path>
             </svg>
             <select class="bg-transparent focus:outline-none w-full">
@@ -53,13 +56,8 @@
 
         <!-- Find Job Button -->
         <div class="w-full md:w-auto">
-            <button class="filled-button-color text-white py-3 px-6 rounded-lg w-full md:w-auto">
-                <svg class="w-6 h-6 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                     xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M8 7V4a2 2 0 00-2-2H4a2 2 0 00-2 2v2a2 2 0 002 2h2m0 4v8a2 2 0 002 2h4a2 2 0 002-2v-8m-6 8h6m0 0V10m0 12V10m0 12H9m3-10a2 2 0 11-4 0 2 2 0 014 0z">
-                    </path>
-                </svg>
+            <button class="flex items-center filled-button-color text-white py-3 px-6 rounded-lg w-full md:w-auto justify-center text-center">
+                <i class="fa-solid fa-magnifying-glass mr-2"></i> 
                 Find Job
             </button>
         </div>
@@ -75,7 +73,7 @@
 <!-- Job Count Section -->
 <section class="">
     <div
-            class="container mx-auto px-4 py-5 flex justify-between text-center text-2xl sm:text-5xl font-semibold lg:px-72">
+        class="container mx-auto px-4 py-5 flex justify-between text-center text-2xl sm:text-5xl font-semibold lg:px-72">
         <div>
             <span>1,548K+</span>
             <p class="text-sm sm:text-base mt-1 text-gray-500 uppercase">
@@ -98,21 +96,26 @@
 </section>
 <!-- Card section -->
 <section>
-    <div class="p-4 global-background-color">
+    <div class="p-4 bg-gray-100">
         <div class="container mx-auto sm:px-16">
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div
-                        class="bg-white p-3 rounded-xl shadow-md mb-2 hover:bg-gray-50 cursor-pointer duration-300 border border-red-500">
+            <div class="sec-title mb-8 flex flex-col items-center justify-center">
+                <h2 class="text-3xl text-center">Most Recently Jobs</h2>
+                <p class="text-gray-500 text-center">Know your worth and find the job that qualify your life</p>
+            </div>         
+    
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4" id="home-card-section">
+                <!-- <div
+                    class="bg-white p-3 rounded-xl shadow-md mb-2 hover:bg-gray-50 cursor-pointer duration-300 border border-red-500">
                     <div class="content flex items-center">
                         <div class="pr-2 mt-1">
-                <span class="mr-2">
-                  <img src="https://smartjob.az/storage/avatars/uWNlbVC0KZZPmwViAMFHpjORTNQqxAFB5vEdDXCH.jpg"
-                       alt="Company Logo" class="w-8 h-8 rounded-full" />
-                </span>
                             <span class="mr-2">
-                  <img src="https://smartjob.az/storage/avatars/g8QEttbtJjCDKMlk9iguXKYzDl56fSEacTfjeyH9.png"
-                       alt="Company Logo" class="w-8 h-8 rounded-full" />
-                </span>
+                                <img src="https://smartjob.az/storage/avatars/uWNlbVC0KZZPmwViAMFHpjORTNQqxAFB5vEdDXCH.jpg"
+                                    alt="Company Logo" class="w-8 h-8 rounded-full" />
+                            </span>
+                            <span class="mr-2">
+                                <img src="https://smartjob.az/storage/avatars/g8QEttbtJjCDKMlk9iguXKYzDl56fSEacTfjeyH9.png"
+                                    alt="Company Logo" class="w-8 h-8 rounded-full" />
+                            </span>
                         </div>
                         <div>
                             <div class="flex">
@@ -123,7 +126,7 @@
                             <ul class="flex flex-col text-gray-600 mt-1 dis-li">
                                 <li class="flex items-center text-xs">
                                     <span class="mr-1"><i class="fa-solid fa-clock"></i> 04.06.2024</span><i
-                                            class="fa-solid fa-location-dot"></i> London, UK
+                                        class="fa-solid fa-location-dot"></i> London, UK
                                 </li>
                             </ul>
                             <div class="flex justify-between">
@@ -154,305 +157,74 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <div
-                        class="bg-white p-3 rounded-xl shadow-md mb-2 hover:bg-gray-50 cursor-pointer duration-300 border border-red-500">
-                    <div class="content flex items-center">
-                        <div class="pr-2 mt-1">
-                <span class="mr-2">
-                  <img src="https://smartjob.az/storage/avatars/uWNlbVC0KZZPmwViAMFHpjORTNQqxAFB5vEdDXCH.jpg"
-                       alt="Company Logo" class="w-8 h-8 rounded-full" />
-                </span>
-                            <span class="mr-2">
-                  <img src="https://smartjob.az/storage/avatars/g8QEttbtJjCDKMlk9iguXKYzDl56fSEacTfjeyH9.png"
-                       alt="Company Logo" class="w-8 h-8 rounded-full" />
-                </span>
-                        </div>
-                        <div>
-                            <div class="flex">
-                                <h4 class="text-base font-bold grid justify-items-start dis-li">
-                                    Software Engineer (Android), Libraries
-                                </h4>
-                            </div>
-                            <ul class="flex flex-col text-gray-600 mt-1 dis-li">
-                                <li class="flex items-center text-xs">
-                                    <span class="mr-1"><i class="fa-solid fa-clock"></i> 04.06.2024</span><i
-                                            class="fa-solid fa-location-dot"></i> London, UK
-                                </li>
-                            </ul>
-                            <div class="flex justify-between">
-                                <ul class="flex mt-1 space-x-1">
-                                    <li class="bg-blue-100 text-blue-700 px-1 py-0.5 rounded-lg">
-                                        Full Time
-                                    </li>
-                                    <li class="bg-green-100 text-green-700 px-1 py-0.5 rounded-lg">
-                                        Private
-                                    </li>
-                                    <li class="bg-yellow-100 text-yellow-700 px-1 py-0.5 rounded-lg">
-                                        Smartjob
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="flex flex-col justify-between h-full flex-grow">
-                            <div class="text-right">
-                                <button class="text-base text-gray-600 font-bold mb-2 w-8 h-8">
-                                    <i class="fa-solid fa-heart text-xl"></i>
-                                </button>
-                                <h4 class="text-base text-gray-600 font-bold mb-2">300$</h4>
-                            </div>
-                            <div class="flex justify-end items-end mt-auto">
-                                <button class="bg-blue-700 text-white px-3 py-1 rounded-lg">
-                                    Visit
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div
-                        class="bg-white p-3 rounded-xl shadow-md mb-2 hover:bg-gray-50 cursor-pointer duration-300 border border-red-500">
-                    <div class="content flex items-center">
-                        <div class="pr-2 mt-1">
-                <span class="mr-2">
-                  <img src="https://smartjob.az/storage/avatars/uWNlbVC0KZZPmwViAMFHpjORTNQqxAFB5vEdDXCH.jpg"
-                       alt="Company Logo" class="w-8 h-8 rounded-full" />
-                </span>
-                            <span class="mr-2">
-                  <img src="https://smartjob.az/storage/avatars/g8QEttbtJjCDKMlk9iguXKYzDl56fSEacTfjeyH9.png"
-                       alt="Company Logo" class="w-8 h-8 rounded-full" />
-                </span>
-                        </div>
-                        <div>
-                            <div class="flex">
-                                <h4 class="text-base font-bold grid justify-items-start dis-li">
-                                    Software Engineer (Android), Libraries
-                                </h4>
-                            </div>
-                            <ul class="flex flex-col text-gray-600 mt-1 dis-li">
-                                <li class="flex items-center text-xs">
-                                    <span class="mr-1"><i class="fa-solid fa-clock"></i> 04.06.2024</span><i
-                                            class="fa-solid fa-location-dot"></i> London, UK
-                                </li>
-                            </ul>
-                            <div class="flex justify-between">
-                                <ul class="flex mt-1 space-x-1">
-                                    <li class="bg-blue-100 text-blue-700 px-1 py-0.5 rounded-lg">
-                                        Full Time
-                                    </li>
-                                    <li class="bg-green-100 text-green-700 px-1 py-0.5 rounded-lg">
-                                        Private
-                                    </li>
-                                    <li class="bg-yellow-100 text-yellow-700 px-1 py-0.5 rounded-lg">
-                                        Smartjob
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="flex flex-col justify-between h-full flex-grow">
-                            <div class="text-right">
-                                <button class="text-base text-gray-600 font-bold mb-2 w-8 h-8">
-                                    <i class="fa-solid fa-heart text-xl"></i>
-                                </button>
-                                <h4 class="text-base text-gray-600 font-bold mb-2">300$</h4>
-                            </div>
-                            <div class="flex justify-end items-end mt-auto">
-                                <button class="bg-blue-700 text-white px-3 py-1 rounded-lg">
-                                    Visit
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div
-                        class="bg-white p-3 rounded-xl shadow-md mb-2 hover:bg-gray-50 cursor-pointer duration-300 border border-red-500">
-                    <div class="content flex items-center">
-                        <div class="pr-2 mt-1">
-                <span class="mr-2">
-                  <img src="https://smartjob.az/storage/avatars/uWNlbVC0KZZPmwViAMFHpjORTNQqxAFB5vEdDXCH.jpg"
-                       alt="Company Logo" class="w-8 h-8 rounded-full" />
-                </span>
-                            <span class="mr-2">
-                  <img src="https://smartjob.az/storage/avatars/g8QEttbtJjCDKMlk9iguXKYzDl56fSEacTfjeyH9.png"
-                       alt="Company Logo" class="w-8 h-8 rounded-full" />
-                </span>
-                        </div>
-                        <div>
-                            <div class="flex">
-                                <h4 class="text-base font-bold grid justify-items-start dis-li">
-                                    Software Engineer (Android), Libraries
-                                </h4>
-                            </div>
-                            <ul class="flex flex-col text-gray-600 mt-1 dis-li">
-                                <li class="flex items-center text-xs">
-                                    <span class="mr-1"><i class="fa-solid fa-clock"></i> 04.06.2024</span><i
-                                            class="fa-solid fa-location-dot"></i> London, UK
-                                </li>
-                            </ul>
-                            <div class="flex justify-between">
-                                <ul class="flex mt-1 space-x-1">
-                                    <li class="bg-blue-100 text-blue-700 px-1 py-0.5 rounded-lg">
-                                        Full Time
-                                    </li>
-                                    <li class="bg-green-100 text-green-700 px-1 py-0.5 rounded-lg">
-                                        Private
-                                    </li>
-                                    <li class="bg-yellow-100 text-yellow-700 px-1 py-0.5 rounded-lg">
-                                        Smartjob
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="flex flex-col justify-between h-full flex-grow">
-                            <div class="text-right">
-                                <button class="text-base text-gray-600 font-bold mb-2 w-8 h-8">
-                                    <i class="fa-solid fa-heart text-xl"></i>
-                                </button>
-                                <h4 class="text-base text-gray-600 font-bold mb-2">300$</h4>
-                            </div>
-                            <div class="flex justify-end items-end mt-auto">
-                                <button class="bg-blue-700 text-white px-3 py-1 rounded-lg">
-                                    Visit
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div
-                        class="bg-white p-3 rounded-xl shadow-md mb-2 hover:bg-gray-50 cursor-pointer duration-300 border border-red-500">
-                    <div class="content flex items-center">
-                        <div class="pr-2 mt-1">
-                <span class="mr-2">
-                  <img src="https://smartjob.az/storage/avatars/uWNlbVC0KZZPmwViAMFHpjORTNQqxAFB5vEdDXCH.jpg"
-                       alt="Company Logo" class="w-8 h-8 rounded-full" />
-                </span>
-                            <span class="mr-2">
-                  <img src="https://smartjob.az/storage/avatars/g8QEttbtJjCDKMlk9iguXKYzDl56fSEacTfjeyH9.png"
-                       alt="Company Logo" class="w-8 h-8 rounded-full" />
-                </span>
-                        </div>
-                        <div>
-                            <div class="flex">
-                                <h4 class="text-base font-bold grid justify-items-start dis-li">
-                                    Software Engineer (Android), Libraries
-                                </h4>
-                            </div>
-                            <ul class="flex flex-col text-gray-600 mt-1 dis-li">
-                                <li class="flex items-center text-xs">
-                                    <span class="mr-1"><i class="fa-solid fa-clock"></i> 04.06.2024</span><i
-                                            class="fa-solid fa-location-dot"></i> London, UK
-                                </li>
-                            </ul>
-                            <div class="flex justify-between">
-                                <ul class="flex mt-1 space-x-1">
-                                    <li class="bg-blue-100 text-blue-700 px-1 py-0.5 rounded-lg">
-                                        Full Time
-                                    </li>
-                                    <li class="bg-green-100 text-green-700 px-1 py-0.5 rounded-lg">
-                                        Private
-                                    </li>
-                                    <li class="bg-yellow-100 text-yellow-700 px-1 py-0.5 rounded-lg">
-                                        Smartjob
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="flex flex-col justify-between h-full flex-grow">
-                            <div class="text-right">
-                                <button class="text-base text-gray-600 font-bold mb-2 w-8 h-8">
-                                    <i class="fa-solid fa-heart text-xl"></i>
-                                </button>
-                                <h4 class="text-base text-gray-600 font-bold mb-2">300$</h4>
-                            </div>
-                            <div class="flex justify-end items-end mt-auto">
-                                <button class="bg-blue-700 text-white px-3 py-1 rounded-lg">
-                                    Visit
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div
-                        class="bg-white p-3 rounded-xl shadow-md mb-2 hover:bg-gray-50 cursor-pointer duration-300 border border-red-500">
-                    <div class="content flex items-center">
-                        <div class="pr-2 mt-1">
-                <span class="mr-2">
-                  <img src="https://smartjob.az/storage/avatars/uWNlbVC0KZZPmwViAMFHpjORTNQqxAFB5vEdDXCH.jpg"
-                       alt="Company Logo" class="w-8 h-8 rounded-full" />
-                </span>
-                            <span class="mr-2">
-                  <img src="https://smartjob.az/storage/avatars/g8QEttbtJjCDKMlk9iguXKYzDl56fSEacTfjeyH9.png"
-                       alt="Company Logo" class="w-8 h-8 rounded-full" />
-                </span>
-                        </div>
-                        <div>
-                            <div class="flex">
-                                <h4 class="text-base font-bold grid justify-items-start dis-li">
-                                    Software Engineer (Android), Libraries
-                                </h4>
-                            </div>
-                            <ul class="flex flex-col text-gray-600 mt-1 dis-li">
-                                <li class="flex items-center text-xs">
-                                    <span class="mr-1"><i class="fa-solid fa-clock"></i> 04.06.2024</span><i
-                                            class="fa-solid fa-location-dot"></i> London, UK
-                                </li>
-                            </ul>
-                            <div class="flex justify-between">
-                                <ul class="flex mt-1 space-x-1">
-                                    <li class="bg-blue-100 text-blue-700 px-1 py-0.5 rounded-lg">
-                                        Full Time
-                                    </li>
-                                    <li class="bg-green-100 text-green-700 px-1 py-0.5 rounded-lg">
-                                        Private
-                                    </li>
-                                    <li class="bg-yellow-100 text-yellow-700 px-1 py-0.5 rounded-lg">
-                                        Smartjob
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="flex flex-col justify-between h-full flex-grow">
-                            <div class="text-right">
-                                <button class="text-base text-gray-600 font-bold mb-2 w-8 h-8">
-                                    <i class="fa-solid fa-heart text-xl"></i>
-                                </button>
-                                <h4 class="text-base text-gray-600 font-bold mb-2">300$</h4>
-                            </div>
-                            <div class="flex justify-end items-end mt-auto">
-                                <button class="bg-blue-700 text-white px-3 py-1 rounded-lg">
-                                    Visit
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                </div> -->
+
             </div>
             <div class="flex items-center justify-center mt-2">
-                <button class="rounded-full bg-green-100 px-6 py-3">
+                <button class="rounded-full filled-button-color bg-green-100 px-6 py-3">
                     Load More
                 </button>
             </div>
         </div>
     </div>
 </section>
-<!-- Join Us In Telegram Section -->
-<% if (Production(false)) { %>
-<section class="bg-gray-100 py-10">
-    <div class="container mx-auto flex flex-col px-3">
-        <div class="flex justify-between ">
-            <!-- Flex row for side by side -->
-            <!-- Telegram Image -->
-            <div>
-                <img src="https://assets.zabbix.com/img/brands/telegram.svg" alt="Telegram"
-                     class="w-40 h-40 rounded-full shadow-lg" />
+
+<!-- Process Section -->
+
+<section class="process-section py-12 bg-white">
+    <div class="auto-container mx-auto max-w-7xl text-center">
+        <div class="sec-title mb-8">
+            <h2 class="text-3xl">How It Works?</h2>
+            <p class="text-gray-500">Job for anyone, anywhere</p>
+        </div>
+
+        <div class="flex flex-col md:flex-row grid-cols-3 justify-between mx-20 items-center space-y-8 md:space-y-0 md:space-x-8">
+            <!-- Process Block -->
+            <div class="flex flex-col items-center">
+                <div class="icon-box w-36 h-36 flex justify-center items-center mb-4 relative">
+                    <img src="https://apusthemes.com/wp-demo/superio/wp-content/uploads/2021/03/f4.jpg" alt="Register" class="w-24 h-24 transition-transform duration-300 transform hover:-translate-y-4">
+                </div>
+                <h4 class="text-lg font-semibold text-center">Register an account <br>to start</h4>
             </div>
-            <!-- Join Now Button -->
-            <div>
-                <button
-                        class="bg-blue-500 text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-blue-600 transition duration-300">
-                    Join Now
-                </button>
+            <!-- Process Block -->
+            <div class="flex flex-col items-center">
+                <div class="icon-box w-36 h-36 flex justify-center items-center mb-4 relative">
+                    <img src="https://apusthemes.com/wp-demo/superio/wp-content/uploads/2021/03/f5.jpg" alt="Register" class="w-24 h-24 transition-transform duration-300 transform hover:-translate-y-4">
+                </div>
+                <h4 class="text-lg font-semibold text-center">Explore over thousands <br>of resumes</h4>
+            </div>
+            <!-- Process Block -->
+            <div class="flex flex-col items-center">
+                <div class="icon-box w-36 h-36 flex justify-center items-center mb-4 relative">
+                    <img src="https://apusthemes.com/wp-demo/superio/wp-content/uploads/2021/03/f6.jpg" alt="Register" class="w-24 h-24 transition-transform duration-300 transform hover:-translate-y-4">
+                </div>
+                <h4 class="text-lg font-semibold text-center">Find the most suitable <br>candidate</h4>
             </div>
         </div>
     </div>
 </section>
-<% }%>
+
+<!-- End Process Section -->
+
+<!-- Join Us In Telegram Section -->
+<% if (Production(false)) { %>
+    <section class="bg-gray-100 py-10">
+        <div class="container mx-auto flex flex-col px-3">
+            <div class="flex justify-between ">
+                <!-- Flex row for side by side -->
+                <!-- Telegram Image -->
+                <div>
+                    <img src="https://assets.zabbix.com/img/brands/telegram.svg" alt="Telegram"
+                        class="w-40 h-40 rounded-full shadow-lg" />
+                </div>
+                <!-- Join Now Button -->
+                <div>
+                    <button
+                        class="bg-blue-500 text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-blue-600 transition duration-300">
+                        Join Now
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+    <% }%>
