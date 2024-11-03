@@ -10,12 +10,12 @@ const JobDataService = {
 
         try {
             const existingRecords = await JobData.find({
-                uniqueKey: { $in: data.map(job => job.uniqueKey) }
-            }).select('uniqueKey');
+                redirectUrl: { $in: data.map(job => job.redirectUrl) }
+            }).select('redirectUrl');
 
             if (existingRecords.length > 0) {
-                const existingUniqueKeys = new Set(existingRecords.map(record => record.uniqueKey));
-                data = data.filter(job => !existingUniqueKeys.has(job.uniqueKey));
+                const existingData = new Set(existingRecords.map(record => record.redirectUrl));
+                data = data.filter(job => !existingData.has(job.redirectUrl));
             }
 
             if (data.length > 0) {

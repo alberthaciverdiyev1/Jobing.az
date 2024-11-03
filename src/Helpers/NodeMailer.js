@@ -16,8 +16,6 @@ const transporter = nodemailer.createTransport({
 export { transporter, sendEmail };
 
 async function sendEmail(data, send_to = null) {
-console.log({data,send_to});
-
     const info = await transporter.sendMail({
         from: `Contact US <${data.title}>`,
         to: send_to ?? process.env.MAIL_TO,
@@ -25,7 +23,7 @@ console.log({data,send_to});
         text: data.text.toString(),        
         // html: "<b>Hello world?</b>", // HTML body
     });
-console.log({info});
+// console.log({info});
 
     return {
         status: 200,
