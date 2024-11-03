@@ -15,15 +15,17 @@ const transporter = nodemailer.createTransport({
 
 export { transporter, sendEmail };
 
-async function sendEmail(data) {
+async function sendEmail(data, send_to = null) {
+console.log({data,send_to});
 
     const info = await transporter.sendMail({
         from: `Contact US <${data.title}>`,
-        to: process.env.MAIL_TO,
-        subject: data.title,
-        text: data.text,
+        to: send_to ?? process.env.MAIL_TO,
+        subject: data.title.toString(),
+        text: data.text.toString(),        
         // html: "<b>Hello world?</b>", // HTML body
     });
+console.log({info});
 
     return {
         status: 200,

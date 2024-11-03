@@ -17,7 +17,7 @@ const jobDataController = {
             // const smartJobAzJobs = await smatJobAz.Jobs();
             // return smartJobAzJobs;
             const jobs = await bossAz.Jobs(categories,cities);
-            console.log({jobs});
+            // console.log({jobs});
             // console.log(jobs);
             // return; 
             const response = await JobService.create(jobs);
