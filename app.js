@@ -28,7 +28,7 @@ app.use('/', routes);
 
 // swaggerDocs(app);
 
-cron.schedule('0 */2 * * *', async () => {
+cron.schedule('0 7-23/2 * * *', async () => {
     const to = process.env.CRON_MAIL_USER;
     const now = new Date();
 
@@ -48,14 +48,14 @@ cron.schedule('0 */2 * * *', async () => {
         if (response.status === 200 || response.status === 201) {
             let endData = {
                 title: "Cron ended",
-                text: `${response.data.message} , Crone ended at ${formatDate(now)}`
+                text: `${response.data.message}`
             };
             await sendEmail(endData, to);
         }
     } catch (error) {
         let errorData = {
             title: "Cron ended with error",
-            text: `${error} , Crone ended at ${formatDate(now)}`
+            text: `${error}`
         };
         await sendEmail(errorData, to);
     }
