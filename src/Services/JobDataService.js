@@ -44,7 +44,6 @@ const JobDataService = {
             const currentDate = new Date();
             const thirtyDaysAgo = new Date(currentDate.setDate(currentDate.getDate() - 30));
             
-            // Initialize the query with $and and add each condition to the array
             const query = {
                 $and: [
                     { createdAt: { $gte: thirtyDaysAgo } }
@@ -85,6 +84,7 @@ const JobDataService = {
                     path: 'companyDetails',
                     select: 'imageUrl'
                 })
+                .sort({ createdAt: -1 }) // Sort by createdAt in descending order
                 .skip(offset)
                 .limit(limit);
     
@@ -102,6 +102,7 @@ const JobDataService = {
             throw new Error('Error retrieving jobs: ' + error.message);
         }
     },
+    
     
 
     // Find a job by ID
