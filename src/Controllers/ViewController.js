@@ -1,4 +1,5 @@
 import Enums from "../Config/Enums.js";
+import sendEmail from "../Helpers/NodeMailer.js";
 
 const ViewController = {
     home: async (req, res) => {
@@ -48,16 +49,16 @@ const ViewController = {
             js: "Index.js"
         };
         res.render('Admin/Main', view);
-    }, 
+    },
 
     adminCategoryView: async (req, res) => {
         const view = {
             title: 'Categories - Admin Panel',
             body: "Category/Index.ejs",
-            js: "Category.js" 
+            js: "Category.js"
         };
-        res.render('Admin/Main', view); 
-    }, 
+        res.render('Admin/Main', view);
+    },
 
 
     education: (req, res) => {
@@ -68,6 +69,11 @@ const ViewController = {
     experience: (req, res) => {
         const experience = Enums.Experience;
         res.status(200).json(experience);
+    },
+    sendMail: async (req, res) => {
+        const response = await sendEmail(req.body.data);
+        res.status(200).json({ status: response.status, message: response.message });
+
     }
 };
 

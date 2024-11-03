@@ -73,4 +73,8 @@ router.get('/experience', viewController.experience);
 router.get('/admin', viewController.adminIndex);
 router.get('/admin/categories', viewController.adminCategoryView);
 
+//Send Mail
+router.post('/send-mail', validator.mailValidator, viewController.sendMail);         // CREATE
+
+
 export default router;

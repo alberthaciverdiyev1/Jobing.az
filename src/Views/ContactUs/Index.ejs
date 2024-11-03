@@ -1,50 +1,49 @@
-<div
-    class="mt-32 md:mt-24 mx-auto flex flex-col justify-center py-3 sm:py-24 px-8 lg:px-8 bg-white rounded-2xl max-w-full">
+<div class="container mx-auto px-4 md:px-8 lg:px-16 py-12 min-h-screen flex items-center mt-8">
+    <div class="bg-white px-6 md:px-8 lg:px-12 py-4 w-full mt-0 rounded-lg shadow-lg">
+        <!-- Contact Us Heading -->
+        <h2 class="text-4xl font-extrabold text-center mb-8 text-gray-800">Contact Us</h2>
+        <p class="text-center text-gray-600 mb-16">
+            Have a question or need more information? Just drop us a line!
+        </p>
 
-    <div class="container mx-auto">
-        <div class="flex flex-col lg:flex-row items-center lg:space-x-8">
-            <div class="w-4/12 ml-6 hidden sm:flex h-full">
-                <img class="w-full h-auto rounded-lg" src="/Images/boss.az.png" alt="About 1">
-            </div>
-            <div class=" flex w-full lg:w-1/2 xl:w-7/12 mt-8 lg:mt-0">
-                <div class="xl:max-w-xl">
-                    <div class="mb-4">
-                        <h2 class="text-center text-3xl font-bold leading-9 tracking-tight text-gray-700">
-                            Contact Us
-                        </h2>
-                    </div>
-                    <div class="mt-8 sm:mx-auto w-full sm:w-96">
-                        <div class="space-y-6">
-                            <div>
-                                <label for="email" class="block text-sm font-medium leading-6 text-gray-700">Email
-                                    address</label>
-                                <div class="mt-2">
-                                    <input id="email" name="email" type="email" autocomplete="email" required
-                                        class="block w-full h-12 rounded-md border-0 py-2 px-3 text-gray-700 shadow-sm ring-1 ring-inset ring-orange-500 focus:ring-2 focus:ring-inset focus:ring-orange-600 sm:text-sm sm:leading-6">
-                                </div>
-                            </div>
-
-                            <div>
-                                <div class="flex items-center justify-between">
-                                    <label for="text"
-                                        class="block text-sm font-medium leading-6 text-gray-700">Text</label>
-                                </div>
-                                <div class="mt-2">
-                                    <textarea id="text" required
-                                        class="block w-full h-24 rounded-md border-0 py-2 px-3 text-gray-700 shadow-sm ring-1 ring-inset ring-orange-500 focus:ring-2 focus:ring-inset focus:ring-orange-500 sm:text-sm sm:leading-6"></textarea>
-                                </div>
-                            </div>
-
-                            <div>
-                                <button type="button"
-                                    class="flex w-full justify-center rounded-md filled-button-color px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-orange-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-500">Send</button>
-                            </div>
-                        </div>
-                    </div>
-
+        <!-- Contact Info and Form Section -->
+        <div class="flex flex-col lg:flex-row gap-8 lg:gap-12">
+            <!-- Contact Information -->
+            <div class="w-full lg:w-1/2 space-y-6 hidden mt-8 ml-8 lg:block">
+                <div class="flex flex-col pb-4">
+                    <h3 class="text-lg font-semibold text-gray-800">Email:</h3>
+                    <p class="text-gray-700">jobbing.az@gmail.com</p>
+                    <div class="border-b border-gray-300 w-72 mt-1"></div>
+                </div>
+                <div class="flex flex-col pb-4">
+                    <h3 class="text-lg font-semibold text-gray-800">Phone:</h3>
+                    <p><a href="tel:+994709990569">070-999-05-69</a></p>
+                    <div class="border-b border-gray-300 w-72 mt-1"></div>
+                </div>
+                <div class="flex flex-col pb-4">
+                    <h3 class="text-lg font-semibold text-gray-800">Address:</h3>
+                    <p class="text-gray-700">Baku</p>
+                    <div class="border-b border-gray-300 w-72 mt-1"></div>
                 </div>
             </div>
 
+            <!-- Contact Form -->
+            <div class="w-full lg:w-1/2 bg-gray-50 p-6 lg:p-10 rounded-lg mr-6">
+                <h3 class="text-2xl font-semibold mb-6 text-gray-800">Send us a message</h3>
+                <form class="space-y-6">
+                    <input type="email" id="title" placeholder="Enter your email" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 hover:bg-orange-50 transition duration-200">
+                    <textarea placeholder="Message" id="text" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 hover:bg-orange-50 h-32 resize-none"></textarea>
+                    <button type="button" id="send-mail" class="w-full filled-button-color text-white font-semibold py-3 rounded-lg hover:bg-orange-700 transition duration-200 shadow-md">
+                        <span id="button-text">Send message</span>
+                        <span id="loader" class="hidden">
+                            <svg class="animate-spin h-5 w-5 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                            </svg>
+                        </span>
+                    </button>
+                </form>
+            </div>
         </div>
     </div>
 </div>
