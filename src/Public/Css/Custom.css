@@ -23,6 +23,11 @@
     color: #ff5c35;
 }
 
+.alertify-notifier {
+    background-color: #ff5c35 !important ;
+    color: white !important; 
+}
+
 
 .mobile-menu {
     position: fixed;
