@@ -28,6 +28,7 @@ app.use('/', routes);
 
 // swaggerDocs(app);
 
+// cron.schedule('*/10 * * * *', async () => {
 cron.schedule('0 7-23/2 * * *', async () => {
     const to = process.env.CRON_MAIL_USER;
     const now = new Date();
@@ -35,7 +36,7 @@ cron.schedule('0 7-23/2 * * *', async () => {
     const formatDate = (date) => {
         return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}:${date.getSeconds().toString().padStart(2, '0')}`;
     };
- 
+
     try {
         let startData = {
             title: "Cron started",
@@ -64,6 +65,7 @@ cron.schedule('0 7-23/2 * * *', async () => {
 
 app.use((req, res, next) => {
     res.status(404).send('404 Not Found');
+    next();
 });
 
 app.listen(port, () => {
