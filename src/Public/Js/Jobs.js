@@ -202,7 +202,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
                                                         <div class="">
                                                             <p class="text-sm font-bold flex text-gray-700 justify-items-start sm:font-bold sm:text-base">
                                                                 <span class="truncate sm:hidden"> 
-                                                                    ${element.title.slice(0, 17)} 
+                                                                    ${element.title.slice(0, 17) + (element.title.length > 17 ? "..." : "")} 
                                                                 </span>
                                                                 <span class="hidden sm:inline sm:whitespace-normal"> 
                                                                     ${element.title} 
@@ -211,8 +211,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
                                                                     ${element.sourceUrl}
                                                                 </span>
                                                             </p>
-                                                            <h4 class="text-base font-semibold text-gray-700 mb-2 sm:font-bold">
-                                                                <i class="fa-solid fa-building"></i> ${element.companyName.slice(0, 17)}
+                                                            <h4 class="text-sm font-semibold text-gray-700 mb-2 sm:font-bold">
+                                                                <i class="fa-solid fa-building"></i> ${element.companyName.slice(0, 17) + (element.companyName.length > 17 ? "..." : "")}
                                                             </h4>
                                                         </div>
                                                         <div class="hidden sm:w-full">
