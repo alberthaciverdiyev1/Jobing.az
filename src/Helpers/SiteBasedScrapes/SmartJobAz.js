@@ -1,6 +1,6 @@
 import Scrape from "../ScrapeHelper.js";
 import enums from "../../Config/Enums.js";
-import Enums from "../../Config/Enums.js";
+import pLimit from 'p-limit';
 
 
 
@@ -8,42 +8,45 @@ class SmartJobAz {
     constructor(url = enums.Sites.SmartJobAz) {
         this.url = url;
     }
-
     async Categories() {
         try {
             const $ = await Scrape('StaticHtmls/SmartJobAz/CategoriesModal.html', true);
 
             const categories = [];
+            let mainCategoryId = null;
 
             $('.cat-root').each((i, el) => {
                 const CategoryName = $(el).find('.cat-title').text().trim();
                 const CategoryValue = $(el).find('.cat-root-checkbox').val();
 
-                categories.push({
-                    name: CategoryName,
-                    categoryId: +CategoryValue,
-                    parentId: null,
-                    website: this.url,
-                    websiteId: Enums.SitesWithId.SmartJobAz
+                if (CategoryValue) {
+                    mainCategoryId = CategoryValue;
 
-                });
+                    categories.push({
+                        name: CategoryName,
+                        categoryId: +CategoryValue,
+                        parentId: null,
+                        website: this.url,
+                        websiteId: enums.SitesWithId.SmartJobAz
+                    });
 
-                $(el).find('.cat-sub-root .sub-item-cat').each((j, subEl) => {
-                    const subCategoryName = $(subEl).find('.cat-sub-title').text().trim();
-                    const subCategoryValue = $(subEl).find('.cat-sub-root-checkbox').val();
- 
-                    if (subCategoryName && subCategoryValue) {
-                        categories.push({
-                            name: subCategoryName,
-                            categoryId: +subCategoryValue,
-                            parentId: CategoryValue,
-                            website: this.url,
-                            websiteId: Enums.SitesWithId.SmartJobAz
+                    $(el).find('.cat-sub-root .sub-item-cat').each((j, subEl) => {
+                        const subCategoryName = $(subEl).find('.cat-sub-title').text().trim();
+                        const subCategoryValue = $(subEl).find('.cat-sub-root-checkbox').val();
 
-                        });
-                    }
-                });
+                        if (subCategoryName && subCategoryValue) {
+                            categories.push({
+                                name: subCategoryName,
+                                categoryId: +subCategoryValue,
+                                parentId: mainCategoryId,
+                                website: this.url,
+                                websiteId: enums.SitesWithId.SmartJobAz
+                            });
+                        }
+                    });
+                }
             });
+console.log(categories);
 
             return categories;
         } catch (error) {
@@ -53,47 +56,89 @@ class SmartJobAz {
     }
 
 
-    async Jobs(categories) {
-        try {
-            const data = [];
-            // for (let category of categories) {
-            //     for (let i = 0; i <= 50; i++) {
-            const $ = await Scrape(`https://smartjob.az/vacancies?_token=LM65f6CFB1COGVcQoGEdPQlUiEk1NgVHZKI7E7Er&job_category_id%5B0%5D=9&job_category_id%5B1%5D=9&job_category_id%5B2%5D=54&salary_from=&salary_to=&page=2`);
+    async Jobs(categories, cities) {
 
-            $('.item-click').each((i, el) => {
-                const title = $(el).find('.brows-job-position h3 a').text().trim();
-                const company = $(el).find('.company-title a').text().trim();
-                const location = $(el).find('.location-pin').text().trim();
-                const salary = $(el).find('.salary-val, .salary-mob').text().trim().split('\n')[0].trim();
-                const jobId = $(el).find('.bookmark-link').attr('data-id');
-                const redirectUrl = $(el).find('.brows-job-position h3 a').attr('href');
-                const jobType = $(el).find('.job-type-block .job-type').text().trim();
-                const postedAt = $(el).find('.created-date').text().trim().replace('Yerləşdirilib', '').trim();
-                const imageUrl = $(el).find('.brows-job-company-img img').attr('src');
-                data.push({
-                    title,
-                    company,
-                    location,
-                    minSalary: salary.isNumeric ? salary : null,
-                    jobId,
-                    jobType,
-                    postedAt,
-                    categoryId: 1,
-                    subCategoryId: 2,
-                    sourceUrl: this.url,
-                    redirectUrl,
-                    imageUrl
-                });
-            });
-            console.log(data);
-            // }
-            // }
+        try {
+            const filteredCategories = categories.filter(c => c.website === enums.SitesWithId.SmartJobAz);
+            const filteredCities = cities.filter(c => c.website === enums.SitesWithId.SmartJobAz);
+
+            const limit = pLimit(+enums.LimitPerRequest);
+            const dataPromises = [];
+
+            for (const category of filteredCategories) {
+                for (let education = 0; education <= 12; education++) {
+                    for (let page = 0; page <= 2; page++) {
+                        const requestPromise = limit(async () => {
+                            // const $ = await Scrape(`https://${this.url}/vacancies?action=index&controller=vacancies&only_path=true&page=${page}&search%5Bcategory_id%5D=${category.categoryId}&search%5Bcompany_id%5D=&search%5Beducation_id%5D=${education}&search%5Bexperience_id%5D=${experience}&search%5Bkeyword%5D=&search%5Bregion_id%5D=&search%5Bsalary%5D=&type=vacancies`);
+                            const $ = await Scrape(`https://smartjob.az/vacancies?_token=BqCGl91ug0ZCKj9nwX3GWaRGdejR8diV8eoMHHuB&job_category_id%5B20%5D=${category}&education_id%5B0%5D=${education}&salary_from=&salary_to=&page=${page}`);
+
+                            const jobData = [];
+                            $('.brows-job-list').each((i, el) => {
+                                const urlAndId = $(el).find('h3 a');
+                                const title = urlAndId.text().trim();
+                                const companyElement = $(el).find('.company-title a');
+                                const companyName = companyElement.text().trim();
+                                const companyId = companyElement.attr('href').split('/').pop();
+                                const location = $(el).find('.location-pin').text().trim();
+                                const salaryText = $(el).find('.salary-val').text().trim();
+                                const cleanSalaryText = salaryText.replace('AZN', '').trim();
+                                const parts = cleanSalaryText.split(' - ');
+                                const jobId = urlAndId.attr('href').split('/').pop();
+                                const redirectUrl = urlAndId.attr('href');
+
+                                let [minSalary, maxSalary] = [null, null];
+                                if (parts.length === 2) {
+                                    minSalary = parseInt(parts[0], 10);
+                                    maxSalary = parseInt(parts[1], 10);
+                                } else if (parts.length === 1) {
+                                    minSalary = maxSalary = parseInt(parts[0], 10);
+                                }
+
+                                const locationCity = filteredCities.find(x => x.name === location);
+                                const localCategoryId = filteredCategories.find(x => x.categoryId === category.categoryId)?.localCategoryId;
+
+                                jobData.push({
+                                    title,
+                                    companyName,
+                                    companyId,
+                                    minSalary: isNaN(minSalary) ? null : minSalary,
+                                    maxSalary: isNaN(maxSalary) ? null : maxSalary,
+                                    location,
+                                    cityId: locationCity ? +locationCity.cityId : null,
+                                    description: null,
+                                    jobId,
+                                    categoryId: localCategoryId || null,
+                                    sourceUrl: this.url,
+                                    redirectUrl: 'https://' + this.url + redirectUrl,
+                                    jobType: '0x001',
+                                    educationId: ((education === 1 || education === 2 || education === 13) ? enums.Education.Secondary :
+                                        (education === 5) ? enums.Education.Higher :
+                                            (education === 6 || education === 7 || education === 11 || education === 10) ? enums.Education.IncompleteEducation :
+                                                (education === 3) ? enums.Education.Bachelor :
+                                                    (education === 2) ? enums.Education.Master :
+                                                        (education === 1) ? enums.Education.Doctor : 0),
+                                    experienceId: experience,
+                                    uniqueKey: `${title.replace(/ /g, '-')}-${companyName.replace(/ /g, '-')}-${location.replace(/ /g, '-')}`
+                                });
+                            });
+
+                            return jobData;
+                        });
+
+                        dataPromises.push(requestPromise);
+                    }
+                }
+            }
+
+            const results = await Promise.all(dataPromises);
+            const data = results.flat();
             return data;
+
         } catch (error) {
             console.error('Error fetching jobs:', error);
             throw new Error('Error fetching jobs');
         }
-    }
+    };
 
 }
 
