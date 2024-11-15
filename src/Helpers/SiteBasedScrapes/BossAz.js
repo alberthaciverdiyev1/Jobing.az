@@ -1,8 +1,6 @@
 import pLimit from 'p-limit';
 import Scrape from "../ScrapeHelper.js";
 import enums from "../../Config/Enums.js";
-import category from "../../Models/Category.js";
-import Category from "../../Models/Category.js";
 import Enums from "../../Config/Enums.js";
 
 class BossAz {
