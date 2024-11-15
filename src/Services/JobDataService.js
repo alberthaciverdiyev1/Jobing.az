@@ -43,20 +43,20 @@ const JobDataService = {
         try {
             const currentDate = new Date();
             const thirtyDaysAgo = new Date(currentDate.setDate(currentDate.getDate() - 30));
-            
+
             const query = {
                 $and: [
                     { createdAt: { $gte: thirtyDaysAgo } }
                 ]
             };
-    
+
             if (data.cityId) query.$and.push({ cityId: data.cityId });
             if (data.educationId) query.$and.push({ educationId: data.educationId });
             if (data.experience) query.$and.push({ experienceId: +data.experience });
             if (data.jobType) query.$and.push({ jobType: data.jobType });
             if (data.minSalary) query.$and.push({ minSalary: { $gte: +data.minSalary } });
             if (data.maxSalary) query.$and.push({ maxSalary: { $lte: +data.maxSalary } });
-            
+
             if (data.categoryId) {
                 query.$and.push({
                     $or: [
@@ -65,7 +65,7 @@ const JobDataService = {
                     ]
                 });
             }
-            
+
             if (data.keyword) {
                 query.$and.push({
                     $or: [
@@ -74,25 +74,42 @@ const JobDataService = {
                     ]
                 });
             }
-    
+
             const limit = 50;
-            const offset = data.offset ?? 0;
-    
+            const offset = Number(data.offset) || 0;
+
+            const jobs = await JobData.aggregate([
+                { $match: query },
+                { $sort: { createdAt: -1 } },
+                {
+                    $group: {
+                        _id: '$redirectUrl',
+                        mostRecentJob: { $first: '$$ROOT' }
+                    }
+                },
+                {
+                    $replaceRoot: { newRoot: '$mostRecentJob' }
+                },
+                {
+                    $lookup: {
+                        from: 'companydetails',
+                        localField: 'companyDetails',
+                        foreignField: '_id',
+                        as: 'companyDetails'
+                    }
+                },
+                { $unwind: { path: '$companyDetails', preserveNullAndEmptyArrays: true } },
+                { $skip: offset },
+                { $limit: limit }
+            ]);
+
             const totalCount = await JobData.countDocuments(query);
-            const jobs = await JobData.find(query)
-                .populate({
-                    path: 'companyDetails',
-                    select: 'imageUrl'
-                })
-                .sort({ createdAt: -1 }) // Sort by createdAt in descending order
-                .skip(offset)
-                .limit(limit);
-    
+
             const jobsWithImageUrl = jobs.map(job => ({
-                ...job.toObject(),
+                ...job,
                 companyImageUrl: job.companyDetails?.imageUrl || null
             }));
-    
+
             return {
                 totalCount: totalCount,
                 jobs: jobsWithImageUrl,
@@ -102,8 +119,7 @@ const JobDataService = {
             throw new Error('Error retrieving jobs: ' + error.message);
         }
     },
-    
-    
+
 
     // Find a job by ID
     findSiteById: async (id) => {
