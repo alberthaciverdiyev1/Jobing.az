@@ -1,29 +1,28 @@
 <nav class="bg-white fixed w-full z-10 shadow-md">
     <div class="container mx-auto flex justify-between items-center py-3 px-8">
-        <div class="text-gray-800 text-xl font-bold">
-            <a href="/" class="text-2xl md:text-xl"><img src="/Svg/Logo.svg" alt=""  class="w-16 h-16" srcset=""></a>
+        <!-- Logo Section -->
+        <div class="flex items-center">
+            <a href="/">
+                <img src="/Images/Static/Logo.png" alt="Logo" class="w-56 h-12 object-cover">
+            </a>
         </div>
 
+        <!-- Navigation Links -->
         <div class="desktop-menu space-x-4 hidden md:flex">
-            <a href="/"
-                class="text-gray-800 font-semibold hover:filled-button-color hover:text-white px-3 py-2 rounded transition duration-300">Home</a>
-
-            <a href="/jobs"
-                class="text-gray-800 font-semibold hover:filled-button-color hover:text-white px-3 py-2 rounded transition duration-300">All
-                Jobs</a>
-            <a href="/contact"
-                class="text-gray-800 font-semibold hover:filled-button-color hover:text-white px-3 py-2 rounded transition duration-300">Contact</a>
-            <a href="/about-us"
-                class="text-gray-800 font-semibold hover:filled-button-color hover:text-white px-3 py-2 rounded transition duration-300">About
-                Us</a>
+            <a href="/" class="text-gray-800 font-semibold hover:filled-button-color hover:text-white px-3 py-2 rounded transition duration-300">Home</a>
+            <a href="/jobs" class="text-gray-800 font-semibold hover:filled-button-color hover:text-white px-3 py-2 rounded transition duration-300">All Jobs</a>
+            <a href="/contact" class="text-gray-800 font-semibold hover:filled-button-color hover:text-white px-3 py-2 rounded transition duration-300">Contact</a>
+            <a href="/about-us" class="text-gray-800 font-semibold hover:filled-button-color hover:text-white px-3 py-2 rounded transition duration-300">About Us</a>
         </div>
+
+        <!-- Login Button -->
         <% if (Production(false)) { %>
-            <div class="hidden md:block">
-                <a href="/auth"
-                    class="filled-button-color text-white px-6 py-2 rounded-full ml-2 hover:filled-button-color duration-300">Login</a>
-            </div>
+        <div class="hidden md:block">
+            <a href="/auth" class="filled-button-color text-white px-6 py-2 rounded-full ml-2 hover:filled-button-color duration-300">Login</a>
+        </div>
         <% } %>
 
+        <!-- Mobile Menu Toggle -->
         <div class="md:hidden">
             <button id="menuToggle" class="text-gray-800 focus:outline-none">
                 <i class="fas fa-bars fa-2x"></i>
