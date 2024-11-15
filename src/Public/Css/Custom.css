@@ -115,6 +115,9 @@ body {
     background-color: #e04826;
 }
 
+.hover\:empty-button-color:hover {
+    background-color: #e04826;
+}
 .hover\:filled-button-color:hover {
     background-color: #ff5c35;
 }
