@@ -130,7 +130,7 @@ cron.schedule('0 7-23 * * *', async () => {
 
 app.use((req, res, next) => {
     res.status(404).send('404 Not Found');
-    next();
+    next(); 
 });
 
 app.listen(port, () => {
