@@ -30,7 +30,7 @@ app.use('/', routes);
 
 // swaggerDocs(app);
 
-cron.schedule('0 */1 7-23 * * *', async () => {
+cron.schedule('0 7-23 * * *', async () => {
 // // cron.schedule('0 7-23/2 * * *', async () => {
     // const to = process.env.CRON_MAIL_USER;
     const now = new Date();
