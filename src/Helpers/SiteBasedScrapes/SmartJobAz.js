@@ -46,7 +46,6 @@ class SmartJobAz {
                     });
                 }
             });
-console.log(categories);
 
             return categories;
         } catch (error) {
@@ -58,9 +57,12 @@ console.log(categories);
 
     async Jobs(categories, cities) {
 
+        let $ = await Scrape(`https://${this.url}`);
+        const token = $('input[name="_token"]').val();
         try {
             const filteredCategories = categories.filter(c => c.website === enums.SitesWithId.SmartJobAz);
-            const filteredCities = cities.filter(c => c.website === enums.SitesWithId.SmartJobAz);
+            const bossAzcities = cities.filter(c => c.website === enums.SitesWithId.BossAz);
+            // const filteredCities = cities.filter(c => c.website === enums.SitesWithId.SmartJobAz);
 
             const limit = pLimit(+enums.LimitPerRequest);
             const dataPromises = [];
@@ -70,7 +72,10 @@ console.log(categories);
                     for (let page = 0; page <= 2; page++) {
                         const requestPromise = limit(async () => {
                             // const $ = await Scrape(`https://${this.url}/vacancies?action=index&controller=vacancies&only_path=true&page=${page}&search%5Bcategory_id%5D=${category.categoryId}&search%5Bcompany_id%5D=&search%5Beducation_id%5D=${education}&search%5Bexperience_id%5D=${experience}&search%5Bkeyword%5D=&search%5Bregion_id%5D=&search%5Bsalary%5D=&type=vacancies`);
-                            const $ = await Scrape(`https://smartjob.az/vacancies?_token=BqCGl91ug0ZCKj9nwX3GWaRGdejR8diV8eoMHHuB&job_category_id%5B20%5D=${category}&education_id%5B0%5D=${education}&salary_from=&salary_to=&page=${page}`);
+                            const $ = await Scrape(`https://${this.url}/vacancies?_token=${token}&job_category_id%5B20%5D=${category.categoryId}&education_id%5B0%5D=${education}&salary_from=&salary_to=&page=${page}`);
+                            // let uri = `https://smartjob.az/vacancies?_token=${token}&job_category_id%5B20%5D=${category}&education_id%5B0%5D=${education}&salary_from=&salary_to=&page=${page}`;
+                            // console.log({uri});
+                            
 
                             const jobData = [];
                             $('.brows-job-list').each((i, el) => {
@@ -94,7 +99,7 @@ console.log(categories);
                                     minSalary = maxSalary = parseInt(parts[0], 10);
                                 }
 
-                                const locationCity = filteredCities.find(x => x.name === location);
+                                const locationCity = bossAzcities.find(x => x.name === location);
                                 const localCategoryId = filteredCategories.find(x => x.categoryId === category.categoryId)?.localCategoryId;
 
                                 jobData.push({
@@ -109,7 +114,7 @@ console.log(categories);
                                     jobId,
                                     categoryId: localCategoryId || null,
                                     sourceUrl: this.url,
-                                    redirectUrl: 'https://' + this.url + redirectUrl,
+                                    redirectUrl,
                                     jobType: '0x001',
                                     educationId: ((education === 1 || education === 2 || education === 13) ? enums.Education.Secondary :
                                         (education === 5) ? enums.Education.Higher :
@@ -117,11 +122,12 @@ console.log(categories);
                                                 (education === 3) ? enums.Education.Bachelor :
                                                     (education === 2) ? enums.Education.Master :
                                                         (education === 1) ? enums.Education.Doctor : 0),
-                                    experienceId: experience,
+                                    experienceId: null,
                                     uniqueKey: `${title.replace(/ /g, '-')}-${companyName.replace(/ /g, '-')}-${location.replace(/ /g, '-')}`
                                 });
                             });
-
+                            // console.log({jobData});
+                            
                             return jobData;
                         });
 

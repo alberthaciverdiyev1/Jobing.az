@@ -80,7 +80,9 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
 
     function getCategories() {
-        axios.get('/api/categories')
+        axios.get('/api/categories', {
+            params: { site: "bossAz" }
+        })
             .then(res => {
                 if (res.status === 200) {
                     categoryArray = res.data;
@@ -98,7 +100,9 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
 
     async function getCities() {
-        await axios.get('/api/cities')
+        await axios.get('/api/cities', {
+            params: { site: "BossAz" }
+        })
             .then(res => {
                 if (res.status === 200) {
                     cityArray = res.data;
@@ -165,7 +169,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
         !offset ? loader(true) : "";
         const uniqueJobs = [];
         const seenUrls = new Set();
-        
+
         await axios.get('/api/jobs', {
             params: params
         }).then(res => {
@@ -214,7 +218,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
                                                                     ${element.title.slice(0, 17) + (element.title.length > 17 ? "..." : "")} 
                                                                 </span>
                                                                 <span class="hidden sm:inline sm:whitespace-normal"> 
-                                                                    ${element.title} 
+                                                                    ${element.title.slice(0, 50) + (element.title.length > 50 ? "..." : "")} 
                                                                 </span>
                                                                 <span class="bg-yellow-100 text-yellow-700 px-1 ml-2 py-0.5 font-medium rounded-lg text-sm h-7 hidden sm:flex">
                                                                     ${element.sourceUrl}
@@ -239,7 +243,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
                                                     </div>
                                                     <div class="flex text-sm text-gray-600">
                                                         <span><i class="fa-solid fa-clock mr-0.5"></i> ${element.postedAt.slice(0, 10)}</span>
-                                                        <span class="ml-3"><i class="fa-solid fa-location-dot mr-0.5"></i> ${element.location}</span>
+                                                        <span class="ml-3"><i class="fa-solid fa-location-dot mr-0.5"></i> ${element.location.slice(0, 17) + (element.location.length > 17 ? "..." : "")}</span>
                                                     </div>
                                                     <div class="border-t border-1 border-gray-300 w-56 mt-2 sm:w-72"></div>
                                                     <div class="text-sm mt-2 hidden sm:flex">
