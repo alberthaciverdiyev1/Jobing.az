@@ -55,13 +55,12 @@ class SmartJobAz {
     }
 
 
-    async Jobs(categories, cities) {
+    async Jobs(categories, bossAzcities) {
 
         let $ = await Scrape(`https://${this.url}`);
         const token = $('input[name="_token"]').val();
         try {
             const filteredCategories = categories.filter(c => c.website === enums.SitesWithId.SmartJobAz);
-            const bossAzcities = cities.filter(c => c.website === enums.SitesWithId.BossAz);
             // const filteredCities = cities.filter(c => c.website === enums.SitesWithId.SmartJobAz);
 
             const limit = pLimit(+enums.LimitPerRequest);
@@ -126,8 +125,6 @@ class SmartJobAz {
                                     uniqueKey: `${title.replace(/ /g, '-')}-${companyName.replace(/ /g, '-')}-${location.replace(/ /g, '-')}`
                                 });
                             });
-                            // console.log({jobData});
-                            
                             return jobData;
                         });
 

@@ -50,11 +50,11 @@ class BossAz {
     }
 
 
-    async Jobs(categories, cities) {
+    async Jobs(categories, filteredCities) {
         try {
             // Filter categories and cities
             const filteredCategories = categories.filter(c => c.website === enums.SitesWithId.BossAz);
-            const filteredCities = cities.filter(c => c.website === enums.SitesWithId.BossAz);
+            // const filteredCities = cities.filter(c => c.website === enums.SitesWithId.BossAz);
 
             const limit = pLimit(+enums.LimitPerRequest);
             const dataPromises = [];
@@ -113,6 +113,8 @@ class BossAz {
                                         uniqueKey: `${title.replace(/ /g, '-')}-${companyName.replace(/ /g, '-')}-${location.replace(/ /g, '-')}`
                                     });
                                 });
+                            
+                                console.log({jobData});
 
                                 return jobData;
                             });

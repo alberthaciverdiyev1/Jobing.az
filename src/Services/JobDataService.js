@@ -4,23 +4,23 @@ import mongoose from 'mongoose';
 const JobDataService = {
     // Create new job data (insert multiple records)
     create: async (data) => {
-        if (!Array.isArray(data)) {
-            throw new Error('Data must be an array');
+        if (!Array.isArray(data) || data.length === 0) {
+            throw new Error('Data must be a non-empty array');
         }
-
+    
         try {
             const existingRecords = await JobData.find({
                 redirectUrl: { $in: data.map(job => job.redirectUrl) }
             }).select('redirectUrl');
-
+    
             if (existingRecords.length > 0) {
                 const existingData = new Set(existingRecords.map(record => record.redirectUrl));
                 data = data.filter(job => !existingData.has(job.redirectUrl));
             }
-
+    
             if (data.length > 0) {
                 const results = await JobData.insertMany(data);
-
+    
                 return {
                     status: 201,
                     message: `Insertion completed. Number of records inserted: ${results.length}`,
@@ -34,7 +34,7 @@ const JobDataService = {
                 };
             }
         } catch (error) {
-            throw new Error('Error inserting records: ' + error.message);
+            throw new Error(`Error inserting records in JobData: ${error.message}`);
         }
     },
 

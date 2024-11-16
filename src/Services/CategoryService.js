@@ -36,8 +36,8 @@ const CategoryService = {
 
     getLocalCategories: async (data) => {
         try {
-            let query = {};
-            if (data.siteId) query.website = data.siteId
+            let query = {};   
+            if (data.length && data.website !== "undefined") {query.website = data.website}
 
             return await Category.find(query);
         } catch (error) {
