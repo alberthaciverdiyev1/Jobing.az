@@ -15,7 +15,7 @@ const CityController = {
 
     getAll: async (req, res) => {
         try {
-            const companies = await CityService.getAll();
+            const companies = await CityService.getAll(req.query);
             res.status(200).json(companies);
         } catch (error) {
             res.status(500).json({message: 'Error retrieving company: ' + error.message});

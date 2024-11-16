@@ -1,3 +1,4 @@
+import Enums from '../Config/Enums.js';
 import City from '../Models/City.js';
 
 const CityService = {
@@ -51,9 +52,11 @@ const CityService = {
     },
 
     // Tüm şehirleri al
-    getAll: async () => {
+    getAll: async (data) => {
         try {
-            return await City.find({});
+            let query = {};
+            if (data.site) query.website = Enums.SitesWithId[data.site]
+            return await City.find(query);
         } catch (error) {
             throw new Error('Error retrieving cities: ' + error.message);
         }

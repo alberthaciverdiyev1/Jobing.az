@@ -10,17 +10,16 @@ const jobDataController = {
     create: async (req, res) => {
         try {
             const categories = await CategoryService.getLocalCategories();
-            
+
             const cities = await CityService.getAll();
             const bossAz = new BossAz();
-            // const smatJobAz = new SmartJobAz();
-            // const smartJobAzJobs = await smatJobAz.Jobs();
-            // return smartJobAzJobs;
-            const jobs = await bossAz.Jobs(categories,cities);
-            // console.log({jobs});
-            // console.log(jobs);
-            // return; 
-            const response = await JobService.create(jobs);
+            const smatJobAz = new SmartJobAz();
+            const smartJobAzJobs = await smatJobAz.Jobs(categories, cities);
+            const bossAzjobs = await bossAz.Jobs(categories, cities);
+            let data = [...bossAzjobs, ...smartJobAzJobs];
+            // console.log(data);return;
+
+            const response = await JobService.create(data);
             res.status(response.status).json({ message: response.message });
         } catch (error) {
             res.status(500).json({ message: 'Error creating site: ' + error.message });
@@ -40,7 +39,7 @@ const jobDataController = {
                 educationId: req.query.educationId,
                 offset: req.query.offset,
             }
-            
+
             const jobs = await JobService.getAllJobs(data);
             res.status(200).json(jobs);
         } catch (error) {

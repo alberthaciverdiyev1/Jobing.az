@@ -12,7 +12,6 @@ const JobDataService = {
             const existingRecords = await JobData.find({
                 redirectUrl: { $in: data.map(job => job.redirectUrl) }
             }).select('redirectUrl');
-console.log(existingRecords);
 
             if (existingRecords.length > 0) {
                 const existingData = new Set(existingRecords.map(record => record.redirectUrl));
@@ -49,7 +48,7 @@ console.log(existingRecords);
                 createdAt: { $gte: thirtyDaysAgo }
             };
     
-            if (data.cityId) query.cityId = data.cityId;
+            if (data.cityId) query.cityId = +data.cityId;
             if (data.educationId) query.educationId = data.educationId;
             if (data.experience) query.experienceId = +data.experience;
             if (data.jobType) query.jobType = data.jobType;

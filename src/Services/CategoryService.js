@@ -34,13 +34,17 @@ const CategoryService = {
         }
     },
 
-    getLocalCategories: async () => {
+    getLocalCategories: async (data) => {
         try {
-            return await Category.find({});
+            let query = {};
+            if (data.siteId) query.website = data.siteId
+
+            return await Category.find(query);
         } catch (error) {
             throw new Error('Error retrieving categories: ' + error.message);
         }
     },
+
 
     addLocalCategory: async (data) => {
         try {

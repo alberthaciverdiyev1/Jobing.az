@@ -43,7 +43,7 @@ const jobSchema = new Schema({
         required: false
     },
     companyId: {
-        type: Number,
+        type: String,
         required: false
     },
     cityId: {
