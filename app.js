@@ -9,9 +9,11 @@ import Production from './src/Helpers/Production.js';
 import axios from 'axios';
 import sendEmail from './src/Helpers/NodeMailer.js';
 import { title } from 'process';
+    const to = process.env.CRON_MAIL_USER;
+
 
 const app = express();
-const port = process.env.PR_PORT || 3001;
+const port = process.env.PR_PORT || 3000;
 
 app.set('view engine', 'ejs');
 app.set('views', './src/Views');
@@ -28,9 +30,9 @@ app.use('/', routes);
 
 // swaggerDocs(app);
 
-cron.schedule('*/10 * * * *', async () => {
-// cron.schedule('0 7-23/2 * * *', async () => {
-    const to = process.env.CRON_MAIL_USER;
+cron.schedule('0 */2 7-23 * * *', async () => {
+// // cron.schedule('0 7-23/2 * * *', async () => {
+    // const to = process.env.CRON_MAIL_USER;
     const now = new Date();
 
     const formatDate = (date) => {
@@ -44,7 +46,9 @@ cron.schedule('*/10 * * * *', async () => {
         };
         await sendEmail(startData, to);
 
-        const response = await axios.post(`http://localhost:${port}/api/jobs`);
+        const response = await axios.post(`http://localhost:3000/api/jobs`);
+        // const response = await axios.post(`http://localhost:${port}/api/jobs`);
+        
 
         if (response.status === 200 || response.status === 201) {
             let endData = {
@@ -62,8 +66,7 @@ cron.schedule('*/10 * * * *', async () => {
     }
 });
 
-// cron.schedule('0 7-23/2 * * *', async () => {
-    // const to = process.env.CRON_MAIL_USER;
+// cron.schedule('0 */1 7-23 * * *', async () => {
 
     // const formatDate = (date) => {
     //     return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}:${date.getSeconds().toString().padStart(2, '0')}`;
