@@ -167,8 +167,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
     async function getJobs(params) {
         !offset ? loader(true) : "";
-        const uniqueJobs = [];
-        const seenUrls = new Set();
+        let jobList = [];
 
         await axios.get('/api/jobs', {
             params: params
@@ -191,13 +190,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
             if (res.status === 200) {
                 // alert(res.data.jobs.length);
                 if (res.data.totalCount) {
-                    res.data.jobs.forEach(job => {
-                        if (!seenUrls.has(job.redirectUrl)) {
-                            seenUrls.add(job.redirectUrl);
-                            uniqueJobs.push(job);
-                        }
-                    });
-                    uniqueJobs.forEach(element => {
+                    jobList = res.data.jobs;
+                    res.data.jobs.forEach(element => {
                         htmlContent += `<div class="job-card bg-white px-3 pt-2 h-40 rounded-xl shadow-md mb-4 hover:hover-card-color cursor-pointer duration-300 border border-custom sm:px-5" data-original-link="${element.redirectUrl}">
                                             <div class="content flex">
                                                 <div class="mt-3 sm:mt-1 ">
@@ -284,11 +278,11 @@ document.addEventListener("DOMContentLoaded", (event) => {
                     document.getElementById("card-section").innerHTML = noDataCard();
                 }
 
-                if (offset && uniqueJobs.length > 0) {
+                if (offset && jobList.length > 0) {
                     console.log("1");
 
                     document.getElementById("card-section").insertAdjacentHTML('beforeend', htmlContent + loadMoreButton);
-                } else if (uniqueJobs.length > 0) {
+                } else if (jobList.length > 0) {
                     console.log("3");
                     document.getElementById("card-section").innerHTML = headerContent + htmlContent + loadMoreButton;
                 }

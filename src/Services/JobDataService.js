@@ -7,20 +7,20 @@ const JobDataService = {
         if (!Array.isArray(data) || data.length === 0) {
             throw new Error('Data must be a non-empty array');
         }
-    
+
         try {
             const existingRecords = await JobData.find({
                 redirectUrl: { $in: data.map(job => job.redirectUrl) }
             }).select('redirectUrl');
-    
+
             if (existingRecords.length > 0) {
                 const existingData = new Set(existingRecords.map(record => record.redirectUrl));
                 data = data.filter(job => !existingData.has(job.redirectUrl));
             }
-    
+
             if (data.length > 0) {
                 const results = await JobData.insertMany(data);
-    
+
                 return {
                     status: 201,
                     message: `Insertion completed. Number of records inserted: ${results.length}`,
@@ -41,27 +41,29 @@ const JobDataService = {
     // Get all job listings
     getAllJobs: async (data) => {
         try {
+            const filteredJobs = [];
+            const seenUrls = new Set();
             const currentDate = new Date();
             const thirtyDaysAgo = new Date(currentDate.setDate(currentDate.getDate() - 30));
-    
+
             const query = {
                 createdAt: { $gte: thirtyDaysAgo }
             };
-    
+
             if (data.cityId) query.cityId = +data.cityId;
             if (data.educationId) query.educationId = data.educationId;
             if (data.experience) query.experienceId = +data.experience;
             if (data.jobType) query.jobType = data.jobType;
             if (data.minSalary) query.minSalary = { $gte: +data.minSalary };
             if (data.maxSalary) query.maxSalary = { $lte: +data.maxSalary };
-    
+
             if (data.categoryId) {
                 query.$or = [
                     { categoryId: data.categoryId },
                     { subCategoryId: data.categoryId }
                 ];
             }
-    
+
             if (data.keyword) {
                 query.$or = [
                     { title: { $regex: data.keyword, $options: 'i' } },
@@ -69,10 +71,10 @@ const JobDataService = {
                     { location: { $regex: data.keyword, $options: 'i' } }
                 ];
             }
-    
+
             const limit = 50;
             const offset = Number(data.offset) || 0;
-    
+
             const jobs = await JobData.aggregate([
                 { $match: query },
                 { $sort: { createdAt: -1 } },
@@ -95,17 +97,22 @@ const JobDataService = {
                 { $skip: offset },
                 { $limit: limit }
             ]);
-    
+
             const totalCount = await JobData.countDocuments(query);
-    
+
             const jobsWithImageUrl = jobs.map(job => ({
                 ...job,
                 companyImageUrl: job.companyDetails?.imageUrl || null
             }));
-    
+            jobsWithImageUrl.forEach(job => {
+                if (!seenUrls.has(job.redirectUrl)) {
+                    seenUrls.add(job.redirectUrl);
+                    filteredJobs.push(job);
+                }
+            });
             return {
                 totalCount: totalCount,
-                jobs: jobsWithImageUrl,
+                jobs: filteredJobs,
                 hideLoadMore: (limit + offset > totalCount)
             };
         } catch (error) {
