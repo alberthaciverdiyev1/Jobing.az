@@ -1,18 +1,17 @@
 document.addEventListener("DOMContentLoaded", (event) => {
 
+    async function getJobs(params) {
+        await axios.get('/api/jobs', {
+            params: params
+        }).then(res => {
+            let htmlContent = '';
 
-  async function getJobs(params) {
-    await axios.get('/api/jobs', {
-      params: params
-    }).then(res => {
-      let htmlContent = '';
-
-      if (res.status === 200) {
-        // alert(res.data.jobs.length);
-        if (res.data.totalCount) {
-          let data = res.data.jobs.slice(0, 6)
-          data.forEach(element => {
-            htmlContent += `<div class="job-card home-margin-bottom bg-white px-3 pt-2 h-40 rounded-xl shadow-md mb-4 hover:hover-card-color cursor-pointer duration-300 border border-custom sm:px-5" data-original-link="${element.redirectUrl}">
+            if (res.status === 200) {
+                // alert(res.data.jobs.length);
+                if (res.data.totalCount) {
+                    let data = res.data.jobs.slice(0, 12)
+                    data.forEach(element => {
+                        htmlContent += `<div class="job-card home-margin-bottom bg-white px-3 pt-2 h-40 rounded-xl shadow-md mb-4 hover:hover-card-color cursor-pointer duration-300 border border-custom sm:px-5" data-original-link="${element.redirectUrl}">
                                         <div class="content flex">
                                             <div class="mt-3 sm:mt-1 ">
                                                 <span class="mr-2">
@@ -87,23 +86,23 @@ document.addEventListener("DOMContentLoaded", (event) => {
                                             </div>
                                         </div>
                                     </div> `;
-          });
+                    });
 
-        }
+                }
 
-        document.getElementById("home-card-section").innerHTML = htmlContent;
+                document.getElementById("home-card-section").innerHTML = htmlContent;
 
-        const jobCards = document.querySelectorAll('.job-card');
-        jobCards.forEach(card => {
-          card.addEventListener('click', function () {
-            const originalLink = this.getAttribute('data-original-link');
-            window.open(originalLink, '_blank');
-          });
+                const jobCards = document.querySelectorAll('.job-card');
+                jobCards.forEach(card => {
+                    card.addEventListener('click', function () {
+                        const originalLink = this.getAttribute('data-original-link');
+                        window.open(originalLink, '_blank');
+                    });
+                });
+            }
+        }).catch(error => {
+            console.error("Error fetching jobs:", error);
         });
-      }
-    }).catch(error => {
-      console.error("Error fetching jobs:", error);
-    });
-  }
-  getJobs();
+    }
+    getJobs();
 });

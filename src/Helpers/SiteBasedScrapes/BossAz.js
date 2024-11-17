@@ -114,7 +114,7 @@ class BossAz {
                                     });
                                 });
                             
-                                console.log({jobData});
+                                // console.log({jobData});
 
                                 return jobData;
                             });

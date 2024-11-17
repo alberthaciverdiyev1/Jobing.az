@@ -30,7 +30,7 @@ const jobDataController = {
             // Fetch jobs from SmartJobAz
             try {
                 smartJobAzJobs = await smartJobAz.Jobs(categories, cities);
-                console.log({smartJobAzJobs});
+                // console.log({smartJobAzJobs});
                 
             } catch (error) {
                 console.error("Error fetching SmartJobAz jobs:", error.message);
@@ -40,7 +40,7 @@ const jobDataController = {
             // Fetch jobs from BossAz without limiting
             try {
                 bossAzjobs = await bossAz.Jobs(categories, cities);
-                console.log({bossAzjobs});
+                // console.log({bossAzjobs});
                 
             } catch (error) {
                 console.error("Error fetching BossAz jobs:", error.message);
@@ -49,7 +49,7 @@ const jobDataController = {
     
             // Merge all jobs from both sources
             const data = [...(bossAzjobs || []), ...(smartJobAzJobs || [])];
-            console.log({ data });
+            // console.log({ data });
     
             // Create the jobs in the system
             const response = await JobService.create(data);
