@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
             if (res.status === 200) {
                 // alert(res.data.jobs.length);
                 if (res.data.totalCount) {
-                    let data = res.data.jobs.slice(0, 12)
+                    let data = res.data.jobs.slice(0, 12);
                     data.forEach(element => {
                         htmlContent += `<div class="job-card home-margin-bottom bg-white px-3 pt-2 h-40 rounded-xl shadow-md mb-4 hover:hover-card-color cursor-pointer duration-300 border border-custom sm:px-5" data-original-link="${element.redirectUrl}">
                                         <div class="content flex">
@@ -55,8 +55,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
                                                     ${false ? `<button class="text-base text-gray-600 font-bold mb-5 sm:hidden">
                                                         <i class="fa-solid fa-heart text-2xl"></i>
                                                     </button>` : ""}
-                                                    
-                                                </div>
+                                                     </div>
                                                 <div class="flex text-sm text-gray-600">
                                                     <span><i class="fa-solid fa-clock mr-0.5"></i> ${element.postedAt.slice(0, 10)}</span>
                                                     <span class="ml-3"><i class="fa-solid fa-location-dot mr-0.5"></i> ${element.location}</span>
@@ -108,4 +107,61 @@ document.addEventListener("DOMContentLoaded", (event) => {
         });
     }
     getJobs();
+
+    async function getCategories() {
+        let o = `<option value="">All Categories</option>`;
+        await axios.get('/api/categories', {
+            params: { site: "bossAz" }
+        })
+            .then(res => {
+                if (res.status === 200) {
+                    res.data.forEach(element => {
+                        o += `                        
+                        <option value="${element.localCategoryId}">${element.name}</option>`
+                    })
+                    document.getElementById("category-select").innerHTML = o;
+                }
+            })
+            .catch(error => {
+                console.error("Error fetching categories:", error);
+            });
+
+    }
+    getCategories();
+
+    async function getCities() {
+        let o = `<option value="">All Cities</option>`;
+
+        await axios.get('/api/cities', {
+            params: { site: "BossAz" }
+        })
+            .then(res => {
+                if (res.status === 200) {
+                    res.data.forEach(element => {
+                        o += `                        
+                        <option value="${element.cityId}">${element.name}</option>`
+                    })
+                    document.getElementById("city-select").innerHTML = o;
+                }
+            })
+            .catch(error => {
+                console.error("Error fetching cities:", error);
+            });
+
+    }
+    getCities();
+
+    document.getElementById("filter-jobs").addEventListener("click", () => {
+        const categorySelect = document.getElementById('category-select');
+        const citySelect = document.getElementById('city-select');
+        const keywordInput = document.getElementById('keyword');
+
+        const categoryId = categorySelect?.value ? +categorySelect.value : '';
+        const cityId = citySelect?.value ? +citySelect.value : '';
+        const keyword = keywordInput?.value || '';
+
+        // console.log({categoryId,cityId,keyword});return;
+        
+        window.location.href = `http://localhost:3000/jobs?minSalary=0&maxSalary=5000&offset=0${categoryId ? `&categoryId=${categoryId}`:''}${cityId ? `&cityId=${cityId}` : ''}${keyword.length > 0 ? `&keyword=${keyword}` : ''}`;
+    });
 });
