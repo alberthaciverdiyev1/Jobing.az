@@ -5,7 +5,8 @@ const ViewController = {
     home: async (req, res) => {
         const view = {
             title: 'Home',
-            body: "Home/Index.ejs",
+            body: "Home/NewHome.ejs",
+            // body: "Home/Index.ejs",
             js: "Home.js"
         };
         res.render('Main', view);
