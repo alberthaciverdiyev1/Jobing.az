@@ -27,19 +27,22 @@ document.addEventListener("DOMContentLoaded", (event) => {
                                                 <div class="flex mb-1 justify-between">
                                                     <div class="">
                                                         <p class="text-sm font-bold flex text-gray-700 justify-items-start sm:font-bold sm:text-base">
-                                                            <span class="truncate sm:hidden"> 
-                                                                ${element.title.slice(0, 17)} 
+                                                            <span class="truncate sm:hidden">
+                                                                ${element.title.length > 17 ? element.title.slice(0, 17) + '...' : element.title}
                                                             </span>
-                                                            <span class="hidden sm:inline sm:whitespace-normal"> 
-                                                                ${element.title} 
+                                                            <span class="sm:block hidden">
+                                                                ${element.title}
                                                             </span>
                                                             <span class="bg-yellow-100 text-yellow-700 px-1 ml-2 py-0.5 font-medium rounded-lg text-sm h-7 hidden sm:flex">
                                                                 ${element.sourceUrl}
                                                             </span>
                                                         </p>
-                                                        <h4 class="text-base font-semibold text-gray-700 mb-2 sm:font-bold">
-                                                            <i class="fa-solid fa-building"></i> ${element.companyName.slice(0, 17)}
-                                                        </h4>
+                                                            <h4 class="text-base font-semibold text-gray-700 mb-2 sm:font-bold sm:block">
+                                                                <i class="fa-solid fa-building"></i> ${element.companyName}
+                                                            </h4>
+                                                            <h4 class="text-base font-semibold text-gray-700 mb-2 sm:font-bold sm:hidden">
+                                                                <i class="fa-solid fa-building"></i> ${element.companyName.length > 17 ? element.companyName.slice(0, 17) + '...' : element.companyName}
+                                                            </h4>
                                                     </div>
                                                     <div class="hidden sm:w-full">
                                                     ${true ? "" : ` <span class="bg-blue-100 text-blue-700 px-1 ml-3 py-0.5 h-12 w-auto rounded-lg text-sm">
