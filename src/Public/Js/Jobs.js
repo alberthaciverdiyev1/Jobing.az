@@ -14,6 +14,72 @@ document.addEventListener("DOMContentLoaded", (event) => {
         maxSalary = null,
         experienceLevel = null;
 
+
+    function getURLParams() {
+        const params = new URLSearchParams(window.location.search);
+        return {
+            categoryId: params.get("categoryId"),
+            cityId: params.get("cityId"),
+            educationId: params.get("educationId"),
+            jobType: params.get("jobType"),
+            minSalary: params.get("minSalary"),
+            maxSalary: params.get("maxSalary"),
+            experience: params.get("experience"),
+            keyword: params.get("keyword"),
+            offset: params.get("offset") || 0,
+        };
+    }
+
+    // Function to update URL parameters without reloading the page
+    function updateURLParams(newParams) {
+        const params = new URLSearchParams(window.location.search);
+        Object.entries(newParams).forEach(([key, value]) => {
+            if (value !== null) {
+                params.set(key, value);
+            } else {
+                params.delete(key);
+            }
+        });
+        history.pushState({}, '', `${window.location.pathname}?${params.toString()}`);
+    }
+
+    function preselectFilters() {
+        const params = getURLParams();
+
+        if (params.categoryId) {
+            const categoryInput = document.querySelector(`input[name="category"][id="${params.categoryId}"]`);
+            if (categoryInput) {
+                categoryInput.checked = true;
+            }
+        }
+
+        if (params.cityId) {
+            const cityInput = document.querySelector(`input[name="city"][data-id="${params.cityId}"]`);
+            if (cityInput) {
+                cityInput.checked = true;
+            }
+        }
+
+        if (params.educationId) {
+            const educationInput = document.querySelector(`input[name="education"][data-id="${params.educationId}"]`);
+            if (educationInput) {
+                educationInput.checked = true;
+            }
+        }
+
+        if (params.experience) {
+            const experienceInput = document.querySelector(`input[name="experience"][data-id="${params.experience}"]`);
+            if (experienceInput) {
+                experienceInput.checked = true;
+            }
+        }
+
+        handleFilterChange(params.offset || 0);
+    }
+
+
+    preselectFilters();
+
     function categoryHTML(data, limit = null) {
         let htmlContent = "";
         if (limit) {
@@ -79,8 +145,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
 
 
-    function getCategories() {
-        axios.get('/api/categories', {
+    async function getCategories() {
+        await axios.get('/api/categories', {
             params: { site: "bossAz" }
         })
             .then(res => {
@@ -349,21 +415,23 @@ document.addEventListener("DOMContentLoaded", (event) => {
             });
         });
     }
+    // Update the filters and make a job request
     function handleFilterChange(offset_value = 0) {
         const params = {
             categoryId: +document.querySelector('input[name="category"]:checked')?.id || null,
             cityId: +document.querySelector('input[name="city"]:checked')?.getAttribute('data-id') || null,
             educationId: +document.querySelector('input[name="education"]:checked')?.getAttribute('data-id') || null,
             jobType: document.querySelector('input[name="jobType"]:checked')?.id || null,
-            minSalary: !!+minSalary ? minSalary : 0,
-            maxSalary: !!+maxSalary ? maxSalary : 50000,
+            minSalary: !!minSalary ? minSalary : 0,
+            maxSalary: !!maxSalary ? maxSalary : 50000,
             experience: +document.querySelector('input[name="experience"]:checked')?.getAttribute('data-id') || null,
             keyword: document.getElementById("search")?.value || null,
             offset: +offset_value || 0
         };
-        // console.log(!!minSalary); return;
-        getJobs(params);
+        updateURLParams(params); 
+        getJobs(params); // Fetch jobs with the updated params
     }
+
 
 
     document.getElementById("search-btn").addEventListener("click", handleFilterChange);
