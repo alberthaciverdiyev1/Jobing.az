@@ -51,7 +51,7 @@ const JobDataService = {
             };
 
             if (data.cityId) query.cityId = +data.cityId;
-            if (data.educationId) query.educationId = data.educationId;
+            if (data.educationId) query.educationId = +data.educationId;
             if (data.experience) query.experienceId = +data.experience;
             if (data.jobType) query.jobType = data.jobType;
             if (data.minSalary) query.minSalary = { $gte: +data.minSalary };
@@ -59,8 +59,8 @@ const JobDataService = {
 
             if (data.categoryId) {
                 query.$or = [
-                    { categoryId: data.categoryId },
-                    { subCategoryId: data.categoryId }
+                    { categoryId: +data.categoryId },
+                    { subCategoryId: +data.categoryId }
                 ];
             }
 
