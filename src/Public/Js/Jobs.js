@@ -15,67 +15,66 @@ document.addEventListener("DOMContentLoaded", (event) => {
         experienceLevel = null;
 
 
-    function getURLParams() {
-        const params = new URLSearchParams(window.location.search);
-        return {
-            categoryId: params.get("categoryId"),
-            cityId: params.get("cityId"),
-            educationId: params.get("educationId"),
-            jobType: params.get("jobType"),
-            minSalary: params.get("minSalary"),
-            maxSalary: params.get("maxSalary"),
-            experience: params.get("experience"),
-            keyword: params.get("keyword"),
-            offset: params.get("offset") || 0,
-        };
+// URL parametrelerini almak
+function getURLParams() {
+    const params = new URLSearchParams(window.location.search);
+    const categoryId = params.get('categoryId');
+    const cityId = params.get('cityId');
+    const educationId = params.get('educationId');
+    const experienceLevel = params.get('experienceLevel');
+    const offset = params.get('offset') || 0;
+  
+    return {
+      categoryId,
+      cityId,
+      educationId,
+      experienceLevel,
+      offset
+    };
+  }
+  
+  // URL parametrelerini güncellemek
+  function updateURLParams(params) {
+    const currentParams = new URLSearchParams(window.location.search);
+  
+    // Parametreleri güncelle
+    for (const key in params) {
+      if (params[key] !== undefined) {
+        currentParams.set(key, params[key]);
+      } else {
+        currentParams.delete(key);
+      }
     }
-
-    // Function to update URL parameters without reloading the page
-    function updateURLParams(newParams) {
-        const params = new URLSearchParams(window.location.search);
-        Object.entries(newParams).forEach(([key, value]) => {
-            if (value !== null) {
-                params.set(key, value);
-            } else {
-                params.delete(key);
-            }
-        });
-        history.pushState({}, '', `${window.location.pathname}?${params.toString()}`);
+  
+    // Yeni URL'yi oluştur ve sayfayı güncelle
+    window.history.replaceState({}, '', '?' + currentParams.toString());
+  }
+  
+// URL parametrelerine göre filtreleri önceden seç
+function preselectFilters() {
+    const { categoryId, cityId, educationId, experienceLevel } = getURLParams();
+  
+    // Kategori seçimini yap
+    if (categoryId) {
+      document.querySelector(`input[name="category"][value="${categoryId}"]`).checked = true;
     }
-
-    function preselectFilters() {
-        const params = getURLParams();
-
-        if (params.categoryId) {
-            const categoryInput = document.querySelector(`input[name="category"][id="${params.categoryId}"]`);
-            if (categoryInput) {
-                categoryInput.checked = true;
-            }
-        }
-
-        if (params.cityId) {
-            const cityInput = document.querySelector(`input[name="city"][data-id="${params.cityId}"]`);
-            if (cityInput) {
-                cityInput.checked = true;
-            }
-        }
-
-        if (params.educationId) {
-            const educationInput = document.querySelector(`input[name="education"][data-id="${params.educationId}"]`);
-            if (educationInput) {
-                educationInput.checked = true;
-            }
-        }
-
-        if (params.experience) {
-            const experienceInput = document.querySelector(`input[name="experience"][data-id="${params.experience}"]`);
-            if (experienceInput) {
-                experienceInput.checked = true;
-            }
-        }
-
-        handleFilterChange(params.offset || 0);
+  
+    // Şehir seçimini yap
+    if (cityId) {
+      document.querySelector(`input[name="city"][value="${cityId}"]`).checked = true;
     }
+  
+    // Eğitim seviyesi seçimini yap
+    if (educationId) {
+      document.querySelector(`input[name="education"][value="${educationId}"]`).checked = true;
+    }
+  
+    // Deneyim seviyesi seçimini yap
+    if (experienceLevel) {
+      document.querySelector(`input[name="experience"][value="${experienceLevel}"]`).checked = true;
+    }
+  }
+  
 
 
     preselectFilters();
@@ -415,22 +414,22 @@ document.addEventListener("DOMContentLoaded", (event) => {
             });
         });
     }
-    // Update the filters and make a job request
-    function handleFilterChange(offset_value = 0) {
-        const params = {
-            categoryId: +document.querySelector('input[name="category"]:checked')?.id || null,
-            cityId: +document.querySelector('input[name="city"]:checked')?.getAttribute('data-id') || null,
-            educationId: +document.querySelector('input[name="education"]:checked')?.getAttribute('data-id') || null,
-            jobType: document.querySelector('input[name="jobType"]:checked')?.id || null,
-            minSalary: !!minSalary ? minSalary : 0,
-            maxSalary: !!maxSalary ? maxSalary : 50000,
-            experience: +document.querySelector('input[name="experience"]:checked')?.getAttribute('data-id') || null,
-            keyword: document.getElementById("search")?.value || null,
-            offset: +offset_value || 0
-        };
-        updateURLParams(params); 
-        getJobs(params); // Fetch jobs with the updated params
-    }
+
+function handleFilterChange() {
+    const categoryId = document.querySelector('input[name="category"]:checked')?.value;
+    const cityId = document.querySelector('input[name="city"]:checked')?.value;
+    const educationId = document.querySelector('input[name="education"]:checked')?.value;
+    const experienceLevel = document.querySelector('input[name="experience"]:checked')?.value;
+    const offset = 0; 
+    updateURLParams({ categoryId, cityId, educationId, experienceLevel, offset });
+  
+    getJobs({ categoryId, cityId, educationId, experienceLevel, offset });
+  }
+  
+  document.querySelectorAll('input[name="category"], input[name="city"], input[name="education"], input[name="experience"]').forEach(element => {
+    element.addEventListener('change', handleFilterChange);
+  });
+  
 
 
 
