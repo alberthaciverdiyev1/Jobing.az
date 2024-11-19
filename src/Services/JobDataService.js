@@ -50,19 +50,19 @@ const JobDataService = {
                 createdAt: { $gte: thirtyDaysAgo }
             };
 
-            if (data.cityId) query.cityId = +data.cityId;
-            if (data.educationId) query.educationId = +data.educationId;
-            if (data.experience) query.experienceId = +data.experience;
+            if (data.cityId && !isNaN(Number(data.cityId))) query.cityId = +data.cityId;
+            if (data.educationId && !isNaN(Number(data.educationId))) query.educationId = +data.educationId;
+            if (data.experience && !isNaN(Number(data.experience))) query.experienceId = +data.experience;
             if (data.jobType) query.jobType = data.jobType;
-            if (data.minSalary) query.minSalary = { $gte: +data.minSalary };
-            if (data.maxSalary) query.maxSalary = { $lte: +data.maxSalary };
-
-            if (data.categoryId) {
+            if (data.minSalary && !isNaN(Number(data.minSalary))) query.minSalary = { $gte: +data.minSalary };
+            if (data.maxSalary && !isNaN(Number(data.maxSalary))) query.maxSalary = { $lte: +data.maxSalary };
+            
+            if (data.categoryId && !isNaN(Number(data.categoryId))) {
                 query.$or = [
                     { categoryId: +data.categoryId },
                     { subCategoryId: +data.categoryId }
                 ];
-            }
+            }            
 
             if (data.keyword) {
                 query.$or = [
