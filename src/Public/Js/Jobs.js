@@ -1,18 +1,22 @@
 // import axios from 'axios';
-document.addEventListener("DOMContentLoaded", (event) => {
+document.addEventListener('DOMContentLoaded', async () => {
+    await Promise.all([getCategories(), getCities(), getEducation(), getExperience()]);
+    preselectFilters();
+});
 
-    var thumbsize = 14;
-    let categoryArray = [], cityArray = [];
-    let showMoreCategories = true;
-    let showMoreCities = true;
-    let offset = 0;
-    let categoryId = null,
-        cityId = null,
-        educationId = null,
-        jobType = null,
-        minSalary = null,
-        maxSalary = null,
-        experienceLevel = null;
+var thumbsize = 14;
+let categoryArray = [], cityArray = [];
+let showMoreCategories = true;
+let showMoreCities = true;
+let offset = 0;
+let categoryId = null,
+    cityId = null,
+    educationId = null,
+    jobType = null,
+    minSalary = null,
+    maxSalary = null,
+    experienceLevel = null;
+
 
 
 // URL parametrelerini almak
@@ -23,83 +27,88 @@ function getURLParams() {
     const educationId = params.get('educationId');
     const experienceLevel = params.get('experienceLevel');
     const offset = params.get('offset') || 0;
-  
+
     return {
-      categoryId,
-      cityId,
-      educationId,
-      experienceLevel,
-      offset
+        categoryId,
+        cityId,
+        educationId,
+        experienceLevel,
+        offset
     };
-  }
-  
-  // URL parametrelerini güncellemek
-  function updateURLParams(params) {
+}
+
+// URL parametrelerini güncellemek
+function updateURLParams(params) {
     const currentParams = new URLSearchParams(window.location.search);
-  
+
     // Parametreleri güncelle
     for (const key in params) {
-      if (params[key] !== undefined) {
-        currentParams.set(key, params[key]);
-      } else {
-        currentParams.delete(key);
-      }
+        console.log({ key, params });
+
+        if (params[key] !== undefined) {
+            currentParams.set(key, params[key]);
+        } else {
+            currentParams.delete(key);
+        }
     }
-  
+
+    console.log({ currentParams });
+
+
     // Yeni URL'yi oluştur ve sayfayı güncelle
     window.history.replaceState({}, '', '?' + currentParams.toString());
-  }
-  
-// URL parametrelerine göre filtreleri önceden seç
+}
+
 function preselectFilters() {
     const { categoryId, cityId, educationId, experienceLevel } = getURLParams();
-  
-    // Kategori seçimini yap
-    if (categoryId) {
-      document.querySelector(`input[name="category"][value="${categoryId}"]`).checked = true;
-    }
-  
-    // Şehir seçimini yap
-    if (cityId) {
-      document.querySelector(`input[name="city"][value="${cityId}"]`).checked = true;
-    }
-  
-    // Eğitim seviyesi seçimini yap
-    if (educationId) {
-      document.querySelector(`input[name="education"][value="${educationId}"]`).checked = true;
-    }
-  
-    // Deneyim seviyesi seçimini yap
-    if (experienceLevel) {
-      document.querySelector(`input[name="experience"][value="${experienceLevel}"]`).checked = true;
-    }
-  }
-  
+    console.log({ categoryId, cityId, educationId, experienceLevel });
 
+    if (categoryId && !isNaN(Number(categoryId))) {
+        console.log({categoryId});
+        
+        document.querySelector(`input[name="category"][id="${+categoryId}"]`).checked = true;
+    } else {
+        document.querySelector(`input[name="category"][id="all"]`).checked = true;
+    }
 
-    preselectFilters();
+    if (cityId && !isNaN(Number(cityId))) {
+        document.querySelector(`input[name="city"][id="${+cityId}"]`).checked = true;
+    } else {
+        document.querySelector(`input[name="city"][id="city-all"]`).checked = true;
+    }
 
-    function categoryHTML(data, limit = null) {
-        let htmlContent = "";
-        if (limit) {
-            data = data.slice(0, limit);
-        }
-        data.forEach(element => {
+    if (educationId && !isNaN(Number(educationId))) {
+        document.querySelector(`input[name="education"][id="${+educationId}"]`).checked = true;
+    }
 
-            htmlContent += `
+    if (experienceLevel && !isNaN(Number(experienceLevel))) {
+        document.querySelector(`input[name="experience"][id="${+experienceLevel}"]`).checked = true;
+    }
+    getJobs({ categoryId, cityId, educationId, experienceLevel, offset: 0 });
+
+}
+
+function categoryHTML(data, limit = null) {
+    let htmlContent = "";
+    if (limit) {
+        data = data.slice(0, limit);
+    }
+    data.forEach(element => {
+
+        htmlContent += `
                 <div class="flex items-center"> 
-                    <input type="radio" name="category" id="${element.localCategoryId}" class="custom-checkbox" />
+                    <input type="radio" name="category"  id="${element.localCategoryId}" class="custom-checkbox" />
                     <label for="${element.localCategoryId}" class="text-gray-800">
                         ${element.name}
                         <span class="text-gray-400">(34)</span>
                     </label>
                 </div>`;
-        });
-        return htmlContent;
-    }
+    });
+    return htmlContent;
+}
 
-    function noDataCard() {
-        return `<div class="flex items-center justify-center min-h-screen">
+function noDataCard() {
+    return `<div class="flex items-center justify-center min-h-screen">
                 <div class="flex flex-col items-center justify-center w-full max-w-xs mx-auto">
                   <div class="w-20 h-20 mx-auto bg-orange-500 rounded-full shadow-sm flex justify-center items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" width="33" height="32" viewBox="0 0 33 32" fill="none">
@@ -114,134 +123,141 @@ function preselectFilters() {
                   </div>
                 </div>
               </div>`
-    }
+}
 
-    function loader(start = false) {
+function loader(start = false) {
 
-        document.getElementById("card-section").innerHTML = start
-            ? `<div class="flex items-center justify-center min-h-screen bg-white  border border-custom rounded-lg">
+    document.getElementById("card-section").innerHTML = start
+        ? `<div class="flex items-center justify-center min-h-screen bg-white  border border-custom rounded-lg">
                     <div class="flex flex-col items-center justify-center w-full max-w-xs mx-auto">
                             <span class="loader"></span>
                     </div>
                </div>`
-            : "";
-    }
+        : "";
+}
 
-    function cityHTML(data, limit = null) {
-        let htmlContent = "";
-        if (limit) {
-            data = data.slice(0, limit);
-        }
-        data.forEach(element => {
-            htmlContent += `
-                <div class="flex items-center">
-                    <input type="radio" name="city" id="city-${element.cityId}" data-id="${element.cityId}"" class="custom-checkbox" />
-                    <label for="city-${element.cityId}" class="text-gray-800">${element.name} <span class="text-gray-400">(145)</span></label>
-                </div>`;
+function cityHTML(data, limit = null) {
+    let htmlContent = "";
+    if (limit) {
+        data = data.slice(0, limit);
+    }
+    data.forEach(element => {
+        htmlContent += `
+            <div class="flex items-center"> 
+                <input type="radio" name="city" id="${element.cityId}" class="custom-checkbox" />
+                <label for="${element.cityId}" class="text-gray-800">
+                    ${element.name}
+                    <span class="text-gray-400">(34)</span>
+                </label>
+            </div>`;
+    });
+    return htmlContent;
+}
+
+
+async function getCategories() {
+    await axios.get('/api/categories', {
+        params: { site: "bossAz" }
+    })
+        .then(res => {
+            if (res.status === 200) {
+                categoryArray = res.data;
+                document.getElementById("categoryList").innerHTML = categoryHTML(res.data, 10);
+                addRadioChangeListener("category");
+            }
+        })
+        .catch(error => {
+            console.error("Error fetching categories:", error);
         });
-        return htmlContent;
-    }
+
+}
+// getCategories();
 
 
-
-    async function getCategories() {
-        await axios.get('/api/categories', {
-            params: { site: "bossAz" }
+async function getCities() {
+    await axios.get('/api/cities', {
+        params: { site: "BossAz" }
+    })
+        .then(res => {
+            if (res.status === 200) {
+                cityArray = res.data;
+                document.getElementById("cityList").innerHTML = cityHTML(res.data, 7);
+                addRadioChangeListener("city");
+            }
         })
-            .then(res => {
-                if (res.status === 200) {
-                    categoryArray = res.data;
-                    document.getElementById("categoryList").innerHTML = categoryHTML(res.data, 10);
-                    addRadioChangeListener("category");
-                }
-            })
-            .catch(error => {
-                console.error("Error fetching categories:", error);
-            });
+        .catch(error => {
+            console.error("Error fetching categories:", error);
+        });
 
-    }
-    getCategories();
+}
+// getCities();
 
-
-
-    async function getCities() {
-        await axios.get('/api/cities', {
-            params: { site: "BossAz" }
-        })
-            .then(res => {
-                if (res.status === 200) {
-                    cityArray = res.data;
-                    document.getElementById("cityList").innerHTML = cityHTML(res.data, 7);
-                    addRadioChangeListener("city");
-                }
-            })
-            .catch(error => {
-                console.error("Error fetching categories:", error);
-            });
-
-    }
-    getCities();
-
-    async function getEducation() {
-        await axios.get('/education')
-            .then(res => {
-                let htmlContent = '';
-                if (res.status === 200) {
-                    Object.entries(res.data).forEach((education) => {
-                        htmlContent += `
-                      <div class="flex items-center">
-                          <input type="radio" name="education" id="education-${education[1]}" data-id="${education[1]}"" class="custom-checkbox" />
-                          <label for="education-${education[1]}" class="text-gray-800">${education[0]} <span class="text-gray-400">(145)</span></label>
-                      </div>`;
-                    });
-                }
-                document.getElementById("educationList").innerHTML = htmlContent;
-                addRadioChangeListener("education");
-
-            })
-            .catch(error => {
-                console.error("Error fetching categories:", error);
-            });
-
-    }
-    getEducation();
-
-    async function getExperience() {
-        await axios.get('/experience')
-            .then(res => {
-                let htmlContent = '';
-                if (res.status === 200) {
-                    Object.entries(res.data).forEach((experience) => {
-                        htmlContent += `
-                      <div class="flex items-center">
-                          <input type="radio" name="experience" id="experience-${experience[1]}" data-id="${experience[1]}"" class="custom-checkbox" />
-                          <label for="experience-${experience[1]}" class="text-gray-800">${experience[0]} <span class="text-gray-400">(145)</span></label>
-                      </div>`;
-                    });
-                }
-                document.getElementById("experienceList").innerHTML = htmlContent;
-                addRadioChangeListener("experience");
-
-            })
-            .catch(error => {
-                console.error("Error fetching experiences:", error);
-            });
-
-    }
-    getExperience();
-
-    async function getJobs(params) {
-        !offset ? loader(true) : "";
-        let jobList = [];
-
-        await axios.get('/api/jobs', {
-            params: params
-        }).then(res => {
+async function getEducation() {
+    await axios.get('/education')
+        .then(res => {
             let htmlContent = '';
-            let headerContent = '';
-            let loadMoreButton = '';
-            if (false) {
-                headerContent = `<div class="flex justify-between mb-3 bg-white py-1 px-4 rounded-lg text-center items-center sm:py-2">
+            if (res.status === 200) {
+                Object.entries(res.data).forEach((education) => {
+                    htmlContent += `
+                        <div class="flex items-center"> 
+                            <input type="radio" name="education" id="${education[1]}" class="custom-checkbox" />
+                            <label for="${education[1]}" class="text-gray-800">
+                            ${education[0]}
+                                <span class="text-gray-400">(34)</span>
+                            </label>
+                        </div>`;
+                });
+            }
+            document.getElementById("educationList").innerHTML = htmlContent;
+            addRadioChangeListener("education");
+
+        })
+        .catch(error => {
+            console.error("Error fetching categories:", error);
+        });
+
+}
+// getEducation();
+
+async function getExperience() {
+    await axios.get('/experience')
+        .then(res => {
+            let htmlContent = '';
+            if (res.status === 200) {
+                Object.entries(res.data).forEach((experience) => {
+                    htmlContent += `
+                        <div class="flex items-center"> 
+                            <input type="radio" name="experience" id="${experience[1]}" class="custom-checkbox" />
+                            <label for="${experience[1]}" class="text-gray-800">
+                            ${experience[0]}
+                                <span class="text-gray-400">(34)</span>
+                            </label>
+                        </div>`;
+                });
+            }
+            document.getElementById("experienceList").innerHTML = htmlContent;
+            addRadioChangeListener("experience");
+
+        })
+        .catch(error => {
+            console.error("Error fetching experiences:", error);
+        });
+
+}
+// getExperience();
+
+async function getJobs(params) {
+    !offset ? loader(true) : "";
+    let jobList = [];
+
+    await axios.get('/api/jobs', {
+        params: params
+    }).then(res => {
+        let htmlContent = '';
+        let headerContent = '';
+        let loadMoreButton = '';
+        if (false) {
+            headerContent = `<div class="flex justify-between mb-3 bg-white py-1 px-4 rounded-lg text-center items-center sm:py-2">
                                         <span class="text-sm">500 results</span>
                                         <select name="" id="" class="w-16 rounded-lg h-6 border-custom sm:8 sm:w-32 sm:h-8">
                                             <option value="">aa</option>
@@ -250,14 +266,14 @@ function preselectFilters() {
                                             <option value="">aa</option>
                                         </select>
                                     </div>`;
-            }
+        }
 
-            if (res.status === 200) {
-                // alert(res.data.jobs.length);
-                if (res.data.totalCount) {
-                    jobList = res.data.jobs;
-                    res.data.jobs.forEach(element => {
-                        htmlContent += `<div class="job-card bg-white px-3 pt-2 h-40 rounded-xl shadow-md mb-4 hover:hover-card-color cursor-pointer duration-300 border border-custom sm:px-5" data-original-link="${element.redirectUrl}">
+        if (res.status === 200) {
+            // alert(res.data.jobs.length);
+            if (res.data.totalCount) {
+                jobList = res.data.jobs;
+                res.data.jobs.forEach(element => {
+                    htmlContent += `<div class="job-card bg-white px-3 pt-2 h-40 rounded-xl shadow-md mb-4 hover:hover-card-color cursor-pointer duration-300 border border-custom sm:px-5" data-original-link="${element.redirectUrl}">
                                             <div class="content flex">
                                                 <div class="mt-3 sm:mt-1 ">
                                                     <span class="mr-2">
@@ -335,233 +351,227 @@ function preselectFilters() {
                                                 </div>
                                             </div>
                                         </div> `;
-                    });
+                });
 
-                    loadMoreButton = res.data.totalCount > 50 && !res.data.hideLoadMore ? `<div class="flex justify-center items-center my-2">
+                loadMoreButton = res.data.totalCount > 50 && !res.data.hideLoadMore ? `<div class="flex justify-center items-center my-2">
                                         <button class="filled-button-color text-white py-2 px-8 rounded-full" id="loadMore">
                                             Load More 
                                         </button>
                                      </div>` : "";
-                } else {
-                    document.getElementById("card-section").innerHTML = noDataCard();
-                }
-
-                if (offset && jobList.length > 0) {
-                    console.log("1");
-
-                    document.getElementById("card-section").insertAdjacentHTML('beforeend', htmlContent + loadMoreButton);
-                } else if (jobList.length > 0) {
-                    console.log("3");
-                    document.getElementById("card-section").innerHTML = headerContent + htmlContent + loadMoreButton;
-                }
-
-                const jobCards = document.querySelectorAll('.job-card');
-                jobCards.forEach(card => {
-                    card.addEventListener('click', function () {
-                        const originalLink = this.getAttribute('data-original-link');
-                        window.open(originalLink, '_blank');
-                    });
-                });
-
-                const loadMoreBtn = document.getElementById('loadMore');
-                if (loadMoreBtn) {
-                    loadMoreBtn.addEventListener('click', function () {
-                        loadMoreBtn.classList.add("hidden");
-                        offset += 50;
-                        handleFilterChange(offset)
-                    });
-                }
+            } else {
+                document.getElementById("card-section").innerHTML = noDataCard();
             }
-        }).catch(error => {
-            console.error("Error fetching jobs:", error);
-        });
-    }
 
-    // getJobs();
+            if (offset && jobList.length > 0) {
+                console.log("1");
 
+                document.getElementById("card-section").insertAdjacentHTML('beforeend', htmlContent + loadMoreButton);
+            } else if (jobList.length > 0) {
+                console.log("3");
+                document.getElementById("card-section").innerHTML = headerContent + htmlContent + loadMoreButton;
+            }
 
-    document.getElementById("show-more-categories").addEventListener("click", function () {
-        if (showMoreCategories) {
-            document.getElementById("categoryList").innerHTML = categoryHTML(categoryArray);
-            addRadioChangeListener("category");
-            this.textContent = "Show Less";
-            showMoreCategories = false;
-        } else {
-            document.getElementById("categoryList").innerHTML = categoryHTML(categoryArray, 10);
-            this.textContent = "Show More";
-            addRadioChangeListener("category");
-            showMoreCategories = true;
-        }
-    });
-
-
-    document.getElementById("show-more-cities").addEventListener("click", function () {
-        if (showMoreCities) {
-            document.getElementById("cityList").innerHTML = cityHTML(cityArray);
-            addRadioChangeListener("city");
-            this.textContent = "Show Less";
-            showMoreCities = false;
-        } else {
-            document.getElementById("cityList").innerHTML = cityHTML(cityArray, 10);
-            this.textContent = "Show More";
-            addRadioChangeListener("city");
-            showMoreCities = true;
-        }
-    });
-
-    function addRadioChangeListener() {
-        document.querySelectorAll('input[name="category"]').forEach(radio => {
-            radio.addEventListener('change', function () {
-                handleFilterChange();
-
+            const jobCards = document.querySelectorAll('.job-card');
+            jobCards.forEach(card => {
+                card.addEventListener('click', function () {
+                    const originalLink = this.getAttribute('data-original-link');
+                    window.open(originalLink, '_blank');
+                });
             });
-        });
+
+            const loadMoreBtn = document.getElementById('loadMore');
+            if (loadMoreBtn) {
+                loadMoreBtn.addEventListener('click', function () {
+                    loadMoreBtn.classList.add("hidden");
+                    offset += 50;
+                    handleFilterChange(offset)
+                });
+            }
+        }
+    }).catch(error => {
+        console.error("Error fetching jobs:", error);
+    });
+}
+
+// getJobs();
+
+
+document.getElementById("show-more-categories").addEventListener("click", function () {
+    if (showMoreCategories) {
+        document.getElementById("categoryList").innerHTML = categoryHTML(categoryArray);
+        addRadioChangeListener("category");
+        this.textContent = "Show Less";
+        showMoreCategories = false;
+    } else {
+        document.getElementById("categoryList").innerHTML = categoryHTML(categoryArray, 10);
+        this.textContent = "Show More";
+        addRadioChangeListener("category");
+        showMoreCategories = true;
     }
+});
+
+
+document.getElementById("show-more-cities").addEventListener("click", function () {
+    if (showMoreCities) {
+        document.getElementById("cityList").innerHTML = cityHTML(cityArray);
+        addRadioChangeListener("city");
+        this.textContent = "Show Less";
+        showMoreCities = false;
+    } else {
+        document.getElementById("cityList").innerHTML = cityHTML(cityArray, 10);
+        this.textContent = "Show More";
+        addRadioChangeListener("city");
+        showMoreCities = true;
+    }
+});
 
 function handleFilterChange() {
-    const categoryId = document.querySelector('input[name="category"]:checked')?.value;
-    const cityId = document.querySelector('input[name="city"]:checked')?.value;
-    const educationId = document.querySelector('input[name="education"]:checked')?.value;
-    const experienceLevel = document.querySelector('input[name="experience"]:checked')?.value;
-    const offset = 0; 
+    console.log("handleFilterChange");
+
+    const categoryId = document.querySelector('input[name="category"]:checked')?.id;
+    const cityId = document.querySelector('input[name="city"]:checked')?.id;
+    const educationId = document.querySelector('input[name="education"]:checked')?.id;
+    const experienceLevel = document.querySelector('input[name="experience"]:checked')?.id;
+    const offset = 0;
+
     updateURLParams({ categoryId, cityId, educationId, experienceLevel, offset });
-  
     getJobs({ categoryId, cityId, educationId, experienceLevel, offset });
-  }
-  
-  document.querySelectorAll('input[name="category"], input[name="city"], input[name="education"], input[name="experience"]').forEach(element => {
-    element.addEventListener('change', handleFilterChange);
-  });
-  
+}
+
+// document.querySelectorAll('input[name="category"], input[name="city"], input[name="education"], input[name="experience"]').forEach(element => {
+//     element.addEventListener('change', handleFilterChange);
+// });
+
+
+document.getElementById("search-btn").addEventListener("click", handleFilterChange);
+document.getElementById("search").addEventListener("keyup", handleFilterChange);
 
 
 
-    document.getElementById("search-btn").addEventListener("click", handleFilterChange);
-    document.getElementById("search").addEventListener("keyup", handleFilterChange);
+function addRadioChangeListener(type) {
+    document.querySelectorAll(`input[name="${type}"]`).forEach(radio => {
+        radio.addEventListener('change', function () {
+            console.log("addRadioChangeListener");
 
-
-
-    function addRadioChangeListener(type) {
-        document.querySelectorAll(`input[name="${type}"]`).forEach(radio => {
-            radio.addEventListener('change', function () {
-                handleFilterChange();
-            });
+            handleFilterChange();
         });
-    }
-
-
-
-    function draw(slider, splitvalue) {
-        handleFilterChange();
-        /* set function vars */
-        var min = slider.querySelector(".min");
-        var max = slider.querySelector(".max");
-        var lower = slider.querySelector(".lower");
-        var upper = slider.querySelector(".upper");
-        var legend = slider.querySelector(".legend");
-        var thumbsize = parseInt(slider.getAttribute("data-thumbsize"));
-        var rangewidth = parseInt(slider.getAttribute("data-rangewidth"));
-        var rangemin = parseInt(slider.getAttribute("data-rangemin"));
-        var rangemax = parseInt(slider.getAttribute("data-rangemax"));
-
-        /* set min and max attributes */
-        min.setAttribute("max", splitvalue);
-        max.setAttribute("min", splitvalue);
-
-        /* set css */
-        min.style.width =
-            parseInt(
-                thumbsize +
-                ((splitvalue - rangemin) / (rangemax - rangemin)) *
-                (rangewidth - 2 * thumbsize)
-            ) + "px";
-        max.style.width =
-            parseInt(
-                thumbsize +
-                ((rangemax - splitvalue) / (rangemax - rangemin)) *
-                (rangewidth - 2 * thumbsize)
-            ) + "px";
-        min.style.left = "0px";
-        max.style.left = parseInt(min.style.width) + "px";
-        lower.style.top = lower.offsetHeight + "px";
-        upper.style.top = upper.offsetHeight + "px";
-        legend.style.marginTop = min.offsetHeight + "px";
-        slider.style.height =
-            lower.offsetHeight + min.offsetHeight + legend.offsetHeight + "px";
-
-        /* write value and labels */
-        max.value = max.getAttribute("data-value");
-        min.value = min.getAttribute("data-value");
-        minSalary = min.value;
-        maxSalary = max.value;
-        lower.innerHTML = min.getAttribute("data-value");
-        upper.innerHTML = max.getAttribute("data-value");
-    }
-
-    function init(slider) {
-        /* set function vars */
-        var min = slider.querySelector(".min");
-        var max = slider.querySelector(".max");
-        var rangemin = parseInt(min.getAttribute("min"));
-        var rangemax = parseInt(max.getAttribute("max"));
-        var avgvalue = (rangemin + rangemax) / 2;
-        var legendnum = slider.getAttribute("data-legendnum");
-
-        /* set data-values */
-        min.setAttribute("data-value", rangemin);
-        max.setAttribute("data-value", rangemax);
-
-        /* set data vars */
-        slider.setAttribute("data-rangemin", rangemin);
-        slider.setAttribute("data-rangemax", rangemax);
-        slider.setAttribute("data-thumbsize", thumbsize);
-        slider.setAttribute("data-rangewidth", slider.offsetWidth);
-
-        /* write legend */
-        var legend = document.createElement("s");
-        legend.classList.add("legend");
-        var legendvalues = [];
-        for (var i = 0; i < legendnum; i++) {
-            legendvalues[i] = document.createElement("div");
-            var val = Math.round(
-                rangemin + (i / (legendnum - 1)) * (rangemax - rangemin)
-            );
-            legendvalues[i].appendChild(document.createTextNode(val));
-            legend.appendChild(legendvalues[i]);
-        }
-        console.log(legend);
-
-        slider.appendChild(legend);
-
-        /* draw */
-        draw(slider, avgvalue);
-
-        /* events */
-        min.addEventListener("input", function () {
-            update(min);
-        });
-        max.addEventListener("input", function () {
-            update(max);
-        });
-    }
-
-    function update(el) {
-        var slider = el.parentElement;
-        var min = slider.querySelector("#min");
-        var max = slider.querySelector("#max");
-        var minvalue = Math.floor(min.value);
-        var maxvalue = Math.floor(max.value);
-
-        min.setAttribute("data-value", minvalue);
-        max.setAttribute("data-value", maxvalue);
-
-        var avgvalue = (minvalue + maxvalue) / 2;
-
-        draw(slider, avgvalue);
-    }
-
-    var sliders = document.querySelectorAll(".min-max-slider");
-    sliders.forEach(function (slider) {
-        init(slider);
     });
+}
+
+
+
+function draw(slider, splitvalue) {
+    // handleFilterChange();
+    console.log("draw");
+
+    /* set function vars */
+    var min = slider.querySelector(".min");
+    var max = slider.querySelector(".max");
+    var lower = slider.querySelector(".lower");
+    var upper = slider.querySelector(".upper");
+    var legend = slider.querySelector(".legend");
+    var thumbsize = parseInt(slider.getAttribute("data-thumbsize"));
+    var rangewidth = parseInt(slider.getAttribute("data-rangewidth"));
+    var rangemin = parseInt(slider.getAttribute("data-rangemin"));
+    var rangemax = parseInt(slider.getAttribute("data-rangemax"));
+
+    /* set min and max attributes */
+    min.setAttribute("max", splitvalue);
+    max.setAttribute("min", splitvalue);
+
+    /* set css */
+    min.style.width =
+        parseInt(
+            thumbsize +
+            ((splitvalue - rangemin) / (rangemax - rangemin)) *
+            (rangewidth - 2 * thumbsize)
+        ) + "px";
+    max.style.width =
+        parseInt(
+            thumbsize +
+            ((rangemax - splitvalue) / (rangemax - rangemin)) *
+            (rangewidth - 2 * thumbsize)
+        ) + "px";
+    min.style.left = "0px";
+    max.style.left = parseInt(min.style.width) + "px";
+    lower.style.top = lower.offsetHeight + "px";
+    upper.style.top = upper.offsetHeight + "px";
+    legend.style.marginTop = min.offsetHeight + "px";
+    slider.style.height =
+        lower.offsetHeight + min.offsetHeight + legend.offsetHeight + "px";
+
+    /* write value and labels */
+    max.value = max.getAttribute("data-value");
+    min.value = min.getAttribute("data-value");
+    minSalary = min.value;
+    maxSalary = max.value;
+    lower.innerHTML = min.getAttribute("data-value");
+    upper.innerHTML = max.getAttribute("data-value");
+}
+
+function init(slider) {
+    /* set function vars */
+    var min = slider.querySelector(".min");
+    var max = slider.querySelector(".max");
+    var rangemin = parseInt(min.getAttribute("min"));
+    var rangemax = parseInt(max.getAttribute("max"));
+    var avgvalue = (rangemin + rangemax) / 2;
+    var legendnum = slider.getAttribute("data-legendnum");
+
+    /* set data-values */
+    min.setAttribute("data-value", rangemin);
+    max.setAttribute("data-value", rangemax);
+
+    /* set data vars */
+    slider.setAttribute("data-rangemin", rangemin);
+    slider.setAttribute("data-rangemax", rangemax);
+    slider.setAttribute("data-thumbsize", thumbsize);
+    slider.setAttribute("data-rangewidth", slider.offsetWidth);
+
+    /* write legend */
+    var legend = document.createElement("s");
+    legend.classList.add("legend");
+    var legendvalues = [];
+    for (var i = 0; i < legendnum; i++) {
+        legendvalues[i] = document.createElement("div");
+        var val = Math.round(
+            rangemin + (i / (legendnum - 1)) * (rangemax - rangemin)
+        );
+        legendvalues[i].appendChild(document.createTextNode(val));
+        legend.appendChild(legendvalues[i]);
+    }
+    console.log(legend);
+
+    slider.appendChild(legend);
+
+    /* draw */
+    draw(slider, avgvalue);
+
+    /* events */
+    min.addEventListener("input", function () {
+        update(min);
+    });
+    max.addEventListener("input", function () {
+        update(max);
+    });
+}
+
+function update(el) {
+    var slider = el.parentElement;
+    var min = slider.querySelector("#min");
+    var max = slider.querySelector("#max");
+    var minvalue = Math.floor(min.value);
+    var maxvalue = Math.floor(max.value);
+
+    min.setAttribute("data-value", minvalue);
+    max.setAttribute("data-value", maxvalue);
+
+    var avgvalue = (minvalue + maxvalue) / 2;
+
+    draw(slider, avgvalue);
+}
+
+var sliders = document.querySelectorAll(".min-max-slider");
+sliders.forEach(function (slider) {
+    init(slider);
 });
