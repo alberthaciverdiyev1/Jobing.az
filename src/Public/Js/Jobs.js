@@ -272,7 +272,7 @@ function preselectFilters() {
                                                 <div class="ml-3 mt-2 pr-1 sm:mt-2 sm:w-auto">
                                                     <div class="flex mb-1 justify-between">
                                                         <div class="">
-                                                            <p class="text-sm font-bold flex text-gray-700 justify-items-start sm:font-bold sm:text-base">
+                                                            <p class="text-sm font-bold flex text-gray-700 justify-items-start sm:font-bold sm:text-base mb-1">
                                                                 <span class="truncate sm:hidden"> 
                                                                     ${element.title.slice(0, 17) + (element.title.length > 17 ? "..." : "")} 
                                                                 </span>
@@ -283,8 +283,11 @@ function preselectFilters() {
                                                                     ${element.sourceUrl}
                                                                 </span>
                                                             </p>
-                                                            <h4 class="text-sm font-semibold text-gray-700 mb-2 sm:font-bold">
+                                                            <h4 class="truncate sm:hidden text-sm font-semibold text-gray-700 mb-1 sm:font-bold"> 
                                                                 <i class="fa-solid fa-building"></i> ${element.companyName.slice(0, 17) + (element.companyName.length > 17 ? "..." : "")}
+                                                            </h4>
+                                                            <h4 class="hidden sm:inline sm:whitespace-normal text-sm font-semibold text-gray-700 mb-1 sm:font-bold"> 
+                                                                <i class="fa-solid fa-building"></i> ${element.companyName.slice(0, 50) + (element.companyName.length > 50 ? "..." : "")}
                                                             </h4>
                                                         </div>
                                                         <div class="hidden sm:w-full">

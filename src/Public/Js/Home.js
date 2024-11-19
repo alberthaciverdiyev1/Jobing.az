@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
                                             <div class="ml-3 mt-2 pr-1 sm:mt-2 sm:w-auto">
                                                 <div class="flex mb-1 justify-between">
                                                     <div class="">
-                                                        <p class="text-sm font-bold flex text-gray-700 justify-items-start sm:font-bold sm:text-base">
+                                                        <p class="text-sm font-bold flex text-gray-700 justify-items-start sm:font-bold sm:text-base mb-1">
                                                             <span class="truncate sm:hidden">
                                                                 ${element.title.length > 17 ? element.title.slice(0, 17) + '...' : element.title}
                                                             </span>
@@ -37,12 +37,12 @@ document.addEventListener("DOMContentLoaded", (event) => {
                                                                 ${element.sourceUrl}
                                                             </span>
                                                         </p>
-                                                            <h4 class="text-base font-semibold text-gray-700 mb-2 sm:font-bold sm:block">
-                                                                <i class="fa-solid fa-building"></i> ${element.companyName}
-                                                            </h4>
-                                                            <h4 class="text-base font-semibold text-gray-700 mb-2 sm:font-bold sm:hidden">
-                                                                <i class="fa-solid fa-building"></i> ${element.companyName.length > 17 ? element.companyName.slice(0, 17) + '...' : element.companyName}
-                                                            </h4>
+                                                        <h4 class="truncate sm:hidden text-sm font-semibold text-gray-700 mb-1 sm:font-bold"> 
+                                                            <i class="fa-solid fa-building"></i> ${element.companyName.slice(0, 17) + (element.companyName.length > 17 ? "..." : "")}
+                                                        </h4>
+                                                        <h4 class="hidden sm:inline sm:whitespace-normal text-sm font-semibold text-gray-700 mb-1 sm:font-bold"> 
+                                                            <i class="fa-solid fa-building"></i> ${element.companyName.slice(0, 50) + (element.companyName.length > 50 ? "..." : "")}
+                                                        </h4>
                                                     </div>
                                                     <div class="hidden sm:w-full">
                                                     ${true ? "" : ` <span class="bg-blue-100 text-blue-700 px-1 ml-3 py-0.5 h-12 w-auto rounded-lg text-sm">
@@ -160,7 +160,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
         const cityId = citySelect?.value || '';
         const keyword = keywordInput?.value?.trim() || '';
     
-        const baseUrl = `${window.location.origin}/jobs`; // Dinamik olaraq URL bazasını götürür
+        const baseUrl = `${window.location.origin}/jobs`; 
         const params = new URLSearchParams({
             minSalary: 0,
             maxSalary: 5000,
