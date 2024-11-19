@@ -155,13 +155,22 @@ document.addEventListener("DOMContentLoaded", (event) => {
         const categorySelect = document.getElementById('category-select');
         const citySelect = document.getElementById('city-select');
         const keywordInput = document.getElementById('keyword');
-
-        const categoryId = categorySelect?.value ? +categorySelect.value : '';
-        const cityId = citySelect?.value ? +citySelect.value : '';
-        const keyword = keywordInput?.value || '';
-
-        // console.log({categoryId,cityId,keyword});return;
-        
-        window.location.href = `http://localhost:3000/jobs?minSalary=0&maxSalary=5000&offset=0${categoryId ? `&categoryId=${categoryId}`:''}${cityId ? `&cityId=${cityId}` : ''}${keyword.length > 0 ? `&keyword=${keyword}` : ''}`;
+    
+        const categoryId = categorySelect?.value || '';
+        const cityId = citySelect?.value || '';
+        const keyword = keywordInput?.value?.trim() || '';
+    
+        const baseUrl = `${window.location.origin}/jobs`; // Dinamik olaraq URL bazasını götürür
+        const params = new URLSearchParams({
+            minSalary: 0,
+            maxSalary: 5000,
+            offset: 0,
+            ...(categoryId && { categoryId }),
+            ...(cityId && { cityId }),
+            ...(keyword && { keyword }),
+        });
+    
+        window.location.href = `${baseUrl}?${params.toString()}`;
     });
+    
 });
