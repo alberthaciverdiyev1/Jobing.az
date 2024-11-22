@@ -39,7 +39,7 @@ const JobDataService = {
     },
 
     // Get all job listings
-    getAllJobs: async (data) => {
+    getAllJobs: async (data) => {       
         try {
             const filteredJobs = [];
             const seenUrls = new Set();
@@ -49,21 +49,23 @@ const JobDataService = {
             const query = {
                 createdAt: { $gte: thirtyDaysAgo }
             };
-    
+            
+            // Add categoryId condition only if it exists in the request
+            if (data.categoryId && data.categoryId !== "undefined" && !isNaN(Number(data.categoryId))) {
+                query.$or = [
+                    { categoryId: +data.categoryId },
+                    { subCategoryId: +data.categoryId }
+                ];
+            }
+            
+            // Continue with the other filters
             if (data.cityId && !isNaN(Number(data.cityId))) query.cityId = +data.cityId;
             if (data.educationId && !isNaN(Number(data.educationId))) query.educationId = +data.educationId;
             if (data.experience && !isNaN(Number(data.experience))) query.experienceId = +data.experience;
             if (data.jobType) query.jobType = data.jobType;
             if (data.minSalary && !isNaN(Number(data.minSalary))) query.minSalary = { $gte: +data.minSalary };
             if (data.maxSalary && !isNaN(Number(data.maxSalary))) query.maxSalary = { $lte: +data.maxSalary };
-    
-            if (data.categoryId && !isNaN(Number(data.categoryId))) {
-                query.$or = [
-                    { categoryId: +data.categoryId },
-                    { subCategoryId: +data.categoryId }
-                ];
-            }
-    
+            
             if (data.keyword) {
                 const keywordQuery = {
                     $or: [
@@ -72,7 +74,7 @@ const JobDataService = {
                         { location: { $regex: data.keyword, $options: 'i' } }
                     ]
                 };
-    
+            
                 if (query.$and) {
                     query.$and.push(keywordQuery);
                 } else {

@@ -19,7 +19,6 @@ let categoryId = null,
 
 
 
-// URL parametrelerini almak
 function getURLParams() {
     const params = new URLSearchParams(window.location.search);
     const categoryId = params.get('categoryId');
@@ -62,7 +61,7 @@ function updateURLParams(params) {
 }
 
 function preselectFilters() {
-    const { categoryId, cityId, educationId, experienceLevel,keyword } = getURLParams();
+    const { categoryId, cityId, educationId, experienceLevel, keyword } = getURLParams();
     console.log({ categoryId, cityId, educationId, experienceLevel });
 
     if (categoryId && !isNaN(Number(categoryId))) {
@@ -90,7 +89,15 @@ function preselectFilters() {
     if (keyword) {
         document.querySelector(`#search`).value = keyword;
     }
-    getJobs({ categoryId, cityId, educationId, experienceLevel, offset: 0 ,keyword});
+    getJobs(
+        {
+            categoryId: !isNaN(Number(categoryId)) ? categoryId : null,
+            cityId: !isNaN(Number(cityId)) ? cityId : null,
+            educationId: !isNaN(Number(educationId)) ? educationId : null,
+            experienceLevel,
+            offset: 0,
+            keyword
+        });
 
 }
 
@@ -341,8 +348,8 @@ async function getJobs(params) {
                                                        <span class="bg-blue-100 text-blue-700 px-1 py-0.5 rounded-lg text-sm">${element.sourceUrl}</span>
                                                     <h4 class="text-lg text-gray-600 font-bold">
                                                      ${(+element.minSalary === +element.maxSalary && +element.minSalary !== null
-                                                        ? +element.minSalary
-                                                        : (+element.minSalary !== null ? +element.minSalary + '-' : "") + (+element.maxSalary ?? (!element.minSalary && !element.maxSalary ? "Razılaşma ilə" : "")))}
+                            ? +element.minSalary
+                            : (+element.minSalary !== null ? +element.minSalary + '-' : "") + (+element.maxSalary ?? (!element.minSalary && !element.maxSalary ? "Razılaşma ilə" : "")))}
                                                     </h4>
                                                     </div>
                                                 </div>
@@ -353,13 +360,13 @@ async function getJobs(params) {
                                                         </button>` : ""}
                                                 <h4 class="text-lg text-gray-600 font-bold mt-2">
                                                 ${element.minSalary && element.maxSalary
-                                                                            ? (+element.minSalary === +element.maxSalary
-                                                                                ? element.minSalary  
-                                                                                : element.minSalary + '-' + element.maxSalary)  
-                                                                            : (!element.minSalary && !element.maxSalary
-                                                                                ? "Razılaşma ilə" 
-                                                                                : element.minSalary || element.maxSalary) 
-                                                                        }
+                            ? (+element.minSalary === +element.maxSalary
+                                ? element.minSalary
+                                : element.minSalary + '-' + element.maxSalary)
+                            : (!element.minSalary && !element.maxSalary
+                                ? "Razılaşma ilə"
+                                : element.minSalary || element.maxSalary)
+                        }
                                                 </h4>
                                                     </div>
                                                     <div class="flex justify-end items-end mt-auto pt-16">
@@ -454,8 +461,8 @@ function handleFilterChange() {
     const keyword = document.getElementById("search")?.value
     const offset = 0;
 
-    updateURLParams({ categoryId, cityId, educationId, experienceLevel, offset ,keyword});
-    getJobs({ categoryId, cityId, educationId, experienceLevel, offset ,keyword});
+    updateURLParams({ categoryId, cityId, educationId, experienceLevel, offset, keyword });
+    getJobs({ categoryId, cityId, educationId, experienceLevel, offset, keyword });
 }
 
 // document.querySelectorAll('input[name="category"], input[name="city"], input[name="education"], input[name="experience"]').forEach(element => {
