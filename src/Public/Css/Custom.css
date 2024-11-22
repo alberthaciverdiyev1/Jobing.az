@@ -262,6 +262,9 @@
     background-color: #fe8011; 
     color: white !important;
 }
+.active i {
+    color: white !important;
+}
 
 /* Change the styles when checked */
 .custom-checkbox:checked+label::before {
