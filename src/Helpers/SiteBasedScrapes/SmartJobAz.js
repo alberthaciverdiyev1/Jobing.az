@@ -63,6 +63,8 @@ class SmartJobAz {
             const limit = pLimit(3);
             const dataPromises = [];
             const educationIds = [1, 2, 5, 6, 7, 9, 10, 11, 12, 13, 0];
+            const filteredJobs = [];
+            const seenUrls = new Set();
 
             for (const category of filteredCategories) {
                 for (const education of educationIds) {
@@ -131,7 +133,14 @@ class SmartJobAz {
 
             const results = await Promise.all(dataPromises);
             const data = results.flat();
-            return data;
+
+            data.forEach(job => {
+                if (!seenUrls.has(job.redirectUrl)) {
+                    seenUrls.add(job.redirectUrl);
+                    filteredJobs.push(job);
+                }
+            });
+            return filteredJobs;
 
         } catch (error) {
             console.error('Error fetching jobs:', error.message, error.stack);
