@@ -4,7 +4,12 @@ document.addEventListener("DOMContentLoaded", (event) => {
             link.classList.add('active');
         }
     });
-
+    document.querySelectorAll('#mobile-menu a').forEach(link => {
+        if (link.href === window.location.href) {
+            link.classList.add('active');
+        }
+    });
+    
     document.getElementById("menuToggle").onclick = function () {
         document.getElementById("mobile-menu").classList.toggle("open");
         document.getElementById("menuBackdrop").classList.toggle("open");
