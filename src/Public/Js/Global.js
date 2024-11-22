@@ -1,4 +1,10 @@
 document.addEventListener("DOMContentLoaded", (event) => {
+    document.querySelectorAll('.desktop-menu a').forEach(link => {
+        if (link.href === window.location.href) {
+            link.classList.add('active');
+        }
+    });
+
     document.getElementById("menuToggle").onclick = function () {
         document.getElementById("mobile-menu").classList.toggle("open");
         document.getElementById("menuBackdrop").classList.toggle("open");
@@ -20,4 +26,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
         document.getElementById("filter-section").classList.toggle("hidden");
         document.getElementById("card-section").classList.toggle("hidden");
     };
+
+
 });
