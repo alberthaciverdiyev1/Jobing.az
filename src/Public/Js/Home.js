@@ -70,15 +70,27 @@ document.addEventListener("DOMContentLoaded", (event) => {
                                                 </div>
                                                 <div class="text-sm mt-2 flex justify-between sm:hidden">
                                                    <span class="bg-blue-100 text-blue-700 px-1 py-0.5 rounded-lg text-sm">${element.sourceUrl}</span>
-                                                    <h4 class="text-lg text-gray-600 font-bold">${(+element.minSalary !== "null" ? +element.minSalary + '-' : "") + +element.maxSalary ?? (!element.minSalary && !element.maxSalary ? "Razilasma ile" : "")}</h4>
-                                                </div>
+                                                    <h4 class="text-lg text-gray-600 font-bold">
+                                                     ${(+element.minSalary === +element.maxSalary && +element.minSalary !== null
+                                                        ? +element.minSalary
+                                                        : (+element.minSalary !== null ? +element.minSalary + '-' : "") + (+element.maxSalary ?? (!element.minSalary && !element.maxSalary ? "Razılaşma ilə" : "")))}
+                                                    </h4>                                                </div>
                                             </div>
                                             <div class="flex flex-col justify-between h-full flex-grow hidden sm:flex">
                                                 <div class="text-right">
                                                 ${false ? ` <button class="text-base text-gray-600 font-bold mb-2 w-8 h-8">
                                                         <i class="fa-solid fa-heart text-2xl"></i>
                                                     </button>` : ""}
-                                                    <h4 class="text-lg text-gray-600 font-bold mt-2">${(+element.minSalary ? element.minSalary + '-' : "") + +element.maxSalary ?? (!element.minSalary && !element.maxSalary ? "Razilasma ile" : "")}</h4>
+                                                <h4 class="text-lg text-gray-600 font-bold mt-2">
+                                                ${element.minSalary && element.maxSalary
+                                                                            ? (+element.minSalary === +element.maxSalary
+                                                                                ? element.minSalary  
+                                                                                : element.minSalary + '-' + element.maxSalary)  
+                                                                            : (!element.minSalary && !element.maxSalary
+                                                                                ? "Razılaşma ilə" 
+                                                                                : element.minSalary || element.maxSalary) 
+                                                                        }
+                                                </h4>
                                                 </div>
                                                 <div class="flex justify-end items-end mt-auto pt-16">
                                                     <a href="${element.redirectUrl}" target="_blank" class="filled-button-color text-white py-2 px-8 rounded-full">
