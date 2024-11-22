@@ -445,10 +445,11 @@ function handleFilterChange() {
     const cityId = document.querySelector('input[name="city"]:checked')?.id;
     const educationId = document.querySelector('input[name="education"]:checked')?.id;
     const experienceLevel = document.querySelector('input[name="experience"]:checked')?.id;
+    const keyword = document.getElementById("search")?.value
     const offset = 0;
 
-    updateURLParams({ categoryId, cityId, educationId, experienceLevel, offset });
-    getJobs({ categoryId, cityId, educationId, experienceLevel, offset });
+    updateURLParams({ categoryId, cityId, educationId, experienceLevel, offset ,keyword});
+    getJobs({ categoryId, cityId, educationId, experienceLevel, offset ,keyword});
 }
 
 // document.querySelectorAll('input[name="category"], input[name="city"], input[name="education"], input[name="experience"]').forEach(element => {
