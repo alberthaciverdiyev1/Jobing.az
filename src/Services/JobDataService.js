@@ -45,46 +45,47 @@ const JobDataService = {
             const seenUrls = new Set();
             const currentDate = new Date();
             const thirtyDaysAgo = new Date(currentDate.setDate(currentDate.getDate() - 30));
-
+    
             const query = {
                 createdAt: { $gte: thirtyDaysAgo }
             };
-
+    
             if (data.cityId && !isNaN(Number(data.cityId))) query.cityId = +data.cityId;
             if (data.educationId && !isNaN(Number(data.educationId))) query.educationId = +data.educationId;
             if (data.experience && !isNaN(Number(data.experience))) query.experienceId = +data.experience;
             if (data.jobType) query.jobType = data.jobType;
             if (data.minSalary && !isNaN(Number(data.minSalary))) query.minSalary = { $gte: +data.minSalary };
             if (data.maxSalary && !isNaN(Number(data.maxSalary))) query.maxSalary = { $lte: +data.maxSalary };
-            
+    
             if (data.categoryId && !isNaN(Number(data.categoryId))) {
                 query.$or = [
                     { categoryId: +data.categoryId },
                     { subCategoryId: +data.categoryId }
                 ];
-            }            
-
-            if (data.keyword) {
-                query.$or = [
-                    { title: { $regex: data.keyword, $options: 'i' } },
-                    { companyName: { $regex: data.keyword, $options: 'i' } },
-                    { location: { $regex: data.keyword, $options: 'i' } }
-                ];
             }
-
+    
+            if (data.keyword) {
+                const keywordQuery = {
+                    $or: [
+                        { title: { $regex: data.keyword, $options: 'i' } },
+                        { companyName: { $regex: data.keyword, $options: 'i' } },
+                        { location: { $regex: data.keyword, $options: 'i' } }
+                    ]
+                };
+    
+                if (query.$and) {
+                    query.$and.push(keywordQuery);
+                } else {
+                    query.$and = [keywordQuery];
+                }
+            }
+    
             const limit = 50;
             const offset = Number(data.offset) || 0;
-
+    
             const jobs = await JobData.aggregate([
                 { $match: query },
                 { $sort: { createdAt: -1 } },
-                // {
-                //     $group: {
-                //         _id: '$redirectUrl', // Group by redirectUrl to remove duplicates
-                //         mostRecentJob: { $first: '$$ROOT' } // Get the most recent job for each redirectUrl
-                //     }
-                // },
-                // { $replaceRoot: { newRoot: '$mostRecentJob' } },
                 {
                     $lookup: {
                         from: 'companydetails',
@@ -97,9 +98,9 @@ const JobDataService = {
                 { $skip: offset },
                 { $limit: limit }
             ]);
-
+    
             const totalCount = await JobData.countDocuments(query);
-
+    
             const jobsWithImageUrl = jobs.map(job => ({
                 ...job,
                 companyImageUrl: job.companyDetails?.imageUrl || null
@@ -110,6 +111,7 @@ const JobDataService = {
                     filteredJobs.push(job);
                 }
             });
+    
             return {
                 totalCount: totalCount,
                 jobs: filteredJobs,
