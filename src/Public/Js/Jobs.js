@@ -26,6 +26,7 @@ function getURLParams() {
     const cityId = params.get('cityId');
     const educationId = params.get('educationId');
     const experienceLevel = params.get('experienceLevel');
+    const keyword = params.get('keyword');
     const offset = params.get('offset') || 0;
 
     return {
@@ -33,6 +34,7 @@ function getURLParams() {
         cityId,
         educationId,
         experienceLevel,
+        keyword,
         offset
     };
 }
@@ -60,7 +62,7 @@ function updateURLParams(params) {
 }
 
 function preselectFilters() {
-    const { categoryId, cityId, educationId, experienceLevel } = getURLParams();
+    const { categoryId, cityId, educationId, experienceLevel,keyword } = getURLParams();
     console.log({ categoryId, cityId, educationId, experienceLevel });
 
     if (categoryId && !isNaN(Number(categoryId))) {
@@ -84,7 +86,11 @@ function preselectFilters() {
     if (experienceLevel && !isNaN(Number(experienceLevel))) {
         document.querySelector(`input[name="experience"][id="${+experienceLevel}"]`).checked = true;
     }
-    getJobs({ categoryId, cityId, educationId, experienceLevel, offset: 0 });
+
+    if (keyword) {
+        document.querySelector(`#search`).value = keyword;
+    }
+    getJobs({ categoryId, cityId, educationId, experienceLevel, offset: 0 ,keyword});
 
 }
 
