@@ -37,7 +37,55 @@ const JobDataService = {
             throw new Error(`Error inserting records in JobData: ${error.message}`);
         }
     },
-
+    removeDuplicates: async () => {
+        try {
+          console.log('Təkrarlanan redirectUrl-ləri silmə prosesi başladı...');
+      
+          // Bütün məlumatları tapırıq
+          const allJobs = await JobData.find();
+      
+          // redirectUrl-lərə görə qruplaşdırırıq
+          const groupedJobs = allJobs.reduce((acc, job) => {
+            acc[job.redirectUrl] = acc[job.redirectUrl] || [];
+            acc[job.redirectUrl].push(job._id); // ID-ləri yığıram
+            return acc;
+          }, {});
+      
+          // Təkrarlanan ID-ləri tapırıq
+          const duplicateIds = Object.values(groupedJobs)
+            .filter(ids => ids.length > 1) // 1-dən çox olanları tapırıq
+            .flatMap(ids => ids.slice(1)); // İlk ID-ni saxlayırıq, qalanlarını silirik
+      
+          if (duplicateIds.length > 0) {
+            // Təkrarlanan qeydləri silirik
+            await JobData.deleteMany({ _id: { $in: duplicateIds } });
+            console.log(`Təkrarlanan ${duplicateIds.length} qeydlər silindi.`);
+            
+            return {
+              status: 201,
+              message: `Təkrarlanan qeydlər uğurla silindi. Silinən qeydlərin sayı: ${duplicateIds.length}`,
+              count: duplicateIds.length,
+            };
+          } else {
+            console.log('Təkrarlanan məlumat yoxdur.');
+            
+            return {
+              status: 200,
+              message: 'Təkrarlanan məlumat yoxdur.',
+              count: 0,
+            };
+          }
+        } catch (error) {
+          console.error('Silmə prosesində xəta:', error.message);
+          return {
+            status: 500,
+            message: 'Silmə prosesində xəta baş verdi.',
+            error: error.message,
+          };
+        }
+      },
+     
+  
     // Get all job listings
     getAllJobs: async (data) => {       
         try {

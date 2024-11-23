@@ -56,6 +56,11 @@ cron.schedule('0 7-23 * * *', async () => {
                 text: `${response.data.message}`
             };
             await sendEmail(endData, to);
+
+
+        const duplicate = await axios.post(`http://localhost:3000/api/jobs/remove-duplicates`);
+        await sendEmail(duplicate, to);
+
         }
     } catch (error) {
         let errorData = {

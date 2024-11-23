@@ -112,6 +112,17 @@ const jobDataController = {
         }
     },
 
+    removeDuplicates: async (req, res) => {
+        try {
+            const site = await JobService.removeDuplicates();
+
+            res.status(200).json(site);
+        } catch (error) {
+            res.status(500).json({ message: 'Error updating site: ' + error.message });
+        }
+    },
+
+
     deleteSite: async (req, res) => {
         try {
             await JobService.deleteSite(req.params.id);
