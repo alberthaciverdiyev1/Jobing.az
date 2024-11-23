@@ -273,6 +273,26 @@
 }
 
 /* Min max slider */
+
+.noUi-touch-area {
+    background-color: #fe8011; 
+    border-radius: 50%;
+    border: 2px solid #fe8011; 
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    
+}
+
+.noUi-handle:hover {
+    background-color: #fe8011; 
+    transform: scale(1.2); 
+}
+
+.noUi-handle:focus {
+    outline: none;
+}
+
+
 input[type="range"] {
     -webkit-appearance: none;
     appearance: none;

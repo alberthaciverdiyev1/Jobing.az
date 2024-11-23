@@ -118,6 +118,7 @@ const JobDataService = {
             if (data.jobType) query.jobType = data.jobType;
             if (data.minSalary && !isNaN(Number(data.minSalary))) query.minSalary = { $gte: +data.minSalary };
             if (data.maxSalary && !isNaN(Number(data.maxSalary))) query.maxSalary = { $lte: +data.maxSalary };
+console.log(data);
 
             if (data.keyword) {
                 const keywordQuery = {
