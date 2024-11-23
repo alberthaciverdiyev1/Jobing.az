@@ -51,11 +51,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
                                         <span class="bg-yellow-100 text-yellow-700 px-1 ml-2 py-0.5 rounded-lg text-sm w-auto">
                                             ${element.sourceUrl}
                                         </span>
-                                    </div>
-                                    ${false ? `<button class="text-base text-gray-600 font-bold mb-5 sm:hidden">
-                                        <i class="fa-solid fa-heart text-2xl"></i>
-                                    </button>` : ""}
-                                    
+                                    </div>                                    
                                 </div>
                                 <div class="flex text-sm text-gray-600">
                                     <span><i class="fa-solid fa-clock mr-0.5"></i> ${element.postedAt.slice(0, 10)}</span>
@@ -92,9 +88,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
                             </div>
                             <div class="flex flex-col justify-between h-full flex-grow hidden sm:flex">
                                 <div class="text-right">
-                                ${false ? ` <button class="text-base text-gray-600 font-bold mb-2 w-8 h-8">
-                                        <i class="fa-solid fa-heart text-2xl"></i>
-                                    </button>` : ""}
                             <h4 class="text-lg text-gray-600 font-bold mt-2">
                                 ${(
                                         (+element.minSalary === +element.maxSalary && +element.minSalary !== null && +element.minSalary !== 0) 
@@ -195,8 +188,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
     
         const baseUrl = `${window.location.origin}/jobs`; 
         const params = new URLSearchParams({
-            minSalary: 0,
-            maxSalary: 5000,
+            // minSalary: 0,
+            // maxSalary: 5000,
             offset: 0,
             ...(categoryId && { categoryId }),
             ...(cityId && { cityId }),

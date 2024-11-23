@@ -16,13 +16,18 @@ let categoryId = null,
     minSalary = null,
     maxSalary = null,
     experienceLevel = null;
-
+const removePrefix = (value, prefix) => {
+    if (value?.startsWith(prefix)) {
+        return value.slice(prefix.length);
+    }
+    return value;
+};
 
 
 function getURLParams() {
     const params = new URLSearchParams(window.location.search);
-    const categoryId = params.get('categoryId');
-    const cityId = params.get('cityId');
+    const categoryId = removePrefix(params.get('categoryId'), 'category-');
+    const cityId = removePrefix(params.get('cityId'), 'city-');
     const educationId = params.get('educationId');
     const experienceLevel = params.get('experienceLevel');
     const keyword = params.get('keyword');
@@ -66,14 +71,22 @@ function preselectFilters() {
 
     if (categoryId && !isNaN(Number(categoryId))) {
         console.log({ categoryId });
+        if (categoryId > 10) document.getElementById("categoryList").innerHTML = categoryHTML(categoryArray);
+        addRadioChangeListener("category");
 
-        document.querySelector(`input[name="category"][id="${+categoryId}"]`).checked = true;
+
+        document.querySelector(`input[name="category"][id="category-${+categoryId}"]`).checked = true;
     } else {
         document.querySelector(`input[name="category"][id="all"]`).checked = true;
     }
 
     if (cityId && !isNaN(Number(cityId))) {
-        document.querySelector(`input[name="city"][id="${+cityId}"]`).checked = true;
+        console.log({ cityId });
+
+        if (cityId !== 28 || cityId !== 12 || cityId !== 83 || cityId !== 87 || cityId !== 85 || cityId !== 34 || cityId !== 88) document.getElementById("cityList").innerHTML = cityHTML(cityArray);
+        addRadioChangeListener("city");
+
+        document.querySelector(`input[name="city"][id="city-${cityId}"]`).checked = true;
     } else {
         document.querySelector(`input[name="city"][id="city-all"]`).checked = true;
     }
@@ -107,15 +120,15 @@ function categoryHTML(data, limit = null) {
         data = data.slice(0, limit);
     }
     data.forEach(element => {
-
+        const categoryId = `category-${element.localCategoryId}`;
         htmlContent += `
-                <div class="flex items-center"> 
-                    <input type="radio" name="category"  id="${element.localCategoryId}" class="custom-checkbox" />
-                    <label for="${element.localCategoryId}" class="text-gray-800">
-                        ${element.name}
-                        <span class="text-gray-400">(34)</span>
-                    </label>
-                </div>`;
+        <div class="flex items-center"> 
+            <input type="radio" name="category" id="${categoryId}" category-id="${element.localCategoryId}" class="custom-checkbox" />
+            <label for="${categoryId}" class="text-gray-800">
+                ${element.name}
+                <span class="text-gray-400">(34)</span>
+            </label>
+        </div>`;
     });
     return htmlContent;
 }
@@ -155,14 +168,17 @@ function cityHTML(data, limit = null) {
         data = data.slice(0, limit);
     }
     data.forEach(element => {
+        const cityId = `city-${element.cityId}`;
+
         htmlContent += `
-            <div class="flex items-center"> 
-                <input type="radio" name="city" id="${element.cityId}" class="custom-checkbox" />
-                <label for="${element.cityId}" class="text-gray-800">
-                    ${element.name}
-                    <span class="text-gray-400">(34)</span>
-                </label>
-            </div>`;
+        <div class="flex items-center"> 
+            <input type="radio" name="city" id="${cityId}" city-id="${element.cityId}" class="custom-checkbox" />
+            <label for="${cityId}" class="text-gray-800">
+                ${element.name}
+                <span class="text-gray-400">(34)</span>
+            </label>
+        </div>
+            `;
     });
     return htmlContent;
 }
@@ -196,6 +212,7 @@ async function getCities() {
                 cityArray = res.data;
                 document.getElementById("cityList").innerHTML = cityHTML(res.data, 7);
                 addRadioChangeListener("city");
+
             }
         })
         .catch(error => {
@@ -348,20 +365,20 @@ async function getJobs(params) {
                                                        <span class="bg-blue-100 text-blue-700 px-1 py-0.5 rounded-lg text-sm">${element.sourceUrl}</span>
                                                     <h4 class="text-lg text-gray-600 font-bold">
                                                         ${(
-                                                                (+element.minSalary === +element.maxSalary && +element.minSalary !== null && +element.minSalary !== 0) 
-                                                                ? +element.minSalary 
-                                                                : (
-                                                                    (+element.minSalary !== null && +element.minSalary !== 0) 
-                                                                    ? +element.minSalary + '-' 
-                                                                    : ""
-                                                                ) + (
-                                                                    (+element.maxSalary !== null && +element.maxSalary !== 0) 
-                                                                    ? +element.maxSalary 
-                                                                    : (
-                                                                        !element.minSalary && !element.maxSalary ? "Razılaşma ilə" : ""
-                                                                    )
-                                                                )
-                                                            )}
+                            (+element.minSalary === +element.maxSalary && +element.minSalary !== null && +element.minSalary !== 0)
+                                ? +element.minSalary
+                                : (
+                                    (+element.minSalary !== null && +element.minSalary !== 0)
+                                        ? +element.minSalary + '-'
+                                        : ""
+                                ) + (
+                                    (+element.maxSalary !== null && +element.maxSalary !== 0)
+                                        ? +element.maxSalary
+                                        : (
+                                            !element.minSalary && !element.maxSalary ? "Razılaşma ilə" : ""
+                                        )
+                                )
+                        )}
                                                         </h4>
                                                     </div>
                                                 </div>
@@ -372,20 +389,20 @@ async function getJobs(params) {
                                                         </button>` : ""}
                                                 <h4 class="text-lg text-gray-600 font-bold mt-2">
                                                     ${(
-                                                            (+element.minSalary === +element.maxSalary && +element.minSalary !== null && +element.minSalary !== 0) 
-                                                            ? +element.minSalary 
-                                                            : (
-                                                                (+element.minSalary !== null && +element.minSalary !== 0) 
-                                                                ? +element.minSalary + '-' 
-                                                                : ""
-                                                            ) + (
-                                                                (+element.maxSalary !== null && +element.maxSalary !== 0) 
-                                                                ? +element.maxSalary 
-                                                                : (
-                                                                    !element.minSalary && !element.maxSalary ? "Razılaşma ilə" : ""
-                                                                )
-                                                            )
-                                                        )}                                                  
+                            (+element.minSalary === +element.maxSalary && +element.minSalary !== null && +element.minSalary !== 0)
+                                ? +element.minSalary
+                                : (
+                                    (+element.minSalary !== null && +element.minSalary !== 0)
+                                        ? +element.minSalary + '-'
+                                        : ""
+                                ) + (
+                                    (+element.maxSalary !== null && +element.maxSalary !== 0)
+                                        ? +element.maxSalary
+                                        : (
+                                            !element.minSalary && !element.maxSalary ? "Razılaşma ilə" : ""
+                                        )
+                                )
+                        )}                                                  
                                                 </h4>
                                                     </div>
                                                     <div class="flex justify-end items-end mt-auto pt-16">
@@ -471,10 +488,8 @@ document.getElementById("show-more-cities").addEventListener("click", function (
 });
 
 function handleFilterChange() {
-    console.log("handleFilterChange");
-
-    const categoryId = document.querySelector('input[name="category"]:checked')?.id;
-    const cityId = document.querySelector('input[name="city"]:checked')?.id;
+    const categoryId = removePrefix(document.querySelector('input[name="category"]:checked')?.id, 'category-');
+    const cityId = removePrefix(document.querySelector('input[name="city"]:checked')?.id,'city-');
     const educationId = document.querySelector('input[name="education"]:checked')?.id;
     const experienceLevel = document.querySelector('input[name="experience"]:checked')?.id;
     const keyword = document.getElementById("search")?.value
@@ -497,8 +512,6 @@ document.getElementById("search").addEventListener("keyup", handleFilterChange);
 function addRadioChangeListener(type) {
     document.querySelectorAll(`input[name="${type}"]`).forEach(radio => {
         radio.addEventListener('change', function () {
-            console.log("addRadioChangeListener");
-
             handleFilterChange();
         });
     });
