@@ -39,65 +39,70 @@ const JobDataService = {
     },
     removeDuplicates: async () => {
         try {
-          console.log('Təkrarlanan redirectUrl-ləri silmə prosesi başladı...');
-      
-          // Bütün məlumatları tapırıq
-          const allJobs = await JobData.find();
-      
-          // redirectUrl-lərə görə qruplaşdırırıq
-          const groupedJobs = allJobs.reduce((acc, job) => {
-            acc[job.redirectUrl] = acc[job.redirectUrl] || [];
-            acc[job.redirectUrl].push(job._id); // ID-ləri yığıram
-            return acc;
-          }, {});
-      
-          // Təkrarlanan ID-ləri tapırıq
-          const duplicateIds = Object.values(groupedJobs)
-            .filter(ids => ids.length > 1) // 1-dən çox olanları tapırıq
-            .flatMap(ids => ids.slice(1)); // İlk ID-ni saxlayırıq, qalanlarını silirik
-      
-          if (duplicateIds.length > 0) {
-            // Təkrarlanan qeydləri silirik
-            await JobData.deleteMany({ _id: { $in: duplicateIds } });
-            console.log(`Təkrarlanan ${duplicateIds.length} qeydlər silindi.`);
-            
-            return {
-              status: 201,
-              message: `Təkrarlanan qeydlər uğurla silindi. Silinən qeydlərin sayı: ${duplicateIds.length}`,
-              count: duplicateIds.length,
-            };
-          } else {
-            console.log('Təkrarlanan məlumat yoxdur.');
-            
-            return {
-              status: 200,
-              message: 'Təkrarlanan məlumat yoxdur.',
-              count: 0,
-            };
-          }
+            const thirtyDaysAgo = new Date();
+            thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+            const allJobs = await JobData.find({
+                createdAt: { $gte: thirtyDaysAgo },
+            }).sort({ createdAt: -1 });
+
+            if (!allJobs || allJobs.length === 0) {
+                return {
+                    status: 200,
+                    message: 'No data found for the last 30 days.',
+                    count: 0,
+                };
+            }
+
+            const seenUniqueKeys = new Map();
+            const duplicateIds = [];
+
+            allJobs.forEach(job => {
+                const uniqueKey = job.uniqueKey;
+                if (seenUniqueKeys.has(uniqueKey)) {
+                    const previousJob = seenUniqueKeys.get(uniqueKey);
+                    duplicateIds.push(previousJob._id);
+                    seenUniqueKeys.set(uniqueKey, job);
+                } else {
+                    seenUniqueKeys.set(uniqueKey, job);
+                }
+            });
+
+            if (duplicateIds.length > 0) {
+                await JobData.deleteMany({ _id: { $in: duplicateIds } });
+                return {
+                    status: 201,
+                    message: `Deleted ${duplicateIds.length} duplicate records from the last 30 days.`,
+                    count: duplicateIds.length,
+                };
+            } else {
+                return {
+                    status: 200,
+                    message: 'No duplicate data found for the last 30 days.',
+                    count: 0,
+                };
+            }
         } catch (error) {
-          console.error('Silmə prosesində xəta:', error.message);
-          return {
-            status: 500,
-            message: 'Silmə prosesində xəta baş verdi.',
-            error: error.message,
-          };
+            return {
+                status: 500,
+                message: 'An error occurred during the process.',
+                error: error.message,
+            };
         }
-      },
-     
-  
+    },
+
     // Get all job listings
-    getAllJobs: async (data) => {       
+    getAllJobs: async (data) => {
         try {
             const filteredJobs = [];
             const seenUrls = new Set();
             const currentDate = new Date();
             const thirtyDaysAgo = new Date(currentDate.setDate(currentDate.getDate() - 30));
-    
+
             const query = {
                 createdAt: { $gte: thirtyDaysAgo }
             };
-            
+
             // Add categoryId condition only if it exists in the request
             if (data.categoryId && data.categoryId !== "undefined" && !isNaN(Number(data.categoryId))) {
                 query.$or = [
@@ -105,7 +110,7 @@ const JobDataService = {
                     { subCategoryId: +data.categoryId }
                 ];
             }
-            
+
             // Continue with the other filters
             if (data.cityId && !isNaN(Number(data.cityId))) query.cityId = +data.cityId;
             if (data.educationId && !isNaN(Number(data.educationId))) query.educationId = +data.educationId;
@@ -113,7 +118,7 @@ const JobDataService = {
             if (data.jobType) query.jobType = data.jobType;
             if (data.minSalary && !isNaN(Number(data.minSalary))) query.minSalary = { $gte: +data.minSalary };
             if (data.maxSalary && !isNaN(Number(data.maxSalary))) query.maxSalary = { $lte: +data.maxSalary };
-            
+
             if (data.keyword) {
                 const keywordQuery = {
                     $or: [
@@ -122,17 +127,17 @@ const JobDataService = {
                         { location: { $regex: data.keyword, $options: 'i' } }
                     ]
                 };
-            
+
                 if (query.$and) {
                     query.$and.push(keywordQuery);
                 } else {
                     query.$and = [keywordQuery];
                 }
             }
-    
+
             const limit = 50;
             const offset = Number(data.offset) || 0;
-    
+
             const jobs = await JobData.aggregate([
                 { $match: query },
                 { $sort: { createdAt: -1 } },
@@ -148,9 +153,9 @@ const JobDataService = {
                 { $skip: offset },
                 { $limit: limit }
             ]);
-    
+
             const totalCount = await JobData.countDocuments(query);
-    
+
             const jobsWithImageUrl = jobs.map(job => ({
                 ...job,
                 companyImageUrl: job.companyDetails?.imageUrl || null
@@ -161,7 +166,7 @@ const JobDataService = {
                     filteredJobs.push(job);
                 }
             });
-    
+
             return {
                 totalCount: totalCount,
                 jobs: filteredJobs,
