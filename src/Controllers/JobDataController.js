@@ -33,7 +33,6 @@ const jobDataController = {
             // Fetch jobs from OfferAz
             try {
                 offerAzjobs = await offerAz.Jobs(categories, cities);
-                // console.log({smartJobAzJobs});
 
             } catch (error) {
                 console.error("Error fetching OfferAz jobs:", error.message);
@@ -60,7 +59,7 @@ const jobDataController = {
             }
 
             // Merge all jobs from both sources
-            const data = [...(bossAzjobs || []), ...(smartJobAzJobs || [])];
+            const data = [...(bossAzjobs || []), ...(smartJobAzJobs || []),...(offerAzjobs || [])];
             // console.log({ data });
 
             // Create the jobs in the system

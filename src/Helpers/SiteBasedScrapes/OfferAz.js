@@ -3,6 +3,7 @@ import enums from "../../Config/Enums.js";
 import pLimit from 'p-limit';
 import axios from 'axios';
 import * as cheerio from 'cheerio';
+import randomUserAgent from "../../Config/UserAgents.js";
 
 
 
@@ -36,9 +37,9 @@ class OfferAz {
         }
     }
 
+
     async Jobs(categories, bossAzcities) {
         const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-
         try {
             const filteredCategories = categories.filter(c => c.website === enums.SitesWithId.OfferAz);
 
@@ -75,7 +76,7 @@ class OfferAz {
                                         'Origin': 'https://www.offer.az',
                                         'Referer': 'https://www.offer.az/is-elanlari-axtar/',
                                         'X-Requested-With': 'XMLHttpRequest',
-                                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36',
+                                        'User-Agent': randomUserAgent(),
                                         'Connection': 'keep-alive',
                                         'Host': 'www.offer.az',
                                     };
@@ -130,6 +131,8 @@ class OfferAz {
                                             experienceId: null,
                                             uniqueKey: `${title.replace(/ /g, '-')}-${companyName.replace(/ /g, '-')}-${location.replace(/ /g, '-')}`
                                         });
+                                    console.log({jobData});
+                                        
                                     });
 
                                 } catch (error) {
@@ -162,12 +165,12 @@ class OfferAz {
 
 
     mapEducation(education) {
-        return (education === 10 || education === 2 || education === 13 || education === 6) ? enums.Education.Secondary :
-            (education === 0 || education === 7) ? enums.Education.IncompleteEducation :
-                (education === 5) ? enums.Education.Higher :
+        return (education === -1 || education === -2) ? enums.Education.Secondary :
+            (education === 15) ? enums.Education.IncompleteEducation :
+                (education === 14) ? enums.Education.Higher :
                     (education === 12) ? enums.Education.Bachelor :
                         (education === 13) ? enums.Education.Master :
-                            (education === 81) ? enums.Education.Doctor : 0;
+                            (education === 81) ? enums.Education.Doctor : 243;
     }
 
 }

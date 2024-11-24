@@ -25,4 +25,8 @@ const UserAgents = [
     "Mozilla/5.0 (Linux; Android 11; Mi 11) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Mobile Safari/537.36"
 ];
 
-export default UserAgents;
+function randomUserAgent () {
+    return  UserAgents[Math.floor(Math.random() * UserAgents.length)];
+}
+
+export default randomUserAgent;
