@@ -28,6 +28,10 @@ const jobSchema = new Schema({
         type: Number,
         required: false
     },
+    currencySign: {
+        type: String,
+        default: "₼"
+    },
     categoryId: {
         type: Number,
         ref: 'Category',

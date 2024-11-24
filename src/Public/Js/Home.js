@@ -1,9 +1,7 @@
 document.addEventListener("DOMContentLoaded", (event) => {
 
-    async function getJobs(params) {
-        await axios.get('/api/jobs', {
-            params: params
-        }).then(res => {
+    async function getJobs() {
+        await axios.get('/api/jobs').then(res => {
             let htmlContent = '';
 
             if (res.status === 200) {
@@ -68,21 +66,21 @@ document.addEventListener("DOMContentLoaded", (event) => {
                                 <div class="text-sm mt-2 flex justify-between sm:hidden">
                                    <span class="bg-blue-100 text-blue-700 px-1 py-0.5 rounded-lg text-sm">${element.sourceUrl}</span>
                                 <h4 class="text-lg text-gray-600 font-bold">
-                                    ${(
-                                            (+element.minSalary === +element.maxSalary && +element.minSalary !== null && +element.minSalary !== 0) 
-                                            ? +element.minSalary 
+                                  ${(
+                                        (+element.minSalary === +element.maxSalary && +element.minSalary !== null && +element.minSalary !== 0)
+                                            ? +element.minSalary +" "+ element.currencySign
                                             : (
-                                                (+element.minSalary !== null && +element.minSalary !== 0) 
-                                                ? +element.minSalary + '-' 
-                                                : ""
+                                                (+element.minSalary !== null && +element.minSalary !== 0)
+                                                    ? +element.minSalary + '-'
+                                                    : ""
                                             ) + (
-                                                (+element.maxSalary !== null && +element.maxSalary !== 0) 
-                                                ? +element.maxSalary 
-                                                : (
-                                                    !element.minSalary && !element.maxSalary ? "Razılaşma ilə" : ""
-                                                )
+                                                (+element.maxSalary !== null && +element.maxSalary !== 0)
+                                                    ? +element.maxSalary  +" "+ element.currencySign
+                                                    : (
+                                                        !element.minSalary && !element.maxSalary ? "Razılaşma ilə" : ""
+                                                    )
                                             )
-                                        )}
+                                    )} 
                                     </h4>
                                 </div>
                             </div>

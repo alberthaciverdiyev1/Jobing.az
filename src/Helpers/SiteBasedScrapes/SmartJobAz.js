@@ -119,7 +119,6 @@ class SmartJobAz {
                                     });
                                 });
 
-                                return jobData;
                             } catch (error) {
                                 console.error(`Error fetching data from ${url}:`, error.message);
                                 return [];
@@ -133,14 +132,7 @@ class SmartJobAz {
 
             const results = await Promise.all(dataPromises);
             const data = results.flat();
-
-            data.forEach(job => {
-                if (!seenUrls.has(job.redirectUrl)) {
-                    seenUrls.add(job.redirectUrl);
-                    filteredJobs.push(job);
-                }
-            });
-            return filteredJobs;
+            return jobData;
 
         } catch (error) {
             console.error('Error fetching jobs:', error.message, error.stack);
