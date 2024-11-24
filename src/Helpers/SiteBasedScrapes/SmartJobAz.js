@@ -148,7 +148,6 @@ class SmartJobAz {
         }
     }
 
-    // Eğitim ID'lerini haritalama fonksiyonu
     mapEducation(education) {
         return (education === 10 || education === 2 || education === 13 || education === 6) ? enums.Education.Secondary :
             (education === 0 || education === 7) ? enums.Education.IncompleteEducation :

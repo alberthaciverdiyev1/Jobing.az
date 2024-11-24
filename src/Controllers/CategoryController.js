@@ -2,17 +2,21 @@ import CategoryService from '../Services/CategoryService.js';
 import BossAz from "../Helpers/SiteBasedScrapes/BossAz.js";
 import SmartJobAz from "../Helpers/SiteBasedScrapes/SmartJobAz.js";
 import Enums from '../Config/Enums.js';
+import OfferAz from '../Helpers/SiteBasedScrapes/OfferAz.js';
 
 const CategoryController = {
     addForeignCategories: async (req, res) => {
         try {
             const boss = new BossAz();
             const smartJob = new SmartJobAz();
-
+            const offer = new OfferAz();
+            
+            
+            const offerAzCategories = await offer.Categories();
             // const bossAzCategories = await boss.Categories();
-            const smartJobCategories = await smartJob.Categories(); 
-            let categories = [...smartJobCategories];
+            // const smartJobCategories = await smartJob.Categories(); 
             // let categories = [...smartJobCategories, ...bossAzCategories];
+            let categories = [...offerAzCategories];
 
             const response = await CategoryService.addForeignCategories(categories);
             res.status(response.status).json({ message: response.message, count: response.count });
