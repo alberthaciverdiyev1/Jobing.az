@@ -3,12 +3,12 @@ import mongoose from 'mongoose';
 const { Schema } = mongoose;
 
 const companySchema = new Schema({
-    name: {
+    companyName: {
         type: String,
-        required: true
+        default: "",
     },
-    imageUrl:{
-        type:String,
+    imageUrl: {
+        type: String,
         default: ""
     },
     website: {
