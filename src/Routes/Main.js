@@ -67,7 +67,16 @@ router.get('/contact', viewController.contactUs);
 router.get('/education', viewController.education);
 router.get('/experience', viewController.experience);
 
-
+//Change language
+router.post('/set-lang', (req, res) => {
+    const { language } = req.body;
+    if (i18n.getLocales().includes(language)) {
+        res.cookie('lang', language);  // Set language in cookie
+        res.send({ message: 'Language updated successfully' });
+    } else {
+        res.status(400).send({ error: 'Invalid language' });
+    }
+});
 
 //Admin Panel 
 
@@ -78,13 +87,13 @@ router.get('/admin/categories', viewController.adminCategoryView);
 router.post('/send-mail', validator.mailValidator, viewController.sendMail);         // CREATE
 
 
-// router.use((req, res) => {
-//     res.render('Partials/Error.ejs');
-//     // res.status(404).render('error', { message: 'Page Not Found' });
-// });
+router.use((req, res) => {
+    res.render('Partials/Error.ejs');
+    // res.status(404).render('error', { message: 'Page Not Found' });
+});
 
-// router.use((err, req, res, next) => {
-//     res.render('Partials/Error.ejs');
-// });
+router.use((err, req, res, next) => {
+    res.render('Partials/Error.ejs');
+});
 
 export default router;

@@ -197,8 +197,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
         });
 
 
-    // keyword=NEVROLOG%C4%B0Ya&categoryId=all&cityId=all&minSalary=0&maxSalary=5000
-    
         window.location.href = `${baseUrl}?${params.toString()}`;
     });
     
