@@ -50,72 +50,70 @@ class OfferAz {
             const seenUrls = new Set();
             const jobData = [];
             for (const category of filteredCategories) {
+                
                 // for (let salary = 0; salary < 5000; salary += 100) {
-                    for (const education of educationIds) {
-                        for (let page = 0; page <= 2; page++) {
-                            
-                            const requestPromise = limit(async () => {
-                                try {
-                                    const randomDelay = Math.floor(Math.random() * 20000) + 1000;
-                                    await delay(randomDelay);
+                for (const education of educationIds) {
+                    for (let page = 0; page <= 2; page++) {
 
-                                    const url = `https://${this.url}/wp-admin/admin-ajax.php`;
+                        const requestPromise = limit(async () => {
+                            try {
+                                const randomDelay = Math.floor(Math.random() * 20000) + 1000;
+                                await delay(randomDelay);
 
-                                    const data = new URLSearchParams();
-                                    data.append('select_category', category);
-                                    data.append('cur_page', page);
-                                    data.append('form_mode', 'long');
-                                    // data.append('salary', salary);
-                                    data.append('select_tehsil', education);
-                                    data.append('action', 'search_form_jobs_submit_input');
+                                const url = `https://${this.url}/wp-admin/admin-ajax.php`;
 
-                                    const headers = {
-                                        'Accept': '*/*',
-                                        'Accept-Encoding': 'gzip, deflate, br',
-                                        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-                                        'Origin': 'https://www.offer.az',
-                                        'Referer': 'https://www.offer.az/is-elanlari-axtar/',
-                                        'X-Requested-With': 'XMLHttpRequest',
-                                        'User-Agent': randomUserAgent(),
-                                        'Connection': 'keep-alive',
-                                        'Host': 'www.offer.az',
-                                    };
+                                const data = new URLSearchParams();
+                                data.append('select_category', category.categoryId);
+                                data.append('cur_page', page);
+                                data.append('form_mode', 'long');
+                                // data.append('salary', salary);
+                                data.append('select_tehsil', education);
+                                data.append('action', 'search_form_jobs_submit_input');
 
-                                    const response = await axios.post(url, data, { headers });
+                                const headers = {
+                                    'Accept': '*/*',
+                                    'Accept-Encoding': 'gzip, deflate, br',
+                                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                                    'Origin': 'https://www.offer.az',
+                                    'Referer': 'https://www.offer.az/is-elanlari-axtar/',
+                                    'X-Requested-With': 'XMLHttpRequest',
+                                    'User-Agent': randomUserAgent(),
+                                    'Connection': 'keep-alive',
+                                    'Host': 'www.offer.az',
+                                };
 
-                                    const $ = cheerio.load(response.data);
+                                const response = await axios.post(url, data, { headers });
 
-                                    $('.cards-in-loop .job-card').each((i, el) => {
-                                        const urlAndId = $(el).find('.job-card__title');
-                                        const title = urlAndId.text().trim();
-                                        const companyElement = $(el).find('.job-card__meta em');
-                                        const companyName = companyElement.text().trim();
-                                        const companyId = companyName;
-                                        const locationText = $(el).find('.job-card__meta').last().text().trim();
-                                        const locationParts = locationText.split(' - ');
-                                        let location = locationParts.length > 1 ? locationParts[1].trim() : locationParts[0].trim();
-                                        const salaryText = $(el).find('.job-card__label').text().trim();
-                                        // const cleanSalaryText = salaryText.replace('₼', '').trim();
-                                        const match = salaryText.match(/[₼$€]/);
-                                        const currencySign = match ? match[0] : null;
-                                        const cleanSalaryText = salaryText ? salaryText.replace(/[₼$€]/g, '').trim() : null;
+                                const $ = cheerio.load(response.data);
 
-                                        const parts = cleanSalaryText.split('—');
-                                        const description = $(el).find('.job-card__excerpt').text().trim();
+                                $('.cards-in-loop .job-card').each((i, el) => {
+                                    const urlAndId = $(el).find('.job-card__title');
+                                    const title = urlAndId.text().trim();
+                                    const companyElement = $(el).find('.job-card__meta em');
+                                    const companyName = companyElement.text().trim();
+                                    const companyId = companyName;
+                                    const locationText = $(el).find('.job-card__meta').last().text().trim();
+                                    const locationParts = locationText.split(' - ');
+                                    let location = locationParts.length > 1 ? locationParts[1].trim() : locationParts[0].trim();
+                                    const salaryText = $(el).find('.job-card__label').text().trim();
+                                    const cleanSalaryText = salaryText.replace('₼', '').trim();
+                                    // const match = salaryText.match(/[₼$€]/);
+                                    // const currencySign = match ? match[0] : null;
+                                    // const cleanSalaryText = salaryText ? salaryText.replace(/[₼$€]/g, '').trim() : null;
 
-                                        const jobId = urlAndId.attr('href')?.split('-').pop() || null;
-                                        const redirectUrl = urlAndId.attr('href') || null;
+                                    const parts = cleanSalaryText.split('—');
+                                    const description = $(el).find('.job-card__excerpt').text().trim();
 
-                                        let [minSalary, maxSalary] = [null, null];
-                                        if (parts.length === 2) {
-                                            minSalary = parseInt(parts[0], 10);
-                                            maxSalary = parseInt(parts[1], 10);
-                                        } else if (parts.length === 1) {
-                                            minSalary = maxSalary = parseInt(parts[0], 10);
-                                        }
+                                    const jobId = urlAndId.attr('href')?.split('-').pop() || null;
+                                    const redirectUrl = urlAndId.attr('href') || null;
 
-                                        const locationCity = bossAzcities.find(x => x.name === location)?.cityId;
-                                        const localCategoryId = filteredCategories.find(x => x.categoryId === category.categoryId)?.localCategoryId;
+                                    let [minSalary, maxSalary] = [null, null];
+                                    if (parts.length === 2) {
+                                        minSalary = parseInt(parts[0], 10);
+                                        maxSalary = parseInt(parts[1], 10);
+                                    } else if (parts.length === 1) {
+                                        minSalary = maxSalary = parseInt(parts[0], 10);
+                                    }
 
                                         jobData.push({
                                             title,
@@ -124,29 +122,29 @@ class OfferAz {
                                             minSalary: isNaN(minSalary) ? null : minSalary,
                                             maxSalary: isNaN(maxSalary) ? null : maxSalary,
                                             location,
-                                            cityId: locationCity || null,
+                                            cityId:  bossAzcities.find(x => x.name === location)?.cityId || null,
                                             description: description || null,
                                             jobId,
-                                            categoryId: localCategoryId || null,
+                                            categoryId: category.localCategoryId || null,
                                             sourceUrl: this.url,
-                                            redirectUrl:redirectUrl,
+                                            redirectUrl: redirectUrl,
                                             jobType: '0x001',
                                             educationId: this.mapEducation(education),
                                             experienceId: null,
                                             uniqueKey: `${title.replace(/ /g, '-')}-${companyName.replace(/ /g, '-')}-${location.replace(/ /g, '-')}`
                                         });
                                     // console.log({jobData});
-                                        
-                                    });
 
-                                } catch (error) {
-                                    console.error('Error:', error);
-                                }
-                            });
+                                });
 
-                            dataPromises.push(requestPromise);
-                        }
+                            } catch (error) {
+                                console.error('Error:', error);
+                            }
+                        });
+
+                        dataPromises.push(requestPromise);
                     }
+                }
                 // }
             }
 
