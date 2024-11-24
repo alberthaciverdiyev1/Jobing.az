@@ -9,25 +9,42 @@
 
         <!-- Navigation Links -->
         <div class="desktop-menu space-x-4 hidden md:flex">
-            <a href="/" class="text-gray-800 font-semibold hover:filled-button-color hover:text-white px-3 py-2 rounded transition duration-300">Home</a>
-            <a href="/jobs" class="text-gray-800 font-semibold hover:filled-button-color hover:text-white px-3 py-2 rounded transition duration-300">All Jobs</a>
-            <a href="/contact" class="text-gray-800 font-semibold hover:filled-button-color hover:text-white px-3 py-2 rounded transition duration-300">Contact</a>
-            <a href="/about-us" class="text-gray-800 font-semibold hover:filled-button-color hover:text-white px-3 py-2 rounded transition duration-300">About Us</a>
+            <a href="/"
+                class="text-gray-800 font-semibold hover:filled-button-color hover:text-white px-3 py-2 rounded transition duration-300">Home</a>
+            <a href="/jobs"
+                class="text-gray-800 font-semibold hover:filled-button-color hover:text-white px-3 py-2 rounded transition duration-300">All
+                Jobs</a>
+            <a href="/contact"
+                class="text-gray-800 font-semibold hover:filled-button-color hover:text-white px-3 py-2 rounded transition duration-300">Contact</a>
+            <a href="/about-us"
+                class="text-gray-800 font-semibold hover:filled-button-color hover:text-white px-3 py-2 rounded transition duration-300">About
+                Us</a>
+
+            <% if (Production(false)) { %>
+                <select id="language" name="language" class="w-14 border rounded">
+                    <option value="en">English</option>
+                    <option value="az">Azerbaijani</option>
+                    <option value="ru">Russian</option>
+                </select>
+                <% } %>
+
+
         </div>
-        
+
 
         <!-- Login Button -->
         <% if (Production(false)) { %>
-        <div class="hidden md:block">
-            <a href="/auth" class="filled-button-color text-white px-6 py-2 rounded-full ml-2 hover:filled-button-color duration-300">Login</a>
-        </div>
-        <% } %>
+            <div class="hidden md:block">
+                <a href="/auth"
+                    class="filled-button-color text-white px-6 py-2 rounded-full ml-2 hover:filled-button-color duration-300">Login</a>
+            </div>
+            <% } %>
 
-        <!-- Mobile Menu Toggle -->
-        <div class="md:hidden">
-            <button id="menuToggle" class="text-gray-800 focus:outline-none">
-                <i class="fas fa-bars fa-2x"></i>
-            </button>
-        </div>
+                <!-- Mobile Menu Toggle -->
+                <div class="md:hidden">
+                    <button id="menuToggle" class="text-gray-800 focus:outline-none">
+                        <i class="fas fa-bars fa-2x"></i>
+                    </button>
+                </div>
     </div>
 </nav>

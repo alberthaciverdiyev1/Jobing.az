@@ -8,9 +8,17 @@ import loggerMiddleware from './src/Middlewares/Logger.js';
 import Production from './src/Helpers/Production.js';
 import axios from 'axios';
 import sendEmail from './src/Helpers/NodeMailer.js';
+import i18n from 'i18n';
+import cookieParser from 'cookie-parser';
 import { title } from 'process';
 const to = process.env.CRON_MAIL_USER;
 
+i18n.configure({
+    locales: ['en', 'ru','az'], // Desteklenen diller
+    directory:'./src/locales', 
+    defaultLocale: 'az',
+    cookie: 'lang' 
+  });
 
 const app = express();
 const port = process.env.PR_PORT || 3000;
@@ -19,6 +27,8 @@ app.set('view engine', 'ejs');
 app.set('views', './src/Views');
 app.use(express.static(path.resolve('./src/Public')));
 app.use(express.json());
+app.use(cookieParser());
+app.use(i18n.init);
 
 app.use((req, res, next) => {
     res.locals.Production = Production;
