@@ -1,12 +1,9 @@
 document.addEventListener("DOMContentLoaded", (event) => {
-    console.log("aaaaaaaaaa");
-
     function getCategories() {
         axios.get('/api/categories')
             .then(res => {
                 let htmlContent = "";
                 let headHtml ="";
-                console.log({ res });
 
                 if (res.status === 200) {
                     let n = 1;
@@ -79,7 +76,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
                                             </td>
                                         </tr>`;
                     });
-                    console.log(headHtml+htmlContent);
 
                     document.getElementById("categoryBody").innerHTML = headHtml + htmlContent; 
 
@@ -90,8 +86,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
                             const childCategorySelect = document.getElementById(`subCategory-${elementId}`);
 
                             const selectedSiteId = document.querySelector(`#siteName-${elementId}`).value;
-                            console.log({ selectedSiteId });
-
                             childCategorySelect.innerHTML = "";
 
                             res.data.foreignCategories.forEach(category => {

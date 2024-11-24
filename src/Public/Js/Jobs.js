@@ -270,8 +270,6 @@ async function getExperience() {
 async function getJobs(params) {
     !offset ? loader(true) : "";
     let jobList = [];
-    console.log({ params });
-
 
     await axios.get('/api/jobs', {
         params: params
@@ -488,7 +486,6 @@ function handleFilterChange(minS = 0, maxS = 5000) {
         let offset = 0;
         minSalary ?? 0;
         maxSalary ?? 5000;
-        console.log("first");
 
         updateURLParams({ categoryId, cityId, educationId, experienceLevel, offset, keyword, minSalary, maxSalary });
         getJobs({ categoryId, cityId, educationId, experienceLevel, offset, keyword, minSalary, maxSalary });

@@ -14,11 +14,11 @@ import { title } from 'process';
 const to = process.env.CRON_MAIL_USER;
 
 i18n.configure({
-    locales: ['en', 'ru','az'], // Desteklenen diller
-    directory:'./src/locales', 
+    locales: ['en', 'ru', 'az'], // Desteklenen diller
+    directory: './src/locales',
     defaultLocale: 'az',
-    cookie: 'lang' 
-  });
+    cookie: 'lang'
+});
 
 const app = express();
 const port = process.env.PR_PORT || 3000;
@@ -40,8 +40,8 @@ app.use('/', routes);
 
 // swaggerDocs(app);
 
-cron.schedule('0 7-23 * * *', async () => {
-    // // cron.schedule('0 7-23/2 * * *', async () => {
+// cron.schedule('0 7-23 * * *', async () => {
+cron.schedule('0 7-23/3 * * *', async () => {
     // const to = process.env.CRON_MAIL_USER;
     const now = new Date();
 
@@ -60,7 +60,7 @@ cron.schedule('0 7-23 * * *', async () => {
         if (response.status === 200 || response.status === 201) {
             let endData = {
                 title: "Cron ended",
-                text: `${response.data.message}`
+                text: `${response.data.message} <br> ${response.data.errors}`
             };
             await sendEmail(endData, to);
         }

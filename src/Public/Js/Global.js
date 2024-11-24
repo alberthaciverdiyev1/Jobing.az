@@ -33,7 +33,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
     };
 
     document.getElementById("language").addEventListener('change', function () {
-        console.log("aa");
         
         const selectedLanguage = this.value;
         axios.post('/set-lang', { language: selectedLanguage })
