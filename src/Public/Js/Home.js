@@ -182,19 +182,22 @@ document.addEventListener("DOMContentLoaded", (event) => {
         const citySelect = document.getElementById('city-select');
         const keywordInput = document.getElementById('keyword');
     
-        const categoryId = categorySelect?.value || '';
-        const cityId = citySelect?.value || '';
-        const keyword = keywordInput?.value?.trim() || '';
+        const categoryId = categorySelect?.value || 'all';
+        const cityId = citySelect?.value || 'all';
+        const keyword = keywordInput?.value?.trim().toLowerCase() || '';
     
         const baseUrl = `${window.location.origin}/jobs`; 
         const params = new URLSearchParams({
-            // minSalary: 0,
-            // maxSalary: 5000,
+            minSalary: 0,
+            maxSalary: 5000,
             offset: 0,
             ...(categoryId && { categoryId }),
             ...(cityId && { cityId }),
             ...(keyword && { keyword }),
         });
+
+
+    // keyword=NEVROLOG%C4%B0Ya&categoryId=all&cityId=all&minSalary=0&maxSalary=5000
     
         window.location.href = `${baseUrl}?${params.toString()}`;
     });
