@@ -125,7 +125,7 @@ class OfferAz {
                                             jobId,
                                             categoryId: localCategoryId || null,
                                             sourceUrl: this.url,
-                                            redirectUrl,
+                                            redirectUrl:redirectUrl,
                                             jobType: '0x001',
                                             educationId: this.mapEducation(education),
                                             experienceId: null,
@@ -149,13 +149,7 @@ class OfferAz {
             const results = await Promise.all(dataPromises);
             const data = results.flat();
 
-            data.forEach(job => {
-                if (!seenUrls.has(job.redirectUrl)) {
-                    seenUrls.add(job.redirectUrl);
-                    filteredJobs.push(job);
-                }
-            });
-            return filteredJobs;
+            return data;
 
         } catch (error) {
             console.error('Error fetching jobs:', error.message, error.stack);
