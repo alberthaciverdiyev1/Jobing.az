@@ -47,18 +47,13 @@ function getURLParams() {
 function updateURLParams(params) {
     const currentParams = new URLSearchParams(window.location.search);
 
-    // Parametreleri güncelle
     for (const key in params) {
-        console.log({ key, params });
-
         if (params[key] !== undefined) {
             currentParams.set(key, params[key]);
         } else {
             currentParams.delete(key);
         }
     }
-
-    console.log({ currentParams });
 
 
     // Yeni URL'yi oluştur ve sayfayı güncelle
@@ -67,10 +62,8 @@ function updateURLParams(params) {
 
 function preselectFilters() {
     const { categoryId, cityId, educationId, experienceLevel, keyword } = getURLParams();
-    console.log({ categoryId, cityId, educationId, experienceLevel });
 
     if (categoryId && !isNaN(Number(categoryId))) {
-        console.log({ categoryId });
         if (categoryId > 10) document.getElementById("categoryList").innerHTML = categoryHTML(categoryArray);
         addRadioChangeListener("category");
 
@@ -81,8 +74,6 @@ function preselectFilters() {
     }
 
     if (cityId && !isNaN(Number(cityId))) {
-        console.log({ cityId });
-
         if (cityId !== 28 || cityId !== 12 || cityId !== 83 || cityId !== 87 || cityId !== 85 || cityId !== 34 || cityId !== 88) document.getElementById("cityList").innerHTML = cityHTML(cityArray);
         addRadioChangeListener("city");
 
@@ -279,6 +270,8 @@ async function getExperience() {
 async function getJobs(params) {
     !offset ? loader(true) : "";
     let jobList = [];
+    console.log({ params });
+
 
     await axios.get('/api/jobs', {
         params: params
@@ -425,11 +418,9 @@ async function getJobs(params) {
             }
 
             if (offset && jobList.length > 0) {
-                console.log("1");
 
                 document.getElementById("card-section").insertAdjacentHTML('beforeend', htmlContent + loadMoreButton);
             } else if (jobList.length > 0) {
-                console.log("3");
                 document.getElementById("card-section").innerHTML = headerContent + htmlContent + loadMoreButton;
             }
 
@@ -487,36 +478,43 @@ document.getElementById("show-more-cities").addEventListener("click", function (
     }
 });
 
-function handleFilterChange(minS = false , maxS = false) {
-    if (!minS) {      
+function handleFilterChange(minS = 0, maxS = 5000) {
+    if (!minS) {
         let categoryId = removePrefix(document.querySelector('input[name="category"]:checked')?.id, 'category-');
-        let cityId = removePrefix(document.querySelector('input[name="city"]:checked')?.id,'city-');
+        let cityId = removePrefix(document.querySelector('input[name="city"]:checked')?.id, 'city-');
         let educationId = document.querySelector('input[name="education"]:checked')?.id;
         let experienceLevel = document.querySelector('input[name="experience"]:checked')?.id;
         let keyword = document.getElementById("search")?.value
         let offset = 0;
-        updateURLParams({ categoryId, cityId, educationId, experienceLevel, offset, keyword ,minSalary,maxSalary});
-        getJobs({ categoryId, cityId, educationId, experienceLevel, offset, keyword ,maxSalary,maxSalary});
+        minSalary ?? 0;
+        maxSalary ?? 5000;
+        console.log("first");
 
-    }else{
-        maxSalary = maxS;
-        minSalary = minS;
+        updateURLParams({ categoryId, cityId, educationId, experienceLevel, offset, keyword, minSalary, maxSalary });
+        getJobs({ categoryId, cityId, educationId, experienceLevel, offset, keyword, minSalary, maxSalary });
 
+    } else {
+        maxSalary = maxS ?? 5000;
+        minSalary = !isNaN(Number(minS)) ? minS : 0;
         let { categoryId, cityId, educationId, experienceLevel, keyword } = getURLParams();
 
-        updateURLParams({ categoryId, cityId, educationId, experienceLevel, offset, keyword ,minSalary,maxSalary});
-        getJobs({ categoryId, cityId, educationId, experienceLevel, offset, keyword ,minSalary,maxSalary});
+        updateURLParams({ categoryId, cityId, educationId, experienceLevel, offset, keyword, minSalary, maxSalary });
+        getJobs({ categoryId, cityId, educationId, experienceLevel, offset, keyword, minSalary, maxSalary });
     }
 
 }
 
-// document.querySelectorAll('input[name="category"], input[name="city"], input[name="education"], input[name="experience"]').forEach(element => {
-//     element.addEventListener('change', handleFilterChange);
-// });
-
-
 document.getElementById("search-btn").addEventListener("click", handleFilterChange);
-document.getElementById("search").addEventListener("keyup", handleFilterChange);
+
+let searchDebounceTimeout;
+
+document.getElementById("search").addEventListener("keyup", () => {
+    searchDebounceTimeout = setTimeout(() => {
+        clearTimeout(searchDebounceTimeout);
+        handleFilterChange();
+    }, 500);
+});
+
 
 
 
@@ -528,14 +526,12 @@ function addRadioChangeListener(type) {
     });
 }
 
-// Slider'ı seç
 var slider = document.getElementById('slider');
 
-// noUiSlider'ı başlat
 noUiSlider.create(slider, {
-    start: [0, 5000], 
+    start: [0, 5000],
     range: {
-        min: 0, 
+        min: 0,
         max: 5000,
     },
     step: 1,
@@ -549,7 +545,7 @@ noUiSlider.create(slider, {
     },
 });
 
-let debounceTimeout; 
+let debounceTimeout;
 
 slider.noUiSlider.on('update', function (values) {
     minSalary = values[0];
@@ -561,7 +557,7 @@ slider.noUiSlider.on('update', function (values) {
     clearTimeout(debounceTimeout);
     debounceTimeout = setTimeout(() => {
         handleFilterChange(values[0], values[1]);
-    }, 500); 
+    }, 500);
 });
 
 
