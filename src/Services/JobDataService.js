@@ -9,6 +9,15 @@ const JobDataService = {
         }
 
         try {
+            const existingRecords = await JobData.find({
+                redirectUrl: { $in: data.map(job => job.redirectUrl) }
+            }).select('redirectUrl');
+
+            if (existingRecords.length > 0) {
+                const existingData = new Set(existingRecords.map(record => record.redirectUrl));
+                data = data.filter(job => !existingData.has(job.redirectUrl));
+            }
+
             if (data.length > 0) {
                 const results = await JobData.insertMany(data);
 

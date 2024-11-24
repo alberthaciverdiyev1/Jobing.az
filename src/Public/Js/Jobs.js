@@ -358,20 +358,20 @@ async function getJobs(params) {
                                                        <span class="bg-blue-100 text-blue-700 px-1 py-0.5 rounded-lg text-sm">${element.sourceUrl}</span>
                                                     <h4 class="text-lg text-gray-600 font-bold">
                                                         ${(
-                            (+element.minSalary === +element.maxSalary && +element.minSalary !== null && +element.minSalary !== 0)
-                                ? +element.minSalary
-                                : (
-                                    (+element.minSalary !== null && +element.minSalary !== 0)
-                                        ? +element.minSalary + '-'
-                                        : ""
-                                ) + (
-                                    (+element.maxSalary !== null && +element.maxSalary !== 0)
-                                        ? +element.maxSalary
-                                        : (
-                                            !element.minSalary && !element.maxSalary ? "Razılaşma ilə" : ""
-                                        )
-                                )
-                        )}
+                                                            (+element.minSalary === +element.maxSalary && +element.minSalary !== null && +element.minSalary !== 0)
+                                                                ? +element.minSalary +" "+ element.currencySign
+                                                                : (
+                                                                    (+element.minSalary !== null && +element.minSalary !== 0)
+                                                                        ? +element.minSalary + '-'
+                                                                        : ""
+                                                                ) + (
+                                                                    (+element.maxSalary !== null && +element.maxSalary !== 0)
+                                                                        ? +element.maxSalary  +" "+ element.currencySign
+                                                                        : (
+                                                                            !element.minSalary && !element.maxSalary ? "Razılaşma ilə" : ""
+                                                                        )
+                                                                )
+                                                        )}
                                                         </h4>
                                                     </div>
                                                 </div>
@@ -381,21 +381,21 @@ async function getJobs(params) {
                                                             <i class="fa-solid fa-heart text-2xl"></i>
                                                         </button>` : ""}
                                                 <h4 class="text-lg text-gray-600 font-bold mt-2">
-                                                    ${(
-                            (+element.minSalary === +element.maxSalary && +element.minSalary !== null && +element.minSalary !== 0)
-                                ? +element.minSalary
-                                : (
-                                    (+element.minSalary !== null && +element.minSalary !== 0)
-                                        ? +element.minSalary + '-'
-                                        : ""
-                                ) + (
-                                    (+element.maxSalary !== null && +element.maxSalary !== 0)
-                                        ? +element.maxSalary
-                                        : (
-                                            !element.minSalary && !element.maxSalary ? "Razılaşma ilə" : ""
-                                        )
-                                )
-                        )}                                                  
+                                                      ${(
+                                                            (+element.minSalary === +element.maxSalary && +element.minSalary !== null && +element.minSalary !== 0)
+                                                                ? +element.minSalary +" "+ element.currencySign
+                                                                : (
+                                                                    (+element.minSalary !== null && +element.minSalary !== 0)
+                                                                        ? +element.minSalary + '-'
+                                                                        : ""
+                                                                ) + (
+                                                                    (+element.maxSalary !== null && +element.maxSalary !== 0)
+                                                                        ? +element.maxSalary  +" "+ element.currencySign
+                                                                        : (
+                                                                            !element.minSalary && !element.maxSalary ? "Razılaşma ilə" : ""
+                                                                        )
+                                                                )
+                                                        )}                                              
                                                 </h4>
                                                     </div>
                                                     <div class="flex justify-end items-end mt-auto pt-16">

@@ -95,7 +95,11 @@ class OfferAz {
                                         const locationParts = locationText.split(' - ');
                                         let location = locationParts.length > 1 ? locationParts[1].trim() : locationParts[0].trim();
                                         const salaryText = $(el).find('.job-card__label').text().trim();
-                                        const cleanSalaryText = salaryText.replace('₼', '').trim();
+                                        // const cleanSalaryText = salaryText.replace('₼', '').trim();
+                                        const match = salaryText.match(/[₼$€]/);
+                                        const currencySign = match ? match[0] : null;
+                                        const cleanSalaryText = salaryText ? salaryText.replace(/[₼$€]/g, '').trim() : null;
+
                                         const parts = cleanSalaryText.split('—');
                                         const description = $(el).find('.job-card__excerpt').text().trim();
 
@@ -149,7 +153,7 @@ class OfferAz {
             const results = await Promise.all(dataPromises);
             const data = results.flat();
 
-            return data;
+            return jobData;
 
         } catch (error) {
             console.error('Error fetching jobs:', error.message, error.stack);
