@@ -3,6 +3,7 @@ import BossAz from "../Helpers/SiteBasedScrapes/BossAz.js";
 import SmartJobAz from "../Helpers/SiteBasedScrapes/SmartJobAz.js";
 import Enums from '../Config/Enums.js';
 import OfferAz from '../Helpers/SiteBasedScrapes/OfferAz.js';
+import HelloJobAz from '../Helpers/SiteBasedScrapes/HelloJobAz.js';
 
 const CategoryController = {
     addForeignCategories: async (req, res) => {
@@ -10,13 +11,15 @@ const CategoryController = {
             const boss = new BossAz();
             const smartJob = new SmartJobAz();
             const offer = new OfferAz();
+            const hellojob = new HelloJobAz()
             
             
-            const offerAzCategories = await offer.Categories();
+            const hellojobAzCategories = await hellojob.Categories();
+            // const offerAzCategories = await offer.Categories();
             // const bossAzCategories = await boss.Categories();
             // const smartJobCategories = await smartJob.Categories(); 
             // let categories = [...smartJobCategories, ...bossAzCategories];
-            let categories = [...offerAzCategories];
+            let categories = [...hellojobAzCategories];
 
             const response = await CategoryService.addForeignCategories(categories);
             res.status(response.status).json({ message: response.message, count: response.count });
