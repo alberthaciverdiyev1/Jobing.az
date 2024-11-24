@@ -8,18 +8,21 @@ import randomUserAgent from "../../Config/UserAgents.js";
 
 
 
-class OfferAz {
-    constructor(url = enums.Sites.OfferAz) {
+class HelloJobAz {
+    constructor(url = enums.Sites.HelloJobAz) {
         this.url = url;
     }
     async Categories() {
         try {
-            const $ = await Scrape(`https://${this.url}/is-elanlari/`);
+            const $ = await Scrape(`https://${this.url}`);
             const categories = [];
 
-            $('#select_category option').each((i, option) => {
+            $('[name="category_id"] option').each((i, option) => {
                 const value = $(option).val();
                 const text = $(option).text().trim();
+
+                console.log({value,text});
+                
                 if (value) {
                     categories.push({
                         name: text,
@@ -49,14 +52,14 @@ class OfferAz {
             const filteredJobs = [];
             const seenUrls = new Set();
             const jobData = [];
+
             for (const category of filteredCategories) {
-                // for (let salary = 0; salary < 5000; salary += 100) {
+                for (let salary = 0; salary < 5000; salary += 100) {
                     for (const education of educationIds) {
                         for (let page = 0; page <= 2; page++) {
-                            
                             const requestPromise = limit(async () => {
                                 try {
-                                    const randomDelay = Math.floor(Math.random() * 15000) + 1000;
+                                    const randomDelay = Math.floor(Math.random() * 20000) + 1000; // 1-20 seconds
                                     await delay(randomDelay);
 
                                     const url = `https://${this.url}/wp-admin/admin-ajax.php`;
@@ -65,7 +68,7 @@ class OfferAz {
                                     data.append('select_category', category);
                                     data.append('cur_page', page);
                                     data.append('form_mode', 'long');
-                                    // data.append('salary', salary);
+                                    data.append('salary', salary);
                                     data.append('select_tehsil', education);
                                     data.append('action', 'search_form_jobs_submit_input');
 
@@ -131,7 +134,7 @@ class OfferAz {
                                             experienceId: null,
                                             uniqueKey: `${title.replace(/ /g, '-')}-${companyName.replace(/ /g, '-')}-${location.replace(/ /g, '-')}`
                                         });
-                                    // console.log({jobData});
+                                    console.log({jobData});
                                         
                                     });
 
@@ -143,7 +146,7 @@ class OfferAz {
                             dataPromises.push(requestPromise);
                         }
                     }
-                // }
+                }
             }
 
             const results = await Promise.all(dataPromises);
@@ -175,4 +178,4 @@ class OfferAz {
 
 }
 
-export default OfferAz;
+export default HelloJobAz;
