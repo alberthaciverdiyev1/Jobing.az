@@ -56,7 +56,7 @@ class OfferAz {
                             
                             const requestPromise = limit(async () => {
                                 try {
-                                    const randomDelay = Math.floor(Math.random() * 15000) + 1000;
+                                    const randomDelay = Math.floor(Math.random() * 20000) + 1000;
                                     await delay(randomDelay);
 
                                     const url = `https://${this.url}/wp-admin/admin-ajax.php`;
