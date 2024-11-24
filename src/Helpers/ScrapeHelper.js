@@ -20,7 +20,7 @@ const scrapeHelper = async (url, html = null, res,) => {
         }
     } catch (error) {
         console.error(error); 
-        throw new Error('Error fetching jobs' + error);
+        throw new Error('Error fetching data' + error);
     }
 };
 
