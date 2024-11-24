@@ -89,8 +89,8 @@ const jobSchema = new Schema({
 
 jobSchema.virtual('companyDetails', {
     ref: 'Company',
-    localField: 'companyId',
-    foreignField: 'companyId',
+    localField: 'companyName',
+    foreignField: 'companyName',
     justOne: true
 });
 

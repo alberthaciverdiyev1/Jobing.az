@@ -7,6 +7,7 @@ import SmartJobAz from "../Helpers/SiteBasedScrapes/SmartJobAz.js";
 import CityService from '../Services/CityService.js';
 import Enums from '../Config/Enums.js';
 import OfferAz from '../Helpers/SiteBasedScrapes/OfferAz.js';
+import HelloJobAz from '../Helpers/SiteBasedScrapes/HelloJobAz.js';
 const jobDataController = {
     create: async (req, res) => {
         // console.log("starteee");
@@ -25,14 +26,26 @@ const jobDataController = {
             const smartJobAz = new SmartJobAz();
             const bossAz = new BossAz();
             const offerAz = new OfferAz();
+            const helloJobAz = new HelloJobAz();
 
             let smartJobAzJobs = [];
             let bossAzjobs = [];
             let offerAzjobs = [];
+            let helloJobAzJobs = [];
 
+
+            // Fetch jobs from HelloJobAz
+            try {
+                helloJobAzJobs = await helloJobAz.Jobs(categories, cities);
+                // console.log({helloJobAzJobs});return;
+                
+            } catch (error) {
+                console.error("Error fetching HelloJobAz jobs:", error.message);
+                throw new Error('Error fetching HelloJobAz jobs');
+            }
             // Fetch jobs from OfferAz
             try {
-                offerAzjobs = await offerAz.Jobs(categories, cities);
+                // offerAzjobs = await offerAz.Jobs(categories, cities);
 
             } catch (error) {
                 console.error("Error fetching OfferAz jobs:", error.message);
@@ -40,8 +53,8 @@ const jobDataController = {
             }
             // Fetch jobs from SmartJobAz
             try {
-                smartJobAzJobs = await smartJobAz.Jobs(categories, cities);
-                // console.log({smartJobAzJobs});
+                // smartJobAzJobs = await smartJobAz.Jobs(categories, cities);
+                console.log({smartJobAzJobs});
 
             } catch (error) {
                 console.error("Error fetching SmartJobAz jobs:", error.message);
@@ -50,8 +63,8 @@ const jobDataController = {
 
             // Fetch jobs from BossAz without limiting
             try {
-                bossAzjobs = await bossAz.Jobs(categories, cities);
-                // console.log({bossAzjobs});
+                // bossAzjobs = await bossAz.Jobs(categories, cities);
+                console.log({bossAzjobs});
 
             } catch (error) {
                 console.error("Error fetching BossAz jobs:", error.message);
@@ -59,7 +72,7 @@ const jobDataController = {
             }
 
             // Merge all jobs from both sources
-            const data = [...(bossAzjobs || []), ...(smartJobAzJobs || []),...(offerAzjobs || [])];
+            const data = [...(bossAzjobs || []), ...(smartJobAzJobs || []), ...(offerAzjobs || []),...(helloJobAzJobs || [])];
             // console.log({ data });
 
             // Create the jobs in the system

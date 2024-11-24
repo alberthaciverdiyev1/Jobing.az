@@ -176,7 +176,7 @@ class BossAz {
                 if (companyId && name) {
                     companies.push({
                         companyId,
-                        name,
+                        companyName:name,
                         uniqueKey: `${companyId}` + `${enums.SitesWithId.BossAz}`,
                         website: enums.SitesWithId.BossAz
                     });
