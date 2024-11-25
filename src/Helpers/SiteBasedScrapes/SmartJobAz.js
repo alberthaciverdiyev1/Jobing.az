@@ -116,14 +116,14 @@ class SmartJobAz {
                                         jobType: '0x001',
                                         educationId: this.mapEducation(education),
                                         experienceId: null,
-                                        uniqueKey: `${title.replace(/ /g, '-')}-${companyName.replace(/ /g, '-')}-${location.replace(/ /g, '-')}`
+                                        uniqueKey: `${title}-${companyName}-${location}`
                                     });
 
                                     companyData.push({
                                         companyName,
                                         imageUrl: companyImageUrl,
                                         website: enums.SitesWithId.SmartJobAz,
-                                        uniqueKey: `${companyName.replace(/ /g, '-')}-${companyImageUrl.replace(/ /g, '-')}`
+                                        uniqueKey: `${companyName}-${companyImageUrl}`
                                     });
                                 });
 

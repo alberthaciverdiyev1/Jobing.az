@@ -131,7 +131,7 @@ class OfferAz {
                                             jobType: '0x001',
                                             educationId: this.mapEducation(education),
                                             experienceId: null,
-                                            uniqueKey: `${title.replace(/ /g, '-')}-${companyName.replace(/ /g, '-')}-${location.replace(/ /g, '-')}`
+                                            uniqueKey: `${title}-${companyName}-${location}`
                                         });
                                     // console.log({jobData});
 
