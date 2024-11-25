@@ -110,7 +110,7 @@ class BossAz {
                                         jobType: '0x001',
                                         educationId: +education,
                                         experienceId: experience,
-                                        uniqueKey: `${title.replace(/ /g, '-')}-${companyName.replace(/ /g, '-')}-${location.replace(/ /g, '-')}`
+                                        uniqueKey: `${title}-${companyName}-${location}`
                                     });
                                 });
                             
