@@ -125,7 +125,7 @@ function categoryHTML(data, limit = null) {
 }
 
 function noDataCard() {
-    return `<div class="flex items-center justify-center min-h-screen">
+    return `<div class="flex items-center justify-center min-h-screen bg-white  border border-custom rounded-lg">
                 <div class="flex flex-col items-center justify-center w-full max-w-xs mx-auto">
                   <div class="w-20 h-20 mx-auto bg-orange-500 rounded-full shadow-sm flex justify-center items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" width="33" height="32" viewBox="0 0 33 32" fill="none">
