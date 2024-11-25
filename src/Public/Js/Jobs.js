@@ -28,8 +28,8 @@ function getURLParams() {
     const params = new URLSearchParams(window.location.search);
     const categoryId = removePrefix(params.get('categoryId'), 'category-');
     const cityId = removePrefix(params.get('cityId'), 'city-');
-    const educationId = params.get('educationId');
-    const experienceLevel = params.get('experienceLevel');
+    const educationId = removePrefix(params.get('educationId'),"education-");
+    const experienceLevel = removePrefix(params.get('experienceLevel'),"experience-");
     const keyword = params.get('keyword');
     const offset = params.get('offset') || 0;
 
@@ -43,7 +43,6 @@ function getURLParams() {
     };
 }
 
-// URL parametrelerini güncellemek
 function updateURLParams(params) {
     const currentParams = new URLSearchParams(window.location.search);
 
@@ -54,9 +53,6 @@ function updateURLParams(params) {
             currentParams.delete(key);
         }
     }
-
-
-    // Yeni URL'yi oluştur ve sayfayı güncelle
     window.history.replaceState({}, '', '?' + currentParams.toString());
 }
 
@@ -66,7 +62,6 @@ function preselectFilters() {
     if (categoryId && !isNaN(Number(categoryId))) {
         if (categoryId > 10) document.getElementById("categoryList").innerHTML = categoryHTML(categoryArray);
         addRadioChangeListener("category");
-
 
         document.querySelector(`input[name="category"][id="category-${+categoryId}"]`).checked = true;
     } else {
@@ -83,11 +78,11 @@ function preselectFilters() {
     }
 
     if (educationId && !isNaN(Number(educationId))) {
-        document.querySelector(`input[name="education"][id="${+educationId}"]`).checked = true;
+        document.querySelector(`input[name="education"][id="education-${+educationId}"]`).checked = true;
     }
 
     if (experienceLevel && !isNaN(Number(experienceLevel))) {
-        document.querySelector(`input[name="experience"][id="${+experienceLevel}"]`).checked = true;
+        document.querySelector(`input[name="experience"][id="experience-${+experienceLevel}"]`).checked = true;
     }
 
     if (keyword) {
@@ -154,7 +149,7 @@ function loader(start = false) {
 }
 
 function cityHTML(data, limit = null) {
-    let htmlContent = "";
+    let htmlContent = "";   
     if (limit) {
         data = data.slice(0, limit);
     }
@@ -219,10 +214,11 @@ async function getEducation() {
             let htmlContent = '';
             if (res.status === 200) {
                 Object.entries(res.data).forEach((education) => {
+                    const educationId = `education-${education[1]}`;
                     htmlContent += `
                         <div class="flex items-center"> 
-                            <input type="radio" name="education" id="${education[1]}" class="custom-checkbox" />
-                            <label for="${education[1]}" class="text-gray-800">
+                            <input type="radio" name="education" id="${educationId}" education-id="${education[1]}" class="custom-checkbox" />
+                            <label for="${educationId}" class="text-gray-800">
                             ${education[0]}
                                 <span class="text-gray-400">(34)</span>
                             </label>
@@ -246,10 +242,11 @@ async function getExperience() {
             let htmlContent = '';
             if (res.status === 200) {
                 Object.entries(res.data).forEach((experience) => {
+                    const experienceId = `experience-${experience[1]}`;
                     htmlContent += `
                         <div class="flex items-center"> 
-                            <input type="radio" name="experience" id="${experience[1]}" class="custom-checkbox" />
-                            <label for="${experience[1]}" class="text-gray-800">
+                            <input type="radio" name="experience" id="${experienceId}" experience-id="${experience[1]}" class="custom-checkbox" />
+                            <label for="${experienceId}" class="text-gray-800">
                             ${experience[0]}
                                 <span class="text-gray-400">(34)</span>
                             </label>
@@ -480,8 +477,8 @@ function handleFilterChange(minS = 0, maxS = 5000) {
     if (!minS) {
         let categoryId = removePrefix(document.querySelector('input[name="category"]:checked')?.id, 'category-');
         let cityId = removePrefix(document.querySelector('input[name="city"]:checked')?.id, 'city-');
-        let educationId = document.querySelector('input[name="education"]:checked')?.id;
-        let experienceLevel = document.querySelector('input[name="experience"]:checked')?.id;
+        let educationId = removePrefix(document.querySelector('input[name="education"]:checked')?.id, 'education-');
+        let experienceLevel = removePrefix(document.querySelector('input[name="experience"]:checked')?.id,"experience-");
         let keyword = document.getElementById("search")?.value
         let offset = 0;
         minSalary ?? 0;
