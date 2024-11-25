@@ -1,6 +1,8 @@
 import Scrape from "../ScrapeHelper.js";
 import enums from "../../Config/Enums.js";
 import pLimit from 'p-limit';
+import CompanyService from '../../Services/CompanyService.js';
+
 
 
 
@@ -65,7 +67,8 @@ class SmartJobAz {
             const educationIds = [1, 2, 5, 6, 7, 9, 10, 11, 12, 13, 0];
             const filteredJobs = [];
             const seenUrls = new Set();
-
+            const jobData = [];
+            const companyData = [];
             for (const category of filteredCategories) {
                 for (const education of educationIds) {
                     for (let page = 0; page <= 2; page++) {
@@ -74,7 +77,6 @@ class SmartJobAz {
                                 const url = `https://${this.url}/vacancies?_token=${encodeURIComponent(token)}&job_category_id%5B20%5D=${encodeURIComponent(category.categoryId)}&education_id%5B0%5D=${encodeURIComponent(education)}&salary_from=&salary_to=&page=${page}`;
                                 const $ = await Scrape(url);
 
-                                const jobData = [];
                                 $('.brows-job-list').each((i, el) => {
                                     const urlAndId = $(el).find('h3 a');
                                     const title = urlAndId.text().trim();
@@ -83,11 +85,11 @@ class SmartJobAz {
                                     const companyId = companyElement.attr('href')?.split('/').pop() || null;
                                     const location = $(el).find('.location-pin').text().trim();
                                     const salaryText = $(el).find('.salary-val').text().trim();
+                                    const companyImageUrl = $(el).find('.brows-job-company-img img').attr('src');
                                     const cleanSalaryText = salaryText.replace('AZN', '').trim();
                                     const parts = cleanSalaryText.split(' - ');
                                     const jobId = urlAndId.attr('href')?.split('/').pop() || null;
                                     const redirectUrl = urlAndId.attr('href') || null;
-
                                     let [minSalary, maxSalary] = [null, null];
                                     if (parts.length === 2) {
                                         minSalary = parseInt(parts[0], 10);
@@ -97,7 +99,6 @@ class SmartJobAz {
                                     }
 
                                     const locationCity = bossAzcities.find(x => x.name === location);
-                                    const localCategoryId = filteredCategories.find(x => x.categoryId === category.categoryId)?.localCategoryId;
 
                                     jobData.push({
                                         title,
@@ -109,13 +110,20 @@ class SmartJobAz {
                                         cityId: locationCity ? +locationCity.cityId : null,
                                         description: null,
                                         jobId,
-                                        categoryId: localCategoryId || null,
+                                        categoryId: category.localCategoryId || null,
                                         sourceUrl: this.url,
                                         redirectUrl,
                                         jobType: '0x001',
                                         educationId: this.mapEducation(education),
                                         experienceId: null,
                                         uniqueKey: `${title.replace(/ /g, '-')}-${companyName.replace(/ /g, '-')}-${location.replace(/ /g, '-')}`
+                                    });
+
+                                    companyData.push({
+                                        companyName,
+                                        imageUrl: companyImageUrl,
+                                        website: enums.SitesWithId.SmartJobAz,
+                                        uniqueKey: `${companyName.replace(/ /g, '-')}-${companyImageUrl.replace(/ /g, '-')}`
                                     });
                                 });
 
@@ -132,6 +140,8 @@ class SmartJobAz {
 
             const results = await Promise.all(dataPromises);
             const data = results.flat();
+            await CompanyService.create(companyData);
+
             return jobData;
 
         } catch (error) {
