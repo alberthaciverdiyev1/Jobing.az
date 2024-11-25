@@ -10,8 +10,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
                         </svg>
                       </div>
                       <div>
-                        <h2 class="text-center text-black text-xl font-semibold leading-loose pb-2">There’s no product here</h2>
-                        <p class="text-center text-black text-base font-normal leading-relaxed pb-4">Try changing your filters to <br />see appointments</p>
+                        <h2 class="text-center text-black text-xl font-semibold leading-loose pb-2">Heç bir vakansiya tapılmadı</h2>
+                        <p class="text-center text-black text-base font-normal leading-relaxed pb-4">Xahiş edirik filterləri dəyişib <br />yenidən yoxlayın</p>
                       </div>
                     </div>
                   </div>`
@@ -83,47 +83,47 @@ document.addEventListener("DOMContentLoaded", (event) => {
                                 <div class="text-sm mt-2 flex justify-between sm:hidden">
                                    <span class="bg-blue-100 text-blue-700 px-1 py-0.5 rounded-lg text-sm">${element.sourceUrl}</span>
                                 <h4 class="text-lg text-gray-600 font-bold">
-                                  ${(
-                                (+element.minSalary === +element.maxSalary && +element.minSalary !== null && +element.minSalary !== 0)
-                                    ? +element.minSalary + " " + element.currencySign
-                                    : (
-                                        (+element.minSalary !== null && +element.minSalary !== 0)
-                                            ? +element.minSalary + '-'
-                                            : ""
-                                    ) + (
-                                        (+element.maxSalary !== null && +element.maxSalary !== 0)
-                                            ? +element.maxSalary + " " + element.currencySign
+                                   ${(
+                                        (+element.minSalary === +element.maxSalary && +element.minSalary !== null && +element.minSalary !== 0)
+                                            ? +element.minSalary +" "+ element.currencySign
                                             : (
-                                                !element.minSalary && !element.maxSalary ? "Razılaşma ilə" : ""
+                                                (+element.minSalary !== null && +element.minSalary !== 0)
+                                                    ? +element.minSalary + '-'
+                                                    : ""
+                                            ) + (
+                                                (+element.maxSalary !== null && +element.maxSalary !== 0)
+                                                    ? +element.maxSalary  +" "+ element.currencySign
+                                                    : (
+                                                        !element.minSalary && !element.maxSalary ? "Razılaşma ilə" : ""
+                                                    )
                                             )
-                                    )
-                            )} 
-                                    </h4>
+                                    )}   
+                                 </h4>
                                 </div>
                             </div>
                             <div class="flex flex-col justify-between h-full flex-grow hidden sm:flex">
                                 <div class="text-right">
                             <h4 class="text-lg text-gray-600 font-bold mt-2">
-                                ${(
-                                (+element.minSalary === +element.maxSalary && +element.minSalary !== null && +element.minSalary !== 0)
-                                    ? +element.minSalary
-                                    : (
-                                        (+element.minSalary !== null && +element.minSalary !== 0)
-                                            ? +element.minSalary + '-'
-                                            : ""
-                                    ) + (
-                                        (+element.maxSalary !== null && +element.maxSalary !== 0)
-                                            ? +element.maxSalary
-                                            : (
-                                                !element.minSalary && !element.maxSalary ? "Razılaşma ilə" : ""
-                                            )
-                                    )
-                            )}                                                  
+                                 ${(
+                                       (+element.minSalary === +element.maxSalary && +element.minSalary !== null && +element.minSalary !== 0)
+                                           ? +element.minSalary +" "+ element.currencySign
+                                           : (
+                                               (+element.minSalary !== null && +element.minSalary !== 0)
+                                                   ? +element.minSalary + '-'
+                                                   : ""
+                                           ) + (
+                                               (+element.maxSalary !== null && +element.maxSalary !== 0)
+                                                   ? +element.maxSalary  +" "+ element.currencySign
+                                                   : (
+                                                       !element.minSalary && !element.maxSalary ? "Razılaşma ilə" : ""
+                                                   )
+                                           )
+                                   )}                                                
                             </h4>
                                 </div>
                                 <div class="flex justify-end items-end mt-auto pt-16">
                                     <a href="${element.redirectUrl}" target="_blank" class="filled-button-color text-white py-2 px-8 rounded-full">
-                                        Visit 
+                                        Keçid Et  
                                     </a>
                                 </div>
                             </div>
@@ -173,7 +173,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     getCategories();
 
     async function getCities() {
-        let o = `<option value="">All Cities</option>`;
+        let o = `<option value="">Bütün Şəhərlər</option>`;
 
         await axios.get('/api/cities', {
             params: { site: "BossAz" }

@@ -130,22 +130,21 @@ function noDataCard() {
                     </svg>
                   </div>
                   <div>
-                    <h2 class="text-center text-black text-xl font-semibold leading-loose pb-2">There’s no product here</h2>
-                    <p class="text-center text-black text-base font-normal leading-relaxed pb-4">Try changing your filters to <br />see appointments</p>
+                    <h2 class="text-center text-black text-xl font-semibold leading-loose pb-2">Heç bir vakansiya tapılmadı</h2>
+                    <p class="text-center text-black text-base font-normal leading-relaxed pb-4">Xahiş edirik filterləri dəyişib <br />yenidən yoxlayın</p>
                   </div>
                 </div>
               </div>`
 }
 
 function loader(start = false) {
-
-    document.getElementById("card-section").innerHTML = start
-        ? `<div class="flex items-center justify-center min-h-screen bg-white  border border-custom rounded-lg">
-                    <div class="flex flex-col items-center justify-center w-full max-w-xs mx-auto">
-                            <span class="loader"></span>
-                    </div>
-               </div>`
-        : "";
+   document.getElementById("card-section").innerHTML = start
+       ? `<div class="flex items-center justify-center min-h-screen bg-white  border border-custom rounded-lg">
+                   <div class="flex flex-col items-center justify-center w-full max-w-xs mx-auto">
+                           <span class="loader"></span>
+                   </div>
+              </div>`
+       : "";
 }
 
 function cityHTML(data, limit = null) {
@@ -287,7 +286,6 @@ async function getJobs(params) {
         }
 
         if (res.status === 200) {
-            // alert(res.data.jobs.length);
             if (res.data.totalCount) {
                 jobList = res.data.jobs;
                 res.data.jobs.forEach(element => {
@@ -395,7 +393,7 @@ async function getJobs(params) {
                                                     </div>
                                                     <div class="flex justify-end items-end mt-auto pt-16">
                                                         <a href="${element.redirectUrl}" target="_blank" class="filled-button-color text-white py-2 px-8 rounded-full">
-                                                            Visit 
+                                                            Keçid Et 
                                                         </a>
                                                     </div>
                                                 </div>
@@ -405,7 +403,7 @@ async function getJobs(params) {
 
                 loadMoreButton = res.data.totalCount > 50 && !res.data.hideLoadMore ? `<div class="flex justify-center items-center my-2">
                                         <button class="filled-button-color text-white py-2 px-8 rounded-full" id="loadMore">
-                                            Load More 
+                                            Daha Çox 
                                         </button>
                                      </div>` : "";
             } else {
