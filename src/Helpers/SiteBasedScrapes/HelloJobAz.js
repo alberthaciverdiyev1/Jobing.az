@@ -4,6 +4,8 @@ import pLimit from 'p-limit';
 import axios from 'axios';
 import * as cheerio from 'cheerio';
 import randomUserAgent from "../../Config/UserAgents.js";
+import CompanyService from '../../Services/CompanyService.js';
+
 
 const cities = {
     "1": "Bakı", "2": "Gəncə", "3": "Sumqayıt", "5": "Şəki", "6": "Lənkəran", "7": "Yevlax", "8": "Göyçay", "9": "Tovuz", "10": "Qəbələ", "11": "Gədəbəy", "12": "Goranboy", "13": "Oğuz", "14": "Zaqatala", "15": "Mingəçevir",
@@ -72,6 +74,8 @@ class HelloJobAz {
             const dataPromises = [];
             const educationIds = [1, 2, 3, 4, 5, 6];
             const jobData = [];
+            const companyData = [];
+
             Object.entries(cities).forEach(([cityId, cityName]) => {
 
                 for (const category of filteredCategories) {
@@ -134,6 +138,12 @@ class HelloJobAz {
                                             experienceId: null,
                                             uniqueKey: `${title.replace(/ /g, '-')}-${companyName.replace(/ /g, '-')}-${location.replace(/ /g, '-')}`
                                         });
+                                        companyData.push({
+                                            companyName,
+                                            imageUrl:companyImageUrl,
+                                            website:enums.SitesWithId.HelloJobAz,
+                                            uniqueKey: `${companyName.replace(/ /g, '-')}-${companyImageUrl.replace(/ /g, '-')}`
+                                        });
                                     });
 
                                 } catch (error) {
@@ -149,7 +159,7 @@ class HelloJobAz {
 
             const results = await Promise.all(dataPromises);
             results.flat();
-
+            await CompanyService.create(companyData);
             return jobData;
 
         } catch (error) {
