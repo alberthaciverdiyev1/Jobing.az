@@ -471,7 +471,7 @@ document.getElementById("show-more-cities").addEventListener("click", function (
     }
 });
 
-function handleFilterChange(minS = 0, maxS = 5000) {
+function handleFilterChange(minS = "all", maxS = 5000) {
     if (!minS) {
         let categoryId = removePrefix(document.querySelector('input[name="category"]:checked')?.id, 'category-');
         let cityId = removePrefix(document.querySelector('input[name="city"]:checked')?.id, 'city-');
@@ -479,7 +479,7 @@ function handleFilterChange(minS = 0, maxS = 5000) {
         let experienceLevel = removePrefix(document.querySelector('input[name="experience"]:checked')?.id,"experience-");
         let keyword = document.getElementById("search")?.value
         let offset = 0;
-        minSalary ?? 0;
+        minSalary ?? "all";
         maxSalary ?? 5000;
 
         updateURLParams({ categoryId, cityId, educationId, experienceLevel, offset, keyword, minSalary, maxSalary });
@@ -487,7 +487,7 @@ function handleFilterChange(minS = 0, maxS = 5000) {
 
     } else {
         maxSalary = maxS ?? 5000;
-        minSalary = !isNaN(Number(minS)) ? minS : 0;
+        minSalary = !isNaN(Number(minS)) ? minS : "all";
         let { categoryId, cityId, educationId, experienceLevel, keyword } = getURLParams();
 
         updateURLParams({ categoryId, cityId, educationId, experienceLevel, offset, keyword, minSalary, maxSalary });
