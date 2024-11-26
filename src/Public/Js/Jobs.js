@@ -518,6 +518,28 @@ function addRadioChangeListener(type) {
     });
 }
 
+// document.getElementById("mobile-filter-btn").onclick = function () {
+//     document.getElementById("filter-section").classList.toggle("hidden");
+//     document.getElementById("card-section").classList.toggle("hidden");
+// };
+
+document.getElementById("mobile-filter-btn").onclick = function () {
+    const filterSection = document.getElementById("filter-section");
+    const cardSection = document.getElementById("card-section");
+    const footer = document.getElementById("footer");
+
+    if (filterSection.classList.contains("hidden")) {
+        filterSection.classList.remove("hidden");
+        cardSection.classList.add("hidden");
+        footer.classList.add("hidden");
+    } else {
+        filterSection.classList.add("hidden");
+        cardSection.classList.remove("hidden");
+        footer.classList.remove("hidden");
+    }
+};
+
+
 var slider = document.getElementById('slider');
 
 noUiSlider.create(slider, {
