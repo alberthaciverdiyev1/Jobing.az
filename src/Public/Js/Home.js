@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
                                         alt="Company Logo" class="w-12 h-12 rounded-lg border border-custom sm:w-14 sm:h-14" />
                                 </span>
                                 <span class="mr-2">
-                                    <img src="${element.companyImageUrl ?? "../Images/DefaultCompany.png"}"
+                                    <img src="${(element.companyImageUrl && element.companyImageUrl !== "/nologo.png")  ? element.companyImageUrl : "../Images/DefaultCompany.png"}"
                                         alt="Company Logo" class="w-12 h-12 rounded-lg sm:w-14 sm:h-14 border border-custom" />
                                 </span>
                             </div>
@@ -152,7 +152,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     getJobs();
 
     async function getCategories() {
-        let o = `<option value="">All Categories</option>`;
+        let o = `<option value="">Bütün Kateqoriyalar</option>`;
         await axios.get('/api/categories', {
             params: { site: "bossAz" }
         })
