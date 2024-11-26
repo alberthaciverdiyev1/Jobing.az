@@ -104,8 +104,8 @@ class SmartJobAz {
                                         title,
                                         companyName,
                                         companyId,
-                                        minSalary: isNaN(minSalary) ? null : minSalary,
-                                        maxSalary: isNaN(maxSalary) ? null : maxSalary,
+                                        minSalary,
+                                        maxSalary,
                                         location,
                                         cityId: locationCity ? +locationCity.cityId : null,
                                         description: null,
@@ -125,6 +125,8 @@ class SmartJobAz {
                                         website: enums.SitesWithId.SmartJobAz,
                                         uniqueKey: `${companyName}-${companyImageUrl}`
                                     });
+                                    // console.log({companyData});
+
                                 });
 
                             } catch (error) {
@@ -139,10 +141,13 @@ class SmartJobAz {
             }
 
             const results = await Promise.all(dataPromises);
-            const data = results.flat();
-            await CompanyService.create(companyData);
+            results.flat();
+            const companyResult = await CompanyService.create(companyData);
+            if (companyResult.status === 200 || companyResult.status === 201) {
+                return jobData;
 
-            return jobData;
+            }
+
 
         } catch (error) {
             console.error('Error fetching jobs:', error.message, error.stack);

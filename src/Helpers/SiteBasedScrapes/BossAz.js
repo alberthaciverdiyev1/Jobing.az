@@ -83,7 +83,7 @@ class BossAz {
                                     const companyUrlParams = new URLSearchParams(companyHref.split('?')[1]);
                                     const companyId = companyUrlParams.get('search[company_id]');
 
-                                    let [minSalary, maxSalary] = [null, null];
+                                    let [minSalary, maxSalary] = [0, 0];
                                     if (parts.length === 2) {
                                         minSalary = parseInt(parts[0], 10);
                                         maxSalary = parseInt(parts[1], 10);
@@ -98,8 +98,8 @@ class BossAz {
                                         title,
                                         companyName,
                                         companyId,
-                                        minSalary: isNaN(minSalary) ? null : minSalary,
-                                        maxSalary: isNaN(maxSalary) ? null : maxSalary,
+                                        minSalary,
+                                        maxSalary,
                                         location,
                                         cityId: locationCity ? +locationCity.cityId : null,
                                         description,
