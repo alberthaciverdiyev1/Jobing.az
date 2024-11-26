@@ -28,17 +28,17 @@ document.addEventListener("DOMContentLoaded", (event) => {
         this.item
     }
 
-    document.getElementById("language").addEventListener('change', function () {
+    // document.getElementById("language").addEventListener('change', function () {
         
-        const selectedLanguage = this.value;
-        axios.post('/set-lang', { language: selectedLanguage })
-            .then(function (response) {
-                console.log('Success:', response.data);
-                location.reload();
-            })
-            .catch(function (error) {
-                console.error('Error:', error);
-            });
-    });
+    //     const selectedLanguage = this.value;
+    //     axios.post('/set-lang', { language: selectedLanguage })
+    //         .then(function (response) {
+    //             console.log('Success:', response.data);
+    //             location.reload();
+    //         })
+    //         .catch(function (error) {
+    //             console.error('Error:', error);
+    //         });
+    // });
 
 });
