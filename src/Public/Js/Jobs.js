@@ -171,7 +171,7 @@ function cityHTML(data, limit = null) {
 
 async function getCategories() {
     await axios.get('/api/categories', {
-        params: { site: "bossAz" }
+        params: { website: "bossAz" }
     })
         .then(res => {
             if (res.status === 200) {
