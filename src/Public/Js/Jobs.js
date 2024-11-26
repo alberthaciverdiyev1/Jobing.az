@@ -28,8 +28,8 @@ function getURLParams() {
     const params = new URLSearchParams(window.location.search);
     const categoryId = removePrefix(params.get('categoryId'), 'category-');
     const cityId = removePrefix(params.get('cityId'), 'city-');
-    const educationId = removePrefix(params.get('educationId'),"education-");
-    const experienceLevel = removePrefix(params.get('experienceLevel'),"experience-");
+    const educationId = removePrefix(params.get('educationId'), "education-");
+    const experienceLevel = removePrefix(params.get('experienceLevel'), "experience-");
     const keyword = params.get('keyword');
     const offset = params.get('offset') || 0;
 
@@ -138,17 +138,17 @@ function noDataCard() {
 }
 
 function loader(start = false) {
-   document.getElementById("card-section").innerHTML = start
-       ? `<div class="flex items-center justify-center min-h-screen bg-white  border border-custom rounded-lg">
+    document.getElementById("card-section").innerHTML = start
+        ? `<div class="flex items-center justify-center min-h-screen bg-white  border border-custom rounded-lg">
                    <div class="flex flex-col items-center justify-center w-full max-w-xs mx-auto">
                            <span class="loader"></span>
                    </div>
               </div>`
-       : "";
+        : "";
 }
 
 function cityHTML(data, limit = null) {
-    let htmlContent = "";   
+    let htmlContent = "";
     if (limit) {
         data = data.slice(0, limit);
     }
@@ -171,7 +171,7 @@ function cityHTML(data, limit = null) {
 
 async function getCategories() {
     await axios.get('/api/categories', {
-        params: { website: "bossAz" }
+        params: { website: "BossAz" }
     })
         .then(res => {
             if (res.status === 200) {
@@ -297,7 +297,7 @@ async function getJobs(params) {
                                                             alt="Company Logo" class="w-12 h-12 rounded-lg border border-custom sm:w-14 sm:h-14" />
                                                     </span>
                                                     <span class="mr-2">
-                                                        <img src="${element.companyImageUrl ?? "../Images/DefaultCompany.png"}"
+                                                           <img src="${(element.companyImageUrl && element.companyImageUrl !== "/nologo.png") ? element.companyImageUrl : "../Images/DefaultCompany.png"}"
                                                             alt="Company Logo" class="w-12 h-12 rounded-lg sm:w-14 sm:h-14 border border-custom" />
                                                     </span>
                                                 </div>
@@ -351,20 +351,20 @@ async function getJobs(params) {
                                                        <span class="bg-blue-100 text-blue-700 px-1 py-0.5 rounded-lg text-sm">${element.sourceUrl}</span>
                                                     <h4 class="text-lg text-gray-600 font-bold">
                                                         ${(
-                                                            (+element.minSalary === +element.maxSalary && +element.minSalary !== null && +element.minSalary !== 0)
-                                                                ? +element.minSalary +" "+ element.currencySign
-                                                                : (
-                                                                    (+element.minSalary !== null && +element.minSalary !== 0)
-                                                                        ? +element.minSalary + '-'
-                                                                        : ""
-                                                                ) + (
-                                                                    (+element.maxSalary !== null && +element.maxSalary !== 0)
-                                                                        ? +element.maxSalary  +" "+ element.currencySign
-                                                                        : (
-                                                                            !element.minSalary && !element.maxSalary ? "Razılaşma ilə" : ""
-                                                                        )
-                                                                )
-                                                        )}
+                            (+element.minSalary === +element.maxSalary && +element.minSalary !== null && +element.minSalary !== 0)
+                                ? +element.minSalary + " " + element.currencySign
+                                : (
+                                    (+element.minSalary !== null && +element.minSalary !== 0)
+                                        ? +element.minSalary + '-'
+                                        : ""
+                                ) + (
+                                    (+element.maxSalary !== null && +element.maxSalary !== 0)
+                                        ? +element.maxSalary + " " + element.currencySign
+                                        : (
+                                            !element.minSalary && !element.maxSalary ? "Razılaşma ilə" : ""
+                                        )
+                                )
+                        )}
                                                         </h4>
                                                     </div>
                                                 </div>
@@ -375,20 +375,20 @@ async function getJobs(params) {
                                                         </button>` : ""}
                                                 <h4 class="text-lg text-gray-600 font-bold mt-2">
                                                       ${(
-                                                            (+element.minSalary === +element.maxSalary && +element.minSalary !== null && +element.minSalary !== 0)
-                                                                ? +element.minSalary +" "+ element.currencySign
-                                                                : (
-                                                                    (+element.minSalary !== null && +element.minSalary !== 0)
-                                                                        ? +element.minSalary + '-'
-                                                                        : ""
-                                                                ) + (
-                                                                    (+element.maxSalary !== null && +element.maxSalary !== 0)
-                                                                        ? +element.maxSalary  +" "+ element.currencySign
-                                                                        : (
-                                                                            !element.minSalary && !element.maxSalary ? "Razılaşma ilə" : ""
-                                                                        )
-                                                                )
-                                                        )}                                              
+                            (+element.minSalary === +element.maxSalary && +element.minSalary !== null && +element.minSalary !== 0)
+                                ? +element.minSalary + " " + element.currencySign
+                                : (
+                                    (+element.minSalary !== null && +element.minSalary !== 0)
+                                        ? +element.minSalary + '-'
+                                        : ""
+                                ) + (
+                                    (+element.maxSalary !== null && +element.maxSalary !== 0)
+                                        ? +element.maxSalary + " " + element.currencySign
+                                        : (
+                                            !element.minSalary && !element.maxSalary ? "Razılaşma ilə" : ""
+                                        )
+                                )
+                        )}                                              
                                                 </h4>
                                                     </div>
                                                     <div class="flex justify-end items-end mt-auto pt-16">
@@ -476,7 +476,7 @@ function handleFilterChange(minS = 0, maxS = 5000) {
         let categoryId = removePrefix(document.querySelector('input[name="category"]:checked')?.id, 'category-');
         let cityId = removePrefix(document.querySelector('input[name="city"]:checked')?.id, 'city-');
         let educationId = removePrefix(document.querySelector('input[name="education"]:checked')?.id, 'education-');
-        let experienceLevel = removePrefix(document.querySelector('input[name="experience"]:checked')?.id,"experience-");
+        let experienceLevel = removePrefix(document.querySelector('input[name="experience"]:checked')?.id, "experience-");
         let keyword = document.getElementById("search")?.value
         let offset = 0;
         minSalary ?? 0;

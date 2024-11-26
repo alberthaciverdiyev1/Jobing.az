@@ -1,5 +1,6 @@
 import ForeignCategory from '../Models/ForeignCategory.js';
 import Category from '../Models/Category.js';
+import Enums from '../Config/Enums.js';
 
 const CategoryService = {
     // Foreign Categories add
@@ -35,10 +36,14 @@ const CategoryService = {
     },
 
     getLocalCategories: async (data) => {
+        console.log({data});
+        
         try {
             let query = {};   
-            if (data.length && data.website !== "undefined") {query.website = data.website}
-
+            
+            if (data?.website) {
+                query.website = Enums.SitesWithId[data.website];
+            }
             return await Category.find(query);
         } catch (error) {
             throw new Error('Error retrieving categories: ' + error.message);
