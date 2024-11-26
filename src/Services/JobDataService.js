@@ -91,86 +91,67 @@ const JobDataService = {
         }
     },
 
-    // Get all job listings
-    getAllJobs: async (data) => {
+     getAllJobs: async (data) => {
         try {
             const filteredJobs = [];
             const seenUrls = new Set();
+    
             const currentDate = new Date();
             const thirtyDaysAgo = new Date(currentDate.setDate(currentDate.getDate() - 30));
-
+    
             const query = {
                 createdAt: { $gte: thirtyDaysAgo }
             };
-
-            // Add categoryId condition only if it exists in the request
-            if (data.categoryId && data.categoryId !== "undefined" && !isNaN(Number(data.categoryId))) {
+    
+            if (data.categoryId && !isNaN(Number(data.categoryId))) {
                 query.$or = [
                     { categoryId: +data.categoryId },
                     { subCategoryId: +data.categoryId }
                 ];
             }
-
-            // Continue with the other filters
+    
             if (data.cityId && !isNaN(Number(data.cityId))) query.cityId = +data.cityId;
             if (data.educationId && !isNaN(Number(data.educationId))) query.educationId = +data.educationId;
             if (data.experience && !isNaN(Number(data.experience))) query.experienceId = +data.experience;
             if (data.jobType) query.jobType = data.jobType;
             if (data.minSalary && !isNaN(Number(data.minSalary))) query.minSalary = { $gte: +data.minSalary };
             if (data.maxSalary && !isNaN(Number(data.maxSalary))) query.maxSalary = { $lte: +data.maxSalary };
-
+    
             if (data.keyword) {
-                const keywordQuery = {
-                    $or: [
-                        { title: { $regex: data.keyword, $options: 'i' } },
-                        { companyName: { $regex: data.keyword, $options: 'i' } },
-                        { location: { $regex: data.keyword, $options: 'i' } }
-                    ]
-                };
-
-                if (query.$and) {
-                    query.$and.push(keywordQuery);
-                } else {
-                    query.$and = [keywordQuery];
-                }
+                query.$or = [
+                    { title: { $regex: data.keyword, $options: 'i' } },
+                    { companyName: { $regex: data.keyword, $options: 'i' } },
+                    { location: { $regex: data.keyword, $options: 'i' } }
+                ];
             }
-
+    
             const limit = 50;
             const offset = Number(data.offset) || 0;
-
-            const jobs = await JobData.aggregate([
-                { $match: query },
-                { $sort: { createdAt: -1 } },
-                {
-                    $lookup: {
-                        from: 'companydetails',
-                        localField: 'companyDetails',
-                        foreignField: '_id',
-                        as: 'companyDetails'
-                    }
-                },
-                { $unwind: { path: '$companyDetails', preserveNullAndEmptyArrays: true } },
-                { $skip: offset },
-                { $limit: limit }
-            ]);
-
+    
+            const jobs = await JobData.find(query)
+                .sort({ createdAt: -1 })
+                .populate('companyDetails', 'imageUrl companyName') 
+                .skip(offset)
+                .limit(limit);
+    
             const totalCount = await JobData.countDocuments(query);
-
+    
             const jobsWithImageUrl = jobs.map(job => ({
-                ...job,
+                ...job.toObject(),
                 companyImageUrl: job.companyDetails?.imageUrl || null
             }));
+    
             jobsWithImageUrl.forEach(job => {
                 if (!seenUrls.has(job.redirectUrl)) {
                     seenUrls.add(job.redirectUrl);
                     filteredJobs.push(job);
                 }
             });
-
+    
             return {
                 totalCount: totalCount,
                 jobs: filteredJobs,
-                hideLoadMore: (limit + offset > totalCount)
+                hideLoadMore: (limit + offset >= totalCount)
             };
         } catch (error) {
             throw new Error('Error retrieving jobs: ' + error.message);

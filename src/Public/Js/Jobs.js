@@ -47,7 +47,7 @@ function updateURLParams(params) {
     const currentParams = new URLSearchParams(window.location.search);
 
     for (const key in params) {
-        if (params[key] !== undefined) {
+        if (params[key] !== undefined && params[key]) {
             currentParams.set(key, params[key]);
         } else {
             currentParams.delete(key);
@@ -471,7 +471,7 @@ document.getElementById("show-more-cities").addEventListener("click", function (
     }
 });
 
-function handleFilterChange(minS = "all", maxS = 5000) {
+function handleFilterChange(minS = 0, maxS = 5000) {
     if (!minS) {
         let categoryId = removePrefix(document.querySelector('input[name="category"]:checked')?.id, 'category-');
         let cityId = removePrefix(document.querySelector('input[name="city"]:checked')?.id, 'city-');
@@ -479,7 +479,7 @@ function handleFilterChange(minS = "all", maxS = 5000) {
         let experienceLevel = removePrefix(document.querySelector('input[name="experience"]:checked')?.id,"experience-");
         let keyword = document.getElementById("search")?.value
         let offset = 0;
-        minSalary ?? "all";
+        minSalary ?? 0;
         maxSalary ?? 5000;
 
         updateURLParams({ categoryId, cityId, educationId, experienceLevel, offset, keyword, minSalary, maxSalary });
@@ -487,7 +487,7 @@ function handleFilterChange(minS = "all", maxS = 5000) {
 
     } else {
         maxSalary = maxS ?? 5000;
-        minSalary = !isNaN(Number(minS)) ? minS : "all";
+        minSalary = !isNaN(Number(minS)) ? minS : 0;
         let { categoryId, cityId, educationId, experienceLevel, keyword } = getURLParams();
 
         updateURLParams({ categoryId, cityId, educationId, experienceLevel, offset, keyword, minSalary, maxSalary });
@@ -570,7 +570,9 @@ slider.noUiSlider.on('update', function (values) {
 
     clearTimeout(debounceTimeout);
     debounceTimeout = setTimeout(() => {
-        handleFilterChange(values[0], values[1]);
+        if (values[0]) {
+            handleFilterChange(values[0], values[1]);
+        }
     }, 500);
 });
 

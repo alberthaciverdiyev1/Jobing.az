@@ -104,7 +104,7 @@ class HelloJobAz {
                                         const currencySign = match ? match[0] : null;
                                         const cleanSalaryText = salaryText ? salaryText.replace(/[₼$€]/g, '').trim() : null;
                                         const parts = cleanSalaryText ? cleanSalaryText.split('—') : [];
-                                        let [minSalary, maxSalary] = [null, null];
+                                        let [minSalary, maxSalary] = [0, 0];
 
                                         if (parts.length === 2) {
                                             minSalary = parseInt(parts[0], 10);
@@ -124,8 +124,8 @@ class HelloJobAz {
                                             title,
                                             companyName,
                                             companyId,
-                                            minSalary: isNaN(minSalary) ? null : minSalary,
-                                            maxSalary: isNaN(maxSalary) ? null : maxSalary,
+                                            minSalary,
+                                            maxSalary,
                                             location: cityName,
                                             description,
                                             cityId: locationCity ? +locationCity.cityId : null,
@@ -140,8 +140,8 @@ class HelloJobAz {
                                         });
                                         companyData.push({
                                             companyName,
-                                            imageUrl:companyImageUrl,
-                                            website:enums.SitesWithId.HelloJobAz,
+                                            imageUrl: companyImageUrl,
+                                            website: enums.SitesWithId.HelloJobAz,
                                             uniqueKey: `${companyName}-${companyImageUrl}`
                                         });
                                     });
@@ -159,9 +159,12 @@ class HelloJobAz {
 
             const results = await Promise.all(dataPromises);
             results.flat();
-            await CompanyService.create(companyData);
-            return jobData;
+            
+            const companyResult = await CompanyService.create(companyData);
+            if (companyResult.status === 200 || companyResult.status === 201) {
+                return jobData;
 
+            }
         } catch (error) {
             console.error('Error fetching jobs:', error.message, error.stack);
             throw new Error('Error fetching jobs');

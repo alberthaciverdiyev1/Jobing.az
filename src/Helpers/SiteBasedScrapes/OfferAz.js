@@ -107,7 +107,7 @@ class OfferAz {
                                     const jobId = urlAndId.attr('href')?.split('-').pop() || null;
                                     const redirectUrl = urlAndId.attr('href') || null;
 
-                                    let [minSalary, maxSalary] = [null, null];
+                                    let [minSalary, maxSalary] = [0, 0];
                                     if (parts.length === 2) {
                                         minSalary = parseInt(parts[0], 10);
                                         maxSalary = parseInt(parts[1], 10);
@@ -119,8 +119,8 @@ class OfferAz {
                                             title,
                                             companyName,
                                             companyId,
-                                            minSalary: isNaN(minSalary) ? null : minSalary,
-                                            maxSalary: isNaN(maxSalary) ? null : maxSalary,
+                                            minSalary,
+                                            maxSalary,
                                             location,
                                             cityId:  bossAzcities.find(x => x.name === location)?.cityId || null,
                                             description: description || null,

@@ -8,15 +8,14 @@ const CompanyService = {
                 throw new Error('Data must be an array');
             }
 
-            const existingRecords = await Company.find({
-                uniqueKey: { $in: data.map(c => c.uniqueKey) }
-            }).select('uniqueKey');
+            // const existingRecords = await Company.find({
+            //     uniqueKey: { $in: data.map(c => c.uniqueKey) }
+            // }).select('uniqueKey');
 
-            if (existingRecords.length > 0) {
-                const existingUniqueKeys = new Set(existingRecords.map(record => record.uniqueKey));
-                data = data.filter(c => !existingUniqueKeys.has(c.uniqueKey));
-            }
-
+            // if (existingRecords.length > 0) {
+            //     const existingUniqueKeys = new Set(existingRecords.map(record => record.uniqueKey));
+            //     data = data.filter(c => !existingUniqueKeys.has(c.uniqueKey));
+            // }
 
             if (data.length > 0) {
                 const results = await Company.insertMany(data);
