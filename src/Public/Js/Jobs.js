@@ -291,15 +291,9 @@ async function getJobs(params) {
                 res.data.jobs.forEach(element => {
                     htmlContent += `<div class="job-card bg-white px-3 pt-2 h-40 rounded-xl shadow-md mb-4 hover:hover-card-color cursor-pointer duration-300 border border-custom sm:px-5" data-original-link="${element.redirectUrl}">
                                             <div class="content flex">
-                                                <div class="mt-3 sm:mt-1 ">
-                                                    <span class="mr-2">
-                                                        <img src="../Images/${element.sourceUrl}.png" 
-                                                            alt="Company Logo" class="w-12 h-12 rounded-lg border border-custom sm:w-14 sm:h-14" />
-                                                    </span>
-                                                    <span class="mr-2">
-                                                           <img src="${(element.companyImageUrl && element.companyImageUrl !== "/nologo.png") ? element.companyImageUrl : "../Images/DefaultCompany.png"}"
-                                                            alt="Company Logo" class="w-12 h-12 rounded-lg sm:w-14 sm:h-14 border border-custom" />
-                                                    </span>
+                                                 <div class="mt-3 flex-shrink-0 sm:mt-1">
+                                                    <img src="../Images/${element.sourceUrl}.png" alt="Company Logo" class="border-custom h-12 w-12 mt-1 rounded-lg border sm:h-14 sm:w-14" />
+                                                    <img src="${(element.companyImageUrl && element.companyImageUrl !== "/nologo.png") ? element.companyImageUrl : "../Images/DefaultCompany.png"}" alt="Company Logo" class="border-custom h-12 w-12 mt-3 rounded-lg border sm:h-14 sm:w-14" />
                                                 </div>
                                                 <div class="ml-3 mt-2 pr-1 sm:mt-2 sm:w-auto">
                                                     <div class="flex mb-1 justify-between">
@@ -340,13 +334,12 @@ async function getJobs(params) {
                                                         <span class="ml-3"><i class="fa-solid fa-location-dot mr-0.5"></i> ${element.location.slice(0, 17) + (element.location.length > 17 ? "..." : "")}</span>
                                                     </div>
                                                     <div class="border-t border-1 border-gray-300 w-56 mt-2 sm:w-72"></div>
-                                                    <div class="text-sm mt-2 hidden sm:flex">
-                                                        <span class="bg-blue-100 text-blue-700 px-1 ml-1 py-0.5 rounded-lg">Html</span>
-                                                        <span class="bg-blue-100 text-blue-700 px-1 ml-1 py-0.5 rounded-lg">Css</span>
-                                                        <span class="bg-blue-100 text-blue-700 px-1 ml-1 py-0.5 rounded-lg">C#</span>
-                                                        <span class="bg-blue-100 text-blue-700 px-1 ml-1 py-0.5 rounded-lg">Php</span>
-                                                        <span class="bg-blue-100 text-blue-700 px-1 ml-1 py-0.5 rounded-lg">Mysql</span>
-                                                    </div>
+                                                        <div class="text-sm mt-2 hidden sm:flex">
+                                                            <span class="bg-yellow-100 text-yellow-700 px-1 ml-2 py-0.5 font-medium rounded-lg text-sm h-7 hidden sm:flex">
+                                                                ${element.sourceUrl}
+                                                            </span>
+                                                            <span class="bg-green-100 text-green-700 px-1 ml-1 py-0.5 rounded-lg">Aktivdir</span>
+                                                        </div>
                                                     <div class="text-sm mt-2 flex justify-between sm:hidden">
                                                        <span class="bg-blue-100 text-blue-700 px-1 py-0.5 rounded-lg text-sm">${element.sourceUrl}</span>
                                                     <h4 class="text-lg text-gray-600 font-bold">
