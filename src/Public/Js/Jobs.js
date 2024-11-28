@@ -308,14 +308,14 @@ async function getJobs(params) {
                                                                 ${element.title.slice(0, 17) + (element.title.length > 17 ? "..." : "")} 
                                                             </span>
                                                             <span class="hidden sm:inline sm:whitespace-normal"> 
-                                                                ${element.title.slice(0, 40) + (element.title.length > 40 ? "..." : "")} 
+                                                                ${element.title.slice(0, 35) + (element.title.length > 35 ? "..." : "")} 
                                                             </span>
                                                         </p>
                                                         <h4 class="truncate sm:hidden text-sm font-semibold text-gray-700 mb-1 sm:font-bold"> 
                                                             <i class="fa-solid fa-building"></i> ${element.companyName.slice(0, 17) + (element.companyName.length > 17 ? "..." : "")}
                                                         </h4>
                                                         <h4 class="hidden sm:inline sm:whitespace-normal text-sm font-semibold text-gray-700 mb-1 sm:font-bold"> 
-                                                            <i class="fa-solid fa-building"></i> ${element.companyName.slice(0, 50) + (element.companyName.length > 50 ? "..." : "")}
+                                                            <i class="fa-solid fa-building"></i> ${element.companyName.slice(0, 40) + (element.companyName.length > 40 ? "..." : "")}
                                                         </h4>
                                                     </div>
                                                     <div class="hidden sm:w-full">
@@ -340,7 +340,7 @@ async function getJobs(params) {
                                                         <span class="bg-yellow-100 text-yellow-700 px-1 ml-2 py-0.5 font-medium rounded-lg text-sm h-7 hidden sm:flex">
                                                             ${element.sourceUrl}
                                                         </span>
-                                                        <span class="bg-green-500 text-white px-1 ml-1 py-0.5 rounded-lg">Aktivdir</span>
+                                                        <span class="bg-green-500 text-white px-1 ml-1 py-0.5 rounded-lg">aktivdir</span>
                                                     </div>
                                                 <div class="text-sm mt-2 flex justify-between sm:hidden">
                                                    <span class="bg-blue-100 text-blue-700 px-1 py-0.5 rounded-lg text-sm">${element.sourceUrl}</span>
@@ -494,7 +494,7 @@ async function getJobs(params) {
 //                                                             <span class="bg-yellow-100 text-yellow-700 px-1 ml-2 py-0.5 font-medium rounded-lg text-sm h-7 hidden sm:flex">
 //                                                                 ${element.sourceUrl}
 //                                                             </span>
-//                                                             <span class="bg-green-100 text-green-700 px-1 ml-1 py-0.5 rounded-lg">Aktivdir</span>
+//                                                             <span class="bg-green-100 text-green-700 px-1 ml-1 py-0.5 rounded-lg">aktivdir</span>
 //                                                         </div>
 //                                                     <div class="text-sm mt-2 flex justify-between sm:hidden">
 //                                                        <span class="bg-blue-100 text-blue-700 px-1 py-0.5 rounded-lg text-sm">${element.sourceUrl}</span>

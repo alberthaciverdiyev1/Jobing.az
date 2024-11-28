@@ -102,10 +102,10 @@ class OfferAz {
     
                                     let [minSalary, maxSalary] = [0, 0];
                                     if (parts.length === 2) {
-                                        minSalary = parseInt(parts[0], 10);
-                                        maxSalary = parseInt(parts[1], 10);
+                                        minSalary = !isNaN(Number(parts[0])) ? parseInt(parts[0], 10) : 0;
+                                        maxSalary = !isNaN(Number(parts[1])) ? parseInt(parts[1], 10) : 0;
                                     } else if (parts.length === 1) {
-                                        minSalary = maxSalary = parseInt(parts[0], 10);
+                                        minSalary = maxSalary = !isNaN(Number(parts[0])) ? parseInt(parts[0], 10) : 0;
                                     }
     
                                     jobData.push({

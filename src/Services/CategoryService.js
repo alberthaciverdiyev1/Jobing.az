@@ -36,8 +36,6 @@ const CategoryService = {
     },
 
     getLocalCategories: async (data) => {
-        console.log({data});
-        
         try {
             let query = {};   
             

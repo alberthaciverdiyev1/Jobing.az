@@ -103,13 +103,14 @@ const JobDataService = {
                 createdAt: { $gte: thirtyDaysAgo }
             };
     
-            if (data.categoryId && !isNaN(Number(data.categoryId))) {
-                query.$or = [
-                    { categoryId: +data.categoryId },
-                    { subCategoryId: +data.categoryId }
-                ];
-            }
+            // if (data.categoryId && !isNaN(Number(data.categoryId))) {
+            //     query.$or = [
+            //         { categoryId: +data.categoryId },
+            //         { subCategoryId: +data.categoryId }
+            //     ];
+            // }
     
+            if (data.categoryId && !isNaN(Number(data.categoryId))) query.categoryId = +data.categoryId;
             if (data.cityId && !isNaN(Number(data.cityId))) query.cityId = +data.cityId;
             if (data.educationId && !isNaN(Number(data.educationId))) query.educationId = +data.educationId;
             if (data.experience && !isNaN(Number(data.experience))) query.experienceId = +data.experience;
@@ -127,6 +128,7 @@ const JobDataService = {
     
             const limit = 50;
             const offset = Number(data.offset) || 0;
+    console.log({data,query});
     
             const jobs = await JobData.find(query)
                 .sort({ createdAt: -1 })
