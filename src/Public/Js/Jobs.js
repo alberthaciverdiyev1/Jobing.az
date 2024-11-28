@@ -340,7 +340,7 @@ async function getJobs(params) {
                                                         <span class="bg-yellow-100 text-yellow-700 px-1 ml-2 py-0.5 font-medium rounded-lg text-sm h-7 hidden sm:flex">
                                                             ${element.sourceUrl}
                                                         </span>
-                                                        <span class="bg-green-100 text-green-700 px-1 ml-1 py-0.5 rounded-lg">Aktivdir</span>
+                                                        <span class="bg-green-500 text-white px-1 ml-1 py-0.5 rounded-lg">Aktivdir</span>
                                                     </div>
                                                 <div class="text-sm mt-2 flex justify-between sm:hidden">
                                                    <span class="bg-blue-100 text-blue-700 px-1 py-0.5 rounded-lg text-sm">${element.sourceUrl}</span>
