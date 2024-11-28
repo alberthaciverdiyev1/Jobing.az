@@ -61,25 +61,25 @@ class SmartJobAz {
         try {
             let $ = await Scrape(`https://${this.url}`);
             const token = $('input[name="_token"]').val();
-    
+
             const filteredCategories = categories.filter(c => c.website === enums.SitesWithId.SmartJobAz);
             const limit = pLimit(3);
             const dataPromises = [];
             const educationIds = [1, 2, 5, 6, 7, 9, 10, 11, 12, 13, 0];
             const jobData = [];
             const companyData = [];
-    
+
             for (const category of filteredCategories) {
                 for (const education of educationIds) {
                     for (let page = 0; page <= 2; page++) {
                         const requestPromise = limit(async () => {
                             try {
                                 const url = `https://${this.url}/vacancies?_token=${encodeURIComponent(token)}&job_category_id%5B20%5D=${encodeURIComponent(category.categoryId)}&education_id%5B0%5D=${encodeURIComponent(education)}&salary_from=&salary_to=&page=${page}`;
-    
+
                                 const timeout = new Promise((_, reject) => {
                                     setTimeout(() => reject(new Error('Request timed out')), 30000);
                                 });
-    
+
                                 const fetchPromise = (async () => {
                                     const $ = await Scrape(url);
                                     $('.brows-job-list').each((i, el) => {
@@ -95,22 +95,22 @@ class SmartJobAz {
                                         const parts = cleanSalaryText.split(' - ');
                                         const jobId = urlAndId.attr('href')?.split('/').pop() || null;
                                         const redirectUrl = urlAndId.attr('href') || null;
-                                        let [minSalary, maxSalary] = [null, null];
+                                        let [minSalary, maxSalary] = [0, 0];
                                         if (parts.length === 2) {
-                                            minSalary = parseInt(parts[0], 10);
-                                            maxSalary = parseInt(parts[1], 10);
+                                            minSalary = !isNaN(Number(parts[0])) ? parseInt(parts[0], 10) : 0;
+                                            maxSalary = !isNaN(Number(parts[1])) ? parseInt(parts[1], 10) : 0;
                                         } else if (parts.length === 1) {
-                                            minSalary = maxSalary = parseInt(parts[0], 10);
+                                            minSalary = maxSalary = !isNaN(Number(parts[0])) ? parseInt(parts[0], 10) : 0;
                                         }
-    
+
                                         const locationCity = bossAzcities.find(x => x.name === location);
-    
+
                                         jobData.push({
                                             title,
                                             companyName,
                                             companyId,
-                                            minSalary,
-                                            maxSalary,
+                                            minSalary: minSalary ?? 0,
+                                            maxSalary: maxSalary ?? 0,
                                             location,
                                             cityId: locationCity ? +locationCity.cityId : null,
                                             description: null,
@@ -123,7 +123,7 @@ class SmartJobAz {
                                             experienceId: null,
                                             uniqueKey: `${title}-${companyName}-${location}`
                                         });
-    
+
                                         companyData.push({
                                             companyName,
                                             imageUrl: companyImageUrl,
@@ -132,23 +132,23 @@ class SmartJobAz {
                                         });
                                     });
                                 })();
-    
+
                                 await Promise.race([fetchPromise, timeout]);
-    
+
                             } catch (error) {
                                 console.error(`Error fetching data from ${url}:`, error.message);
                                 return [];
                             }
                         });
-    
+
                         dataPromises.push(requestPromise);
                     }
                 }
             }
-    
+
             const results = await Promise.all(dataPromises);
-            results.flat(); 
-    
+            results.flat();
+
             const companyResult = await CompanyService.create(companyData);
             if (companyResult.status === 200 || companyResult.status === 201) {
                 return jobData;
@@ -156,13 +156,13 @@ class SmartJobAz {
                 console.error('Failed to save company data:', companyResult);
                 throw new Error('Failed to save company data');
             }
-    
+
         } catch (error) {
             console.error('Error fetching jobs:', error.message, error.stack);
             throw new Error('Error fetching jobs');
         }
     }
-    
+
     mapEducation(education) {
         return (education === 10 || education === 2 || education === 13 || education === 6) ? enums.Education.Secondary :
             (education === 0 || education === 7) ? enums.Education.IncompleteEducation :
