@@ -15,74 +15,81 @@ const jobDataController = {
             if (!categories || categories.length === 0) {
                 throw new Error("No categories found");
             }
-
+    
             const cities = await CityService.getAll({ site: "BossAz" });
             if (!cities || cities.length === 0) {
                 throw new Error("No cities found");
             }
-
+    
             const smartJobAz = new SmartJobAz();
             const bossAz = new BossAz();
             const offerAz = new OfferAz();
             const helloJobAz = new HelloJobAz();
-
-            let smartJobAzJobs = [];
-            let bossAzjobs = [];
-            let offerAzjobs = [];
-            let helloJobAzJobs = [];
+    
             const errors = [];
-
+    
+            const insertJobs = async (jobs, sourceName) => {
+                if (jobs.length > 0) {
+                    try {
+                        const response = await JobService.create(jobs);
+                        if (!response || !response.status || !response.message) {
+                            throw new Error(`Invalid response from JobService for ${sourceName}`);
+                        }
+                        console.log(`${sourceName} jobs successfully inserted`);
+                        return response;
+                    } catch (error) {
+                        const errorMessage = `Error inserting ${sourceName} jobs: ` + error.message;
+                        errors.push(errorMessage);
+                        console.error(errorMessage);
+                    }
+                }
+            };
+    
+            let helloJobAzJobs = [];
             try {
                 helloJobAzJobs = await helloJobAz.Jobs(categories, cities);
+                await insertJobs(helloJobAzJobs, "HelloJobAz");
             } catch (error) {
-                const errorMessage = "Error fetching HelloJobAz jobs: " + error.message;
-                errors.push(errorMessage);
+                errors.push(`Error fetching HelloJobAz jobs: ${error.message}`);
             }
-
+    
+            let offerAzjobs = [];
             try {
                 offerAzjobs = await offerAz.Jobs(categories, cities);
+                await insertJobs(offerAzjobs, "OfferAz");
             } catch (error) {
-                const errorMessage = "Error fetching OfferAz jobs: " + error.message;
-                errors.push(errorMessage);
+                errors.push(`Error fetching OfferAz jobs: ${error.message}`);
             }
-
+    
+            let smartJobAzJobs = [];
             try {
                 smartJobAzJobs = await smartJobAz.Jobs(categories, cities);
+                await insertJobs(smartJobAzJobs, "SmartJobAz");
             } catch (error) {
-                const errorMessage = "Error fetching SmartJobAz jobs: " + error.message;
-                errors.push(errorMessage);
+                errors.push(`Error fetching SmartJobAz jobs: ${error.message}`);
             }
-
+    
+            let bossAzjobs = [];
             try {
                 bossAzjobs = await bossAz.Jobs(categories, cities);
+                await insertJobs(bossAzjobs, "BossAz");
             } catch (error) {
-                const errorMessage = "Error fetching BossAz jobs: " + error.message;
-                errors.push(errorMessage);
+                errors.push(`Error fetching BossAz jobs: ${error.message}`);
             }
-
-            const data = [...(bossAzjobs || []), ...(smartJobAzJobs || []), ...(offerAzjobs || []), ...(helloJobAzJobs || [])];
-
-            if (data.length === 0) {
-                throw new Error("No jobs fetched from any source");
-            }
-
-            const response = await JobService.create(data);
-            if (!response || !response.status || !response.message) {
-                throw new Error("Invalid response from JobService");
-            }
-
-            res.status(response.status).json({
-                message: response.message,
+    
+            res.status(200).json({
+                message: "Jobs scraping completed",
                 errors: errors.length > 0 ? errors : null,
             });
-
+    
         } catch (error) {
             res.status(500).json({
-                message: "Error scrape jobs",
+                message: "Error scraping jobs",
                 error: error.message || "Unknown error",
             });
         }
     },
+    
 
     getAll: async (req, res) => {
         try {
