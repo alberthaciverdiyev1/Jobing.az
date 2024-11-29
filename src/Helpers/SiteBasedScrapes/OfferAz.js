@@ -128,8 +128,6 @@ class OfferAz {
                                         experienceId: null,
                                         uniqueKey: `${title}-${companyName}-${location}`
                                     });
-                                    console.log({jobData});
-
                                 });
 
                             } catch (error) {
