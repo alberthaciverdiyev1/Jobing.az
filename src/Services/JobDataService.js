@@ -115,7 +115,7 @@ const JobDataService = {
             if (data.educationId && !isNaN(Number(data.educationId))) query.educationId = +data.educationId;
             if (data.experience && !isNaN(Number(data.experience))) query.experienceId = +data.experience;
             if (data.jobType) query.jobType = data.jobType;
-            if (data.minSalary && !isNaN(Number(data.minSalary))) query.minSalary = { $gte: +data.minSalary };
+            if (data.minSalary && !isNaN(Number(data.minSalary)) && data.minSalary !== 0) query.minSalary = { $gte: +data.minSalary };
             if (data.maxSalary && !isNaN(Number(data.maxSalary))) query.maxSalary = { $lte: +data.maxSalary };
     
             if (data.keyword) {
