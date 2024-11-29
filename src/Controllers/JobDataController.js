@@ -46,20 +46,20 @@ const jobDataController = {
             };
     
             let helloJobAzJobs = [];
-            // try {
-            //     helloJobAzJobs = await helloJobAz.Jobs(categories, cities);
-            //     await insertJobs(helloJobAzJobs, "HelloJobAz");
-            // } catch (error) {
-            //     errors.push(`Error fetching HelloJobAz jobs: ${error.message}`);
-            // }
-    
-            let offerAzjobs = [];
             try {
-                offerAzjobs = await offerAz.Jobs(categories, cities);
-                await insertJobs(offerAzjobs, "OfferAz");
+                helloJobAzJobs = await helloJobAz.Jobs(categories, cities);
+                await insertJobs(helloJobAzJobs, "HelloJobAz");
             } catch (error) {
-                errors.push(`Error fetching OfferAz jobs: ${error.message}`);
+                errors.push(`Error fetching HelloJobAz jobs: ${error.message}`);
             }
+    
+            // let offerAzjobs = [];
+            // try {
+            //     offerAzjobs = await offerAz.Jobs(categories, cities);
+            //     await insertJobs(offerAzjobs, "OfferAz");
+            // } catch (error) {
+            //     errors.push(`Error fetching OfferAz jobs: ${error.message}`);
+            // }
     
             let smartJobAzJobs = [];
             // try {
