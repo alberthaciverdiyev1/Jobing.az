@@ -31,7 +31,6 @@ function getURLParams() {
     const educationId = removePrefix(params.get('educationId'), "education-");
     const experienceLevel = removePrefix(params.get('experienceLevel'), "experience-");
     const keyword = params.get('keyword');
-    const offset = params.get('offset') || 0;
 
     return {
         categoryId,
@@ -39,7 +38,6 @@ function getURLParams() {
         educationId,
         experienceLevel,
         keyword,
-        offset
     };
 }
 
@@ -56,9 +54,9 @@ function updateURLParams(params) {
     window.history.replaceState({}, '', '?' + currentParams.toString());
 }
 
-function preselectFilters() {
-    console.log("im in");
-    
+function preselectFilters(onlyCheckFilter = false) {
+    // console.log("im in");
+
     const { categoryId, cityId, educationId, experienceLevel, keyword } = getURLParams();
 
     if (categoryId && !isNaN(Number(categoryId))) {
@@ -90,15 +88,17 @@ function preselectFilters() {
     if (keyword) {
         document.querySelector(`#search`).value = keyword;
     }
-    getJobs(
-        {
-            categoryId: !isNaN(Number(categoryId)) ? categoryId : null,
-            cityId: !isNaN(Number(cityId)) ? cityId : null,
-            educationId: !isNaN(Number(educationId)) ? educationId : null,
-            experienceLevel,
-            offset,
-            keyword
-        });
+    if (!onlyCheckFilter) {
+        getJobs(
+            {
+                categoryId: !isNaN(Number(categoryId)) ? categoryId : null,
+                cityId: !isNaN(Number(cityId)) ? cityId : null,
+                educationId: !isNaN(Number(educationId)) ? educationId : null,
+                experienceLevel,
+                offset,
+                keyword
+            });
+    }
 
 }
 
@@ -162,7 +162,6 @@ function cityHTML(data, limit = null) {
             <input type="radio" name="city" id="${cityId}" city-id="${element.cityId}" class="custom-checkbox" />
             <label for="${cityId}" class="text-gray-800">
                 ${element.name}
-                <span class="text-gray-400">(34)</span>
             </label>
         </div>
             `;
@@ -221,7 +220,6 @@ async function getEducation() {
                             <input type="radio" name="education" id="${educationId}" education-id="${education[1]}" class="custom-checkbox" />
                             <label for="${educationId}" class="text-gray-800">
                             ${education[0]}
-                                <span class="text-gray-400">(34)</span>
                             </label>
                         </div>`;
                 });
@@ -249,7 +247,6 @@ async function getExperience() {
                             <input type="radio" name="experience" id="${experienceId}" experience-id="${experience[1]}" class="custom-checkbox" />
                             <label for="${experienceId}" class="text-gray-800">
                             ${experience[0]}
-                                <span class="text-gray-400">(34)</span>
                             </label>
                         </div>`;
                 });
@@ -338,30 +335,30 @@ async function getJobs(params) {
                                                     <span class="ml-3"><i class="fa-solid fa-location-dot mr-0.5"></i> ${element.location.slice(0, 17) + (element.location.length > 17 ? "..." : "")}</span>
                                                 </div>
                                                 <div class="border-t border-1 border-gray-300 w-56 mt-2 sm:w-72"></div>
-                                                    <div class="text-sm mt-2 hidden sm:flex">
-                                                        <span class="bg-yellow-100 text-yellow-700 px-1 ml-2 py-0.5 font-medium rounded-lg text-sm h-7 hidden sm:flex">
+                                                    <div class="text-sm mt-2 hidden sm:flex items-center">
+                                                        <span class="bg-yellow-100 text-yellow-700 px-1 py-0.5 font-medium rounded-lg text-sm h-7 hidden sm:flex">
                                                             ${element.sourceUrl}
                                                         </span>
-                                                        <span class="bg-green-500 text-white px-1 ml-1 py-0.5 rounded-lg">aktivdir</span>
+                                                        <span class="bg-green-400 text-white px-1 ml-1 py-0.5 rounded-lg">aktivdir</span>
                                                     </div>
                                                 <div class="text-sm mt-2 flex justify-between sm:hidden">
                                                    <span class="bg-blue-100 text-blue-700 px-1 py-0.5 rounded-lg text-sm">${element.sourceUrl}</span>
                                                 <h4 class="text-lg text-gray-600 font-bold">
                                                     ${(
-                                                        (+element.minSalary === +element.maxSalary && +element.minSalary !== null && +element.minSalary !== 0)
-                                                            ? +element.minSalary + " " + element.currencySign
-                                                            : (
-                                                                (+element.minSalary !== null && +element.minSalary !== 0)
-                                                                    ? +element.minSalary + '-'
-                                                                    : ""
-                                                            ) + (
-                                                                (+element.maxSalary !== null && +element.maxSalary !== 0)
-                                                                    ? +element.maxSalary + " " + element.currencySign
-                                                                    : (
-                                                                        !element.minSalary && !element.maxSalary ? "Razılaşma ilə" : ""
-                                                                    )
-                                                            )
-                                                    )}
+                            (+element.minSalary === +element.maxSalary && +element.minSalary !== null && +element.minSalary !== 0)
+                                ? +element.minSalary + " " + element.currencySign
+                                : (
+                                    (+element.minSalary !== null && +element.minSalary !== 0)
+                                        ? +element.minSalary + '-'
+                                        : ""
+                                ) + (
+                                    (+element.maxSalary !== null && +element.maxSalary !== 0)
+                                        ? +element.maxSalary + " " + element.currencySign
+                                        : (
+                                            !element.minSalary && !element.maxSalary ? "Razılaşma ilə" : ""
+                                        )
+                                )
+                        )}
                                                     </h4>
                                                 </div>
                                             </div>
@@ -372,20 +369,20 @@ async function getJobs(params) {
                                                     </button>` : ""}
                                                 <h4 class="text-lg text-gray-600 font-bold mt-2">
                                                     ${(
-                                                            (+element.minSalary === +element.maxSalary && +element.minSalary !== null && +element.minSalary !== 0)
-                                                                ? +element.minSalary + " " + element.currencySign
-                                                                : (
-                                                                    (+element.minSalary !== null && +element.minSalary !== 0)
-                                                                        ? +element.minSalary + '-'
-                                                                        : ""
-                                                                ) + (
-                                                                    (+element.maxSalary !== null && +element.maxSalary !== 0)
-                                                                        ? +element.maxSalary + " " + element.currencySign
-                                                                        : (
-                                                                            !element.minSalary && !element.maxSalary ? "Razılaşma ilə" : ""
-                                                                        )
-                                                                    )
-                                                            )}                                              
+                            (+element.minSalary === +element.maxSalary && +element.minSalary !== null && +element.minSalary !== 0)
+                                ? +element.minSalary + " " + element.currencySign
+                                : (
+                                    (+element.minSalary !== null && +element.minSalary !== 0)
+                                        ? +element.minSalary + '-'
+                                        : ""
+                                ) + (
+                                    (+element.maxSalary !== null && +element.maxSalary !== 0)
+                                        ? +element.maxSalary + " " + element.currencySign
+                                        : (
+                                            !element.minSalary && !element.maxSalary ? "Razılaşma ilə" : ""
+                                        )
+                                )
+                        )}                                              
                                                 </h4>
                                                 </div>
                                                 <div class="flex justify-end items-end mt-auto pt-16">
@@ -406,7 +403,7 @@ async function getJobs(params) {
             } else {
                 document.getElementById("card-section").innerHTML = noDataCard();
             }
-            
+
             const jobCards = document.querySelectorAll('.job-card');
             jobCards.forEach(card => {
                 card.addEventListener('click', function () {
@@ -485,7 +482,7 @@ async function getJobs(params) {
 //                                                         ${false ? `<button class="text-base text-gray-600 font-bold mb-5 sm:hidden">
 //                                                             <i class="fa-solid fa-heart text-2xl"></i>
 //                                                         </button>` : ""}
-                                                        
+
 //                                                     </div>
 //                                                     <div class="flex text-sm text-gray-600">
 //                                                         <span><i class="fa-solid fa-clock mr-0.5"></i> ${element.postedAt.slice(0, 10)}</span>
@@ -599,13 +596,13 @@ document.getElementById("show-more-categories").addEventListener("click", functi
         addRadioChangeListener("category");
         this.textContent = "Show Less";
         showMoreCategories = false;
-        preselectFilters();
+        preselectFilters(true);
     } else {
         document.getElementById("categoryList").innerHTML = categoryHTML(categoryArray, 10);
         this.textContent = "Show More";
         addRadioChangeListener("category");
         showMoreCategories = true;
-        preselectFilters();
+        preselectFilters(true);
     }
 });
 
@@ -616,13 +613,13 @@ document.getElementById("show-more-cities").addEventListener("click", function (
         addRadioChangeListener("city");
         this.textContent = "Show Less";
         showMoreCities = false;
-        preselectFilters();
+        preselectFilters(true);
     } else {
         document.getElementById("cityList").innerHTML = cityHTML(cityArray, 10);
         this.textContent = "Show More";
         addRadioChangeListener("city");
         showMoreCities = true;
-        preselectFilters();
+        preselectFilters(true);
     }
 });
 

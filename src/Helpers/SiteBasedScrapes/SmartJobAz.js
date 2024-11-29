@@ -102,7 +102,6 @@ class SmartJobAz {
                                         } else if (parts.length === 1) {
                                             minSalary = maxSalary = !isNaN(Number(parts[0])) ? parseInt(parts[0], 10) : 0;
                                         }
-                                        console.log({maxSalary,minSalary,parts,salaryText});
 
                                         const locationCity = bossAzcities.find(x => x.name === location);
 

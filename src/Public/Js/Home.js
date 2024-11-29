@@ -64,12 +64,12 @@ document.addEventListener("DOMContentLoaded", (event) => {
                                     <span class="ml-3"><i class="fa-solid fa-location-dot mr-0.5"></i> ${element.location.slice(0, 17) + (element.location.length > 17 ? "..." : "")}</span>
                                 </div>
                                 <div class="border-t border-1 border-gray-300 w-56 mt-2 sm:w-72"></div>
-                                <div class="text-sm mt-2 hidden sm:flex">
-                                    <span class="bg-yellow-100 text-yellow-700 px-1 ml-2 py-0.5 font-medium rounded-lg text-sm h-7 hidden sm:flex">
-                                        ${element.sourceUrl}
-                                    </span>
-                                     <span class="bg-green-500 text-white px-1 ml-1 py-0.5 rounded-lg">aktivdir</span>
-                                </div>
+                                    <div class="text-sm mt-2 hidden sm:flex items-center">
+                                        <span class="bg-yellow-100 text-yellow-700 px-1 py-0.5 font-medium rounded-lg text-sm h-7 hidden sm:flex">
+                                            ${element.sourceUrl}
+                                        </span>
+                                        <span class="bg-green-400 text-white px-1 ml-1 py-0.5 rounded-lg">aktivdir</span>
+                                    </div>
                                 <div class="text-sm mt-2 flex justify-between sm:hidden">
                                    <span class="bg-blue-100 text-blue-700 px-1 py-0.5 rounded-lg text-sm">${element.sourceUrl}</span>
                                 <h4 class="text-lg text-gray-600 font-bold">
