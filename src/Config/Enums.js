@@ -26,13 +26,15 @@ const Enums = Object.freeze({
         SmartJobAz:'smartjob.az',
         OfferAz:'offer.az',
         HelloJobAz:'hellojob.az'
+        JobSearchAz:'jobsearch.az'
     },
     SitesWithId:{
         BossAz:'0x001', 
         BusyAz:'0x002',
         SmartJobAz:'0x003',
         OfferAz:'0x004',
-        HelloJobAz:'0x005'
+        HelloJobAz:'0x005',
+        JobSearchAz:'0x006'
     },
 
     LimitPerRequest:10

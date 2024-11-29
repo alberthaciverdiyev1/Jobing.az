@@ -94,12 +94,15 @@ class OfferAz {
                                     const locationParts = locationText.split(' - ');
                                     let location = locationParts.length > 1 ? locationParts[1].trim() : locationParts[0].trim();
                                     const salaryText = $(el).find('.job-card__label').text().trim();
-                                    const cleanSalaryText = salaryText.replace('₼', '').trim();
+                                    const cleanSalaryText = salaryText.replace(/[₼\s]/g, '').trim();
                                     const parts = cleanSalaryText.split('—');
                                     const description = $(el).find('.job-card__excerpt').text().trim();
                                     const jobId = urlAndId.attr('href')?.split('-').pop() || null;
                                     const redirectUrl = urlAndId.attr('href') || null;
-    
+                                    const parts = cleanSalaryText.split('—').map(part => part.trim());
+
+
+
                                     let [minSalary, maxSalary] = [0, 0];
                                     if (parts.length === 2) {
                                         minSalary = !isNaN(Number(parts[0])) ? parseInt(parts[0], 10) : 0;
