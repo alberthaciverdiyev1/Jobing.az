@@ -128,7 +128,7 @@ const JobDataService = {
     
             const limit = 50;
             const offset = Number(data.offset) || 0;
-    console.log({data,query});
+    // console.log({data,query});
     
             const jobs = await JobData.find(query)
                 .sort({ createdAt: -1 })
