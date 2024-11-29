@@ -204,8 +204,8 @@ class HelloJobAz {
                                         const jobId = urlAndId?.split('/').pop() || null;
                                         const redirectUrl = urlAndId || null;
                                         const salaryText = $(el).find('.vacancies__price').text().trim();
-                                        const cleanSalaryText = salaryText ? salaryText.replace(/[₼$€]/g, '').trim() : null;
-                                        const parts = cleanSalaryText ? cleanSalaryText.split('—') : [];
+                                        const cleanSalaryText = salaryText ? salaryText.replace(/[AZN]/g, '').trim() : null;                                       
+                                        const parts = cleanSalaryText ? (cleanSalaryText.includes('-') ? cleanSalaryText.split('-').map(part => part.trim()) : [cleanSalaryText.trim()]) : [];
                                      
                                         let [minSalary, maxSalary] = [0, 0];
                                         if (parts.length === 2) {
@@ -214,8 +214,6 @@ class HelloJobAz {
                                         } else if (parts.length === 1) {
                                             minSalary = maxSalary = !isNaN(Number(parts[0])) ? parseInt(parts[0], 10) : 0;
                                         }
-                                        
-
                                         
                                         const location = $(el).find('.vacancy_item_time').last().text().trim();
                                         const description = $(el).find('.vacancies__desc').text().trim();

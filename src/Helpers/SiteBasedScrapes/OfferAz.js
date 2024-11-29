@@ -99,9 +99,7 @@ class OfferAz {
                                     const description = $(el).find('.job-card__excerpt').text().trim();
                                     const jobId = urlAndId.attr('href')?.split('-').pop() || null;
                                     const redirectUrl = urlAndId.attr('href') || null;
-                                    const parts = cleanSalaryText.includes('—')
-                                        ? cleanSalaryText.split('—').map(part => part.trim())
-                                        : [cleanSalaryText.trim()];
+                                    const parts = cleanSalaryText.includes('—') ? cleanSalaryText.split('—').map(part => part.trim()) : [cleanSalaryText.trim()];
 
 
 
