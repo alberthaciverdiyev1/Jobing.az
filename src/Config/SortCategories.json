@@ -259,6 +259,7 @@ Digər 223 198
     "helloJobAz":{192,280,212,274,275,215,213,273}
 },
 "Nəqliyyat, paylama və logistika":{
+    "localCategoryId":4,
     "smartJobAz":{128,129,130,131},
     "offerAz":{151,149 },
     "jobSearch":{1349},
@@ -266,6 +267,7 @@ Digər 223 198
     "helloJobAz":{286,256,253,251}
 },
 "Dizayn, incəsənət və sənətkarlıq":{
+    "localCategoryId":5,
     "smartJobAz":{5,63,64,79},
     "offerAz":{156},
     "jobSearch":{886},
@@ -273,6 +275,7 @@ Digər 223 198
     "helloJobAz":{193,284,282,281,276,235,234,231}
 },
 "Hüquq və məhkəmə xidmətləri":{
+    "localCategoryId":6,
     "smartJobAz":{43,127},
     "offerAz":{154},
     "jobSearch":{1375},

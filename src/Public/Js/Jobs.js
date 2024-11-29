@@ -57,6 +57,8 @@ function updateURLParams(params) {
 }
 
 function preselectFilters() {
+    console.log("im in");
+    
     const { categoryId, cityId, educationId, experienceLevel, keyword } = getURLParams();
 
     if (categoryId && !isNaN(Number(categoryId))) {
@@ -269,7 +271,7 @@ window.addEventListener('scroll', () => {
     if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - scrollThreshold) {
         if (!loading) {
             loading = true;
-            offset += 10;
+            offset += 50;
             handleFilterChange();
 
         }
@@ -597,11 +599,13 @@ document.getElementById("show-more-categories").addEventListener("click", functi
         addRadioChangeListener("category");
         this.textContent = "Show Less";
         showMoreCategories = false;
+        preselectFilters();
     } else {
         document.getElementById("categoryList").innerHTML = categoryHTML(categoryArray, 10);
         this.textContent = "Show More";
         addRadioChangeListener("category");
         showMoreCategories = true;
+        preselectFilters();
     }
 });
 
@@ -612,11 +616,13 @@ document.getElementById("show-more-cities").addEventListener("click", function (
         addRadioChangeListener("city");
         this.textContent = "Show Less";
         showMoreCities = false;
+        preselectFilters();
     } else {
         document.getElementById("cityList").innerHTML = cityHTML(cityArray, 10);
         this.textContent = "Show More";
         addRadioChangeListener("city");
         showMoreCities = true;
+        preselectFilters();
     }
 });
 
