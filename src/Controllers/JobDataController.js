@@ -46,12 +46,12 @@ const jobDataController = {
             };
     
             let helloJobAzJobs = [];
-            try {
-                helloJobAzJobs = await helloJobAz.Jobs(categories, cities);
-                await insertJobs(helloJobAzJobs, "HelloJobAz");
-            } catch (error) {
-                errors.push(`Error fetching HelloJobAz jobs: ${error.message}`);
-            }
+            // try {
+            //     helloJobAzJobs = await helloJobAz.Jobs(categories, cities);
+            //     await insertJobs(helloJobAzJobs, "HelloJobAz");
+            // } catch (error) {
+            //     errors.push(`Error fetching HelloJobAz jobs: ${error.message}`);
+            // }
     
             let offerAzjobs = [];
             try {
@@ -62,20 +62,20 @@ const jobDataController = {
             }
     
             let smartJobAzJobs = [];
-            try {
-                smartJobAzJobs = await smartJobAz.Jobs(categories, cities);
-                await insertJobs(smartJobAzJobs, "SmartJobAz");
-            } catch (error) {
-                errors.push(`Error fetching SmartJobAz jobs: ${error.message}`);
-            }
+            // try {
+            //     smartJobAzJobs = await smartJobAz.Jobs(categories, cities);
+            //     await insertJobs(smartJobAzJobs, "SmartJobAz");
+            // } catch (error) {
+            //     errors.push(`Error fetching SmartJobAz jobs: ${error.message}`);
+            // }
     
             let bossAzjobs = [];
-            try {
-                bossAzjobs = await bossAz.Jobs(categories, cities);
-                await insertJobs(bossAzjobs, "BossAz");
-            } catch (error) {
-                errors.push(`Error fetching BossAz jobs: ${error.message}`);
-            }
+            // try {
+            //     bossAzjobs = await bossAz.Jobs(categories, cities);
+            //     await insertJobs(bossAzjobs, "BossAz");
+            // } catch (error) {
+            //     errors.push(`Error fetching BossAz jobs: ${error.message}`);
+            // }
     
             res.status(200).json({
                 message: "Jobs scraping completed",

@@ -214,7 +214,9 @@ class HelloJobAz {
                                         } else if (parts.length === 1) {
                                             minSalary = maxSalary = !isNaN(Number(parts[0])) ? parseInt(parts[0], 10) : 0;
                                         }
-    
+                                        
+
+                                        
                                         const location = $(el).find('.vacancy_item_time').last().text().trim();
                                         const description = $(el).find('.vacancies__desc').text().trim();
                                         const companyImageUrl = $(el).find('.vacancies__icon img').attr('src') || null;
