@@ -49,13 +49,13 @@ const jobDataController = {
             };
 
             let jobSearchAzJobs = [];
-            try {
-                jobSearchAzJobs = await jobSearchAz.Jobs(categories, cities);
-                console.log({jobSearchAz})
-                await insertJobs(jobSearchAzJobs, "JobSearchAz");
-            } catch (error) {
-                errors.push(`Error fetching HelloJobAz jobs: ${error.message}`);
-            }
+            // try {
+            //     jobSearchAzJobs = await jobSearchAz.Jobs(categories, cities);
+            //     console.log({jobSearchAz})
+            //     await insertJobs(jobSearchAzJobs, "JobSearchAz");
+            // } catch (error) {
+            //     errors.push(`Error fetching HelloJobAz jobs: ${error.message}`);
+            // }
 // return
             let helloJobAzJobs = [];
             // try {
@@ -82,12 +82,12 @@ const jobDataController = {
             // }
             //
             let bossAzjobs = [];
-            // try {
-            //     bossAzjobs = await bossAz.Jobs(categories, cities);
-            //     await insertJobs(bossAzjobs, "BossAz");
-            // } catch (error) {
-            //     errors.push(`Error fetching BossAz jobs: ${error.message}`);
-            // }
+            try {
+                bossAzjobs = await bossAz.Jobs(categories, cities);
+                await insertJobs(bossAzjobs, "BossAz");
+            } catch (error) {
+                errors.push(`Error fetching BossAz jobs: ${error.message}`);
+            }
     
             res.status(201).json({
                 errors: errors.length > 0 ? errors : null,
