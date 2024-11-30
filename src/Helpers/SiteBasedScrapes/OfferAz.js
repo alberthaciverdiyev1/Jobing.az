@@ -41,14 +41,21 @@ class OfferAz {
     async Jobs(categories, bossAzcities) {
         const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
         try {
-            const filteredCategories = categories.filter(c => c.website === enums.SitesWithId.OfferAz);
+            let splitCategories = categories
+                .flatMap(c => c.offerAz.split(','))
+                .map(jobId => jobId.trim())
+                .filter(jobId => jobId !== '')
+                .map(jobId => ({
+                    localCategoryId: categories.find(c => c.offerAz.includes(jobId)).localCategoryId,
+                    offerAzId: jobId,
+                }))
 
             const limit = pLimit(1);
             const dataPromises = [];
             const educationIds = [249, 15, 14, 12, 13, 81, -1, -2];
             const jobData = [];
 
-            for (const category of filteredCategories) {
+            Object.entries(splitCategories).forEach(([no, category]) => {
                 for (const education of educationIds) {
                     for (let page = 0; page <= 2; page++) {
                         const requestPromise = limit(async () => {
@@ -59,7 +66,7 @@ class OfferAz {
                                 const url = `https://${this.url}/wp-admin/admin-ajax.php`;
 
                                 const data = new URLSearchParams();
-                                data.append('select_category', category.categoryId);
+                                data.append('select_category', category.offerAzId);
                                 data.append('cur_page', page);
                                 data.append('form_mode', 'long');
                                 data.append('select_tehsil', education);
@@ -138,7 +145,7 @@ class OfferAz {
                         dataPromises.push(requestPromise);
                     }
                 }
-            }
+            });
 
             const results = await Promise.all(dataPromises);
             const data = results.flat();
