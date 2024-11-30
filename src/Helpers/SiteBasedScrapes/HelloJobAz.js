@@ -159,7 +159,7 @@ class HelloJobAz {
 
     //         const results = await Promise.all(dataPromises);
     //         results.flat();
-            
+
     //         const companyResult = await CompanyService.create(companyData);
     //         if (companyResult.status === 200 || companyResult.status === 201) {
     //             return jobData;
@@ -174,29 +174,36 @@ class HelloJobAz {
     async Jobs(categories, bossAzcities) {
         const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
         try {
-            const filteredCategories = categories.filter(c => c.website === enums.SitesWithId.HelloJobAz);
-    
+            let splitCategories = categories
+                .flatMap(c => c.helloJobAz.split(','))
+                .map(jobId => jobId.trim())
+                .filter(jobId => jobId !== '')
+                .map(jobId => ({
+                    localCategoryId: categories.find(c => c.helloJobAz.includes(jobId)).localCategoryId,
+                    helloJobAzId: jobId,
+                }))
+
             const limit = pLimit(1);
             const dataPromises = [];
             const educationIds = [1, 2, 3, 4, 5, 6];
             const jobData = [];
             const companyData = [];
-    
+
             Object.entries(cities).forEach(([cityId, cityName]) => {
-                for (const category of filteredCategories) {
+                Object.entries(splitCategories).forEach(([no, category]) => {
                     for (const education of educationIds) {
                         for (let page = 0; page <= 2; page++) {
                             const requestPromise = limit(async () => {
                                 try {
-                                    const randomDelay = Math.floor(Math.random() * 2000) + 1000; 
-                                    let url = `https://www.${this.url}/search?direction=works&category_id=${category.categoryId}&region_id=${cityId}&salary_min=&education_type=${education}&work_exp=0&search_type=filter`;
-    
+                                    const randomDelay = Math.floor(Math.random() * 2000) + 1000;
+                                    let url = `https://www.${this.url}/search?direction=works&category_id=${category.helloJobAzId}&region_id=${cityId}&salary_min=&education_type=${education}&work_exp=0&search_type=filter`;
+
                                     const requestWithTimeout = new Promise((_, reject) =>
-                                        setTimeout(() => reject(new Error('Request Timeout')), 30000) 
+                                        setTimeout(() => reject(new Error('Request Timeout')), 30000)
                                     );
-    
+
                                     const $ = await Promise.race([Scrape(url), requestWithTimeout]);
-    
+
                                     $('.vacancies__item').each((i, el) => {
                                         const urlAndId = $(el).attr('href');
                                         const title = $(el).find('h3').text().trim();
@@ -204,9 +211,9 @@ class HelloJobAz {
                                         const jobId = urlAndId?.split('/').pop() || null;
                                         const redirectUrl = urlAndId || null;
                                         const salaryText = $(el).find('.vacancies__price').text().trim();
-                                        const cleanSalaryText = salaryText ? salaryText.replace(/[AZN]/g, '').trim() : null;                                       
+                                        const cleanSalaryText = salaryText ? salaryText.replace(/[AZN]/g, '').trim() : null;
                                         const parts = cleanSalaryText ? (cleanSalaryText.includes('-') ? cleanSalaryText.split('-').map(part => part.trim()) : [cleanSalaryText.trim()]) : [];
-                                     
+
                                         let [minSalary, maxSalary] = [0, 0];
                                         if (parts.length === 2) {
                                             minSalary = !isNaN(Number(parts[0])) ? parseInt(parts[0], 10) : 0;
@@ -214,16 +221,17 @@ class HelloJobAz {
                                         } else if (parts.length === 1) {
                                             minSalary = maxSalary = !isNaN(Number(parts[0])) ? parseInt(parts[0], 10) : 0;
                                         }
-                                        
+
                                         const location = $(el).find('.vacancy_item_time').last().text().trim();
                                         const description = $(el).find('.vacancies__desc').text().trim();
                                         const companyImageUrl = $(el).find('.vacancies__icon img').attr('src') || null;
-    
+
                                         jobData.push({
                                             title,
                                             companyName,
                                             minSalary,
                                             maxSalary,
+                                            categoryId: category.localCategoryId,
                                             location: cityName,
                                             description,
                                             jobId,
@@ -240,21 +248,21 @@ class HelloJobAz {
                                             uniqueKey: `${companyName}-${companyImageUrl}`
                                         });
                                     });
-    
+
                                 } catch (error) {
                                     console.error('Error Or Timeout:', error.message);
                                 }
                             });
-    
+
                             dataPromises.push(requestPromise);
                         }
                     }
-                }
+                });
             });
-    
+
             const results = await Promise.all(dataPromises);
             results.flat();
-            
+
             const companyResult = await CompanyService.create(companyData);
             if (companyResult.status === 200 || companyResult.status === 201) {
                 return jobData;
@@ -264,7 +272,7 @@ class HelloJobAz {
             throw new Error('İşlerin çekilmesinde hata');
         }
     }
-    
+
     mapEducation(education) {
         return (education === 5 || education === 6) ? enums.Education.Secondary :
             (education === 3 || education === 4) ? enums.Education.IncompleteEducation :
