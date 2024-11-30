@@ -14,7 +14,7 @@ import { title } from 'process';
 const to = process.env.CRON_MAIL_USER;
 
 i18n.configure({
-    locales: ['en', 'ru', 'az'], // Desteklenen diller
+    locales: ['en', 'ru', 'az'],
     directory: './src/locales',
     defaultLocale: 'az',
     cookie: 'lang'

@@ -5,23 +5,31 @@ const { Schema } = mongoose;
 const categorySchema = new Schema({
     localCategoryId: {
         type: Number,
-        required: true
-    },
-    name: {
-        type: String,
-        required: true
-    },
-    categoryId: {
-        type: Number,
         required: false
     },
-    parentId: {
-        type: Number,
+    categoryName: {
+        type: String,
         required: false
     },
-    website: {
+    smartJobAz: {
         type: String,
-        required: true
+        required: false
+    },
+    offerAz: {
+        type: String,
+        required: false
+    },
+    jobSearch: {
+        type: String,
+        required: false
+    },
+    bossAz: {
+        type: String,
+        required: false
+    },
+    helloJobAz: {
+        type: String,
+        required: false
     }
 }, { 
     timestamps: true,
@@ -30,7 +38,7 @@ const categorySchema = new Schema({
 
 categorySchema.virtual('Parent', {
     ref: 'Category',
-    localField: 'parentId',
+    localField: 'localCategoryId',
     foreignField: 'id',
     justOne: true
 });

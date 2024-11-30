@@ -40,6 +40,8 @@ const CategoryController = {
     getLocalCategories: async (req, res) => {
         try {           
             const categories = await CategoryService.getLocalCategories(req.query);
+            console.log({categories});
+            
             res.status(200).json(categories);
         } catch (error) {
             res.status(500).json({ message: 'Error retrieving categories: ' + error.message });

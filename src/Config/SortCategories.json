@@ -3,31 +3,23 @@
 
 1411 = Pərakəndə satış və müştəri xidmətləri
 1203 = Mühəndislik
-1471 = Otel, İaşə, Turizm
-1004 = Təlim və tədris
 1251 = Təsərrüfat və əmlak xidmətləri
-937 = Səhiyyə
 1320 = Təhlükəsizlik, uniforma və qoruyucu xidmətlər
 1101 = İnşaat və tikinti
 1387 = İstehsalat
 1147 = İfaçılıq sənəti və media
-1179 = Elm, riyaziyyat və statistika
 1037 = Heyvanlar, torpaq və ətraf mühit
 
 // <!-- Offer az -->
 -2 = Peşə sahələri
 -1 = Fərq etmir
 146 = HR və kargüzarlıq
-157 = KİV və nəşriyyat
 144 = Müştəri xidməti
 159 = Müxtəlif peşələr
 143 = Satış
 147 = Sənaye və tikinti
 155 = Təhlükəsizlik
-150 = Təhsil
 153 = Təsərrüfat
-158 = Tibb
-152 = Turizm və istirahət
 1 = Uncategorized
 
 
@@ -77,12 +69,6 @@ Daxili audit 16 14
 Keyfiyyətə nəzarət 51 14
 Əczaçı 19 17
 Laborant 114 17
-Təhsil sahəsi 2 null
-Müəllim 37 2
-Hotelçilik 22 null
-Hostes 23 22
-Restoran işi 25 null
-Ofisiant 30 25
 Digər sahələr 39 null
 Xadimə 52 39
 Təcrübə 60 39
@@ -91,7 +77,6 @@ Köməkçi 78 39
 Təmizlikçi 85 39
 Supervisor 87 39
 Kargüzarlıq 91 39
-Turizm 95 39
 Dərzi 100 39
 Baytar 102 39
 Aqronom 104 39
@@ -116,7 +101,8 @@ Ofis meneceri 89 47
 Qeydiyyatçı 105 47
 Kulinariya 73 null
 Aşpaz 74 73
-İnzibati dəstək 86 null Tərcümə 97 86
+İnzibati dəstək 86 null
+Tərcümə 97 86
 İnzibati dəstək 136 86
 
 // Boss Az Category
@@ -147,27 +133,15 @@ SPA və gözəllik 193 133
 
 Xadimə 157 133 
 
-
-Restoran işi 134 133 
-
 Dayə 136 133 
 
 Fəhlə 137 133 
 
-Turizm və mehmanxana işi 142 133 
  Tərcüməçi 144 133 
 
 Mühafizə xidməti 153 133 
 
 Digər 149 133 
-
-Tibb 138 0 
-
-Həkim 139 138 
-
-Tibbi personal 140 138 
-
-Tibb təmsilçisi 141 138 
 
 Müxtəlif 146 0 
 
@@ -175,15 +149,6 @@ Jurnalistika 148 146
  Tələbələr üçün 160 146 
 
 // Hello Job
-
-Restoran işi 291 null
-Menecer 298 291
-Qabyuyan 297 291
-Təmizlikçi 296 291
-Barista 295 291
-Restoran işi 252 291
-Ofisiant 294 291
-Aşpaz 293 291
 Satış 190 null
 Satış üzrə mütəxəssis 229 190
 Daşınmaz əmlak agenti / makler230 190
@@ -195,7 +160,6 @@ Xadimə 254 194
 Dayə 250 194
 Telefon ustası 279 194
 Fəhlə 249 194
-Turizm və mehmanxana işi 248 194
 Tərcüməçi 247 194
 Mühafizə xidməti 246 194
 Digər 245 194
@@ -211,17 +175,7 @@ Fotoqrafiya 278 200
 Jurnalistika 261 200
 Tələbələr üçün 260 200
 Digər 271 200
-Səhiyyə 197 null
-Həkim 259 197
-Tibb təmsilçisi 257 197
-Tibbi personal 258 197
-Digər 270 197
-Təhsil və elm 199 null
-Məktəb tədrisi 244 199
-Universitet tədrisi 243 199
-Repetitor 242 199
-Xüsusi təhsil/ Təlim 241 199
-Digər 240 199
+
 Sənaye və k/t 262 null
 Kənd təsərrüfatı 266 262
 Digər 263 262
@@ -235,12 +189,12 @@ Digər 223 198
 
 <!-- Jobing Az Categories -->
 "İT və Proqramlaşdırma":{
-    "localCategoryId":1,
-    "smartJobAz":{1,3,4,32,33,34,35,80,115,141},
-    "offerAz":145,
-    "jobSearch":1076,
-    "bossAz":{38,66,67,68,69,70,71,72 },
-    "helloJobAz":{195,219,222,220,217,216}
+    "localCategoryId":"1",
+    "smartJobAz":"1,3,4,32,33,34,35,80,115,141",
+    "offerAz":"145",
+    "jobSearch":"1076",
+    "bossAz":"38,66,67,68,69,70,71,72 ",
+    "helloJobAz":"195,219,222,220,217,216"
 },
 "Maliyyə xidmətləri":{
     "localCategoryId":2,
@@ -253,7 +207,7 @@ Digər 223 198
 "Marketinq, reklam, çap və nəşriyyat" : {
     "localCategoryId":3,
     "smartJobAz":{8,6,53,55,61,67,72,77,81,94,112,118,138,146,150},
-    "offerAz":{148},
+    "offerAz":{148,157},
     "jobSearch":{1288},
     "bossAz":{37,64,61,62,60},
     "helloJobAz":{192,280,212,274,275,215,213,273}
@@ -281,6 +235,38 @@ Digər 223 198
     "jobSearch":{1375},
     "bossAz":{},
     "helloJobAz":{196,237,238,239} 
+},
+"Restoran işi":{
+    "localCategoryId":7,
+    "smartJobAz":{25,30},
+    "offerAz":{},
+    "jobSearch":{},
+    "bossAz":{134},
+    "helloJobAz":{291 298,297,296,295, 252,294,293} 
+},
+"Otel, İaşə, Turizm":{
+    "localCategoryId":8,
+    "smartJobAz":{95,22,23},
+    "offerAz":{152},
+    "jobSearch":{1471},
+    "bossAz":{142},
+    "helloJobAz":{248}
+}
+"Səhiyyə":{
+    "localCategoryId":9,
+    "smartJobAz":"17,18,19,20,83,110,114,134,135",
+    "offerAz":{158},
+    "jobSearch":{937},
+    "bossAz":{138,139,140, 141},
+    "helloJobAz":{197, 259, 257,258,270}   
+},
+"Təhsil və elm":{
+    "localCategoryId":10,
+    "smartJobAz":{2,37},
+    "offerAz":{150},
+    "jobSearch":{1004,1179},
+    "bossAz":{46,119,120,121,122,145},
+    "helloJobAz":{199,244,243,242,241,240}
 }
 
 

@@ -52,11 +52,18 @@ class BossAz {
 
     async Jobs(categories, filteredCities) {
         try {
-            const filteredCategories = categories.filter(c => c.website === enums.SitesWithId.BossAz);
+            let splitCategories = categories
+                .flatMap(c => c.bossAz.split(','))
+                .map(jobId => jobId.trim())
+                .filter(jobId => jobId !== '')
+                .map(jobId => ({
+                    localCategoryId: categories.find(c => c.bossAz.includes(jobId)).localCategoryId,
+                    bossAzId: jobId,
+                }))
             const limit = pLimit(+enums.LimitPerRequest);
             const dataPromises = [];
-            
-            for (const category of filteredCategories) {
+
+            Object.entries(splitCategories).forEach(([no, category]) => {
                 for (let education = 0; education <= 7; education++) {
                     for (let experience = 0; experience <= 4; experience++) {
                         for (let page = 0; page <= 2; page++) {
@@ -67,7 +74,7 @@ class BossAz {
     
                                 try {
                                     const $ = await Promise.race([
-                                        Scrape(`https://${this.url}/vacancies?action=index&controller=vacancies&only_path=true&page=${page}&search%5Bcategory_id%5D=${category.categoryId}&search%5Bcompany_id%5D=&search%5Beducation_id%5D=${education}&search%5Bexperience_id%5D=${experience}&search%5Bkeyword%5D=&search%5Bregion_id%5D=&search%5Bsalary%5D=&type=vacancies`),
+                                        Scrape(`https://${this.url}/vacancies?action=index&controller=vacancies&only_path=true&page=${page}&search%5Bcategory_id%5D=${category.bossAzId}&search%5Bcompany_id%5D=&search%5Beducation_id%5D=${education}&search%5Bexperience_id%5D=${experience}&search%5Bkeyword%5D=&search%5Bregion_id%5D=&search%5Bsalary%5D=&type=vacancies`),
                                         timeout
                                     ]);
     
@@ -97,8 +104,7 @@ class BossAz {
                                         }
                                         
                                         const locationCity = filteredCities.find(x => x.name === location);
-                                        const localCategoryId = filteredCategories.find(x => x.categoryId === category.categoryId)?.localCategoryId;
-    
+
                                         jobData.push({
                                             title,
                                             companyName,
@@ -109,7 +115,7 @@ class BossAz {
                                             cityId: locationCity ? +locationCity.cityId : null,
                                             description,
                                             jobId,
-                                            categoryId: localCategoryId || null,
+                                            categoryId: category.localCategoryId || null,
                                             sourceUrl: this.url,
                                             redirectUrl: 'https://' + this.url + redirectUrl,
                                             jobType: '0x001',
@@ -130,7 +136,7 @@ class BossAz {
                         }
                     }
                 }
-            }
+            });
     
             const results = await Promise.all(dataPromises);
             const data = results.flat();

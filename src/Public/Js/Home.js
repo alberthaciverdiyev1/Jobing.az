@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
                 if (res.data.totalCount) {
                     let data = res.data.jobs.slice(0, 12);
                     data.forEach(element => {
-                        htmlContent += `<div class="job-card bg-white px-3 pt-2 h-40 rounded-xl shadow-md mb-4 hover:hover-card-color cursor-pointer duration-300 border border-custom sm:px-5" data-original-link="${element.redirectUrl}">
+                        htmlContent += `<div class="job-card bg-white px-3 pt-2 h-40 rounded-xl shadow-md hover:hover-card-color cursor-pointer duration-300 border border-custom sm:px-5" data-original-link="${element.redirectUrl}">
                         <div class="content flex">
                              <div class="mt-3 flex-shrink-0 sm:mt-1">
                                 <img src="../Images/${element.sourceUrl}.png" alt="Company Logo" class="border-custom h-12 w-12 mt-1 rounded-lg border sm:h-14 sm:w-14" />

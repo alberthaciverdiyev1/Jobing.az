@@ -35,14 +35,27 @@ const CategoryService = {
         }
     },
 
+    // getLocalCategories: async (data) => {
+    //     try {
+    //         let query = {};
+    //
+    //         // if (data?.website) {
+    //         //     query.website = Enums.SitesWithId[data.website];
+    //         // }
+    //         return await Category.find(query);
+    //     } catch (error) {
+    //         throw new Error('Error retrieving categories: ' + error.message);
+    //     }
+    // },
+
     getLocalCategories: async (data) => {
         try {
-            let query = {};   
-            
-            if (data?.website) {
-                query.website = Enums.SitesWithId[data.website];
-            }
-            return await Category.find(query);
+            let query = {};
+
+            // if (data?.website) {
+            //     query.website = Enums.SitesWithId[data.website];
+            // }
+            return await Category.find(query).select('-_id');
         } catch (error) {
             throw new Error('Error retrieving categories: ' + error.message);
         }
