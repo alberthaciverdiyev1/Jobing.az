@@ -57,7 +57,7 @@ function updateURLParams(params) {
 function preselectFilters(onlyCheckFilter = false) {
     // console.log("im in");
 
-    const { categoryId, cityId, educationId, experienceLevel, keyword } = getURLParams();
+    const {categoryId, cityId, educationId, experienceLevel, keyword} = getURLParams();
 
     if (categoryId && !isNaN(Number(categoryId))) {
         if (categoryId > 10) document.getElementById("categoryList").innerHTML = categoryHTML(categoryArray);
@@ -107,7 +107,7 @@ function categoryHTML(data, limit = null) {
     if (limit) {
         data = data.slice(0, limit);
     }
-    data.forEach(element => {
+    Object.values(data).forEach(element => {
         const categoryId = `category-${element.localCategoryId}`;
         htmlContent += `
         <div class="flex items-center"> 
@@ -172,26 +172,31 @@ function cityHTML(data, limit = null) {
 
 async function getCategories() {
     await axios.get('/api/categories', {
-        params: { website: "BossAz" }
+        params: {website: "BossAz"}
+    }).then(res => {
+        if (res.status === 200) {
+            res.data.forEach(element => {
+                categoryArray.push({
+                    "localCategoryId": element.localCategoryId,
+                    "name": element.categoryName
+                });
+            });
+            document.getElementById("categoryList").innerHTML = categoryHTML(categoryArray, 10);
+            addRadioChangeListener("category");
+        }
     })
-        .then(res => {
-            if (res.status === 200) {
-                categoryArray = res.data;
-                document.getElementById("categoryList").innerHTML = categoryHTML(res.data, 10);
-                addRadioChangeListener("category");
-            }
-        })
         .catch(error => {
             console.error("Error fetching categories:", error);
         });
 
 }
+
 // getCategories();
 
 
 async function getCities() {
     await axios.get('/api/cities', {
-        params: { site: "BossAz" }
+        params: {site: "BossAz"}
     })
         .then(res => {
             if (res.status === 200) {
@@ -206,6 +211,7 @@ async function getCities() {
         });
 
 }
+
 // getCities();
 
 async function getEducation() {
@@ -233,6 +239,7 @@ async function getEducation() {
         });
 
 }
+
 // getEducation();
 
 async function getExperience() {
@@ -260,6 +267,7 @@ async function getExperience() {
         });
 
 }
+
 // getExperience();
 
 const scrollThreshold = 100;
@@ -345,20 +353,20 @@ async function getJobs(params) {
                                                    <span class="bg-blue-100 text-blue-700 px-1 py-0.5 rounded-lg text-sm">${element.sourceUrl}</span>
                                                 <h4 class="text-lg text-gray-600 font-bold">
                                                     ${(
-                            (+element.minSalary === +element.maxSalary && +element.minSalary !== null && +element.minSalary !== 0)
-                                ? +element.minSalary + " " + element.currencySign
+                        (+element.minSalary === +element.maxSalary && +element.minSalary !== null && +element.minSalary !== 0)
+                            ? +element.minSalary + " " + element.currencySign
+                            : (
+                            (+element.minSalary !== null && +element.minSalary !== 0)
+                                ? +element.minSalary + '-'
+                                : ""
+                        ) + (
+                            (+element.maxSalary !== null && +element.maxSalary !== 0)
+                                ? +element.maxSalary + " " + element.currencySign
                                 : (
-                                    (+element.minSalary !== null && +element.minSalary !== 0)
-                                        ? +element.minSalary + '-'
-                                        : ""
-                                ) + (
-                                    (+element.maxSalary !== null && +element.maxSalary !== 0)
-                                        ? +element.maxSalary + " " + element.currencySign
-                                        : (
-                                            !element.minSalary && !element.maxSalary ? "Razılaşma ilə" : ""
-                                        )
+                                    !element.minSalary && !element.maxSalary ? "Razılaşma ilə" : ""
                                 )
-                        )}
+                        )
+                    )}
                                                     </h4>
                                                 </div>
                                             </div>
@@ -369,20 +377,20 @@ async function getJobs(params) {
                                                     </button>` : ""}
                                                 <h4 class="text-lg text-gray-600 font-bold mt-2">
                                                     ${(
-                            (+element.minSalary === +element.maxSalary && +element.minSalary !== null && +element.minSalary !== 0)
-                                ? +element.minSalary + " " + element.currencySign
+                        (+element.minSalary === +element.maxSalary && +element.minSalary !== null && +element.minSalary !== 0)
+                            ? +element.minSalary + " " + element.currencySign
+                            : (
+                            (+element.minSalary !== null && +element.minSalary !== 0)
+                                ? +element.minSalary + '-'
+                                : ""
+                        ) + (
+                            (+element.maxSalary !== null && +element.maxSalary !== 0)
+                                ? +element.maxSalary + " " + element.currencySign
                                 : (
-                                    (+element.minSalary !== null && +element.minSalary !== 0)
-                                        ? +element.minSalary + '-'
-                                        : ""
-                                ) + (
-                                    (+element.maxSalary !== null && +element.maxSalary !== 0)
-                                        ? +element.maxSalary + " " + element.currencySign
-                                        : (
-                                            !element.minSalary && !element.maxSalary ? "Razılaşma ilə" : ""
-                                        )
+                                    !element.minSalary && !element.maxSalary ? "Razılaşma ilə" : ""
                                 )
-                        )}                                              
+                        )
+                    )}                                              
                                                 </h4>
                                                 </div>
                                                 <div class="flex justify-end items-end mt-auto pt-16">
@@ -416,9 +424,6 @@ async function getJobs(params) {
         console.error(err);
     }
 }
-
-
-
 
 
 // async function getJobs(params) {
@@ -633,16 +638,16 @@ function handleFilterChange(minS = 0, maxS = 5000) {
         minSalary ?? 0;
         maxSalary ?? 5000;
 
-        updateURLParams({ categoryId, cityId, educationId, experienceLevel, offset, keyword, minSalary, maxSalary });
-        getJobs({ categoryId, cityId, educationId, experienceLevel, offset, keyword, minSalary, maxSalary });
+        updateURLParams({categoryId, cityId, educationId, experienceLevel, offset, keyword, minSalary, maxSalary});
+        getJobs({categoryId, cityId, educationId, experienceLevel, offset, keyword, minSalary, maxSalary});
 
     } else {
         maxSalary = maxS ?? 5000;
         minSalary = !isNaN(Number(minS)) ? minS : 0;
-        let { categoryId, cityId, educationId, experienceLevel, keyword } = getURLParams();
+        let {categoryId, cityId, educationId, experienceLevel, keyword} = getURLParams();
 
-        updateURLParams({ categoryId, cityId, educationId, experienceLevel, offset, keyword, minSalary, maxSalary });
-        getJobs({ categoryId, cityId, educationId, experienceLevel, offset, keyword, minSalary, maxSalary });
+        updateURLParams({categoryId, cityId, educationId, experienceLevel, offset, keyword, minSalary, maxSalary});
+        getJobs({categoryId, cityId, educationId, experienceLevel, offset, keyword, minSalary, maxSalary});
     }
 
 }
@@ -657,8 +662,6 @@ document.getElementById("search").addEventListener("keyup", () => {
         handleFilterChange();
     }, 500);
 });
-
-
 
 
 function addRadioChangeListener(type) {

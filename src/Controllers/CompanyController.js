@@ -1,6 +1,8 @@
 import BossAz from '../Helpers/SiteBasedScrapes/BossAz.js';
 import SmartJobAz from '../Helpers/SiteBasedScrapes/SmartJobAz.js';
 import CompanyService from '../Services/CompanyService.js';
+import path from 'path';
+import fs from 'fs';
 
 const CompanyController = {
     create: async (req, res) => {
@@ -19,14 +21,39 @@ const CompanyController = {
         }
     },
 
+    // getAll: async (req, res) => {
+    //     try {
+    //         const companies = await CompanyService.getAll();
+    //         res.status(200).json(companies);
+    //     } catch (error) {
+    //         res.status(500).json({ message: 'Error retrieving company: ' + error.message });
+    //     }
+    // },
+
     getAll: async (req, res) => {
         try {
             const companies = await CompanyService.getAll();
-            res.status(200).json(companies);
+
+            const updatedCompanies = companies.map((company) => {
+                if (company.imageUrl && company.imageUrl.startsWith('http')) {
+                    const companyFolder = `./src/Public/${company.companyName || 'default'}`;
+
+                    if (!fs.existsSync(companyFolder)) {
+                        fs.mkdirSync(companyFolder, { recursive: true });
+                    }
+
+                    const localFilePath = path.join(companyFolder, path.basename(company.imageUrl));
+                    company.imageUrl = localFilePath;
+                }
+                return company;
+            });
+
+            res.status(200).json(updatedCompanies);
         } catch (error) {
-            res.status(500).json({ message: 'Error retrieving company: ' + error.message });
+            res.status(500).json({ message: 'Error retrieving companies: ' + error.message });
         }
     },
+
 
     findById: async (req, res) => {
         try {
