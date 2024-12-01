@@ -115,7 +115,8 @@ class OfferAz {
                                         minSalary = !isNaN(Number(parts[0])) ? parseInt(parts[0], 10) : 0;
                                         maxSalary = !isNaN(Number(parts[1])) ? parseInt(parts[1], 10) : 0;
                                     } else if (parts.length === 1) {
-                                        minSalary = maxSalary = !isNaN(Number(parts[0])) ? parseInt(parts[0], 10) : 0;
+                                        minSalary = 0;
+                                        maxSalary = !isNaN(Number(parts[0])) ? parseInt(parts[0], 10) : 0;
                                     }
 
                                     jobData.push({
@@ -135,6 +136,8 @@ class OfferAz {
                                         experienceId: null,
                                         uniqueKey: `${title}-${companyName}-${location}`
                                     });
+                                    console.log({"OfferAz": jobData})
+
                                 });
 
                             } catch (error) {

@@ -29,14 +29,31 @@ const VisitorService = {
             throw new Error('Error updating last visit: ' + error.message);
         }
     },
-    count:async () => {
+
+    incrementVisitCount: async (ip) => {
+        return VisitorModel.updateOne({ ip }, { $inc: { visitCount: 1 } });
+    },
+
+    count: async () => {
         const thirtyDaysAgo = new Date();
         thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
-        return Visitor.countDocuments({
-            createdAt: {$gte: thirtyDaysAgo}
-        });
+        const result = await Visitor.aggregate([
+            {
+                $match: {
+                    createdAt: { $gte: thirtyDaysAgo }
+                }
+            },
+            {
+                $group: {
+                    _id: null,
+                    totalVisits: { $sum: "$visitCount" }
+                }
+            }
+        ]);
+        return result[0]?.totalVisits || 0; 
     }
+
 };
 
 export default VisitorService;
