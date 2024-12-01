@@ -66,10 +66,10 @@ document.addEventListener("DOMContentLoaded", (event) => {
                                             </h4>
                                         </div>
                                         <h4 class="truncate sm:hidden text-sm font-semibold text-gray-700 mb-1"> 
-                                            <i class="fa-solid fa-building"></i> ${element.companyName.slice(0, 17) + (element.companyName.length > 17 ? "..." : "")}
+                                            <i class="fa-solid fa-building"></i> ${capitalizeFirstLetter(element.companyName.slice(0, 17)) + (element.companyName.length > 17 ? "..." : "")}
                                         </h4>
                                         <h4 class="hidden sm:inline sm:whitespace-normal text-sm font-semibold text-gray-700 mb-1"> 
-                                            <i class="fa-solid fa-building"></i> ${element.companyName.slice(0, 32) + (element.companyName.length > 32 ? "..." : "")}
+                                            <i class="fa-solid fa-building"></i> ${capitalizeFirstLetter(element.companyName.slice(0, 32)) + (element.companyName.length > 32 ? "..." : "")}
                                         </h4>
                                     </div>
                                     <div class="hidden sm:w-full">

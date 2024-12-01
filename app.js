@@ -43,21 +43,8 @@ app.use('/', routes);
 
 // cron.schedule('0 7-23 * * *', async () => {
 cron.schedule('0 7-23/3 * * *', async () => {
-    // const to = process.env.CRON_MAIL_USER;
-    const now = new Date();
-
-    const formatDate = (date) => {
-        return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}:${date.getSeconds().toString().padStart(2, '0')}`;
-    };
-
     try {
-        let startData = {
-            title: "Cron started",
-            text: `Crone started at ${formatDate(now)}`
-        };
-        await sendEmail(startData, to);
         const response = await axios.post(`http://localhost:${port}/api/jobs`);
-
         if (response.status === 200 || response.status === 201) {
             let endData = {
                 title: "Cron ended",
