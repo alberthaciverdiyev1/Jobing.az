@@ -39,16 +39,24 @@ const CompanyService = {
         }
     },
 
+    updateCompanyImageUrl: async (companyId, newImagePath) => {
+        try {
+            await Company.findByIdAndUpdate(companyId, { imageUrl: newImagePath });
+        } catch (error) {
+            throw new Error(`Error updating image URL for company with ID ${companyId}: ${error.message}`);
+        }
+    },
+
     removeDuplicates: async () => {
         try {
             const thirtyDaysAgo = new Date();
             thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
-            const allCompanies = await Company.find({
-                createdAt: {$gte: thirtyDaysAgo},
-            }).sort({createdAt: -1});
+            const companiesList = await Company.find({
+                createdAt: { $gte: thirtyDaysAgo },
+            }).sort({ createdAt: -1 });
 
-            if (!allCompanies || allCompanies.length === 0) {
+            if (!companiesList || companiesList.length === 0) {
                 return {
                     status: 200,
                     message: 'No data found for the last 30 days.',
@@ -57,23 +65,25 @@ const CompanyService = {
             }
 
             const seenUniqueKeys = new Map();
-            const duplicateUniqueKeys = new Set();
+            const duplicateIds = [];
 
-            allCompanies.forEach(company => {
-                const uniqueKey = company.uniqueKey;
+            companiesList.forEach(c => {
+                const uniqueKey = c.uniqueKey;
                 if (seenUniqueKeys.has(uniqueKey)) {
-                    duplicateUniqueKeys.add(uniqueKey);
+                    const previousCompany = seenUniqueKeys.get(uniqueKey);
+                    duplicateIds.push(previousCompany._id);
+                    seenUniqueKeys.set(uniqueKey, c);
                 } else {
-                    seenUniqueKeys.set(uniqueKey, company);
+                    seenUniqueKeys.set(uniqueKey, c);
                 }
             });
 
-            if (duplicateUniqueKeys.size > 0) {
-                await Company.deleteMany({uniqueKey: {$in: Array.from(duplicateUniqueKeys)}});
+            if (duplicateIds.length > 0) {
+                await JobData.deleteMany({ _id: { $in: duplicateIds } });
                 return {
                     status: 201,
-                    message: `Deleted records with duplicate uniqueKey values from the last 30 days.`,
-                    count: duplicateUniqueKeys.size,
+                    message: `Deleted ${duplicateIds.length} duplicate records from the last 30 days.`,
+                    count: duplicateIds.length,
                 };
             } else {
                 return {
