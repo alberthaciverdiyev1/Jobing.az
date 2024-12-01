@@ -33,8 +33,7 @@ const CompanyService = {
     // Get all companies
     getAll: async () => {
         try {
-            const companies = await Company.find({});
-            return companies;
+            return await Company.find({});
         } catch (error) {
             throw new Error('Error retrieving companies: ' + error.message);
         }
@@ -44,11 +43,11 @@ const CompanyService = {
         try {
             const thirtyDaysAgo = new Date();
             thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-    
+
             const allCompanies = await Company.find({
-                createdAt: { $gte: thirtyDaysAgo },
-            }).sort({ createdAt: -1 });
-    
+                createdAt: {$gte: thirtyDaysAgo},
+            }).sort({createdAt: -1});
+
             if (!allCompanies || allCompanies.length === 0) {
                 return {
                     status: 200,
@@ -56,10 +55,10 @@ const CompanyService = {
                     count: 0,
                 };
             }
-    
+
             const seenUniqueKeys = new Map();
             const duplicateUniqueKeys = new Set();
-    
+
             allCompanies.forEach(company => {
                 const uniqueKey = company.uniqueKey;
                 if (seenUniqueKeys.has(uniqueKey)) {
@@ -68,9 +67,9 @@ const CompanyService = {
                     seenUniqueKeys.set(uniqueKey, company);
                 }
             });
-    
+
             if (duplicateUniqueKeys.size > 0) {
-                await Company.deleteMany({ uniqueKey: { $in: Array.from(duplicateUniqueKeys) } });
+                await Company.deleteMany({uniqueKey: {$in: Array.from(duplicateUniqueKeys)}});
                 return {
                     status: 201,
                     message: `Deleted records with duplicate uniqueKey values from the last 30 days.`,
@@ -126,7 +125,7 @@ const CompanyService = {
                 throw new Error('Company not found');
             }
             await company.remove();
-            return { message: 'Company successfully deleted' };
+            return {message: 'Company successfully deleted'};
         } catch (error) {
             throw new Error('Error deleting company: ' + error.message);
         }

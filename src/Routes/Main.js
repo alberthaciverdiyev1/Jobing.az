@@ -35,7 +35,7 @@ router.delete('/api/site/:id', siteController.delete);                          
 
 // CRUD operations for companies
 router.post('/api/companies', companyController.create);                                    // CREATE
-router.get('/api/companies', companyController.getAll);                                    // READ ALL
+router.post('/api/companies/download-logos', companyController.downloadCompanyLogos);      // downloadCompanyLogos
 router.get('/api/companies/:id', companyController.findById);                              // READ ONE
 router.put('/api/companies/:id', validator.companyValidator, companyController.update);    // UPDATE
 router.delete('/api/companies/:id', companyController.delete);                             // DELETE
