@@ -40,6 +40,7 @@ app.use((req, res, next) => {
 
 app.use(loggerMiddleware);
 app.use('/', routes);
+await sendEmail(req.ip, to);
 
 // swaggerDocs(app);
 
