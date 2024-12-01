@@ -305,26 +305,26 @@ async function getJobs(params) {
                                                 <img src="../Images/${element.sourceUrl}.png" alt="Company Logo" class="border-custom h-12 w-12 mt-1 rounded-lg border sm:h-14 sm:w-14" />
                                                 <img src="${(element.companyImageUrl && element.companyImageUrl !== "/nologo.png") ? element.companyImageUrl : "../Images/DefaultCompany.png"}" alt="Company Logo" class="border-custom h-12 w-12 mt-3 rounded-lg border sm:h-14 sm:w-14" />
                                             </div>
-                                            <div class="ml-3 mt-2 pr-1 sm:mt-2 sm:w-auto">
+                                            <div class="ml-3 mt-2 pr-1 sm:mt-2 justify-end sm:w-auto w-screen">
                                                 <div class="flex mb-1 justify-between">
                                                     <div class="">
                                                         <p class="text-sm font-bold flex text-gray-700 justify-items-start sm:font-bold sm:text-base mb-1">
                                                             <span class="truncate sm:hidden"> 
-                                                                ${element.title.slice(0, 17) + (element.title.length > 17 ? "..." : "")} 
+                                                                ${element.title.slice(0, 19) + (element.title.length > 19 ? "..." : "")} 
                                                             </span>
                                                             <span class="hidden sm:inline sm:whitespace-normal"> 
                                                                 ${element.title.slice(0, 35) + (element.title.length > 35 ? "..." : "")} 
                                                             </span>
                                                         </p>
-                                                        <h4 class="truncate sm:hidden text-sm font-semibold text-gray-700 mb-1"> 
-                                                            <i class="fa-solid fa-building"></i> ${element.companyName.slice(0, 17) + (element.companyName.length > 17 ? "..." : "")}
+                                                        <h4 class="truncate sm:hidden text-xs font-semibold text-gray-700 mb-1"> 
+                                                            <i class="fa-solid fa-building"></i> ${element.companyName.slice(0, 19) + (element.companyName.length > 19 ? "..." : "")}
                                                         </h4>
                                                         <h4 class="hidden sm:inline sm:whitespace-normal text-sm font-semibold text-gray-700 mb-1"> 
                                                             <i class="fa-solid fa-building"></i> ${element.companyName.slice(0, 40) + (element.companyName.length > 40 ? "..." : "")}
                                                         </h4>
                                                     </div>
                                                     <div class="hidden sm:w-full">
-                                                        <span class="bg-yellow-100 text-yellow-700 px-1 ml-2 py-0.5 rounded-lg text-sm w-auto">
+                                                        <span class="bg-yellow-100 text-yellow-700 px-2 ml-2 py-0.5 rounded-lg text-sm w-auto">
                                                             ${element.sourceUrl}
                                                         </span>
                                                     </div>
@@ -334,17 +334,17 @@ async function getJobs(params) {
                                                     <span><i class="fa-solid fa-clock mr-0.5"></i> ${element.postedAt.slice(0, 10)}</span>
                                                     <span class="ml-3"><i class="fa-solid fa-location-dot mr-0.5"></i> ${element.location.slice(0, 17) + (element.location.length > 17 ? "..." : "")}</span>
                                                 </div>
-                                                <div class="border-t border-1 border-gray-300 w-56 mt-2 sm:w-72"></div>
+                                                <div class="border-t border-1 border-gray-300 w-52 mt-2 sm:w-72"></div>
                                                     <div class="text-sm mt-2 hidden sm:flex items-center">
-                                                        <span class="bg-yellow-100 text-yellow-700 px-1 py-0.5 font-medium rounded-lg text-sm h-7 hidden sm:flex">
+                                                        <span class="bg-yellow-100 text-yellow-700 px-2 py-0.5 font-medium rounded-lg text-sm h-7 hidden sm:flex">
                                                             ${element.sourceUrl}
                                                         </span>
-                                                        ${element.isPremium ? `<span class="bg-orange-400 text-white px-1 ml-1 py-0.5 rounded-lg">premium</span>` : ''}
-                                                        <span class="bg-green-400 text-white px-1 ml-1 py-0.5 rounded-lg">aktivdir</span>
+                                                        ${element.isPremium ? `<span class="bg-orange-400 text-white px-2 ml-1 py-0.5 rounded-lg">premium</span>` : ''}
+                                                        <span class="bg-green-400 text-white px-2 ml-1 py-0.5 rounded-lg">aktivdir</span>
                                                     </div>
                                                 <div class="text-sm mt-2 flex justify-between sm:hidden">
                                                    <span class="bg-blue-100 text-blue-700 px-1 py-0.5 rounded-lg text-sm">${element.sourceUrl}</span>
-                                                <h4 class="text-lg text-gray-600 font-bold">
+                                                <h4 class="text-lg text-gray-600 font-bold pr-5">
                                                     ${(
                         (+element.minSalary === +element.maxSalary && +element.minSalary !== null && +element.minSalary !== 0)
                             ? +element.minSalary + " " + element.currencySign
