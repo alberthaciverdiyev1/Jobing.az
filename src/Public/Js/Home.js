@@ -1,6 +1,9 @@
+import { capitalizeFirstLetter } from './Helpers.js';
+
+
 document.addEventListener("DOMContentLoaded", (event) => {
     function noDataCard() {
-        return `<div class="flex items-center justify-center h-72 bg-white  border border-custom rounded-lg">
+        return `<div class="flex items-center justify-center h-72 bg-white border border-custom rounded-lg">
                     <div class="flex flex-col items-center justify-center w-full max-w-xs mx-auto">
                       <div class="w-20 h-20 mx-auto bg-orange-400 rounded-full shadow-sm flex justify-center items-center">
                         <svg xmlns="http://www.w3.org/2000/svg" width="33" height="32" viewBox="0 0 33 32" fill="none">
@@ -32,28 +35,44 @@ document.addEventListener("DOMContentLoaded", (event) => {
                                 <img src="../Images/${element.sourceUrl}.png" alt="Company Logo" class="border-custom h-12 w-12 mt-1 rounded-lg border sm:h-14 sm:w-14" />
                                 <img src="${(element.companyImageUrl && element.companyImageUrl !== "/nologo.png") ? element.companyImageUrl : "../Images/DefaultCompany.png"}" alt="Company Logo" class="border-custom h-12 w-12 mt-3 rounded-lg border sm:h-14 sm:w-14" />
                             </div>
-                            <div class="ml-3 mt-2 pr-1 sm:mt-2 sm:w-auto">
+                            <div class="ml-3 mt-2 pr-1 sm:mt-2 justify-end w-screen">
                                 <div class="flex mb-1 justify-between">
-                                    <div class="">
-                                        <p class="text-sm font-bold flex text-gray-700 justify-items-start sm:font-bold sm:text-base mb-1">
-                                            <span class="truncate sm:hidden"> 
-                                                ${element.title.slice(0, 17) + (element.title.length > 17 ? "..." : "")} 
-                                            </span>
-                                            <span class="hidden sm:inline sm:whitespace-normal"> 
-                                                ${element.title.slice(0, 35) + (element.title.length > 35 ? "..." : "")} 
-                                            </span>
-                                        </p>
+                                    <div class="w-full">
+                                        <div class="flex justify-between w-full">
+                                                <p class="text-sm font-bold flex text-gray-700 justify-items-start sm:font-bold sm:text-base mb-1">
+                                                    <span class="truncate sm:hidden"> 
+                                                        ${capitalizeFirstLetter(element.title.slice(0, 17)) + (element.title.length > 17 ? "..." : "")} 
+                                                    </span>
+                                                    <span class="hidden sm:inline sm:whitespace-normal"> 
+                                                        ${capitalizeFirstLetter(element.title.slice(0, 25)) + (element.title.length > 25 ? "..." : "")} 
+                                                    </span>
+                                                </p>
+                                            <h4 class="text-lg text-gray-600 font-bold hidden sm:block">
+                                                ${(
+                                            (+element.minSalary === +element.maxSalary && +element.minSalary !== null && +element.minSalary !== 0)
+                                                ? +element.minSalary + " " + element.currencySign
+                                                : (
+                                                (+element.minSalary !== null && +element.minSalary !== 0)
+                                                    ? +element.minSalary + '-'
+                                                    : ""
+                                            ) + (
+                                                (+element.maxSalary !== null && +element.maxSalary !== 0)
+                                                    ? +element.maxSalary + " " + element.currencySign
+                                                    : (
+                                                        !element.minSalary && !element.maxSalary ? "Razılaşma ilə" : ""
+                                                    )
+                                            )
+                                                )}                                                
+                                            </h4>
+                                        </div>
                                         <h4 class="truncate sm:hidden text-sm font-semibold text-gray-700 mb-1"> 
                                             <i class="fa-solid fa-building"></i> ${element.companyName.slice(0, 17) + (element.companyName.length > 17 ? "..." : "")}
                                         </h4>
                                         <h4 class="hidden sm:inline sm:whitespace-normal text-sm font-semibold text-gray-700 mb-1"> 
-                                            <i class="fa-solid fa-building"></i> ${element.companyName.slice(0, 40) + (element.companyName.length > 40 ? "..." : "")}
+                                            <i class="fa-solid fa-building"></i> ${element.companyName.slice(0, 32) + (element.companyName.length > 32 ? "..." : "")}
                                         </h4>
                                     </div>
                                     <div class="hidden sm:w-full">
-                                    ${true ? "" : ` <span class="bg-blue-100 text-blue-700 px-1 ml-3 py-0.5 h-12 w-auto rounded-lg text-sm">
-                                            ${element.jobType}
-                                        </span>`}
                                         <span class="bg-yellow-100 text-yellow-700 px-1 ml-2 py-0.5 rounded-lg text-sm w-auto">
                                             ${element.sourceUrl}
                                         </span>
@@ -63,60 +82,43 @@ document.addEventListener("DOMContentLoaded", (event) => {
                                     <span><i class="fa-solid fa-clock mr-0.5"></i> ${element.postedAt.slice(0, 10)}</span>
                                     <span class="ml-3"><i class="fa-solid fa-location-dot mr-0.5"></i> ${element.location.slice(0, 17) + (element.location.length > 17 ? "..." : "")}</span>
                                 </div>
-                                <div class="border-t border-1 border-gray-300 w-56 mt-2 sm:w-72"></div>
-                                    <div class="text-sm mt-2 hidden sm:flex items-center">
-                                        <span class="bg-yellow-100 text-yellow-700 px-1 py-0.5 font-medium rounded-lg text-sm h-7 hidden sm:flex">
+                                <div class="border-t border-1 border-gray-300 w-52 mt-2 sm:w-72"></div>
+                                    <div class="text-sm mt-2 hidden sm:flex items-center justify-between">
+                                      <div class="flex">  <span class="bg-yellow-100 text-yellow-700 px-2 py-0.5 font-medium rounded-lg text-sm h-7 hidden sm:flex">
                                             ${element.sourceUrl}
                                         </span>
-                                         ${element.isPremium ? `<span class="bg-orange-500 text-white px-1 ml-1 py-0.5 rounded-lg">premium</span>` : ''}
-                                        <span class="bg-green-400 text-white px-1 ml-1 py-0.5 rounded-lg">aktivdir</span>
-                                    </div>
+                                         ${element.isPremium ? `<span class="bg-orange-500 text-white px-2 ml-1 py-0.5 rounded-lg">premium</span>` : ''}
+                                        <span class="bg-green-400 text-white px-2 ml-1  py-0.5 rounded-lg">aktivdir</span></div>
+                                        <div class="flex justify-end items-end mt-auto">
+                                    <a href="${element.redirectUrl}" target="_blank" class="filled-button-color text-white py-2 px-8 rounded-full">
+                                        Keçid Et  
+                                    </a>
+                                </div>
+                                        </div>
                                 <div class="text-sm mt-2 flex justify-between sm:hidden">
                                    <span class="bg-blue-100 text-blue-700 px-1 py-0.5 rounded-lg text-sm">${element.sourceUrl}</span>
                                 <h4 class="text-lg text-gray-600 font-bold">
                                    ${(
                                         (+element.minSalary === +element.maxSalary && +element.minSalary !== null && +element.minSalary !== 0)
-                                            ? +element.minSalary +" "+ element.currencySign
+                                            ? +element.minSalary + " " + element.currencySign
                                             : (
-                                                (+element.minSalary !== null && +element.minSalary !== 0)
-                                                    ? +element.minSalary + '-'
-                                                    : ""
-                                            ) + (
-                                                (+element.maxSalary !== null && +element.maxSalary !== 0)
-                                                    ? +element.maxSalary  +" "+ element.currencySign
-                                                    : (
-                                                        !element.minSalary && !element.maxSalary ? "Razılaşma ilə" : ""
-                                                    )
-                                            )
+                                            (+element.minSalary !== null && +element.minSalary !== 0)
+                                                ? +element.minSalary + '-'
+                                                : ""
+                                        ) + (
+                                            (+element.maxSalary !== null && +element.maxSalary !== 0)
+                                                ? +element.maxSalary + " " + element.currencySign
+                                                : (
+                                                    !element.minSalary && !element.maxSalary ? "Razılaşma ilə" : ""
+                                                )
+                                        )
                                     )}   
                                  </h4>
                                 </div>
                             </div>
                             <div class="flex flex-col justify-between h-full flex-grow hidden sm:flex">
-                                <div class="text-right">
-                            <h4 class="text-lg text-gray-600 font-bold mt-2">
-                                 ${(
-                                       (+element.minSalary === +element.maxSalary && +element.minSalary !== null && +element.minSalary !== 0)
-                                           ? +element.minSalary +" "+ element.currencySign
-                                           : (
-                                               (+element.minSalary !== null && +element.minSalary !== 0)
-                                                   ? +element.minSalary + '-'
-                                                   : ""
-                                           ) + (
-                                               (+element.maxSalary !== null && +element.maxSalary !== 0)
-                                                   ? +element.maxSalary  +" "+ element.currencySign
-                                                   : (
-                                                       !element.minSalary && !element.maxSalary ? "Razılaşma ilə" : ""
-                                                   )
-                                           )
-                                   )}                                                
-                            </h4>
-                                </div>
-                                <div class="flex justify-end items-end mt-auto pt-16">
-                                    <a href="${element.redirectUrl}" target="_blank" class="filled-button-color text-white py-2 px-8 rounded-full">
-                                        Keçid Et  
-                                    </a>
-                                </div>
+
+
                             </div>
                         </div>
                     </div> `;
@@ -140,19 +142,20 @@ document.addEventListener("DOMContentLoaded", (event) => {
             console.error("Error fetching jobs:", error);
         });
     }
+
     getJobs();
 
     async function getCategories() {
         let o = `<option value="">Bütün Kateqoriyalar</option>`;
         await axios.get('/api/categories', {
-            params: { site: "bossAz" }
+            params: {site: "bossAz"}
         })
             .then(res => {
                 if (res.status === 200) {
-                    res.data.forEach(element => {
-                        o += `                        
-                        <option value="${element.localCategoryId}">${element.name}</option>`
-                    })
+                    console.log(res.data);
+                    Object.values(res.data).forEach(element => {
+                        o += `<option value="${element.localCategoryId}">${element.categoryName}</option> `
+                    });
                     document.getElementById("category-select").innerHTML = o;
                 }
             })
@@ -161,13 +164,15 @@ document.addEventListener("DOMContentLoaded", (event) => {
             });
 
     }
+
+
     getCategories();
 
     async function getCities() {
         let o = `<option value="">Bütün Şəhərlər</option>`;
 
         await axios.get('/api/cities', {
-            params: { site: "BossAz" }
+            params: {site: "BossAz"}
         })
             .then(res => {
                 if (res.status === 200) {
@@ -183,7 +188,9 @@ document.addEventListener("DOMContentLoaded", (event) => {
             });
 
     }
+
     getCities();
+
     async function getStatistics() {
         await axios.get('/statistics')
             .then(res => {
@@ -198,6 +205,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
             });
 
     }
+
     getStatistics();
     document.getElementById("filter-jobs").addEventListener("click", () => {
         const categorySelect = document.getElementById('category-select');
@@ -213,9 +221,9 @@ document.addEventListener("DOMContentLoaded", (event) => {
             minSalary: 0,
             maxSalary: 5000,
             offset: 0,
-            ...(categoryId && { categoryId }),
-            ...(cityId && { cityId }),
-            ...(keyword && { keyword }),
+            ...(categoryId && {categoryId}),
+            ...(cityId && {cityId}),
+            ...(keyword && {keyword}),
         });
 
 
