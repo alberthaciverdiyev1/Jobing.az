@@ -26,6 +26,7 @@ const port = process.env.PR_PORT || 3000;
 
 app.set('view engine', 'ejs');
 app.set('views', './src/Views');
+app.set('trust proxy', true);
 app.use(express.static(path.resolve('./src/Public')));
 app.use(express.json());
 app.use(cookieParser());
