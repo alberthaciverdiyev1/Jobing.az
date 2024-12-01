@@ -1,5 +1,8 @@
 import Enums from "../Config/Enums.js";
 import sendEmail from "../Helpers/NodeMailer.js";
+import CategoryService from "../Services/CategoryService.js";
+import CompanyService from "../Services/CompanyService.js";
+import JobDataService from "../Services/JobDataService.js";
 
 const ViewController = {
     home: async (req, res) => {
@@ -75,6 +78,12 @@ const ViewController = {
         const response = await sendEmail(req.body.data);
         res.status(200).json({ status: response.status, message: response.message });
 
+    },
+    statistics: async (req, res) => {
+        const company = await CompanyService.count()
+        const vacancy = await JobDataService.count()
+        res.status(200).json({ status: 200, message:"",data:{company,vacancy} });
+    
     }
 };
 

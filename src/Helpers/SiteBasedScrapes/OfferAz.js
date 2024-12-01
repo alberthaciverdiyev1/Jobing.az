@@ -48,7 +48,7 @@ class OfferAz {
                 .map(jobId => ({
                     localCategoryId: categories.find(c => c.offerAz.includes(jobId)).localCategoryId,
                     offerAzId: jobId,
-                }))
+                }));
 
             const limit = pLimit(1);
             const dataPromises = [];

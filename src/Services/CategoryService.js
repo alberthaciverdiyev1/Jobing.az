@@ -35,6 +35,17 @@ const CategoryService = {
         }
     },
 
+
+    // get all foreign categories
+    countCategory: async () => {
+        try {
+            return await Category.countDocuments({});
+        } catch (error) {
+            throw new Error('Error retrieving categories: ' + error.message);
+        }
+    },
+
+
     // getLocalCategories: async (data) => {
     //     try {
     //         let query = {};

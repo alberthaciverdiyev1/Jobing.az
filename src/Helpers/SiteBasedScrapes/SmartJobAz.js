@@ -59,22 +59,31 @@ class SmartJobAz {
     async Jobs(categories, bossAzcities) {
         const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
         try {
+
+            let splitCategories = categories
+            .flatMap(c => c.smartJobAz.split(','))
+            .map(jobId => jobId.trim())
+            .filter(jobId => jobId !== '')
+            .map(jobId => ({
+                localCategoryId: categories.find(c => c.smartJobAz.includes(jobId)).localCategoryId,
+                smartJobAzId: jobId,
+            }));
+
             let $ = await Scrape(`https://${this.url}`);
             const token = $('input[name="_token"]').val();
 
-            const filteredCategories = categories.filter(c => c.website === enums.SitesWithId.SmartJobAz);
             const limit = pLimit(3);
             const dataPromises = [];
             const educationIds = [1, 2, 5, 6, 7, 9, 10, 11, 12, 13, 0];
             const jobData = [];
             const companyData = [];
 
-            for (const category of filteredCategories) {
+            Object.entries(splitCategories).forEach(([no, category]) => {
                 for (const education of educationIds) {
                     for (let page = 0; page <= 2; page++) {
                         const requestPromise = limit(async () => {
                             try {
-                                const url = `https://${this.url}/vacancies?_token=${encodeURIComponent(token)}&job_category_id%5B20%5D=${encodeURIComponent(category.categoryId)}&education_id%5B0%5D=${encodeURIComponent(education)}&salary_from=&salary_to=&page=${page}`;
+                                const url = `https://${this.url}/vacancies?_token=${encodeURIComponent(token)}&job_category_id%5B20%5D=${encodeURIComponent(category.smartJobAzId)}&education_id%5B0%5D=${encodeURIComponent(education)}&salary_from=&salary_to=&page=${page}`;
 
                                 const timeout = new Promise((_, reject) => {
                                     setTimeout(() => reject(new Error('Request timed out')), 30000);
@@ -144,7 +153,7 @@ class SmartJobAz {
                         dataPromises.push(requestPromise);
                     }
                 }
-            }
+            });
 
             const results = await Promise.all(dataPromises);
             results.flat();

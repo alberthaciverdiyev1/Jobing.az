@@ -212,6 +212,14 @@ const JobDataService = {
         } catch (error) {
             throw new Error('Error deleting job: ' + error.message);
         }
+    },
+    count:async () => {
+        const thirtyDaysAgo = new Date();
+        thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+    
+        return await JobData.countDocuments({
+            createdAt: { $gte: thirtyDaysAgo }
+        });
     }
 };
 

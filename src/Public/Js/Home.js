@@ -183,7 +183,21 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
     }
     getCities();
+    async function getCities() {
+        await axios.get('/statistics')
+            .then(res => {
+                if (res.status === 200) {
+                    document.getElementById("vacancy").innerText = res.data.data.vacancy;
+                    document.getElementById("company").innerText = res.data.data.company;
+                    document.getElementById("visitor").innerText = res.data.data.company;
+                }
+            })
+            .catch(error => {
+                console.error("Error fetching cities:", error);
+            });
 
+    }
+    getCities();
     document.getElementById("filter-jobs").addEventListener("click", () => {
         const categorySelect = document.getElementById('category-select');
         const citySelect = document.getElementById('city-select');
