@@ -30,14 +30,14 @@ const CompanyController = {
         }
     },
 
-    getAll: async (req, res) => {
+    downloadCompanyLogos: async (req, res) => {
         try {
             const companies = await CompanyService.getAll();
 
             const updatedCompanies = companies.map((company) => {
+                // console.log(company);
                 if (company.imageUrl && company.imageUrl.startsWith('http')) {
                     const companyFolder = `./src/Public/${company.companyName || 'default'}`;
-
                     if (!fs.existsSync(companyFolder)) {
                         fs.mkdirSync(companyFolder, { recursive: true });
                     }

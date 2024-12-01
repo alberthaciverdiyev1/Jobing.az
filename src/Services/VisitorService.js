@@ -31,7 +31,7 @@ const VisitorService = {
     },
 
     incrementVisitCount: async (ip) => {
-        return VisitorModel.updateOne({ ip }, { $inc: { visitCount: 1 } });
+        return Visitor.updateOne({ ip }, { $inc: { visitCount: 1 } });
     },
 
     count: async () => {

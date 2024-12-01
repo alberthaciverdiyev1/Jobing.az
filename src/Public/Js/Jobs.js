@@ -316,10 +316,10 @@ async function getJobs(params) {
                                                                 ${element.title.slice(0, 35) + (element.title.length > 35 ? "..." : "")} 
                                                             </span>
                                                         </p>
-                                                        <h4 class="truncate sm:hidden text-sm font-semibold text-gray-700 mb-1 sm:font-bold"> 
+                                                        <h4 class="truncate sm:hidden text-sm font-semibold text-gray-700 mb-1"> 
                                                             <i class="fa-solid fa-building"></i> ${element.companyName.slice(0, 17) + (element.companyName.length > 17 ? "..." : "")}
                                                         </h4>
-                                                        <h4 class="hidden sm:inline sm:whitespace-normal text-sm font-semibold text-gray-700 mb-1 sm:font-bold"> 
+                                                        <h4 class="hidden sm:inline sm:whitespace-normal text-sm font-semibold text-gray-700 mb-1"> 
                                                             <i class="fa-solid fa-building"></i> ${element.companyName.slice(0, 40) + (element.companyName.length > 40 ? "..." : "")}
                                                         </h4>
                                                     </div>
