@@ -21,14 +21,14 @@ const CompanyController = {
         }
     },
 
-    // getAll: async (req, res) => {
-    //     try {
-    //         const companies = await CompanyService.getAll();
-    //         res.status(200).json(companies);
-    //     } catch (error) {
-    //         res.status(500).json({ message: 'Error retrieving company: ' + error.message });
-    //     }
-    // },
+    removeDuplicates: async (req, res) => {
+        try {
+            const response = await CompanyService.removeDuplicates();
+            res.status(200).json(response);
+        } catch (error) {
+            res.status(500).json({ message: 'Error updating site: ' + error.message });
+        }
+    },
 
     getAll: async (req, res) => {
         try {

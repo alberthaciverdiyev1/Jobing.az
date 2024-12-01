@@ -3,10 +3,9 @@ import mongoose from 'mongoose';
 const { Schema } = mongoose;
 
 const visitorSchema = new Schema({
-    visitIp: {
+    ip: {
         type: String,
-        required: true,
-        unique: true
+        required: true
     },
     lastVisit: {
         type: Date,
