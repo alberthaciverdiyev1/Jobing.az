@@ -1,23 +1,16 @@
 import mongoose from 'mongoose';
 
-const { Schema } = mongoose;
+const {Schema} = mongoose;
 
-const siteSchema = new Schema({
-    name: {
+const visitorSchema = new Schema({
+    ip: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
-    url: {
-        type: String,
-        required: true
-    },
-    icon: {
-        type: String,
-        required: false
-    },
-    isActive: {
-        type: Boolean,
-        default: true
+    lastVisit: {
+        type: Date,
+        default: Date.now
     },
     deletedAt: {
         type: Date,
@@ -28,6 +21,6 @@ const siteSchema = new Schema({
     versionKey: false
 });
 
-const Site = mongoose.model('Site', siteSchema);
+const Visitor = mongoose.model('Visitor', visitorSchema);
 
-export default Site;
+export default Visitor;

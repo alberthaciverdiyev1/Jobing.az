@@ -49,38 +49,37 @@ const jobDataController = {
             };
 
             let jobSearchAzJobs = [];
-            // try {
-            //     jobSearchAzJobs = await jobSearchAz.Jobs(categories, cities);
-            //     console.log({jobSearchAz})
-            //     await insertJobs(jobSearchAzJobs, "JobSearchAz");
-            // } catch (error) {
-            //     errors.push(`Error fetching HelloJobAz jobs: ${error.message}`);
-            // }
+            try {
+                jobSearchAzJobs = await jobSearchAz.Jobs(categories, cities);
+                await insertJobs(jobSearchAzJobs, "JobSearchAz");
+            } catch (error) {
+                errors.push(`Error fetching HelloJobAz jobs: ${error.message}`);
+            }
 // return
             let helloJobAzJobs = [];
-            // try {
-            //     helloJobAzJobs = await helloJobAz.Jobs(categories, cities);
-            //     await insertJobs(helloJobAzJobs, "HelloJobAz");
-            // } catch (error) {
-            //     errors.push(`Error fetching HelloJobAz jobs: ${error.message}`);
-            // }
+            try {
+                helloJobAzJobs = await helloJobAz.Jobs(categories, cities);
+                await insertJobs(helloJobAzJobs, "HelloJobAz");
+            } catch (error) {
+                errors.push(`Error fetching HelloJobAz jobs: ${error.message}`);
+            }
     
             let offerAzjobs = [];
-            // try {
-            //     offerAzjobs = await offerAz.Jobs(categories, cities);
-            //     await insertJobs(offerAzjobs, "OfferAz");
-            // } catch (error) {
-            //     errors.push(`Error fetching OfferAz jobs: ${error.message}`);
-            // }
-            //
+            try {
+                offerAzjobs = await offerAz.Jobs(categories, cities);
+                await insertJobs(offerAzjobs, "OfferAz");
+            } catch (error) {
+                errors.push(`Error fetching OfferAz jobs: ${error.message}`);
+            }
+
             let smartJobAzJobs = [];
-            // try {
-            //     smartJobAzJobs = await smartJobAz.Jobs(categories, cities);
-            //     await insertJobs(smartJobAzJobs, "SmartJobAz");
-            // } catch (error) {
-            //     errors.push(`Error fetching SmartJobAz jobs: ${error.message}`);
-            // }
-            //
+            try {
+                smartJobAzJobs = await smartJobAz.Jobs(categories, cities);
+                await insertJobs(smartJobAzJobs, "SmartJobAz");
+            } catch (error) {
+                errors.push(`Error fetching SmartJobAz jobs: ${error.message}`);
+            }
+
             let bossAzjobs = [];
             try {
                 bossAzjobs = await bossAz.Jobs(categories, cities);

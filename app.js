@@ -11,6 +11,7 @@ import sendEmail from './src/Helpers/NodeMailer.js';
 import i18n from 'i18n';
 import cookieParser from 'cookie-parser';
 import { title } from 'process';
+import visitorLogger from "./src/Middlewares/Visitors.js";
 const to = process.env.CRON_MAIL_USER;
 
 i18n.configure({
@@ -29,6 +30,8 @@ app.use(express.static(path.resolve('./src/Public')));
 app.use(express.json());
 app.use(cookieParser());
 app.use(i18n.init);
+app.use(visitorLogger);
+
 
 app.use((req, res, next) => {
     res.locals.Production = Production;

@@ -36,6 +36,9 @@ const CompanyService = {
         }
     },
 
+    count: async () => {
+        return Company.countDocuments();
+    },
     // Get all companies
     getAll: async () => {
         try {
