@@ -9,6 +9,7 @@ import viewController from "../Controllers/ViewController.js";
 import cityController from '../Controllers/CityController.js';
 
 import validator from '../Validators/Main.js'
+import visitorLogger from "../Middlewares/Visitors.js";
 const router = express.Router();
 
 router.post('/api/users', validator.registerValidator, userController.createUser);         // CREATE
@@ -60,9 +61,9 @@ router.get('/api/scrape', scrapeController.getData);                            
 //Load Views
 router.get('/', viewController.home);
 router.get('/auth', viewController.auth);
-router.get('/jobs', viewController.jobs);
-router.get('/about-us', viewController.aboutUs);
-router.get('/contact', viewController.contactUs);
+router.get('/jobs',visitorLogger, viewController.jobs);
+router.get('/about-us',visitorLogger, viewController.aboutUs);
+router.get('/contact',visitorLogger, viewController.contactUs);
 router.get('/statistics',viewController.statistics)
 //Enums
 router.get('/education', viewController.education);
