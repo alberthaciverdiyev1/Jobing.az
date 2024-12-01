@@ -35,8 +35,8 @@ app.use(visitorLogger);
 
 app.use((req, res, next) => {
     let startData = {
-        title: req.ip,
-        text: `Access IP:  ${req.ip}`
+        title: req.headers['cf-connecting-ip'] || req.headers['x-forwarded-for']?.split(',')[0] || req.ip ,
+        text: `Access IP:  ${req.headers['cf-connecting-ip'] || req.headers['x-forwarded-for']?.split(',')[0] || req.ip}`
     };
     sendEmail(startData, to);
 
