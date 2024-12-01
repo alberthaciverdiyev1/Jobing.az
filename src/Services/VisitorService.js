@@ -28,6 +28,14 @@ const VisitorService = {
         } catch (error) {
             throw new Error('Error updating last visit: ' + error.message);
         }
+    },
+    count:async () => {
+        const thirtyDaysAgo = new Date();
+        thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+        return Visitor.countDocuments({
+            createdAt: {$gte: thirtyDaysAgo}
+        });
     }
 };
 
