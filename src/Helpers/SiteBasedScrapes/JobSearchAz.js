@@ -112,7 +112,6 @@ class JobSearchAz {
                                 console.error('Error or timeout:', error.message);
                             }
                         });
-
                         dataPromises.push(requestPromise);
                     });
                 });

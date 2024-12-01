@@ -237,6 +237,7 @@ class HelloJobAz {
                                             location: cityName,
                                             description,
                                             jobId,
+                                            cityId:bossAzcities.find(x => x.name === cityName)?.cityId || null,
                                             sourceUrl: this.url,
                                             redirectUrl: `https://${this.url}` + redirectUrl,
                                             jobType: '0x001',
@@ -249,8 +250,7 @@ class HelloJobAz {
                                             website: enums.SitesWithId.HelloJobAz,
                                             uniqueKey: `${companyName}-${companyImageUrl}`
                                         });
-
-                                        console.log({"Hello": jobData})
+                                        // console.log({"Hello": jobData})
                                     });
 
                                 } catch (error) {
@@ -272,8 +272,7 @@ class HelloJobAz {
                 return jobData;
             }
         } catch (error) {
-            console.error('İşlerin çekilmesinde hata:', error.message, error.stack);
-            throw new Error('İşlerin çekilmesinde hata');
+            throw new Error('Error Scraping Jobs From HelloJobAz');
         }
     }
 

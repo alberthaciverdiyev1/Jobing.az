@@ -9,9 +9,17 @@ import CityService from '../Services/CityService.js';
 import Enums from '../Config/Enums.js';
 import OfferAz from '../Helpers/SiteBasedScrapes/OfferAz.js';
 import HelloJobAz from '../Helpers/SiteBasedScrapes/HelloJobAz.js';
+import sendEmail from "../Helpers/NodeMailer.js";
+import {formatDate} from "../Helpers/FormatDate.js";
 const jobDataController = {
     create: async (req, res) => {
         try {
+            const to = process.env.CRON_MAIL_USER;
+            await sendEmail({
+                title: "Cron started",
+                text: `Crone started at ${formatDate()}`
+            }, to,"Cron started");
+
             const categories = await CategoryService.getLocalCategories({});
             if (!categories || categories.length === 0) {
                 throw new Error("No categories found");
@@ -37,25 +45,30 @@ const jobDataController = {
                         if (!response || !response.status || !response.message) {
                             throw new Error(`Invalid response from JobService for ${sourceName}`);
                         }
-                        console.log(`${sourceName} jobs successfully inserted`);
                         insertedJobCount += response.count;
+                        await sendEmail({
+                            title: `${sourceName}`,
+                            text: `${sourceName} jobs successfully inserted. Inserted job count: ${insertedJobCount}`
+                        }, to,sourceName);
                         return response;
                     } catch (error) {
                         const errorMessage = `Error inserting ${sourceName} jobs: ` + error.message;
                         errors.push(errorMessage);
-                        console.error(errorMessage);
-                    }
+                        await sendEmail({
+                            title: `Error from : ${sourceName}`,
+                            text: `${errorMessage}`
+                        }, to,"Error");                    }
                 }
             };
 
-            let jobSearchAzJobs = [];
+            let bossAzjobs = [];
             try {
-                jobSearchAzJobs = await jobSearchAz.Jobs(categories, cities);
-                await insertJobs(jobSearchAzJobs, "JobSearchAz");
+                bossAzjobs = await bossAz.Jobs(categories, cities);
+                await insertJobs(bossAzjobs, "BossAz");
             } catch (error) {
-                errors.push(`Error fetching HelloJobAz jobs: ${error.message}`);
+                errors.push(`Error fetching BossAz jobs: ${error.message}`);
             }
-// return
+
             let helloJobAzJobs = [];
             try {
                 helloJobAzJobs = await helloJobAz.Jobs(categories, cities);
@@ -80,12 +93,12 @@ const jobDataController = {
                 errors.push(`Error fetching SmartJobAz jobs: ${error.message}`);
             }
 
-            let bossAzjobs = [];
+            let jobSearchAzJobs = [];
             try {
-                bossAzjobs = await bossAz.Jobs(categories, cities);
-                await insertJobs(bossAzjobs, "BossAz");
+                jobSearchAzJobs = await jobSearchAz.Jobs(categories, cities);
+                await insertJobs(jobSearchAzJobs, "JobSearchAz");
             } catch (error) {
-                errors.push(`Error fetching BossAz jobs: ${error.message}`);
+                errors.push(`Error fetching HelloJobAz jobs: ${error.message}`);
             }
     
             res.status(201).json({
