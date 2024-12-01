@@ -24,7 +24,7 @@ router.get('/api/jobs', jobDataController.getAll);                              
 router.get('/api/jobs/:id', jobDataController.getSiteById);                                // READ ONE
 router.put('/api/jobs/:id', jobDataController.updateSite);                                 // UPDATE
 router.delete('/api/jobs/:id', jobDataController.deleteSite);                              // DELETE
-router.post('/api/jobs/remove-duplicates', jobDataController.removeDuplicates);                              // DELETE
+router.post('/api/jobs/remove-duplicates', jobDataController.removeDuplicates);            // DELETE
 
 // CRUD operations for job sites (JobDataController)
 router.post('/api/site', validator.siteValidator, siteController.create);                  // CREATE
@@ -39,6 +39,7 @@ router.get('/api/companies', companyController.getAll);                         
 router.get('/api/companies/:id', companyController.findById);                              // READ ONE
 router.put('/api/companies/:id', validator.companyValidator, companyController.update);    // UPDATE
 router.delete('/api/companies/:id', companyController.delete);                             // DELETE
+router.post('/api/companies/remove-duplicates', companyController.removeDuplicates);          // DELETE
 
 // CRUD operations for categories
 router.post('/api/foreign-categories', categoryController.addForeignCategories);           // CREATE

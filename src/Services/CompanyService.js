@@ -1,4 +1,5 @@
 import Company from '../Models/Company.js';
+import JobData from "../Models/JobData.js";
 
 const CompanyService = {
     // Create a company
@@ -7,16 +8,6 @@ const CompanyService = {
             if (!Array.isArray(data)) {
                 throw new Error('Data must be an array');
             }
-
-            // const existingRecords = await Company.find({
-            //     uniqueKey: { $in: data.map(c => c.uniqueKey) }
-            // }).select('uniqueKey');
-
-            // if (existingRecords.length > 0) {
-            //     const existingUniqueKeys = new Set(existingRecords.map(record => record.uniqueKey));
-            //     data = data.filter(c => !existingUniqueKeys.has(c.uniqueKey));
-            // }
-
             if (data.length > 0) {
                 const results = await Company.insertMany(data);
                 return {
@@ -49,6 +40,57 @@ const CompanyService = {
         }
     },
 
+    removeDuplicates: async () => {
+        try {
+            const thirtyDaysAgo = new Date();
+            thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+    
+            const allCompanies = await Company.find({
+                createdAt: { $gte: thirtyDaysAgo },
+            }).sort({ createdAt: -1 });
+    
+            if (!allCompanies || allCompanies.length === 0) {
+                return {
+                    status: 200,
+                    message: 'No data found for the last 30 days.',
+                    count: 0,
+                };
+            }
+    
+            const seenUniqueKeys = new Map();
+            const duplicateUniqueKeys = new Set();
+    
+            allCompanies.forEach(company => {
+                const uniqueKey = company.uniqueKey;
+                if (seenUniqueKeys.has(uniqueKey)) {
+                    duplicateUniqueKeys.add(uniqueKey);
+                } else {
+                    seenUniqueKeys.set(uniqueKey, company);
+                }
+            });
+    
+            if (duplicateUniqueKeys.size > 0) {
+                await Company.deleteMany({ uniqueKey: { $in: Array.from(duplicateUniqueKeys) } });
+                return {
+                    status: 201,
+                    message: `Deleted records with duplicate uniqueKey values from the last 30 days.`,
+                    count: duplicateUniqueKeys.size,
+                };
+            } else {
+                return {
+                    status: 200,
+                    message: 'No duplicate data found for the last 30 days.',
+                    count: 0,
+                };
+            }
+        } catch (error) {
+            return {
+                status: 500,
+                message: 'An error occurred during the process.',
+                error: error.message,
+            };
+        }
+    },
     // Find a company by ID
     findById: async (id) => {
         try {

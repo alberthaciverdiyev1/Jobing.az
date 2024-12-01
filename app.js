@@ -73,7 +73,8 @@ cron.schedule('0 7-23/3 * * *', async () => {
         await sendEmail(errorData, to);
     }
 
-    await axios.post(`http://localhost:3000/api/jobs/remove-duplicates`);
+    await axios.post(`http://localhost:${port}/api/jobs/remove-duplicates`);
+    await axios.post(`http://localhost:${port}/api/companies/remove-duplicates`);
 
 });
 
