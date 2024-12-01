@@ -102,6 +102,7 @@ class SmartJobAz {
                                         const companyImageUrl = $(el).find('.brows-job-company-img img').attr('src');
                                         const cleanSalaryText = salaryText.replace('AZN', '').trim();
                                         const parts = cleanSalaryText.split(' - ');
+                                        const isPremium = $(el).find('.tg-featuretag').length > 0;
                                         const jobId = urlAndId.attr('href')?.split('/').pop() || null;
                                         const redirectUrl = urlAndId.attr('href') || null;
                                         let [minSalary, maxSalary] = [0, 0];
@@ -109,7 +110,8 @@ class SmartJobAz {
                                             minSalary = !isNaN(Number(parts[0])) ? parseInt(parts[0], 10) : 0;
                                             maxSalary = !isNaN(Number(parts[1])) ? parseInt(parts[1], 10) : 0;
                                         } else if (parts.length === 1) {
-                                            minSalary = maxSalary = !isNaN(Number(parts[0])) ? parseInt(parts[0], 10) : 0;
+                                            minSalary = 0;
+                                            maxSalary = !isNaN(Number(parts[0])) ? parseInt(parts[0], 10) : 0;
                                         }
 
                                         const locationCity = bossAzcities.find(x => x.name === location);
@@ -117,6 +119,7 @@ class SmartJobAz {
                                         jobData.push({
                                             title,
                                             companyName,
+                                            isPremium,
                                             companyId,
                                             minSalary: minSalary ?? 0,
                                             maxSalary: maxSalary ?? 0,
@@ -139,6 +142,8 @@ class SmartJobAz {
                                             website: enums.SitesWithId.SmartJobAz,
                                             uniqueKey: `${companyName}-${companyImageUrl}`
                                         });
+                                        console.log({"SmartJob": jobData})
+
                                     });
                                 })();
 

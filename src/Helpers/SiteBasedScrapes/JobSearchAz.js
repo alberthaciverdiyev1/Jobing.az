@@ -91,6 +91,7 @@ class JobSearchAz {
                                         cityId: bossAzcities.find(x => x.name === cityName)?.cityId || null,
                                         description: element.text || null,
                                         jobId: element.id,
+                                        isPremium:element?.is_vip,
                                         categoryId: category.localCategoryId,
                                         sourceUrl: this.url,
                                         redirectUrl: `https://www.jobsearch.az/vacancies/${element.slug}`,

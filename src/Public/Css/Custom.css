@@ -50,7 +50,6 @@
     margin: 0 auto;
     height: 113px;
     width: 105px;
-    background-image: url(../images/shape-3.png);
     z-index: -1;
     content: "";
 }
@@ -204,7 +203,6 @@
 
 /* Home section styles */
 .bg-home {
-    background-image: url("your-image-url.jpg");
     background-size: cover;
     background-position: center;
     position: relative;

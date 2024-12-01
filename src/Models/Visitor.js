@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-const {Schema} = mongoose;
+const { Schema } = mongoose;
 
 const visitorSchema = new Schema({
     ip: {
@@ -11,6 +11,10 @@ const visitorSchema = new Schema({
     lastVisit: {
         type: Date,
         default: Date.now
+    },
+    visitCount: {
+        type: Number,
+        default: 1
     },
     deletedAt: {
         type: Date,

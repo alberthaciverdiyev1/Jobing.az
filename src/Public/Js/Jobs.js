@@ -4,7 +4,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     preselectFilters();
 });
 
-var thumbsize = 14;
 let categoryArray = [], cityArray = [];
 let showMoreCategories = true;
 let showMoreCities = true;
@@ -114,7 +113,6 @@ function categoryHTML(data, limit = null) {
             <input type="radio" name="category" id="${categoryId}" category-id="${element.localCategoryId}" class="custom-checkbox" />
             <label for="${categoryId}" class="text-gray-800">
                 ${element.name}
-                <span class="text-gray-400">(34)</span>
             </label>
         </div>`;
     });
@@ -326,17 +324,11 @@ async function getJobs(params) {
                                                         </h4>
                                                     </div>
                                                     <div class="hidden sm:w-full">
-                                                    ${true ? "" : ` <span class="bg-blue-100 text-blue-700 px-1 ml-3 py-0.5 h-12 w-auto rounded-lg text-sm">
-                                                            ${element.jobType}
-                                                        </span>`}
                                                         <span class="bg-yellow-100 text-yellow-700 px-1 ml-2 py-0.5 rounded-lg text-sm w-auto">
                                                             ${element.sourceUrl}
                                                         </span>
                                                     </div>
-                                                    ${false ? `<button class="text-base text-gray-600 font-bold mb-5 sm:hidden">
-                                                        <i class="fa-solid fa-heart text-2xl"></i>
-                                                    </button>` : ""}
-                                                        
+
                                                 </div>
                                                 <div class="flex text-sm text-gray-600">
                                                     <span><i class="fa-solid fa-clock mr-0.5"></i> ${element.postedAt.slice(0, 10)}</span>
@@ -347,6 +339,7 @@ async function getJobs(params) {
                                                         <span class="bg-yellow-100 text-yellow-700 px-1 py-0.5 font-medium rounded-lg text-sm h-7 hidden sm:flex">
                                                             ${element.sourceUrl}
                                                         </span>
+                                                        ${element.isPremium ? `<span class="bg-orange-400 text-white px-1 ml-1 py-0.5 rounded-lg">premium</span>` : ''}
                                                         <span class="bg-green-400 text-white px-1 ml-1 py-0.5 rounded-lg">aktivdir</span>
                                                     </div>
                                                 <div class="text-sm mt-2 flex justify-between sm:hidden">
@@ -638,7 +631,7 @@ function handleFilterChange(minS = 0, maxS = 5000) {
         minSalary ?? 0;
         maxSalary ?? 5000;
 
-        updateURLParams({categoryId, cityId, educationId, experienceLevel, offset, keyword, minSalary, maxSalary});
+        updateURLParams({categoryId, cityId, educationId, experienceLevel, keyword, minSalary, maxSalary});
         getJobs({categoryId, cityId, educationId, experienceLevel, offset, keyword, minSalary, maxSalary});
 
     } else {
@@ -646,7 +639,7 @@ function handleFilterChange(minS = 0, maxS = 5000) {
         minSalary = !isNaN(Number(minS)) ? minS : 0;
         let {categoryId, cityId, educationId, experienceLevel, keyword} = getURLParams();
 
-        updateURLParams({categoryId, cityId, educationId, experienceLevel, offset, keyword, minSalary, maxSalary});
+        updateURLParams({categoryId, cityId, educationId, experienceLevel, keyword, minSalary, maxSalary});
         getJobs({categoryId, cityId, educationId, experienceLevel, offset, keyword, minSalary, maxSalary});
     }
 
@@ -667,6 +660,7 @@ document.getElementById("search").addEventListener("keyup", () => {
 function addRadioChangeListener(type) {
     document.querySelectorAll(`input[name="${type}"]`).forEach(radio => {
         radio.addEventListener('change', function () {
+            offset = 0;
             handleFilterChange();
         });
     });

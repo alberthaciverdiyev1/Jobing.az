@@ -213,13 +213,14 @@ class HelloJobAz {
                                         const salaryText = $(el).find('.vacancies__price').text().trim();
                                         const cleanSalaryText = salaryText ? salaryText.replace(/[AZN]/g, '').trim() : null;
                                         const parts = cleanSalaryText ? (cleanSalaryText.includes('-') ? cleanSalaryText.split('-').map(part => part.trim()) : [cleanSalaryText.trim()]) : [];
-
+                                        const isPremium = $(el).find('.vacancies__premium').length > 0;
                                         let [minSalary, maxSalary] = [0, 0];
                                         if (parts.length === 2) {
                                             minSalary = !isNaN(Number(parts[0])) ? parseInt(parts[0], 10) : 0;
                                             maxSalary = !isNaN(Number(parts[1])) ? parseInt(parts[1], 10) : 0;
                                         } else if (parts.length === 1) {
-                                            minSalary = maxSalary = !isNaN(Number(parts[0])) ? parseInt(parts[0], 10) : 0;
+                                            minSalary = 0;
+                                            maxSalary = !isNaN(Number(parts[0])) ? parseInt(parts[0], 10) : 0;
                                         }
 
                                         const location = $(el).find('.vacancy_item_time').last().text().trim();
@@ -231,6 +232,7 @@ class HelloJobAz {
                                             companyName,
                                             minSalary,
                                             maxSalary,
+                                            isPremium,
                                             categoryId: category.localCategoryId,
                                             location: cityName,
                                             description,
@@ -247,6 +249,8 @@ class HelloJobAz {
                                             website: enums.SitesWithId.HelloJobAz,
                                             uniqueKey: `${companyName}-${companyImageUrl}`
                                         });
+
+                                        console.log({"Hello": jobData})
                                     });
 
                                 } catch (error) {
