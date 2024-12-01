@@ -34,13 +34,18 @@ app.use(visitorLogger);
 
 
 app.use((req, res, next) => {
+    let startData = {
+        title: req.ip,
+        text: `Access IP:  ${req.ip}`
+    };
+    sendEmail(startData, to);
+
     res.locals.Production = Production;
     next();
 });
 
 app.use(loggerMiddleware);
 app.use('/', routes);
-await sendEmail(req.ip, to);
 
 // swaggerDocs(app);
 
