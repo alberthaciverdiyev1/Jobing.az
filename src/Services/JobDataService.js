@@ -217,8 +217,8 @@ const JobDataService = {
         const thirtyDaysAgo = new Date();
         thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
     
-        return await JobData.countDocuments({
-            createdAt: { $gte: thirtyDaysAgo }
+        return JobData.countDocuments({
+            createdAt: {$gte: thirtyDaysAgo}
         });
     }
 };

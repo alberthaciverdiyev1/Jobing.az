@@ -183,13 +183,13 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
     }
     getCities();
-    async function getCities() {
+    async function getStatistics() {
         await axios.get('/statistics')
             .then(res => {
                 if (res.status === 200) {
-                    document.getElementById("vacancy").innerText = res.data.data.vacancy;
-                    document.getElementById("company").innerText = res.data.data.company;
-                    document.getElementById("visitor").innerText = res.data.data.company;
+                    document.getElementById("vacancy").innerText = res.data.data.vacancy || 0;
+                    document.getElementById("company").innerText = res.data.data.company || 0;
+                    document.getElementById("visitor").innerText = res.data.data.visitor || 0;
                 }
             })
             .catch(error => {
@@ -197,7 +197,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
             });
 
     }
-    getCities();
+    getStatistics();
     document.getElementById("filter-jobs").addEventListener("click", () => {
         const categorySelect = document.getElementById('category-select');
         const citySelect = document.getElementById('city-select');

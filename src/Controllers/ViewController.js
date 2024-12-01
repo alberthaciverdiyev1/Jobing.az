@@ -3,6 +3,7 @@ import sendEmail from "../Helpers/NodeMailer.js";
 import CategoryService from "../Services/CategoryService.js";
 import CompanyService from "../Services/CompanyService.js";
 import JobDataService from "../Services/JobDataService.js";
+import VisitorService from "../Services/VisitorService.js";
 
 const ViewController = {
     home: async (req, res) => {
@@ -82,7 +83,8 @@ const ViewController = {
     statistics: async (req, res) => {
         const company = await CompanyService.count()
         const vacancy = await JobDataService.count()
-        res.status(200).json({ status: 200, message:"",data:{company,vacancy} });
+        const visitor = await VisitorService.count()
+        res.status(200).json({ status: 200, message:"",data:{company,vacancy,visitor} });
     
     }
 };
