@@ -14,7 +14,7 @@ const visitorLogger = async (req, res, next) => {
             }
         } else {
             await VisitorService.create({
-                ip: ipAddress,
+                visitIp: ipAddress,
                 visitCount: 1,
                 lastVisit: new Date(),
             });
