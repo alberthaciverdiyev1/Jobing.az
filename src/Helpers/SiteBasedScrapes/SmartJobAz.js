@@ -56,9 +56,13 @@ class SmartJobAz {
         }
     }
 
-    async Jobs(categories, bossAzcities) {
+    async Jobs(categories, bossAzCity) {
         const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
         try {
+            const city = Object.entries(enums.Cities.SmartJobAz).find(
+                ([k, v]) => v === bossAzCity.name
+            );
+            const cityId = city[0];
 
             let splitCategories = categories
             .flatMap(c => c.smartJobAz.split(','))
@@ -83,7 +87,7 @@ class SmartJobAz {
                     for (let page = 0; page <= 2; page++) {
                         const requestPromise = limit(async () => {
                             try {
-                                const url = `https://${this.url}/vacancies?_token=${encodeURIComponent(token)}&job_category_id%5B20%5D=${encodeURIComponent(category.smartJobAzId)}&education_id%5B0%5D=${encodeURIComponent(education)}&salary_from=&salary_to=&page=${page}`;
+                                const url = `https://${this.url}/vacancies?_token=${encodeURIComponent(token)}&city_id%5B%5D=${cityId}&job_category_id%5B20%5D=${encodeURIComponent(category.smartJobAzId)}&education_id%5B0%5D=${encodeURIComponent(education)}&salary_from=&salary_to=&page=${page}`;
 
                                 const timeout = new Promise((_, reject) => {
                                     setTimeout(() => reject(new Error('Request timed out')), 30000);
@@ -114,8 +118,6 @@ class SmartJobAz {
                                             maxSalary = !isNaN(Number(parts[0])) ? parseInt(parts[0], 10) : 0;
                                         }
 
-                                        const locationCity = bossAzcities.find(x => x.name === location);
-
                                         jobData.push({
                                             title,
                                             companyName,
@@ -124,7 +126,7 @@ class SmartJobAz {
                                             minSalary: minSalary ?? 0,
                                             maxSalary: maxSalary ?? 0,
                                             location,
-                                            cityId: locationCity ? +locationCity.cityId : null,
+                                            cityId: bossAzCity?.cityId,
                                             description: null,
                                             jobId,
                                             categoryId: category.localCategoryId || null,
@@ -135,7 +137,6 @@ class SmartJobAz {
                                             experienceId: null,
                                             uniqueKey: `${title}-${companyName}-${location}`
                                         });
-                                        console.log({"SmartJob": jobData})
 
                                         companyData.push({
                                             companyName,

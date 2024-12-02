@@ -304,7 +304,7 @@ async function getJobs(params) {
                                         <div class="content flex">
                                              <div class="mt-3 flex-shrink-0 sm:mt-1">
                                                 <img src="../Images/${element.sourceUrl}.png" alt="Company Logo" class="border-custom h-12 w-12 mt-1 rounded-lg border sm:h-14 sm:w-14" />
-                                                <img src="${(element.companyImageUrl && element.companyImageUrl !== "/nologo.png") ? ((element.imageUrl.startsWith('http') || element.imageUrl.startsWith('https')) ? element.companyImageUrl : element.companyImageUrl.replace(/src\\Public/g, '..')) : "../Images/DefaultCompany.png"}" alt="Company Logo" class="border-custom h-12 w-12 mt-3 rounded-lg border sm:h-14 sm:w-14" />
+                                                <img src="${(element.companyImageUrl && element.companyImageUrl !== "/nologo.png") ? element.companyImageUrl : "../Images/DefaultCompany.png"}" alt="Company Logo" class="border-custom h-12 w-12 mt-3 rounded-lg border sm:h-14 sm:w-14" />
                                             </div>
                                             <div class="ml-3 mt-2 pr-1 sm:mt-2 justify-end sm:w-auto w-screen">
                                                 <div class="flex mb-1 justify-between">

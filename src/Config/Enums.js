@@ -58,7 +58,30 @@ const Enums = Object.freeze({
                 "47": "Masallı", "49": "Beyləqan", "50": "Ağsu", "51": "Qobustan", "52": "Bərdə", "53": "Ordubad", "54": "Balakən", "55": "İsmayıllı", "56": "Şuşa",
                 "57": "Samux", "58": "Ağcabədi", "59": "Ağdam", "60": "Dəvəçi", "61": "İmişli", "62": "Saatlı", "63": "Naxçıvan", "64": "Siyəzən", "65": "Şahbuz",
                 "66": "Cəlilabad", "67": "Sabirabad", "68": "Neftçala", "69": "Laçın", "70": "Naftalan", "71": "Zərdab", "72": "Şərur", "73": "Qıvraq", "74": "Şirvan", "75": "Şamaxı"
-        }
+        },
+        SmartJobAz:{
+            "81": "Abşeron", "11": "Ağcabədi", "58": "Ağdam", "40": "Ağdaş", "82": "Ağdərə", "15": "Ağstafa", "50": "Ağsu", "33": "Astara", "3": "Bakı", "61": "Balakən",
+            "35": "Beyləqan", "31": "Bərdə", "57": "Biləsuvar", "80": "Binəqədi", "56": "Cəbrayıl", "27": "Cəlilabad", "47": "Daşkəsən", "37": "Füzuli", "9": "Gədəbəy", 
+            "6": "Gəncə", "54": "Goranboy", "12": "Göyçay", "65": "Göygöl", "42": "Hacıqabul", "49": "Hacıqabul", "10": "İmişli", "29": "İsmayıllı", "70": "Kəlbəcər", 
+            "32": "Kürdəmir", "69": "Laçın", "52": "Lerik", "22": "Lənkəran", "59": "Lökbatan", "21": "Masallı", "60": "Mehdiabad", "20": "Mingəçevir", "55": "Naftalan", 
+            "48": "Naxçıvan", "7": "Neftçala", "53": "Oğuz", "78": "Qarabağ", "67": "Qaradağ", "62": "Qax", "13": "Qazax", "38": "Qəbələ", "71": "Qobustan", "26": "Quba", 
+            "72": "Qubadlı", "25": "Qusar", "43": "Saatlı", "34": "Sabirabad", "23": "Şabran", "8": "Salyan", "45": "Şamaxı", "66": "Samux", "73": "Sədərək", "28": "Şəki", 
+            "30": "Şəmkir", "64": "Şərur", "36": "Şirvan", "41": "Siyəzən", "17": "Sumqayıt", "74": "Şuşa", "46": "Tərtər", "14": "Tovuz", "63": "Ucar", "19": "Xaçmaz", 
+            "76": "Xankəndi", "18": "Xırdalan", "39": "Xızı", "77": "Xocalı", "75": "Xocavənd", "79": "Xudat", "51": "Yardımlı", "24": "Yevlax", "16": "Zaqatala",
+            "68": "Zəngilan", "44": "Zərdab"
+        },
+        OfferAz:{
+            "696": "Ağcabədi", "2815": "Ağdam", "849": "Ağdaş", "894": "Ağstafa", "693": "Ağsu", "695": "Astara", "4131": "Babək", "9": "Bakı", "1515": "Balakən", 
+            "1190": "Beyləqan", "931": "Bərdə", "1147": "Biləsuvar", "4952": "Cəbrayıl", "750": "Cəlilabad", "4132": "Culfa", "1303": "Daşkəsən", "1273": "Fizuli", 
+            "5589": "Füzuli", "2120": "Gədəbəy", "175": "Gəncə", "4880": "Goran", "699": "Goranboy", "694": "Göyçay", "1206": "Göygöl", "742": "Hacıqabul", 
+            "692": "İmişli", "1903": "İsmayıllı", "4519": "Kəlbəcər", "3553": "Kəngərli", "951": "Kürdəmir", "1640": "Laçın", "3765": "Lerik", "482": "Lənkəran",
+            "332": "Masallı", "1067": "Mingəçevir", "697": "Naftalan", "2069": "Naxçıvan", "1352": "Neftçala", "2523": "Oğuz", "4133": "Ordubad", "812": "Qax", 
+            "848": "Qazax", "257": "Qəbələ", "4051": "Qobustan", "5782": "Qovlar", "604": "Quba", "5058": "Qubadlı", "826": "Qusar", "691": "Saatlı", "850": "Sabirabad", 
+            "824": "Şabran", "4134": "Şahbuz", "689": "Salyan", "690": "Şamaxı", "616": "Samux", "991": "Şəki", "700": "Şəmkir", "847": "Şirvan", "829": "Siyəzən", 
+            "174": "Sumqayıt", "6475": "Şuşa", "2814": "Tərtər", "813": "Tovuz", "854": "Ucar", "827": "Xaçmaz", "398": "Xırdalan", "825": "Xızı", "7209": "Xocalı", 
+            "7210": "Xocalı", "828": "Xudat", "698": "Yardımlı", "1115": "Yevlax", "447": "Zaqatala", "4974": "Zəngilan", "2813": "Zərdab"
+          }
+          
     }
 
 });
