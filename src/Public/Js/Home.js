@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
                         <div class="content flex">
                              <div class="mt-3 flex-shrink-0 sm:mt-1">
                                 <img src="../Images/${element.sourceUrl}.png" alt="Company Logo" class="border-custom h-12 w-12 mt-1 rounded-lg border sm:h-14 sm:w-14" />
-                                <img src="${(element.companyImageUrl && element.companyImageUrl !== "/nologo.png") ? element.companyImageUrl : "../Images/DefaultCompany.png"}" alt="Company Logo" class="border-custom h-12 w-12 mt-3 rounded-lg border sm:h-14 sm:w-14" />
+                                <img src="${(element.companyImageUrl && element.companyImageUrl !== "/nologo.png") ? ((element.imageUrl.startsWith('http') || element.imageUrl.startsWith('https')) ? element.companyImageUrl : element.companyImageUrl.replace(/src\\Public/g, '..')) : "../Images/DefaultCompany.png"}" alt="Company Logo" class="border-custom h-12 w-12 mt-3 rounded-lg border sm:h-14 sm:w-14" />
                             </div>
                             <div class="ml-3 mt-2 pr-1 sm:mt-2 justify-end w-screen">
                                 <div class="flex mb-1 justify-between">
@@ -47,7 +47,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
                                                         ${capitalizeFirstLetter(element.title.slice(0, 25)) + (element.title.length > 25 ? "..." : "")} 
                                                     </span>
                                                 </p>
-                                            <h4 class="text-lg text-gray-600 font-bold hidden sm:block">
+                                            <h4 class=" text-gray-600 hidden sm:block ${!element.minSalary && !element.maxSalary ? "font-semibold text-base" :"font-bold text-lg"}">
                                                 ${(
                                             (+element.minSalary === +element.maxSalary && +element.minSalary !== null && +element.minSalary !== 0)
                                                 ? +element.minSalary + " " + element.currencySign
@@ -97,7 +97,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
                                         </div>
                                 <div class="text-sm mt-2 flex justify-between sm:hidden">
                                    <span class="bg-blue-100 text-blue-700 px-1 py-0.5 rounded-lg text-sm">${element.sourceUrl}</span>
-                                <h4 class="text-lg text-gray-600 font-bold">
+                                <h4 class="text-gray-600 ${!element.minSalary && !element.maxSalary ? "font-semibold text-base" :"font-bold text-lg"}">
                                    ${(
                                         (+element.minSalary === +element.maxSalary && +element.minSalary !== null && +element.minSalary !== 0)
                                             ? +element.minSalary + " " + element.currencySign

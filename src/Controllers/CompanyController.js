@@ -5,6 +5,8 @@ import path from 'path';
 import fs from 'fs';
 import mime from 'mime-types'
 import axios from 'axios';
+import pLimit from 'p-limit';
+
 
 const CompanyController = {
     create: async (req, res) => {
@@ -35,46 +37,52 @@ const CompanyController = {
     downloadCompanyLogos: async (req, res) => {
         try {
             const companies = await CompanyService.getAll();
-            console.log(companies);
+            const limit = pLimit(3);
+
             const updatedCompanies = await Promise.all(
-                companies.map(async (company) => {
-                    if (company.imageUrl && (company.imageUrl.startsWith('http') || company.imageUrl.startsWith('https') || company.imageUrl.includes('/'))) {
+                companies.map((company) => {
+                    return limit(async () => {
+                        if (company.imageUrl && company.imageUrl !== '/nologo.png' && (company.imageUrl.startsWith('http') || company.imageUrl.startsWith('https') || company.imageUrl.includes('/'))) {
+                            const imageUrl = company.imageUrl.startsWith('http') || company.imageUrl.startsWith('https')
+                                ? company.imageUrl
+                                : `http://${company.imageUrl}`;
 
-                        const imageUrl = company.imageUrl.startsWith('http') || company.imageUrl.startsWith('https')
-                            ? company.imageUrl
-                            : `http://${company.imageUrl}`;
+                            const ext = mime.extension(mime.lookup(imageUrl));
+                            if (!ext) {
+                                throw new Error(`Unable to determine the file extension for URL: ${imageUrl}`);
+                            }
 
-                        const ext = mime.extension(mime.lookup(imageUrl));
-                        if (!ext) {
-                            throw new Error(`Unable to determine the file extension for URL: ${imageUrl}`);
+                            const companyFolder = `./src/Public/Images/CompanyLogos`;
+                            if (!fs.existsSync(companyFolder)) {
+                                fs.mkdirSync(companyFolder, { recursive: true });
+                            }
+
+                            const fileName = `${company.companyName || 'default'}.${ext}`;
+                            if (!!/["<>|:*?\/\\]/.test(fileName)) {
+                                return company;
+                            }
+
+                            const localFilePath = path.join(companyFolder, fileName);
+
+                            const response = await axios({
+                                url: imageUrl,
+                                method: 'GET',
+                                responseType: 'stream',
+                            });
+
+                            await new Promise((resolve, reject) => {
+                                const writer = fs.createWriteStream(localFilePath);
+                                response.data.pipe(writer);
+
+                                writer.on('finish', resolve);
+                                writer.on('error', reject);
+                            });
+
+                            company.imageUrl = localFilePath;
+                            await CompanyService.updateCompanyImageUrl(company._id, localFilePath);
                         }
-
-                        const companyFolder = `./src/Public/Images/CompanyLogos`;
-                        if (!fs.existsSync(companyFolder)) {
-                            fs.mkdirSync(companyFolder, { recursive: true });
-                        }
-
-                        const localFilePath = path.join(companyFolder, `${company.companyName || 'default'}.${ext}`);
-
-                        const response = await axios({
-                            imageUrl,
-                            method: 'GET',
-                            responseType: 'stream',
-                        });
-                
-                        new Promise((resolve, reject) => {
-                            const writer = fs.createWriteStream(filepath);
-                            response.data.pipe(writer);
-                
-                            writer.on('finish', resolve);
-                            writer.on('error', reject);
-                        });
-
-                        company.imageUrl = localFilePath; 
-                        await CompanyService.updateCompanyImageUrl(company._id, localFilePath);
-
-                    }
-                    return company;
+                        return company;
+                    });
                 })
             );
 
@@ -84,6 +92,7 @@ const CompanyController = {
             res.status(500).json({ message: 'Error retrieving companies: ' + error.message });
         }
     },
+
 
     findById: async (req, res) => {
         try {
