@@ -62,12 +62,12 @@ const jobDataController = {
             };
 
             let bossAzjobs = [];
-            try {
-                bossAzjobs = await bossAz.Jobs(categories, cities);
-                await insertJobs(bossAzjobs, "BossAz");
-            } catch (error) {
-                errors.push(`Error fetching BossAz jobs: ${error.message}`);
-            }
+            // try {
+            //     bossAzjobs = await bossAz.Jobs(categories, cities);
+            //     await insertJobs(bossAzjobs, "BossAz");
+            // } catch (error) {
+            //     errors.push(`Error fetching BossAz jobs: ${error.message}`);
+            // }
 
             let helloJobAzJobs = [];
             try {
@@ -77,29 +77,29 @@ const jobDataController = {
                 errors.push(`Error fetching HelloJobAz jobs: ${error.message}`);
             }
     
-            let offerAzjobs = [];
-            try {
-                offerAzjobs = await offerAz.Jobs(categories, cities);
-                await insertJobs(offerAzjobs, "OfferAz");
-            } catch (error) {
-                errors.push(`Error fetching OfferAz jobs: ${error.message}`);
-            }
-
-            let smartJobAzJobs = [];
-            try {
-                smartJobAzJobs = await smartJobAz.Jobs(categories, cities);
-                await insertJobs(smartJobAzJobs, "SmartJobAz");
-            } catch (error) {
-                errors.push(`Error fetching SmartJobAz jobs: ${error.message}`);
-            }
-
-            let jobSearchAzJobs = [];
-            try {
-                jobSearchAzJobs = await jobSearchAz.Jobs(categories, cities);
-                await insertJobs(jobSearchAzJobs, "JobSearchAz");
-            } catch (error) {
-                errors.push(`Error fetching HelloJobAz jobs: ${error.message}`);
-            }
+            // let offerAzjobs = [];
+            // try {
+            //     offerAzjobs = await offerAz.Jobs(categories, cities);
+            //     await insertJobs(offerAzjobs, "OfferAz");
+            // } catch (error) {
+            //     errors.push(`Error fetching OfferAz jobs: ${error.message}`);
+            // }
+            //
+            // let smartJobAzJobs = [];
+            // try {
+            //     smartJobAzJobs = await smartJobAz.Jobs(categories, cities);
+            //     await insertJobs(smartJobAzJobs, "SmartJobAz");
+            // } catch (error) {
+            //     errors.push(`Error fetching SmartJobAz jobs: ${error.message}`);
+            // }
+            //
+            // let jobSearchAzJobs = [];
+            // try {
+            //     jobSearchAzJobs = await jobSearchAz.Jobs(categories, cities);
+            //     await insertJobs(jobSearchAzJobs, "JobSearchAz");
+            // } catch (error) {
+            //     errors.push(`Error fetching HelloJobAz jobs: ${error.message}`);
+            // }
     
             res.status(201).json({
                 errors: errors.length > 0 ? errors : null,

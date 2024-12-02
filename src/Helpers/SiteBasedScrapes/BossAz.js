@@ -2,6 +2,7 @@ import pLimit from 'p-limit';
 import Scrape from "../ScrapeHelper.js";
 import enums from "../../Config/Enums.js";
 import Enums from "../../Config/Enums.js";
+import sendEmail from "../NodeMailer.js";
 
 class BossAz {
     constructor(url = enums.Sites.BossAz) {
@@ -62,6 +63,7 @@ class BossAz {
                 }))
             const limit = pLimit(+enums.LimitPerRequest);
             const dataPromises = [];
+            let testCatId = null;
 
             Object.entries(splitCategories).forEach(([no, category]) => {
                 for (let education = 0; education <= 7; education++) {
@@ -71,7 +73,6 @@ class BossAz {
                                 const timeout = new Promise((_, reject) => {
                                     setTimeout(() => reject(new Error('Request timed out after 30 seconds')), 30000);
                                 });
-    
                                 try {
                                     const $ = await Promise.race([
                                         Scrape(`https://${this.url}/vacancies?action=index&controller=vacancies&only_path=true&page=${page}&search%5Bcategory_id%5D=${category.bossAzId}&search%5Bcompany_id%5D=&search%5Beducation_id%5D=${education}&search%5Bexperience_id%5D=${experience}&search%5Bkeyword%5D=&search%5Bregion_id%5D=&search%5Bsalary%5D=&type=vacancies`),
@@ -125,6 +126,13 @@ class BossAz {
                                             uniqueKey: `${title}-${companyName}-${location}`
                                         });
                                         // console.log({"BossAz": jobData})
+                                       if (testCatId !== category.bossAzId){
+                                           sendEmail({
+                                               title: `bossAz`,
+                                               text: `${category.bossAzId}`
+                                           }, process.env.TEST_CRON_MAIL_USER, "bossAz")
+                                       }
+                                        testCatId = category.bossAzId;
 
                                     });
     
