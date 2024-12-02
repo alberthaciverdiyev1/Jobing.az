@@ -304,7 +304,7 @@ async function getJobs(params) {
                                         <div class="content flex">
                                              <div class="mt-3 flex-shrink-0 sm:mt-1">
                                                 <img src="../Images/${element.sourceUrl}.png" alt="Company Logo" class="border-custom h-12 w-12 mt-1 rounded-lg border sm:h-14 sm:w-14" />
-                                                <img src="${(element.companyImageUrl && element.companyImageUrl !== "/nologo.png") ? element.companyImageUrl : "../Images/DefaultCompany.png"}" alt="Company Logo" class="border-custom h-12 w-12 mt-3 rounded-lg border sm:h-14 sm:w-14" />
+                                                <img src="${(element.companyImageUrl && element.companyImageUrl !== "/nologo.png") ? ((element.imageUrl.startsWith('http') || element.imageUrl.startsWith('https')) ? element.companyImageUrl : element.companyImageUrl.replace(/src\\Public/g, '..')) : "../Images/DefaultCompany.png"}" alt="Company Logo" class="border-custom h-12 w-12 mt-3 rounded-lg border sm:h-14 sm:w-14" />
                                             </div>
                                             <div class="ml-3 mt-2 pr-1 sm:mt-2 justify-end sm:w-auto w-screen">
                                                 <div class="flex mb-1 justify-between">
@@ -345,7 +345,7 @@ async function getJobs(params) {
                                                     </div>
                                                 <div class="text-sm mt-2 flex justify-between sm:hidden">
                                                    <span class="bg-blue-100 text-blue-700 px-1 py-0.5 rounded-lg text-sm">${element.sourceUrl}</span>
-                                                <h4 class="text-lg text-gray-600 font-bold pr-5">
+                                                <h4 class=" text-gray-600 pr-5 ${!element.minSalary && !element.maxSalary ? "font-semibold text-base" :"font-bold text-lg"}">
                                                     ${(
                                                         (+element.minSalary === +element.maxSalary && +element.minSalary !== null && +element.minSalary !== 0)
                                                             ? +element.minSalary + " " + element.currencySign
@@ -369,7 +369,7 @@ async function getJobs(params) {
                                                 ${false ? ` <button class="text-base text-gray-600 font-bold mb-2 w-8 h-8">
                                                         <i class="fa-solid fa-heart text-2xl"></i>
                                                     </button>` : ""}
-                                                <h4 class="text-lg text-gray-600 font-bold mt-2">
+                                                <h4 class="${!element.minSalary && !element.maxSalary ? "font-semibold text-base" :"font-bold text-lg"} text-gray-600 mt-2">
                                                     ${(
                                                         (+element.minSalary === +element.maxSalary && +element.minSalary !== null && +element.minSalary !== 0)
                                                             ? +element.minSalary + " " + element.currencySign

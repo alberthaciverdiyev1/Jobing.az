@@ -5,10 +5,11 @@ import routes from './src/Routes/Main.js';
 import sequelize from './src/Config/Database.js';
 import loggerMiddleware from './src/Middlewares/Logger.js';
 import Production from './src/Helpers/Production.js';
-import axios from 'axios';
 import sendEmail from './src/Helpers/NodeMailer.js';
 import i18n from 'i18n';
 import cookieParser from 'cookie-parser';
+import {requestAllSites} from "./src/Helpers/Automation.js";
+
 const to = process.env.CRON_MAIL_USER;
 
 i18n.configure({
@@ -29,48 +30,41 @@ app.use(express.static(path.resolve('./src/Public')));
 app.use(express.json());
 app.use(cookieParser());
 app.use(i18n.init);
-// app.use(visitorLogger);
-
-app.use((req, res, next) => {
-    res.locals.Production = Production;
-    next();
-});
-
+app.use((req, res, next) => { res.locals.Production = Production; next(); });
 app.use(loggerMiddleware);
 app.use('/', routes);
+// 404 Not Found middleware
+app.use((req, res, next) => { res.status(404).send('404 Not Found'); next(); });
 
-// swaggerDocs(app);
+app.use(async (err, req, res, next) => {
+    const errorData = {
+        title: 'Global Error',
+        text: `${err.stack}`
+    };
+    await sendEmail(errorData, to);
+    res.status(500).send('Something went wrong!');
+});
 
-// cron.schedule('0 7-23 * * *', async () => {
+
 cron.schedule('0 7-23/4 * * *', async () => {
-    try {
-        const response = await axios.post(`http://localhost:${port}/api/jobs`);
-        if (response.status === 200 || response.status === 201) {
-            let endData = {
-                title: "Cron ended",
-                text: `${response.data.message} <br> ${response.data.errors}`
-            };
-            await sendEmail(endData, to);
-        }
-    } catch (error) {
-        let errorData = {
-            title: "Cron ended with error",
-            text: `${error}`
-        };
-        await sendEmail(errorData, to);
-    }
-
-    await axios.post(`http://localhost:${port}/api/jobs/remove-duplicates`);
-    await axios.post(`http://localhost:${port}/api/companies/remove-duplicates`);
-
+    await requestAllSites()
 });
 
+app.listen(port, () => { console.log(`Server is running at http://localhost:${port}`); });
 
-app.use((req, res, next) => {
-    res.status(404).send('404 Not Found');
-    next();
+process.on('uncaughtException', async (err) => {
+    const errorData = {
+        title: 'Uncaught Exception',
+        text: `${err.stack}`
+    };
+    await sendEmail(errorData, to);
+    process.exit(1);
 });
 
-app.listen(port, () => {
-    console.log(`Server is running at http://localhost:${port}`);
+process.on('unhandledRejection', async (reason, promise) => {
+    const errorData = {
+        title: 'Unhandled Promise Rejection',
+        text: `Promise: ${promise}, Reason: ${reason}`
+    };
+    await sendEmail(errorData, to);
 });

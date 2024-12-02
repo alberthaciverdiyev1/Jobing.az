@@ -79,7 +79,7 @@ const CompanyService = {
             });
 
             if (duplicateIds.length > 0) {
-                await JobData.deleteMany({ _id: { $in: duplicateIds } });
+             await Company.deleteMany({ _id: { $in: duplicateIds } });
                 return {
                     status: 201,
                     message: `Deleted ${duplicateIds.length} duplicate records from the last 30 days.`,
