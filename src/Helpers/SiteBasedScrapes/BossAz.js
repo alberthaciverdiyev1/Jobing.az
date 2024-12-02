@@ -61,6 +61,9 @@ class BossAz {
                     localCategoryId: categories.find(c => c.bossAz.includes(jobId)).localCategoryId,
                     bossAzId: jobId,
                 }))
+
+            console.log(splitCategories)
+
             const limit = pLimit(+enums.LimitPerRequest);
             const dataPromises = [];
             let testCatId = null;

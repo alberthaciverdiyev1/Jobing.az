@@ -88,6 +88,8 @@ class HelloJobAz {
                                         title: `Hello Job Category Status`,
                                         text: `${processedCount}/${totalCategories}`
                                     };
+
+                                    console.log((index + 1) , processedCount,category)
                                     if ((index + 1) !== processedCount) {
                                         sendEmail(status, process.env.TEST_CRON_MAIL_USER, "HelloJob Crone Info");
                                     }
