@@ -30,7 +30,7 @@ const CompanyController = {
             const response = await CompanyService.removeDuplicates();
             res.status(200).json(response);
         } catch (error) {
-            res.status(500).json({ message: 'Error updating site: ' + error.message });
+            res.status(500).json({ message: 'Error duplicate company: ' + error.message });
         }
     },
 

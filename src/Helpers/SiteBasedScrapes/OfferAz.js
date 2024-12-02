@@ -38,7 +38,8 @@ class OfferAz {
     }
 
 
-    async Jobs(categories, bossAzcities) {
+    async Jobs(categories, bossAzCity) {
+
         const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
         try {
             let splitCategories = categories
@@ -49,6 +50,11 @@ class OfferAz {
                     localCategoryId: categories.find(c => c.offerAz.includes(jobId)).localCategoryId,
                     offerAzId: jobId,
                 }));
+
+            const city = Object.entries(enums.Cities.SmartJobAz).find(
+                ([k, v]) => v === bossAzCity.name
+            );
+            const cityId = city[0];
 
             const limit = pLimit(1);
             const dataPromises = [];
@@ -68,6 +74,7 @@ class OfferAz {
                                 const data = new URLSearchParams();
                                 data.append('select_category', category.offerAzId);
                                 data.append('cur_page', page);
+                                data.append('select_erazi', cityId);
                                 data.append('form_mode', 'long');
                                 data.append('select_tehsil', education);
                                 data.append('action', 'search_form_jobs_submit_input');
@@ -125,7 +132,7 @@ class OfferAz {
                                         minSalary: !isNaN(Number(minSalary)) ? minSalary : 0,
                                         maxSalary: !isNaN(Number(maxSalary)) ? maxSalary : 0,
                                         location,
-                                        cityId: bossAzcities.find(x => x.name === location)?.cityId || null,
+                                        cityId: bossAzCity?.cityId || null,
                                         description: description || null,
                                         jobId,
                                         categoryId: category.localCategoryId || null,

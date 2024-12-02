@@ -3,6 +3,7 @@ import Scrape from "../ScrapeHelper.js";
 import enums from "../../Config/Enums.js";
 import Enums from "../../Config/Enums.js";
 import sendEmail from "../NodeMailer.js";
+import CityService from "../../Services/CityService.js";
 
 class BossAz {
     constructor(url = enums.Sites.BossAz) {
@@ -51,8 +52,10 @@ class BossAz {
     }
 
 
-    async Jobs(categories, filteredCities) {
+    async Jobs(categories, a) {
         try {
+            const filteredCities = await CityService.getAll({site: "BossAz"});
+
             let splitCategories = categories
                 .flatMap(c => c.bossAz.split(','))
                 .map(jobId => jobId.trim())
@@ -61,8 +64,6 @@ class BossAz {
                     localCategoryId: categories.find(c => c.bossAz.includes(jobId)).localCategoryId,
                     bossAzId: jobId,
                 }))
-
-            console.log(splitCategories)
 
             const limit = pLimit(+enums.LimitPerRequest);
             const dataPromises = [];

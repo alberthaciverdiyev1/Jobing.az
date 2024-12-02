@@ -11,7 +11,7 @@ class JobSearchAz {
     };
 
 
-    async Jobs(categories, bossAzcities) {
+    async Jobs(categories, bossAzCity) {
         let splitCategories = categories
             .flatMap(c => c.jobSearch.split(','))
             .map(jobId => jobId.trim())
@@ -22,9 +22,11 @@ class JobSearchAz {
             }))
             .filter(c => c.jobsearchId !== '');
 
-        const cities = {
-            "17655": "Bakı"
-        };
+        const city = Object.entries(enums.Cities.JobSearchAz).find(
+            ([k, v]) => v === bossAzCity.name
+        );
+        const cityId = city[0];
+
         const experience = {
             "7751": "Təcrübəçi",
             "7752": "Köməkçi",
@@ -43,8 +45,8 @@ class JobSearchAz {
             const jobData = [];
             const companyData = [];
 
-            Object.entries(splitCategories).forEach(([no, category]) => {
-                Object.entries(enums.Cities.JobSearchAz).forEach(([cityId, cityName]) => {
+            if (cityId) {
+                Object.entries(splitCategories).forEach(([no, category]) => {
                     Object.entries(experience).forEach(([experienceId]) => {
                         const requestPromise = limit(async () => {
                             try {
@@ -78,7 +80,7 @@ class JobSearchAz {
                                     setTimeout(() => reject(new Error('Request timed out')), 30000)
                                 );
 
-                                const response = await Promise.race([axios.post(url, params, {headers}), timeoutPromise]);
+                                const response = await Promise.race([axios.post(url, params, { headers }), timeoutPromise]);
                                 // console.log(response.data.items);return;
                                 Object.values(response.data.items).forEach(element => {
 
@@ -87,18 +89,18 @@ class JobSearchAz {
                                         companyName: element.company.title,
                                         minSalary: element.salary ?? 0,
                                         maxSalary: element.salary ?? 0,
-                                        location: cityName,
-                                        cityId: bossAzcities.find(x => x.name === cityName)?.cityId || null,
+                                        location: bossAzCity.name,
+                                        cityId: bossAzCity?.cityId || null,
                                         description: element.text || null,
                                         jobId: element.id,
-                                        isPremium:element?.is_vip,
+                                        isPremium: element?.is_vip,
                                         categoryId: category.localCategoryId,
                                         sourceUrl: this.url,
                                         redirectUrl: `https://www.jobsearch.az/vacancies/${element.slug}`,
                                         jobType: '0x001',
                                         educationId: null,
                                         experienceId: this.mapExperience(experienceId),
-                                        uniqueKey: `${element.title}-${element?.company.title}-${cityName}`
+                                        uniqueKey: `${element.title}-${element?.company.title}-${bossAzCity.name}`
                                     });
                                     companyData.push({
                                         companyName: element?.company?.title,
@@ -115,7 +117,7 @@ class JobSearchAz {
                         dataPromises.push(requestPromise);
                     });
                 });
-            });
+            }
 
             const results = await Promise.all(dataPromises);
             const data = results.flat();

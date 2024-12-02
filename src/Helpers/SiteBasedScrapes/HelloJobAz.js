@@ -57,7 +57,13 @@ class HelloJobAz {
     }
 
 
-    async Jobs(categories, bossAzcities) {
+    async Jobs(categories, bossAzCity) {
+
+        const city = Object.entries(enums.Cities.HelloJobAz).find(
+            ([k, v]) => v === bossAzCity.name
+        );
+        const cityId = city[0];
+
         const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
         const educationIds = [1, 2, 3, 4, 5, 6];
         const jobData = [];
@@ -78,8 +84,8 @@ class HelloJobAz {
             const totalCategories = splitCategories.length;
             let processedCount = 0;
 
-            for (const [index, category] of splitCategories.entries()) {
-                for (const [cityId, cityName] of Object.entries(enums.Cities.HelloJobAz)) {
+            if (cityId) {
+                for (const [index, category] of splitCategories.entries()) {
                     for (const education of educationIds) {
                         for (let page = 0; page <= 2; page++) {
                             const requestPromise = limit(async () => {
@@ -89,7 +95,7 @@ class HelloJobAz {
                                         text: `${processedCount}/${totalCategories}`
                                     };
 
-                                    console.log((index + 1) , processedCount,category)
+                                    console.log((index + 1), processedCount, category)
                                     if ((index + 1) !== processedCount) {
                                         sendEmail(status, process.env.TEST_CRON_MAIL_USER, "HelloJob Crone Info");
                                     }
@@ -141,10 +147,10 @@ class HelloJobAz {
                                             maxSalary,
                                             isPremium,
                                             categoryId: category.localCategoryId,
-                                            location: cityName,
+                                            location: bossAzCity.name,
                                             description,
                                             jobId,
-                                            cityId: bossAzcities.find(x => x.name === cityName)?.cityId || null,
+                                            cityId: bossAzCity?.cityId || null,
                                             sourceUrl: this.url,
                                             redirectUrl: `https://${this.url}` + redirectUrl,
                                             jobType: '0x001',
@@ -160,7 +166,7 @@ class HelloJobAz {
                                         });
                                     });
                                 } catch (error) {
-                                    console.error(`Error for URL ${category.helloJobAzId} - ${cityName}:`, error.message);
+                                    console.error(`Error for URL ${category.helloJobAzId} - ${bossAzCity.name}:`, error.message);
                                 }
                             });
 

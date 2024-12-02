@@ -140,7 +140,7 @@ const JobDataService = {
     
             const jobsWithImageUrl = jobs.map(job => ({
                 ...job.toObject(),
-                companyImageUrl: job.companyDetails?.imageUrl || null
+                companyImageUrl: (job.companyDetails?.imageUrl && job.companyDetails?.imageUrl.startsWith('http')) ? job.companyDetails?.imageUrl :  (job.companyDetails?.imageUrl && job.companyDetails?.imageUrl.startsWith('/') ?  element.companyImageUrl.replace(/src\\Public/g, '..') : null  )
             }));
     
             jobsWithImageUrl.forEach(job => {

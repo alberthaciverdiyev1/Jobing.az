@@ -2,6 +2,8 @@ import axios from "axios";
 import sendEmail from "./NodeMailer.js";
 
 export async function requestAllSites(){
+    const port = process.env.PR_PORT || 3000;
+
     try {
         const response = await axios.post(`http://localhost:${port}/api/jobs`);
         if (response.status === 200 || response.status === 201) {
