@@ -135,6 +135,7 @@ class SmartJobAz {
                                             experienceId: null,
                                             uniqueKey: `${title}-${companyName}-${location}`
                                         });
+                                        console.log({"SmartJob": jobData})
 
                                         companyData.push({
                                             companyName,

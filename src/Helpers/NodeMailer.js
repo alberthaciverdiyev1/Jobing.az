@@ -19,9 +19,9 @@ async function sendEmail(data, send_to = null,title = "Contact Us") {
     const info = await transporter.sendMail({
         from: `${title} <${process.env.MAIL_FROM}>`,
         to: send_to ?? process.env.MAIL_TO,
-        subject: data.title.toString(),
-        text: data.text?.toString(),
-        html: data.html ?? null,
+        subject: data?.title?.toString() || "",
+        text: data?.text?.toString() || "",
+        html: data?.html ?? null,
     });
 
     return {

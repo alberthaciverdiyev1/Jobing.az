@@ -49,6 +49,15 @@ const Enums = Object.freeze({
             "17700": "Naxçıvan", "17701": "Neftçala", "17702": "Oğuz", "17703": "Ordubad", "17704": "Saatlı", "17705": "Sabirabad", "17706": "Salyan", "17707": "Samux", "17708": "Siyəzən",
             "17709": "Sumqayıt", "17710": "Şabran", "17711": "Şahbuz", "17712": "Şamaxı", "17713": "Şəki", "17714": "Şəmkir", "17715": "Şərur", "17716": "Şirvan", "17717": "Şuşa",
             "17718": "Tərtər", "17719": "Tovuz", "17720": "Ucar", "17721": "Yardımlı", "17722": "Yevlax", "17723": "Zaqatala", "17724": "Zəngilan", "17725": "Zərdab"
+        },
+        HelloJobAz:{
+                "1": "Bakı", "2": "Gəncə", "3": "Sumqayıt", "5": "Şəki", "6": "Lənkəran", "8": "Göyçay", "7": "Yevlax", "9": "Tovuz", "10": "Qəbələ", "11": "Gədəbəy",
+                "12": "Goranboy", "13": "Oğuz", "14": "Zaqatala", "15": "Mingəçevir", "16": "Xızı", "17": "Xırdalan", "20": "Ağstafa", "21": "Ucar", "22": "Göygöl",
+                "24": "Xaçmaz", "26": "Yardımlı", "27": "Daşkəsən", "28": "Kürdəmir", "29": "Hacıqabul", "30": "Qax", "31": "Qazax", "32": "Tərtər", "33": "Biləsuvar",
+                "34": "Şəmkir", "36": "Quba", "37": "Qusar", "38": "Babək", "39": "Füzuli", "40": "Cəbrayıl", "41": "Salyan", "43": "Astara", "44": "Culfa", "45": "Ağdaş",
+                "47": "Masallı", "49": "Beyləqan", "50": "Ağsu", "51": "Qobustan", "52": "Bərdə", "53": "Ordubad", "54": "Balakən", "55": "İsmayıllı", "56": "Şuşa",
+                "57": "Samux", "58": "Ağcabədi", "59": "Ağdam", "60": "Dəvəçi", "61": "İmişli", "62": "Saatlı", "63": "Naxçıvan", "64": "Siyəzən", "65": "Şahbuz",
+                "66": "Cəlilabad", "67": "Sabirabad", "68": "Neftçala", "69": "Laçın", "70": "Naftalan", "71": "Zərdab", "72": "Şərur", "73": "Qıvraq", "74": "Şirvan", "75": "Şamaxı"
         }
     }
 
