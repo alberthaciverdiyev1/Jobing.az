@@ -42,7 +42,7 @@ app.use('/', routes);
 // swaggerDocs(app);
 
 // cron.schedule('0 7-23 * * *', async () => {
-cron.schedule('0 7-23/3 * * *', async () => {
+cron.schedule('0 7-23/4 * * *', async () => {
     try {
         const response = await axios.post(`http://localhost:${port}/api/jobs`);
         if (response.status === 200 || response.status === 201) {
