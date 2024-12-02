@@ -39,8 +39,7 @@ const CompanyController = {
             const updatedCompanies = await Promise.all(
                 companies.map(async (company) => {
                     if (company.imageUrl && (company.imageUrl.startsWith('http') || company.imageUrl.startsWith('https') || company.imageUrl.includes('/'))) {
-console.log("1")
-                       
+
                         const imageUrl = company.imageUrl.startsWith('http') || company.imageUrl.startsWith('https')
                             ? company.imageUrl
                             : `http://${company.imageUrl}`;
