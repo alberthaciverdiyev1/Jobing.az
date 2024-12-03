@@ -72,6 +72,7 @@ class SmartJobAz {
                 localCategoryId: categories.find(c => c.smartJobAz.includes(jobId)).localCategoryId,
                 smartJobAzId: jobId,
             }));
+            console.log("SmartJob",cityId,splitCategories)
 
             let $ = await Scrape(`https://${this.url}`);
             const token = $('input[name="_token"]').val();

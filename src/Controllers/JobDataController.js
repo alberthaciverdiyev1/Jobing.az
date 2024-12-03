@@ -12,6 +12,7 @@ import HelloJobAz from '../Helpers/SiteBasedScrapes/HelloJobAz.js';
 import sendEmail from "../Helpers/NodeMailer.js";
 import {formatDate} from "../Helpers/FormatDate.js";
 import {requestAllSites} from '../Helpers/Automation.js';
+import {sendTgMessage} from "../Helpers/TelegramBot.js";
 
 const jobDataController = {
     //
@@ -86,11 +87,7 @@ const jobDataController = {
     create: async (req, res) => {
         try {
             const to = process.env.CRON_MAIL_USER;
-
-            await sendEmail({
-                title: "Cron started",
-                text: `Cron started at ${formatDate()}`,
-            }, to, "Cron started");
+            sendTgMessage(`Cron started at ${formatDate()}`)
 
             const categories = await CategoryService.getLocalCategories({});
             if (!categories || categories.length === 0) {
@@ -124,18 +121,12 @@ const jobDataController = {
                                     throw new Error(`Invalid response from JobService for ${name}`);
                                 }
                                 insertedJobCount += response.count;
-                                await sendEmail({
-                                    title: `${name}`,
-                                    text: `${name} jobs successfully inserted for category ${category.categoryName} and city ${city.name}. Inserted job count: ${insertedJobCount}`,
-                                }, to, name);
+                                sendTgMessage(`${name} jobs successfully inserted for category ${category.categoryName} and city ${city.name}. Inserted job count: ${insertedJobCount}`)
                             }
                         } catch (error) {
                             const errorMessage = `Error processing ${name} for category ${category.categoryName} and city ${city.name}: ${error.message}`;
                             errors.push(errorMessage);
-                            await sendEmail({
-                                title: `Error from: ${name}`,
-                                text: errorMessage,
-                            }, to, "Error");
+                            sendTgMessage(`Error from: ${name}, Error message:${errorMessage}`)
                         }
                     }
                 }

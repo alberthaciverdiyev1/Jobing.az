@@ -6,6 +6,7 @@ import * as cheerio from 'cheerio';
 import randomUserAgent from "../../Config/UserAgents.js";
 import CompanyService from '../../Services/CompanyService.js';
 import sendEmail from "../NodeMailer.js";
+import {sendTgMessage} from "../TelegramBot.js";
 
 
 const cities = {
@@ -90,14 +91,10 @@ class HelloJobAz {
                         for (let page = 0; page <= 2; page++) {
                             const requestPromise = limit(async () => {
                                 try {
-                                    let status = {
-                                        title: `Hello Job Category Status`,
-                                        text: `${processedCount}/${totalCategories}`
-                                    };
-
                                     console.log((index + 1), processedCount, category)
                                     if ((index + 1) !== processedCount) {
-                                        sendEmail(status, process.env.TEST_CRON_MAIL_USER, "HelloJob Crone Info");
+                                        // sendEmail(status, process.env.TEST_CRON_MAIL_USER, "HelloJob Crone Info")
+                                       await sendTgMessage(`Hello Job Category Status:${processedCount}/${totalCategories}`)
                                     }
                                     processedCount = index + 1
 

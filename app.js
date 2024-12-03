@@ -9,6 +9,9 @@ import sendEmail from './src/Helpers/NodeMailer.js';
 import i18n from 'i18n';
 import cookieParser from 'cookie-parser';
 import {requestAllSites} from "./src/Helpers/Automation.js";
+import bot,{listenTgCommands, sendTgMessage} from "./src/Helpers/TelegramBot.js";
+import TelegramBot from 'node-telegram-bot-api';
+
 
 const to = process.env.CRON_MAIL_USER;
 
@@ -22,6 +25,8 @@ i18n.configure({
 const app = express();
 const port = process.env.PR_PORT || 3000;
 
+bot.on('message', listenTgCommands);
+
 app.set('view engine', 'ejs');
 app.set('views', './src/Views');
 app.set('trust proxy', true);
@@ -33,7 +38,6 @@ app.use(i18n.init);
 app.use((req, res, next) => { res.locals.Production = Production; next(); });
 app.use(loggerMiddleware);
 app.use('/', routes);
-// 404 Not Found middleware
 app.use((req, res, next) => { res.status(404).send('404 Not Found'); next(); });
 
 app.use(async (err, req, res, next) => {
