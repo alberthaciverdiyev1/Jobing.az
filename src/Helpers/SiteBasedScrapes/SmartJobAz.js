@@ -62,17 +62,18 @@ class SmartJobAz {
             const city = Object.entries(enums.Cities.SmartJobAz).find(
                 ([k, v]) => v === bossAzCity.name
             );
-            const cityId = city[0];
+            const cityId = city ? city[0] : null;
+console.log(cityId);
 
             let splitCategories = categories
-            .flatMap(c => c.smartJobAz.split(','))
-            .map(jobId => jobId.trim())
-            .filter(jobId => jobId !== '')
-            .map(jobId => ({
-                localCategoryId: categories.find(c => c.smartJobAz.includes(jobId)).localCategoryId,
-                smartJobAzId: jobId,
-            }));
-            console.log("SmartJob",cityId,splitCategories)
+                .flatMap(c => c.smartJobAz.split(','))
+                .map(jobId => jobId.trim())
+                .filter(jobId => jobId !== '')
+                .map(jobId => ({
+                    localCategoryId: categories.find(c => c.smartJobAz.includes(jobId)).localCategoryId,
+                    smartJobAzId: jobId,
+                }));
+            console.log("SmartJob", cityId, splitCategories)
 
             let $ = await Scrape(`https://${this.url}`);
             const token = $('input[name="_token"]').val();
@@ -83,85 +84,88 @@ class SmartJobAz {
             const jobData = [];
             const companyData = [];
 
-            Object.entries(splitCategories).forEach(([no, category]) => {
-                for (const education of educationIds) {
-                    for (let page = 0; page <= 2; page++) {
-                        const requestPromise = limit(async () => {
-                            try {
-                                const url = `https://${this.url}/vacancies?_token=${encodeURIComponent(token)}&city_id%5B%5D=${cityId}&job_category_id%5B20%5D=${encodeURIComponent(category.smartJobAzId)}&education_id%5B0%5D=${encodeURIComponent(education)}&salary_from=&salary_to=&page=${page}`;
-
-                                const timeout = new Promise((_, reject) => {
-                                    setTimeout(() => reject(new Error('Request timed out')), 30000);
-                                });
-
-                                const fetchPromise = (async () => {
-                                    const $ = await Scrape(url);
-                                    $('.brows-job-list').each((i, el) => {
-                                        const urlAndId = $(el).find('h3 a');
-                                        const title = urlAndId.text().trim();
-                                        const companyElement = $(el).find('.company-title a');
-                                        const companyName = companyElement.text().trim();
-                                        const companyId = companyElement.attr('href')?.split('/').pop() || null;
-                                        const location = $(el).find('.location-pin').text().trim();
-                                        const salaryText = $(el).find('.salary-val').text().trim();
-                                        const companyImageUrl = $(el).find('.brows-job-company-img img').attr('src');
-                                        const cleanSalaryText = salaryText.replace('AZN', '').trim();
-                                        const parts = cleanSalaryText.split(' - ');
-                                        const isPremium = $(el).find('.tg-featuretag').length > 0;
-                                        const jobId = urlAndId.attr('href')?.split('/').pop() || null;
-                                        const redirectUrl = urlAndId.attr('href') || null;
-                                        let [minSalary, maxSalary] = [0, 0];
-                                        if (parts.length === 2) {
-                                            minSalary = !isNaN(Number(parts[0])) ? parseInt(parts[0], 10) : 0;
-                                            maxSalary = !isNaN(Number(parts[1])) ? parseInt(parts[1], 10) : 0;
-                                        } else if (parts.length === 1) {
-                                            minSalary = 0;
-                                            maxSalary = !isNaN(Number(parts[0])) ? parseInt(parts[0], 10) : 0;
-                                        }
-
-                                        jobData.push({
-                                            title,
-                                            companyName,
-                                            isPremium,
-                                            companyId,
-                                            minSalary: minSalary ?? 0,
-                                            maxSalary: maxSalary ?? 0,
-                                            location,
-                                            cityId: bossAzCity?.cityId,
-                                            description: null,
-                                            jobId,
-                                            categoryId: category.localCategoryId || null,
-                                            sourceUrl: this.url,
-                                            redirectUrl,
-                                            jobType: '0x001',
-                                            educationId: this.mapEducation(education),
-                                            experienceId: null,
-                                            uniqueKey: `${title}-${companyName}-${location}`
-                                        });
-
-                                        companyData.push({
-                                            companyName,
-                                            imageUrl: companyImageUrl,
-                                            website: enums.SitesWithId.SmartJobAz,
-                                            uniqueKey: `${companyName}-${companyImageUrl}`
-                                        });
-                                        console.log({"SmartJob": jobData})
-
+            if (cityId) {
+                Object.entries(splitCategories).forEach(([no, category]) => {
+                    for (const education of educationIds) {
+                        for (let page = 0; page <= 2; page++) {
+                            const requestPromise = limit(async () => {
+                                try {
+                                    const url = `https://${this.url}/vacancies?_token=${encodeURIComponent(token)}&city_id%5B%5D=${cityId}&job_category_id%5B20%5D=${encodeURIComponent(category.smartJobAzId)}&education_id%5B0%5D=${encodeURIComponent(education)}&salary_from=&salary_to=&page=${page}`;
+                                    const randomDelay = Math.floor(Math.random() * 15000) + 1000;
+                                    await delay(randomDelay);
+                                    const timeout = new Promise((_, reject) => {
+                                        setTimeout(() => reject(new Error('Request timed out')), 30000);
                                     });
-                                })();
 
-                                await Promise.race([fetchPromise, timeout]);
+                                    const fetchPromise = (async () => {
+                                        const $ = await Scrape(url);
+                                        $('.brows-job-list').each((i, el) => {
+                                            const urlAndId = $(el).find('h3 a');
+                                            const title = urlAndId.text().trim();
+                                            const companyElement = $(el).find('.company-title a');
+                                            const companyName = companyElement.text().trim();
+                                            const companyId = companyElement.attr('href')?.split('/').pop() || null;
+                                            const location = $(el).find('.location-pin').text().trim();
+                                            const salaryText = $(el).find('.salary-val').text().trim();
+                                            const companyImageUrl = $(el).find('.brows-job-company-img img').attr('src');
+                                            const cleanSalaryText = salaryText.replace('AZN', '').trim();
+                                            const parts = cleanSalaryText.split(' - ');
+                                            const isPremium = $(el).find('.tg-featuretag').length > 0;
+                                            const jobId = urlAndId.attr('href')?.split('/').pop() || null;
+                                            const redirectUrl = urlAndId.attr('href') || null;
+                                            let [minSalary, maxSalary] = [0, 0];
+                                            if (parts.length === 2) {
+                                                minSalary = !isNaN(Number(parts[0])) ? parseInt(parts[0], 10) : 0;
+                                                maxSalary = !isNaN(Number(parts[1])) ? parseInt(parts[1], 10) : 0;
+                                            } else if (parts.length === 1) {
+                                                minSalary = 0;
+                                                maxSalary = !isNaN(Number(parts[0])) ? parseInt(parts[0], 10) : 0;
+                                            }
 
-                            } catch (error) {
-                                console.error(`Error fetching data from ${url}:`, error.message);
-                                return [];
-                            }
-                        });
+                                            jobData.push({
+                                                title,
+                                                companyName,
+                                                isPremium,
+                                                companyId,
+                                                minSalary: minSalary ?? 0,
+                                                maxSalary: maxSalary ?? 0,
+                                                location,
+                                                cityId: bossAzCity?.cityId,
+                                                description: null,
+                                                jobId,
+                                                categoryId: category.localCategoryId || null,
+                                                sourceUrl: this.url,
+                                                redirectUrl,
+                                                jobType: '0x001',
+                                                educationId: this.mapEducation(education),
+                                                experienceId: null,
+                                                uniqueKey: `${title}-${companyName}-${location}`
+                                            });
 
-                        dataPromises.push(requestPromise);
+                                            companyData.push({
+                                                companyName,
+                                                imageUrl: companyImageUrl,
+                                                website: enums.SitesWithId.SmartJobAz,
+                                                uniqueKey: `${companyName}-${companyImageUrl}`
+                                            });
+                                            console.log({ "SmartJob": jobData })
+
+                                        });
+                                    })();
+
+                                    await Promise.race([fetchPromise, timeout]);
+
+                                } catch (error) {
+                                    console.error(`Error fetching data from ${url}:`, error.message);
+                                    return [];
+                                }
+                            });
+
+                            dataPromises.push(requestPromise);
+                        }
                     }
-                }
-            });
+                });
+            }
 
             const results = await Promise.all(dataPromises);
             results.flat();

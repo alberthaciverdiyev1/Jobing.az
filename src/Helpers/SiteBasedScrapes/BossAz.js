@@ -61,7 +61,7 @@ class BossAz {
                     localCategoryId: categories.find(c => c.bossAz.includes(jobId)).localCategoryId,
                     bossAzId: jobId,
                 }))
-
+            const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
             const limit = pLimit(+enums.LimitPerRequest);
             const dataPromises = [];
             let testCatId = null;
@@ -69,11 +69,15 @@ class BossAz {
                 ([k, v]) => v === bossAzCity.name
             );
             const cityId = city[0];
+            
             Object.entries(splitCategories).forEach(([no, category]) => {
                 for (let education = 0; education <= 7; education++) {
                     for (let experience = 0; experience <= 4; experience++) {
                         for (let page = 0; page <= 2; page++) {
                             const requestPromise = limit(async () => {
+                                const randomDelay = Math.floor(Math.random() * 15000) + 1000;
+                                await delay(randomDelay);
+                                
                                 const timeout = new Promise((_, reject) => {
                                     setTimeout(() => reject(new Error('Request timed out after 30 seconds')), 30000);
                                 });
@@ -137,7 +141,6 @@ class BossAz {
                                         testCatId = category.bossAzId;
 
                                     });
-                                    console.log(jobData)
                                     return jobData;
                                 } catch (error) {
                                     console.error(`Error fetching data from page ${page} for category ${category.categoryId}:`, error.message);
