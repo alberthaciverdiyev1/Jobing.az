@@ -45,6 +45,7 @@ class JobSearchAz {
             const jobData = [];
             const companyData = [];
 
+            console.log("JobSearch",cityId,splitCategories)
             if (cityId) {
                 Object.entries(splitCategories).forEach(([no, category]) => {
                     Object.entries(experience).forEach(([experienceId]) => {

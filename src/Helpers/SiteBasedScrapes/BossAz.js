@@ -3,7 +3,6 @@ import Scrape from "../ScrapeHelper.js";
 import enums from "../../Config/Enums.js";
 import Enums from "../../Config/Enums.js";
 import sendEmail from "../NodeMailer.js";
-import CityService from "../../Services/CityService.js";
 
 class BossAz {
     constructor(url = enums.Sites.BossAz) {
@@ -52,10 +51,8 @@ class BossAz {
     }
 
 
-    async Jobs(categories, a) {
+    async Jobs(categories, bossAzCity) {
         try {
-            const filteredCities = await CityService.getAll({site: "BossAz"});
-
             let splitCategories = categories
                 .flatMap(c => c.bossAz.split(','))
                 .map(jobId => jobId.trim())
@@ -68,7 +65,10 @@ class BossAz {
             const limit = pLimit(+enums.LimitPerRequest);
             const dataPromises = [];
             let testCatId = null;
-
+            const city = Object.entries(enums.Cities.BossAz).find(
+                ([k, v]) => v === bossAzCity.name
+            );
+            const cityId = city[0];
             Object.entries(splitCategories).forEach(([no, category]) => {
                 for (let education = 0; education <= 7; education++) {
                     for (let experience = 0; experience <= 4; experience++) {
@@ -79,7 +79,7 @@ class BossAz {
                                 });
                                 try {
                                     const $ = await Promise.race([
-                                        Scrape(`https://${this.url}/vacancies?action=index&controller=vacancies&only_path=true&page=${page}&search%5Bcategory_id%5D=${category.bossAzId}&search%5Bcompany_id%5D=&search%5Beducation_id%5D=${education}&search%5Bexperience_id%5D=${experience}&search%5Bkeyword%5D=&search%5Bregion_id%5D=&search%5Bsalary%5D=&type=vacancies`),
+                                        Scrape(`https://${this.url}/vacancies?action=index&controller=vacancies&only_path=true&page=${page}&search%5Bcategory_id%5D=${category.bossAzId}&search%5Bcompany_id%5D=&search%5Beducation_id%5D=${education}&search%5Bexperience_id%5D=${experience}&search%5Bkeyword%5D=&search%5Bregion_id%5D=${cityId}&search%5Bsalary%5D=&type=vacancies`),
                                         timeout
                                     ]);
     
@@ -109,8 +109,6 @@ class BossAz {
                                             maxSalary = !isNaN(Number(parts[0])) ? parseInt(parts[0], 10) : 0;
                                         }
                                         
-                                        const locationCity = filteredCities.find(x => x.name === location);
-
                                         jobData.push({
                                             title,
                                             companyName,
@@ -118,7 +116,7 @@ class BossAz {
                                             minSalary,
                                             maxSalary,
                                             location,
-                                            cityId: locationCity ? +locationCity.cityId : null,
+                                            cityId: cityId || null,
                                             description,
                                             jobId,
                                             categoryId: category.localCategoryId || null,
@@ -139,7 +137,7 @@ class BossAz {
                                         testCatId = category.bossAzId;
 
                                     });
-    
+                                    console.log(jobData)
                                     return jobData;
                                 } catch (error) {
                                     console.error(`Error fetching data from page ${page} for category ${category.categoryId}:`, error.message);
@@ -152,7 +150,6 @@ class BossAz {
                     }
                 }
             });
-    
             const results = await Promise.all(dataPromises);
             const data = results.flat();
             return data;

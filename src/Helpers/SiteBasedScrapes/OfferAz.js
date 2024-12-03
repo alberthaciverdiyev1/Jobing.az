@@ -60,6 +60,7 @@ class OfferAz {
             const dataPromises = [];
             const educationIds = [249, 15, 14, 12, 13, 81, -1, -2];
             const jobData = [];
+            console.log("OfferAz",cityId,splitCategories)
 
             Object.entries(splitCategories).forEach(([no, category]) => {
                 for (const education of educationIds) {

@@ -80,8 +80,20 @@ const Enums = Object.freeze({
             "824": "Şabran", "4134": "Şahbuz", "689": "Salyan", "690": "Şamaxı", "616": "Samux", "991": "Şəki", "700": "Şəmkir", "847": "Şirvan", "829": "Siyəzən", 
             "174": "Sumqayıt", "6475": "Şuşa", "2814": "Tərtər", "813": "Tovuz", "854": "Ucar", "827": "Xaçmaz", "398": "Xırdalan", "825": "Xızı", "7209": "Xocalı", 
             "7210": "Xocalı", "828": "Xudat", "698": "Yardımlı", "1115": "Yevlax", "447": "Zaqatala", "4974": "Zəngilan", "2813": "Zərdab"
-          }
-          
+          },
+        BossAz:{"28": "Ağcabədi", "12": "Ağdam", "83": "Ağdaş", "87": "Ağdərə", "85": "Ağstafa", "34": "Ağsu", "88": "Astara", "1": "Bakı", "73": "Balakən",
+                "30": "Beyləqan", "31": "Bərdə", "26": "Biləsuvar", "93": "Cəbrayıl", "72": "Cəlilabad", "94": "Culfa", "84": "Daşkəsən", "7": "Əli-Bayramlı",
+                "23": "Füzuli", "86": "Gədəbəy", "4": "Gəncə", "81": "Goranboy", "29": "Göyçay", "90": "Göygöl", "91": "Göytəpə", "110": "Hacıqabul",
+                "25": "İmişli", "3": "İsmayıllı", "97": "Kəlbəcər", "27": "Kürdəmir", "99": "Laçın", "82": "Lerik", "89": "Lənkəran", "16": "Masallı",
+                "6": "Mingəçevir", "14": "Naftalan", "8": "Naxçıvan", "100": "Neftçala", "101": "Oğuz", "102": "Ordubad", "39": "Qaradağ", "38": "Qax",
+                "15": "Qazax", "76": "Qəbələ", "92": "Qobustan", "18": "Quba", "98": "Qubadlı", "19": "Qusar", "33": "Saatlı", "24": "Sabirabad",
+                "80": "Şabran", "108": "Şahbuz", "22": "Salyan", "21": "Şamaxı", "35": "Samux", "9": "Şəki", "13": "Şəmkir", "79": "Şərur", "78": "Şirvan",
+                "74": "Siyəzən", "5": "Sumqayıt", "109": "Şuşa", "32": "Tərtər", "17": "Tovuz", "103": "Ucar", "20": "Xaçmaz", "104": "Xankəndi",
+                "75": "Xırdalan", "37": "Xızı", "106": "Xocalı", "105": "Xocavənd", "107": "Xudat", "77": "Yardımlı", "10": "Yevlax", "2": "Zaqatala",
+                "95": "Zəngilan", "96": "Zərdab"
+        }
+
+
     }
 
 });

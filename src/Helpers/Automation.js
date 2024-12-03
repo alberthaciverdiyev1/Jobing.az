@@ -1,25 +1,22 @@
 import axios from "axios";
 import sendEmail from "./NodeMailer.js";
+import { sendTgMessage } from "./TelegramBot.js";
 
-export async function requestAllSites(){
+
+export async function requestAllSites() {
     const port = process.env.PR_PORT || 3000;
-
     try {
         const response = await axios.post(`http://localhost:${port}/api/jobs`);
         if (response.status === 200 || response.status === 201) {
-            let endData = {
-                title: "Cron ended",
-                text: `${response.data.message} <br> ${response.data.errors}`
-            };
-            await sendEmail(endData, process.env.CRON_MAIL_USER);
+            // await sendEmail(endData, process.env.CRON_MAIL_USER);
+            await sendTgMessage(`Cron ended : ${response.data.message} <=> ${response.data.errors}`);
+
         }
     } catch (error) {
-        let errorData = {
-            title: "Cron ended with error",
-            text: `${error}`
-        };
-        await sendEmail(errorData, process.env.CRON_MAIL_USER);
+        // await sendEmail(errorData, process.env.CRON_MAIL_USER);
+       await sendTgMessage(`Cron ended with error : ${error}`);
     }
+
 
     const jresponse = await axios.post(`http://localhost:${port}/api/jobs/remove-duplicates`);
     if (jresponse.status === 200 || jresponse.status === 201) {

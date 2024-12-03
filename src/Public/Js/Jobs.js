@@ -300,6 +300,7 @@ async function getJobs(params) {
             if (res.data.totalCount) {
                 jobList = res.data.jobs;
                 res.data.jobs.forEach(element => {
+                    console.log(element.companyImageUrl);
                     htmlContent += `<div class="job-card bg-white px-3 pt-2 h-40 rounded-xl shadow-md mb-4 hover:hover-card-color cursor-pointer duration-300 border border-custom sm:px-5" data-original-link="${element.redirectUrl}">
                                         <div class="content flex">
                                              <div class="mt-3 flex-shrink-0 sm:mt-1">
