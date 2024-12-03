@@ -63,7 +63,7 @@ class HelloJobAz {
         const city = Object.entries(enums.Cities.HelloJobAz).find(
             ([k, v]) => v === bossAzCity.name
         );
-        const cityId = city[0];
+        const cityId = city ? city[0] : null;
 
         const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
         const educationIds = [1, 2, 3, 4, 5, 6];
@@ -80,7 +80,7 @@ class HelloJobAz {
                     localCategoryId: categories.find(c => c.helloJobAz.includes(jobId)).localCategoryId,
                     helloJobAzId: jobId,
                 }));
-
+            console.log(cityId)
             const dataPromises = [];
             const totalCategories = splitCategories.length;
             let processedCount = 0;
@@ -94,11 +94,11 @@ class HelloJobAz {
                                     console.log((index + 1), processedCount, category)
                                     if ((index + 1) !== processedCount) {
                                         // sendEmail(status, process.env.TEST_CRON_MAIL_USER, "HelloJob Crone Info")
-                                       await sendTgMessage(`Hello Job Category Status:${processedCount}/${totalCategories}`)
+                                        await sendTgMessage(`Hello Job Category Status:${processedCount}/${totalCategories}`)
                                     }
                                     processedCount = index + 1
 
-                                    const randomDelay = Math.floor(Math.random() * 2000) + 1000;
+                                    const randomDelay = Math.floor(Math.random() * 15000) + 1000;
                                     await delay(randomDelay);
 
                                     let url = `https://www.${this.url}/search?direction=works&category_id=${category.helloJobAzId}&region_id=${cityId}&salary_min=&education_type=${education}&work_exp=0&search_type=filter`;

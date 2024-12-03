@@ -1,5 +1,6 @@
 import JobService from '../Services/JobDataService.js';
 import CategoryService from '../Services/CategoryService.js';
+import pLimit from 'p-limit';
 
 import BossAz from "../Helpers/SiteBasedScrapes/BossAz.js";
 import Category from "../Models/Category.js";
@@ -15,15 +16,11 @@ import {requestAllSites} from '../Helpers/Automation.js';
 import {sendTgMessage} from "../Helpers/TelegramBot.js";
 
 const jobDataController = {
-    //
+
     // create: async (req, res) => {
     //     try {
     //         const to = process.env.CRON_MAIL_USER;
-    //
-    //         await sendEmail({
-    //             title: "Cron started",
-    //             text: `Cron started at ${formatDate()}`,
-    //         }, to, "Cron started");
+    //         await sendTgMessage(`Cron started at ${formatDate()}`)
     //
     //         const categories = await CategoryService.getLocalCategories({});
     //         if (!categories || categories.length === 0) {
@@ -47,27 +44,23 @@ const jobDataController = {
     //         const errors = [];
     //
     //         for (const category of categories) {
-    //             for (const {instance, name} of sources) {
-    //                 try {
-    //                     const jobs = await instance.Jobs([category], cities);
-    //                     if (jobs.length > 0) {
-    //                         const response = await JobService.create(jobs);
-    //                         if (!response || !response.status || !response.message) {
-    //                             throw new Error(`Invalid response from JobService for ${name}`);
+    //             for (const city of cities) {
+    //                 for (const {instance, name} of sources) {
+    //                     try {
+    //                         const jobs = await instance.Jobs([category], city);
+    //                         if (jobs.length > 0) {
+    //                             const response = await JobService.create(jobs);
+    //                             if (!response || !response.status || !response.message) {
+    //                                 throw new Error(`Invalid response from JobService for ${name}`);
+    //                             }
+    //                             insertedJobCount += response.count;
+    //                             await sendTgMessage(`${name} jobs successfully inserted for category ${category.categoryName} and city ${city.name}. Inserted job count: ${insertedJobCount}`)
     //                         }
-    //                         insertedJobCount += response.count;
-    //                         await sendEmail({
-    //                             title: `${name}`,
-    //                             text: `${name} jobs successfully inserted for category ${category.categoryName}. Inserted job count: ${insertedJobCount}`,
-    //                         }, to, name);
+    //                     } catch (error) {
+    //                         const errorMessage = `Error processing ${name} for category ${category.categoryName} and city ${city.name}: ${error.message}`;
+    //                         errors.push(errorMessage);
+    //                         await sendTgMessage(`Error from: ${name}, Error message:${errorMessage}`)
     //                     }
-    //                 } catch (error) {
-    //                     const errorMessage = `Error processing ${name} for category ${category.categoryName}: ${error.message}`;
-    //                     errors.push(errorMessage);
-    //                     await sendEmail({
-    //                         title: `Error from: ${name}`,
-    //                         text: errorMessage,
-    //                     }, to, "Error");
     //                 }
     //             }
     //         }
@@ -84,54 +77,70 @@ const jobDataController = {
     //         });
     //     }
     // },
+
+
     create: async (req, res) => {
         try {
             const to = process.env.CRON_MAIL_USER;
-            sendTgMessage(`Cron started at ${formatDate()}`)
-
+            sendTgMessage(`Cron started at ${formatDate()}`);
+    
             const categories = await CategoryService.getLocalCategories({});
             if (!categories || categories.length === 0) {
                 throw new Error("No categories found");
             }
-
-            const cities = await CityService.getAll({site: "BossAz"});
+    
+            const cities = await CityService.getAll({ site: "BossAz" });
             if (!cities || cities.length === 0) {
                 throw new Error("No cities found");
             }
-
+    
             const sources = [
-                {instance: new BossAz(), name: "BossAz"},
-                {instance: new HelloJobAz(), name: "HelloJobAz"},
-                {instance: new OfferAz(), name: "OfferAz"},
-                {instance: new SmartJobAz(), name: "SmartJobAz"},
-                {instance: new JobSearchAz(), name: "JobSearchAz"},
+                { instance: new BossAz(), name: "BossAz" },
+                { instance: new HelloJobAz(), name: "HelloJobAz" },
+                { instance: new OfferAz(), name: "OfferAz" },
+                { instance: new SmartJobAz(), name: "SmartJobAz" },
+                { instance: new JobSearchAz(), name: "JobSearchAz" },
             ];
-
+    
             let insertedJobCount = 0;
             const errors = [];
-
+    
+            // Limit the concurrency to 5
+            const limit = pLimit(5);
+    
+            // Kategorileri sırayla işleme
             for (const category of categories) {
+                const categoryPromises = [];
+    
                 for (const city of cities) {
-                    for (const {instance, name} of sources) {
-                        try {
-                            const jobs = await instance.Jobs([category], city);
-                            if (jobs.length > 0) {
-                                const response = await JobService.create(jobs);
-                                if (!response || !response.status || !response.message) {
-                                    throw new Error(`Invalid response from JobService for ${name}`);
+                    // Her şehir için tüm kaynakları aynı anda çalıştırma
+                    const cityPromises = sources.map(({ instance, name }) => {
+                        return limit(async () => {
+                            try {
+                                const jobs = await instance.Jobs([category], city);
+                                if (jobs.length > 0) {
+                                    const response = await JobService.create(jobs);
+                                    if (!response || !response.status || !response.message) {
+                                        throw new Error(`Invalid response from JobService for ${name}`);
+                                    }
+                                    insertedJobCount += response.count;
+                                    sendTgMessage(`${name} jobs successfully inserted for category ${category.categoryName} and city ${city.name}. Inserted job count: ${insertedJobCount}`);
                                 }
-                                insertedJobCount += response.count;
-                                sendTgMessage(`${name} jobs successfully inserted for category ${category.categoryName} and city ${city.name}. Inserted job count: ${insertedJobCount}`)
+                            } catch (error) {
+                                const errorMessage = `Error processing ${name} for category ${category.categoryName} and city ${city.name}: ${error.message}`;
+                                errors.push(errorMessage);
+                                sendTgMessage(`Error from: ${name}, Error message: ${errorMessage}`);
                             }
-                        } catch (error) {
-                            const errorMessage = `Error processing ${name} for category ${category.categoryName} and city ${city.name}: ${error.message}`;
-                            errors.push(errorMessage);
-                            sendTgMessage(`Error from: ${name}, Error message:${errorMessage}`)
-                        }
-                    }
+                        });
+                    });
+    
+                    categoryPromises.push(Promise.all(cityPromises));
                 }
+    
+                // Kategorideki tüm şehirler için işlemleri aynı anda çalıştır
+                await Promise.all(categoryPromises);
             }
-
+    
             res.status(201).json({
                 errors: errors.length > 0 ? errors : null,
                 status: 201,
@@ -144,6 +153,7 @@ const jobDataController = {
             });
         }
     },
+    
 
     getAll: async (req, res) => {
         try {

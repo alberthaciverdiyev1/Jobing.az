@@ -49,10 +49,10 @@ class JobSearchAz {
             if (cityId) {
                 Object.entries(splitCategories).forEach(([no, category]) => {
                     Object.entries(experience).forEach(([experienceId]) => {
+                        const randomDelay = Math.floor(Math.random() * 15000) + 1000;
+                        delay(randomDelay);
                         const requestPromise = limit(async () => {
                             try {
-                                const randomDelay = Math.floor(Math.random() * 20000) + 1000;
-                                await delay(randomDelay);
                                 const url = 'https://www.jobsearch.az/api-az/vacancies-az';
                                 const params = {
                                     hl: 'az',

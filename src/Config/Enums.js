@@ -37,7 +37,7 @@ const Enums = Object.freeze({
         JobSearchAz:'0x006'
     },
 
-    LimitPerRequest:10,
+    LimitPerRequest:3,
 
     Cities:{
         JobSearchAz:{ "17647": "Ağcabədi", "17648": "Ağdam", "17649": "Ağdaş", "17650": "Ağdərə", "17651": "Ağstafa", "17652": "Ağsu", "17653": "Astara", "17654": "Babək",
