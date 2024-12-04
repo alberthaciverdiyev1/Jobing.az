@@ -50,9 +50,10 @@ app.use(async (err, req, res, next) => {
 });
 
 
-cron.schedule('0 17 * * *', async () => {
+cron.schedule('0 13 * * 5', async () => {
     await requestAllSites();
 });
+
 
 cron.schedule('0 7-23/3 * * *', async () => {
     await requestAllSites(true)
