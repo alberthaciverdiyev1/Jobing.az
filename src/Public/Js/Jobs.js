@@ -428,7 +428,7 @@ async function getJobs(params) {
             });
         }
     } catch (err) {
-        console.error(err);
+         le.error(err);
     }
 }
 

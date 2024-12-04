@@ -51,11 +51,10 @@ class OfferAz {
                     offerAzId: jobId,
                 }));
 
-            const city = Object.entries(enums.Cities.SmartJobAz).find(
+            const city = Object.entries(enums.Cities.OfferAz).find(
                 ([k, v]) => v === bossAzCity.name
             );
             const cityId = city ? city[0] : null;
-            console.log(cityId);
             
 
             const limit = pLimit(1);
@@ -101,6 +100,7 @@ class OfferAz {
                                     );
 
                                     const response = await Promise.race([axios.post(url, data, { headers }), timeoutPromise]);
+                                    console.log({response});
 
                                     const $ = cheerio.load(response.data);
 
@@ -148,7 +148,7 @@ class OfferAz {
                                             experienceId: null,
                                             uniqueKey: `${title}-${companyName}-${location}`
                                         });
-                                        // console.log({"OfferAz": jobData})
+                                        console.log({"OfferAz": jobData})
 
                                     });
 
