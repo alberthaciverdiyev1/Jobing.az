@@ -275,7 +275,7 @@ window.addEventListener('scroll', () => {
     if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - scrollThreshold) {
         if (!loading) {
             loading = true;
-            offset += 50;
+            offset += 100;
             handleFilterChange();
 
         }
