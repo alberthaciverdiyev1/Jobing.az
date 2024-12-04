@@ -38,7 +38,7 @@ class OfferAz {
     }
 
 
-    async Jobs(categories, bossAzCity) {
+    async Jobs(categories, bossAzCity,main) {
 
         const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
         try {
@@ -64,7 +64,8 @@ class OfferAz {
             const jobData = [];
             console.log("OfferAz", cityId, splitCategories)
 
-            if (cityId) {
+            if (cityId && (main ? true : (bossAzCity.name !== "Bakı" ? true : false))) {
+
                 Object.entries(splitCategories).forEach(([no, category]) => {
                     for (const education of educationIds) {
                         for (let page = 0; page <= 2; page++) {
