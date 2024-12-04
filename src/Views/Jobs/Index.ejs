@@ -30,7 +30,7 @@
                         <div class="flex items-center">
                             <input type="radio" name="category" id="all" class="custom-checkbox" />
                             <label for="all" class="text-gray-800">
-                               Bütün Kateqoriyalar
+                                Bütün Kateqoriyalar
                             </label>
                         </div>
                     </div>
@@ -79,7 +79,7 @@
                             <span id="max-value" class="value upper block font-semibold text-gray-800">4999</span>
                         </div>
                     </div>
-            
+
                     <div id="slider" class="absolute inset-0 border-2 rounded-lg h-4 border-red-400"></div>
                 </div>
             </div>
@@ -150,12 +150,18 @@
         <div class="lg:w-3/4 bg-gray-100 rounded-xl px-5 pb-6 overflow-y-scroll scroll-smooth custom-scroll"
             id="card-section">
 
-            <div class="flex items-center justify-center min-h-screen bg-white  border border-custom rounded-lg">
+            <div class="flex items-center justify-center min-h-screen bg-white  border border-custom rounded-lg"
+                id="mobile-scroll">
                 <div class="flex flex-col items-center justify-center w-full max-w-xs mx-auto">
-                        <span class="loader"></span>
+                    <span class="loader"></span>
                 </div>
-           </div>
+            </div>
 
+        </div>
+        <div class="flex items-center justify-center mt-1 sm:hidden">
+            <button class="rounded-full filled-button-color px-8 py-3 text-white hover:empty-button-color" id="load-more-mobile">
+                Daha Çox
+            </button>
         </div>
         <button class="fixed bottom-4 right-4 w-14 h-14 z-10 filled-button-color rounded-full sm:hidden"
             id="mobile-filter-btn">

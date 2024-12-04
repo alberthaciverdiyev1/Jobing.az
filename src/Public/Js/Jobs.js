@@ -293,8 +293,17 @@ const onScroll = debounce(() => {
     }
 }, 500);
 
-scrollContainer.addEventListener('scroll', onScroll);
+const loadMoreForMobile = debounce(() => {
+    if (loading) return;
 
+        loading = true;
+        offset+=100;
+        handleFilterChange()
+         loading = false; 
+}, 500);
+
+scrollContainer.addEventListener('scroll', onScroll);
+document.getElementById("load-more-mobile").addEventListener("click",loadMoreForMobile)
 
 async function getJobs(params) {
     !offset ? loader(true) : "";
@@ -506,7 +515,7 @@ document.getElementById("search").addEventListener("keyup", () => {
 function addRadioChangeListener(type) {
     document.querySelectorAll(`input[name="${type}"]`).forEach(radio => {
         radio.addEventListener('change', function () {
-            this.offset = 0;
+            offset = 0;
             handleFilterChange();
         });
     });

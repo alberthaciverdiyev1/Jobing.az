@@ -239,6 +239,14 @@ body {
   margin-bottom: 10px;
 }
 
+#card-section {
+    display: block !important;
+}
+
+#card-section {
+    overflow-y: auto;
+}
+
 /* SCROLL */
 .custom-scroll {
   scrollbar-width: none;
