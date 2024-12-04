@@ -126,7 +126,7 @@ const JobDataService = {
                 ];
             }
     
-            const limit = 50;
+            const limit = 100;
             const offset = Number(data.offset) || 0;
     // console.log({data,query});
     
