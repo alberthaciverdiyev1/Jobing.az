@@ -36,60 +36,10 @@ const CompanyController = {
 
     downloadCompanyLogos: async (req, res) => {
         try {
-            const companies = await CompanyService.getAll();
-            const limit = pLimit(3);
-
-            const updatedCompanies = await Promise.all(
-                companies.map((company) => {
-                    return limit(async () => {
-                        if (company.imageUrl && company.imageUrl !== '/nologo.png' && (company.imageUrl.startsWith('http') || company.imageUrl.startsWith('https') || company.imageUrl.includes('/'))) {
-                            const imageUrl = company.imageUrl.startsWith('http') || company.imageUrl.startsWith('https')
-                                ? company.imageUrl
-                                : `http://${company.imageUrl}`;
-
-                            const ext = mime.extension(mime.lookup(imageUrl));
-                            if (!ext) {
-                                throw new Error(`Unable to determine the file extension for URL: ${imageUrl}`);
-                            }
-
-                            const companyFolder = `./src/Public/Images/CompanyLogos`;
-                            if (!fs.existsSync(companyFolder)) {
-                                fs.mkdirSync(companyFolder, { recursive: true });
-                            }
-
-                            const fileName = `${company.companyName || 'default'}.${ext}`;
-                            if (!!/["<>|:*?\/\\]/.test(fileName)) {
-                                return company;
-                            }
-
-                            const localFilePath = path.join(companyFolder, fileName);
-
-                            const response = await axios({
-                                url: imageUrl,
-                                method: 'GET',
-                                responseType: 'stream',
-                            });
-
-                            await new Promise((resolve, reject) => {
-                                const writer = fs.createWriteStream(localFilePath);
-                                response.data.pipe(writer);
-
-                                writer.on('finish', resolve);
-                                writer.on('error', reject);
-                            });
-
-                            company.imageUrl = localFilePath;
-                            await CompanyService.updateCompanyImageUrl(company._id, localFilePath);
-                        }
-                        return company;
-                    });
-                })
-            );
-
-            res.status(200).json(updatedCompanies);
+            const response = await CompanyService.downloadCompanyLogos();
+            res.status(200).json(response);
         } catch (error) {
-            console.error(error);
-            res.status(500).json({ message: 'Error retrieving companies: ' + error.message });
+            res.status(500).json({ message: 'Error duplicate company: ' + error.message });
         }
     },
 

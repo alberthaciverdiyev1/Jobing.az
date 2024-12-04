@@ -3,6 +3,7 @@ import pLimit from 'p-limit';
 import axios from 'axios';
 import randomUserAgent from "../../Config/UserAgents.js";
 import smartJobAz from "./SmartJobAz.js";
+import CompanyService from "../../Services/CompanyService.js";
 
 
 class JobSearchAz {
@@ -123,9 +124,11 @@ class JobSearchAz {
 
             const results = await Promise.all(dataPromises);
             const data = results.flat();
+            const companyResult = await CompanyService.create(companyData);
 
-            return jobData;
-
+            if (companyResult.status === 200 || companyResult.status === 201) {
+                return jobData;
+            }
         } catch (error) {
             console.error('Error fetching jobs:', error.message, error.stack);
             throw new Error('Error fetching jobs');

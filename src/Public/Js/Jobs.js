@@ -268,7 +268,6 @@ async function getExperience() {
 // getExperience();
 
 const scrollContainer = document.getElementById('card-section');
-console.log(scrollContainer);
 
 let loading = false;
 
@@ -313,11 +312,11 @@ async function getJobs(params) {
             if (res.data.totalCount) {
                 jobList = res.data.jobs;
                 res.data.jobs.forEach(element => {
-                    htmlContent += `<div class="job-card bg-white px-3 pt-2 h-40 rounded-xl shadow-md mb-4 hover:hover-card-color cursor-pointer duration-300 border border-custom sm:px-5" data-original-link="${element.redirectUrl}">
+                    htmlContent += `<div class="job-card bg-white px-3 pt-2 h-36 sm:h-40 rounded-xl shadow-md mb-4 hover:hover-card-color cursor-pointer duration-300 border border-custom sm:px-5" data-original-link="${element.redirectUrl}">
                                         <div class="content flex">
-                                             <div class="mt-3 flex-shrink-0 sm:mt-1">
+                                             <div class="mt-2 flex-shrink-0 sm:mt-1">
                                                 <img src="../Images/${element.sourceUrl}.png" alt="Company Logo" class="border-custom h-12 w-12 mt-1 rounded-lg border sm:h-14 sm:w-14" />
-                                                <img src="${(element.companyImageUrl && element.companyImageUrl !== "/nologo.png") ? element.companyImageUrl : "../Images/DefaultCompany.png"}" alt="Company Logo" class="border-custom h-12 w-12 mt-3 rounded-lg border sm:h-14 sm:w-14" />
+                                                <img src="${(element.companyImageUrl && element.companyImageUrl !== "/nologo.png" && !element.companyImageUrl.startsWith('http')) ? element.companyImageUrl.replace(/src\\Public/g, '..') : (element.companyImageUrl && element.companyImageUrl.startsWith('http') ? element.companyImageUrl : "../Images/DefaultCompany.png")}" alt="Company Logo" class="border-custom h-12 w-12 mt-3 rounded-lg border sm:h-14 sm:w-14" />
                                             </div>
                                             <div class="ml-3 mt-2 pr-1 sm:mt-2 justify-end sm:w-auto w-screen">
                                                 <div class="flex mb-1 justify-between">
@@ -348,7 +347,7 @@ async function getJobs(params) {
                                                     <span><i class="fa-solid fa-clock mr-0.5"></i> ${element.postedAt.slice(0, 10)}</span>
                                                     <span class="ml-3"><i class="fa-solid fa-location-dot mr-0.5"></i> ${element.location.slice(0, 17) + (element.location.length > 17 ? "..." : "")}</span>
                                                 </div>
-                                                <div class="border-t border-1 border-gray-300 w-52 mt-2 sm:w-72"></div>
+                                                <div class="border-custom-top w-52 mt-2 sm:w-72"></div>
                                                     <div class="text-sm mt-2 hidden sm:flex items-center">
                                                         <span class="bg-yellow-100 text-yellow-700 px-2 py-0.5 font-medium rounded-lg text-sm h-7 hidden sm:flex">
                                                             ${element.sourceUrl}
@@ -358,7 +357,7 @@ async function getJobs(params) {
                                                     </div>
                                                 <div class="text-sm mt-2 flex justify-between sm:hidden">
                                                    <span class="bg-blue-100 text-blue-700 px-1 py-0.5 rounded-lg text-sm">${element.sourceUrl}</span>
-                                                <h4 class=" text-gray-600 pr-5 ${!element.minSalary && !element.maxSalary ? "font-semibold text-base" : "font-bold text-lg"}">
+                                                <h4 class=" text-gray-600 ${!element.minSalary && !element.maxSalary ? "font-semibold text-base" : "font-bold text-lg"}">
                                                     ${(
                                                         (+element.minSalary === +element.maxSalary && +element.minSalary !== null && +element.minSalary !== 0)
                                                             ? +element.minSalary + " " + element.currencySign
@@ -428,7 +427,7 @@ async function getJobs(params) {
             });
         }
     } catch (err) {
-         le.error(err);
+         console.error(err);
     }
 }
 

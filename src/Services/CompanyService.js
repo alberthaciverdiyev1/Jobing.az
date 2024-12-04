@@ -1,4 +1,9 @@
 import Company from '../Models/Company.js';
+import pLimit from "p-limit";
+import mime from "mime-types";
+import fs from "fs";
+import path from "path";
+import axios from "axios";
 
 const CompanyService = {
     // Create a company
@@ -47,6 +52,75 @@ const CompanyService = {
         }
     },
 
+
+    downloadCompanyLogos: async (req, res) => {
+        try {
+            const companies = await CompanyService.getAll();
+            const limit = pLimit(3);
+
+            const updatedCompanies = await Promise.all(
+                companies.map((company) => {
+                    return limit(async () => {
+                        if (company.imageUrl && company.imageUrl !== '/nologo.png' && (company.imageUrl.startsWith('http') || company.imageUrl.startsWith('https') || company.imageUrl.includes('/'))) {
+                            const imageUrl = company.imageUrl.startsWith('http') || company.imageUrl.startsWith('https')
+                                ? company.imageUrl
+                                : `http://${company.imageUrl}`;
+
+                            const ext = mime.extension(mime.lookup(imageUrl));
+                            if (!ext) {
+                                throw new Error(`Unable to determine the file extension for URL: ${imageUrl}`);
+                            }
+
+                            const companyFolder = `./src/Public/Images/CompanyLogos`;
+                            if (!fs.existsSync(companyFolder)) {
+                                fs.mkdirSync(companyFolder, { recursive: true });
+                            }
+
+                            const fileName = `${company.companyName || 'default'}.${ext}`;
+                            if (!!/["<>|:*?\/\\]/.test(fileName)) {
+                                return company;
+                            }
+
+                            const localFilePath = path.join(companyFolder, fileName);
+
+                            const response = await axios({
+                                url: imageUrl,
+                                method: 'GET',
+                                responseType: 'stream',
+                            });
+
+                            await new Promise((resolve, reject) => {
+                                const writer = fs.createWriteStream(localFilePath);
+                                response.data.pipe(writer);
+
+                                writer.on('finish', resolve);
+                                writer.on('error', reject);
+                            });
+
+                            company.imageUrl = localFilePath;
+                            await CompanyService.updateCompanyImageUrl(company._id, localFilePath);
+                        }
+                        return company;
+                    });
+                })
+            );
+
+            return {
+                status: 200,
+                message: 'Downloaded All Company Logos',
+                count: 0,
+            };
+        } catch (error) {
+            console.error(error);
+            return {
+                status: 500,
+                message: 'Error Download Company Logos',
+                count: 0,
+            };
+        }
+    },
+
+
     updateCompanyImageUrl: async (companyId, newImagePath) => {
         try {
             await Company.findByIdAndUpdate(companyId, { imageUrl: newImagePath });
@@ -87,7 +161,7 @@ const CompanyService = {
             });
 
             if (duplicateIds.length > 0) {
-             await Company.deleteMany({ _id: { $in: duplicateIds } });
+                await Company.deleteMany({ _id: { $in: duplicateIds } });
                 return {
                     status: 201,
                     message: `Deleted ${duplicateIds.length} duplicate records from the last 30 days.`,
@@ -143,7 +217,7 @@ const CompanyService = {
                 throw new Error('Company not found');
             }
             await company.remove();
-            return {message: 'Company successfully deleted'};
+            return { message: 'Company successfully deleted' };
         } catch (error) {
             throw new Error('Error deleting company: ' + error.message);
         }

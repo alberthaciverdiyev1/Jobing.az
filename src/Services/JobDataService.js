@@ -137,24 +137,11 @@ const JobDataService = {
                 .limit(limit);
     
             const totalCount = await JobData.countDocuments(query);
-    
+
             const jobsWithImageUrl = jobs.map(job => ({
                 ...job.toObject(),
-                companyImageUrl: (() => {
-                    const imageUrl = job.companyDetails?.imageUrl;
-                    const fallbackImageUrl = job.companyImageUrl;
+                companyImageUrl: job.companyDetails?.imageUrl || null
 
-                    if (imageUrl) {
-                        if (imageUrl.startsWith('http')) {
-                            return imageUrl;
-                        } else if (imageUrl.startsWith('/')) {
-                            return fallbackImageUrl
-                                ? fallbackImageUrl.replace(/src\\Public/g, '..')
-                                : null;
-                        }
-                    }
-                    return null;
-                })()
             }));
     
             jobsWithImageUrl.forEach(job => {

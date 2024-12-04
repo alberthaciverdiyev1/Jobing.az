@@ -2,7 +2,7 @@
     width: 16px;
     height: 16px;
     border-radius: 50%;
-    background: #ff5c35;
+    background: #fe8011;
     position: relative;
 }
 .loader:before,
@@ -11,7 +11,7 @@
     position: absolute;
     border-radius: 50%;
     inset: 0;
-    background: #ff5c35;
+    background: #fe8011;
     transform: rotate(0deg) translate(30px);
     animation: rotate 1s ease infinite;
 }
