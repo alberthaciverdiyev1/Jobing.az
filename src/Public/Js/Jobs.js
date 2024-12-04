@@ -57,7 +57,7 @@ function updateURLParams(params) {
 function preselectFilters(onlyCheckFilter = false) {
     // console.log("im in");
 
-    const {categoryId, cityId, educationId, experienceLevel, keyword} = getURLParams();
+    const { categoryId, cityId, educationId, experienceLevel, keyword } = getURLParams();
 
     if (categoryId && !isNaN(Number(categoryId))) {
         if (categoryId > 10) document.getElementById("categoryList").innerHTML = categoryHTML(categoryArray);
@@ -171,7 +171,7 @@ function cityHTML(data, limit = null) {
 
 async function getCategories() {
     await axios.get('/api/categories', {
-        params: {website: "BossAz"}
+        params: { website: "BossAz" }
     }).then(res => {
         if (res.status === 200) {
             res.data.forEach(element => {
@@ -195,7 +195,7 @@ async function getCategories() {
 
 async function getCities() {
     await axios.get('/api/cities', {
-        params: {site: "BossAz"}
+        params: { site: "BossAz" }
     })
         .then(res => {
             if (res.status === 200) {
@@ -269,20 +269,33 @@ async function getExperience() {
 
 // getExperience();
 
-const scrollThreshold = 100;
-
-window.addEventListener('scroll', () => {
-    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - scrollThreshold) {
-        if (!loading) {
-            loading = true;
-            offset += 100;
-            handleFilterChange();
-
-        }
-    }
-});
-
+const scrollContainer = document.getElementById('card-section');
 let loading = false;
+
+function debounce(func, wait) {
+    let timeout;
+    return function (...args) {
+        const context = this;
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func.apply(context, args), wait);
+    };
+}
+
+const onScroll = debounce(() => {
+    if (loading) return;
+
+    const { scrollTop, scrollHeight, clientHeight } = scrollContainer;
+
+    if (scrollHeight - scrollTop <= clientHeight + 100) {
+        loading = true;
+        offset+=100;
+        handleFilterChange()
+         loading = false; 
+    }
+}, 500);
+
+scrollContainer.addEventListener('scroll', onScroll);
+
 
 async function getJobs(params) {
     !offset ? loader(true) : "";
@@ -300,7 +313,6 @@ async function getJobs(params) {
             if (res.data.totalCount) {
                 jobList = res.data.jobs;
                 res.data.jobs.forEach(element => {
-                    console.log(element.companyImageUrl);
                     htmlContent += `<div class="job-card bg-white px-3 pt-2 h-40 rounded-xl shadow-md mb-4 hover:hover-card-color cursor-pointer duration-300 border border-custom sm:px-5" data-original-link="${element.redirectUrl}">
                                         <div class="content flex">
                                              <div class="mt-3 flex-shrink-0 sm:mt-1">
@@ -346,21 +358,21 @@ async function getJobs(params) {
                                                     </div>
                                                 <div class="text-sm mt-2 flex justify-between sm:hidden">
                                                    <span class="bg-blue-100 text-blue-700 px-1 py-0.5 rounded-lg text-sm">${element.sourceUrl}</span>
-                                                <h4 class=" text-gray-600 pr-5 ${!element.minSalary && !element.maxSalary ? "font-semibold text-base" :"font-bold text-lg"}">
+                                                <h4 class=" text-gray-600 pr-5 ${!element.minSalary && !element.maxSalary ? "font-semibold text-base" : "font-bold text-lg"}">
                                                     ${(
                                                         (+element.minSalary === +element.maxSalary && +element.minSalary !== null && +element.minSalary !== 0)
                                                             ? +element.minSalary + " " + element.currencySign
                                                             : (
-                                                            (+element.minSalary !== null && +element.minSalary !== 0)
-                                                                ? +element.minSalary + '-'
-                                                                : ""
-                                                        ) + (
-                                                            (+element.maxSalary !== null && +element.maxSalary !== 0)
-                                                                ? +element.maxSalary + " " + element.currencySign
-                                                                : (
-                                                                    !element.minSalary && !element.maxSalary ? "Razılaşma ilə" : ""
-                                                                )
-                                                        )
+                                                                (+element.minSalary !== null && +element.minSalary !== 0)
+                                                                    ? +element.minSalary + '-'
+                                                                    : ""
+                                                            ) + (
+                                                                (+element.maxSalary !== null && +element.maxSalary !== 0)
+                                                                    ? +element.maxSalary + " " + element.currencySign
+                                                                    : (
+                                                                        !element.minSalary && !element.maxSalary ? "Razılaşma ilə" : ""
+                                                                    )
+                                                            )
                                                     )}
                                                     </h4>
                                                 </div>
@@ -370,21 +382,21 @@ async function getJobs(params) {
                                                 ${false ? ` <button class="text-base text-gray-600 font-bold mb-2 w-8 h-8">
                                                         <i class="fa-solid fa-heart text-2xl"></i>
                                                     </button>` : ""}
-                                                <h4 class="${!element.minSalary && !element.maxSalary ? "font-semibold text-base" :"font-bold text-lg"} text-gray-600 mt-2">
+                                                <h4 class="${!element.minSalary && !element.maxSalary ? "font-semibold text-base" : "font-bold text-lg"} text-gray-600 mt-2">
                                                     ${(
                                                         (+element.minSalary === +element.maxSalary && +element.minSalary !== null && +element.minSalary !== 0)
                                                             ? +element.minSalary + " " + element.currencySign
                                                             : (
-                                                            (+element.minSalary !== null && +element.minSalary !== 0)
-                                                                ? +element.minSalary + '-'
-                                                                : ""
-                                                        ) + (
-                                                            (+element.maxSalary !== null && +element.maxSalary !== 0)
-                                                                ? +element.maxSalary + " " + element.currencySign
-                                                                : (
-                                                                    !element.minSalary && !element.maxSalary ? "Razılaşma ilə" : ""
-                                                                )
-                                                        )
+                                                                (+element.minSalary !== null && +element.minSalary !== 0)
+                                                                    ? +element.minSalary + '-'
+                                                                    : ""
+                                                            ) + (
+                                                                (+element.maxSalary !== null && +element.maxSalary !== 0)
+                                                                    ? +element.maxSalary + " " + element.currencySign
+                                                                    : (
+                                                                        !element.minSalary && !element.maxSalary ? "Razılaşma ilə" : ""
+                                                                    )
+                                                            )
                                                     )}                                              
                                                 </h4>
                                                 </div>
@@ -420,174 +432,6 @@ async function getJobs(params) {
     }
 }
 
-
-// async function getJobs(params) {
-//     !offset ? loader(true) : "";
-//     let jobList = [];
-
-//     await axios.get('/api/jobs', {
-//         params: params
-//     }).then(res => {
-//         let htmlContent = '';
-//         let headerContent = '';
-//         let loadMoreButton = '';
-//         if (false) {
-//             headerContent = `<div class="flex justify-between mb-3 bg-white py-1 px-4 rounded-lg text-center items-center sm:py-2">
-//                                         <span class="text-sm">500 results</span>
-//                                         <select name="" id="" class="w-16 rounded-lg h-6 border-custom sm:8 sm:w-32 sm:h-8">
-//                                             <option value="">aa</option>
-//                                             <option value="">aa</option>
-//                                             <option value="">aa</option>
-//                                             <option value="">aa</option>
-//                                         </select>
-//                                     </div>`;
-//         }
-
-//         if (res.status === 200) {
-//             if (res.data.totalCount) {
-//                 jobList = res.data.jobs;
-//                 res.data.jobs.forEach(element => {
-//                     htmlContent += `<div class="job-card bg-white px-3 pt-2 h-40 rounded-xl shadow-md mb-4 hover:hover-card-color cursor-pointer duration-300 border border-custom sm:px-5" data-original-link="${element.redirectUrl}">
-//                                             <div class="content flex">
-//                                                  <div class="mt-3 flex-shrink-0 sm:mt-1">
-//                                                     <img src="../Images/${element.sourceUrl}.png" alt="Company Logo" class="border-custom h-12 w-12 mt-1 rounded-lg border sm:h-14 sm:w-14" />
-//                                                     <img src="${(element.companyImageUrl && element.companyImageUrl !== "/nologo.png") ? element.companyImageUrl : "../Images/DefaultCompany.png"}" alt="Company Logo" class="border-custom h-12 w-12 mt-3 rounded-lg border sm:h-14 sm:w-14" />
-//                                                 </div>
-//                                                 <div class="ml-3 mt-2 pr-1 sm:mt-2 sm:w-auto">
-//                                                     <div class="flex mb-1 justify-between">
-//                                                         <div class="">
-//                                                             <p class="text-sm font-bold flex text-gray-700 justify-items-start sm:font-bold sm:text-base mb-1">
-//                                                                 <span class="truncate sm:hidden"> 
-//                                                                     ${element.title.slice(0, 17) + (element.title.length > 17 ? "..." : "")} 
-//                                                                 </span>
-//                                                                 <span class="hidden sm:inline sm:whitespace-normal"> 
-//                                                                     ${element.title.slice(0, 40) + (element.title.length > 40 ? "..." : "")} 
-//                                                                 </span>
-//                                                             </p>
-//                                                             <h4 class="truncate sm:hidden text-sm font-semibold text-gray-700 mb-1 sm:font-bold"> 
-//                                                                 <i class="fa-solid fa-building"></i> ${element.companyName.slice(0, 17) + (element.companyName.length > 17 ? "..." : "")}
-//                                                             </h4>
-//                                                             <h4 class="hidden sm:inline sm:whitespace-normal text-sm font-semibold text-gray-700 mb-1 sm:font-bold"> 
-//                                                                 <i class="fa-solid fa-building"></i> ${element.companyName.slice(0, 50) + (element.companyName.length > 50 ? "..." : "")}
-//                                                             </h4>
-//                                                         </div>
-//                                                         <div class="hidden sm:w-full">
-//                                                         ${true ? "" : ` <span class="bg-blue-100 text-blue-700 px-1 ml-3 py-0.5 h-12 w-auto rounded-lg text-sm">
-//                                                                 ${element.jobType}
-//                                                             </span>`}
-//                                                             <span class="bg-yellow-100 text-yellow-700 px-1 ml-2 py-0.5 rounded-lg text-sm w-auto">
-//                                                                 ${element.sourceUrl}
-//                                                             </span>
-//                                                         </div>
-//                                                         ${false ? `<button class="text-base text-gray-600 font-bold mb-5 sm:hidden">
-//                                                             <i class="fa-solid fa-heart text-2xl"></i>
-//                                                         </button>` : ""}
-
-//                                                     </div>
-//                                                     <div class="flex text-sm text-gray-600">
-//                                                         <span><i class="fa-solid fa-clock mr-0.5"></i> ${element.postedAt.slice(0, 10)}</span>
-//                                                         <span class="ml-3"><i class="fa-solid fa-location-dot mr-0.5"></i> ${element.location.slice(0, 17) + (element.location.length > 17 ? "..." : "")}</span>
-//                                                     </div>
-//                                                     <div class="border-t border-1 border-gray-300 w-56 mt-2 sm:w-72"></div>
-//                                                         <div class="text-sm mt-2 hidden sm:flex">
-//                                                             <span class="bg-yellow-100 text-yellow-700 px-1 ml-2 py-0.5 font-medium rounded-lg text-sm h-7 hidden sm:flex">
-//                                                                 ${element.sourceUrl}
-//                                                             </span>
-//                                                             <span class="bg-green-100 text-green-700 px-1 ml-1 py-0.5 rounded-lg">aktivdir</span>
-//                                                         </div>
-//                                                     <div class="text-sm mt-2 flex justify-between sm:hidden">
-//                                                        <span class="bg-blue-100 text-blue-700 px-1 py-0.5 rounded-lg text-sm">${element.sourceUrl}</span>
-//                                                     <h4 class="text-lg text-gray-600 font-bold">
-//                                                         ${(
-//                                                             (+element.minSalary === +element.maxSalary && +element.minSalary !== null && +element.minSalary !== 0)
-//                                                                 ? +element.minSalary + " " + element.currencySign
-//                                                                 : (
-//                                                                     (+element.minSalary !== null && +element.minSalary !== 0)
-//                                                                         ? +element.minSalary + '-'
-//                                                                         : ""
-//                                                                 ) + (
-//                                                                     (+element.maxSalary !== null && +element.maxSalary !== 0)
-//                                                                         ? +element.maxSalary + " " + element.currencySign
-//                                                                         : (
-//                                                                             !element.minSalary && !element.maxSalary ? "Razılaşma ilə" : ""
-//                                                                         )
-//                                                                 )
-//                                                         )}
-//                                                         </h4>
-//                                                     </div>
-//                                                 </div>
-//                                                 <div class="flex flex-col justify-between h-full flex-grow hidden sm:flex">
-//                                                     <div class="text-right">
-//                                                     ${false ? ` <button class="text-base text-gray-600 font-bold mb-2 w-8 h-8">
-//                                                             <i class="fa-solid fa-heart text-2xl"></i>
-//                                                         </button>` : ""}
-//                                                     <h4 class="text-lg text-gray-600 font-bold mt-2">
-//                                                         ${(
-//                                                                 (+element.minSalary === +element.maxSalary && +element.minSalary !== null && +element.minSalary !== 0)
-//                                                                     ? +element.minSalary + " " + element.currencySign
-//                                                                     : (
-//                                                                         (+element.minSalary !== null && +element.minSalary !== 0)
-//                                                                             ? +element.minSalary + '-'
-//                                                                             : ""
-//                                                                     ) + (
-//                                                                         (+element.maxSalary !== null && +element.maxSalary !== 0)
-//                                                                             ? +element.maxSalary + " " + element.currencySign
-//                                                                             : (
-//                                                                                 !element.minSalary && !element.maxSalary ? "Razılaşma ilə" : ""
-//                                                                             )
-//                                                                     )
-//                                                             )}                                              
-//                                                     </h4>
-//                                                     </div>
-//                                                     <div class="flex justify-end items-end mt-auto pt-16">
-//                                                         <a href="${element.redirectUrl}" target="_blank" class="filled-button-color text-white py-2 px-8 rounded-full">
-//                                                             Keçid Et 
-//                                                         </a>
-//                                                     </div>
-//                                                 </div>
-//                                             </div>
-//                                         </div> `;
-//                 });
-
-//                 loadMoreButton = res.data.totalCount > 50 && !res.data.hideLoadMore ? `<div class="flex justify-center items-center my-2">
-//                                         <button class="filled-button-color text-white py-2 px-8 rounded-full" id="loadMore">
-//                                             Daha Çox 
-//                                         </button>
-//                                      </div>` : "";
-//             } else {
-//                 document.getElementById("card-section").innerHTML = noDataCard();
-//             }
-
-//             if (offset && jobList.length > 0) {
-
-//                 document.getElementById("card-section").insertAdjacentHTML('beforeend', htmlContent + loadMoreButton);
-//             } else if (jobList.length > 0) {
-//                 document.getElementById("card-section").innerHTML = headerContent + htmlContent + loadMoreButton;
-//             }
-
-//             const jobCards = document.querySelectorAll('.job-card');
-//             jobCards.forEach(card => {
-//                 card.addEventListener('click', function () {
-//                     const originalLink = this.getAttribute('data-original-link');
-//                     window.open(originalLink, '_blank');
-//                 });
-//             });
-
-//             const loadMoreBtn = document.getElementById('loadMore');
-//             if (loadMoreBtn) {
-//                 loadMoreBtn.addEventListener('click', function () {
-//                     loadMoreBtn.classList.add("hidden");
-//                     offset += 50;
-//                     handleFilterChange(offset)
-//                 });
-//             }
-//         }
-//     }).catch(error => {
-//         console.error("Error fetching jobs:", error);
-//     });
-// }
-
-// getJobs();
 
 
 document.getElementById("show-more-categories").addEventListener("click", function () {
@@ -633,16 +477,16 @@ function handleFilterChange(minS = 0, maxS = 5000) {
         minSalary ?? 0;
         maxSalary ?? 5000;
 
-        updateURLParams({categoryId, cityId, educationId, experienceLevel, keyword, minSalary, maxSalary});
-        getJobs({categoryId, cityId, educationId, experienceLevel, offset, keyword, minSalary, maxSalary});
+        updateURLParams({ categoryId, cityId, educationId, experienceLevel, keyword, minSalary, maxSalary });
+        getJobs({ categoryId, cityId, educationId, experienceLevel, offset, keyword, minSalary, maxSalary });
 
     } else {
         maxSalary = maxS ?? 5000;
         minSalary = !isNaN(Number(minS)) ? minS : 0;
-        let {categoryId, cityId, educationId, experienceLevel, keyword} = getURLParams();
+        let { categoryId, cityId, educationId, experienceLevel, keyword } = getURLParams();
 
-        updateURLParams({categoryId, cityId, educationId, experienceLevel, keyword, minSalary, maxSalary});
-        getJobs({categoryId, cityId, educationId, experienceLevel, offset, keyword, minSalary, maxSalary});
+        updateURLParams({ categoryId, cityId, educationId, experienceLevel, keyword, minSalary, maxSalary });
+        getJobs({ categoryId, cityId, educationId, experienceLevel, offset, keyword, minSalary, maxSalary });
     }
 
 }
@@ -721,6 +565,7 @@ slider.noUiSlider.on('update', function (values) {
     clearTimeout(debounceTimeout);
     debounceTimeout = setTimeout(() => {
         if (values[0]) {
+            offset = 0;
             handleFilterChange(values[0], values[1]);
         }
     }, 500);
