@@ -56,23 +56,22 @@ class SmartJobAz {
         }
     }
 
-    async Jobs(categories, bossAzCity) {
+    async Jobs(categories, bossAzCity,main) {
         const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
         try {
             const city = Object.entries(enums.Cities.SmartJobAz).find(
                 ([k, v]) => v === bossAzCity.name
             );
             const cityId = city ? city[0] : null;
-console.log(cityId);
-
+            
             let splitCategories = categories
-                .flatMap(c => c.smartJobAz.split(','))
-                .map(jobId => jobId.trim())
-                .filter(jobId => jobId !== '')
-                .map(jobId => ({
-                    localCategoryId: categories.find(c => c.smartJobAz.includes(jobId)).localCategoryId,
-                    smartJobAzId: jobId,
-                }));
+            .flatMap(c => c.smartJobAz.split(','))
+            .map(jobId => jobId.trim())
+            .filter(jobId => jobId !== '')
+            .map(jobId => ({
+                localCategoryId: categories.find(c => c.smartJobAz.includes(jobId)).localCategoryId,
+                smartJobAzId: jobId,
+            }));
             console.log("SmartJob", cityId, splitCategories)
 
             let $ = await Scrape(`https://${this.url}`);
@@ -83,15 +82,16 @@ console.log(cityId);
             const educationIds = [1, 2, 5, 6, 7, 9, 10, 11, 12, 13, 0];
             const jobData = [];
             const companyData = [];
+            let parts = [];
+            if (cityId && (main ? true : (bossAzCity.name !== "Bakı" ? true : false))) {
 
-            if (cityId) {
                 Object.entries(splitCategories).forEach(([no, category]) => {
                     for (const education of educationIds) {
                         for (let page = 0; page <= 2; page++) {
                             const requestPromise = limit(async () => {
                                 try {
                                     const url = `https://${this.url}/vacancies?_token=${encodeURIComponent(token)}&city_id%5B%5D=${cityId}&job_category_id%5B20%5D=${encodeURIComponent(category.smartJobAzId)}&education_id%5B0%5D=${encodeURIComponent(education)}&salary_from=&salary_to=&page=${page}`;
-                                    const randomDelay = Math.floor(Math.random() * 15000) + 1000;
+                                    const randomDelay = Math.floor(Math.random() * 20000) + 1000;
                                     await delay(randomDelay);
                                     const timeout = new Promise((_, reject) => {
                                         setTimeout(() => reject(new Error('Request timed out')), 30000);
@@ -109,15 +109,15 @@ console.log(cityId);
                                             const salaryText = $(el).find('.salary-val').text().trim();
                                             const companyImageUrl = $(el).find('.brows-job-company-img img').attr('src');
                                             const cleanSalaryText = salaryText.replace('AZN', '').trim();
-                                            const parts = cleanSalaryText.split(' - ');
+                                            parts = cleanSalaryText.split(' - ');
                                             const isPremium = $(el).find('.tg-featuretag').length > 0;
                                             const jobId = urlAndId.attr('href')?.split('/').pop() || null;
                                             const redirectUrl = urlAndId.attr('href') || null;
                                             let [minSalary, maxSalary] = [0, 0];
-                                            if (parts.length === 2) {
+                                            if (parts && parts.length === 2) {
                                                 minSalary = !isNaN(Number(parts[0])) ? parseInt(parts[0], 10) : 0;
                                                 maxSalary = !isNaN(Number(parts[1])) ? parseInt(parts[1], 10) : 0;
-                                            } else if (parts.length === 1) {
+                                            } else if (parts && parts.length === 1) {
                                                 minSalary = 0;
                                                 maxSalary = !isNaN(Number(parts[0])) ? parseInt(parts[0], 10) : 0;
                                             }
@@ -148,7 +148,6 @@ console.log(cityId);
                                                 website: enums.SitesWithId.SmartJobAz,
                                                 uniqueKey: `${companyName}-${companyImageUrl}`
                                             });
-                                            console.log({ "SmartJob": jobData })
 
                                         });
                                     })();
@@ -156,7 +155,7 @@ console.log(cityId);
                                     await Promise.race([fetchPromise, timeout]);
 
                                 } catch (error) {
-                                    console.error(`Error fetching data from ${url}:`, error.message);
+                                    console.error(`Error fetching data from ${this.url}:`, error.message);
                                     return [];
                                 }
                             });

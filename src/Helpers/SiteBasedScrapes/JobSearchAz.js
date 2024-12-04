@@ -11,7 +11,7 @@ class JobSearchAz {
     };
 
 
-    async Jobs(categories, bossAzCity) {
+    async Jobs(categories, bossAzCity,main) {
         let splitCategories = categories
             .flatMap(c => c.jobSearch.split(','))
             .map(jobId => jobId.trim())
@@ -25,7 +25,7 @@ class JobSearchAz {
         const city = Object.entries(enums.Cities.JobSearchAz).find(
             ([k, v]) => v === bossAzCity.name
         );
-        const cityId = city[0];
+        const cityId = city ? city[0] : null;
 
         const experience = {
             "7751": "Təcrübəçi",
@@ -45,8 +45,9 @@ class JobSearchAz {
             const jobData = [];
             const companyData = [];
 
-            console.log("JobSearch",cityId,splitCategories)
-            if (cityId) {
+            // console.log("JobSearch",cityId,splitCategories)
+            if (cityId && (main ? true : (bossAzCity.name !== "Bakı" ? true : false))) {
+
                 Object.entries(splitCategories).forEach(([no, category]) => {
                     Object.entries(experience).forEach(([experienceId]) => {
                         const randomDelay = Math.floor(Math.random() * 15000) + 1000;

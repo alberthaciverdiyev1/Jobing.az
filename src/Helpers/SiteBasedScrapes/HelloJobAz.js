@@ -58,8 +58,7 @@ class HelloJobAz {
     }
 
 
-    async Jobs(categories, bossAzCity) {
-
+    async Jobs(categories, bossAzCity,main) {
         const city = Object.entries(enums.Cities.HelloJobAz).find(
             ([k, v]) => v === bossAzCity.name
         );
@@ -80,25 +79,22 @@ class HelloJobAz {
                     localCategoryId: categories.find(c => c.helloJobAz.includes(jobId)).localCategoryId,
                     helloJobAzId: jobId,
                 }));
-            console.log(cityId)
             const dataPromises = [];
-            const totalCategories = splitCategories.length;
-            let processedCount = 0;
+            if (cityId && (main ? true : (bossAzCity.name !== "Bakı" ? true : false))) {
 
-            if (cityId) {
                 for (const [index, category] of splitCategories.entries()) {
                     for (const education of educationIds) {
                         for (let page = 0; page <= 2; page++) {
                             const requestPromise = limit(async () => {
                                 try {
-                                    console.log((index + 1), processedCount, category)
-                                    if ((index + 1) !== processedCount) {
-                                        // sendEmail(status, process.env.TEST_CRON_MAIL_USER, "HelloJob Crone Info")
-                                        await sendTgMessage(`Hello Job Category Status:${processedCount}/${totalCategories}`)
-                                    }
-                                    processedCount = index + 1
+                                    // console.log((index + 1), processedCount,cityId, category)
+                                    // if ((index + 1) !== processedCount) {
+                                    //     // sendEmail(status, process.env.TEST_CRON_MAIL_USER, "HelloJob Crone Info")
+                                    //     await sendTgMessage(`Hello Job Category Status:${processedCount}/${totalCategories}`)
+                                    // }
+                                    // processedCount = index + 1
 
-                                    const randomDelay = Math.floor(Math.random() * 15000) + 1000;
+                                    const randomDelay = Math.floor(Math.random() * 6000) + 1000;
                                     await delay(randomDelay);
 
                                     let url = `https://www.${this.url}/search?direction=works&category_id=${category.helloJobAzId}&region_id=${cityId}&salary_min=&education_type=${education}&work_exp=0&search_type=filter`;
