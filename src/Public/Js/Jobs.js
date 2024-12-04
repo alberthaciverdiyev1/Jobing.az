@@ -55,8 +55,6 @@ function updateURLParams(params) {
 }
 
 function preselectFilters(onlyCheckFilter = false) {
-    // console.log("im in");
-
     const { categoryId, cityId, educationId, experienceLevel, keyword } = getURLParams();
 
     if (categoryId && !isNaN(Number(categoryId))) {
@@ -270,6 +268,8 @@ async function getExperience() {
 // getExperience();
 
 const scrollContainer = document.getElementById('card-section');
+console.log(scrollContainer);
+
 let loading = false;
 
 function debounce(func, wait) {
@@ -498,6 +498,7 @@ let searchDebounceTimeout;
 document.getElementById("search").addEventListener("keyup", () => {
     searchDebounceTimeout = setTimeout(() => {
         clearTimeout(searchDebounceTimeout);
+        offset = 0;
         handleFilterChange();
     }, 500);
 });
@@ -506,7 +507,7 @@ document.getElementById("search").addEventListener("keyup", () => {
 function addRadioChangeListener(type) {
     document.querySelectorAll(`input[name="${type}"]`).forEach(radio => {
         radio.addEventListener('change', function () {
-            offset = 0;
+            this.offset = 0;
             handleFilterChange();
         });
     });
