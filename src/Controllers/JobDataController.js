@@ -2,21 +2,14 @@ import JobService from '../Services/JobDataService.js';
 import CategoryService from '../Services/CategoryService.js';
 import pLimit from 'p-limit';
 
-import BossAz from "../Helpers/SiteBasedScrapes/BossAz.js";
-import Category from "../Models/Category.js";
-import SmartJobAz from "../Helpers/SiteBasedScrapes/SmartJobAz.js";
 import JobSearchAz from "../Helpers/SiteBasedScrapes/JobSearchAz.js";
 import CityService from '../Services/CityService.js';
-import Enums from '../Config/Enums.js';
-import OfferAz from '../Helpers/SiteBasedScrapes/OfferAz.js';
-import HelloJobAz from '../Helpers/SiteBasedScrapes/HelloJobAz.js';
-import sendEmail from "../Helpers/NodeMailer.js";
+
 import { formatDate } from "../Helpers/FormatDate.js";
 import { requestAllSites } from '../Helpers/Automation.js';
 import { sendTgMessage } from "../Helpers/TelegramBot.js";
 import fs from "fs";
 import CompanyService from "../Services/CompanyService.js";
-
 const jobDataController = {
 
     create: async (req, res) => {
@@ -39,10 +32,10 @@ const jobDataController = {
             }
 
             const sources = [
-                { instance: new BossAz(), name: "BossAz" },
-                { instance: new HelloJobAz(), name: "HelloJobAz" },
-                { instance: new OfferAz(), name: "OfferAz" },
-                { instance: new SmartJobAz(), name: "SmartJobAz" },
+                // { instance: new BossAz(), name: "BossAz" },
+                // { instance: new HelloJobAz(), name: "HelloJobAz" },
+                // { instance: new OfferAz(), name: "OfferAz" },
+                // { instance: new SmartJobAz(), name: "SmartJobAz" },
                 { instance: new JobSearchAz(), name: "JobSearchAz" },
             ];
 
@@ -91,7 +84,12 @@ const jobDataController = {
             if (errors.length > 0) {
                 await sendTgMessage(`Cron completed with errors: ${errors.length}`);
             }
-
+            // if (res.status === 201) {
+              let response =   await CompanyService.removeDuplicates();
+                console.log(response)
+                let re = await CompanyService.downloadCompanyLogos();
+                console.log(re)
+            // }
             res.status(201).json({
                 errors: errors.length > 0 ? errors : null,
                 status: 201,
