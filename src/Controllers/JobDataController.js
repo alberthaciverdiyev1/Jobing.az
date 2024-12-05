@@ -10,6 +10,10 @@ import { requestAllSites } from '../Helpers/Automation.js';
 import { sendTgMessage } from "../Helpers/TelegramBot.js";
 import fs from "fs";
 import CompanyService from "../Services/CompanyService.js";
+import BossAz from "../Helpers/SiteBasedScrapes/BossAz.js";
+import HelloJobAz from "../Helpers/SiteBasedScrapes/HelloJobAz.js";
+import OfferAz from "../Helpers/SiteBasedScrapes/OfferAz.js";
+import SmartJobAz from "../Helpers/SiteBasedScrapes/SmartJobAz.js";
 const jobDataController = {
 
     create: async (req, res) => {
