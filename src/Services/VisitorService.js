@@ -18,17 +18,21 @@ const VisitorService = {
         }
     },
 
-    updateLastVisit: async (ip) => {
+    updateLastVisit: async (ip, userAgent) => {
         try {
             return await Visitor.findOneAndUpdate(
                 { ip },
-                { lastVisit: Date.now() },
+                { 
+                    lastVisit: Date.now(),
+                    userAgent: userAgent 
+                },
                 { new: true }
             );
         } catch (error) {
             throw new Error('Error updating last visit: ' + error.message);
         }
     },
+    
 
     incrementVisitCount: async (ip) => {
         return Visitor.updateOne({ ip }, { $inc: { visitCount: 1 } });
