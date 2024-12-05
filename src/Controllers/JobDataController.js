@@ -32,10 +32,10 @@ const jobDataController = {
             }
 
             const sources = [
-                // { instance: new BossAz(), name: "BossAz" },
-                // { instance: new HelloJobAz(), name: "HelloJobAz" },
-                // { instance: new OfferAz(), name: "OfferAz" },
-                // { instance: new SmartJobAz(), name: "SmartJobAz" },
+                { instance: new BossAz(), name: "BossAz" },
+                { instance: new HelloJobAz(), name: "HelloJobAz" },
+                { instance: new OfferAz(), name: "OfferAz" },
+                { instance: new SmartJobAz(), name: "SmartJobAz" },
                 { instance: new JobSearchAz(), name: "JobSearchAz" },
             ];
 
