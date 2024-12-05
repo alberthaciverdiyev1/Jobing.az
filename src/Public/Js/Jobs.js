@@ -313,6 +313,9 @@ const onScroll = debounce(() => {
 
 const loadMoreForMobile = debounce(() => {
     if (loading) return;
+        document.querySelectorAll("#load-more-btn").forEach(button => {
+            button.remove();
+        });
         loader(true,true);
         loading = true;
         offset+=100;
@@ -320,8 +323,11 @@ const loadMoreForMobile = debounce(() => {
          loading = false; 
 }, 200);
 
-scrollContainer.addEventListener('scroll', onScroll);
-document.getElementById("load-more-mobile").addEventListener("click",loadMoreForMobile)
+const loadMoreComponent = `<div class="flex items-center justify-center mt-1">
+                                <button class="rounded-full filled-button-color px-8 py-3 text-white hover:empty-button-color" id="load-more-btn">
+                                    Daha Çox
+                                </button>
+                            </div>`
 
 async function getJobs(params) {
     !offset ? loader(true) : "";
@@ -437,9 +443,9 @@ async function getJobs(params) {
                 });
 
                 if (offset && jobList.length > 0) {
-                    document.getElementById("card-section").insertAdjacentHTML('beforeend', htmlContent);
+                    document.getElementById("card-section").insertAdjacentHTML('beforeend', (htmlContent + (res.data.totalCount > 100 ? loadMoreComponent : '')));
                 } else if (jobList.length > 0) {
-                    document.getElementById("card-section").innerHTML = headerContent + htmlContent;
+                    document.getElementById("card-section").innerHTML = headerContent + htmlContent + (res.data.totalCount > 100 ? loadMoreComponent : '');
                 }
             } else {
                 document.getElementById("card-section").innerHTML = noDataCard();
@@ -451,6 +457,12 @@ async function getJobs(params) {
                     const originalLink = this.getAttribute('data-original-link');
                     window.open(originalLink, '_blank');
                 });
+            });
+
+            document.body.addEventListener("click", function (event) {
+                if (event.target && event.target.id === "load-more-btn") {
+                    loadMoreForMobile();
+                }
             });
         }
     } catch (err) {
@@ -550,7 +562,7 @@ document.getElementById("mobile-filter-btn").onclick = function () {
     const filterSection = document.getElementById("filter-section");
     const cardSection = document.getElementById("card-section");
     const footer = document.getElementById("footer");
-    const loadMoreButton = document.getElementById("load-more-mobile");
+    const loadMoreButton = document.getElementById("load-more-btn");
 
     if (filterSection.classList.contains("hidden")) {
         filterSection.classList.remove("hidden");
