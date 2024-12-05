@@ -530,18 +530,20 @@ document.getElementById("mobile-filter-btn").onclick = function () {
     const filterSection = document.getElementById("filter-section");
     const cardSection = document.getElementById("card-section");
     const footer = document.getElementById("footer");
+    const loadMoreButton = document.getElementById("load-more-mobile");
 
     if (filterSection.classList.contains("hidden")) {
         filterSection.classList.remove("hidden");
-        cardSection.classList.add("hidden");
-        footer.classList.add("hidden");
+        cardSection.style.display = "none";
+        footer.style.display = "none";
+        loadMoreButton.classList.add("hidden");
     } else {
         filterSection.classList.add("hidden");
-        cardSection.classList.remove("hidden");
-        footer.classList.remove("hidden");
+        loadMoreButton.classList.remove("hidden");
+        cardSection.style.display = "block";
+        footer.style.display = "block";
     }
 };
-
 
 var slider = document.getElementById('slider');
 
