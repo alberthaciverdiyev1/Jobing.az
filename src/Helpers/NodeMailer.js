@@ -16,7 +16,6 @@ const transporter = nodemailer.createTransport({
 export { transporter, sendEmail };
 
 async function sendEmail(data, send_to = null,title = "Contact Us") {
-    if (false) {        
         const info = await transporter.sendMail({
             from: `${title} <${process.env.MAIL_FROM}>`,
             to: send_to ?? process.env.MAIL_TO,
@@ -24,9 +23,6 @@ async function sendEmail(data, send_to = null,title = "Contact Us") {
             text: data?.text?.toString() || "",
             html: data?.html ?? null,
         });
-    }else{
-        console.log(data)
-    }
 
     return {
         status: 200,
