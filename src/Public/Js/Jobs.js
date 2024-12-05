@@ -309,7 +309,7 @@ const onScroll = debounce(() => {
         handleFilterChange()
          loading = false; 
     }
-}, 100);
+}, 500);
 
 const loadMoreForMobile = debounce(() => {
     if (loading) return;
@@ -318,7 +318,7 @@ const loadMoreForMobile = debounce(() => {
         offset+=100;
         handleFilterChange()
          loading = false; 
-}, 100);
+}, 200);
 
 scrollContainer.addEventListener('scroll', onScroll);
 document.getElementById("load-more-mobile").addEventListener("click",loadMoreForMobile)
