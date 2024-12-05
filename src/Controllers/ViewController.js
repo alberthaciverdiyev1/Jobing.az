@@ -8,7 +8,7 @@ import VisitorService from "../Services/VisitorService.js";
 const ViewController = {
     home: async (req, res) => {
         const view = {
-            title: 'Home',
+            title: 'Ana Səhifə',
             body: "Home/NewHome.ejs",
             // body: "Home/Index.ejs",
             js: "Home.js"
@@ -25,7 +25,7 @@ const ViewController = {
     },
     jobs: async (req, res) => {
         const view = {
-            title: 'Jobs',
+            title: 'Vakansiyalar',
             body: "Jobs/Index.ejs",
             js: "Jobs.js"
         };
@@ -33,7 +33,7 @@ const ViewController = {
     },
     aboutUs: async (req, res) => {
         const view = {
-            title: 'About Us',
+            title: 'Haqqımızda',
             body: "AboutUs/Index.ejs",
             js: null
         };
@@ -41,7 +41,7 @@ const ViewController = {
     },
     contactUs: async (req, res) => {
         const view = {
-            title: 'Contact Us',
+            title: 'Bizimlə Əlaqə',
             body: "ContactUs/Index.ejs",
             js: 'ContactUs.js'
         };
