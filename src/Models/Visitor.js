@@ -15,6 +15,10 @@ const visitorSchema = new Schema({
         type: Number,
         default: 1
     },
+    userAgent: {
+        type: String, 
+        default: ''
+    },
     deletedAt: {
         type: Date,
         default: null
