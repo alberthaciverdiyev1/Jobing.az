@@ -136,14 +136,31 @@ function noDataCard() {
               </div>`
 }
 
-function loader(start = false) {
-    document.getElementById("card-section").innerHTML = start
+function loader(start = false,append=false) {
+    if (start && !append) {
+        document.getElementById("card-section").innerHTML = start
         ? `<div class="flex items-center justify-center min-h-screen bg-white  border border-custom rounded-lg">
                    <div class="flex flex-col items-center justify-center w-full max-w-xs mx-auto">
                            <span class="loader"></span>
                    </div>
               </div>`
-        : "";
+        : "";  
+    }else if (start && append){
+        document.getElementById("card-section").insertAdjacentHTML('beforeend', `<div class="flex items-center justify-center h-40 bg-white  border border-custom rounded-lg">
+                   <div class="flex flex-col items-center justify-center w-full max-w-xs mx-auto">
+                           <span class="loader"></span>
+                   </div>
+              </div>`);
+
+    }else{
+        const h40DivsWithLoader = document.querySelectorAll("#card-section .h-40");
+        h40DivsWithLoader.forEach(div => {
+            if (div.querySelector('.loader')) {
+                div.remove();
+            }
+        });
+    }
+
 }
 
 function cityHTML(data, limit = null) {
@@ -286,21 +303,22 @@ const onScroll = debounce(() => {
     const { scrollTop, scrollHeight, clientHeight } = scrollContainer;
 
     if (scrollHeight - scrollTop <= clientHeight + 100) {
+        loader(true,true);
         loading = true;
         offset+=100;
         handleFilterChange()
          loading = false; 
     }
-}, 500);
+}, 100);
 
 const loadMoreForMobile = debounce(() => {
     if (loading) return;
-
+        loader(true,true);
         loading = true;
         offset+=100;
         handleFilterChange()
          loading = false; 
-}, 500);
+}, 100);
 
 scrollContainer.addEventListener('scroll', onScroll);
 document.getElementById("load-more-mobile").addEventListener("click",loadMoreForMobile)
@@ -437,6 +455,8 @@ async function getJobs(params) {
         }
     } catch (err) {
          console.error(err);
+    }finally{
+        loader();
     }
 }
 
