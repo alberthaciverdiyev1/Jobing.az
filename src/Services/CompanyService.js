@@ -12,14 +12,14 @@ const CompanyService = {
             if (!Array.isArray(data)) {
                 throw new Error('Data must be an array');
             }
-            const existingRecords = await Company.find({
-                redirectUrl: { $in: data.map(company => company.redirectUrl) }
-            }).select('redirectUrl');
+            // const existingRecords = await Company.find({
+            //     redirectUrl: { $in: data.map(company => company.redirectUrl) }
+            // }).select('redirectUrl');
 
-            if (existingRecords.length > 0) {
-                const existingData = new Set(existingRecords.map(record => record.redirectUrl));
-                data = data.filter(company => !existingData.has(company.redirectUrl));
-            }
+            // if (existingRecords.length > 0) {
+            //     const existingData = new Set(existingRecords.map(record => record.redirectUrl));
+            //     data = data.filter(company => !existingData.has(company.redirectUrl));
+            // }
 
             if (data.length > 0) {
                 const results = await Company.insertMany(data);
