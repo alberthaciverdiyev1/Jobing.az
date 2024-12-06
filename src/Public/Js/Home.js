@@ -80,7 +80,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
                                 </div>
                                 <div class="flex text-sm text-gray-600">
                                     <span><i class="fa-solid fa-clock mr-0.5"></i> ${element.postedAt.slice(0, 10)}</span>
-                                    <span class="ml-3"><i class="fa-solid fa-location-dot mr-0.5"></i> ${element.location.slice(0, 17) + (element.location.length > 17 ? "..." : "")}</span>
+                                    <span class="ml-3"><i class="fa-solid fa-location-dot mr-0.5"></i> ${element.location.slice(0, 10) + (element.location.length > 10 ? "..." : "")}</span>
                                 </div>
                                 <div class="border-custom-top w-52 mt-2 sm:w-72"></div>
                                     <div class="text-sm mt-2 hidden sm:flex items-center justify-between">
