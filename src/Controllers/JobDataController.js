@@ -60,7 +60,7 @@ const jobDataController = {
                                     if (jobs.length > 0) {
                                         const response = await JobService.create(jobs);
                                         // await CompanyService.removeDuplicates();
-
+                                        
 
                                         if (!response || !response.status || !response.message) {
                                             throw new Error(`Invalid response from JobService for ${name}`);
