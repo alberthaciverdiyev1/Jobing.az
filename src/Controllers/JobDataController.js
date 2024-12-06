@@ -59,8 +59,7 @@ const jobDataController = {
 
                                     if (jobs.length > 0) {
                                         const response = await JobService.create(jobs);
-                                        // await CompanyService.removeDuplicates();
-                                        
+                                        await CompanyService.removeDuplicates();
 
                                         if (!response || !response.status || !response.message) {
                                             throw new Error(`Invalid response from JobService for ${name}`);
@@ -89,7 +88,6 @@ const jobDataController = {
                 await sendTgMessage(`Cron completed with errors: ${errors.length}`);
             }
             // if (res.status === 201) {
-              await CompanyService.removeDuplicates();
               await JobService.removeDuplicates();
               await CompanyService.downloadCompanyLogos();
             // }
