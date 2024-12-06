@@ -9,9 +9,13 @@ export async function sendTgMessage(data = 'Test') {
 }
 
 export const listenTgCommands = async (msg) => {
-    if (msg.text === '/restart') {
+    if (msg.text === '/all') {
         await requestAllSites();
-        await bot.sendMessage(msg.chat.id, 'Restarted Scrape');
+        await bot.sendMessage(msg.chat.id, 'Bot Started Crone For All Cities');
+    }
+    if (msg.text === '/main') {
+        await requestAllSites();
+        await bot.sendMessage(msg.chat.id, 'Bot Started Crone For Main Cities');
     }
 };
 
