@@ -54,10 +54,10 @@ cron.schedule('0 13 * * 5', async () => {
     await requestAllSites();
 });
 
-
-cron.schedule('0 7-23/3 * * *', async () => {
-    await requestAllSites(true)
+cron.schedule('0 9,16,20 * * *', async () => {
+    await requestAllSites(true);
 });
+
 app.listen(port, () => { console.log(`Server is running at http://localhost:${port}`); });
 
 process.on('uncaughtException', async (err) => {

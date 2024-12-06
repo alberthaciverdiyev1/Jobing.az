@@ -89,10 +89,9 @@ const jobDataController = {
                 await sendTgMessage(`Cron completed with errors: ${errors.length}`);
             }
             // if (res.status === 201) {
-              let response =   await CompanyService.removeDuplicates();
-                console.log(response)
-                let re = await CompanyService.downloadCompanyLogos();
-                console.log(re)
+              await CompanyService.removeDuplicates();
+              await JobService.removeDuplicates();
+              await CompanyService.downloadCompanyLogos();
             // }
             res.status(201).json({
                 errors: errors.length > 0 ? errors : null,

@@ -6,12 +6,11 @@ import * as cheerio from 'cheerio';
 import randomUserAgent from "../../Config/UserAgents.js";
 
 
-
-
 class OfferAz {
     constructor(url = enums.Sites.OfferAz) {
         this.url = url;
     }
+
     async Categories() {
         try {
             const $ = await Scrape(`https://${this.url}/is-elanlari/`);
@@ -38,7 +37,7 @@ class OfferAz {
     }
 
 
-    async Jobs(categories, bossAzCity,main) {
+    async Jobs(categories, bossAzCity, main) {
 
         const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
         try {
@@ -55,7 +54,7 @@ class OfferAz {
                 ([k, v]) => v === bossAzCity.name
             );
             const cityId = city ? city[0] : null;
-            
+
 
             const limit = pLimit(1);
             const dataPromises = [];
@@ -99,7 +98,7 @@ class OfferAz {
                                         setTimeout(() => reject(new Error('Request timed out')), 30000)
                                     );
 
-                                    const response = await Promise.race([axios.post(url, data, { headers }), timeoutPromise]);
+                                    const response = await Promise.race([axios.post(url, data, {headers}), timeoutPromise]);
                                     console.log({response});
 
                                     const $ = cheerio.load(response.data);
@@ -121,7 +120,6 @@ class OfferAz {
                                         const parts = cleanSalaryText.includes('—') ? cleanSalaryText.split('—').map(part => part.trim()) : [cleanSalaryText.trim()];
 
 
-
                                         let [minSalary, maxSalary] = [0, 0];
                                         if (parts.length === 2) {
                                             minSalary = !isNaN(Number(parts[0])) ? parseInt(parts[0], 10) : 0;
@@ -131,24 +129,25 @@ class OfferAz {
                                             maxSalary = !isNaN(Number(parts[0])) ? parseInt(parts[0], 10) : 0;
                                         }
 
-                                        jobData.push({
-                                            title,
-                                            companyName,
-                                            minSalary: !isNaN(Number(minSalary)) ? minSalary : 0,
-                                            maxSalary: !isNaN(Number(maxSalary)) ? maxSalary : 0,
-                                            location,
-                                            cityId: bossAzCity?.cityId || null,
-                                            description: description || null,
-                                            jobId,
-                                            categoryId: category.localCategoryId || null,
-                                            sourceUrl: this.url,
-                                            redirectUrl: redirectUrl,
-                                            jobType: '0x001',
-                                            educationId: this.mapEducation(education),
-                                            experienceId: null,
-                                            uniqueKey: `${title}-${companyName}-${location}`
-                                        });
-                                        console.log({"OfferAz": jobData})
+                                        if (title) {
+                                            jobData.push({
+                                                title,
+                                                companyName,
+                                                minSalary: !isNaN(Number(minSalary)) ? minSalary : 0,
+                                                maxSalary: !isNaN(Number(maxSalary)) ? maxSalary : 0,
+                                                location,
+                                                cityId: bossAzCity?.cityId || null,
+                                                description: description || null,
+                                                jobId,
+                                                categoryId: category.localCategoryId || null,
+                                                sourceUrl: this.url,
+                                                redirectUrl: redirectUrl,
+                                                jobType: '0x001',
+                                                educationId: this.mapEducation(education),
+                                                experienceId: null,
+                                                uniqueKey: `${title}-${companyName}-${location}`
+                                            });
+                                        }
 
                                     });
 
