@@ -1,4 +1,4 @@
-// tg.js
+
 import TelegramBot from 'node-telegram-bot-api';
 import { requestAllSites , cancelRequest } from "./Automation.js";
 
