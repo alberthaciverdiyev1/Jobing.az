@@ -1,6 +1,6 @@
 // tg.js
 import TelegramBot from 'node-telegram-bot-api';
-import { requestAllSites } from "./Automation.js";
+import { requestAllSites , cancelRequest } from "./Automation.js";
 
 const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN, { polling: true });
 
@@ -14,8 +14,13 @@ export const listenTgCommands = async (msg) => {
         await bot.sendMessage(msg.chat.id, 'Bot Started Crone For All Cities');
     }
     if (msg.text === '/main') {
-        await requestAllSites();
+        await requestAllSites(true);
         await bot.sendMessage(msg.chat.id, 'Bot Started Crone For Main Cities');
+    }
+    if(msg.text === '/cancel'){
+       await cancelRequest();
+       await bot.sendMessage(msg.chat.id, 'All Request Was Cancelled');
+
     }
 };
 
