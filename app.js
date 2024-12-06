@@ -58,7 +58,7 @@ cron.schedule('0 9,16,20 * * *', async () => {
     await requestAllSites(true);
 });
 
-app.listen(port, () => { console.log(`Server is running at http://localhost:${port}`); });
+app.listen(port, '0.0.0.0', () => { console.log(`Server is running at http://localhost:${port}`); });
 
 process.on('uncaughtException', async (err) => {
     const errorData = {
