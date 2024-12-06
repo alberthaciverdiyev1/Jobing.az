@@ -23,13 +23,4 @@ export async function requestAllSites(main = false) {
         // await sendEmail(errorData, process.env.CRON_MAIL_USER);
         await sendTgMessage(`Cron ended with error : ${error}`);
     }
-
-
-    const jresponse = await axios.post(`http://localhost:${port}/api/jobs/remove-duplicates`);
-    if (jresponse.status === 200 || jresponse.status === 201) {
-        const cresponse = await axios.post(`http://localhost:${port}/api/companies/remove-duplicates`);
-        if (cresponse.status === 200 || cresponse.status === 201) {
-            await axios.post(`http://localhost:${port}/api/companies/download-logos`);
-        }
-    }
 }
