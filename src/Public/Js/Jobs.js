@@ -561,6 +561,25 @@ function addRadioChangeListener(type) {
 //     document.getElementById("card-section").classList.toggle("hidden");
 // };
 
+// document.getElementById("mobile-filter-btn").onclick = function () {
+//     const filterSection = document.getElementById("filter-section");
+//     const cardSection = document.getElementById("card-section");
+//     const footer = document.getElementById("footer");
+//     const loadMoreButton = document.getElementById("load-more-btn");
+
+//     if (filterSection.classList.contains("hidden")) {
+//         filterSection.classList.remove("hidden");
+//         cardSection.style.display = "none";
+//         footer.style.display = "none";
+//         loadMoreButton.classList.add("hidden");
+//     } else {
+//         filterSection.classList.add("hidden");
+//         loadMoreButton.classList.remove("hidden");
+//         cardSection.style.display = "block";
+//         footer.style.display = "block";
+//     }
+// };
+
 document.getElementById("mobile-filter-btn").onclick = function () {
     const filterSection = document.getElementById("filter-section");
     const cardSection = document.getElementById("card-section");
@@ -571,14 +590,24 @@ document.getElementById("mobile-filter-btn").onclick = function () {
         filterSection.classList.remove("hidden");
         cardSection.style.display = "none";
         footer.style.display = "none";
-        loadMoreButton.classList.add("hidden");
+        
+        // Check if loadMoreButton exists before changing its class
+        if (loadMoreButton) {
+            loadMoreButton.classList.add("hidden");
+        }
     } else {
         filterSection.classList.add("hidden");
-        loadMoreButton.classList.remove("hidden");
+        
+        // Check if loadMoreButton exists before changing its class
+        if (loadMoreButton) {
+            loadMoreButton.classList.remove("hidden");
+        }
+        
         cardSection.style.display = "block";
         footer.style.display = "block";
     }
 };
+
 
 var slider = document.getElementById('slider');
 
