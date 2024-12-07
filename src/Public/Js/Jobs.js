@@ -56,9 +56,12 @@ function updateURLParams(params) {
 
 function preselectFilters(onlyCheckFilter = false) {
     const { categoryId, cityId, educationId, experienceLevel, keyword } = getURLParams();
+console.log({categoryId});
 
     if (categoryId && !isNaN(Number(categoryId))) {
         if (categoryId > 10) document.getElementById("categoryList").innerHTML = categoryHTML(categoryArray);
+        if (categoryId !== 1 || categoryId !== 4 || categoryId !== 6 || categoryId !== 8 || categoryId !== 7 || categoryId !== 9 || categoryId !== 11 || categoryId !== 2 || categoryId !== 13|| categoryId !== 14) document.getElementById("categoryList").innerHTML = categoryHTML(categoryArray);
+
         addRadioChangeListener("category");
 
         document.querySelector(`input[name="category"][id="category-${+categoryId}"]`).checked = true;
