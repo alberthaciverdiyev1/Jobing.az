@@ -1193,6 +1193,17 @@ video {
 .bg-\[url\(\'\.\.\/Images\/Static\/MobileHomeFormBGV\.mp4\'\)\] {
   background-image: url('../Images/Static/MobileHomeFormBGV.mp4');
 }
+.bg-gradient-to-t {
+  background-image: linear-gradient(to top, var(--tw-gradient-stops));
+}
+.from-orange-200 {
+  --tw-gradient-from: #fed7aa var(--tw-gradient-from-position);
+  --tw-gradient-to: rgb(254 215 170 / 0) var(--tw-gradient-to-position);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+}
+.to-gray-50 {
+  --tw-gradient-to: #f9fafb var(--tw-gradient-to-position);
+}
 .bg-cover {
   background-size: cover;
 }
@@ -1513,6 +1524,11 @@ video {
 .shadow-2xl {
   --tw-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
   --tw-shadow-colored: 0 25px 50px -12px var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+.shadow-\[0_14px_6px_rgba\(253\2c 230\2c 138\2c 0\.5\)\] {
+  --tw-shadow: 0 14px 6px rgba(253,230,138,0.5);
+  --tw-shadow-colored: 0 14px 6px var(--tw-shadow-color);
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 }
 .shadow-lg {

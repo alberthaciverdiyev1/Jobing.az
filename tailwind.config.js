@@ -5,6 +5,9 @@ export const theme = {
     height: {
       '38': '1660px',
     },
+    boxShadow: {
+      'bottom-only': '0px 4px 6px rgba(0, 0, 0, 10)',
+    },
   },
 };
 export const plugins = [];
