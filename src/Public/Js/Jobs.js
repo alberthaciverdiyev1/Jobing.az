@@ -539,11 +539,11 @@ document.getElementById("search-btn").addEventListener("click", handleFilterChan
 let searchDebounceTimeout;
 
 document.getElementById("search").addEventListener("keyup", () => {
-    searchDebounceTimeout = setTimeout(() => {
-        clearTimeout(searchDebounceTimeout);
+    // searchDebounceTimeout = setTimeout(() => {
+    //     clearTimeout(searchDebounceTimeout);
         offset = 0;
         handleFilterChange();
-    }, 500);
+    // }, 500);
 });
 
 
