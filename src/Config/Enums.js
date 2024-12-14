@@ -94,8 +94,24 @@ const Enums = Object.freeze({
         }
 
 
-    }
+    },
+    
+    Meta: {
+        Keywords: {
+            HomePage: "albert,jale",
+            ConatctPage: 0x002,
+            AboutPahe: 0x003,
+            JobsPage: 0x004,
+        },
+        Descriptions: {
+            HomePage: "albert,jale",
+            ConatctPage: 0x002,
+            AboutPahe: 0x003,
+            JobsPage: 0x004,
+        }
+    },
 
+    
 });
 
 export default Enums;
