@@ -90,9 +90,9 @@ document.addEventListener("DOMContentLoaded", (event) => {
                                          ${element.isPremium ? `<span class="bg-orange-500 text-white px-2 ml-1 py-0.5 rounded-lg">premium</span>` : ''}
                                         <span class="bg-green-400 text-white px-2 ml-1  py-0.5 rounded-lg">aktivdir</span></div>
                                         <div class="flex justify-end items-end mt-auto">
-                                    <a href="${element.redirectUrl}" target="_blank" class="filled-button-color text-white py-2 px-8 rounded-full">
+                                    <p class="filled-button-color text-white py-2 px-8 rounded-full">
                                         Keçid Et  
-                                    </a>
+                                    </p>
                                 </div>
                                         </div>
                                 <div class="text-sm mt-2 flex justify-between lg:hidden">
