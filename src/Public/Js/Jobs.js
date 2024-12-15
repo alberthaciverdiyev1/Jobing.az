@@ -436,9 +436,9 @@ async function getJobs(params) {
                                                 </h4>
                                                 </div>
                                                 <div class="flex justify-end items-end mt-auto pt-16">
-                                                    <a href="${element.redirectUrl}" target="_blank" class="filled-button-color text-white py-2 px-8 rounded-full">
+                                                    <p class="filled-button-color text-white py-2 px-8 rounded-full">
                                                         Keçid Et 
-                                                    </a>
+                                                    </p>
                                                 </div>
                                             </div>
                                         </div>
