@@ -47,6 +47,14 @@ const ViewController = {
         };
         res.render('Main', view);
     },
+    addJob: async (req, res) => {
+        const view = {
+            title: 'Yeni vakansiya',
+            body: "Jobs/Add.ejs",
+            js: 'ContactUs.js'
+        };
+        res.render('Main', view);
+    },
     adminIndex: async (req, res) => {
         const view = {
             title: 'Admin Panel',

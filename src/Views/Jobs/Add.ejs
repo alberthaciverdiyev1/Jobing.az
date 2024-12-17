@@ -1,0 +1,147 @@
+<div class="container mx-auto px-4 md:px-8 lg:px-16 py-12 min-h-screen flex items-center mt-8">
+    <div class="bg-white px-6 md:px-8 lg:px-12 py-4 w-full mt-0 rounded-lg shadow-lg">
+        <h2 class="text-4xl font-bold text-center mt-3 mb-8 text-gray-800">Yeni Elan</h2>
+
+        <div class="bg-gray-50 p-6 lg:p-10 rounded-lg">
+            <form class="space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="email" class="block mb-2 text-sm font-medium text-gray-700">Email</label>
+                        <input id="email" type="email" placeholder="Emailinizi daxil edin"
+                            class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500">
+                        <span class="text-red-500 text-sm mt-1 block">Bu xana doldurulmalıdır</span>
+                    </div>
+                    <div>
+                        <label for="username" class="block mb-2 text-sm font-medium text-gray-700">İstifadəçi Adı</label>
+                        <input id="username" type="text" placeholder="İstifadəçi adı"
+                            class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500">
+                        <span class="text-red-500 text-sm mt-1 block">Bu xana doldurulmalıdır</span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="phone1" class="block mb-2 text-sm font-medium text-gray-700">Telefon Nömrəsi 1</label>
+                        <input id="phone1" type="tel" placeholder="Telefon nömrəsi 1"
+                            class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500">
+                        <span class="text-red-500 text-sm mt-1 block">Bu xana doldurulmalıdır</span>
+                    </div>
+                    <div>
+                        <label for="phone2" class="block mb-2 text-sm font-medium text-gray-700">Telefon Nömrəsi 2</label>
+                        <input id="phone2" type="tel" placeholder="Telefon nömrəsi 2"
+                            class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500">
+                        <span class="text-red-500 text-sm mt-1 block">Bu xana doldurulmalıdır</span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="company-name" class="block mb-2 text-sm font-medium text-gray-700">Şirkət Adı</label>
+                        <input id="company-name" type="text" placeholder="Şirkət adı"
+                            class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500">
+                        <span class="text-red-500 text-sm mt-1 block">Bu xana doldurulmalıdır</span>
+                    </div>
+                    <div>
+                        <label for="company-image" class="block mb-2 text-sm font-medium text-gray-700">Şirkət Rəsmi</label>
+                        <input id="company-image" type="file"
+                            class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500">
+                        <span class="text-red-500 text-sm mt-1 block">Bu xana doldurulmalıdır</span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="category" class="block mb-2 text-sm font-medium text-gray-700">Kategoriya</label>
+                        <select id="category"
+                            class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500">
+                            <option value="" disabled selected>Kategoriyanı seçin</option>
+                            <option value="IT">IT</option>
+                            <option value="Marketing">Marketing</option>
+                            <option value="Mühasibatlıq">Mühasibatlıq</option>
+                        </select>
+                        <span class="text-red-500 text-sm mt-1 block">Bu xana doldurulmalıdır</span>
+                    </div>
+                    <div>
+                        <label for="city" class="block mb-2 text-sm font-medium text-gray-700">Şəhər</label>
+                        <select id="city"
+                            class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500">
+                            <option value="" disabled selected>Şəhəri seçin</option>
+                            <option value="Bakı">Bakı</option>
+                            <option value="Gəncə">Gəncə</option>
+                            <option value="Sumqayıt">Sumqayıt</option>
+                        </select>
+                        <span class="text-red-500 text-sm mt-1 block">Bu xana doldurulmalıdır</span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="position" class="block mb-2 text-sm font-medium text-gray-700">Vəzifə</label>
+                        <input id="position" type="text" placeholder="Vəzifəni daxil edin"
+                            class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500">
+                        <span class="text-red-500 text-sm mt-1 block">Bu xana doldurulmalıdır</span>
+                    </div>
+                    <div>
+                        <label for="education" class="block mb-2 text-sm font-medium text-gray-700">Təhsil</label>
+                        <select id="education"
+                            class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500">
+                            <option value="" disabled selected>Təhsili seçin</option>
+                            <option value="Ali">Ali</option>
+                            <option value="Orta">Orta</option>
+                        </select>
+                        <span class="text-red-500 text-sm mt-1 block">Bu xana doldurulmalıdır</span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div>
+                        <label for="min-salary" class="block mb-2 text-sm font-medium text-gray-700">Minimum Maaş</label>
+                        <input id="min-salary" type="number" placeholder="Minimum maaş"
+                            class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500">
+                        <span class="text-red-500 text-sm mt-1 block">Bu xana doldurulmalıdır</span>
+                    </div>
+                    <div>
+                        <label for="max-salary" class="block mb-2 text-sm font-medium text-gray-700">Maksimum Maaş</label>
+                        <input id="max-salary" type="number" placeholder="Maksimum maaş"
+                            class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500">
+                        <span class="text-red-500 text-sm mt-1 block">Bu xana doldurulmalıdır</span>
+                    </div>
+                    <div>
+                        <label for="min-age" class="block mb-2 text-sm font-medium text-gray-700">Minimum Yaş</label>
+                        <input id="min-age" type="number" placeholder="Minimum yaş"
+                            class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500">
+                        <span class="text-red-500 text-sm mt-1 block">Bu xana doldurulmalıdır</span>
+                    </div>
+                    <div>
+                        <label for="max-age" class="block mb-2 text-sm font-medium text-gray-700">Maksimum Yaş</label>
+                        <input id="max-age" type="number" placeholder="Maksimum yaş"
+                            class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500">
+                        <span class="text-red-500 text-sm mt-1 block">Bu xana doldurulmalıdır</span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="requirements" class="block mb-2 text-sm font-medium text-gray-700">Tələblər</label>
+                        <textarea id="requirements" placeholder="Tələblər"
+                            class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 resize-none"></textarea>
+                        <span class="text-red-500 text-sm mt-1 block">Bu xana doldurulmalıdır</span>
+                    </div>
+
+                    <div>
+                        <label for="about-job" class="block mb-2 text-sm font-medium text-gray-700">İş Haqqında Məlumat</label>
+                        <textarea id="about-job" placeholder="İş haqqında məlumat"
+                            class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 resize-none"></textarea>
+                        <span class="text-red-500 text-sm mt-1 block">Bu xana doldurulmalıdır</span>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit"
+                    class="w-full bg-orange-500 text-white font-semibold py-3 rounded-lg hover:bg-orange-700 transition duration-200 shadow-md">
+                    Paylaş
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
