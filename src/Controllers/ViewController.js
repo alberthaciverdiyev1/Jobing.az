@@ -51,7 +51,7 @@ const ViewController = {
         const view = {
             title: 'Yeni vakansiya',
             body: "Jobs/Add.ejs",
-            js: 'ContactUs.js'
+            js: 'NewJob.js'
         };
         res.render('Main', view);
     },
