@@ -19,8 +19,8 @@ async function getCategories() {
             });
         }
     }).catch(error => {
-            console.error("Error fetching categories:", error);
-        });
+        console.error("Error fetching categories:", error);
+    });
 
 }
 async function getCities() {
@@ -87,8 +87,8 @@ document.getElementById('addJob').addEventListener("click", async () => {
 
     const data = {
         email: document.getElementById("email")?.value.trim(),
-        experience: document.getElementById("experience")?.value.trim(),
-        phone1: document.getElementById("phone1")?.value.trim(),
+        username: document.getElementById("username")?.value.trim(),
+        phone: document.getElementById("phone")?.value.trim(),
         experience: document.getElementById("experience")?.value.trim(),
         companyName: document.getElementById("companyName")?.value.trim(),
         companyImage: companyImageBase64,
@@ -129,23 +129,31 @@ document.getElementById('addJob').addEventListener("click", async () => {
     });
 
     if (allValid) {
-        alertify.success("Məlumat uğurla əlavə edildi!");
-        axios
+        // alertify.success("Məlumat uğurla əlavə edildi!");
+        axios.post('/api/jobs/add-request', { data: data }).then(res => {
+            console.log(res);
+            
+            if (res.data.status === 200) {
+                alertify.success(res.data.message);
+                Object.keys(data).forEach((key) => {
+                    const element = document.getElementById(key);
+                    if (element) {
+                        if (element.tagName === "INPUT" || element.tagName === "TEXTAREA") {
+                            element.value = "";
+                        } else if (element.tagName === "SELECT") {
+                            element.selectedIndex = 0;
+                        }
+                    }
+                });
 
-        Object.keys(data).forEach((key) => {
-            const element = document.getElementById(key);
-            if (element) {
-                if (element.tagName === "INPUT" || element.tagName === "TEXTAREA") {
-                    element.value = "";
-                } else if (element.tagName === "SELECT") {
-                    element.selectedIndex = 0;
+                if (companyImageElement) {
+                    companyImageElement.value = null;
                 }
+            } else {
+                alertify.error(res.data.message);
             }
         });
 
-        if (companyImageElement) {
-            companyImageElement.value = null;
-        }
     } else {
         alertify.error("Zəhmət olmasa bütün məcburi xanaları doldurun!");
     }

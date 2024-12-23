@@ -12,6 +12,13 @@ const jobSchema = new Schema({
         type: String,
         required: true
     },
+    email: {
+        type: String,
+        required: false},
+    phone: {
+        type: String,
+        required: false
+    },
     description: {
         type: String,
         required: false
@@ -25,6 +32,14 @@ const jobSchema = new Schema({
         required: false
     },
     maxSalary: {
+        type: Number,
+        required: false
+    },
+    minAge: {
+        type: Number,
+        required: false
+    },
+    maxAge: {
         type: Number,
         required: false
     },
@@ -70,9 +85,13 @@ const jobSchema = new Schema({
         type: Boolean,
         default: false
     },
+    isActive: {
+        type: Boolean,
+        default: true
+    },
     jobType: {
         type: String,
-        required: true
+        required: false
     },
     postedAt: {
         type: Date,
