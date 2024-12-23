@@ -56,7 +56,6 @@ function updateURLParams(params) {
 
 function preselectFilters(onlyCheckFilter = false) {
     const { categoryId, cityId, educationId, experienceLevel, keyword } = getURLParams();
-console.log({categoryId});
 
     if (categoryId && !isNaN(Number(categoryId))) {
         if (categoryId > 10) document.getElementById("categoryList").innerHTML = categoryHTML(categoryArray);
