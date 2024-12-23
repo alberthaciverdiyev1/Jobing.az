@@ -174,6 +174,40 @@ const jobDataController = {
         } catch (error) {
             res.status(500).json({ message: 'Error deleting site: ' + error.message });
         }
+    },
+    addJobRequest: async (req, res) => {
+        try {
+            let description = `${req.body.data.aboutJob + ' ' + req.body.data.aboutJob}`;
+            let data = {
+                title: req.body.data.position,
+                description: description,
+                location: (await CityService.findById(req.body.data.city))?.name,
+                minSalary: req.body.data.minSalary,
+                maxSalary: req.body.data.maxSalary,
+                minAge: req.body.data.minAge,
+                maxAge: req.body.data.maxAge,
+                categoryId: req.body.data.category,
+                companyName: req.body.data.companyName,
+                cityId: req.body.data.city,
+                educationId: req.body.data.education,
+                experienceId: req.body.data.experience,
+                userName: req.body.data.username,
+                isPremium: false,
+                sourceUrl:'jobing.az',
+                isActive: false,
+                email: req.body.data.email,
+                phone: req.body.data.phone,
+                redirectUrl:"q",
+                uniqueKey:  req.body.data.position + req.body.data.companyName + req.body.data.city,
+            }
+            // companyImage: null,
+
+            const jobs = await JobService.addJobRequest(data);
+            console.log(jobs);
+            res.status(200).json(jobs);
+        } catch (error) {
+            res.status(500).json({ message: 'Error retrieving jobs: ' + error.message });
+        }
     }
 };
 

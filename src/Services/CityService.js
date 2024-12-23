@@ -2,7 +2,6 @@ import Enums from '../Config/Enums.js';
 import City from '../Models/City.js';
 
 const CityService = {
-    // Şehir oluştur
     create: async (data) => {
         try {
             if (!Array.isArray(data)) {
@@ -24,7 +23,6 @@ const CityService = {
         }
     },
 
-    // Şehri sil
     delete: async (id) => {
         try {
             const city = await City.findById(id);
@@ -38,10 +36,9 @@ const CityService = {
         }
     },
 
-    // ID ile şehri bul
     findById: async (id) => {
         try {
-            const city = await City.findById(id);
+            const city = await City.findOne({ cityId: id });
             if (!city) {
                 throw new Error('City not found');
             }
@@ -51,7 +48,6 @@ const CityService = {
         }
     },
 
-    // Tüm şehirleri al
     getAll: async (data) => {
         try {
             let query = {};
@@ -62,7 +58,6 @@ const CityService = {
         }
     },
 
-    // Şehri güncelle
     update: async (id, updateData) => {
         try {
             const city = await City.findById(id);

@@ -91,25 +91,25 @@ const JobDataService = {
         }
     },
 
-     getAllJobs: async (data) => {
+    getAllJobs: async (data) => {
         try {
             const filteredJobs = [];
             const seenUrls = new Set();
-    
+
             const currentDate = new Date();
             const thirtyDaysAgo = new Date(currentDate.setDate(currentDate.getDate() - 30));
-    
+
             const query = {
                 createdAt: { $gte: thirtyDaysAgo }
             };
-    
+
             // if (data.categoryId && !isNaN(Number(data.categoryId))) {
             //     query.$or = [
             //         { categoryId: +data.categoryId },
             //         { subCategoryId: +data.categoryId }
             //     ];
             // }
-    
+
             if (data.categoryId && !isNaN(Number(data.categoryId))) query.categoryId = +data.categoryId;
             if (data.cityId && !isNaN(Number(data.cityId))) query.cityId = +data.cityId;
             if (data.educationId && !isNaN(Number(data.educationId))) query.educationId = +data.educationId;
@@ -117,7 +117,7 @@ const JobDataService = {
             if (data.jobType) query.jobType = data.jobType;
             if (data.minSalary && !isNaN(Number(data.minSalary)) && data.minSalary !== 0) query.minSalary = { $gte: +data.minSalary };
             if (data.maxSalary && !isNaN(Number(data.maxSalary))) query.maxSalary = { $lte: +data.maxSalary };
-    
+
             if (data.keyword) {
                 query.$or = [
                     { title: { $regex: data.keyword, $options: 'i' } },
@@ -125,17 +125,17 @@ const JobDataService = {
                     { location: { $regex: data.keyword, $options: 'i' } }
                 ];
             }
-    
+
             const limit = 100;
             const offset = Number(data.offset) || 0;
-    // console.log({data,query});
-    
+            // console.log({data,query});
+
             const jobs = await JobData.find(query)
                 .sort({ createdAt: -1 })
-                .populate('companyDetails', 'imageUrl companyName') 
+                .populate('companyDetails', 'imageUrl companyName')
                 .skip(offset)
                 .limit(limit);
-    
+
             const totalCount = await JobData.countDocuments(query);
 
             const jobsWithImageUrl = jobs.map(job => ({
@@ -143,14 +143,14 @@ const JobDataService = {
                 companyImageUrl: job.companyDetails?.imageUrl || null
 
             }));
-    
+
             jobsWithImageUrl.forEach(job => {
                 if (!seenUrls.has(job.redirectUrl)) {
                     seenUrls.add(job.redirectUrl);
                     filteredJobs.push(job);
                 }
             });
-    
+
             return {
                 totalCount: totalCount,
                 jobs: filteredJobs,
@@ -214,12 +214,22 @@ const JobDataService = {
             throw new Error('Error deleting job: ' + error.message);
         }
     },
-    count:async () => {
+    addJobRequest: async (data) => {
+        try {
+            const job = new JobData(data);
+            console.log({ data, job });
+            await job.save();
+            return { status: 200, message: 'Məlumat uğurla əlavə edildi!' };
+        } catch (error) {
+            throw new Error('Error adding job request: ' + error.message);
+        }
+    },
+    count: async () => {
         const thirtyDaysAgo = new Date();
         thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-    
+
         return JobData.countDocuments({
-            createdAt: {$gte: thirtyDaysAgo}
+            createdAt: { $gte: thirtyDaysAgo }
         });
     }
 };
