@@ -5,15 +5,17 @@ import pLimit from 'p-limit';
 import JobSearchAz from "../Helpers/SiteBasedScrapes/JobSearchAz.js";
 import CityService from '../Services/CityService.js';
 
-import { formatDate } from "../Helpers/FormatDate.js";
-import { requestAllSites } from '../Helpers/Automation.js';
-import { sendTgMessage } from "../Helpers/TelegramBot.js";
+import {formatDate} from "../Helpers/FormatDate.js";
+import {requestAllSites} from '../Helpers/Automation.js';
+import {sendNewJobRequest, sendTgMessage} from "../Helpers/TelegramBot.js";
 import fs from "fs";
 import CompanyService from "../Services/CompanyService.js";
 import BossAz from "../Helpers/SiteBasedScrapes/BossAz.js";
 import HelloJobAz from "../Helpers/SiteBasedScrapes/HelloJobAz.js";
 import OfferAz from "../Helpers/SiteBasedScrapes/OfferAz.js";
 import SmartJobAz from "../Helpers/SiteBasedScrapes/SmartJobAz.js";
+import sendEmail from "../Helpers/NodeMailer.js";
+
 const jobDataController = {
 
     create: async (req, res) => {
@@ -21,8 +23,8 @@ const jobDataController = {
             const data = await fs.promises.readFile('./src/Config/OnlyMainContent.json', 'utf8');
 
             const cities = data.includes('false')
-                ? await CityService.getAll({ site: "BossAz" })
-                : [{ name: 'Bakı', cityId: 1 }];
+                ? await CityService.getAll({site: "BossAz"})
+                : [{name: 'Bakı', cityId: 1}];
 
             if (!cities || cities.length === 0) {
                 throw new Error("No cities found");
@@ -36,9 +38,9 @@ const jobDataController = {
             }
 
             const sources = [
-                { instance: new BossAz(), name: "BossAz" },
-                { instance: new HelloJobAz(), name: "HelloJobAz" },
-                { instance: new OfferAz(), name: "OfferAz" },
+                {instance: new BossAz(), name: "BossAz"},
+                {instance: new HelloJobAz(), name: "HelloJobAz"},
+                {instance: new OfferAz(), name: "OfferAz"},
                 // { instance: new SmartJobAz(), name: "SmartJobAz" },
                 // { instance: new JobSearchAz(), name: "JobSearchAz" },
             ];
@@ -52,10 +54,10 @@ const jobDataController = {
             for (const city of cities) {
                 for (const category of categories) {
                     cityCategoryTasks.push(
-                        ...sources.map(({ instance, name }) =>
+                        ...sources.map(({instance, name}) =>
                             limit(async () => {
                                 try {
-                                    const jobs = await instance.Jobs([category], city,data.includes('true'));
+                                    const jobs = await instance.Jobs([category], city, data.includes('true'));
 
                                     if (jobs.length > 0) {
                                         const response = await JobService.create(jobs);
@@ -88,8 +90,8 @@ const jobDataController = {
                 await sendTgMessage(`Cron completed with errors: ${errors.length}`);
             }
             // if (res.status === 201) {
-              await JobService.removeDuplicates();
-              await CompanyService.downloadCompanyLogos();
+            await JobService.removeDuplicates();
+            await CompanyService.downloadCompanyLogos();
             // }
             res.status(201).json({
                 errors: errors.length > 0 ? errors : null,
@@ -121,7 +123,7 @@ const jobDataController = {
             const jobs = await JobService.getAllJobs(data);
             res.status(200).json(jobs);
         } catch (error) {
-            res.status(500).json({ message: 'Error retrieving jobs: ' + error.message });
+            res.status(500).json({message: 'Error retrieving jobs: ' + error.message});
         }
     },
 
@@ -129,23 +131,23 @@ const jobDataController = {
         try {
             const site = await JobService.findSiteById(req.params.id);
             if (!site) {
-                return res.status(404).json({ message: 'Site not found' });
+                return res.status(404).json({message: 'Site not found'});
             }
             res.status(200).json(site);
         } catch (error) {
-            res.status(500).json({ message: 'Error retrieving site: ' + error.message });
+            res.status(500).json({message: 'Error retrieving site: ' + error.message});
         }
     },
 
     updateSite: async (req, res) => {
         try {
-            const site = await JobService.updateSite(req.params.id, req.body);
+            const site = await JobService.updateJob(req.params.id, req.body);
             if (!site) {
-                return res.status(404).json({ message: 'Site not found' });
+                return res.status(404).json({message: 'Site not found'});
             }
             res.status(200).json(site);
         } catch (error) {
-            res.status(500).json({ message: 'Error updating site: ' + error.message });
+            res.status(500).json({message: 'Error updating site: ' + error.message});
         }
     },
 
@@ -155,7 +157,7 @@ const jobDataController = {
 
             res.status(200).json(site);
         } catch (error) {
-            res.status(500).json({ message: 'Error updating site: ' + error.message });
+            res.status(500).json({message: 'Error updating site: ' + error.message});
         }
     },
 
@@ -163,16 +165,16 @@ const jobDataController = {
         try {
             await requestAllSites(true)
         } catch (error) {
-            res.status(500).json({ message: 'Error updating site: ' + error.message });
+            res.status(500).json({message: 'Error updating site: ' + error.message});
         }
     },
 
     deleteSite: async (req, res) => {
         try {
             await JobService.deleteSite(req.params.id);
-            res.status(200).json({ message: 'Site successfully deleted' });
+            res.status(200).json({message: 'Site successfully deleted'});
         } catch (error) {
-            res.status(500).json({ message: 'Error deleting site: ' + error.message });
+            res.status(500).json({message: 'Error deleting site: ' + error.message});
         }
     },
     addJobRequest: async (req, res) => {
@@ -193,20 +195,25 @@ const jobDataController = {
                 experienceId: req.body.data.experience,
                 userName: req.body.data.username,
                 isPremium: false,
-                sourceUrl:'jobing.az',
+                sourceUrl: 'jobing.az',
                 isActive: false,
                 email: req.body.data.email,
                 phone: req.body.data.phone,
-                redirectUrl:"q",
-                uniqueKey:  req.body.data.position + req.body.data.companyName + req.body.data.city,
+                redirectUrl: "#",
+                uniqueKey: req.body.data.position + req.body.data.companyName + req.body.data.city,
             }
             // companyImage: null,
 
             const jobs = await JobService.addJobRequest(data);
-            console.log(jobs);
+            sendEmail({
+                title: "Jobing.az",
+                text: "Sizin vakansiyanız yoxlanis ucun Jobing.az komandasina gonderildi. Qisa zaman icinde cavab verilecekdir."
+            }, req.body.data.email, "support - Jobing.az")
+            data.id = jobs.id
+            await sendNewJobRequest(data)
             res.status(200).json(jobs);
         } catch (error) {
-            res.status(500).json({ message: 'Error retrieving jobs: ' + error.message });
+            res.status(500).json({message: 'Error retrieving jobs: ' + error.message});
         }
     }
 };

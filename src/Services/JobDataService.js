@@ -180,13 +180,14 @@ const JobDataService = {
     },
 
     // Update job data
-    updateSite: async (id, updateData) => {
+    updateJob: async (id) => {
         try {
-            if (!mongoose.Types.ObjectId.isValid(id)) {
-                throw new Error('Invalid job ID format');
-            }
+            const updateData = {
+                isActive: true,
+                updatedAt: new Date(),
+                redirectUrl: `https://jobing.az/${id}`,
+            };
 
-            // findByIdAndUpdate() updates and returns the updated document
             const job = await JobData.findByIdAndUpdate(id, updateData, { new: true });
             if (!job) {
                 throw new Error('Job not found');
@@ -217,13 +218,15 @@ const JobDataService = {
     addJobRequest: async (data) => {
         try {
             const job = new JobData(data);
-            console.log({ data, job });
-            await job.save();
-            return { status: 200, message: 'Məlumat uğurla əlavə edildi!' };
+            const savedJob = await job.save();
+            savedJob.uniqueKey = savedJob._id.toString();
+            await savedJob.save();
+            return { status: 200, message: 'Məlumat uğurla əlavə edildi!', "id":savedJob._id };
         } catch (error) {
             throw new Error('Error adding job request: ' + error.message);
         }
     },
+
     count: async () => {
         const thirtyDaysAgo = new Date();
         thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
