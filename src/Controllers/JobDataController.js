@@ -180,7 +180,7 @@ const jobDataController = {
     },
     addJobRequest: async (req, res) => {
         try {
-            let description = `${req.body.data.aboutJob + ' ' + req.body.data.aboutJob}`;
+            let description = `${req.body.data.aboutJob + '<h4 class="text-lg font-bold text-gray-800">Tələblər:</h4>' + req.body.data.requirements}`;
             let data = {
                 title: req.body.data.position,
                 description: description,
@@ -218,15 +218,19 @@ const jobDataController = {
         }
     },
     details: async (req, res) => {
-        log.info('Job details');
         try {
-            // await JobService.details(req.params.id);
+           let data = await JobService.details(req.params.id);
+        console.log(data);
+
             // res.status(200).json({ message: 'Success' });                                                
             const view = {
                 title: 'Iş haqqında',
-                body: "Job/Details.ejs",
-                js: 'Details.js'
+                body: "Jobs/Details.ejs",
+                data: data,                                         
+                js: null
             };
+        console.log({view});
+
             res.render('Main', view);
         } catch (error) {
             res.status(500).json({ message: 'Error job details: ' + error.message });

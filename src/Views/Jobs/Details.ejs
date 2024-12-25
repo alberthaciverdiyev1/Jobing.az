@@ -1,117 +1,164 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Job Details</title>
-    <link rel="stylesheet" href="/styles/main.css">
-</head>
-<body>
-    <header>
-        <h1>Job Details</h1>
-    </header>
-    <main>
-        <section>
-            <h2><%= job.title %></h2>
-            <p><strong>Company:</strong> <%= job.company %></p>
-            <p><strong>Location:</strong> <%= job.location %></p>
-            <p><strong>Salary:</strong> <%= job.salary %></p>
-            <p><strong>Description:</strong> <%= job.description %></p>
-            <p><strong>Requirements:</strong> <%= job.requirements %></p>
-        </section>
-        <a href="/jobs">Back to Jobs List</a>
-    </main>
-    <footer>
-        <p>&copy; 2023 EasyCV</p>
-    </footer>
-</body>
-</html><section class="p-6 bg-gray-50">
-    <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
-      <!-- Main Content -->
-      <div class="lg:col-span-2 bg-white shadow-md rounded-lg p-6">
-        <div class="space-y-6">
-          <!-- Job Header -->
-          <div class="border-b pb-4">
-            <h4 class="text-xl font-bold text-gray-800">Product Manager, Studio</h4>
-            <ul class="flex flex-wrap gap-4 text-sm text-gray-600 mt-2">
-              <li class="flex items-center"><span class="material-icons mr-1">work</span>Invision</li>
-              <li class="flex items-center"><span class="material-icons mr-1">location_on</span>London, UK</li>
-              <li class="flex items-center"><span class="material-icons mr-1">schedule</span>11 hours ago</li>
-              <li class="flex items-center"><span class="material-icons mr-1">attach_money</span>$35k - $45k</li>
-            </ul>
-            <ul class="flex gap-3 mt-2">
-              <li class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">Part Time</li>
-              <li class="px-3 py-1 bg-gray-100 text-gray-800 rounded-full text-xs">Private</li>
-              <li class="px-3 py-1 bg-red-100 text-red-800 rounded-full text-xs">Urgent</li>
-            </ul>
-          </div>
-  
-          <!-- Job Description -->
-          <div>
-            <h4 class="text-lg font-bold text-gray-800">Job Description</h4>
-            <p class="text-gray-700 mt-2">As a Product Designer, you will work within a Product Delivery Team fused with UX, engineering, product and data talent. You will help the team design beautiful interfaces that solve business challenges for our clients...</p>
-          </div>
-  
-          <!-- Key Responsibilities -->
-          <div>
-            <h4 class="text-lg font-bold text-gray-800">Key Responsibilities</h4>
-            <ul class="list-disc pl-6 space-y-1 text-gray-700">
-              <li>Be involved in every step of the product design cycle...</li>
-              <li>Work with BAs, product managers and tech teams...</li>
-              <li>Maintain quality of the design process...</li>
-            </ul>
-          </div>
-  
-          <!-- Skills & Experience -->
-          <div>
-            <h4 class="text-lg font-bold text-gray-800">Skill & Experience</h4>
-            <ul class="list-disc pl-6 space-y-1 text-gray-700">
-              <li>You have at least 3 years’ experience working as a Product Designer.</li>
-              <li>You have experience using Sketch and InVision or Framer X.</li>
-              <li>You have some previous experience working in an agile environment.</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-  
-      <!-- Sidebar -->
-      <aside class="space-y-6">
-        <!-- Apply Button -->
-        <div class="bg-white shadow-md rounded-lg p-6 text-center">
-          <a href="#" class="block bg-blue-500 text-white font-medium py-2 px-4 rounded-lg">Apply For Job</a>
-          <button class="mt-4 text-gray-500 hover:text-blue-500">Bookmark</button>
-        </div>
-  
-        <!-- Company Info -->
-        <div class="bg-white shadow-md rounded-lg p-6">
-          <div class="flex items-center space-x-4">
-            <img src="/path-to-logo.png" alt="Company Logo" class="w-12 h-12 rounded-full">
-            <div>
-              <h5 class="font-bold text-gray-800">Invision</h5>
-              <a href="#" class="text-blue-500 text-sm">View company profile</a>
+<section class="p-6 bg-gray-50 pt-32">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Main Content -->
+        <div class="lg:col-span-2 bg-white shadow-lg rounded-xl p-8">
+            <div class="space-y-6">
+                <!-- Job Header -->
+                <div class="flex gap-8 items-start">
+                    <img src="<%= data.companyImage ? data.companyImage : '/Images/DefaultCompany.png' %>"
+                        alt="Company Logo" class="h-12 w-12 mt-1 border-custom rounded-xl border sm:h-28 sm:w-28">
+
+                    <div class="border-b flex-1">
+                        <div class="flex items-center justify-between">
+                            <h4 class="text-xl font-bold text-gray-800">
+                                <%= data.title %>
+                            </h4>
+                            <% if (data.minSalary || data.maxSalary) { %>
+                                <span class="flex items-center text-xl font-bold">
+                                    <% if (data.minSalary) { %>
+                                        <%= data.minSalary %>
+                                            <% if (data.minSalary) { %><i class="fa-solid fa-manat-sign mx-1"></i>
+                                                <% } %>
+                                                    <% } %>
+                                                        <% if (data.maxSalary) { %> - <%= data.maxSalary %>
+                                                                <i class="fa-solid fa-manat-sign ml-1"></i>
+                                                                <% } %>
+                                </span>
+                                <% } else { %>
+                                    <span class="text-sm font-medium text-gray-500">Razılaşma yolu ilə</span>
+                                    <% } %>
+                        </div>
+                        <div class="text-base flex items-center text-gray-600 mt-6 space-x-4">
+                            <!-- Location Field -->
+                            <span class="flex items-center">
+                                <i class="fa-solid fa-location-dot mr-2 text-gray-500"></i>
+                                <%= data.location %>
+                            </span>
+
+                            <span class="flex items-center">
+                                <i class="fa-solid fa-building mr-2 text-gray-500"></i>
+                                <%= data.companyName %>
+                            </span>
+                        </div>
+                        <div class="text-base flex items-center text-gray-600 mt-3 mb-1 space-x-4">
+                            <span class="flex items-center">
+                                <i class="fa-solid fa-school mr-2 text-gray-500"></i>
+                                <%= data.location %>
+                            </span>
+
+                            <span class="flex items-center">
+                                <i class="fa-solid fa-business-time mr-2 text-gray-500"></i>
+                                <%= data.companyName %>
+                            </span>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="default-html">
+                    <h4 class="text-lg font-bold text-gray-800">Vakansiyanın təsviri:</h4>
+                    <p class="text-gray-700 mt-4 ml-4">
+                        <%- data.description %>
+                    </p>
+                </div>
             </div>
-          </div>
-          <ul class="mt-4 space-y-2 text-gray-700">
-            <li><strong>Primary industry:</strong> Software</li>
-            <li><strong>Company size:</strong> 501-1,000</li>
-            <li><strong>Founded in:</strong> 2011</li>
-            <li><strong>Phone:</strong> 123 456 7890</li>
-            <li><strong>Email:</strong> info@joio.com</li>
-            <li><strong>Location:</strong> London, UK</li>
-          </ul>
         </div>
-  
-        <!-- Contact Form -->
-        <div class="bg-white shadow-md rounded-lg p-6">
-          <h4 class="text-lg font-bold text-gray-800">Contact Us</h4>
-          <form class="mt-4 space-y-4">
-            <input type="text" placeholder="Your Name" class="w-full border rounded-lg p-2">
-            <input type="email" placeholder="Email Address" class="w-full border rounded-lg p-2">
-            <textarea placeholder="Message" class="w-full border rounded-lg p-2"></textarea>
-            <button type="submit" class="w-full bg-blue-500 text-white font-medium py-2 px-4 rounded-lg">Send Message</button>
-          </form>
-        </div>
-      </aside>
+
+        <!-- Sidebar -->
+        <aside class="space-y-8">
+            <!-- Apply Button -->
+            <div class="bg-white shadow-md rounded-xl p-6 text-center hover:shadow-lg transition-shadow duration-200">
+                <a href="#"
+                    class="block filled-button-color hover:bg-orange-700 text-white font-medium py-3 px-6 rounded-lg">
+                    Apply For Job
+                </a>
+            </div>
+
+            <!-- Company Info -->
+            <div class="bg-white shadow-lg rounded-xl p-6 max-w-3xl mx-auto">
+                <!-- Şirket Bilgisi Başlangıç -->
+                <div class="flex items-center space-x-4 border-b pb-6 mb-6 border-gray-200">
+                    <img src="<%= data.companyImage ? data.companyImage : '/Images/DefaultCompany.png' %>"
+                        alt="Company Logo" class="h-14 w-14 border-custom rounded-xl border shadow-sm">
+                    <div>
+                        <h5 class="text-xl font-bold text-gray-800 hover:text-blue-600 transition duration-200">
+                            <%= data.companyName %>
+                        </h5>
+                        <a href="#" class="text-blue-500 text-sm hover:underline mt-1 inline-block">Şirkətin bütün
+                            vakansiyaları</a>
+                    </div>
+                </div>
+
+                <!-- Liste Başlangıç -->
+                <div>
+                    <ul class="space-y-4 text-gray-800">
+                        <li class="flex items-center justify-between border-b pb-3 border-gray-200">
+                            <span class="font-semibold text-gray-600">Kategoriya:</span>
+                            <span class="text-gray-700 font-medium">
+                                <%= data.categoryId %>
+                            </span>
+                        </li>
+                        <li class="flex items-center justify-between border-b pb-3 border-gray-200">
+                            <span class="font-semibold text-gray-600">Telefon:</span>
+                            <span class="text-gray-700 font-medium">
+                                <%= data.phone %>
+                            </span>
+                        </li>
+                        <li class="flex items-center justify-between border-b pb-3 border-gray-200">
+                            <span class="font-semibold text-gray-600">Email:</span>
+                            <span class="text-gray-700 font-medium">
+                                <%= data.email %>
+                            </span>
+                        </li>
+                        <li class="flex items-center justify-between border-b pb-3 border-gray-200">
+                            <span class="font-semibold text-gray-600">Şəhər:</span>
+                            <span class="text-gray-700 font-medium">
+                                <%= data.location %>
+                            </span>
+                        </li>
+                        <li class="flex items-center justify-between border-b pb-3 border-gray-200">
+                            <span class="font-semibold text-gray-600">Yaş:</span>
+                            <span class="text-gray-700 font-medium">
+                                <%= data.minAge %>-<%= data.maxAge %> arası
+                            </span>
+                        </li>
+                        <li class="flex items-center justify-between border-b pb-3 border-gray-200">
+                            <span class="font-semibold text-gray-600">Əlaqədar şəxs:</span>
+                            <span class="text-gray-700 font-medium">
+                                <%= data.userName %>
+                            </span>
+                        </li>
+                        <li class="flex items-center justify-between border-b pb-3 border-gray-200">
+                            <span class="font-semibold text-gray-600">Təhsil:</span>
+                            <span class="text-gray-700 font-medium">
+                                <%= data.educationId %>
+                            </span>
+                        </li>
+                        <li class="flex items-center justify-between border-b pb-3 border-gray-200">
+                            <span class="font-semibold text-gray-600">Təcrübə:</span>
+                            <span class="text-gray-700 font-medium">
+                                <%= data.experienceId %>
+                            </span>
+                        </li>
+                        <li class="flex items-center justify-between border-b pb-3 border-gray-200">
+                            <span class="font-semibold text-gray-600">Tarix:</span>
+                            <span class="text-gray-700 font-medium">
+                                <%= new Date(data.postedAt).toLocaleString('az-AZ', { day: '2-digit' , month: '2-digit'
+                                    , year: 'numeric' , hour: '2-digit' , minute: '2-digit' , hour12: false }) %>
+                            </span>
+                        </li>
+                        <li class="flex items-center justify-between pb-3 border-gray-200">
+                            <span class="font-semibold text-gray-600">Bitiş Tarixi:</span>
+                            <span class="text-gray-700 font-medium">
+                                <%= new Date(new Date(data.postedAt).setDate(new Date(data.postedAt).getDate() +
+                                    30)).toLocaleString('az-AZ', { day: '2-digit' , month: '2-digit' , year: 'numeric' ,
+                                    hour: '2-digit' , minute: '2-digit' , hour12: false }) %>
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+                <!-- Liste Bitişi -->
+            </div>
+
+        </aside>
     </div>
-  </section>
-  </html>
+</section>
