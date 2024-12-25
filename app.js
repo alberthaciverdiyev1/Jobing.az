@@ -8,8 +8,8 @@ import Production from './src/Helpers/Production.js';
 import sendEmail from './src/Helpers/NodeMailer.js';
 import i18n from 'i18n';
 import cookieParser from 'cookie-parser';
-import {requestAllSites} from "./src/Helpers/Automation.js";
-import bot,{listenTgCommands, sendTgMessage} from "./src/Helpers/TelegramBot.js";
+import { requestAllSites } from "./src/Helpers/Automation.js";
+import bot, { listenTgCommands, sendTgMessage } from "./src/Helpers/TelegramBot.js";
 import TelegramBot from 'node-telegram-bot-api';
 
 
@@ -65,7 +65,7 @@ process.on('uncaughtException', async (err) => {
         title: 'Uncaught Exception',
         text: `${err.stack}`
     };
-    await sendEmail(errorData, to);
+    process.env.NODE_ENV === "production" ? await sendEmail(errorData, to) : console.log(errorData);
     process.exit(1);
 });
 
@@ -74,5 +74,5 @@ process.on('unhandledRejection', async (reason, promise) => {
         title: 'Unhandled Promise Rejection',
         text: `Promise: ${promise}, Reason: ${reason}`
     };
-    await sendEmail(errorData, to);
+    process.env.NODE_ENV === "production" ? await sendEmail(errorData, to) : console.log(errorData);
 });

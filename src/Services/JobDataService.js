@@ -185,14 +185,14 @@ const JobDataService = {
             const updateData = {
                 isActive: true,
                 updatedAt: new Date(),
-                redirectUrl: `https://jobing.az/${id}`,
+                redirectUrl: `https://jobing.az/${id}/details`,
             };
 
             const job = await JobData.findByIdAndUpdate(id, updateData, { new: true });
             if (!job) {
                 throw new Error('Job not found');
             }
-            return job;
+            return 'Job updated';
         } catch (error) {
             throw new Error('Error updating job: ' + error.message);
         }
@@ -215,15 +215,30 @@ const JobDataService = {
             throw new Error('Error deleting job: ' + error.message);
         }
     },
+
     addJobRequest: async (data) => {
         try {
             const job = new JobData(data);
             const savedJob = await job.save();
             savedJob.uniqueKey = savedJob._id.toString();
             await savedJob.save();
-            return { status: 200, message: 'Məlumat uğurla əlavə edildi!', "id":savedJob._id };
+            return { status: 200, message: 'Məlumat uğurla əlavə edildi!', "id": savedJob._id };
         } catch (error) {
             throw new Error('Error adding job request: ' + error.message);
+        }
+    },
+
+    // Job details
+    details: async (id) => {
+        console.log({id});
+        try {
+            const job = await JobData.findOne({uniqueKey:id});
+            if (!job) {
+                throw new Error('Job not found');
+            }
+            return job;
+        } catch (error) {
+            throw new Error('Error finding job: ' + error.message);
         }
     },
 

@@ -65,7 +65,11 @@ bot.on('callback_query', async (callbackQuery) => {
             "support - Jobing.az"
         );
 
-        await jobDataService.updateJob(jobId);
+       let message = await jobDataService.updateJob(jobId);
+        await bot.sendMessage(
+            chatId,
+            `✅ ${message} ✅`
+        );
     }
 
     if (action === 'reject') {
