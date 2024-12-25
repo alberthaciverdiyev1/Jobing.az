@@ -3,6 +3,50 @@ document.addEventListener('DOMContentLoaded', async () => {
     ]);
     alertify.set('notifier', 'position', 'top-right');
 });
+let editorRequirements = null;
+let editorAboutJob = null;
+
+ClassicEditor
+    .create(document.querySelector('#requirements'), {
+        toolbar: [
+            'heading',
+            'bold',
+            'italic',
+            'link',
+            'bulletedList',
+            'undo',
+            'redo',
+            'indent',
+            'outdent'
+        ],
+
+    }).then(editor => {
+        editorRequirements = editor;
+    })
+    .catch(error => {
+        console.error(error);
+    });
+
+ClassicEditor
+    .create(document.querySelector('#aboutJob'), {
+        toolbar: [
+            'heading',
+            'bold',
+            'italic',
+            'link',
+            'bulletedList',
+            'undo',
+            'redo',
+            'indent',
+            'outdent'
+        ],
+    }).then(editor => {
+        editorAboutJob = editor;
+    })
+    .catch(error => {
+        console.error(error);
+    });
+
 async function getCategories() {
     await axios.get('/api/categories', {
         params: { website: "BossAz" }
@@ -11,10 +55,6 @@ async function getCategories() {
         if (res.status === 200) {
             res.data.forEach(element => {
                 h += ` <option value=${element.localCategoryId}>${element.categoryName}</option>`
-                // categoryArray.push({
-                //     "localCategoryId": element.localCategoryId,
-                //     "name": element.categoryName
-                // });
                 document.getElementById("category").innerHTML = h;
             });
         }
@@ -84,6 +124,8 @@ document.getElementById('addJob').addEventListener("click", async () => {
     if (companyImageElement && companyImageElement.files && companyImageElement.files[0]) {
         companyImageBase64 = await fileToBase64(companyImageElement.files[0]);
     }
+    const requirementsEditorData = editorRequirements ? await editorRequirements.getData() : '';
+    const aboutJobEditorData = editorAboutJob ? await editorAboutJob.getData() : '';
 
     const data = {
         email: document.getElementById("email")?.value.trim(),
@@ -96,21 +138,24 @@ document.getElementById('addJob').addEventListener("click", async () => {
         city: document.getElementById("city")?.value,
         position: document.getElementById("position")?.value.trim(),
         education: document.getElementById("education")?.value,
-        minSalary: document.getElementById("minSalary")?.value,
-        maxSalary: document.getElementById("maxSalary")?.value,
+        minSalary: !isNaN(Number(document.getElementById("minSalary")?.value)) ? document.getElementById("minSalary")?.value : 0,
+        maxSalary: !isNaN(Number(document.getElementById("maxSalary")?.value)) ? document.getElementById("maxSalary")?.value : 0,
         minAge: document.getElementById("minAge")?.value,
         maxAge: document.getElementById("maxAge")?.value,
-        requirements: document.getElementById("requirements")?.value.trim(),
-        aboutJob: document.getElementById("aboutJob")?.value.trim(),
+        requirements: requirementsEditorData.trim(),
+        aboutJob: aboutJobEditorData.trim(),
     };
 
     let allValid = true;
 
     Object.keys(data).forEach((key) => {
-        if (key === "companyImage" || key === "minAge" || key === "maxSalary" || key === "minSalary") return;
+        if (key === "companyImage" || key === "maxAge" || key === "maxSalary" || key === "minSalary") return;
+
 
         const element = document.getElementById(key);
         if (!element) return;
+        if (key === "requirements" && !data[key]) document.getElementById("requirements-error").classList.remove("hidden");
+        if (key === "aboutJob" && !data[key]) document.getElementById("about-error").classList.remove("hidden");
 
         const errorMessage = element.closest("div").querySelector("span");
 
@@ -123,6 +168,9 @@ document.getElementById('addJob').addEventListener("click", async () => {
         } else {
             if (errorMessage) {
                 errorMessage.classList.add("hidden");
+                if (key === "requirements") document.getElementById("requirements-error").classList.add("hidden");
+                if (key === "aboutJob") document.getElementById("about-error").classList.add("hidden");
+
             }
             element.classList.remove("border-red-500");
         }
@@ -132,7 +180,7 @@ document.getElementById('addJob').addEventListener("click", async () => {
         // alertify.success("Məlumat uğurla əlavə edildi!");
         axios.post('/api/jobs/add-request', { data: data }).then(res => {
             console.log(res);
-            
+
             if (res.data.status === 200) {
                 alertify.success(res.data.message);
                 Object.keys(data).forEach((key) => {
@@ -146,9 +194,10 @@ document.getElementById('addJob').addEventListener("click", async () => {
                     }
                 });
 
-                if (companyImageElement) {
-                    companyImageElement.value = null;
-                }
+                if (companyImageElement) companyImageElement.value = null;
+                if (editorRequirements) editorRequirements.setData('');
+                if (editorAboutJob) editorAboutJob.setData('');
+
             } else {
                 alertify.error(res.data.message);
             }

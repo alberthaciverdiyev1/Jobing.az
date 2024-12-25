@@ -240,11 +240,11 @@ body {
 }
 
 #card-section {
-    display: block;
+  display: block;
 }
 
 #card-section {
-    overflow-y: auto;
+  overflow-y: auto;
 }
 
 /* SCROLL */
@@ -353,4 +353,41 @@ input[type="range"]::-moz-range-thumb {
   border-radius: 50%;
   text-align: center;
   padding: 25px 0;
+}
+
+/* CK Editorr */
+.ck-editor__editable {
+  min-height: 150px; 
+}
+
+.default-html h1, .default-html h2, .default-html h3, .default-html h4, .default-html h5, .default-html h6 {
+  /* font-family: Arial, sans-serif; */
+  font-weight: bold;
+  margin: 1em 0;
+}
+
+.default-html b, .default-html strong {
+  font-weight: bold;
+}
+
+.default-html i, .default-html em {
+  font-style: italic;
+}
+
+.default-html a {
+  color: #0066cc;
+  text-decoration: underline;
+}
+.default-html a:hover {
+  color: #004080;
+  text-decoration: none;
+}
+
+.default-html ul {
+  list-style-type: disc;
+  margin-left: 1.5em;
+  padding-left: 0;
+}
+.default-html ul li {
+  margin: 0.5em 0;
 }
