@@ -5,9 +5,9 @@ import pLimit from 'p-limit';
 import JobSearchAz from "../Helpers/SiteBasedScrapes/JobSearchAz.js";
 import CityService from '../Services/CityService.js';
 
-import {formatDate} from "../Helpers/FormatDate.js";
-import {requestAllSites} from '../Helpers/Automation.js';
-import {sendNewJobRequest, sendTgMessage} from "../Helpers/TelegramBot.js";
+import { formatDate } from "../Helpers/FormatDate.js";
+import { requestAllSites } from '../Helpers/Automation.js';
+import { sendNewJobRequest, sendTgMessage } from "../Helpers/TelegramBot.js";
 import fs from "fs";
 import CompanyService from "../Services/CompanyService.js";
 import BossAz from "../Helpers/SiteBasedScrapes/BossAz.js";
@@ -15,6 +15,7 @@ import HelloJobAz from "../Helpers/SiteBasedScrapes/HelloJobAz.js";
 import OfferAz from "../Helpers/SiteBasedScrapes/OfferAz.js";
 import SmartJobAz from "../Helpers/SiteBasedScrapes/SmartJobAz.js";
 import sendEmail from "../Helpers/NodeMailer.js";
+import { log } from 'console';
 
 const jobDataController = {
 
@@ -23,8 +24,8 @@ const jobDataController = {
             const data = await fs.promises.readFile('./src/Config/OnlyMainContent.json', 'utf8');
 
             const cities = data.includes('false')
-                ? await CityService.getAll({site: "BossAz"})
-                : [{name: 'Bakı', cityId: 1}];
+                ? await CityService.getAll({ site: "BossAz" })
+                : [{ name: 'Bakı', cityId: 1 }];
 
             if (!cities || cities.length === 0) {
                 throw new Error("No cities found");
@@ -38,9 +39,9 @@ const jobDataController = {
             }
 
             const sources = [
-                {instance: new BossAz(), name: "BossAz"},
-                {instance: new HelloJobAz(), name: "HelloJobAz"},
-                {instance: new OfferAz(), name: "OfferAz"},
+                { instance: new BossAz(), name: "BossAz" },
+                { instance: new HelloJobAz(), name: "HelloJobAz" },
+                { instance: new OfferAz(), name: "OfferAz" },
                 // { instance: new SmartJobAz(), name: "SmartJobAz" },
                 // { instance: new JobSearchAz(), name: "JobSearchAz" },
             ];
@@ -54,7 +55,7 @@ const jobDataController = {
             for (const city of cities) {
                 for (const category of categories) {
                     cityCategoryTasks.push(
-                        ...sources.map(({instance, name}) =>
+                        ...sources.map(({ instance, name }) =>
                             limit(async () => {
                                 try {
                                     const jobs = await instance.Jobs([category], city, data.includes('true'));
@@ -123,7 +124,7 @@ const jobDataController = {
             const jobs = await JobService.getAllJobs(data);
             res.status(200).json(jobs);
         } catch (error) {
-            res.status(500).json({message: 'Error retrieving jobs: ' + error.message});
+            res.status(500).json({ message: 'Error retrieving jobs: ' + error.message });
         }
     },
 
@@ -131,11 +132,11 @@ const jobDataController = {
         try {
             const site = await JobService.findSiteById(req.params.id);
             if (!site) {
-                return res.status(404).json({message: 'Site not found'});
+                return res.status(404).json({ message: 'Site not found' });
             }
             res.status(200).json(site);
         } catch (error) {
-            res.status(500).json({message: 'Error retrieving site: ' + error.message});
+            res.status(500).json({ message: 'Error retrieving site: ' + error.message });
         }
     },
 
@@ -143,11 +144,11 @@ const jobDataController = {
         try {
             const site = await JobService.updateJob(req.params.id, req.body);
             if (!site) {
-                return res.status(404).json({message: 'Site not found'});
+                return res.status(404).json({ message: 'Site not found' });
             }
             res.status(200).json(site);
         } catch (error) {
-            res.status(500).json({message: 'Error updating site: ' + error.message});
+            res.status(500).json({ message: 'Error updating site: ' + error.message });
         }
     },
 
@@ -157,7 +158,7 @@ const jobDataController = {
 
             res.status(200).json(site);
         } catch (error) {
-            res.status(500).json({message: 'Error updating site: ' + error.message});
+            res.status(500).json({ message: 'Error updating site: ' + error.message });
         }
     },
 
@@ -165,16 +166,16 @@ const jobDataController = {
         try {
             await requestAllSites(true)
         } catch (error) {
-            res.status(500).json({message: 'Error updating site: ' + error.message});
+            res.status(500).json({ message: 'Error updating site: ' + error.message });
         }
     },
 
     deleteSite: async (req, res) => {
         try {
             await JobService.deleteSite(req.params.id);
-            res.status(200).json({message: 'Site successfully deleted'});
+            res.status(200).json({ message: 'Site successfully deleted' });
         } catch (error) {
-            res.status(500).json({message: 'Error deleting site: ' + error.message});
+            res.status(500).json({ message: 'Error deleting site: ' + error.message });
         }
     },
     addJobRequest: async (req, res) => {
@@ -213,9 +214,24 @@ const jobDataController = {
             await sendNewJobRequest(data)
             res.status(200).json(jobs);
         } catch (error) {
-            res.status(500).json({message: 'Error retrieving jobs: ' + error.message});
+            res.status(500).json({ message: 'Error retrieving jobs: ' + error.message });
         }
-    }
+    },
+    details: async (req, res) => {
+        log.info('Job details');
+        try {
+            // await JobService.details(req.params.id);
+            // res.status(200).json({ message: 'Success' });                                                
+            const view = {
+                title: 'Iş haqqında',
+                body: "Job/Details.ejs",
+                js: 'Details.js'
+            };
+            res.render('Main', view);
+        } catch (error) {
+            res.status(500).json({ message: 'Error job details: ' + error.message });
+        }
+    },
 };
 
 export default jobDataController;
