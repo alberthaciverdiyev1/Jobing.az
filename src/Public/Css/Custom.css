@@ -230,6 +230,9 @@ body {
 .border-custom-bottom {
   border-bottom: 2px solid rgb(209 213 219 / var(--tw-border-opacity, 1)) !important;
 }
+.border-custom-bottom-1px {
+  border-bottom: 1px solid rgb(209 213 219 / var(--tw-border-opacity, 1)) !important;
+}
 
 .border-custom-top {
   border-top: 1px solid rgb(209 213 219 / var(--tw-border-opacity, 1)) !important;
