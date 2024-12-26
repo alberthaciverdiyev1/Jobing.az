@@ -220,14 +220,12 @@ const jobDataController = {
     details: async (req, res) => {
         try {
            let data = await JobService.details(req.params.id);
-        console.log(data);
-
-            // res.status(200).json({ message: 'Success' });                                                
+                                             
             const view = {
                 title: 'Iş haqqında',
                 body: "Jobs/Details.ejs",
                 data: data,                                         
-                js: null
+                js: 'Jobs/Details.js'
             };
         console.log({view});
 

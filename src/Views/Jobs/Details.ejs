@@ -1,4 +1,4 @@
-<section class="p-6 bg-gray-50 pt-32">
+<section class="py-4 bg-gray-50 pt-32 container px-32">
     <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
         <!-- Main Content -->
         <div class="lg:col-span-2 bg-white shadow-lg rounded-xl p-8">
@@ -17,13 +17,14 @@
                                 <span class="flex items-center text-xl font-bold">
                                     <% if (data.minSalary) { %>
                                         <%= data.minSalary %>
-                                            <% if (data.minSalary) { %><i class="fa-solid fa-manat-sign mx-1"></i>
-                                                <% } %>
-                                                    <% } %>
-                                                        <% if (data.maxSalary) { %> - <%= data.maxSalary %>
-                                                                <i class="fa-solid fa-manat-sign ml-1"></i>
-                                                                <% } %>
+                                        <% if (data.minSalary) { %><i class="fa-solid fa-manat-sign mx-1" style="font-size: 1.25rem;"></i>
+                                        <% } %>
+                                    <% } %>
+                                    <% if (data.maxSalary) { %> - <%= data.maxSalary %>
+                                        <i class="fa-solid fa-manat-sign ml-1" style="font-size: 1.25rem;"></i>
+                                    <% } %>
                                 </span>
+                                
                                 <% } else { %>
                                     <span class="text-sm font-medium text-gray-500">Razılaşma yolu ilə</span>
                                     <% } %>
@@ -54,28 +55,37 @@
                     </div>
 
                 </div>
-                <div class="default-html">
+                <div class="default-html mx-3">
                     <h4 class="text-lg font-bold text-gray-800">Vakansiyanın təsviri:</h4>
                     <p class="text-gray-700 mt-4 ml-4">
                         <%- data.description %>
                     </p>
                 </div>
             </div>
+            <div class="text-center flex items-center justify-between mt-8 gap-3">
+                <button class="block filled-button-color hover:bg-orange-700 text-white font-medium py-3 px-16 rounded-lg w-full">
+                    İrəli Çəkmək
+                </button>
+                <button class="block filled-button-color hover:bg-orange-700 text-white font-medium py-3 px-16 rounded-lg w-full">
+                    Premium
+                </button>
+                <button class="block filled-button-color hover:bg-orange-700 text-white font-medium py-3 px-16 rounded-lg w-full">
+                    VİP
+                </button>
+            </div>
+            
         </div>
 
         <!-- Sidebar -->
         <aside class="space-y-8">
-            <!-- Apply Button -->
             <div class="bg-white shadow-md rounded-xl p-6 text-center hover:shadow-lg transition-shadow duration-200">
-                <a href="#"
+                <a href="mailto:<%= data.email %>"
                     class="block filled-button-color hover:bg-orange-700 text-white font-medium py-3 px-6 rounded-lg">
                     Apply For Job
                 </a>
             </div>
 
-            <!-- Company Info -->
             <div class="bg-white shadow-lg rounded-xl p-6 max-w-3xl mx-auto">
-                <!-- Şirket Bilgisi Başlangıç -->
                 <div class="flex items-center space-x-4 border-b pb-6 mb-6 border-gray-200">
                     <img src="<%= data.companyImage ? data.companyImage : '/Images/DefaultCompany.png' %>"
                         alt="Company Logo" class="h-14 w-14 border-custom rounded-xl border shadow-sm">
@@ -88,7 +98,6 @@
                     </div>
                 </div>
 
-                <!-- Liste Başlangıç -->
                 <div>
                     <ul class="space-y-4 text-gray-800">
                         <li class="flex items-center justify-between border-b pb-3 border-gray-200">
@@ -146,7 +155,7 @@
                                     , year: 'numeric' , hour: '2-digit' , minute: '2-digit' , hour12: false }) %>
                             </span>
                         </li>
-                        <li class="flex items-center justify-between pb-3 border-gray-200">
+                        <li class="flex items-center justify-between border-b pb-3 border-gray-200">
                             <span class="font-semibold text-gray-600">Bitiş Tarixi:</span>
                             <span class="text-gray-700 font-medium">
                                 <%= new Date(new Date(data.postedAt).setDate(new Date(data.postedAt).getDate() +
@@ -154,11 +163,68 @@
                                     hour: '2-digit' , minute: '2-digit' , hour12: false }) %>
                             </span>
                         </li>
+                        <li class="flex items-center justify-between pb-3 border-gray-200">
+                            <span class="font-semibold text-gray-600">Paylaş:</span>
+                            <div class="flex items-center space-x-6">
+                                <a href="https://www.facebook.com/sharer/sharer.php?u=<%=data.redirectUrl%>"
+                                    target="_blank" class="text-2xl transition-colors duration-300">
+                                    <i class="fab fa-facebook-f text-[#1877f2] hover:text-gray-900"></i>
+                                </a>
+                                <a href="https://www.linkedin.com/sharing/share-offsite/?url=<%=data.redirectUrl%>"
+                                    target="_blank" class="text-2xl transition-colors duration-300">
+                                    <i class="fab fa-linkedin-in text-[#0A66C2] hover:text-gray-900"></i>
+                                </a>
+                                <button id="copyLinkButton" class="text-2xl transition-colors duration-300">
+                                    <i class="fa-regular fa-copy text-gray-600 hover:text-gray-900"></i>
+                                </button>
+                            </div>
+                        </li>
+
                     </ul>
+
                 </div>
-                <!-- Liste Bitişi -->
+
             </div>
 
         </aside>
+    </div>
+</section>
+<section>
+    <div class="p-4 bg-gray-50">
+        <div class="container mx-auto 2xl:px-28">
+            <div class="sec-title mb-8 mt-3 flex flex-col items-center justify-center">
+                <h2 class="text-3xl text-center mb-3">Digər Vakansiyalar</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="home-card-section">
+
+                <div class="flex items-center justify-center h-40 bg-white  border border-custom rounded-lg">
+                    <div class="flex flex-col items-center justify-center w-full max-w-xs mx-auto"> <span
+                            class="loader"></span>
+                    </div>
+                </div>
+                <div class="flex items-center justify-center h-40 bg-white  border border-custom rounded-lg">
+                    <div class="flex flex-col items-center justify-center w-full max-w-xs mx-auto">
+                        <span class="loader"></span>
+                    </div>
+                </div>
+                <div class="flex items-center justify-center h-40 bg-white  border border-custom rounded-lg">
+                    <div class="flex flex-col items-center justify-center w-full max-w-xs mx-auto">
+                        <span class="loader"></span>
+                    </div>
+                </div>
+                <div class="flex items-center justify-center h-40 bg-white  border border-custom rounded-lg">
+                    <div class="flex flex-col items-center justify-center w-full max-w-xs mx-auto">
+                        <span class="loader"></span>
+                    </div>
+                </div>
+
+            </div>
+            <div class="flex items-center justify-center mt-6">
+                <a href="/jobs" class="rounded-full filled-button-color px-8 py-3 text-white hover:empty-button-color">
+                    Daha Çox
+                </a>
+            </div>
+        </div>
     </div>
 </section>
