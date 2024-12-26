@@ -100,7 +100,8 @@ const JobDataService = {
             const thirtyDaysAgo = new Date(currentDate.setDate(currentDate.getDate() - 30));
 
             const query = {
-                createdAt: { $gte: thirtyDaysAgo }
+                createdAt: { $gte: thirtyDaysAgo },
+                isActive: true
             };
 
             // if (data.categoryId && !isNaN(Number(data.categoryId))) {
@@ -185,7 +186,7 @@ const JobDataService = {
             const updateData = {
                 isActive: true,
                 updatedAt: new Date(),
-                redirectUrl: `https://jobing.az/${id}/details`,
+                redirectUrl: `https://jobing.az/jobs/${id}/details`,
             };
 
             const job = await JobData.findByIdAndUpdate(id, updateData, { new: true });

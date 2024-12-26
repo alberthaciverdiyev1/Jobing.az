@@ -2,17 +2,19 @@ import { capitalizeFirstLetter } from '../Helpers.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
     alertify.set('notifier', 'position', 'top-right');
-    
-        async function getJobs() {
-            await axios.get('/api/jobs').then(res => {
-                let htmlContent = '';
-    
-                if (res.status === 200) {
-                    // alert(res.data.jobs.length);
-                    if (res.data.totalCount) {
-                        let data = res.data.jobs.slice(0, 12);
-                        data.forEach(element => {
-                            htmlContent += `<div class="job-card bg-white px-3 pt-2 h-36 lg:h-40 rounded-xl shadow-md hover:hover-card-color cursor-pointer duration-300 border border-custom lg:px-5" data-original-link="${element.redirectUrl}">
+
+    async function getJobs() {
+        await axios.get('/api/jobs', {
+            params: { categoryId: document.getElementById('categoryId').value }
+        }).then(res => {
+            let htmlContent = '';
+
+            if (res.status === 200) {
+                // alert(res.data.jobs.length);
+                if (res.data.totalCount) {
+                    let data = res.data.jobs.slice(0, 12);
+                    data.forEach(element => {
+                        htmlContent += `<div class="job-card bg-white px-3 pt-2 h-36 lg:h-40 rounded-xl shadow-md hover:hover-card-color cursor-pointer duration-300 border border-custom lg:px-5" data-original-link="${element.redirectUrl}">
                             <div class="content flex">
                                  <div class="mt-2 flex-shrink-0 lg:mt-1">
                                     <img src="../../Images/${element.sourceUrl}.png" alt="Company Logo" class="border-custom h-12 w-12 mt-1 rounded-lg border lg:h-14 lg:w-14" />
@@ -30,22 +32,22 @@ document.addEventListener('DOMContentLoaded', async () => {
                                                             ${capitalizeFirstLetter(element.title.slice(0, 25)) + (element.title.length > 25 ? "..." : "")} 
                                                         </span>
                                                     </p>
-                                                <h4 class=" text-gray-600 hidden lg:block ${!element.minSalary && !element.maxSalary ? "font-semibold text-base" :"font-bold text-lg"}">
+                                                <h4 class=" text-gray-600 hidden lg:block ${!element.minSalary && !element.maxSalary ? "font-semibold text-base" : "font-bold text-lg"}">
                                                     ${(
-                                                (+element.minSalary === +element.maxSalary && +element.minSalary !== null && +element.minSalary !== 0)
-                                                    ? +element.minSalary + " " + element.currencySign
-                                                    : (
-                                                    (+element.minSalary !== null && +element.minSalary !== 0)
-                                                        ? +element.minSalary + '-'
-                                                        : ""
-                                                ) + (
-                                                    (+element.maxSalary !== null && +element.maxSalary !== 0)
-                                                        ? +element.maxSalary + " " + element.currencySign
-                                                        : (
-                                                            !element.minSalary && !element.maxSalary ? "Razılaşma ilə" : ""
-                                                        )
-                                                )
-                                                    )}                                                
+                                (+element.minSalary === +element.maxSalary && +element.minSalary !== null && +element.minSalary !== 0)
+                                    ? +element.minSalary + " " + element.currencySign
+                                    : (
+                                        (+element.minSalary !== null && +element.minSalary !== 0)
+                                            ? +element.minSalary + '-'
+                                            : ""
+                                    ) + (
+                                        (+element.maxSalary !== null && +element.maxSalary !== 0)
+                                            ? +element.maxSalary + " " + element.currencySign
+                                            : (
+                                                !element.minSalary && !element.maxSalary ? "Razılaşma ilə" : ""
+                                            )
+                                    )
+                            )}                                                
                                                 </h4>
                                             </div>
                                             <h4 class="truncate lg:hidden text-sm font-semibold text-gray-700 mb-1"> 
@@ -80,22 +82,22 @@ document.addEventListener('DOMContentLoaded', async () => {
                                             </div>
                                     <div class="text-sm mt-2 flex justify-between lg:hidden">
                                        <span class="bg-blue-100 text-blue-700 px-1 py-0.5 rounded-lg text-sm">${element.sourceUrl}</span>
-                                    <h4 class="text-gray-600 ${!element.minSalary && !element.maxSalary ? "font-semibold text-base" :"font-bold text-lg"}">
+                                    <h4 class="text-gray-600 ${!element.minSalary && !element.maxSalary ? "font-semibold text-base" : "font-bold text-lg"}">
                                        ${(
-                                            (+element.minSalary === +element.maxSalary && +element.minSalary !== null && +element.minSalary !== 0)
-                                                ? +element.minSalary + " " + element.currencySign
-                                                : (
-                                                (+element.minSalary !== null && +element.minSalary !== 0)
-                                                    ? +element.minSalary + '-'
-                                                    : ""
-                                            ) + (
-                                                (+element.maxSalary !== null && +element.maxSalary !== 0)
-                                                    ? +element.maxSalary + " " + element.currencySign
-                                                    : (
-                                                        !element.minSalary && !element.maxSalary ? "Razılaşma ilə" : ""
-                                                    )
+                                (+element.minSalary === +element.maxSalary && +element.minSalary !== null && +element.minSalary !== 0)
+                                    ? +element.minSalary + " " + element.currencySign
+                                    : (
+                                        (+element.minSalary !== null && +element.minSalary !== 0)
+                                            ? +element.minSalary + '-'
+                                            : ""
+                                    ) + (
+                                        (+element.maxSalary !== null && +element.maxSalary !== 0)
+                                            ? +element.maxSalary + " " + element.currencySign
+                                            : (
+                                                !element.minSalary && !element.maxSalary ? "Razılaşma ilə" : ""
                                             )
-                                        )}   
+                                    )
+                            )}   
                                      </h4>
                                     </div>
                                 </div>
@@ -105,35 +107,35 @@ document.addEventListener('DOMContentLoaded', async () => {
                                 </div>
                             </div>
                         </div> `;
-                        });
-    
-                        document.getElementById("home-card-section").innerHTML = htmlContent;
-                    } else {
-                        document.getElementById("card-section").innerHTML = noDataCard();
-                    }
-    
-    
-                    const jobCards = document.querySelectorAll('.job-card');
-                    jobCards.forEach(card => {
-                        card.addEventListener('click', function () {
-                            const originalLink = this.getAttribute('data-original-link');
-                            window.open(originalLink, '_blank');
-                        });
                     });
-                }
-            }).catch(error => {
-                console.error("Error fetching jobs:", error);
-            });
-        }
-    
-        getJobs();
 
-        document.getElementById('copyLinkButton').addEventListener('click', function() {
-            const copyText = window.location.href; 
-            navigator.clipboard.writeText(copyText).then(function() {
-                alertify.success('Link kopyalandı');
-            }).catch(function() {
-                alertify.success('Link kopyalana bilmədi');
-            });
+                    document.getElementById("home-card-section").innerHTML = htmlContent;
+                } else {
+                    document.getElementById("card-section").innerHTML = noDataCard();
+                }
+
+
+                const jobCards = document.querySelectorAll('.job-card');
+                jobCards.forEach(card => {
+                    card.addEventListener('click', function () {
+                        const originalLink = this.getAttribute('data-original-link');
+                        window.open(originalLink, '_blank');
+                    });
+                });
+            }
+        }).catch(error => {
+            console.error("Error fetching jobs:", error);
         });
+    }
+
+    getJobs();
+
+    document.getElementById('copyLinkButton').addEventListener('click', function () {
+        const copyText = window.location.href;
+        navigator.clipboard.writeText(copyText).then(function () {
+            alertify.success('Link kopyalandı');
+        }).catch(function () {
+            alertify.success('Link kopyalana bilmədi');
+        });
+    });
 });
