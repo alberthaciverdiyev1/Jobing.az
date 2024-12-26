@@ -357,7 +357,7 @@ input[type="range"]::-moz-range-thumb {
 
 /* CK Editorr */
 .ck-editor__editable {
-  min-height: 150px; 
+  min-height: 150px;
 }
 
 .default-html h1, .default-html h2, .default-html h3, .default-html h4, .default-html h5, .default-html h6 {
