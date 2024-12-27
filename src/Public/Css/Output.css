@@ -1353,6 +1353,10 @@ video {
   padding-top: 1.75rem;
   padding-bottom: 1.75rem;
 }
+.py-8 {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
 .pb-2 {
   padding-bottom: 0.5rem;
 }
@@ -1367,6 +1371,9 @@ video {
 }
 .pl-10 {
   padding-left: 2.5rem;
+}
+.pl-3 {
+  padding-left: 0.75rem;
 }
 .pr-1 {
   padding-right: 0.25rem;
@@ -1966,6 +1973,15 @@ video {
     border-radius: 0.5rem;
   }
 
+  .sm\:bg-gray-50 {
+    --tw-bg-opacity: 1;
+    background-color: rgb(249 250 251 / var(--tw-bg-opacity, 1));
+  }
+
+  .sm\:p-6 {
+    padding: 1.5rem;
+  }
+
   .sm\:px-0 {
     padding-left: 0px;
     padding-right: 0px;
@@ -1994,6 +2010,10 @@ video {
   .sm\:py-8 {
     padding-top: 2rem;
     padding-bottom: 2rem;
+  }
+
+  .sm\:pl-8 {
+    padding-left: 2rem;
   }
 
   .sm\:text-2xl {
@@ -2352,11 +2372,6 @@ video {
   .xl\:px-16 {
     padding-left: 4rem;
     padding-right: 4rem;
-  }
-
-  .xl\:px-28 {
-    padding-left: 7rem;
-    padding-right: 7rem;
   }
 
   .xl\:px-48 {
