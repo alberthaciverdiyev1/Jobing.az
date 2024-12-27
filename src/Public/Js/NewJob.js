@@ -5,6 +5,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 let editorRequirements = null;
 let editorAboutJob = null;
+let allValid = true;
+let data = {};
 
 ClassicEditor
     .create(document.querySelector('#requirements'), {
@@ -117,40 +119,33 @@ async function getExperience() {
 
 }
 
-document.getElementById('addJob').addEventListener("click", async () => {
-    const companyImageElement = document.getElementById("company-image");
-    let companyImageBase64 = null;
 
-    if (companyImageElement && companyImageElement.files && companyImageElement.files[0]) {
-        companyImageBase64 = await fileToBase64(companyImageElement.files[0]);
+
+async function validateData(data) {
+    allValid = true;
+    const validatedData = { ...data };
+
+    // Salary validation
+    if (validatedData.maxSalary < 0) validatedData.maxSalary = 0;
+    if (validatedData.maxSalary > 5000) validatedData.maxSalary = 5000;
+    if (validatedData.minSalary < 0 || validatedData.minSalary > 5000) validatedData.minSalary = 0;
+
+    // Age validation
+    validatedData.minAge = validatedData.minAge < 18 ? 18 : (validatedData.minAge > 65 ? 65 : validatedData.minAge);
+    validatedData.maxAge = validatedData.maxAge > 65 ? 65 : validatedData.maxAge;
+    if (validatedData.maxAge < 18) validatedData.maxAge = 18;
+
+    // Swapping logic
+    if (validatedData.minSalary > validatedData.maxSalary) {
+        [validatedData.minSalary, validatedData.maxSalary] = [validatedData.maxSalary, validatedData.minSalary];
     }
-    const requirementsEditorData = editorRequirements ? await editorRequirements.getData() : '';
-    const aboutJobEditorData = editorAboutJob ? await editorAboutJob.getData() : '';
+    if (validatedData.minAge > validatedData.maxAge) {
+        [validatedData.minAge, validatedData.maxAge] = [validatedData.maxAge, validatedData.minAge];
+    }
 
-    const data = {
-        email: document.getElementById("email")?.value.trim(),
-        username: document.getElementById("username")?.value.trim(),
-        phone: document.getElementById("phone")?.value.trim(),
-        experience: document.getElementById("experience")?.value.trim(),
-        companyName: document.getElementById("companyName")?.value.trim(),
-        companyImage: companyImageBase64,
-        category: document.getElementById("category")?.value,
-        city: document.getElementById("city")?.value,
-        position: document.getElementById("position")?.value.trim(),
-        education: document.getElementById("education")?.value,
-        minSalary: !isNaN(Number(document.getElementById("minSalary")?.value)) ? document.getElementById("minSalary")?.value : 0,
-        maxSalary: !isNaN(Number(document.getElementById("maxSalary")?.value)) ? document.getElementById("maxSalary")?.value : 0,
-        minAge: document.getElementById("minAge")?.value,
-        maxAge: document.getElementById("maxAge")?.value,
-        requirements: requirementsEditorData.trim(),
-        aboutJob: aboutJobEditorData.trim(),
-    };
-
-    let allValid = true;
-
+    // DOM updates
     Object.keys(data).forEach((key) => {
         if (key === "companyImage" || key === "maxAge" || key === "maxSalary" || key === "minSalary") return;
-
 
         const element = document.getElementById(key);
         if (!element) return;
@@ -176,37 +171,129 @@ document.getElementById('addJob').addEventListener("click", async () => {
         }
     });
 
-    if (allValid) {
-        // alertify.success("Məlumat uğurla əlavə edildi!");
-        axios.post('/api/jobs/add-request', { data: data }).then(res => {
-            console.log(res);
+    return { allValid, validatedData };
+}
 
-            if (res.data.status === 200) {
-                alertify.success(res.data.message);
+document.getElementById('addJob').addEventListener("click", async () => {
+    try {
+        const companyImageElement = document.getElementById("company-image");
+        let companyImageBase64 = null;
+
+        if (companyImageElement?.files?.[0]) {
+            companyImageBase64 = await fileToBase64(companyImageElement.files[0]);
+        }
+
+        const requirementsEditorData = editorRequirements ? await editorRequirements.getData() : '';
+        const aboutJobEditorData = editorAboutJob ? await editorAboutJob.getData() : '';
+
+        const data = {
+            email: document.getElementById("email")?.value.trim(),
+            username: document.getElementById("username")?.value.trim(),
+            phone: document.getElementById("phone")?.value.trim(),
+            experience: document.getElementById("experience")?.value.trim(),
+            companyName: document.getElementById("companyName")?.value.trim(),
+            companyImage: companyImageBase64,
+            category: document.getElementById("category")?.value,
+            city: document.getElementById("city")?.value,
+            position: document.getElementById("position")?.value.trim(),
+            education: document.getElementById("education")?.value,
+            minSalary: Number(document.getElementById("minSalary")?.value) || 0,
+            maxSalary: Number(document.getElementById("maxSalary")?.value) || 0,
+            minAge: Number(document.getElementById("minAge")?.value) || 18,
+            maxAge: Number(document.getElementById("maxAge")?.value) || 65,
+            requirements: requirementsEditorData.trim(),
+            aboutJob: aboutJobEditorData.trim(),
+        };
+
+        const { allValid, validatedData } = await validateData(data);
+
+        if (allValid) {
+            const response = await axios.post('/api/jobs/add-request', { data: validatedData });
+            if (response.data.status === 200) {
+                alertify.success(response.data.message);
+                // Clear form
                 Object.keys(data).forEach((key) => {
                     const element = document.getElementById(key);
-                    if (element) {
-                        if (element.tagName === "INPUT" || element.tagName === "TEXTAREA") {
-                            element.value = "";
-                        } else if (element.tagName === "SELECT") {
-                            element.selectedIndex = 0;
-                        }
-                    }
+                    if (element) element.value = '';
                 });
-
                 if (companyImageElement) companyImageElement.value = null;
                 if (editorRequirements) editorRequirements.setData('');
                 if (editorAboutJob) editorAboutJob.setData('');
-
             } else {
-                alertify.error(res.data.message);
+                alertify.error(response.data.message);
             }
-        });
-
-    } else {
-        alertify.error("Zəhmət olmasa bütün məcburi xanaları doldurun!");
+        } else {
+            alertify.error("Zəhmət olmasa bütün məcburi xanaları doldurun!");
+        }
+    } catch (error) {
+        alertify.error("Xəta baş verdi, zəhmət olmasa yenidən cəhd edin.");
+        console.error(error);
     }
 });
+// document.getElementById('addJob').addEventListener("click", async () => {
+//     const companyImageElement = document.getElementById("company-image");
+//     let companyImageBase64 = null;
+
+//     if (companyImageElement && companyImageElement.files && companyImageElement.files[0]) {
+//         companyImageBase64 = await fileToBase64(companyImageElement.files[0]);
+//     }
+//     const requirementsEditorData = editorRequirements ? await editorRequirements.getData() : '';
+//     const aboutJobEditorData = editorAboutJob ? await editorAboutJob.getData() : '';
+
+//     data = {
+//         email: document.getElementById("email")?.value.trim(),
+//         username: document.getElementById("username")?.value.trim(),
+//         phone: document.getElementById("phone")?.value.trim(),
+//         experience: document.getElementById("experience")?.value.trim(),
+//         companyName: document.getElementById("companyName")?.value.trim(),
+//         companyImage: companyImageBase64,
+//         category: document.getElementById("category")?.value,
+//         city: document.getElementById("city")?.value,
+//         position: document.getElementById("position")?.value.trim(),
+//         education: document.getElementById("education")?.value,
+//         minSalary: !isNaN(Number(document.getElementById("minSalary")?.value)) ? document.getElementById("minSalary")?.value : 0,
+//         maxSalary: !isNaN(Number(document.getElementById("maxSalary")?.value)) ? document.getElementById("maxSalary")?.value : 0,
+//         minAge: document.getElementById("minAge")?.value,
+//         maxAge: document.getElementById("maxAge")?.value,
+//         requirements: requirementsEditorData.trim(),
+//         aboutJob: aboutJobEditorData.trim(),
+//     };
+
+//     await validateData(data);
+
+//     if (allValid) {
+//         // alertify.success("Məlumat uğurla əlavə edildi!");
+//         axios.post('/api/jobs/add-request', { data: data }).then(async res => {
+
+//             if (res.data.status === 200) {
+//                 alertify.success(res.data.message);
+//                 Object.keys(data).forEach((key) => {
+//                     const element = document.getElementById(key);
+//                     if (element) {
+//                         if (element.tagName === "INPUT" || element.tagName === "TEXTAREA") {
+//                             element.value = "";
+//                         } else if (element.tagName === "SELECT") {
+//                             element.selectedIndex = 0;
+//                         }
+//                     }
+//                 });
+//                 data = {};
+
+//                 if (companyImageElement) companyImageElement.value = null;
+//                 if (editorRequirements) editorRequirements.setData('');
+//                 if (editorAboutJob) editorAboutJob.setData('');
+
+//             } else {
+//                 await validateData(res.data.data);
+//                 data = {};
+//                 alertify.error(res.data.message);
+//             }
+//         });
+
+//     } else {
+//         alertify.error("Zəhmət olmasa bütün məcburi xanaları doldurun!");
+//     }
+// });
 
 function fileToBase64(file) {
     return new Promise((resolve, reject) => {

@@ -179,6 +179,7 @@ const jobDataController = {
             res.status(500).json({ message: 'Error deleting site: ' + error.message });
         }
     },
+
     addJobRequest: async (req, res) => {
         try {
             let description = `${req.body.data.aboutJob + '<h4 class="text-lg font-bold text-gray-800">Tələblər:</h4>' + req.body.data.requirements}`;
@@ -207,6 +208,8 @@ const jobDataController = {
             // companyImage: null,
 
             const jobs = await JobService.addJobRequest(data);
+            const response = await CompanyService.create();
+
             sendEmail({
                 title: "Jobing.az",
                 text: "Sizin vakansiyanız yoxlanis ucun Jobing.az komandasina gonderildi. Qisa zaman icinde cavab verilecekdir."
