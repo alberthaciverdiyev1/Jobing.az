@@ -181,10 +181,10 @@ const JobDataService = {
     },
 
     // Update job data
-    updateJob: async (id) => {
+    updateJob: async (id,status) => {
         try {
             const updateData = {
-                isActive: true,
+                isActive: status,
                 updatedAt: new Date(),
                 redirectUrl: `https://jobing.az/jobs/${id}/details`,
             };
