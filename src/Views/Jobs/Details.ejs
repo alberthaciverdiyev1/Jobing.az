@@ -5,13 +5,13 @@
         <div class="lg:col-span-2 bg-white shadow-lg rounded-xl py-8 pl-3 pr-8 sm:pl-8 ">
             <div class="space-y-6">
                 <!-- Job Header -->
-                <div class="flex gap-4 sm:gap-8 items-start">
+                <div class="flex gap-4 sm:gap-6 items-start">
                     <img src="<%= data.companyImage ? data.companyImage : '/Images/DefaultCompany.png' %>"
                         alt="Company Logo" class="h-24 w-24 mt-1 border-custom rounded-xl border sm:h-28 sm:w-28">
 
-                    <div class="border-custom-bottom-1px flex-1">
+                    <div class="border-custom-bottom-1px flex-1 mt-1 sm:mt-0">
                         <div class="flex items-center justify-between">
-                            <h4 class="text-xl font-bold text-gray-800 truncate w-52 md:w-96">
+                            <h4 class="text-xl font-bold text-gray-800 truncate w-52 md:w-80">
                                 <%= data.title %>
                             </h4>
 
@@ -19,14 +19,11 @@
                                 <span class=" items-center text-xl font-bold hidden md:flex">
                                     <% if (data.minSalary) { %>
                                         <%= data.minSalary %>
-                                            <% if (data.minSalary) { %><i class="fa-solid fa-manat-sign mx-1"
-                                                    style="font-size: 1.25rem;"></i>
-                                                <% } %>
-                                                    <% } %>
-                                                        <% if (data.maxSalary) { %> - <%= data.maxSalary %>
-                                                                <i class="fa-solid fa-manat-sign ml-1"
-                                                                    style="font-size: 1.25rem;"></i>
-                                                                <% } %>
+                                            <% } %>
+                                                <% if (data.maxSalary) { %> - <%= data.maxSalary %>
+                                                        <i class="fa-solid fa-manat-sign ml-1"
+                                                            style="font-size: 1.25rem;"></i>
+                                                        <% } %>
                                 </span>
 
                                 <% } else { %>
@@ -102,7 +99,9 @@
                         <li class="flex items-center justify-between border-custom-bottom-1px pb-3">
                             <span class="font-semibold text-gray-600">Kategoriya:</span>
                             <span class="text-gray-700 font-medium">
-                                <%= data.categoryId %>
+                                <%= data.category.length> 20
+                                    ? `${data.category.slice(0, 20)}...`
+                                    : data.category %>
                             </span>
                         </li>
 
@@ -133,8 +132,8 @@
                         <li class="flex items-center justify-between border-custom-bottom-1px pb-3">
                             <span class="font-semibold text-gray-600">Email:</span>
                             <span class="text-gray-700 font-medium">
-                                <%= data.email.length> 25
-                                    ? `${data.email.slice(0, 25)}...`
+                                <%= data.email.length> 23
+                                    ? `${data.email.slice(0, 23)}...`
                                     : data.email %>
                             </span>
                         </li>

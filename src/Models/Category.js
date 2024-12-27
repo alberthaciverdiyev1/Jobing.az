@@ -4,7 +4,7 @@ const { Schema } = mongoose;
 
 const categorySchema = new Schema({
     localCategoryId: {
-        type: Number,
+        type: String,
         required: false
     },
     categoryName: {

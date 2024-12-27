@@ -231,15 +231,58 @@ const JobDataService = {
 
     // Job details
     details: async (id) => {
-        console.log({id});
         try {
-            const job = await JobData.findOne({uniqueKey:id});
-            if (!job) {
+            const job = await JobData.aggregate([
+                {
+                    $match: { uniqueKey: id }
+                },
+                {
+                    $lookup: {
+                        from: 'categories',
+                        localField: 'categoryId',
+                        foreignField: 'localCategoryId',
+                        as: 'category'
+                    }
+                },
+                {
+                    $addFields: {
+                        category: { $arrayElemAt: ['$category.categoryName', 0] }
+                    }
+                },
+                {
+                    $project: {
+                        uniqueKey: 1,
+                        title: 1,
+                        email: 1,
+                        phone: 1,
+                        description: 1,
+                        location: 1,
+                        minSalary: 1,
+                        maxSalary: 1,
+                        minAge: 1,
+                        maxAge: 1,
+                        companyName: 1,
+                        cityId: 1,
+                        educationId: 1,
+                        experienceId: 1,
+                        userName: 1,
+                        isPremium: 1,
+                        isActive: 1,
+                        sourceUrl: 1,
+                        redirectUrl: 1,
+                        postedAt: 1,
+                        createdAt: 1,
+                        updatedAt: 1,
+                        category: 1
+                    }
+                }
+            ]);
+            if (!job || job.length === 0) {
                 throw new Error('Job not found');
             }
-            return job;
+            return job[0];
         } catch (error) {
-            throw new Error('Error finding job: ' + error.message);
+            throw new Error('Error fetching job: ' + JSON.stringify(error));
         }
     },
 
