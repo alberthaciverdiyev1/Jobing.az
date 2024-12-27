@@ -16,6 +16,7 @@ import OfferAz from "../Helpers/SiteBasedScrapes/OfferAz.js";
 import SmartJobAz from "../Helpers/SiteBasedScrapes/SmartJobAz.js";
 import sendEmail from "../Helpers/NodeMailer.js";
 import { log } from 'console';
+import Enums from "../Config/Enums.js";
 
 const jobDataController = {
 
@@ -219,15 +220,22 @@ const jobDataController = {
     },
     details: async (req, res) => {
         try {
-           let data = await JobService.details(req.params.id);
-                                             
+            let data = await JobService.details(req.params.id);
+            const educationData = Object.entries(Enums.Education)
+                .filter(([key, value]) => Number(value) === data.educationId);
+            const experiencenData = Object.entries(Enums.Experience)
+                .filter(([key, value]) => Number(value) === data.experienceId);
+
+                data.education = educationData[0][0];
+                data.experience = experiencenData[0][0];
             const view = {
                 title: 'Iş haqqında',
                 body: "Jobs/Details.ejs",
-                data: data,                                         
+                data: data,
                 js: 'Jobs/Details.js'
             };
-        console.log({view});
+
+
 
             res.render('Main', view);
         } catch (error) {

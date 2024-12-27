@@ -1,8 +1,8 @@
 <section class=" bg-gray-50">
     <div
-        class="py-4 px-4 xl:px-28  pt-32 container max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+        class="py-4 px-4 mx-auto 2xl:px-28  pt-32 container max-w-7xl  grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
         <!-- Main Content -->
-        <div class="lg:col-span-2 bg-white shadow-lg rounded-xl p-8">
+        <div class="lg:col-span-2 bg-white shadow-lg rounded-xl py-8 pl-3 pr-8 sm:pl-8 ">
             <div class="space-y-6">
                 <!-- Job Header -->
                 <div class="flex gap-4 sm:gap-8 items-start">
@@ -30,7 +30,7 @@
                                 </span>
 
                                 <% } else { %>
-                                    <span class="text-sm font-medium text-gray-500 hidden md:flex">Razılaşma yolu ilə</span>
+                                    <span class="text-base font-bold  hidden md:flex">Razılaşma yolu ilə</span>
                                     <% } %>
                         </div>
                         <div class="text-base items-center text-gray-600 mt-6 space-x-4 hidden md:flex">
@@ -47,11 +47,11 @@
                         <div class="text-base md:flex items-center text-gray-600 mt-3 mb-1 md:space-x-4">
                             <span class="flex items-center">
                                 <i class="fa-solid fa-school mr-2 text-gray-500"></i>
-                                <%= data.location %>
+                                <%= data.education %>
                             </span>
                             <span class="flex items-center truncate w-52 md:w-96">
                                 <i class="fa-solid fa-business-time mr-2 text-gray-500"></i>
-                                <%= data.companyName %>
+                                <%= data.experience %>
                             </span>
 
                         </div>
@@ -133,7 +133,9 @@
                         <li class="flex items-center justify-between border-custom-bottom-1px pb-3">
                             <span class="font-semibold text-gray-600">Email:</span>
                             <span class="text-gray-700 font-medium">
-                                <%= data.email %>
+                                <%= data.email.length> 25
+                                    ? `${data.email.slice(0, 25)}...`
+                                    : data.email %>
                             </span>
                         </li>
                         <li class="flex items-center justify-between border-custom-bottom-1px pb-3">
@@ -145,7 +147,8 @@
                         <li class="flex items-center justify-between border-custom-bottom-1px pb-3">
                             <span class="font-semibold text-gray-600">Yaş:</span>
                             <span class="text-gray-700 font-medium">
-                                <%= data.minAge %>-<%= data.maxAge %> arası
+                                <%= data.minAge && data.maxAge ? `${data.minAge}-${data.maxAge} arası` : data.minAge ?
+                                    `${data.minAge}+` : data.maxAge ? `-${data.maxAge}` : '' %>
                             </span>
                         </li>
                         <li class="flex items-center justify-between border-custom-bottom-1px pb-3">
@@ -157,13 +160,13 @@
                         <li class="flex items-center justify-between border-custom-bottom-1px pb-3">
                             <span class="font-semibold text-gray-600">Təhsil:</span>
                             <span class="text-gray-700 font-medium">
-                                <%= data.educationId %>
+                                <%= data.education%>
                             </span>
                         </li>
                         <li class="flex items-center justify-between border-custom-bottom-1px pb-3">
                             <span class="font-semibold text-gray-600">Təcrübə:</span>
                             <span class="text-gray-700 font-medium">
-                                <%= data.experienceId %>
+                                <%= data.experience %>
                             </span>
                         </li>
                         <li class="flex items-center justify-between border-custom-bottom-1px pb-3">
