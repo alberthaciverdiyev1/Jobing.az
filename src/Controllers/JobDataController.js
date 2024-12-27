@@ -223,11 +223,11 @@ const jobDataController = {
             let data = await JobService.details(req.params.id);
             const educationData = Object.entries(Enums.Education)
                 .filter(([key, value]) => Number(value) === data.educationId);
-            const experiencenData = Object.entries(Enums.Experience)
+            const experienceData = Object.entries(Enums.Experience)
                 .filter(([key, value]) => Number(value) === data.experienceId);
 
-                data.education = educationData[0][0];
-                data.experience = experiencenData[0][0];
+            data.education = educationData[0][0];
+            data.experience = experienceData[0][0];
             const view = {
                 title: 'Iş haqqında',
                 body: "Jobs/Details.ejs",
