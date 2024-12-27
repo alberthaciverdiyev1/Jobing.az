@@ -70,8 +70,75 @@ const Validators = {
         if (!text) {
             return res.status(200).json({ code: 400, message: "Text is required" });
         }
+
+        req.validatedData = data;
+
         next();
-    }
+    },
+    addJobValidator: (req, res, next) => {
+        const defaultValues = {
+            title: 0,
+            minSalary: 0,
+            maxSalary: 0,
+            minAge: 0,
+            maxAge: 0,
+            categoryId: 0,
+            companyName: 0,
+            cityId: 0,
+            educationId: 0,
+            experienceId: 0,
+            userName: "",
+            email: 0,
+            phone: 0,
+        };
+    
+        const data = {
+            title: req.body.data.position || defaultValues.title,
+            minSalary: req.body.data.minSalary || defaultValues.minSalary,
+            maxSalary: req.body.data.maxSalary || defaultValues.maxSalary,
+            minAge: req.body.data.minAge || defaultValues.minAge,
+            maxAge: req.body.data.maxAge || defaultValues.maxAge,
+            categoryId: req.body.data.category || defaultValues.categoryId,
+            companyName: req.body.data.companyName || defaultValues.companyName,
+            cityId: req.body.data.city || defaultValues.cityId,
+            educationId: req.body.data.education || defaultValues.educationId,
+            experienceId: req.body.data.experience || defaultValues.experienceId,
+            userName: req.body.data.username || defaultValues.userName,
+            email: req.body.data.email || defaultValues.email,
+            phone: req.body.data.phone || defaultValues.phone,
+        };
+    
+        // Email format validation
+        if (!data.email || !/^\S+@\S+\.\S+$/.test(data.email)) {
+            data.email = defaultValues.email;
+        }
+    
+        // Required field validation
+        const requiredFields = [
+            "title",
+            "companyName",
+            "userName",
+            "categoryId",
+            "cityId",
+            "email",
+            "educationId",
+            "experienceId",
+            "phone",
+        ];
+    
+        const hasValidationError = requiredFields.some((field) => !data[field]);
+    
+        if (hasValidationError) {
+            return res.status(200).json({
+                status: 400,
+                message: "Validation failed. Please correct the fields.",
+                data,
+            });
+        }
+    
+        next();
+    },
+    
 
 }
 export default Validators;

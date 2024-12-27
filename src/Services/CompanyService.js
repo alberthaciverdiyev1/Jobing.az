@@ -221,6 +221,9 @@ const CompanyService = {
         } catch (error) {
             throw new Error('Error deleting company: ' + error.message);
         }
+    },
+    addSingleCompany:async (data)=>{
+        
     }
 };
 
