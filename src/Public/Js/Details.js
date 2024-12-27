@@ -1,4 +1,4 @@
-import { capitalizeFirstLetter } from '../Helpers.js';
+import { capitalizeFirstLetter } from './Helpers.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
     alertify.set('notifier', 'position', 'top-right');

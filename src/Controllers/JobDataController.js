@@ -232,7 +232,7 @@ const jobDataController = {
                 title: 'Iş haqqında',
                 body: "Jobs/Details.ejs",
                 data: data,
-                js: 'Jobs/Details.js'
+                js: 'Details.js'
             };
 
 
