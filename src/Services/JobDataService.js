@@ -1,5 +1,6 @@
 import JobData from '../Models/JobData.js';
 import mongoose from 'mongoose';
+import Company from "../Models/Company.js";
 
 const JobDataService = {
     // Create new job data (insert multiple records)
@@ -181,7 +182,7 @@ const JobDataService = {
     },
 
     // Update job data
-    updateJob: async (id,status) => {
+    updateJob: async (id, status) => {
         try {
             const updateData = {
                 isActive: status,
@@ -246,7 +247,7 @@ const JobDataService = {
                 },
                 {
                     $addFields: {
-                        category: { $arrayElemAt: ['$category.categoryName', 0] }
+                        category: { $arrayElemAt: ['$category.categoryName', 0] },
                     }
                 },
                 {
@@ -273,10 +274,18 @@ const JobDataService = {
                         postedAt: 1,
                         createdAt: 1,
                         updatedAt: 1,
-                        category: 1
+                        category: 1,
                     }
                 }
             ]);
+            if (job) {
+                const company = await Company.findOne({ companyName: String(job[0].companyName) });
+                let imageUrl = company.imageUrl;
+                let index = imageUrl.indexOf('src/Public'); 
+                job[0].companyImage = imageUrl.slice(10);
+                
+            }
+            
             if (!job || job.length === 0) {
                 throw new Error('Job not found');
             }
@@ -285,6 +294,7 @@ const JobDataService = {
             throw new Error('Error fetching job: ' + JSON.stringify(error));
         }
     },
+
 
     count: async () => {
         const thirtyDaysAgo = new Date();

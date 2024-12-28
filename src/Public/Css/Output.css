@@ -1928,6 +1928,10 @@ video {
     width: 18rem;
   }
 
+  .sm\:w-80 {
+    width: 20rem;
+  }
+
   .sm\:w-96 {
     width: 24rem;
   }
