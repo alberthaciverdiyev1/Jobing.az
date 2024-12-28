@@ -176,13 +176,13 @@ async function validateData(data) {
 
 document.getElementById('addJob').addEventListener("click", async () => {
     try {
-        const companyImageElement = document.getElementById("company-image");
+        const companyImageElement = document.getElementById("companyImage");
         let companyImageBase64 = null;
 
         if (companyImageElement?.files?.[0]) {
             companyImageBase64 = await fileToBase64(companyImageElement.files[0]);
         }
-
+console.log(companyImageBase64,companyImageElement);
         const requirementsEditorData = editorRequirements ? await editorRequirements.getData() : '';
         const aboutJobEditorData = editorAboutJob ? await editorAboutJob.getData() : '';
 
