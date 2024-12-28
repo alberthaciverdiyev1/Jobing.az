@@ -222,8 +222,47 @@ const CompanyService = {
             throw new Error('Error deleting company: ' + error.message);
         }
     },
-    addSingleCompany:async (data)=>{
-        
+    addSingleCompany: async (data) => {
+        try {
+            const companyFolder = `./src/Public/Images/CompanyLogos`;
+
+            if (!fs.existsSync(companyFolder)) {
+                fs.mkdirSync(companyFolder, { recursive: true });
+            }
+
+            let filePath = '';
+            if (data.imageUrl) {
+                let ext = 'png'; 
+                const match = data.imageUrl.match(/^data:(.*?);base64,/);
+                if (match) {
+                    const mimeType = match[1]; 
+                    const type = mimeType.split('/')[1];
+                    ext = type;
+                }
+
+                const base64Data = data.imageUrl.split(';base64,').pop();
+
+                const sanitizedCompanyName = (data.companyName || 'default').replace(/["<>|:*?\/\\]/g, '_');
+                const fileName = `${sanitizedCompanyName}.${ext}`;
+
+                filePath = path.join(companyFolder, fileName);
+
+                fs.writeFileSync(filePath, base64Data, { encoding: 'base64' });
+                console.log(`Image saved at ${filePath}`);
+            }
+
+            data.imageUrl = filePath || null;
+            if (data.companyName) {
+                data.companyName = data.companyName.replace(/["<>|:*?\/\\]/g, '0');
+            }
+
+            const company = new Company(data);
+            const savedCompany = await company.save();
+
+            return { status: 200, message: 'Məlumat uğurla əlavə edildi!' };
+        } catch (error) {
+            throw new Error('Error adding company: ' + error.message);
+        }
     }
 };
 

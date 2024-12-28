@@ -17,6 +17,7 @@ import SmartJobAz from "../Helpers/SiteBasedScrapes/SmartJobAz.js";
 import sendEmail from "../Helpers/NodeMailer.js";
 import { log } from 'console';
 import Enums from "../Config/Enums.js";
+import enums from "../Config/Enums.js";
 
 const jobDataController = {
 
@@ -206,9 +207,15 @@ const jobDataController = {
                 uniqueKey: req.body.data.position + req.body.data.companyName + req.body.data.city,
             }
             // companyImage: null,
+            const companyData ={
+                companyName: req.body.data.companyName,
+                imageUrl: req.body.data.companyImage,
+                website: enums.Sites.JobingAz,
+                uniqueKey:` ${req.body.data.companyName} + ${enums.Sites.JobingAz}`,
+            }
 
             const jobs = await JobService.addJobRequest(data);
-            const response = await CompanyService.create();
+            const response = await CompanyService.addSingleCompany(companyData);
 
             sendEmail({
                 title: "Jobing.az",
