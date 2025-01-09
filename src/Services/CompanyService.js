@@ -232,10 +232,10 @@ const CompanyService = {
 
             let filePath = '';
             if (data.imageUrl) {
-                let ext = 'png'; 
+                let ext = 'png';
                 const match = data.imageUrl.match(/^data:(.*?);base64,/);
                 if (match) {
-                    const mimeType = match[1]; 
+                    const mimeType = match[1];
                     const type = mimeType.split('/')[1];
                     ext = type;
                 }
@@ -251,6 +251,9 @@ const CompanyService = {
                 console.log(`Image saved at ${filePath}`);
             }
 
+            if (filePath) {
+                filePath = filePath.replace(/\//g, '\\');
+            }
             data.imageUrl = filePath || null;
             if (data.companyName) {
                 data.companyName = data.companyName.replace(/["<>|:*?\/\\]/g, '0');
@@ -264,6 +267,7 @@ const CompanyService = {
             throw new Error('Error adding company: ' + error.message);
         }
     }
+
 };
 
 export default CompanyService;
