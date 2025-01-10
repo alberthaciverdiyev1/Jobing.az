@@ -91,8 +91,9 @@ const ViewController = {
     statistics: async (req, res) => {
         const company = await CompanyService.count()
         const vacancy = await JobDataService.count()
-        const visitor = await VisitorService.count()
-        res.status(200).json({ status: 200, message:"",data:{company,vacancy,visitor} });
+        const visitor = await VisitorService.count(30)
+        const totalVisitor = await VisitorService.count()
+        res.status(200).json({ status: 200, message:"",data:{company,vacancy,visitor,totalVisitor} });
     
     }
 };

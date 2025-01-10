@@ -47,22 +47,22 @@ document.addEventListener("DOMContentLoaded", (event) => {
                                                         ${capitalizeFirstLetter(element.title.slice(0, 25)) + (element.title.length > 25 ? "..." : "")} 
                                                     </span>
                                                 </p>
-                                            <h4 class=" text-gray-600 hidden lg:block ${!element.minSalary && !element.maxSalary ? "font-semibold text-base" :"font-bold text-lg"}">
+                                            <h4 class=" text-gray-600 hidden lg:block ${!element.minSalary && !element.maxSalary ? "font-semibold text-base" : "font-bold text-lg"}">
                                                 ${(
-                                            (+element.minSalary === +element.maxSalary && +element.minSalary !== null && +element.minSalary !== 0)
-                                                ? +element.minSalary + " " + element.currencySign
-                                                : (
-                                                (+element.minSalary !== null && +element.minSalary !== 0)
-                                                    ? +element.minSalary + '-'
-                                                    : ""
-                                            ) + (
-                                                (+element.maxSalary !== null && +element.maxSalary !== 0)
-                                                    ? +element.maxSalary + " " + element.currencySign
-                                                    : (
-                                                        !element.minSalary && !element.maxSalary ? "Razılaşma ilə" : ""
-                                                    )
+                                (+element.minSalary === +element.maxSalary && +element.minSalary !== null && +element.minSalary !== 0)
+                                    ? +element.minSalary + " " + element.currencySign
+                                    : (
+                                        (+element.minSalary !== null && +element.minSalary !== 0)
+                                            ? +element.minSalary + '-'
+                                            : ""
+                                    ) + (
+                                        (+element.maxSalary !== null && +element.maxSalary !== 0)
+                                            ? +element.maxSalary + " " + element.currencySign
+                                            : (
+                                                !element.minSalary && !element.maxSalary ? "Razılaşma ilə" : ""
                                             )
-                                                )}                                                
+                                    )
+                            )}                                                
                                             </h4>
                                         </div>
                                         <h4 class="truncate lg:hidden text-sm font-semibold text-gray-700 mb-1"> 
@@ -97,22 +97,22 @@ document.addEventListener("DOMContentLoaded", (event) => {
                                         </div>
                                 <div class="text-sm mt-2 flex justify-between lg:hidden">
                                    <span class="bg-blue-100 text-blue-700 px-1 py-0.5 rounded-lg text-sm">${element.sourceUrl}</span>
-                                <h4 class="text-gray-600 ${!element.minSalary && !element.maxSalary ? "font-semibold text-base" :"font-bold text-lg"}">
+                                <h4 class="text-gray-600 ${!element.minSalary && !element.maxSalary ? "font-semibold text-base" : "font-bold text-lg"}">
                                    ${(
-                                        (+element.minSalary === +element.maxSalary && +element.minSalary !== null && +element.minSalary !== 0)
-                                            ? +element.minSalary + " " + element.currencySign
+                                (+element.minSalary === +element.maxSalary && +element.minSalary !== null && +element.minSalary !== 0)
+                                    ? +element.minSalary + " " + element.currencySign
+                                    : (
+                                        (+element.minSalary !== null && +element.minSalary !== 0)
+                                            ? +element.minSalary + '-'
+                                            : ""
+                                    ) + (
+                                        (+element.maxSalary !== null && +element.maxSalary !== 0)
+                                            ? +element.maxSalary + " " + element.currencySign
                                             : (
-                                            (+element.minSalary !== null && +element.minSalary !== 0)
-                                                ? +element.minSalary + '-'
-                                                : ""
-                                        ) + (
-                                            (+element.maxSalary !== null && +element.maxSalary !== 0)
-                                                ? +element.maxSalary + " " + element.currencySign
-                                                : (
-                                                    !element.minSalary && !element.maxSalary ? "Razılaşma ilə" : ""
-                                                )
-                                        )
-                                    )}   
+                                                !element.minSalary && !element.maxSalary ? "Razılaşma ilə" : ""
+                                            )
+                                    )
+                            )}   
                                  </h4>
                                 </div>
                             </div>
@@ -148,7 +148,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     async function getCategories() {
         let o = `<option value="">Bütün Kateqoriyalar</option>`;
         await axios.get('/api/categories', {
-            params: {site: "bossAz"}
+            params: { site: "bossAz" }
         })
             .then(res => {
                 if (res.status === 200) {
@@ -171,7 +171,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
         let o = `<option value="">Bütün Şəhərlər</option>`;
 
         await axios.get('/api/cities', {
-            params: {site: "BossAz"}
+            params: { site: "BossAz" }
         })
             .then(res => {
                 if (res.status === 200) {
@@ -197,6 +197,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
                     document.getElementById("vacancy").innerText = res.data.data.vacancy || 0;
                     document.getElementById("company").innerText = res.data.data.company || 0;
                     document.getElementById("visitor").innerText = res.data.data.visitor || 0;
+                    document.getElementById("totalVisitor").innerText = res.data.data.totalVisitor || 0;
                 }
             })
             .catch(error => {
@@ -220,9 +221,9 @@ document.addEventListener("DOMContentLoaded", (event) => {
             minSalary: 0,
             maxSalary: 5000,
             offset: 0,
-            ...(categoryId && {categoryId}),
-            ...(cityId && {cityId}),
-            ...(keyword && {keyword}),
+            ...(categoryId && { categoryId }),
+            ...(cityId && { cityId }),
+            ...(keyword && { keyword }),
         });
 
 
