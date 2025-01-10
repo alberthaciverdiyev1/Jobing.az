@@ -22,9 +22,9 @@ const VisitorService = {
         try {
             return await Visitor.findOneAndUpdate(
                 { ip },
-                { 
+                {
                     lastVisit: Date.now(),
-                    userAgent: userAgent 
+                    userAgent: userAgent
                 },
                 { new: true }
             );
@@ -32,21 +32,24 @@ const VisitorService = {
             throw new Error('Error updating last visit: ' + error.message);
         }
     },
-    
+
 
     incrementVisitCount: async (ip) => {
         return Visitor.updateOne({ ip }, { $inc: { visitCount: 1 } });
     },
 
-    count: async () => {
-        const thirtyDaysAgo = new Date();
-        thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+    count: async (day) => {
+        const matchCondition = {};
+
+        if (day) {
+            const date = new Date();
+            date.setDate(date.getDate() - day);
+            matchCondition.createdAt = { $gte: date };
+        }
 
         const result = await Visitor.aggregate([
             {
-                $match: {
-                    createdAt: { $gte: thirtyDaysAgo }
-                }
+                $match: matchCondition
             },
             {
                 $group: {
@@ -55,8 +58,10 @@ const VisitorService = {
                 }
             }
         ]);
-        return result[0]?.totalVisits || 0; 
+
+        return result[0]?.totalVisits || 0;
     }
+
 
 };
 
