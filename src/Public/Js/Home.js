@@ -192,13 +192,13 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
     async function getStatistics() {
         await axios.get('/statistics')
-            .then(res => {
-                if (res.status === 200) {
+            .then(res => {  
+                if (res.status === 200) {   
                     document.getElementById("vacancy").innerText = res.data.data.vacancy || 0;
                     document.getElementById("company").innerText = res.data.data.company || 0;
                     document.getElementById("visitor").innerText = res.data.data.visitor || 0;
                     document.getElementById("totalVisitor").innerText = res.data.data.totalVisitor || 0;
-                }
+                } 
             })
             .catch(error => {
                 console.error("Error fetching cities:", error);
