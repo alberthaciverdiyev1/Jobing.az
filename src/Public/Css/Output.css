@@ -2084,12 +2084,12 @@ video {
     display: none;
   }
 
-  .md\:w-1\/4 {
-    width: 25%;
+  .md\:w-1\/2 {
+    width: 50%;
   }
 
-  .md\:w-5\/12 {
-    width: 41.666667%;
+  .md\:w-1\/4 {
+    width: 25%;
   }
 
   .md\:w-80 {
@@ -2355,9 +2355,9 @@ video {
     padding-inline-start: 1rem;
   }
 
-  .lg\:text-2xl {
-    font-size: 1.5rem;
-    line-height: 2rem;
+  .lg\:text-3xl {
+    font-size: 1.875rem;
+    line-height: 2.25rem;
   }
 
   .lg\:text-5xl {
