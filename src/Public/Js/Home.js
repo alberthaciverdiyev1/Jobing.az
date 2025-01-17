@@ -197,6 +197,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
                     document.getElementById("vacancy").innerText = res.data.data.vacancy || 0;
                     document.getElementById("company").innerText = res.data.data.company || 0;
                     document.getElementById("visitor").innerText = res.data.data.visitor || 0;
+                    document.getElementById("dailyVisitor").innerText = res.data.data.dailyVisitor || 0;
                     document.getElementById("totalVisitor").innerText = res.data.data.totalVisitor || 0;
                 } 
             })
