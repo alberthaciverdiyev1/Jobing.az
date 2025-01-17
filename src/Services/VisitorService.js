@@ -60,8 +60,31 @@ const VisitorService = {
         ]);
 
         return result[0]?.totalVisits || 0;
-    }
+    },
+    dailyCount: async () => {
+        const date = new Date();
+        date.setHours(0, 0, 0, 0);
+        const startOfDay = date;
 
+        const endOfDay = new Date(startOfDay);
+        endOfDay.setHours(23, 59, 59, 999);
+
+        const result = await Visitor.aggregate([
+            {
+                $match: {
+                    createdAt: { $gte: startOfDay, $lte: endOfDay }
+                }
+            },
+            {
+                $group: {
+                    _id: null,
+                    totalVisits: { $sum: "$visitCount" }
+                }
+            }
+        ]);
+
+        return result[0]?.totalVisits || 0;
+    }
 
 };
 
