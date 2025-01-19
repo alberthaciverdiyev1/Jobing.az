@@ -15,7 +15,9 @@ export async function requestAllSites(main = false) {
     cancelTokenSource = axios.CancelToken.source();
 
     try {
-        const response = await axios.post(`http://localhost:${port}/api/jobs`, null, {
+        // const response = await axios.post(`http://localhost:${port}/api/jobs`, null, {
+
+        const response = await axios.post(`https://jobing.az/api/jobs`, null, {
             cancelToken: cancelTokenSource.token 
         });
 
