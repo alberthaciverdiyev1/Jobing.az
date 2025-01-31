@@ -64,7 +64,6 @@ bot.on('callback_query', async (callbackQuery) => {
             sendTo,
             "support - Jobing.az"
         );
-
        let message = await jobDataService.updateJob(jobId,true);
         await bot.sendMessage(
             chatId,

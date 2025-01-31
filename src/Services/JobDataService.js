@@ -184,21 +184,29 @@ const JobDataService = {
     // Update job data
     updateJob: async (id, status) => {
         try {
+            if (!id) {
+                throw new Error('ID is required');
+            }
+    
             const updateData = {
                 isActive: status,
                 updatedAt: new Date(),
-                redirectUrl: `https://jobing.az/jobs/${id}/details`,
+                redirectUrl: `http://localhost:3000/jobs/${id}/details`,
             };
-
+    
             const job = await JobData.findByIdAndUpdate(id, updateData, { new: true });
+    
             if (!job) {
                 throw new Error('Job not found');
             }
+    
             return 'Job updated';
         } catch (error) {
-            throw new Error('Error updating job: ' + error.message);
+            console.error('Error updating job:', error); // Konsola detaylı hata yazdır
+            throw error; // Orijinal hatayı yeniden fırlat
         }
     },
+    
 
     // Delete job data
     deleteSite: async (id) => {
@@ -278,23 +286,33 @@ const JobDataService = {
                     }
                 }
             ]);
-            if (job) {
-                const company = await Company.findOne({ companyName: String(job[0].companyName) });
-                let imageUrl = company.imageUrl;
-                let index = imageUrl.indexOf('src/Public'); 
-                job[0].companyImage = imageUrl.slice(10);
-                
-            }
-            
+    
             if (!job || job.length === 0) {
                 throw new Error('Job not found');
             }
+    
+            const company = await Company.findOne({ companyName: String(job[0].companyName) });
+    
+            if (company && company.imageUrl) {
+                let imageUrl = company.imageUrl;
+                let index = imageUrl.indexOf('src/Public'); 
+    
+                if (index !== -1) {
+                    job[0].companyImage = imageUrl.slice(index + 10);
+                } else {
+                    job[0].companyImage = imageUrl;
+                }
+            } else {
+                job[0].companyImage = null; 
+            }
+    
             return job[0];
         } catch (error) {
-            throw new Error('Error fetching job: ' + JSON.stringify(error));
+            console.error('Error fetching job:', error); // Hata detaylarını konsola yaz
+            throw error; // Orijinal hatayı fırlat
         }
     },
-
+    
 
     count: async () => {
         const thirtyDaysAgo = new Date();
