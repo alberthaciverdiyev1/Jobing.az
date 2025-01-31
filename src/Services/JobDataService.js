@@ -191,7 +191,7 @@ const JobDataService = {
             const updateData = {
                 isActive: status,
                 updatedAt: new Date(),
-                redirectUrl: `http://localhost:3000/jobs/${id}/details`,
+                redirectUrl: `https://jobing.az/jobs/${id}/details`,
             };
     
             const job = await JobData.findByIdAndUpdate(id, updateData, { new: true });
