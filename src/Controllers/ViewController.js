@@ -39,6 +39,14 @@ const ViewController = {
         };
         res.render('Main', view);
     },
+    faq: async (req, res) => {
+        const view = {
+            title: 'Haqqımızda',
+            body: "AboutUs/Faq.ejs",
+            js: null
+        };
+        res.render('Main', view);
+    },
     contactUs: async (req, res) => {
         const view = {
             title: 'Bizimlə Əlaqə',

@@ -69,6 +69,7 @@ router.get('/jobs', visitorLogger, viewController.jobs);
 router.get('/about-us', visitorLogger, viewController.aboutUs);
 router.get('/contact', visitorLogger, viewController.contactUs);
 router.get('/add-job', visitorLogger, viewController.addJob);
+router.get('/faq', visitorLogger, viewController.faq);
 router.get('/statistics', viewController.statistics)
 //Enums
 router.get('/education', viewController.education);
