@@ -93,7 +93,7 @@ const ViewController = {
         const vacancy = await JobDataService.count()
         const visitor = await VisitorService.count(30)
         const dailyVisitor = await VisitorService.dailyCount()
-        const totalVisitor = await VisitorService.count()
+        const totalVisitor = await VisitorService.count(365)
         res.status(200).json({ status: 200, message:"",data:{company,vacancy,visitor,totalVisitor,dailyVisitor} });
     
     }
