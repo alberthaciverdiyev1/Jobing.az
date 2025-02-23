@@ -6,7 +6,7 @@ import sequelize from './src/Config/Database.js';
 import loggerMiddleware from './src/Middlewares/Logger.js';
 import Production from './src/Helpers/Production.js';
 import sendEmail from './src/Helpers/NodeMailer.js';
-import i18n from 'i18n';
+// import i18n from 'i18n';
 import cookieParser from 'cookie-parser';
 import { requestAllSites } from "./src/Helpers/Automation.js";
 import bot, { listenTgCommands, sendTgMessage } from "./src/Helpers/TelegramBot.js";
@@ -14,13 +14,13 @@ import TelegramBot from 'node-telegram-bot-api';
 
 
 const to = process.env.CRON_MAIL_USER;
-
-i18n.configure({
-    locales: ['en', 'ru', 'az'],
-    directory: './src/locales',
-    defaultLocale: 'az',
-    cookie: 'lang'
-});
+//
+// i18n.configure({
+//     locales: ['en', 'ru', 'az'],
+//     directory: './src/locales',
+//     defaultLocale: 'az',
+//     cookie: 'lang'
+// });
 
 const app = express();
 const port = process.env.PR_PORT || 3000;
@@ -34,7 +34,7 @@ app.set('trust proxy', true);
 app.use(express.static(path.resolve('./src/Public')));
 app.use(express.json());
 app.use(cookieParser());
-app.use(i18n.init);
+// app.use(i18n.init);
 app.use((req, res, next) => { res.locals.Production = Production; next(); });
 app.use(loggerMiddleware);
 app.use('/', routes);
