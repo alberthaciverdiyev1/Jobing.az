@@ -1,0 +1,62 @@
+<div class="max-w-3xl mx-auto mt-28 mb-16 space-y-8">
+    <!-- Payments Section -->
+    <h2 class="text-3xl font-bold text-gray-800 mb-6 border-b pb-2">Tez-tez verilən suallar</h2>
+    <div class="flex flex-wrap justify-center gap-6">
+        <div class="w-full border rounded-xl shadow-lg overflow-hidden">
+            <button class="w-full text-left p-5 font-semibold flex justify-between items-center bg-gray-100 hover:bg-gray-200 transition-all duration-300" onclick="toggleFAQ(this)">
+                <span>Jobing.az-da necə iş tapa bilərəm?</span>
+                <span class="icon text-lg">+</span>
+            </button>
+            <div class="p-5 hidden text-gray-700 bg-white">Axtarış bölməsindən istifadə edərək uyğun vakansiyaları tapa bilərsiniz. Açar sözlər və kateqoriyalar üzrə filtrləmə aparın.
+            </div>
+        </div>
+        <div class="w-full border rounded-xl shadow-lg overflow-hidden">
+            <button class="w-full text-left p-5 font-semibold flex justify-between items-center bg-gray-100 hover:bg-gray-200 transition-all duration-300" onclick="toggleFAQ(this)">
+                <span>Pulsuz iş elanlarını necə yerləşdirə bilərəm?</span>
+                <span class="icon text-lg">+</span>
+            </button>
+            <div class="p-5 hidden text-gray-700 bg-white">Saytdan qeydiyyatdan keçməyə ehtiyac yoxdur. Birbaşa “Elan Yerləşdir" bölməsinə keçid edin. Vakansiya məlumatlarını doldurun və elanınızı dərc edin.</div>
+        </div>
+        <div class="w-full border rounded-xl shadow-lg overflow-hidden">
+            <button class="w-full text-left p-5 font-semibold flex justify-between items-center bg-gray-100 hover:bg-gray-200 transition-all duration-300" onclick="toggleFAQ(this)">
+                <span>Jobing.az ödənişsizdir?</span>
+                <span class="icon text-lg">+</span>
+            </button>
+            <div class="p-5 hidden text-gray-700 bg-white">İş axtaranlar üçün platformadan istifadə tamamilə pulsuzdur. İşəgötürənlər isə həm pulsuz iş elanı yerləşdirə, həm də müəyyən ödənişli xidmətlərdən faydalana bilərlər.</div>
+        </div>
+    </div>
+
+    <div class="flex justify-center">
+        <div class="w-full border rounded-xl shadow-lg overflow-hidden">
+            <button class="w-full text-left p-5 font-semibold flex justify-between items-center bg-gray-100 hover:bg-gray-200 transition-all duration-300" onclick="toggleFAQ(this)">
+                <span>Jobing.az-dakı vakansiyalar nə qədər aktualdır?</span>
+                <span class="icon text-lg">+</span>
+            </button>
+            <div class="p-5 hidden text-gray-700 bg-white">Bütün vakansiyalar mütəmadi olaraq yenilənir. Hər bir iş elanı yerləşdirildikdən sonra müəyyən müddət aktiv qalır.</div>
+        </div>
+    </div>
+    <div class="flex justify-center">
+        <div class="w-full border rounded-xl shadow-lg overflow-hidden">
+            <button class="w-full text-left p-5 font-semibold flex justify-between items-center bg-gray-100 hover:bg-gray-200 transition-all duration-300" onclick="toggleFAQ(this)">
+                <span>İş elanlarını sosial mediada paylaşmaq mümkündürmü?</span>
+                <span class="icon text-lg">+</span>
+            </button>
+            <div class="p-5 hidden text-gray-700 bg-white">Bəli, hər bir vakansiyanın səhifəsində sosial media paylaşma düymələri var. Vakansiyanı Facebook, LinkedIn, Twitter və WhatsApp-da paylaşa bilərsiniz.</div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleFAQ(button) {
+        const content = button.nextElementSibling;
+        const icon = button.querySelector('.icon');
+
+        if (content.classList.contains('hidden')) {
+            content.classList.remove('hidden');
+            icon.textContent = '-';
+        } else {
+            content.classList.add('hidden');
+            icon.textContent = '+';
+        }
+    }
+</script>
