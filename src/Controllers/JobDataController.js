@@ -120,9 +120,9 @@ const jobDataController = {
                 maxSalary: req.query.maxSalary,
                 experience: req.query.experience,
                 educationId: req.query.educationId,
+                allJobs: req.query.allJobs === 'true' ? 1 : 0,
                 offset: req.query.offset,
             }
-
             const jobs = await JobService.getAllJobs(data);
             res.status(200).json(jobs);
         } catch (error) {
