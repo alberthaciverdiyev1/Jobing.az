@@ -21,7 +21,11 @@ document.addEventListener("DOMContentLoaded", (event) => {
     }
 
     async function getJobs() {
-        await axios.get('/api/jobs').then(res => {
+        await axios.get('/api/jobs',{
+            params: {
+                'allJobs':true
+            }
+        }).then(res => {
             let htmlContent = '';
 
             if (res.status === 200) {
