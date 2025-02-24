@@ -3,6 +3,7 @@ import { requestAllSites, cancelRequest } from "./Automation.js";
 import sendEmail from "./NodeMailer.js";
 import JobService from '../Services/JobDataService.js';
 import jobDataService from "../Services/JobDataService.js";
+import VisitorService from "../Services/VisitorService.js";
 
 let sendTo = null;
 
@@ -105,7 +106,11 @@ export const listenTgCommands = async (msg) => {
     if (msg.text === '/cancel') {
         await cancelRequest();
         await bot.sendMessage(msg.chat.id, 'All Request Was Cancelled');
-
+    }
+    if (msg.text === '/views') {
+        let count = await VisitorService.dailyCount();
+        console.log({count})
+        await bot.sendMessage(msg.chat.id, `Daily visitor count: ${count}`);
     }
 };
 
