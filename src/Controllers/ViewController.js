@@ -41,7 +41,7 @@ const ViewController = {
     },
     faq: async (req, res) => {
         const view = {
-            title: 'Haqqımızda',
+            title: 'Tez-tez verilən suallar',
             body: "AboutUs/Faq.ejs",
             js: null
         };
