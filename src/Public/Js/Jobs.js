@@ -10,6 +10,7 @@ let showMoreCategories = true;
 let showMoreCities = true;
 let offset = 0;
 let categoryId = null,
+    allJobs = true,
     cityId = null,
     educationId = null,
     jobType = null,
@@ -96,7 +97,8 @@ function preselectFilters(onlyCheckFilter = false) {
                 educationId: !isNaN(Number(educationId)) ? educationId : null,
                 experienceLevel,
                 offset,
-                keyword
+                keyword,
+                allJobs
             });
     }
 
@@ -520,7 +522,7 @@ function handleFilterChange(minS = 0, maxS = 5000) {
         maxSalary ?? 5000;
 
         updateURLParams({ categoryId, cityId, educationId, experienceLevel, keyword, minSalary, maxSalary });
-        getJobs({ categoryId, cityId, educationId, experienceLevel, offset, keyword, minSalary, maxSalary });
+        getJobs({ categoryId, cityId, educationId, experienceLevel, offset, keyword, minSalary, maxSalary,allJobs });
 
     } else {
         maxSalary = maxS ?? 5000;
@@ -528,7 +530,7 @@ function handleFilterChange(minS = 0, maxS = 5000) {
         let { categoryId, cityId, educationId, experienceLevel, keyword } = getURLParams();
 
         updateURLParams({ categoryId, cityId, educationId, experienceLevel, keyword, minSalary, maxSalary });
-        getJobs({ categoryId, cityId, educationId, experienceLevel, offset, keyword, minSalary, maxSalary });
+        getJobs({ categoryId, cityId, educationId, experienceLevel, offset, keyword, minSalary, maxSalary,allJobs });
     }
 
 }
@@ -578,6 +580,29 @@ function addRadioChangeListener(type) {
 //         footer.style.display = "block";
 //     }
 // };
+
+document.getElementById("onlyJobing").addEventListener("click", function() {
+    allJobs = false;
+    document.getElementById("getAllJobs").classList.remove('filled-button-color');
+    document.getElementById("getAllJobs").classList.remove('text-gray-50');
+    document.getElementById("getAllJobs").classList.add('text-gray-900');
+    this.classList.add('filled-button-color');
+    this.classList.remove('text-gray-900');
+    this.classList.add('text-gray-50');
+
+    handleFilterChange();
+});
+
+document.getElementById("getAllJobs").addEventListener("click", function() {
+    allJobs = true;
+    document.getElementById("onlyJobing").classList.remove('filled-button-color');
+    document.getElementById("onlyJobing").classList.remove('text-gray-50');
+    document.getElementById("onlyJobing").classList.add('text-gray-900');
+    this.classList.add('filled-button-color');
+    this.classList.remove('text-gray-900');
+    this.classList.add('text-gray-50');
+    handleFilterChange();
+});
 
 document.getElementById("mobile-filter-btn").onclick = function () {
     const filterSection = document.getElementById("filter-section");
