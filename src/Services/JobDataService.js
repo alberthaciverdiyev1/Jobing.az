@@ -192,7 +192,7 @@ const JobDataService = {
             const updateData = {
                 isActive: status,
                 updatedAt: new Date(),
-                redirectUrl: `https://jobing.az/jobs/${id}/details`,
+                redirectUrl: `https://jobing.az/vakansiyalar/${id}/details`,
             };
     
             const job = await JobData.findByIdAndUpdate(id, updateData, { new: true });

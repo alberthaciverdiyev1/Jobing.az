@@ -27,7 +27,7 @@ router.delete('/api/jobs/:id', jobDataController.deleteSite);                   
 router.post('/api/jobs/remove-duplicates', jobDataController.removeDuplicates);            // Post
 router.post('/api/jobs/request-all-sites', jobDataController.requestAllSites)               // Post
 router.post('/api/jobs/add-request',validator.addJobValidator, jobDataController.addJobRequest)                       // Post
-router.get('/jobs/:id/details', jobDataController.details);                                 // Job Details
+router.get('/vakansiyalar/:id/details', jobDataController.details);                                 // Job Details
 
 // CRUD operations for job sites (JobDataController)
 router.post('/api/site', validator.siteValidator, siteController.create);                  // CREATE
@@ -65,7 +65,7 @@ router.get('/api/scrape', scrapeController.getData);                            
 //Load Views
 router.get('/', viewController.home);
 router.get('/auth', viewController.auth);
-router.get('/jobs', visitorLogger, viewController.jobs);
+router.get('/vakansiyalar', visitorLogger, viewController.jobs);
 router.get('/about-us', visitorLogger, viewController.aboutUs);
 router.get('/contact', visitorLogger, viewController.contactUs);
 router.get('/add-job', visitorLogger, viewController.addJob);
