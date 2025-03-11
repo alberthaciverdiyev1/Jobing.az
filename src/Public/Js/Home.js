@@ -221,7 +221,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
         const cityId = citySelect?.value || 'all';
         const keyword = keywordInput?.value?.trim().toLowerCase() || '';
 
-        const baseUrl = `${window.location.origin}/jobs`;
+        const baseUrl = `${window.location.origin}/vakansiyalar`;
         const params = new URLSearchParams({
             minSalary: 0,
             maxSalary: 5000,
