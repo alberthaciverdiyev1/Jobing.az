@@ -1,122 +1,119 @@
-import mongoose from 'mongoose';
-import Enums from '../Config/Enums.js';
+import { Sequelize, DataTypes, Model } from 'sequelize';
+import sequelize from '../Config/Database';
+import Enums from '../Config/Enums';
 
-const { Schema } = mongoose;
+class Job extends Model {}
 
-const jobSchema = new Schema({
+Job.init({
     uniqueKey: {
-        type: String,
-        required: true
+        type: DataTypes.STRING,
+        allowNull: false,
     },
     title: {
-        type: String,
-        required: true
+        type: DataTypes.STRING,
+        allowNull: false,
     },
     email: {
-        type: String,
-        required: false},
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
     phone: {
-        type: String,
-        required: false
+        type: DataTypes.STRING,
+        allowNull: true,
     },
     description: {
-        type: String,
-        required: false
+        type: DataTypes.STRING,
+        allowNull: true,
     },
     location: {
-        type: String,
-        required: false
+        type: DataTypes.STRING,
+        allowNull: true,
     },
     minSalary: {
-        type: Number,
-        required: false
+        type: DataTypes.INTEGER,
+        allowNull: true,
     },
     maxSalary: {
-        type: Number,
-        required: false
+        type: DataTypes.INTEGER,
+        allowNull: true,
     },
     minAge: {
-        type: Number,
-        required: false
+        type: DataTypes.INTEGER,
+        allowNull: true,
     },
     maxAge: {
-        type: Number,
-        required: false
+        type: DataTypes.INTEGER,
+        allowNull: true,
     },
     currencySign: {
-        type: String,
-        default: "₼"
+        type: DataTypes.STRING,
+        defaultValue: "₼",
     },
     categoryId: {
-        type: Number,
-        ref: 'Category',
-        required: false
+        type: DataTypes.INTEGER,
+        allowNull: true,
     },
     subCategoryId: {
-        type: Number,
-        ref: 'Category',
-        required: false
+        type: DataTypes.INTEGER,
+        allowNull: true,
     },
     companyName: {
-        type: String,
-        required: false
+        type: DataTypes.STRING,
+        allowNull: true,
     },
     companyId: {
-        type: String,
-        required: false
+        type: DataTypes.STRING,
+        allowNull: true,
     },
     cityId: {
-        type: Number,
-        required: false
+        type: DataTypes.INTEGER,
+        allowNull: true,
     },
     educationId: {
-        type: Number,
-        required: false
+        type: DataTypes.INTEGER,
+        allowNull: true,
     },
     experienceId: {
-        type: Number,
-        required: false
+        type: DataTypes.INTEGER,
+        allowNull: true,
     },
     userName: {
-        type: String,
-        required: false
+        type: DataTypes.STRING,
+        allowNull: true,
     },
     isPremium: {
-        type: Boolean,
-        default: false
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
     },
     isActive: {
-        type: Boolean,
-        default: true
+        type: DataTypes.BOOLEAN,
+        defaultValue: true,
     },
     jobType: {
-        type: String,
-        required: false
+        type: DataTypes.STRING,
+        allowNull: true,
     },
     postedAt: {
-        type: Date,
-        default: Date.now
+        type: DataTypes.DATE,
+        defaultValue: Sequelize.NOW,
     },
     sourceUrl: {
-        type: String,
-        required: true
+        type: DataTypes.STRING,
+        allowNull: false,
     },
     redirectUrl: {
-        type: String,
-        required: true
+        type: DataTypes.STRING,
+        allowNull: false,
     }
 }, {
+    sequelize,
+    modelName: 'Job',
+    tableName: 'jobs',
     timestamps: true,
-    versionKey: false
+    createdAt: 'created_at',
+    updatedAt: 'updated_at',
+    version: false,
+    underscored: true,
 });
-
-jobSchema.virtual('companyDetails', {
-    ref: 'Company',
-    localField: 'companyName',
-    foreignField: 'companyName',
-    justOne: true
-});
-
-const Job = mongoose.model('Job', jobSchema);
 
 export default Job;

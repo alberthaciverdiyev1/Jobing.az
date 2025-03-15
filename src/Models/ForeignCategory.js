@@ -1,35 +1,42 @@
-import mongoose from 'mongoose';
-import Enums from '../Config/Enums.js';
+import { Sequelize, DataTypes, Model } from 'sequelize';
+import sequelize from '../Config/Database';
+import Enums from '../Config/Enums';
 
-const { Schema } = mongoose;
+class ForeignCategory extends Model {}
 
-const foreignCategorySchema = new Schema({
+ForeignCategory.init({
     name: {
-        type: String,
-        required: true
+        type: DataTypes.STRING,
+        allowNull: false,
     },
     categoryId: {
-        type: Number,
-        required: false
+        type: DataTypes.INTEGER,
+        allowNull: true,
     },
     parentId: {
-        type: Number,
-        required: false
+        type: DataTypes.INTEGER,
+        allowNull: true,
     },
     website: {
-        type: String,
-        required: true
+        type: DataTypes.STRING,
+        allowNull: false,
     },
     websiteId: {
-        type: String,
-        enum: Enums.SitesWithId, 
-        required: false
+        type: DataTypes.STRING,
+        allowNull: true,
+        validate: {
+            isIn: [Enums.SitesWithId],
+        },
     }
 }, {
+    sequelize,
+    modelName: 'ForeignCategory',
+    tableName: 'foreign_categories',
     timestamps: true,
-    versionKey: false
+    createdAt: 'created_at',
+    updatedAt: 'updated_at',
+    version: false,
+    underscored: true,
 });
-
-const ForeignCategory = mongoose.model('ForeignCategory', foreignCategorySchema);
 
 export default ForeignCategory;
