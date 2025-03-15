@@ -1,15 +1,25 @@
+import { Sequelize, DataTypes } from 'sequelize';
 import dotenv from 'dotenv';
-import mongoose from 'mongoose';
 
 dotenv.config();
 
-const dbURI = process.env.NODE_ENV !== "production" ? `mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}` : process.env.REMOTE_DB_URL;
+const sequelize = new Sequelize({
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT,
+    database: process.env.DB_NAME,
+    username: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    dialect: 'mysql',
+    logging: false,
+});
 
-mongoose.connect(dbURI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-})
-.then(() => console.log('Successfully connected to the database.'))
-.catch(err => console.error('Connection error:', err));
+const connectDatabase = async () => {
+    try {
+        await sequelize.authenticate();
+        console.log('Successfully connected to the MySQL database.');
+    } catch (error) {
+        console.error('Unable to connect to the database:', error);
+    }
+};
 
-export default mongoose;
+export default connectDatabase();
