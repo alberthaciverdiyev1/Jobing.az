@@ -42,12 +42,12 @@ class OfferAz {
         const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
         try {
             let splitCategories = categories
-                .flatMap(c => c.offerAz.split(','))
+                .flatMap(c => c.offer_az.split(','))
                 .map(jobId => jobId.trim())
                 .filter(jobId => jobId !== '')
                 .map(jobId => ({
-                    localCategoryId: categories.find(c => c.offerAz.includes(jobId)).localCategoryId,
-                    offerAzId: jobId,
+                    local_category_id: categories.find(c => c.offer_az.includes(jobId)).local_category_id,
+                    offer_az_id: jobId,
                 }));
 
             const city = Object.entries(enums.Cities.OfferAz).find(
@@ -75,7 +75,7 @@ class OfferAz {
                                     const url = `https://${this.url}/wp-admin/admin-ajax.php`;
 
                                     const data = new URLSearchParams();
-                                    data.append('select_category', category.offerAzId);
+                                    data.append('select_category', category.offer_az_id);
                                     data.append('cur_page', page);
                                     data.append('select_erazi', cityId);
                                     data.append('form_mode', 'long');
@@ -107,7 +107,7 @@ class OfferAz {
                                         const urlAndId = $(el).find('.job-card__title');
                                         const title = urlAndId.text().trim();
                                         const companyElement = $(el).find('.job-card__meta em');
-                                        const companyName = companyElement.text().trim();
+                                        const company_name = companyElement.text().trim();
                                         const locationText = $(el).find('.job-card__meta').last().text().trim();
                                         const locationParts = locationText.split(' - ');
                                         let location = locationParts.length > 1 ? locationParts[1].trim() : locationParts[0].trim();
@@ -132,20 +132,20 @@ class OfferAz {
                                         if (title) {
                                             jobData.push({
                                                 title,
-                                                companyName,
-                                                minSalary: !isNaN(Number(minSalary)) ? minSalary : 0,
-                                                maxSalary: !isNaN(Number(maxSalary)) ? maxSalary : 0,
+                                                company_name,
+                                                min_salary: !isNaN(Number(minSalary)) ? minSalary : 0,
+                                                max_salary: !isNaN(Number(maxSalary)) ? maxSalary : 0,
                                                 location,
-                                                cityId: bossAzCity?.cityId || null,
+                                                city_id: bossAzCity?.cityId || null,
                                                 description: description || null,
-                                                jobId,
-                                                categoryId: category.localCategoryId || null,
-                                                sourceUrl: this.url,
-                                                redirectUrl: redirectUrl,
-                                                jobType: '0x001',
-                                                educationId: this.mapEducation(education),
-                                                experienceId: null,
-                                                uniqueKey: `${title}-${companyName}-${location}`
+                                                job_id:jobId,
+                                                category_id: category.local_category_id || null,
+                                                source_url: this.url,
+                                                redirect_url: redirectUrl,
+                                                job_type: '0x001',
+                                                education_id: this.mapEducation(education),
+                                                experience_id: null,
+                                                unique_key: `${title}-${company_name}-${location}`
                                             });
                                         }
 

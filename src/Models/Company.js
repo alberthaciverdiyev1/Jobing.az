@@ -25,18 +25,13 @@ Company.init(
         unique_key: {
             type: DataTypes.STRING,
             allowNull: true,
-        },
-        deleted_at: {
-            type: DataTypes.DATE,
-            allowNull: true,
-        },
+        }
     },
     {
         sequelize,
         modelName: 'Company',
         tableName: 'companies',
         timestamps: true,
-        paranoid: true,
         underscored: true,
     }
 );

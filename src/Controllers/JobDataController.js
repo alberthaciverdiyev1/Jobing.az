@@ -35,14 +35,15 @@ const jobDataController = {
             await sendTgMessage(`Cron started at ${formatDate()}`);
 
             const categories = await CategoryService.getLocalCategories({});
+            console.log(categories)
             if (!categories || categories.length === 0) {
                 throw new Error("No categories found");
             }
 
             const sources = [
-                { instance: new BossAz(), name: "BossAz" },
+                // { instance: new BossAz(), name: "BossAz" },
                 // { instance: new HelloJobAz(), name: "HelloJobAz" },
-                // { instance: new OfferAz(), name: "OfferAz" },
+                { instance: new OfferAz(), name: "OfferAz" },
                 // { instance: new SmartJobAz(), name: "SmartJobAz" },
                 // { instance: new JobSearchAz(), name: "JobSearchAz" },
             ];
@@ -63,7 +64,7 @@ const jobDataController = {
 
                                     if (jobs.length > 0) {
                                         const response = await JobService.create(jobs);
-                                        // await CompanyService.removeDuplicates();
+                                        await CompanyService.removeDuplicates();
 
                                         if (!response || !response.status || !response.message) {
                                             throw new Error(`Invalid response from JobService for ${name}`);

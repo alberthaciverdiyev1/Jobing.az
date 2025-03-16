@@ -56,10 +56,10 @@ const CompanyService = {
             const updatedCompanies = await Promise.all(
                 companies.map((company) => {
                     return limit(async () => {
-                        if (company.imageUrl && company.imageUrl !== '/nologo.png' && (company.imageUrl.startsWith('http') || company.imageUrl.startsWith('https') || company.imageUrl.includes('/'))) {
-                            const imageUrl = company.imageUrl.startsWith('http') || company.imageUrl.startsWith('https')
-                                ? company.imageUrl
-                                : `http://${company.imageUrl}`;
+                        if (company.image_url && company.image_url !== '/nologo.png' && (company.image_url.startsWith('http') || company.image_url.startsWith('https') || company.image_url.includes('/'))) {
+                            const imageUrl = company.image_url.startsWith('http') || company.image_url.startsWith('https')
+                                ? company.image_url
+                                : `http://${company.image_url}`;
 
                             const ext = mime.extension(mime.lookup(imageUrl));
                             if (!ext) {
@@ -71,7 +71,7 @@ const CompanyService = {
                                 fs.mkdirSync(companyFolder, { recursive: true });
                             }
 
-                            const fileName = `${company.companyName || 'default'}.${ext}`;
+                            const fileName = `${company.company_name || 'default'}.${ext}`;
                             if (!!/["<>|:*?\/\\]/.test(fileName)) {
                                 return company;
                             }
@@ -92,7 +92,7 @@ const CompanyService = {
                                 writer.on('error', reject);
                             });
 
-                            company.imageUrl = localFilePath;
+                            company.image_url = localFilePath;
                             await CompanyService.updateCompanyImageUrl(company.id, localFilePath);
                         }
                         return company;
@@ -117,71 +117,51 @@ const CompanyService = {
 
     updateCompanyImageUrl: async (companyId, newImagePath) => {
         try {
-            await Company.update({ imageUrl: newImagePath }, { where: { id: companyId } });
+            await Company.update({ image_url: newImagePath }, { where: { id: companyId } });
         } catch (error) {
             throw new Error(`Error updating image URL for company with ID ${companyId}: ${error.message}`);
         }
     },
 
-    removeDuplicates: async () => {
+
+     removeDuplicates : async () => {
         try {
             const thirtyDaysAgo = new Date();
             thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
-            const companiesList = await Company.findAll({
-                where: {
-                    createdAt: {
-                        [Sequelize.Op.gte]: thirtyDaysAgo,
-                    },
-                },
-                order: [['createdAt', 'DESC']],
+            const companies = await Company.findAll({
+                where: { created_at: { [Op.gte]: thirtyDaysAgo } },
+                order: [['created_at', 'DESC']],
+                attributes: ['id', 'unique_key', 'created_at']
             });
 
-            if (!companiesList || companiesList.length === 0) {
-                return {
-                    status: 200,
-                    message: 'No data found for the last 30 days.',
-                    count: 0,
-                };
+            if (!companies.length) {
+                return { status: 200, message: 'No data found for the last 30 days.', count: 0 };
             }
-
-            const seenUniqueKeys = new Map();
             const duplicateIds = [];
+            const seenKeys = new Map();
+            for (const company of companies) {
+                const key = company.unique_key;
 
-            companiesList.forEach(c => {
-                const uniqueKey = c.uniqueKey;
-                if (seenUniqueKeys.has(uniqueKey)) {
-                    const previousCompany = seenUniqueKeys.get(uniqueKey);
-                    duplicateIds.push(previousCompany.id);
-                    seenUniqueKeys.set(uniqueKey, c);
+                if (seenKeys.has(key)) {
+                    duplicateIds.push(company.id);
                 } else {
-                    seenUniqueKeys.set(uniqueKey, c);
+                    seenKeys.set(key, company.id);
                 }
-            });
+            }
 
             if (duplicateIds.length > 0) {
-                await Company.destroy({ where: { id: { [Sequelize.Op.in]: duplicateIds } } });
-                return {
-                    status: 201,
-                    message: `Deleted ${duplicateIds.length} duplicate records from the last 30 days.`,
-                    count: duplicateIds.length,
-                };
-            } else {
-                return {
-                    status: 200,
-                    message: 'No duplicate data found for the last 30 days.',
-                    count: 0,
-                };
+                await Company.destroy({ where: { id: { [Op.in]: duplicateIds } } });
+                return { status: 201, message: `Deleted ${duplicateIds.length} duplicate records.`, count: duplicateIds.length };
             }
+
+            return { status: 200, message: 'No duplicate data found.', count: 0 };
+
         } catch (error) {
-            return {
-                status: 500,
-                message: 'An error occurred during the process.',
-                error: error.message,
-            };
+            console.error("Error in removeDuplicates:", error);
+            return { status: 500, message: 'An error occurred.', error: error.message };
         }
     },
-
     // Find a company by ID
     findById: async (id) => {
         try {

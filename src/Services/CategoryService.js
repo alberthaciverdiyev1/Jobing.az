@@ -42,9 +42,11 @@ const CategoryService = {
 
     getLocalCategories: async (data) => {
         try {
-            let categories =  await Category.findAll({
-                attributes: { exclude: ['id'] },
+            let categories = await Category.findAll({
+                // where: { id: 36 },
+                attributes: { exclude: ['id'] }
             });
+
             return categories.map(category => category.dataValues);
 
         } catch (error) {
@@ -68,7 +70,7 @@ const CategoryService = {
     // Delete category
     delete: async (id) => {
         try {
-            const category = await Category.findByPk(id);  // Sequelize'de findById yerine findByPk kullanılır
+            const category = await Category.findByPk(id); 
             if (!category) {
                 throw new Error('Category not found');
             }

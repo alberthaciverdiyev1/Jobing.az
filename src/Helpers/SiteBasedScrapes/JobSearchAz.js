@@ -14,14 +14,14 @@ class JobSearchAz {
 
     async Jobs(categories, bossAzCity,main) {
         let splitCategories = categories
-            .flatMap(c => c.jobSearch.split(','))
+            .flatMap(c => c.job_search.split(','))
             .map(jobId => jobId.trim())
             .filter(jobId => jobId !== '')
             .map(jobId => ({
-                localCategoryId: categories.find(c => c.jobSearch.includes(jobId)).localCategoryId,
-                jobsearchId: jobId,
+                local_category_id: categories.find(c => c.job_search.includes(jobId)).local_category_id,
+                jobsearch_id: jobId,
             }))
-            .filter(c => c.jobsearchId !== '');
+            .filter(c => c.jobsearch_id !== '');
 
         const city = Object.entries(enums.Cities.JobSearchAz).find(
             ([k, v]) => v === bossAzCity.name
@@ -61,7 +61,7 @@ class JobSearchAz {
                                     q: '',
                                     posted_date: '',
                                     seniority: experienceId,
-                                    categories: category.jobsearchId,
+                                    categories: category.jobsearch_id,
                                     industries: '',
                                     ads: '',
                                     location: cityId,
@@ -89,28 +89,30 @@ class JobSearchAz {
 
                                     jobData.push({
                                         title: element.title,
-                                        companyName: element.company.title,
-                                        minSalary: element.salary ?? 0,
-                                        maxSalary: element.salary ?? 0,
+                                        company_name: element.company.title,
+                                        min_salary: !isNaN(Number(element.salary)) ? Number(element.salary) : 0,
+                                        max_salary: !isNaN(Number(element.salary)) ? Number(element.salary) : 0,
                                         location: bossAzCity.name,
-                                        cityId: bossAzCity?.cityId || null,
+                                        city_id: bossAzCity?.cityId || null,
                                         description: element.text || null,
-                                        jobId: element.id,
-                                        isPremium: element?.is_vip,
-                                        categoryId: category.localCategoryId,
-                                        sourceUrl: this.url,
-                                        redirectUrl: `https://www.jobsearch.az/vacancies/${element.slug}`,
-                                        jobType: '0x001',
-                                        educationId: null,
-                                        experienceId: this.mapExperience(experienceId),
-                                        uniqueKey: `${element.title}-${element?.company.title}-${bossAzCity.name}`
+                                        job_id: element.id,
+                                        is_premium: element?.is_vip,
+                                        category_id: category.local_category_id,
+                                        source_url: this.url,
+                                        redirect_url: `https://www.jobsearch.az/vacancies/${element.slug}`,
+                                        job_type: '0x001',
+                                        education_id: null,
+                                        experience_id: this.mapExperience(experienceId),
+                                        unique_key: `${element.title}-${element?.company.title}-${bossAzCity.name}`
                                     });
                                     companyData.push({
-                                        companyName: element?.company?.title,
-                                        imageUrl: element?.company?.logo_mini,
+                                        company_name: element?.company?.title,
+                                        image_url: element?.company?.logo_mini,
                                         website: enums.SitesWithId.JobSearchAz,
-                                        uniqueKey: `${element?.company?.title}-${element?.company?.logo_mini}`
+                                        unique_key: `${element?.company?.title}-${element?.company?.logo_mini}`
                                     });
+
+                                    console.log({jobData,companyData})
                                 });
 
                             } catch (error) {

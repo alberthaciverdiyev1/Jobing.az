@@ -7,6 +7,7 @@ const JobDataService = {
     // Create new job data (insert multiple records)
 
     create: async (data) => {
+        console.log(data);
         if (!Array.isArray(data) || data.length === 0) {
             throw new Error('Data must be a non-empty array');
         }
@@ -127,17 +128,14 @@ const JobDataService = {
     getAllJobs: async (data) => {
         try {
             const seenUrls = new Set();
-            // Son 30 günü hesapla
             const currentDate = new Date();
             const thirtyDaysAgo = new Date(currentDate.setDate(currentDate.getDate() - 30));
 
-            // Varsayılan filtreler
             const query = {
                 is_active: true,
-                created_at: { [Sequelize.Op.gte]: thirtyDaysAgo } // Son 30 gün
+                created_at: { [Sequelize.Op.gte]: thirtyDaysAgo } // Last 30 days
             };
 
-            // Dinamik filtreler
             const filters = [
                 { key: 'category_id', type: 'int' },
                 { key: 'city_id', type: 'int' },
@@ -154,10 +152,8 @@ const JobDataService = {
                 }
             });
 
-            // Tüm işleri almak istemiyorsanız 'jobing.az' filtresini ekleyin
             if (!data.all_jobs) query.source_url = 'jobing.az';
 
-            // Min ve max maaş filtreleri
             if (data.min_salary && !isNaN(Number(data.min_salary)) && data.min_salary !== 0) {
                 query.min_salary = { [Sequelize.Op.gte]: Number(data.min_salary) };
             }
@@ -166,7 +162,6 @@ const JobDataService = {
                 query.max_salary = { [Sequelize.Op.lte]: Number(data.max_salary) };
             }
 
-            // Anahtar kelime araması
             if (data.keyword) {
                 const keywordQuery = { [Sequelize.Op.iLike]: `%${data.keyword}%` };
                 query[Sequelize.Op.or] = [
@@ -177,36 +172,30 @@ const JobDataService = {
                 ];
             }
 
-            console.log(query); // Kontrol amaçlı log
-
             const limit = 100;
             const offset = Number(data.offset) || 0;
 
-            // İşleri sorgulama
             const jobs = await JobData.findAll({
                 where: query,
-                order: [['created_at', 'DESC']],  // Zaman sırasına göre sırala
+                order: [['created_at', 'DESC']],
                 offset,
                 limit,
-                raw: true,  // Veriyi düz bir JSON formatında almak için raw: true ekledik
-                include: [
-                    {
-                        model: Company,
-                        as: 'company',
-                        attributes: ['image_url', 'company_name'],
-                    },
-                ],
+                raw: true
             });
 
-            console.log(jobs); // Kontrol amaçlı log
+            const companies = await Company.findAll({
+                attributes: ['company_name', 'image_url'],
+            });
 
-            const totalCount = await JobData.count({ where: query });
+            const companyMap = companies.reduce((acc, company) => {
+                acc[company.company_name] = company.image_url;
+                return acc;
+            }, {});
 
-            // Dönüştürme işlemi
             const filteredJobs = jobs
                 .map(job => ({
                     ...job,
-                    company_image_url: job['company.image_url'] || null,
+                    company_image_url: companyMap[job.company_name] || null,
                 }))
                 .filter(job => {
                     if (!seenUrls.has(job.redirect_url)) {
@@ -215,6 +204,9 @@ const JobDataService = {
                     }
                     return false;
                 });
+
+            const totalCount = await JobData.count({});
+
             return {
                 totalCount,
                 jobs: filteredJobs,
@@ -223,8 +215,8 @@ const JobDataService = {
         } catch (error) {
             throw new Error(`Error retrieving jobs: ${error.message}`);
         }
-    },
-
+    }
+,
 // Find a job by ID
     findSiteById: async (id) => {
         try {

@@ -59,6 +59,7 @@ class HelloJobAz {
 
 
     async Jobs(categories, bossAzCity,main) {
+        console.log(categories)
         const city = Object.entries(enums.Cities.HelloJobAz).find(
             ([k, v]) => v === bossAzCity.name
         );
@@ -72,12 +73,12 @@ class HelloJobAz {
 
         try {
             let splitCategories = categories
-                .flatMap(c => c.helloJobAz.split(','))
+                .flatMap(c => c.hello_job_az.split(','))
                 .map(jobId => jobId.trim())
                 .filter(jobId => jobId !== '')
                 .map(jobId => ({
-                    localCategoryId: categories.find(c => c.helloJobAz.includes(jobId)).localCategoryId,
-                    helloJobAzId: jobId,
+                    local_category_id: categories.find(c => c.hello_job_az.includes(jobId)).local_category_id,
+                    hello_job_az_id: jobId,
                 }));
             const dataPromises = [];
             if (cityId && (main ? true : (bossAzCity.name !== "Bakı" ? true : false))) {
@@ -97,20 +98,19 @@ class HelloJobAz {
                                     const randomDelay = Math.floor(Math.random() * 6000) + 1000;
                                     await delay(randomDelay);
 
-                                    let url = `https://www.${this.url}/search?direction=works&category_id=${category.helloJobAzId}&region_id=${cityId}&salary_min=&education_type=${education}&work_exp=0&search_type=filter`;
-
+                                    let url = `https://www.${this.url}/search?direction=works&category_id=${category.hello_job_az_id}&region_id=${cityId}&salary_min=&education_type=${education}&work_exp=0&search_type=filter`;
                                     const requestWithTimeout = new Promise((_, reject) =>
                                         setTimeout(() => reject(new Error('Request Timeout')), 30000)
                                     );
 
                                     const $ = await Promise.race([Scrape(url), requestWithTimeout]);
-
                                     $('.vacancies__item').each((i, el) => {
-                                        const urlAndId = $(el).attr('href');
-                                        const title = $(el).find('h3').text().trim();
-                                        const companyName = $(el).find('.vacancy_item_company').text().trim();
-                                        const jobId = urlAndId?.split('/').pop() || null;
-                                        const redirectUrl = urlAndId || null;
+                                    console.log(i);
+                                        const urlAndId = $(el).find('.vacancies__body').attr('href');
+                                        const title = $(el).find('h2').text().trim();
+                                        const company_name = $(el).find('.vacancies__company').text().trim();
+                                        const job_id = urlAndId?.split('/').pop() || null;
+                                        const redirect_url = urlAndId || null;
 
                                         const salaryText = $(el).find('.vacancies__price').text().trim();
                                         const cleanSalaryText = salaryText ? salaryText.replace(/[AZN]/g, '').trim() : null;
@@ -120,46 +120,47 @@ class HelloJobAz {
                                                 : [cleanSalaryText.trim()])
                                             : [];
 
-                                        const isPremium = $(el).find('.vacancies__premium').length > 0;
-                                        let [minSalary, maxSalary] = [0, 0];
+                                        const is_premium = $(el).find('.vacancies__label').length > 0;
+                                        let [min_salary, max_salary] = [0, 0];
+
                                         if (parts.length === 2) {
-                                            minSalary = parseInt(parts[0], 10) || 0;
-                                            maxSalary = parseInt(parts[1], 10) || 0;
+                                            min_salary = parseInt(parts[0], 10) || 0;
+                                            max_salary = parseInt(parts[1], 10) || 0;
                                         } else if (parts.length === 1) {
-                                            maxSalary = parseInt(parts[0], 10) || 0;
+                                            max_salary = parseInt(parts[0], 10) || 0;
                                         }
 
                                         const location = $(el).find('.vacancy_item_time').last().text().trim();
                                         const description = $(el).find('.vacancies__desc').text().trim();
-                                        const companyImageUrl = $(el).find('.vacancies__icon img').attr('src') || null;
+                                        const companyImageUrl = $(el).find('.vacancies__logo img').attr('src') || null;
 
                                         jobData.push({
                                             title,
-                                            companyName,
-                                            minSalary,
-                                            maxSalary,
-                                            isPremium,
-                                            categoryId: category.localCategoryId,
+                                            company_name,
+                                            min_salary,
+                                            max_salary,
+                                            is_premium,
+                                            category_id: category.local_category_id,
                                             location: bossAzCity.name,
                                             description,
-                                            jobId,
-                                            cityId: bossAzCity?.cityId || null,
-                                            sourceUrl: this.url,
-                                            redirectUrl: `https://${this.url}` + redirectUrl,
-                                            jobType: '0x001',
-                                            educationId: this.mapEducation(education),
-                                            uniqueKey: `${title}-${companyName}-${location}`
+                                            job_id,
+                                            city_id: bossAzCity?.cityId || null,
+                                            source_url: this.url,
+                                            redirect_url: redirect_url,
+                                            job_type: '0x001',
+                                            education_id: this.mapEducation(education),
+                                            unique_key: `${title}-${company_name}-${bossAzCity.name}`
                                         });
-
                                         companyData.push({
-                                            companyName,
-                                            imageUrl: companyImageUrl,
+                                            company_name,
+                                            image_url: companyImageUrl,
                                             website: enums.SitesWithId.HelloJobAz,
-                                            uniqueKey: `${companyName}-${companyImageUrl}`
+                                            unique_key: `${company_name}-${companyImageUrl}`
                                         });
+                                        // console.log({bossAzCity,jobData, companyData});
                                     });
                                 } catch (error) {
-                                    console.error(`Error for URL ${category.helloJobAzId} - ${bossAzCity.name}:`, error.message);
+                                    console.error(`Error for URL ${category.hello_job_az_id} - ${bossAzCity.name}:`, error.message);
                                 }
                             });
 
