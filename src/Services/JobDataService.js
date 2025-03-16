@@ -7,7 +7,6 @@ const JobDataService = {
     // Create new job data (insert multiple records)
 
     create: async (data) => {
-        console.log(data);return
         if (!Array.isArray(data) || data.length === 0) {
             throw new Error('Data must be a non-empty array');
         }
@@ -19,7 +18,7 @@ const JobDataService = {
             // Check for existing records with matching redirectUrl
             const existingRecords = await JobData.findAll({
                 where: {
-                    redirectUrl: {
+                    redirect_url: {
                         [Sequelize.Op.in]: redirectUrls
                     }
                 },

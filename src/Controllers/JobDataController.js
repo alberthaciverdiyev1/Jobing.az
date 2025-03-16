@@ -39,9 +39,6 @@ const jobDataController = {
                 throw new Error("No categories found");
             }
 
-            console.log({categories});
-
-
             const sources = [
                 { instance: new BossAz(), name: "BossAz" },
                 // { instance: new HelloJobAz(), name: "HelloJobAz" },
@@ -66,7 +63,7 @@ const jobDataController = {
 
                                     if (jobs.length > 0) {
                                         const response = await JobService.create(jobs);
-                                        await CompanyService.removeDuplicates();
+                                        // await CompanyService.removeDuplicates();
 
                                         if (!response || !response.status || !response.message) {
                                             throw new Error(`Invalid response from JobService for ${name}`);
@@ -75,11 +72,11 @@ const jobDataController = {
                                         totalInsertedJobCount += response.count;
 
                                         await sendTgMessage(
-                                            `${name} jobs successfully inserted for category ${category.categoryName} and city ${city.name}. Inserted count: ${response.count}. Total count: ${totalInsertedJobCount}`
+                                            `${name} jobs successfully inserted for category ${category.category_name} and city ${city.name}. Inserted count: ${response.count}. Total count: ${totalInsertedJobCount}`
                                         );
                                     }
                                 } catch (error) {
-                                    const errorMessage = `Error processing ${name} for category ${category.categoryName} and city ${city.name}: ${error.message}`;
+                                    const errorMessage = `Error processing ${name} for category ${category.category_name} and city ${city.name}: ${error.message}`;
                                     errors.push(errorMessage);
                                     await sendTgMessage(`Error from: ${name}, Error: ${errorMessage}`);
                                 }

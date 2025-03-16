@@ -23,11 +23,12 @@ document.addEventListener("DOMContentLoaded", (event) => {
     async function getJobs() {
         await axios.get('/api/jobs',{
             params: {
-                'allJobs':true
+                'all_jobs':true
             }
         }).then(res => {
             let htmlContent = '';
 
+                    console.log(res)
             if (res.status === 200) {
                 // alert(res.data.jobs.length);
                 if (res.data.totalCount) {
@@ -83,7 +84,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
                                     </div>                                    
                                 </div>
                                 <div class="flex text-sm text-gray-600">
-                                    <span><i class="fa-solid fa-clock mr-0.5"></i> ${element.postedAt.slice(0, 10)}</span>
+                                    <span><i class="fa-solid fa-clock mr-0.5"></i> ${element.posted_at.slice(0, 10)}</span>
                                     <span class="ml-3"><i class="fa-solid fa-location-dot mr-0.5"></i> ${element.location.slice(0, 10) + (element.location.length > 10 ? "..." : "")}</span>
                                 </div>
                                 <div class="border-custom-top w-52 mt-2 lg:w-72"></div>

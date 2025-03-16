@@ -8,7 +8,7 @@ const CityService = {
             if (!Array.isArray(data)) {
                 throw new Error('Data must be an array');
             }
-            const results = await City.bulkCreate(data); // Use bulkCreate for multiple records
+            const results = await City.bulkCreate(data);
 
             if (results && results.length > 0) {
                 return {
@@ -26,11 +26,11 @@ const CityService = {
 
     delete: async (id) => {
         try {
-            const city = await City.findByPk(id); // Use findByPk to find by primary key
+            const city = await City.findByPk(id);
             if (!city) {
                 throw new Error('City not found');
             }
-            await city.destroy(); // Use destroy method to delete the record
+            await city.destroy();
             return { message: 'City successfully deleted' };
         } catch (error) {
             throw new Error('Error deleting city: ' + error.message);
@@ -39,7 +39,7 @@ const CityService = {
 
     findById: async (id) => {
         try {
-            const city = await City.findOne({ where: { cityId: id } }); // Use findOne with a condition
+            const city = await City.findOne({ where: { city_id: id } });
             if (!city) {
                 throw new Error('City not found');
             }
@@ -55,7 +55,7 @@ const CityService = {
             if (data.site) {
                 query.website = Enums.SitesWithId[data.site];
             }
-            return await City.findAll({ where: query }); // Use findAll for multiple records
+            return await City.findAll({ where: query });
         } catch (error) {
             throw new Error('Error retrieving cities: ' + error.message);
         }
@@ -63,11 +63,11 @@ const CityService = {
 
     update: async (id, updateData) => {
         try {
-            const city = await City.findByPk(id); // Use findByPk to find the city
+            const city = await City.findByPk(id);
             if (!city) {
                 throw new Error('City not found');
             }
-            await city.update(updateData); // Use update method to modify data
+            await city.update(updateData);
             return city;
         } catch (error) {
             throw new Error('Error updating city: ' + error.message);
@@ -76,4 +76,3 @@ const CityService = {
 };
 
 export default CityService;
-    
