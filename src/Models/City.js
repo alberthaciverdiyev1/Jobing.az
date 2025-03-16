@@ -1,5 +1,5 @@
 import { Sequelize, DataTypes, Model } from 'sequelize';
-import sequelize from '../Config/Database';
+import sequelize from '../Config/Database.js';
 
 class City extends Model {}
 
@@ -12,7 +12,7 @@ City.init({
         type: DataTypes.STRING,
         allowNull: true,
     },
-    cityId: {
+    city_id: {
         type: DataTypes.INTEGER,
         allowNull: true,
     }
@@ -21,8 +21,8 @@ City.init({
     modelName: 'City',
     tableName: 'cities',
     timestamps: true,
-    createdAt: 'created_at',
-    updatedAt: 'updated_at',
+    created_at: 'created_at',
+    updated_at: 'updated_at',
     underscored: true,
     version: false,
 });

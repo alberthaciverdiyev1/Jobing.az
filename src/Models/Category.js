@@ -1,34 +1,34 @@
 import { Sequelize, DataTypes, Model } from 'sequelize';
-import sequelize from '../Config/Database';
+import sequelize from '../Config/Database.js';
 
 class Category extends Model {}
 
 Category.init({
-    localCategoryId: {
+    local_category_id: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+    },
+    category_name: {
         type: DataTypes.STRING,
         allowNull: true,
     },
-    categoryName: {
+    smart_job_az: {
         type: DataTypes.STRING,
         allowNull: true,
     },
-    smartJobAz: {
+    offer_az: {
         type: DataTypes.STRING,
         allowNull: true,
     },
-    offerAz: {
+    job_search: {
         type: DataTypes.STRING,
         allowNull: true,
     },
-    jobSearch: {
+    boss_az: {
         type: DataTypes.STRING,
         allowNull: true,
     },
-    bossAz: {
-        type: DataTypes.STRING,
-        allowNull: true,
-    },
-    helloJobAz: {
+    hello_job_az: {
         type: DataTypes.STRING,
         allowNull: true,
     }
@@ -37,16 +37,16 @@ Category.init({
     modelName: 'Category',
     tableName: 'categories',
     timestamps: true,
-    createdAt: 'created_at',
-    updatedAt: 'updated_at',
+    created_at: 'created_at',
+    updated_at: 'updated_at',
     underscored: true,
     version: false,
 });
 
-Category.hasOne(Category, {
-    foreignKey: 'localCategoryId',
-    sourceKey: 'id',
-    as: 'Parent',
-});
+// Category.hasOne(Category, {
+//     foreignKey: 'localCategoryId',
+//     sourceKey: 'id',
+//     as: 'Parent',
+// });
 
 export default Category;

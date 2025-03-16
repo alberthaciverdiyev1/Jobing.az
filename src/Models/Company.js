@@ -1,44 +1,44 @@
 import { Sequelize, DataTypes, Model } from 'sequelize';
-import sequelize from '../Config/Database';
+import sequelize from '../Config/Database.js';
 
 class Company extends Model {}
 
-Company.init({
-    companyName: {
-        type: DataTypes.STRING,
-        defaultValue: "",
+Company.init(
+    {
+        company_name: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            defaultValue: '',
+        },
+        image_url: {
+            type: DataTypes.STRING,
+            defaultValue: '',
+        },
+        website: {
+            type: DataTypes.STRING,
+            allowNull: true,
+        },
+        company_id: {
+            type: DataTypes.INTEGER,
+            allowNull: true,
+        },
+        unique_key: {
+            type: DataTypes.STRING,
+            allowNull: true,
+        },
+        deleted_at: {
+            type: DataTypes.DATE,
+            allowNull: true,
+        },
     },
-    imageUrl: {
-        type: DataTypes.STRING,
-        defaultValue: "",
-    },
-    website: {
-        type: DataTypes.STRING,
-        allowNull: true,
-    },
-    companyId: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-    },
-    uniqueKey: {
-        type: DataTypes.STRING,
-        allowNull: true,
-    },
-    deletedAt: {
-        type: DataTypes.DATE,
-        defaultValue: null,
+    {
+        sequelize,
+        modelName: 'Company',
+        tableName: 'companies',
+        timestamps: true,
+        paranoid: true,
+        underscored: true,
     }
-}, {
-    sequelize,
-    modelName: 'Company',
-    tableName: 'companies',
-    timestamps: true,
-    createdAt: 'created_at',
-    updatedAt: 'updated_at',
-    deletedAt: 'deleted_at',
-    paranoid: true,
-    version: false,
-    underscored: true,
-});
+);
 
 export default Company;

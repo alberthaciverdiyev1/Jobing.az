@@ -1,6 +1,6 @@
 import { Sequelize, DataTypes, Model } from 'sequelize';
-import sequelize from '../Config/Database';
-import Enums from '../Config/Enums';
+import sequelize from '../Config/Database.js';
+import Enums from '../Config/Enums.js';
 
 class ForeignCategory extends Model {}
 
@@ -9,11 +9,11 @@ ForeignCategory.init({
         type: DataTypes.STRING,
         allowNull: false,
     },
-    categoryId: {
+    category_id: {
         type: DataTypes.INTEGER,
         allowNull: true,
     },
-    parentId: {
+    parent_id: {
         type: DataTypes.INTEGER,
         allowNull: true,
     },
@@ -21,7 +21,7 @@ ForeignCategory.init({
         type: DataTypes.STRING,
         allowNull: false,
     },
-    websiteId: {
+    website_id: {
         type: DataTypes.STRING,
         allowNull: true,
         validate: {
@@ -33,8 +33,8 @@ ForeignCategory.init({
     modelName: 'ForeignCategory',
     tableName: 'foreign_categories',
     timestamps: true,
-    createdAt: 'created_at',
-    updatedAt: 'updated_at',
+    created_at: 'created_at',
+    updated_at: 'updated_at',
     version: false,
     underscored: true,
 });

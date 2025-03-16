@@ -1,5 +1,5 @@
 import { Sequelize, DataTypes, Model } from 'sequelize';
-import sequelize from '../Config/Database';
+import sequelize from '../Config/Database.js';
 
 class Visitor extends Model {}
 
@@ -8,19 +8,19 @@ Visitor.init({
         type: DataTypes.STRING,
         allowNull: false,
     },
-    lastVisit: {
+    last_visit: {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW,
     },
-    visitCount: {
+    visit_count: {
         type: DataTypes.INTEGER,
         defaultValue: 1,
     },
-    userAgent: {
+    user_agent: {
         type: DataTypes.STRING,
         defaultValue: '',
     },
-    deletedAt: {
+    deleted_at: {
         type: DataTypes.DATE,
         allowNull: true,
     }
@@ -29,9 +29,9 @@ Visitor.init({
     modelName: 'Visitor',
     tableName: 'visitors',
     timestamps: true,
-    createdAt: 'created_at',
-    updatedAt: 'updated_at',
-    deletedAt: 'deleted_at',
+    created_at: 'created_at',
+    updated_at: 'updated_at',
+    deleted_at: 'deleted_at',
     paranoid: true,
     version: false,
     underscored: true,

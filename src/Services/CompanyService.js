@@ -1,9 +1,12 @@
 import Company from '../Models/Company.js';
-import pLimit from "p-limit";
-import mime from "mime-types";
-import fs from "fs";
-import path from "path";
-import axios from "axios";
+import pLimit from 'p-limit';
+import mime from 'mime-types';
+import fs from 'fs';
+import path from 'path';
+import axios from 'axios';
+import { Op } from 'sequelize';
+
+import sequelize from '../Config/Database.js';
 
 const CompanyService = {
     // Create a company
@@ -12,17 +15,9 @@ const CompanyService = {
             if (!Array.isArray(data)) {
                 throw new Error('Data must be an array');
             }
-            // const existingRecords = await Company.find({
-            //     redirectUrl: { $in: data.map(company => company.redirectUrl) }
-            // }).select('redirectUrl');
-
-            // if (existingRecords.length > 0) {
-            //     const existingData = new Set(existingRecords.map(record => record.redirectUrl));
-            //     data = data.filter(company => !existingData.has(company.redirectUrl));
-            // }
 
             if (data.length > 0) {
-                const results = await Company.insertMany(data);
+                const results = await Company.bulkCreate(data);
                 return {
                     status: 201,
                     message: `Insertion completed. Number of records inserted: ${results.length}`,
@@ -41,17 +36,17 @@ const CompanyService = {
     },
 
     count: async () => {
-        return Company.countDocuments();
+        return Company.count();
     },
+
     // Get all companies
     getAll: async () => {
         try {
-            return await Company.find({});
+            return await Company.findAll();
         } catch (error) {
             throw new Error('Error retrieving companies: ' + error.message);
         }
     },
-
 
     downloadCompanyLogos: async (req, res) => {
         try {
@@ -98,7 +93,7 @@ const CompanyService = {
                             });
 
                             company.imageUrl = localFilePath;
-                            await CompanyService.updateCompanyImageUrl(company._id, localFilePath);
+                            await CompanyService.updateCompanyImageUrl(company.id, localFilePath);
                         }
                         return company;
                     });
@@ -120,10 +115,9 @@ const CompanyService = {
         }
     },
 
-
     updateCompanyImageUrl: async (companyId, newImagePath) => {
         try {
-            await Company.findByIdAndUpdate(companyId, { imageUrl: newImagePath });
+            await Company.update({ imageUrl: newImagePath }, { where: { id: companyId } });
         } catch (error) {
             throw new Error(`Error updating image URL for company with ID ${companyId}: ${error.message}`);
         }
@@ -134,9 +128,14 @@ const CompanyService = {
             const thirtyDaysAgo = new Date();
             thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
-            const companiesList = await Company.find({
-                createdAt: { $gte: thirtyDaysAgo },
-            }).sort({ createdAt: -1 });
+            const companiesList = await Company.findAll({
+                where: {
+                    createdAt: {
+                        [Sequelize.Op.gte]: thirtyDaysAgo,
+                    },
+                },
+                order: [['createdAt', 'DESC']],
+            });
 
             if (!companiesList || companiesList.length === 0) {
                 return {
@@ -153,7 +152,7 @@ const CompanyService = {
                 const uniqueKey = c.uniqueKey;
                 if (seenUniqueKeys.has(uniqueKey)) {
                     const previousCompany = seenUniqueKeys.get(uniqueKey);
-                    duplicateIds.push(previousCompany._id);
+                    duplicateIds.push(previousCompany.id);
                     seenUniqueKeys.set(uniqueKey, c);
                 } else {
                     seenUniqueKeys.set(uniqueKey, c);
@@ -161,7 +160,7 @@ const CompanyService = {
             });
 
             if (duplicateIds.length > 0) {
-                await Company.deleteMany({ _id: { $in: duplicateIds } });
+                await Company.destroy({ where: { id: { [Sequelize.Op.in]: duplicateIds } } });
                 return {
                     status: 201,
                     message: `Deleted ${duplicateIds.length} duplicate records from the last 30 days.`,
@@ -182,10 +181,11 @@ const CompanyService = {
             };
         }
     },
+
     // Find a company by ID
     findById: async (id) => {
         try {
-            const company = await Company.findById(id);
+            const company = await Company.findByPk(id);
             if (!company) {
                 throw new Error('Company not found');
             }
@@ -198,11 +198,11 @@ const CompanyService = {
     // Update a company
     update: async (id, updateData) => {
         try {
-            const company = await Company.findById(id);
+            const company = await Company.findByPk(id);
             if (!company) {
                 throw new Error('Company not found');
             }
-            await company.updateOne(updateData);
+            await company.update(updateData);
             return company;
         } catch (error) {
             throw new Error('Error updating company: ' + error.message);
@@ -212,16 +212,17 @@ const CompanyService = {
     // Delete a company
     delete: async (id) => {
         try {
-            const company = await Company.findById(id);
+            const company = await Company.findByPk(id);
             if (!company) {
                 throw new Error('Company not found');
             }
-            await company.remove();
+            await company.destroy();
             return { message: 'Company successfully deleted' };
         } catch (error) {
             throw new Error('Error deleting company: ' + error.message);
         }
     },
+
     addSingleCompany: async (data) => {
         try {
             const companyFolder = `./src/Public/Images/CompanyLogos`;
@@ -259,15 +260,13 @@ const CompanyService = {
                 data.companyName = data.companyName.replace(/["<>|:*?\/\\]/g, '0');
             }
 
-            const company = new Company(data);
-            const savedCompany = await company.save();
+            const company = await Company.create(data);
 
             return { status: 200, message: 'Məlumat uğurla əlavə edildi!' };
         } catch (error) {
             throw new Error('Error adding company: ' + error.message);
         }
     }
-
 };
 
 export default CompanyService;

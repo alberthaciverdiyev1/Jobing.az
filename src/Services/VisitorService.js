@@ -1,4 +1,5 @@
 import Visitor from '../Models/Visitor.js';
+import {Sequelize,Op} from 'sequelize';
 
 const VisitorService = {
     findByIp: async (ip) => {
@@ -11,6 +12,7 @@ const VisitorService = {
 
     create: async (data) => {
         try {
+            console.log({data});
             const newVisitor = new Visitor(data);
             return await newVisitor.save();
         } catch (error) {
@@ -20,70 +22,85 @@ const VisitorService = {
 
     updateLastVisit: async (ip, userAgent) => {
         try {
-            return await Visitor.findOneAndUpdate(
-                { ip },
-                {
-                    lastVisit: Date.now(),
-                    userAgent: userAgent
-                },
-                { new: true }
-            );
+            const visitor = await Visitor.findOne({
+                where: { ip }
+            });
+
+            if (!visitor) {
+                throw new Error('Visitor not found');
+            }
+
+            visitor.last_visit = new Date();
+            visitor.user_agent = userAgent;
+
+            await visitor.save();
+
+            return visitor;
         } catch (error) {
             throw new Error('Error updating last visit: ' + error.message);
         }
     },
 
 
-    incrementVisitCount: async (ip) => {
-        return Visitor.updateOne({ ip }, { $inc: { visitCount: 1 } });
+    incrementVisitCount : async (ip) => {
+        try {
+            const [updatedRowCount, updatedVisitor] = await Visitor.update(
+                { visit_count: Sequelize.literal('visit_count + 1') }, // Increment the visit count
+                { where: { ip }, returning: true } // Ensure we return the updated data
+            );
+
+            if (updatedRowCount === 0) {
+                throw new Error('Visitor not found');
+            }
+
+            return updatedVisitor[0];
+        } catch (error) {
+            console.error('Error logging visitor:', error);
+            throw new Error('Error logging visitor');
+        }
     },
 
     count: async (day) => {
-        const matchCondition = {};
+        try {
+            const whereCondition = {};
 
-        if (day) {
-            const date = new Date();
-            date.setDate(date.getDate() - day);
-            matchCondition.createdAt = { $gte: date };
+            if (day) {
+                const date = new Date();
+                date.setDate(date.getDate() - day);
+                whereCondition.created_at = {
+                    [Op.gte]: date
+                };
+            }
+
+            const result = await Visitor.sum('visit_count', {
+                where: whereCondition
+            });
+
+            return result || 0;
+        } catch (error) {
+            throw new Error('Error counting visits: ' + error.message);
         }
-
-        const result = await Visitor.aggregate([
-            {
-                $match: matchCondition
-            },
-            {
-                $group: {
-                    _id: null,
-                    totalVisits: { $sum: "$visitCount" }
-                }
-            }
-        ]);
-
-        return result[0]?.totalVisits || 0;
     },
+
     dailyCount: async () => {
-        const date = new Date();
-        date.setHours(0, 0, 0, 0);
-        const startOfDay = date;
+        try {
+            const date = new Date();
+            const startOfDay = new Date(date.setHours(0, 0, 0, 0));
+            const endOfDay = new Date(startOfDay);
+            endOfDay.setHours(23, 59, 59, 999);
 
-        const endOfDay = new Date(startOfDay);
-        endOfDay.setHours(23, 59, 59, 999);
-
-        const result = await Visitor.aggregate([
-            {
-                $match: {
-                    createdAt: { $gte: startOfDay, $lte: endOfDay }
+            const result = await Visitor.sum('visit_count', {
+                where: {
+                    created_at: {
+                        [Op.between]: [startOfDay, endOfDay]
+                    }
                 }
-            },
-            {
-                $group: {
-                    _id: null,
-                    totalVisits: { $sum: "$visitCount" }
-                }
-            }
-        ]);
+            });
 
-        return result[0]?.totalVisits || 0;
+            return result || 0;
+        } catch (error) {
+            throw new Error('Error counting daily visits: ' + error.message);
+        }
     }
 
 };

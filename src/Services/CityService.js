@@ -1,3 +1,4 @@
+import { Op } from 'sequelize';
 import Enums from '../Config/Enums.js';
 import City from '../Models/City.js';
 
@@ -7,9 +8,9 @@ const CityService = {
             if (!Array.isArray(data)) {
                 throw new Error('Data must be an array');
             }
-            const results = await City.insertMany(data);
+            const results = await City.bulkCreate(data); // Use bulkCreate for multiple records
 
-            if (results && Array.isArray(results) && results.length > 0) {
+            if (results && results.length > 0) {
                 return {
                     status: 201,
                     message: `Insertion completed. Number of records inserted: ${results.length}`,
@@ -25,11 +26,11 @@ const CityService = {
 
     delete: async (id) => {
         try {
-            const city = await City.findById(id);
+            const city = await City.findByPk(id); // Use findByPk to find by primary key
             if (!city) {
                 throw new Error('City not found');
             }
-            await city.remove();
+            await city.destroy(); // Use destroy method to delete the record
             return { message: 'City successfully deleted' };
         } catch (error) {
             throw new Error('Error deleting city: ' + error.message);
@@ -38,7 +39,7 @@ const CityService = {
 
     findById: async (id) => {
         try {
-            const city = await City.findOne({ cityId: id });
+            const city = await City.findOne({ where: { cityId: id } }); // Use findOne with a condition
             if (!city) {
                 throw new Error('City not found');
             }
@@ -51,8 +52,10 @@ const CityService = {
     getAll: async (data) => {
         try {
             let query = {};
-            if (data.site) query.website = Enums.SitesWithId[data.site]
-            return await City.find(query);
+            if (data.site) {
+                query.website = Enums.SitesWithId[data.site];
+            }
+            return await City.findAll({ where: query }); // Use findAll for multiple records
         } catch (error) {
             throw new Error('Error retrieving cities: ' + error.message);
         }
@@ -60,11 +63,11 @@ const CityService = {
 
     update: async (id, updateData) => {
         try {
-            const city = await City.findById(id);
+            const city = await City.findByPk(id); // Use findByPk to find the city
             if (!city) {
                 throw new Error('City not found');
             }
-            await city.updateOne(updateData);
+            await city.update(updateData); // Use update method to modify data
             return city;
         } catch (error) {
             throw new Error('Error updating city: ' + error.message);
@@ -73,3 +76,4 @@ const CityService = {
 };
 
 export default CityService;
+    

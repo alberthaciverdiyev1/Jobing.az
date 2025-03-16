@@ -11,7 +11,7 @@ class BossAz {
 
     async Categories() {
         try {
-            const $ = await Scrape(this.url);
+            const $ = await Scrape('https://'+this.url);
             const categories = [];
 
             let mainCategoryId = null;
@@ -93,7 +93,7 @@ class BossAz {
                                             const htmlContent = $(el).find('.results-i-secondary').html();
                                             const location = htmlContent.match(/^(.*?)<span/)[1].trim();
                                             const title = $(el).find('.results-i-title').text().trim();
-                                            const companyName = $(el).find('.results-i-company').text().trim();
+                                            const company_name = $(el).find('.results-i-company').text().trim();
                                             const description = $(el).find('.results-i-summary p').text().trim();
                                             const redirectUrl = urlAndId.attr('href');
                                             const jobId = redirectUrl.split('/').pop();
@@ -115,7 +115,7 @@ class BossAz {
 
                                             jobData.push({
                                                 title,
-                                                companyName,
+                                                company_name,
                                                 companyId,
                                                 minSalary,
                                                 maxSalary,
@@ -129,7 +129,7 @@ class BossAz {
                                                 jobType: '0x001',
                                                 educationId: +education,
                                                 experienceId: experience,
-                                                uniqueKey: `${title}-${companyName}-${location}`
+                                                uniqueKey: `${title}-${company_name}-${location}`
                                             });
                                             
                                             
@@ -199,7 +199,7 @@ class BossAz {
                 if (companyId && name) {
                     companies.push({
                         companyId,
-                        companyName: name,
+                        company_name: name,
                         uniqueKey: `${companyId}` + `${enums.SitesWithId.BossAz}`,
                         website: enums.SitesWithId.BossAz
                     });

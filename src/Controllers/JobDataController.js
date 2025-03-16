@@ -28,7 +28,6 @@ const jobDataController = {
             const cities = data.includes('false')
                 ? await CityService.getAll({ site: "BossAz" })
                 : [{ name: 'Bakı', cityId: 1 }];
-
             if (!cities || cities.length === 0) {
                 throw new Error("No cities found");
             }
@@ -40,10 +39,13 @@ const jobDataController = {
                 throw new Error("No categories found");
             }
 
+            console.log({categories});
+
+
             const sources = [
                 { instance: new BossAz(), name: "BossAz" },
-                { instance: new HelloJobAz(), name: "HelloJobAz" },
-                { instance: new OfferAz(), name: "OfferAz" },
+                // { instance: new HelloJobAz(), name: "HelloJobAz" },
+                // { instance: new OfferAz(), name: "OfferAz" },
                 // { instance: new SmartJobAz(), name: "SmartJobAz" },
                 // { instance: new JobSearchAz(), name: "JobSearchAz" },
             ];
@@ -112,15 +114,15 @@ const jobDataController = {
     getAll: async (req, res) => {
         try {
             let data = {
-                categoryId: req.query.categoryId,
-                cityId: req.query.cityId,
+                category_id: req.query.category_id,
+                city_id: req.query.city_id,
                 keyword: req.query.keyword,
-                jobType: req.query.jobType,
-                minSalary: req.query.minSalary,
-                maxSalary: req.query.maxSalary,
+                job_type: req.query.job_type,
+                min_salary: req.query.min_salary,
+                max_salary: req.query.max_salary,
                 experience: req.query.experience,
-                educationId: req.query.educationId,
-                allJobs: req.query.allJobs === 'true' ? 1 : 0,
+                education_id: req.query.education_id,
+                all_jobs: req.query.all_jobs === 'true' ? 1 : 0,
                 offset: req.query.offset,
             }
             const jobs = await JobService.getAllJobs(data);

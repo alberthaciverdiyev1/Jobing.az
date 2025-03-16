@@ -19,11 +19,12 @@ const CategoryController = {
 
 
             const hellojobAzCategories = await hellojob.Categories();
-            // const offerAzCategories = await offer.Categories();
-            // const bossAzCategories = await boss.Categories();
-            // const smartJobCategories = await smartJob.Categories(); 
-            // let categories = [...smartJobCategories, ...bossAzCategories];
-            let categories = [...hellojobAzCategories];
+            const offerAzCategories = await offer.Categories();
+            const bossAzCategories = await boss.Categories();
+            // const smartJobCategories = await smartJob.Categories();
+            let categories = [      ...bossAzCategories,...hellojobAzCategories,...offerAzCategories];
+            console.log(categories);
+            // let categories = [...hellojobAzCategories];
 
             const response = await CategoryService.addForeignCategories(categories);
             res.status(response.status).json({message: response.message, count: response.count});

@@ -1,5 +1,5 @@
 import { Sequelize, DataTypes, Model } from 'sequelize';
-import sequelize from '../Config/Database';
+import sequelize from '../Config/Database.js';
 
 class Site extends Model {}
 
@@ -16,11 +16,11 @@ Site.init({
         type: DataTypes.STRING,
         allowNull: true,
     },
-    isActive: {
+    is_active: {
         type: DataTypes.BOOLEAN,
         defaultValue: true,
     },
-    deletedAt: {
+    deleted_at: {
         type: DataTypes.DATE,
         allowNull: true,
     }
@@ -29,9 +29,9 @@ Site.init({
     modelName: 'Site',
     tableName: 'sites',
     timestamps: true,
-    createdAt: 'created_at',
-    updatedAt: 'updated_at',
-    deletedAt: 'deleted_at',
+    created_at: 'created_at',
+    updated_at: 'updated_at',
+    deleted_at: 'deleted_at',
     paranoid: true,
     version: false,
     underscored: true,

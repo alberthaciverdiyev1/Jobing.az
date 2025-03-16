@@ -1,26 +1,40 @@
 import JobData from '../Models/JobData.js';
-import mongoose from 'mongoose';
+import { Sequelize, Op } from 'sequelize';
 import Company from "../Models/Company.js";
+import Category from "../Models/Category.js";
 
 const JobDataService = {
     // Create new job data (insert multiple records)
+
     create: async (data) => {
+        console.log(data);return
         if (!Array.isArray(data) || data.length === 0) {
             throw new Error('Data must be a non-empty array');
         }
 
         try {
-            const existingRecords = await JobData.find({
-                redirectUrl: { $in: data.map(job => job.redirectUrl) }
-            }).select('redirectUrl');
+            // Extract redirectUrl values from input data
+            const redirectUrls = data.map(job => job.redirect_url);
 
-            if (existingRecords.length > 0) {
-                const existingData = new Set(existingRecords.map(record => record.redirectUrl));
-                data = data.filter(job => !existingData.has(job.redirectUrl));
-            }
+            // Check for existing records with matching redirectUrl
+            const existingRecords = await JobData.findAll({
+                where: {
+                    redirectUrl: {
+                        [Sequelize.Op.in]: redirectUrls
+                    }
+                },
+                attributes: ['redirect_url']
+            });
+
+            // Extract existing redirectUrls into a Set
+            const existingData = new Set(existingRecords.map(record => record.redirect_url));
+
+            // Filter out the jobs that already exist in the database
+            data = data.filter(job => !existingData.has(job.redirect_url));
 
             if (data.length > 0) {
-                const results = await JobData.insertMany(data);
+                // Insert new records
+                const results = await JobData.bulkCreate(data);
 
                 return {
                     status: 201,
@@ -38,14 +52,24 @@ const JobDataService = {
             throw new Error(`Error inserting records in JobData: ${error.message}`);
         }
     },
+
+
+
     removeDuplicates: async () => {
         try {
+            // Get the date 30 days ago
             const thirtyDaysAgo = new Date();
             thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
-            const allJobs = await JobData.find({
-                createdAt: { $gte: thirtyDaysAgo },
-            }).sort({ createdAt: -1 });
+            // Fetch all jobs created in the last 30 days, sorted by createdAt
+            const allJobs = await JobData.findAll({
+                where: {
+                    created_at: {
+                        [Sequelize.Op.gte]: thirtyDaysAgo,
+                    },
+                },
+                order: [['created_at', 'DESC']],
+            });
 
             if (!allJobs || allJobs.length === 0) {
                 return {
@@ -59,18 +83,26 @@ const JobDataService = {
             const duplicateIds = [];
 
             allJobs.forEach(job => {
-                const uniqueKey = job.uniqueKey;
-                if (seenUniqueKeys.has(uniqueKey)) {
-                    const previousJob = seenUniqueKeys.get(uniqueKey);
-                    duplicateIds.push(previousJob._id);
-                    seenUniqueKeys.set(uniqueKey, job);
+                const unique_key = job.unique_key;
+                if (seenUniqueKeys.has(unique_key)) {
+                    const previousJob = seenUniqueKeys.get(unique_key);
+                    duplicateIds.push(previousJob.id);
+                    seenUniqueKeys.set(unique_key, job);
                 } else {
-                    seenUniqueKeys.set(uniqueKey, job);
+                    seenUniqueKeys.set(unique_key, job);
                 }
             });
 
             if (duplicateIds.length > 0) {
-                await JobData.deleteMany({ _id: { $in: duplicateIds } });
+                // Delete the duplicate records
+                await JobData.destroy({
+                    where: {
+                        id: {
+                            [Sequelize.Op.in]: duplicateIds,
+                        },
+                    },
+                });
+
                 return {
                     status: 201,
                     message: `Deleted ${duplicateIds.length} duplicate records from the last 30 days.`,
@@ -92,87 +124,126 @@ const JobDataService = {
         }
     },
 
+
     getAllJobs: async (data) => {
         try {
-            const filteredJobs = [];
             const seenUrls = new Set();
-
+            // Son 30 günü hesapla
             const currentDate = new Date();
             const thirtyDaysAgo = new Date(currentDate.setDate(currentDate.getDate() - 30));
 
+            // Varsayılan filtreler
             const query = {
-                createdAt: { $gte: thirtyDaysAgo },
-                isActive: true
+                is_active: true,
+                created_at: { [Sequelize.Op.gte]: thirtyDaysAgo } // Son 30 gün
             };
 
-            // if (data.categoryId && !isNaN(Number(data.categoryId))) {
-            //     query.$or = [
-            //         { categoryId: +data.categoryId },
-            //         { subCategoryId: +data.categoryId }
-            //     ];
-            // }
+            // Dinamik filtreler
+            const filters = [
+                { key: 'category_id', type: 'int' },
+                { key: 'city_id', type: 'int' },
+                { key: 'education_id', type: 'int' },
+                { key: 'experience_id', type: 'int', alias: 'experience' },
+                { key: 'job_type', type: 'string' },
+            ];
 
-            if (data.categoryId && !isNaN(Number(data.categoryId))) query.categoryId = +data.categoryId;
-            if (data.cityId && !isNaN(Number(data.cityId))) query.cityId = +data.cityId;
-            if (data.educationId && !isNaN(Number(data.educationId))) query.educationId = +data.educationId;
-            if (data.experience && !isNaN(Number(data.experience))) query.experienceId = +data.experience;
-            if (data.jobType) query.jobType = data.jobType;
-            if (!data.allJobs) query.sourceUrl = 'jobing.az';
-            if (data.minSalary && !isNaN(Number(data.minSalary)) && data.minSalary !== 0) query.minSalary = { $gte: +data.minSalary };
-            if (data.maxSalary && !isNaN(Number(data.maxSalary))) query.maxSalary = { $lte: +data.maxSalary };
-
-            if (data.keyword) {
-                query.$or = [
-                    { title: { $regex: data.keyword, $options: 'i' } },
-                    { companyName: { $regex: data.keyword, $options: 'i' } },
-                    { location: { $regex: data.keyword, $options: 'i' } }
-                ];
-            }
-
-            const limit = 100;
-            const offset = Number(data.offset) || 0;
-            // console.log({data,query});
-
-            const jobs = await JobData.find(query)
-                .sort({ createdAt: -1 })
-                .populate('companyDetails', 'imageUrl companyName')
-                .skip(offset)
-                .limit(limit);
-
-            const totalCount = await JobData.countDocuments(query);
-
-            const jobsWithImageUrl = jobs.map(job => ({
-                ...job.toObject(),
-                companyImageUrl: job.companyDetails?.imageUrl || null
-
-            }));
-
-            jobsWithImageUrl.forEach(job => {
-                if (!seenUrls.has(job.redirectUrl)) {
-                    seenUrls.add(job.redirectUrl);
-                    filteredJobs.push(job);
+            filters.forEach(({ key, type, alias }) => {
+                const value = data[alias || key];
+                if (value !== undefined) {
+                    if (type === 'int' && !isNaN(Number(value))) query[key] = Number(value);
+                    else if (type === 'string' && value.trim()) query[key] = value;
                 }
             });
 
+            // Tüm işleri almak istemiyorsanız 'jobing.az' filtresini ekleyin
+            if (!data.all_jobs) query.source_url = 'jobing.az';
+
+            // Min ve max maaş filtreleri
+            if (data.min_salary && !isNaN(Number(data.min_salary)) && data.min_salary !== 0) {
+                query.min_salary = { [Sequelize.Op.gte]: Number(data.min_salary) };
+            }
+
+            if (data.max_salary && !isNaN(Number(data.max_salary))) {
+                query.max_salary = { [Sequelize.Op.lte]: Number(data.max_salary) };
+            }
+
+            // Anahtar kelime araması
+            if (data.keyword) {
+                const keywordQuery = { [Sequelize.Op.iLike]: `%${data.keyword}%` };
+                query[Sequelize.Op.or] = [
+                    { title: keywordQuery },
+                    { description: keywordQuery },
+                    { company_name: keywordQuery },
+                    { location: keywordQuery },
+                ];
+            }
+
+            console.log(query); // Kontrol amaçlı log
+
+            const limit = 100;
+            const offset = Number(data.offset) || 0;
+
+            // İşleri sorgulama
+            const jobs = await JobData.findAll({
+                where: query,
+                order: [['created_at', 'DESC']],  // Zaman sırasına göre sırala
+                offset,
+                limit,
+                raw: true,  // Veriyi düz bir JSON formatında almak için raw: true ekledik
+                include: [
+                    {
+                        model: Company,
+                        as: 'company',
+                        attributes: ['image_url', 'company_name'],
+                    },
+                ],
+            });
+
+            console.log(jobs); // Kontrol amaçlı log
+
+            const totalCount = await JobData.count({ where: query });
+
+            // Dönüştürme işlemi
+            const filteredJobs = jobs
+                .map(job => ({
+                    ...job,
+                    company_image_url: job['company.image_url'] || null,
+                }))
+                .filter(job => {
+                    if (!seenUrls.has(job.redirect_url)) {
+                        seenUrls.add(job.redirect_url);
+                        return true;
+                    }
+                    return false;
+                });
             return {
-                totalCount: totalCount,
+                totalCount,
                 jobs: filteredJobs,
-                hideLoadMore: (limit + offset >= totalCount)
+                hideLoadMore: limit + offset >= totalCount,
             };
         } catch (error) {
-            throw new Error('Error retrieving jobs: ' + error.message);
+            throw new Error(`Error retrieving jobs: ${error.message}`);
         }
     },
 
-    // Find a job by ID
+// Find a job by ID
     findSiteById: async (id) => {
         try {
-            if (!mongoose.Types.ObjectId.isValid(id)) {
+            // Check if the ID is a valid number or string, depending on how IDs are structured in Sequelize
+            if (!id || isNaN(Number(id))) {
                 throw new Error('Invalid job ID format');
             }
 
-            // findById() retrieves a document by its ID
-            const job = await JobData.findById(id);
+            // Find the job by ID using Sequelize's `findByPk` method, assuming ID is primary key
+            const job = await JobData.findByPk(id, {
+                include: [
+                    {
+                        model: CompanyDetails,
+                        attributes: ['imageUrl', 'companyName'],
+                    },
+                ],
+            });
+
             if (!job) {
                 throw new Error('Job not found');
             }
@@ -182,45 +253,55 @@ const JobDataService = {
         }
     },
 
-    // Update job data
+// Update job data
     updateJob: async (id, status) => {
         try {
             if (!id) {
                 throw new Error('ID is required');
             }
-    
+
             const updateData = {
                 isActive: status,
                 updatedAt: new Date(),
                 redirectUrl: `https://jobing.az/vakansiyalar/${id}/details`,
             };
-    
-            const job = await JobData.findByIdAndUpdate(id, updateData, { new: true });
-    
-            if (!job) {
+
+            // Update job using Sequelize's `update` method
+            const [updatedRowsCount, updatedJobs] = await JobData.update(updateData, {
+                where: { id: id },
+                returning: true, // This ensures the updated row is returned
+            });
+
+            if (updatedRowsCount === 0) {
                 throw new Error('Job not found');
             }
-    
+
+            // Assuming updatedJobs[0] is the updated job object
             return 'Job updated';
         } catch (error) {
-            console.error('Error updating job:', error); // Konsola detaylı hata yazdır
-            throw error; // Orijinal hatayı yeniden fırlat
+            console.error('Error updating job:', error); // Log detailed error to the console
+            throw error; // Rethrow the original error
         }
     },
-    
+
 
     // Delete job data
+// Delete job data
     deleteSite: async (id) => {
         try {
-            if (!mongoose.Types.ObjectId.isValid(id)) {
+            if (!id || isNaN(Number(id))) {
                 throw new Error('Invalid job ID format');
             }
 
-            // findByIdAndDelete() deletes a document by its ID
-            const job = await JobData.findByIdAndDelete(id);
-            if (!job) {
+            // Use Sequelize's `destroy` method to delete a record by its ID
+            const deletedRows = await JobData.destroy({
+                where: { id: id },
+            });
+
+            if (deletedRows === 0) {
                 throw new Error('Job not found');
             }
+
             return { message: 'Job successfully deleted' };
         } catch (error) {
             throw new Error('Error deleting job: ' + error.message);
@@ -229,100 +310,92 @@ const JobDataService = {
 
     addJobRequest: async (data) => {
         try {
-            const job = new JobData(data);
-            const savedJob = await job.save();
-            savedJob.uniqueKey = savedJob._id.toString();
-            await savedJob.save();
-            return { status: 200, message: 'Məlumat uğurla əlavə edildi!', "id": savedJob._id };
+            // Create a new job instance using the provided data
+            const job = await JobData.create(data);
+
+            // Assuming the unique key is based on the ID (converted to string)
+            job.uniqueKey = job.id.toString();
+
+            // Update the job with the uniqueKey
+            await job.save();
+
+            return { status: 200, message: 'Məlumat uğurla əlavə edildi!', id: job.id };
         } catch (error) {
             throw new Error('Error adding job request: ' + error.message);
         }
     },
 
-    // Job details
+
+// Job details
     details: async (id) => {
         try {
-            const job = await JobData.aggregate([
-                {
-                    $match: { uniqueKey: id }
-                },
-                {
-                    $lookup: {
-                        from: 'categories',
-                        localField: 'categoryId',
-                        foreignField: 'localCategoryId',
-                        as: 'category'
+            // Find the job with the provided uniqueKey
+            const job = await JobData.findOne({
+                where: { uniqueKey: id },
+                include: [{
+                    model: Category,
+                    as: 'category',
+                    required: false, // You can change this to true if you want to make sure the job has an associated category
+                    attributes: ['category_name'],
+                    // Correct the condition to match categoryId between JobData and Category
+                    where: {
+                        categoryId: Sequelize.col('JobData.category_id') // Ensure it's referencing the correct column from JobData
                     }
-                },
-                {
-                    $addFields: {
-                        category: { $arrayElemAt: ['$category.categoryName', 0] },
-                    }
-                },
-                {
-                    $project: {
-                        uniqueKey: 1,
-                        title: 1,
-                        email: 1,
-                        phone: 1,
-                        description: 1,
-                        location: 1,
-                        minSalary: 1,
-                        maxSalary: 1,
-                        minAge: 1,
-                        maxAge: 1,
-                        companyName: 1,
-                        cityId: 1,
-                        educationId: 1,
-                        experienceId: 1,
-                        userName: 1,
-                        isPremium: 1,
-                        isActive: 1,
-                        sourceUrl: 1,
-                        redirectUrl: 1,
-                        postedAt: 1,
-                        createdAt: 1,
-                        updatedAt: 1,
-                        category: 1,
-                    }
-                }
-            ]);
-    
-            if (!job || job.length === 0) {
-                throw new Error('Job not found');
-            }
-    
-            const company = await Company.findOne({ companyName: String(job[0].companyName) });
-    
-            if (company && company.imageUrl) {
-                let imageUrl = company.imageUrl;
-                let index = imageUrl.indexOf('src/Public'); 
-    
-                if (index !== -1) {
-                    job[0].companyImage = imageUrl.slice(index + 10);
-                } else {
-                    job[0].companyImage = imageUrl;
-                }
-            } else {
-                job[0].companyImage = null; 
-            }
-    
-            return job[0];
+                }]
+            });
+
+            // if (!job) {
+            //     throw new Error('Job not found');
+            // }
+            //
+            // // Add category field to job object
+            // const category = job.category ? job.category.categoryName : null;
+            // job.category = category;
+            //
+            // // Find the company details based on the company name
+            // const company = await Company.findOne({ where: { companyName: job.companyName } });
+            //
+            // if (company && company.imageUrl) {
+            //     let imageUrl = company.imageUrl;
+            //     let index = imageUrl.indexOf('src/Public');
+            //
+            //     if (index !== -1) {
+            //         job.companyImage = imageUrl.slice(index + 10);
+            //     } else {
+            //         job.companyImage = imageUrl;
+            //     }
+            // } else {
+            //     job.companyImage = null;
+            // }
+
+            // Return the job with additional company image and category information
+            return job;
         } catch (error) {
-            console.error('Error fetching job:', error); // Hata detaylarını konsola yaz
-            throw error; // Orijinal hatayı fırlat
+            console.error('Error fetching job:', error); // Log detailed error to console
+            throw error; // Rethrow the original error
         }
     },
-    
 
     count: async () => {
-        const thirtyDaysAgo = new Date();
-        thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+        try {
+            const thirtyDaysAgo = new Date();
+            thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
-        return JobData.countDocuments({
-            createdAt: { $gte: thirtyDaysAgo }
-        });
-    }
+            // Use Sequelize's count method with a condition on the createdAt field
+            const jobCount = await JobData.count({
+                where: {
+                    createdAt: {
+                        [Sequelize.Op.gte]: thirtyDaysAgo
+                    }
+                }
+            });
+
+            return jobCount;
+        } catch (error) {
+            throw new Error('Error counting jobs: ' + error.message);
+        }
+    },
+
 };
 
 export default JobDataService;

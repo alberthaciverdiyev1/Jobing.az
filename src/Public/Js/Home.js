@@ -33,11 +33,11 @@ document.addEventListener("DOMContentLoaded", (event) => {
                 if (res.data.totalCount) {
                     let data = res.data.jobs.slice(0, 12);
                     data.forEach(element => {
-                        htmlContent += `<div class="job-card bg-white px-3 pt-2 h-36 lg:h-40 rounded-xl shadow-md hover:hover-card-color cursor-pointer duration-300 border border-custom lg:px-5" data-original-link="${element.redirectUrl}">
+                        htmlContent += `<div class="job-card bg-white px-3 pt-2 h-36 lg:h-40 rounded-xl shadow-md hover:hover-card-color cursor-pointer duration-300 border border-custom lg:px-5" data-original-link="${element.redirect_url}">
                         <div class="content flex">
                              <div class="mt-2 flex-shrink-0 lg:mt-1">
-                                <img src="../Images/${element.sourceUrl}.png" alt="Company Logo" class="border-custom h-12 w-12 mt-1 rounded-lg border lg:h-14 lg:w-14" />
-                                <img src="${(element.companyImageUrl && element.companyImageUrl !== "/nologo.png" && !element.companyImageUrl.startsWith('http')) ? element.companyImageUrl.replace(/src\/Public/g, '..') : (element.companyImageUrl && element.companyImageUrl.startsWith('http') ? element.companyImageUrl : "../Images/DefaultCompany.png")}" alt="Company Logo" class="border-custom h-12 w-12 mt-3 rounded-lg border lg:h-14 lg:w-14" />
+                                <img src="../Images/${element.source_url}.png" alt="Company Logo" class="border-custom h-12 w-12 mt-1 rounded-lg border lg:h-14 lg:w-14" />
+                                <img src="${(element.company_image_url && element.company_image_url !== "/nologo.png" && !element.company_image_url.startsWith('http')) ? element.company_image_url.replace(/src\/Public/g, '..') : (element.company_image_url && element.company_image_url.startsWith('http') ? element.company_image_url : "../Images/DefaultCompany.png")}" alt="Company Logo" class="border-custom h-12 w-12 mt-3 rounded-lg border lg:h-14 lg:w-14" />
                             </div>
                             <div class="ml-3 mt-2 pr-1 lg:mt-2 justify-end w-screen">
                                 <div class="flex mb-1 justify-between">
@@ -51,34 +51,34 @@ document.addEventListener("DOMContentLoaded", (event) => {
                                                         ${capitalizeFirstLetter(element.title.slice(0, 25)) + (element.title.length > 25 ? "..." : "")} 
                                                     </span>
                                                 </p>
-                                            <h4 class=" text-gray-600 hidden lg:block ${!element.minSalary && !element.maxSalary ? "font-semibold text-base" : "font-bold text-lg"}">
+                                            <h4 class=" text-gray-600 hidden lg:block ${!element.min_salary && !element.max_salary ? "font-semibold text-base" : "font-bold text-lg"}">
                                                 ${(
-                                (+element.minSalary === +element.maxSalary && +element.minSalary !== null && +element.minSalary !== 0)
-                                    ? +element.minSalary + " " + element.currencySign
+                                (+element.min_salary === +element.max_salary && +element.min_salary !== null && +element.min_salary !== 0)
+                                    ? +element.min_salary + " " + element.currency_sign
                                     : (
-                                        (+element.minSalary !== null && +element.minSalary !== 0)
-                                            ? +element.minSalary + '-'
+                                        (+element.min_salary !== null && +element.min_salary !== 0)
+                                            ? +element.min_salary + '-'
                                             : ""
                                     ) + (
-                                        (+element.maxSalary !== null && +element.maxSalary !== 0)
-                                            ? +element.maxSalary + " " + element.currencySign
+                                        (+element.max_salary !== null && +element.max_salary !== 0)
+                                            ? +element.max_salary + " " + element.currency_sign
                                             : (
-                                                !element.minSalary && !element.maxSalary ? "Razılaşma ilə" : ""
+                                                !element.min_salary && !element.max_salary ? "Razılaşma ilə" : ""
                                             )
                                     )
                             )}                                                
                                             </h4>
                                         </div>
                                         <h4 class="truncate lg:hidden text-sm font-semibold text-gray-700 mb-1"> 
-                                            <i class="fa-solid fa-building"></i> ${capitalizeFirstLetter(element.companyName.slice(0, 17)) + (element.companyName.length > 17 ? "..." : "")}
+                                            <i class="fa-solid fa-building"></i> ${capitalizeFirstLetter(element.company_name.slice(0, 17)) + (element.company_name.length > 17 ? "..." : "")}
                                         </h4>
                                         <h4 class="hidden lg:inline lg:whitespace-normal text-sm font-semibold text-gray-700 mb-1"> 
-                                            <i class="fa-solid fa-building"></i> ${capitalizeFirstLetter(element.companyName.slice(0, 32)) + (element.companyName.length > 32 ? "..." : "")}
+                                            <i class="fa-solid fa-building"></i> ${capitalizeFirstLetter(element.company_name.slice(0, 32)) + (element.company_name.length > 32 ? "..." : "")}
                                         </h4>
                                     </div>
                                     <div class="hidden lg:w-full">
                                         <span class="bg-yellow-100 text-yellow-700 px-1 ml-2 py-0.5 rounded-lg text-sm w-auto">
-                                            ${element.sourceUrl}
+                                            ${element.source_url}
                                         </span>
                                     </div>                                    
                                 </div>
@@ -89,9 +89,9 @@ document.addEventListener("DOMContentLoaded", (event) => {
                                 <div class="border-custom-top w-52 mt-2 lg:w-72"></div>
                                     <div class="text-sm mt-2 hidden lg:flex items-center justify-between">
                                       <div class="flex">  <span class="bg-yellow-100 text-yellow-700 px-2 py-0.5 font-medium rounded-lg text-sm h-7 hidden lg:flex">
-                                            ${element.sourceUrl}
+                                            ${element.source_url}
                                         </span>
-                                         ${element.isPremium ? `<span class="bg-orange-500 text-white px-2 ml-1 py-0.5 rounded-lg">premium</span>` : ''}
+                                         ${element.is_premium ? `<span class="bg-orange-500 text-white px-2 ml-1 py-0.5 rounded-lg">premium</span>` : ''}
                                         <span class="bg-green-400 text-white px-2 ml-1  py-0.5 rounded-lg">aktivdir</span></div>
                                         <div class="flex justify-end items-end mt-auto">
                                     <p class="filled-button-color text-white py-2 px-8 rounded-full">
@@ -100,20 +100,20 @@ document.addEventListener("DOMContentLoaded", (event) => {
                                 </div>
                                         </div>
                                 <div class="text-sm mt-2 flex justify-between lg:hidden">
-                                   <span class="bg-blue-100 text-blue-700 px-1 py-0.5 rounded-lg text-sm">${element.sourceUrl}</span>
-                                <h4 class="text-gray-600 ${!element.minSalary && !element.maxSalary ? "font-semibold text-base" : "font-bold text-lg"}">
+                                   <span class="bg-blue-100 text-blue-700 px-1 py-0.5 rounded-lg text-sm">${element.source_url}</span>
+                                <h4 class="text-gray-600 ${!element.min_salary && !element.max_salary ? "font-semibold text-base" : "font-bold text-lg"}">
                                    ${(
-                                (+element.minSalary === +element.maxSalary && +element.minSalary !== null && +element.minSalary !== 0)
-                                    ? +element.minSalary + " " + element.currencySign
+                                (+element.min_salary === +element.max_salary && +element.min_salary !== null && +element.min_salary !== 0)
+                                    ? +element.min_salary + " " + element.currency_sign
                                     : (
-                                        (+element.minSalary !== null && +element.minSalary !== 0)
-                                            ? +element.minSalary + '-'
+                                        (+element.min_salary !== null && +element.min_salary !== 0)
+                                            ? +element.min_salary + '-'
                                             : ""
                                     ) + (
-                                        (+element.maxSalary !== null && +element.maxSalary !== 0)
-                                            ? +element.maxSalary + " " + element.currencySign
+                                        (+element.max_salary !== null && +element.max_salary !== 0)
+                                            ? +element.max_salary + " " + element.currency_sign
                                             : (
-                                                !element.minSalary && !element.maxSalary ? "Razılaşma ilə" : ""
+                                                !element.min_salary && !element.max_salary ? "Razılaşma ilə" : ""
                                             )
                                     )
                             )}   
@@ -157,7 +157,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
             .then(res => {
                 if (res.status === 200) {
                     Object.values(res.data).forEach(element => {
-                        o += `<option value="${element.localCategoryId}">${element.categoryName}</option> `
+                        o += `<option value="${element.local_category_id}">${element.category_name}</option> `
                     });
                     document.getElementById("category-select").innerHTML = o;
                 }
@@ -181,7 +181,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
                 if (res.status === 200) {
                     res.data.forEach(element => {
                         o += `                        
-                        <option value="${element.cityId}">${element.name}</option>`
+                        <option value="${element.city_id}">${element.name}</option>`
                     })
                     document.getElementById("city-select").innerHTML = o;
                 }
@@ -223,8 +223,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
         const baseUrl = `${window.location.origin}/vakansiyalar`;
         const params = new URLSearchParams({
-            minSalary: 0,
-            maxSalary: 5000,
+            min_salary: 0,
+            max_salary: 5000,
             offset: 0,
             ...(categoryId && { categoryId }),
             ...(cityId && { cityId }),
