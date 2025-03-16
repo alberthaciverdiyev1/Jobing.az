@@ -1,33 +1,40 @@
-import mongoose from 'mongoose';
+import { Sequelize, DataTypes, Model } from 'sequelize';
+import sequelize from '../Config/Database.js';
 
-const { Schema } = mongoose;
+class Visitor extends Model {}
 
-const visitorSchema = new Schema({
+Visitor.init({
     ip: {
-        type: String,
-        required: true
+        type: DataTypes.STRING,
+        allowNull: false,
     },
-    lastVisit: {
-        type: Date,
-        default: Date.now
+    last_visit: {
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW,
     },
-    visitCount: {
-        type: Number,
-        default: 1
+    visit_count: {
+        type: DataTypes.INTEGER,
+        defaultValue: 1,
     },
-    userAgent: {
-        type: String, 
-        default: ''
+    user_agent: {
+        type: DataTypes.STRING,
+        defaultValue: '',
     },
-    deletedAt: {
-        type: Date,
-        default: null
+    deleted_at: {
+        type: DataTypes.DATE,
+        allowNull: true,
     }
 }, {
+    sequelize,
+    modelName: 'Visitor',
+    tableName: 'visitors',
     timestamps: true,
-    versionKey: false
+    created_at: 'created_at',
+    updated_at: 'updated_at',
+    deleted_at: 'deleted_at',
+    paranoid: true,
+    version: false,
+    underscored: true,
 });
-
-const Visitor = mongoose.model('Visitor', visitorSchema);
 
 export default Visitor;

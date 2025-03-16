@@ -9,14 +9,14 @@ let categoryArray = [], cityArray = [];
 let showMoreCategories = true;
 let showMoreCities = true;
 let offset = 0;
-let categoryId = null,
-    allJobs = true,
-    cityId = null,
-    educationId = null,
+let category_id = null,
+    all_jobs = true,
+    city_id = null,
+    education_id = null,
     jobType = null,
-    minSalary = null,
-    maxSalary = null,
-    experienceLevel = null;
+    min_salary = null,
+    max_salary = null,
+    experience_level = null;
 const removePrefix = (value, prefix) => {
     if (value?.startsWith(prefix)) {
         return value.slice(prefix.length);
@@ -27,17 +27,17 @@ const removePrefix = (value, prefix) => {
 
 function getURLParams() {
     const params = new URLSearchParams(window.location.search);
-    const categoryId = removePrefix(params.get('categoryId'), 'category-');
-    const cityId = removePrefix(params.get('cityId'), 'city-');
-    const educationId = removePrefix(params.get('educationId'), "education-");
-    const experienceLevel = removePrefix(params.get('experienceLevel'), "experience-");
+    const category_id = removePrefix(params.get('category_id'), 'category-');
+    const city_id = removePrefix(params.get('city_id'), 'city-');
+    const education_id = removePrefix(params.get('education_id'), "education-");
+    const experience_level = removePrefix(params.get('experience_level'), "experience-");
     const keyword = params.get('keyword');
 
     return {
-        categoryId,
-        cityId,
-        educationId,
-        experienceLevel,
+        category_id,
+        city_id,
+        education_id,
+        experience_level,
         keyword,
     };
 }
@@ -56,34 +56,34 @@ function updateURLParams(params) {
 }
 
 function preselectFilters(onlyCheckFilter = false) {
-    const { categoryId, cityId, educationId, experienceLevel, keyword } = getURLParams();
+    const { category_id, city_id, education_id, experience_level, keyword } = getURLParams();
 
-    if (categoryId && !isNaN(Number(categoryId))) {
-        if (categoryId > 10) document.getElementById("categoryList").innerHTML = categoryHTML(categoryArray);
-        if (categoryId !== 1 || categoryId !== 4 || categoryId !== 6 || categoryId !== 8 || categoryId !== 7 || categoryId !== 9 || categoryId !== 11 || categoryId !== 2 || categoryId !== 13|| categoryId !== 14) document.getElementById("categoryList").innerHTML = categoryHTML(categoryArray);
+    if (category_id && !isNaN(Number(category_id))) {
+        if (category_id > 10) document.getElementById("categoryList").innerHTML = categoryHTML(categoryArray);
+        if (category_id !== 1 || category_id !== 4 || category_id !== 6 || category_id !== 8 || category_id !== 7 || category_id !== 9 || category_id !== 11 || category_id !== 2 || category_id !== 13|| category_id !== 14) document.getElementById("categoryList").innerHTML = categoryHTML(categoryArray);
 
         addRadioChangeListener("category");
 
-        document.querySelector(`input[name="category"][id="category-${+categoryId}"]`).checked = true;
+        document.querySelector(`input[name="category"][id="category-${+category_id}"]`).checked = true;
     } else {
         document.querySelector(`input[name="category"][id="all"]`).checked = true;
     }
 
-    if (cityId && !isNaN(Number(cityId))) {
-        if (cityId !== 28 || cityId !== 12 || cityId !== 83 || cityId !== 87 || cityId !== 85 || cityId !== 34 || cityId !== 88) document.getElementById("cityList").innerHTML = cityHTML(cityArray);
+    if (city_id && !isNaN(Number(city_id))) {
+        if (city_id !== 28 || city_id !== 12 || city_id !== 83 || city_id !== 87 || city_id !== 85 || city_id !== 34 || city_id !== 88) document.getElementById("cityList").innerHTML = cityHTML(cityArray);
         addRadioChangeListener("city");
 
-        document.querySelector(`input[name="city"][id="city-${cityId}"]`).checked = true;
+        document.querySelector(`input[name="city"][id="city-${city_id}"]`).checked = true;
     } else {
         document.querySelector(`input[name="city"][id="city-all"]`).checked = true;
     }
 
-    if (educationId && !isNaN(Number(educationId))) {
-        document.querySelector(`input[name="education"][id="education-${+educationId}"]`).checked = true;
+    if (education_id && !isNaN(Number(education_id))) {
+        document.querySelector(`input[name="education"][id="education-${+education_id}"]`).checked = true;
     }
 
-    if (experienceLevel && !isNaN(Number(experienceLevel))) {
-        document.querySelector(`input[name="experience"][id="experience-${+experienceLevel}"]`).checked = true;
+    if (experience_level && !isNaN(Number(experience_level))) {
+        document.querySelector(`input[name="experience"][id="experience-${+experience_level}"]`).checked = true;
     }
 
     if (keyword) {
@@ -92,13 +92,13 @@ function preselectFilters(onlyCheckFilter = false) {
     if (!onlyCheckFilter) {
         getJobs(
             {
-                categoryId: !isNaN(Number(categoryId)) ? categoryId : null,
-                cityId: !isNaN(Number(cityId)) ? cityId : null,
-                educationId: !isNaN(Number(educationId)) ? educationId : null,
-                experienceLevel,
+                category_id: !isNaN(Number(category_id)) ? category_id : null,
+                city_id: !isNaN(Number(city_id)) ? city_id : null,
+                education_id: !isNaN(Number(education_id)) ? education_id : null,
+                experience_level,
                 offset,
                 keyword,
-                allJobs
+                all_jobs
             });
     }
 
@@ -110,11 +110,11 @@ function categoryHTML(data, limit = null) {
         data = data.slice(0, limit);
     }
     Object.values(data).forEach(element => {
-        const categoryId = `category-${element.localCategoryId}`;
+        const category_id = `category-${element.local_category_id}`;
         htmlContent += `
         <div class="flex items-center"> 
-            <input type="radio" name="category" id="${categoryId}" category-id="${element.localCategoryId}" class="custom-checkbox" />
-            <label for="${categoryId}" class="text-gray-800 text-base">
+            <input type="radio" name="category" id="${category_id}" category-id="${element.local_category_id}" class="custom-checkbox" />
+            <label for="${category_id}" class="text-gray-800 text-base">
                 ${element.name}
             </label>
         </div>`;
@@ -173,12 +173,12 @@ function cityHTML(data, limit = null) {
         data = data.slice(0, limit);
     }
     data.forEach(element => {
-        const cityId = `city-${element.cityId}`;
+        const city_id = `city-${element.city_id}`;
 
         htmlContent += `
         <div class="flex items-center"> 
-            <input type="radio" name="city" id="${cityId}" city-id="${element.cityId}" class="custom-checkbox" />
-            <label for="${cityId}" class="text-gray-800">
+            <input type="radio" name="city" id="${city_id}" city-id="${element.city_id}" class="custom-checkbox" />
+            <label for="${city_id}" class="text-gray-800">
                 ${element.name}
             </label>
         </div>
@@ -189,14 +189,13 @@ function cityHTML(data, limit = null) {
 
 
 async function getCategories() {
-    await axios.get('/api/categories', {
-        params: { website: "BossAz" }
-    }).then(res => {
+    await axios.get('/api/categories').then(res => {
+        console.log({res})
         if (res.status === 200) {
             res.data.forEach(element => {
                 categoryArray.push({
-                    "localCategoryId": element.localCategoryId,
-                    "name": element.categoryName
+                    "local_category_id": element.local_category_id,
+                    "name": element.category_name
                 });
             });
             document.getElementById("categoryList").innerHTML = categoryHTML(categoryArray, 10);
@@ -238,11 +237,11 @@ async function getEducation() {
             let htmlContent = '';
             if (res.status === 200) {
                 Object.entries(res.data).forEach((education) => {
-                    const educationId = `education-${education[1]}`;
+                    const education_id = `education-${education[1]}`;
                     htmlContent += `
                         <div class="flex items-center"> 
-                            <input type="radio" name="education" id="${educationId}" education-id="${education[1]}" class="custom-checkbox" />
-                            <label for="${educationId}" class="text-gray-800">
+                            <input type="radio" name="education" id="${education_id}" education-id="${education[1]}" class="custom-checkbox" />
+                            <label for="${education_id}" class="text-gray-800">
                             ${education[0]}
                             </label>
                         </div>`;
@@ -347,13 +346,14 @@ async function getJobs(params) {
 
         if (res.status === 200) {
             if (res.data.totalCount) {
+                console.log(res.data)
                 jobList = res.data.jobs;
                 res.data.jobs.forEach(element => {
-                    htmlContent += `<div class="job-card bg-white px-3 pt-2 h-36 sm:h-40 rounded-xl shadow-md mb-4 hover:hover-card-color cursor-pointer duration-300 border border-custom sm:px-5" data-original-link="${element.redirectUrl}">
+                    htmlContent += `<div class="job-card bg-white px-3 pt-2 h-36 sm:h-40 rounded-xl shadow-md mb-4 hover:hover-card-color cursor-pointer duration-300 border border-custom sm:px-5" data-original-link="${element.redirect_url}">
                                         <div class="content flex">
                                              <div class="mt-2 flex-shrink-0 sm:mt-1">
-                                                <img src="../Images/${element.sourceUrl}.png" alt="Company Logo" class="border-custom h-12 w-12 mt-1 rounded-lg border sm:h-14 sm:w-14" />
-                                                <img src="${(element.companyImageUrl && element.companyImageUrl !== "/nologo.png" && !element.companyImageUrl.startsWith('http')) ? element.companyImageUrl.replace(/src\/Public/g, '..') : (element.companyImageUrl && element.companyImageUrl.startsWith('http') ? element.companyImageUrl : "../Images/DefaultCompany.png")}" alt="Company Logo" class="border-custom h-12 w-12 mt-3 rounded-lg border sm:h-14 sm:w-14" />
+                                                <img src="../Images/${element.source_url}.png" alt="Company Logo" class="border-custom h-12 w-12 mt-1 rounded-lg border sm:h-14 sm:w-14" />
+                                                <img src="${(element.company_image_url && element.company_image_url !== "/nologo.png" && !element.company_image_url.startsWith('http')) ? element.company_image_url.replace(/src\/Public/g, '..') : (element.company_image_url && element.company_image_url.startsWith('http') ? element.company_image_url : "../Images/DefaultCompany.png")}" alt="Company Logo" class="border-custom h-12 w-12 mt-3 rounded-lg border sm:h-14 sm:w-14" />
                                             </div>
                                             <div class="ml-3 mt-2 pr-1 sm:mt-2 justify-end sm:w-auto w-screen">
                                                 <div class="flex mb-1 justify-between">
@@ -367,46 +367,46 @@ async function getJobs(params) {
                                                             </span>
                                                         </p>
                                                         <h4 class="truncate sm:hidden text-xs font-semibold text-gray-700 mb-1"> 
-                                                            <i class="fa-solid fa-building"></i> ${capitalizeFirstLetter(element.companyName.slice(0, 19)) + (element.companyName.length > 19 ? "..." : "")}
+                                                            <i class="fa-solid fa-building"></i> ${capitalizeFirstLetter(element.company_name.slice(0, 19)) + (element.company_name.length > 19 ? "..." : "")}
                                                         </h4>
                                                         <h4 class="hidden sm:inline sm:whitespace-normal text-sm font-semibold text-gray-700 mb-1"> 
-                                                            <i class="fa-solid fa-building"></i> ${capitalizeFirstLetter(element.companyName.slice(0, 40)) + (element.companyName.length > 40 ? "..." : "")}
+                                                            <i class="fa-solid fa-building"></i> ${capitalizeFirstLetter(element.company_name.slice(0, 40)) + (element.company_name.length > 40 ? "..." : "")}
                                                         </h4>
                                                     </div>
                                                     <div class="hidden sm:w-full">
                                                         <span class="bg-yellow-100 text-yellow-700 px-2 ml-2 py-0.5 rounded-lg text-sm w-auto">
-                                                            ${element.sourceUrl}
+                                                            ${element.source_url}
                                                         </span>
                                                     </div>
 
                                                 </div>
                                                 <div class="flex text-sm text-gray-600">
-                                                    <span><i class="fa-solid fa-clock mr-0.5"></i> ${element.postedAt.slice(0, 10)}</span>
+                                                    <span><i class="fa-solid fa-clock mr-0.5"></i> ${element.posted_at.slice(0, 10)}</span>
                                                     <span class="ml-3"><i class="fa-solid fa-location-dot mr-0.5"></i> ${element.location.slice(0, 10) + (element.location.length > 10 ? "..." : "")}</span>
                                                 </div>
                                                 <div class="border-custom-top w-52 mt-2 sm:w-72"></div>
                                                     <div class="text-sm mt-2 hidden sm:flex items-center">
                                                         <span class="bg-yellow-100 text-yellow-700 px-2 py-0.5 font-medium rounded-lg text-sm h-7 hidden sm:flex">
-                                                            ${element.sourceUrl}
+                                                            ${element.source_url}
                                                         </span>
-                                                        ${element.isPremium ? `<span class="bg-orange-400 text-white px-2 ml-1 py-0.5 rounded-lg">premium</span>` : ''}
+                                                        ${element.is_premium ? `<span class="bg-orange-400 text-white px-2 ml-1 py-0.5 rounded-lg">premium</span>` : ''}
                                                         <span class="bg-green-400 text-white px-2 ml-1 py-0.5 rounded-lg">aktivdir</span>
                                                     </div>
                                                 <div class="text-sm mt-2 flex justify-between sm:hidden">
-                                                   <span class="bg-blue-100 text-blue-700 px-1 py-0.5 rounded-lg text-sm">${element.sourceUrl}</span>
-                                                <h4 class=" text-gray-600 ${!element.minSalary && !element.maxSalary ? "font-semibold text-base" : "font-bold text-lg"}">
+                                                   <span class="bg-blue-100 text-blue-700 px-1 py-0.5 rounded-lg text-sm">${element.source_url}</span>
+                                                <h4 class=" text-gray-600 ${!element.min_salary && !element.max_salary ? "font-semibold text-base" : "font-bold text-lg"}">
                                                     ${(
-                                                        (+element.minSalary === +element.maxSalary && +element.minSalary !== null && +element.minSalary !== 0)
-                                                            ? +element.minSalary + " " + element.currencySign
+                                                        (+element.min_salary === +element.max_salary && +element.min_salary !== null && +element.min_salary !== 0)
+                                                            ? +element.min_salary + " " + element.currency_sign
                                                             : (
-                                                                (+element.minSalary !== null && +element.minSalary !== 0)
-                                                                    ? +element.minSalary + '-'
+                                                                (+element.min_salary !== null && +element.min_salary !== 0)
+                                                                    ? +element.min_salary + '-'
                                                                     : ""
                                                             ) + (
-                                                                (+element.maxSalary !== null && +element.maxSalary !== 0)
-                                                                    ? +element.maxSalary + " " + element.currencySign
+                                                                (+element.max_salary !== null && +element.max_salary !== 0)
+                                                                    ? +element.max_salary + " " + element.currency_sign
                                                                     : (
-                                                                        !element.minSalary && !element.maxSalary ? "Razılaşma ilə" : ""
+                                                                        !element.min_salary && !element.max_salary ? "Razılaşma ilə" : ""
                                                                     )
                                                             )
                                                     )}
@@ -418,19 +418,19 @@ async function getJobs(params) {
                                                 ${false ? ` <button class="text-base text-gray-600 font-bold mb-2 w-8 h-8">
                                                         <i class="fa-solid fa-heart text-2xl"></i>
                                                     </button>` : ""}
-                                                <h4 class="${!element.minSalary && !element.maxSalary ? "font-semibold text-base" : "font-bold text-lg"} text-gray-600 mt-2">
+                                                <h4 class="${!element.min_salary && !element.max_salary ? "font-semibold text-base" : "font-bold text-lg"} text-gray-600 mt-2">
                                                     ${(
-                                                        (+element.minSalary === +element.maxSalary && +element.minSalary !== null && +element.minSalary !== 0)
-                                                            ? +element.minSalary + " " + element.currencySign
+                                                        (+element.min_salary === +element.max_salary && +element.min_salary !== null && +element.min_salary !== 0)
+                                                            ? +element.min_salary + " " + element.currency_sign
                                                             : (
-                                                                (+element.minSalary !== null && +element.minSalary !== 0)
-                                                                    ? +element.minSalary + '-'
+                                                                (+element.min_salary !== null && +element.min_salary !== 0)
+                                                                    ? +element.min_salary + '-'
                                                                     : ""
                                                             ) + (
-                                                                (+element.maxSalary !== null && +element.maxSalary !== 0)
-                                                                    ? +element.maxSalary + " " + element.currencySign
+                                                                (+element.max_salary !== null && +element.max_salary !== 0)
+                                                                    ? +element.max_salary + " " + element.currency_sign
                                                                     : (
-                                                                        !element.minSalary && !element.maxSalary ? "Razılaşma ilə" : ""
+                                                                        !element.min_salary && !element.max_salary ? "Razılaşma ilə" : ""
                                                                     )
                                                             )
                                                     )}                                              
@@ -513,24 +513,24 @@ document.getElementById("show-more-cities").addEventListener("click", function (
 
 function handleFilterChange(minS = 0, maxS = 5000) {
     if (!minS) {
-        let categoryId = removePrefix(document.querySelector('input[name="category"]:checked')?.id, 'category-');
-        let cityId = removePrefix(document.querySelector('input[name="city"]:checked')?.id, 'city-');
-        let educationId = removePrefix(document.querySelector('input[name="education"]:checked')?.id, 'education-');
-        let experienceLevel = removePrefix(document.querySelector('input[name="experience"]:checked')?.id, "experience-");
+        let category_id = removePrefix(document.querySelector('input[name="category"]:checked')?.id, 'category-');
+        let city_id = removePrefix(document.querySelector('input[name="city"]:checked')?.id, 'city-');
+        let education_id = removePrefix(document.querySelector('input[name="education"]:checked')?.id, 'education-');
+        let experience_level = removePrefix(document.querySelector('input[name="experience"]:checked')?.id, "experience-");
         let keyword = document.getElementById("search")?.value
-        minSalary ?? 0;
-        maxSalary ?? 5000;
+        min_salary ?? 0;
+        max_salary ?? 5000;
 
-        updateURLParams({ categoryId, cityId, educationId, experienceLevel, keyword, minSalary, maxSalary });
-        getJobs({ categoryId, cityId, educationId, experienceLevel, offset, keyword, minSalary, maxSalary,allJobs });
+        updateURLParams({ category_id, city_id, education_id, experience_level, keyword, min_salary, max_salary });
+        getJobs({ category_id, city_id, education_id, experience_level, offset, keyword, min_salary, max_salary,all_jobs });
 
     } else {
-        maxSalary = maxS ?? 5000;
-        minSalary = !isNaN(Number(minS)) ? minS : 0;
-        let { categoryId, cityId, educationId, experienceLevel, keyword } = getURLParams();
+        max_salary = maxS ?? 5000;
+        min_salary = !isNaN(Number(minS)) ? minS : 0;
+        let { category_id, city_id, education_id, experience_level, keyword } = getURLParams();
 
-        updateURLParams({ categoryId, cityId, educationId, experienceLevel, keyword, minSalary, maxSalary });
-        getJobs({ categoryId, cityId, educationId, experienceLevel, offset, keyword, minSalary, maxSalary,allJobs });
+        updateURLParams({ category_id, city_id, education_id, experience_level, keyword, min_salary, max_salary });
+        getJobs({ category_id, city_id, education_id, experience_level, offset, keyword, min_salary, max_salary,all_jobs });
     }
 
 }
@@ -582,10 +582,10 @@ function addRadioChangeListener(type) {
 // };
 
 document.getElementById("onlyJobing").addEventListener("click", function() {
-    allJobs = false;
-    document.getElementById("getAllJobs").classList.remove('filled-button-color');
-    document.getElementById("getAllJobs").classList.remove('text-gray-50');
-    document.getElementById("getAllJobs").classList.add('text-gray-900');
+    all_jobs = false;
+    document.getElementById("getall_jobs").classList.remove('filled-button-color');
+    document.getElementById("getall_jobs").classList.remove('text-gray-50');
+    document.getElementById("getall_jobs").classList.add('text-gray-900');
     this.classList.add('filled-button-color');
     this.classList.remove('text-gray-900');
     this.classList.add('text-gray-50');
@@ -593,8 +593,8 @@ document.getElementById("onlyJobing").addEventListener("click", function() {
     handleFilterChange();
 });
 
-document.getElementById("getAllJobs").addEventListener("click", function() {
-    allJobs = true;
+document.getElementById("getall_jobs").addEventListener("click", function() {
+    all_jobs = true;
     document.getElementById("onlyJobing").classList.remove('filled-button-color');
     document.getElementById("onlyJobing").classList.remove('text-gray-50');
     document.getElementById("onlyJobing").classList.add('text-gray-900');
@@ -655,8 +655,8 @@ noUiSlider.create(slider, {
 let debounceTimeout;
 
 slider.noUiSlider.on('update', function (values) {
-    minSalary = values[0];
-    maxSalary = values[1];
+    min_salary = values[0];
+    max_salary = values[1];
 
     document.getElementById('min-value').innerText = values[0];
     document.getElementById('max-value').innerText = values[1];

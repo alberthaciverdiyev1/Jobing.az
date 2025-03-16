@@ -28,7 +28,6 @@ const jobDataController = {
             const cities = data.includes('false')
                 ? await CityService.getAll({ site: "BossAz" })
                 : [{ name: 'Bakı', cityId: 1 }];
-
             if (!cities || cities.length === 0) {
                 throw new Error("No cities found");
             }
@@ -36,13 +35,14 @@ const jobDataController = {
             await sendTgMessage(`Cron started at ${formatDate()}`);
 
             const categories = await CategoryService.getLocalCategories({});
+            console.log(categories)
             if (!categories || categories.length === 0) {
                 throw new Error("No categories found");
             }
 
             const sources = [
-                { instance: new BossAz(), name: "BossAz" },
-                { instance: new HelloJobAz(), name: "HelloJobAz" },
+                // { instance: new BossAz(), name: "BossAz" },
+                // { instance: new HelloJobAz(), name: "HelloJobAz" },
                 { instance: new OfferAz(), name: "OfferAz" },
                 // { instance: new SmartJobAz(), name: "SmartJobAz" },
                 // { instance: new JobSearchAz(), name: "JobSearchAz" },
@@ -73,11 +73,11 @@ const jobDataController = {
                                         totalInsertedJobCount += response.count;
 
                                         await sendTgMessage(
-                                            `${name} jobs successfully inserted for category ${category.categoryName} and city ${city.name}. Inserted count: ${response.count}. Total count: ${totalInsertedJobCount}`
+                                            `${name} jobs successfully inserted for category ${category.category_name} and city ${city.name}. Inserted count: ${response.count}. Total count: ${totalInsertedJobCount}`
                                         );
                                     }
                                 } catch (error) {
-                                    const errorMessage = `Error processing ${name} for category ${category.categoryName} and city ${city.name}: ${error.message}`;
+                                    const errorMessage = `Error processing ${name} for category ${category.category_name} and city ${city.name}: ${error.message}`;
                                     errors.push(errorMessage);
                                     await sendTgMessage(`Error from: ${name}, Error: ${errorMessage}`);
                                 }
@@ -112,15 +112,15 @@ const jobDataController = {
     getAll: async (req, res) => {
         try {
             let data = {
-                categoryId: req.query.categoryId,
-                cityId: req.query.cityId,
+                category_id: req.query.category_id,
+                city_id: req.query.city_id,
                 keyword: req.query.keyword,
-                jobType: req.query.jobType,
-                minSalary: req.query.minSalary,
-                maxSalary: req.query.maxSalary,
+                job_type: req.query.job_type,
+                min_salary: req.query.min_salary,
+                max_salary: req.query.max_salary,
                 experience: req.query.experience,
-                educationId: req.query.educationId,
-                allJobs: req.query.allJobs === 'true' ? 1 : 0,
+                education_id: req.query.education_id,
+                all_jobs: req.query.all_jobs === 'true' ? 1 : 0,
                 offset: req.query.offset,
             }
             const jobs = await JobService.getAllJobs(data);

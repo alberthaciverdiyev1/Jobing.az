@@ -1,18 +1,16 @@
-import ForeignCategory from '../Models/ForeignCategory.js';
 import Category from '../Models/Category.js';
 import Enums from '../Config/Enums.js';
 
 const CategoryService = {
-    // Foreign Categories add
     addForeignCategories: async (data) => {
         try {
             if (!Array.isArray(data)) {
                 throw new Error('Data must be an array');
             }
 
-            const results = await ForeignCategory.insertMany(data);
+            const results = await Category.bulkCreate(data);
 
-            if (results && Array.isArray(results) && results.length > 0) {
+            if (results && results.length > 0) {
                 return {
                     status: 201,
                     message: `Insertion completed. Number of records inserted: ${results.length}`,
@@ -26,52 +24,35 @@ const CategoryService = {
         }
     },
 
-    // get all foreign categories
     getForeignCategories: async () => {
         try {
-            return await ForeignCategory.find({});
+            return await Category.findAll();
         } catch (error) {
             throw new Error('Error retrieving categories: ' + error.message);
         }
     },
 
-
-    // get all foreign categories
     countCategory: async () => {
         try {
-            return await Category.countDocuments({});
+            return await Category.count();
         } catch (error) {
             throw new Error('Error retrieving categories: ' + error.message);
         }
     },
-
-
-    // getLocalCategories: async (data) => {
-    //     try {
-    //         let query = {};
-    //
-    //         // if (data?.website) {
-    //         //     query.website = Enums.SitesWithId[data.website];
-    //         // }
-    //         return await Category.find(query);
-    //     } catch (error) {
-    //         throw new Error('Error retrieving categories: ' + error.message);
-    //     }
-    // },
 
     getLocalCategories: async (data) => {
         try {
-            let query = {};
+            let categories = await Category.findAll({
+                // where: { id: 36 },
+                attributes: { exclude: ['id'] }
+            });
 
-            // if (data?.website) {
-            //     query.website = Enums.SitesWithId[data.website];
-            // }
-            return await Category.find(query).select('-_id');
+            return categories.map(category => category.dataValues);
+
         } catch (error) {
             throw new Error('Error retrieving categories: ' + error.message);
         }
     },
-
 
     addLocalCategory: async (data) => {
         try {
@@ -89,21 +70,20 @@ const CategoryService = {
     // Delete category
     delete: async (id) => {
         try {
-            const category = await Category.findById(id);
+            const category = await Category.findByPk(id); 
             if (!category) {
                 throw new Error('Category not found');
             }
-            await category.remove();
+            await category.destroy();
             return { message: 'Category successfully deleted' };
         } catch (error) {
             throw new Error('Error deleting category: ' + error.message);
         }
     },
 
-    // Fing with id
     findById: async (id) => {
         try {
-            const category = await Category.findById(id);
+            const category = await Category.findByPk(id);
             if (!category) {
                 throw new Error('Category not found');
             }
@@ -116,11 +96,11 @@ const CategoryService = {
     // Update category
     update: async (id, updateData) => {
         try {
-            const category = await Category.findById(id);
+            const category = await Category.findByPk(id);
             if (!category) {
                 throw new Error('Category not found');
             }
-            await category.updateOne(updateData);
+            await category.update(updateData);
             return category;
         } catch (error) {
             throw new Error('Error updating category: ' + error.message);

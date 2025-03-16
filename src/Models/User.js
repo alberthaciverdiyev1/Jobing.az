@@ -19,11 +19,11 @@ const userSchema = new Schema({
         type: Boolean,
         default: false
     },
-    isActive: {
+    is_active: {
         type: Boolean,
         default: true
     },
-    deletedAt: {
+    deleted_at: {
         type: Date,
         default: null
     }

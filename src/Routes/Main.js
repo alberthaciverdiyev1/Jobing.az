@@ -63,7 +63,7 @@ router.get('/api/scrape', scrapeController.getData);                            
 
 
 //Load Views
-router.get('/', viewController.home);
+router.get('/',visitorLogger, viewController.home);
 router.get('/auth', viewController.auth);
 router.get('/vakansiyalar', visitorLogger, viewController.jobs);
 router.get('/about-us', visitorLogger, viewController.aboutUs);
@@ -85,11 +85,6 @@ router.post('/set-lang', (req, res) => {
         res.status(400).send({ error: 'Invalid language' });
     }
 });
-
-//Admin Panel 
-
-router.get('/admin', viewController.adminIndex);
-router.get('/admin/categories', viewController.adminCategoryView);
 
 //Send Mail
 router.post('/send-mail', viewController.sendMail);         // CREATE

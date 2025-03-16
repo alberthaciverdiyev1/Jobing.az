@@ -1,25 +1,30 @@
-import mongoose from 'mongoose';
+import { Sequelize, DataTypes, Model } from 'sequelize';
+import sequelize from '../Config/Database.js';
 
-const { Schema } = mongoose;
+class City extends Model {}
 
-const citySchema = new Schema({
+City.init({
     name: {
-        type: String,
-        required: true
+        type: DataTypes.STRING,
+        allowNull: false,
     },
     website: {
-        type: String,
-        required: false
+        type: DataTypes.STRING,
+        allowNull: true,
     },
-    cityId: {
-        type: Number,
-        required: false
+    city_id: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
     }
 }, {
+    sequelize,
+    modelName: 'City',
+    tableName: 'cities',
     timestamps: true,
-    versionKey: false
+    created_at: 'created_at',
+    updated_at: 'updated_at',
+    underscored: true,
+    version: false,
 });
-
-const City = mongoose.model('City', citySchema);
 
 export default City;

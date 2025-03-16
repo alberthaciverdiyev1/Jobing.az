@@ -2,7 +2,6 @@ import pLimit from 'p-limit';
 import Scrape from "../ScrapeHelper.js";
 import enums from "../../Config/Enums.js";
 import Enums from "../../Config/Enums.js";
-import sendEmail from "../NodeMailer.js";
 
 class BossAz {
     constructor(url = enums.Sites.BossAz) {
@@ -11,7 +10,7 @@ class BossAz {
 
     async Categories() {
         try {
-            const $ = await Scrape(this.url);
+            const $ = await Scrape('https://'+this.url);
             const categories = [];
 
             let mainCategoryId = null;
@@ -54,13 +53,14 @@ class BossAz {
     async Jobs(categories, bossAzCity,main = false) {
         try {
             let splitCategories = categories
-                .flatMap(c => c.bossAz.split(','))
+                .flatMap(c => c.boss_az.split(','))
                 .map(jobId => jobId.trim())
                 .filter(jobId => jobId !== '')
                 .map(jobId => ({
-                    localCategoryId: categories.find(c => c.bossAz.includes(jobId)).localCategoryId,
-                    bossAzId: jobId,
+                    local_category_id: categories.find(c => c.boss_az.includes(jobId)).local_category_id,
+                    boss_az_id: jobId,
                 }))
+
             const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
             const limit = pLimit(+enums.LimitPerRequest);
             const dataPromises = [];
@@ -68,8 +68,9 @@ class BossAz {
             const city = Object.entries(enums.Cities.BossAz).find(
                 ([k, v]) => v === bossAzCity.name
             );
-            const cityId = city ? city[0] : null;
-            if (cityId && (main ? true : (bossAzCity.name !== "Bakı" ? true : false))) {
+
+            const city_id = city ? city[0] : null;
+            if (city_id && (main ? true : (bossAzCity.name !== "Bakı" ? true : false))) {
                 Object.entries(splitCategories).forEach(([no, category]) => {
                     for (let education = 0; education <= 7; education++) {
                         for (let experience = 0; experience <= 4; experience++) {
@@ -83,7 +84,7 @@ class BossAz {
                                     });
                                     try {
                                         const $ = await Promise.race([
-                                            Scrape(`https://${this.url}/vacancies?action=index&controller=vacancies&only_path=true&page=${page}&search%5Bcategory_id%5D=${category.bossAzId}&search%5Bcompany_id%5D=&search%5Beducation_id%5D=${education}&search%5Bexperience_id%5D=${experience}&search%5Bkeyword%5D=&search%5Bregion_id%5D=${cityId}&search%5Bsalary%5D=&type=vacancies`),
+                                            Scrape(`https://${this.url}/vacancies?action=index&controller=vacancies&only_path=true&page=${page}&search%5Bcategory_id%5D=${category.boss_az_id}&search%5Bcompany_id%5D=&search%5Beducation_id%5D=${education}&search%5Bexperience_id%5D=${experience}&search%5Bkeyword%5D=&search%5Bregion_id%5D=${city_id}&search%5Bsalary%5D=&type=vacancies`),
                                             timeout
                                         ]);
 
@@ -93,51 +94,50 @@ class BossAz {
                                             const htmlContent = $(el).find('.results-i-secondary').html();
                                             const location = htmlContent.match(/^(.*?)<span/)[1].trim();
                                             const title = $(el).find('.results-i-title').text().trim();
-                                            const companyName = $(el).find('.results-i-company').text().trim();
+                                            const company_name = $(el).find('.results-i-company').text().trim();
                                             const description = $(el).find('.results-i-summary p').text().trim();
-                                            const redirectUrl = urlAndId.attr('href');
-                                            const jobId = redirectUrl.split('/').pop();
+                                            const redirect_url = urlAndId.attr('href');
+                                            const job_id = redirect_url.split('/').pop();
                                             const salaryText = $(el).find('.results-i-salary').text().trim();
                                             const cleanSalaryText = salaryText.replace('AZN', '').trim();
                                             const parts = cleanSalaryText.split(' - ');
                                             const companyHref = $(el).find('.results-i-company').attr('href');
                                             const companyUrlParams = new URLSearchParams(companyHref.split('?')[1]);
-                                            const companyId = companyUrlParams.get('search[company_id]');
+                                            const company_id = companyUrlParams.get('search[company_id]');
 
-                                            let [minSalary, maxSalary] = [0, 0];
+                                            let [min_salary, max_salary] = [0, 0];
                                             if (parts.length === 2) {
-                                                minSalary = !isNaN(Number(parts[0])) ? parseInt(parts[0], 10) : 0;
-                                                maxSalary = !isNaN(Number(parts[1])) ? parseInt(parts[1], 10) : 0;
+                                                min_salary = !isNaN(Number(parts[0])) ? parseInt(parts[0], 10) : 0;
+                                                max_salary = !isNaN(Number(parts[1])) ? parseInt(parts[1], 10) : 0;
                                             } else if (parts.length === 1) {
-                                                minSalary = 0;
-                                                maxSalary = !isNaN(Number(parts[0])) ? parseInt(parts[0], 10) : 0;
+                                                min_salary = 0;
+                                                max_salary = !isNaN(Number(parts[0])) ? parseInt(parts[0], 10) : 0;
                                             }
 
                                             jobData.push({
                                                 title,
-                                                companyName,
-                                                companyId,
-                                                minSalary,
-                                                maxSalary,
+                                                company_name,
+                                                company_id,
+                                                min_salary,
+                                                max_salary,
                                                 location,
-                                                cityId: cityId || null,
+                                                city_id: city_id || null,
                                                 description,
-                                                jobId,
-                                                categoryId: category.localCategoryId || null,
-                                                sourceUrl: this.url,
-                                                redirectUrl: 'https://' + this.url + redirectUrl,
-                                                jobType: '0x001',
-                                                educationId: +education,
-                                                experienceId: experience,
-                                                uniqueKey: `${title}-${companyName}-${location}`
+                                                job_id,
+                                                category_id: category.local_category_id || null,
+                                                source_url: this.url,
+                                                redirect_url: 'https://' + this.url + redirect_url,
+                                                job_type: '0x001',
+                                                education_id: +education,
+                                                experience_id: experience,
+                                                unique_key: `${title}-${company_name}-${location}`
                                             });
-                                            
-                                            
+
                                         });
 
                                         return jobData;
                                     } catch (error) {
-                                        console.error(`Error fetching data from page ${page} for category ${category.categoryId}:`, error.message);
+                                        console.error(`Error fetching data from page ${page} for category ${category.category_id}:`, error.message);
                                         return [];
                                     }
                                 });
@@ -149,8 +149,7 @@ class BossAz {
                 });
             }
             const results = await Promise.all(dataPromises);
-            const data = results.flat();
-            return data;
+            return results.flat();
 
         } catch (error) {
             console.error('Error fetching jobs:', error);
@@ -167,11 +166,11 @@ class BossAz {
             const cities = [];
 
             $('#search_region_id option').each((i, el) => {
-                const cityId = $(el).attr('value');
+                const city_id = $(el).attr('value');
                 const name = $(el).text().trim();
-                if (cityId && name) {
+                if (city_id && name) {
                     cities.push({
-                        cityId,
+                        city_id,
                         name,
                         website: enums.SitesWithId.BossAz
                     });
@@ -192,15 +191,15 @@ class BossAz {
 
             $('.tab-list-i-link').each((i, el) => {
                 const href = $(el).attr('href');
-                const companyIdMatch = href.match(/company_id%5D=(\d+)/);
-                const companyId = companyIdMatch ? companyIdMatch[1] : null;
+                const company_id_match = href.match(/company_id%5D=(\d+)/);
+                const company_id = company_id_match ? company_id_match[1] : null;
                 const name = $(el).text().trim();
 
-                if (companyId && name) {
+                if (company_id && name) {
                     companies.push({
-                        companyId,
-                        companyName: name,
-                        uniqueKey: `${companyId}` + `${enums.SitesWithId.BossAz}`,
+                        company_id,
+                        company_name: name,
+                        unique_key: `${company_id}` + `${enums.SitesWithId.BossAz}`,
                         website: enums.SitesWithId.BossAz
                     });
                 }

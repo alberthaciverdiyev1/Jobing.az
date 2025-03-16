@@ -1,48 +1,52 @@
-import mongoose from 'mongoose';
+import { Sequelize, DataTypes, Model } from 'sequelize';
+import sequelize from '../Config/Database.js';
 
-const { Schema } = mongoose;
+class Category extends Model {}
 
-const categorySchema = new Schema({
-    localCategoryId: {
-        type: String,
-        required: false
+Category.init({
+    local_category_id: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
     },
-    categoryName: {
-        type: String,
-        required: false
+    category_name: {
+        type: DataTypes.STRING,
+        allowNull: true,
     },
-    smartJobAz: {
-        type: String,
-        required: false
+    smart_job_az: {
+        type: DataTypes.STRING,
+        allowNull: true,
     },
-    offerAz: {
-        type: String,
-        required: false
+    offer_az: {
+        type: DataTypes.STRING,
+        allowNull: true,
     },
-    jobSearch: {
-        type: String,
-        required: false
+    job_search: {
+        type: DataTypes.STRING,
+        allowNull: true,
     },
-    bossAz: {
-        type: String,
-        required: false
+    boss_az: {
+        type: DataTypes.STRING,
+        allowNull: true,
     },
-    helloJobAz: {
-        type: String,
-        required: false
+    hello_job_az: {
+        type: DataTypes.STRING,
+        allowNull: true,
     }
-}, { 
+}, {
+    sequelize,
+    modelName: 'Category',
+    tableName: 'categories',
     timestamps: true,
-    versionKey: false
+    created_at: 'created_at',
+    updated_at: 'updated_at',
+    underscored: true,
+    version: false,
 });
 
-categorySchema.virtual('Parent', {
-    ref: 'Category',
-    localField: 'localCategoryId',
-    foreignField: 'id',
-    justOne: true
-});
-
-const Category = mongoose.model('Category', categorySchema);
+// Category.hasOne(Category, {
+//     foreignKey: 'localCategoryId',
+//     sourceKey: 'id',
+//     as: 'Parent',
+// });
 
 export default Category;

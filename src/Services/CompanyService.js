@@ -1,9 +1,12 @@
 import Company from '../Models/Company.js';
-import pLimit from "p-limit";
-import mime from "mime-types";
-import fs from "fs";
-import path from "path";
-import axios from "axios";
+import pLimit from 'p-limit';
+import mime from 'mime-types';
+import fs from 'fs';
+import path from 'path';
+import axios from 'axios';
+import { Op } from 'sequelize';
+
+import sequelize from '../Config/Database.js';
 
 const CompanyService = {
     // Create a company
@@ -12,17 +15,9 @@ const CompanyService = {
             if (!Array.isArray(data)) {
                 throw new Error('Data must be an array');
             }
-            // const existingRecords = await Company.find({
-            //     redirectUrl: { $in: data.map(company => company.redirectUrl) }
-            // }).select('redirectUrl');
-
-            // if (existingRecords.length > 0) {
-            //     const existingData = new Set(existingRecords.map(record => record.redirectUrl));
-            //     data = data.filter(company => !existingData.has(company.redirectUrl));
-            // }
 
             if (data.length > 0) {
-                const results = await Company.insertMany(data);
+                const results = await Company.bulkCreate(data);
                 return {
                     status: 201,
                     message: `Insertion completed. Number of records inserted: ${results.length}`,
@@ -41,17 +36,17 @@ const CompanyService = {
     },
 
     count: async () => {
-        return Company.countDocuments();
+        return Company.count();
     },
+
     // Get all companies
     getAll: async () => {
         try {
-            return await Company.find({});
+            return await Company.findAll();
         } catch (error) {
             throw new Error('Error retrieving companies: ' + error.message);
         }
     },
-
 
     downloadCompanyLogos: async (req, res) => {
         try {
@@ -61,10 +56,10 @@ const CompanyService = {
             const updatedCompanies = await Promise.all(
                 companies.map((company) => {
                     return limit(async () => {
-                        if (company.imageUrl && company.imageUrl !== '/nologo.png' && (company.imageUrl.startsWith('http') || company.imageUrl.startsWith('https') || company.imageUrl.includes('/'))) {
-                            const imageUrl = company.imageUrl.startsWith('http') || company.imageUrl.startsWith('https')
-                                ? company.imageUrl
-                                : `http://${company.imageUrl}`;
+                        if (company.image_url && company.image_url !== '/nologo.png' && (company.image_url.startsWith('http') || company.image_url.startsWith('https') || company.image_url.includes('/'))) {
+                            const imageUrl = company.image_url.startsWith('http') || company.image_url.startsWith('https')
+                                ? company.image_url
+                                : `http://${company.image_url}`;
 
                             const ext = mime.extension(mime.lookup(imageUrl));
                             if (!ext) {
@@ -76,7 +71,7 @@ const CompanyService = {
                                 fs.mkdirSync(companyFolder, { recursive: true });
                             }
 
-                            const fileName = `${company.companyName || 'default'}.${ext}`;
+                            const fileName = `${company.company_name || 'default'}.${ext}`;
                             if (!!/["<>|:*?\/\\]/.test(fileName)) {
                                 return company;
                             }
@@ -97,8 +92,8 @@ const CompanyService = {
                                 writer.on('error', reject);
                             });
 
-                            company.imageUrl = localFilePath;
-                            await CompanyService.updateCompanyImageUrl(company._id, localFilePath);
+                            company.image_url = localFilePath;
+                            await CompanyService.updateCompanyImageUrl(company.id, localFilePath);
                         }
                         return company;
                     });
@@ -120,72 +115,57 @@ const CompanyService = {
         }
     },
 
-
     updateCompanyImageUrl: async (companyId, newImagePath) => {
         try {
-            await Company.findByIdAndUpdate(companyId, { imageUrl: newImagePath });
+            await Company.update({ image_url: newImagePath }, { where: { id: companyId } });
         } catch (error) {
             throw new Error(`Error updating image URL for company with ID ${companyId}: ${error.message}`);
         }
     },
 
-    removeDuplicates: async () => {
+
+     removeDuplicates : async () => {
         try {
             const thirtyDaysAgo = new Date();
             thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
-            const companiesList = await Company.find({
-                createdAt: { $gte: thirtyDaysAgo },
-            }).sort({ createdAt: -1 });
-
-            if (!companiesList || companiesList.length === 0) {
-                return {
-                    status: 200,
-                    message: 'No data found for the last 30 days.',
-                    count: 0,
-                };
-            }
-
-            const seenUniqueKeys = new Map();
-            const duplicateIds = [];
-
-            companiesList.forEach(c => {
-                const uniqueKey = c.uniqueKey;
-                if (seenUniqueKeys.has(uniqueKey)) {
-                    const previousCompany = seenUniqueKeys.get(uniqueKey);
-                    duplicateIds.push(previousCompany._id);
-                    seenUniqueKeys.set(uniqueKey, c);
-                } else {
-                    seenUniqueKeys.set(uniqueKey, c);
-                }
+            const companies = await Company.findAll({
+                where: { created_at: { [Op.gte]: thirtyDaysAgo } },
+                order: [['created_at', 'DESC']],
+                attributes: ['id', 'unique_key', 'created_at']
             });
 
-            if (duplicateIds.length > 0) {
-                await Company.deleteMany({ _id: { $in: duplicateIds } });
-                return {
-                    status: 201,
-                    message: `Deleted ${duplicateIds.length} duplicate records from the last 30 days.`,
-                    count: duplicateIds.length,
-                };
-            } else {
-                return {
-                    status: 200,
-                    message: 'No duplicate data found for the last 30 days.',
-                    count: 0,
-                };
+            if (!companies.length) {
+                return { status: 200, message: 'No data found for the last 30 days.', count: 0 };
             }
+            const duplicateIds = [];
+            const seenKeys = new Map();
+            for (const company of companies) {
+                const key = company.unique_key;
+
+                if (seenKeys.has(key)) {
+                    duplicateIds.push(company.id);
+                } else {
+                    seenKeys.set(key, company.id);
+                }
+            }
+
+            if (duplicateIds.length > 0) {
+                await Company.destroy({ where: { id: { [Op.in]: duplicateIds } } });
+                return { status: 201, message: `Deleted ${duplicateIds.length} duplicate records.`, count: duplicateIds.length };
+            }
+
+            return { status: 200, message: 'No duplicate data found.', count: 0 };
+
         } catch (error) {
-            return {
-                status: 500,
-                message: 'An error occurred during the process.',
-                error: error.message,
-            };
+            console.error("Error in removeDuplicates:", error);
+            return { status: 500, message: 'An error occurred.', error: error.message };
         }
     },
     // Find a company by ID
     findById: async (id) => {
         try {
-            const company = await Company.findById(id);
+            const company = await Company.findByPk(id);
             if (!company) {
                 throw new Error('Company not found');
             }
@@ -198,11 +178,11 @@ const CompanyService = {
     // Update a company
     update: async (id, updateData) => {
         try {
-            const company = await Company.findById(id);
+            const company = await Company.findByPk(id);
             if (!company) {
                 throw new Error('Company not found');
             }
-            await company.updateOne(updateData);
+            await company.update(updateData);
             return company;
         } catch (error) {
             throw new Error('Error updating company: ' + error.message);
@@ -212,16 +192,17 @@ const CompanyService = {
     // Delete a company
     delete: async (id) => {
         try {
-            const company = await Company.findById(id);
+            const company = await Company.findByPk(id);
             if (!company) {
                 throw new Error('Company not found');
             }
-            await company.remove();
+            await company.destroy();
             return { message: 'Company successfully deleted' };
         } catch (error) {
             throw new Error('Error deleting company: ' + error.message);
         }
     },
+
     addSingleCompany: async (data) => {
         try {
             const companyFolder = `./src/Public/Images/CompanyLogos`;
@@ -259,15 +240,13 @@ const CompanyService = {
                 data.companyName = data.companyName.replace(/["<>|:*?\/\\]/g, '0');
             }
 
-            const company = new Company(data);
-            const savedCompany = await company.save();
+            const company = await Company.create(data);
 
             return { status: 200, message: 'Məlumat uğurla əlavə edildi!' };
         } catch (error) {
             throw new Error('Error adding company: ' + error.message);
         }
     }
-
 };
 
 export default CompanyService;

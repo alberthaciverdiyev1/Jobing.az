@@ -1,122 +1,121 @@
-import mongoose from 'mongoose';
-import Enums from '../Config/Enums.js';
+import { Sequelize, DataTypes, Model } from 'sequelize';
+import sequelize from '../Config/Database.js';
+import Company from './Company.js';
 
-const { Schema } = mongoose;
+class Job extends Model {}
 
-const jobSchema = new Schema({
-    uniqueKey: {
-        type: String,
-        required: true
+Job.init(
+    {
+        unique_key: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
+        title: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
+        email: {
+            type: DataTypes.STRING,
+            allowNull: true,
+        },
+        phone: {
+            type: DataTypes.STRING,
+            allowNull: true,
+        },
+        description: {
+            type: DataTypes.TEXT,
+            allowNull: true,
+        },
+        location: {
+            type: DataTypes.STRING,
+            allowNull: true,
+        },
+        min_salary: {
+            type: DataTypes.INTEGER,
+            allowNull: true,
+        },
+        max_salary: {
+            type: DataTypes.INTEGER,
+            allowNull: true,
+        },
+        min_age: {
+            type: DataTypes.INTEGER,
+            allowNull: true,
+        },
+        max_age: {
+            type: DataTypes.INTEGER,
+            allowNull: true,
+        },
+        currency_sign: {
+            type: DataTypes.STRING,
+            defaultValue: '₼',
+        },
+        category_id: {
+            type: DataTypes.INTEGER,
+            allowNull: true,
+        },
+        sub_category_id: {
+            type: DataTypes.INTEGER,
+            allowNull: true,
+        },
+        company_name: {
+            type: DataTypes.STRING,
+            allowNull: true,
+        },
+        company_id: {
+            type: DataTypes.INTEGER,
+            allowNull: true,
+        },
+        city_id: {
+            type: DataTypes.INTEGER,
+            allowNull: true,
+        },
+        education_id: {
+            type: DataTypes.INTEGER,
+            allowNull: true,
+        },
+        experience_id: {
+            type: DataTypes.INTEGER,
+            allowNull: true,
+        },
+        user_name: {
+            type: DataTypes.STRING,
+            allowNull: true,
+        },
+        is_premium: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: false,
+        },
+        is_active: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: true,
+        },
+        job_type: {
+            type: DataTypes.STRING,
+            allowNull: true,
+        },
+        posted_at: {
+            type: DataTypes.DATE,
+            defaultValue: Sequelize.NOW,
+        },
+        source_url: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
+        redirect_url: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
     },
-    title: {
-        type: String,
-        required: true
-    },
-    email: {
-        type: String,
-        required: false},
-    phone: {
-        type: String,
-        required: false
-    },
-    description: {
-        type: String,
-        required: false
-    },
-    location: {
-        type: String,
-        required: false
-    },
-    minSalary: {
-        type: Number,
-        required: false
-    },
-    maxSalary: {
-        type: Number,
-        required: false
-    },
-    minAge: {
-        type: Number,
-        required: false
-    },
-    maxAge: {
-        type: Number,
-        required: false
-    },
-    currencySign: {
-        type: String,
-        default: "₼"
-    },
-    categoryId: {
-        type: Number,
-        ref: 'Category',
-        required: false
-    },
-    subCategoryId: {
-        type: Number,
-        ref: 'Category',
-        required: false
-    },
-    companyName: {
-        type: String,
-        required: false
-    },
-    companyId: {
-        type: String,
-        required: false
-    },
-    cityId: {
-        type: Number,
-        required: false
-    },
-    educationId: {
-        type: Number,
-        required: false
-    },
-    experienceId: {
-        type: Number,
-        required: false
-    },
-    userName: {
-        type: String,
-        required: false
-    },
-    isPremium: {
-        type: Boolean,
-        default: false
-    },
-    isActive: {
-        type: Boolean,
-        default: true
-    },
-    jobType: {
-        type: String,
-        required: false
-    },
-    postedAt: {
-        type: Date,
-        default: Date.now
-    },
-    sourceUrl: {
-        type: String,
-        required: true
-    },
-    redirectUrl: {
-        type: String,
-        required: true
+    {
+        sequelize,
+        modelName: 'Job',
+        tableName: 'jobs',
+        timestamps: true,
+        underscored: true,
     }
-}, {
-    timestamps: true,
-    versionKey: false
-});
+);
 
-jobSchema.virtual('companyDetails', {
-    ref: 'Company',
-    localField: 'companyName',
-    foreignField: 'companyName',
-    justOne: true
-});
-
-const Job = mongoose.model('Job', jobSchema);
+Job.belongsTo(Company, { foreignKey: 'company_id', as: 'company' });
 
 export default Job;
