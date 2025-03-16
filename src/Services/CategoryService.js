@@ -70,7 +70,7 @@ const CategoryService = {
     // Delete category
     delete: async (id) => {
         try {
-            const category = await Category.findByPk(id); 
+            const category = await Category.findByPk(id);
             if (!category) {
                 throw new Error('Category not found');
             }

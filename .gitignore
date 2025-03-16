@@ -1,6 +1,9 @@
 #Company Logos
 /src/Public/Images/CompanyLogos/*
 
+.directory
+.~
+
 # Logs
 logs
 *.log
