@@ -13,10 +13,8 @@ const JobDataService = {
         }
 
         try {
-            // Extract redirectUrl values from input data
             const redirectUrls = data.map(job => job.redirect_url);
 
-            // Check for existing records with matching redirectUrl
             const existingRecords = await JobData.findAll({
                 where: {
                     redirect_url: {
@@ -26,14 +24,11 @@ const JobDataService = {
                 attributes: ['redirect_url']
             });
 
-            // Extract existing redirectUrls into a Set
             const existingData = new Set(existingRecords.map(record => record.redirect_url));
 
-            // Filter out the jobs that already exist in the database
             data = data.filter(job => !existingData.has(job.redirect_url));
 
             if (data.length > 0) {
-                // Insert new records
                 const results = await JobData.bulkCreate(data);
 
                 return {
@@ -57,11 +52,9 @@ const JobDataService = {
 
     removeDuplicates: async () => {
         try {
-            // Get the date 30 days ago
             const thirtyDaysAgo = new Date();
             thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
-            // Fetch all jobs created in the last 30 days, sorted by createdAt
             const allJobs = await JobData.findAll({
                 where: {
                     created_at: {
@@ -94,7 +87,6 @@ const JobDataService = {
             });
 
             if (duplicateIds.length > 0) {
-                // Delete the duplicate records
                 await JobData.destroy({
                     where: {
                         id: {
@@ -205,7 +197,7 @@ const JobDataService = {
                     return false;
                 });
 
-            const totalCount = await JobData.count({});
+            const totalCount = await JobData.count({ where: query });
 
             return {
                 totalCount,
@@ -217,15 +209,12 @@ const JobDataService = {
         }
     }
 ,
-// Find a job by ID
     findSiteById: async (id) => {
         try {
-            // Check if the ID is a valid number or string, depending on how IDs are structured in Sequelize
             if (!id || isNaN(Number(id))) {
                 throw new Error('Invalid job ID format');
             }
 
-            // Find the job by ID using Sequelize's `findByPk` method, assuming ID is primary key
             const job = await JobData.findByPk(id, {
                 include: [
                     {
@@ -244,7 +233,6 @@ const JobDataService = {
         }
     },
 
-// Update job data
     updateJob: async (id, status) => {
         try {
             if (!id) {
@@ -257,34 +245,30 @@ const JobDataService = {
                 redirectUrl: `https://jobing.az/vakansiyalar/${id}/details`,
             };
 
-            // Update job using Sequelize's `update` method
             const [updatedRowsCount, updatedJobs] = await JobData.update(updateData, {
                 where: { id: id },
-                returning: true, // This ensures the updated row is returned
+                returning: true,
             });
 
             if (updatedRowsCount === 0) {
                 throw new Error('Job not found');
             }
 
-            // Assuming updatedJobs[0] is the updated job object
             return 'Job updated';
         } catch (error) {
-            console.error('Error updating job:', error); // Log detailed error to the console
-            throw error; // Rethrow the original error
+            console.error('Error updating job:', error);
+            throw error;
         }
     },
 
 
     // Delete job data
-// Delete job data
     deleteSite: async (id) => {
         try {
             if (!id || isNaN(Number(id))) {
                 throw new Error('Invalid job ID format');
             }
 
-            // Use Sequelize's `destroy` method to delete a record by its ID
             const deletedRows = await JobData.destroy({
                 where: { id: id },
             });
@@ -301,13 +285,10 @@ const JobDataService = {
 
     addJobRequest: async (data) => {
         try {
-            // Create a new job instance using the provided data
             const job = await JobData.create(data);
 
-            // Assuming the unique key is based on the ID (converted to string)
             job.uniqueKey = job.id.toString();
 
-            // Update the job with the uniqueKey
             await job.save();
 
             return { status: 200, message: 'Məlumat uğurla əlavə edildi!', id: job.id };
@@ -317,18 +298,15 @@ const JobDataService = {
     },
 
 
-// Job details
     details: async (id) => {
         try {
-            // Find the job with the provided uniqueKey
             const job = await JobData.findOne({
                 where: { uniqueKey: id },
                 include: [{
                     model: Category,
                     as: 'category',
-                    required: false, // You can change this to true if you want to make sure the job has an associated category
+                    required: false,
                     attributes: ['category_name'],
-                    // Correct the condition to match categoryId between JobData and Category
                     where: {
                         categoryId: Sequelize.col('JobData.category_id') // Ensure it's referencing the correct column from JobData
                     }
@@ -372,7 +350,6 @@ const JobDataService = {
             const thirtyDaysAgo = new Date();
             thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
-            // Use Sequelize's count method with a condition on the createdAt field
             const jobCount = await JobData.count({
                 where: {
                     createdAt: {

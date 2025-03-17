@@ -218,8 +218,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
         const citySelect = document.getElementById('city-select');
         const keywordInput = document.getElementById('keyword');
 
-        const categoryId = categorySelect?.value || 'all';
-        const cityId = citySelect?.value || 'all';
+        const category_id = categorySelect?.value || 'all';
+        const city_id = citySelect?.value || 'all';
         const keyword = keywordInput?.value?.trim().toLowerCase() || '';
 
         const baseUrl = `${window.location.origin}/vakansiyalar`;
@@ -227,8 +227,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
             min_salary: 0,
             max_salary: 5000,
             offset: 0,
-            ...(categoryId && { categoryId }),
-            ...(cityId && { cityId }),
+            ...(category_id && { category_id }),
+            ...(city_id && { city_id }),
             ...(keyword && { keyword }),
         });
 

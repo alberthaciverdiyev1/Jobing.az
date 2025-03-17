@@ -123,6 +123,7 @@ const jobDataController = {
                 all_jobs: req.query.all_jobs === 'true' ? 1 : 0,
                 offset: req.query.offset,
             }
+
             const jobs = await JobService.getAllJobs(data);
             res.status(200).json(jobs);
         } catch (error) {
