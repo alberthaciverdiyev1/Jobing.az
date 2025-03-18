@@ -37,8 +37,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
                         htmlContent += `<div class="job-card bg-white px-3 pt-2 h-36 lg:h-40 rounded-xl shadow-md hover:hover-card-color cursor-pointer duration-300 border border-custom lg:px-5" data-original-link="${element.redirect_url}">
                         <div class="content flex">
                              <div class="mt-2 flex-shrink-0 lg:mt-1">
-                                <img src="../Images/${element.source_url}.png" alt="Company Logo" class="border-custom h-12 w-12 mt-1 rounded-lg border lg:h-14 lg:w-14" />
-                                <img src="${(element.company_image_url && element.company_image_url !== "/nologo.png" && !element.company_image_url.startsWith('http')) ? element.company_image_url.replace(/src\/Public/g, '..') : (element.company_image_url && element.company_image_url.startsWith('http') ? element.company_image_url : "../Images/DefaultCompany.png")}" alt="Company Logo" class="border-custom h-12 w-12 mt-3 rounded-lg border lg:h-14 lg:w-14" />
+                                <img src="${(element.company_image_url && element.company_image_url !== "/nologo.png" && !element.company_image_url.startsWith('http')) ? element.company_image_url.replace(/src\/Public/g, '..') : (element.company_image_url && element.company_image_url.startsWith('http') ? element.company_image_url : "../Images/DefaultCompany.png")}" alt="Company Logo" class="border-custom h-12 w-12 mt-1 rounded-lg border lg:h-14 lg:w-14"  />
+                                <img src="../Images/${element.source_url}.png" alt="Company Logo" class="border-custom h-12 w-12 mt-3 rounded-lg border lg:h-14 lg:w-14"/>
                             </div>
                             <div class="ml-3 mt-2 pr-1 lg:mt-2 justify-end w-screen">
                                 <div class="flex mb-1 justify-between">

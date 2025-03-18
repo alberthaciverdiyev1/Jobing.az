@@ -183,38 +183,39 @@ const jobDataController = {
     },
 
     addJobRequest: async (req, res) => {
+        console.log({"aaaaaaa": req});
         try {
             let description = `${req.body.data.aboutJob + '<h4 class="text-lg font-bold text-gray-800">Tələblər:</h4>' + req.body.data.requirements}`;
             let data = {
                 title: req.body.data.position,
                 description: description,
                 location: (await CityService.findById(req.body.data.city))?.name,
-                minSalary: req.body.data.minSalary,
-                maxSalary: req.body.data.maxSalary,
-                minAge: req.body.data.minAge,
-                maxAge: req.body.data.maxAge,
-                categoryId: req.body.data.category,
-                companyName: req.body.data.companyName,
-                cityId: req.body.data.city,
-                educationId: req.body.data.education,
-                experienceId: req.body.data.experience,
-                userName: req.body.data.username,
-                isPremium: false,
-                sourceUrl: 'jobing.az',
-                isActive: false,
+                min_salary: req.body.data.minSalary,
+                max_salary: req.body.data.maxSalary,
+                min_age: req.body.data.minAge,
+                max_age: req.body.data.maxAge,
+                category_id: req.body.data.category,
+                company_name: req.body.data.company_name,
+                city_id: req.body.data.city,
+                education_id: req.body.data.education,
+                experience_id: req.body.data.experience,
+                user_name: req.body.data.username,
+                is_premium: false,
+                source_url: 'jobing.az',
+                is_active: false,
                 email: req.body.data.email,
                 phone: req.body.data.phone,
-                redirectUrl: "#",
-                uniqueKey: req.body.data.position + req.body.data.companyName + req.body.data.city,
+                redirect_url: "#",
+                uniqueKey: req.body.data.position + req.body.data.company_name + req.body.data.city,
             }
             // companyImage: null,
             const companyData ={
-                companyName: req.body.data.companyName,
-                imageUrl: req.body.data.companyImage,
+                company_name: req.body.data.company_name,
+                image_url: req.body.data.companyImage,
                 website: enums.Sites.JobingAz,
-                uniqueKey:` ${req.body.data.companyName} + ${enums.Sites.JobingAz}`,
+                unique_key:` ${req.body.data.company_name} + ${enums.Sites.JobingAz}`,
             }
-
+console.log({data,companyData});
             const jobs = await JobService.addJobRequest(data);
             const response = await CompanyService.addSingleCompany(companyData);
 

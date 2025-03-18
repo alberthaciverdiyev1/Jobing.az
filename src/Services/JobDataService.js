@@ -2,6 +2,7 @@ import JobData from '../Models/JobData.js';
 import { Sequelize, Op } from 'sequelize';
 import Company from "../Models/Company.js";
 import Category from "../Models/Category.js";
+import slugify from "slugify";
 
 const JobDataService = {
     // Create new job data (insert multiple records)
@@ -233,25 +234,30 @@ const JobDataService = {
         }
     },
 
-    updateJob: async (id, status) => {
+    updateJob : async (id, status) => {
         try {
             if (!id) {
                 throw new Error('ID is required');
             }
 
+            const job = await JobData.findByPk(id);
+            if (!job) {
+                throw new Error('Job not found');
+            }
+
             const updateData = {
                 isActive: status,
                 updatedAt: new Date(),
-                redirectUrl: `https://jobing.az/vakansiyalar/${id}/details`,
+                redirectUrl: `https://jobing.az/vakansiyalar/${slugify(job.title || "job", { lower: true, strict: true })}/details`,
             };
 
-            const [updatedRowsCount, updatedJobs] = await JobData.update(updateData, {
-                where: { id: id },
+            const [updatedRowsCount] = await JobData.update(updateData, {
+                where: { id },
                 returning: true,
             });
 
             if (updatedRowsCount === 0) {
-                throw new Error('Job not found');
+                throw new Error('Job update failed');
             }
 
             return 'Job updated';
@@ -260,7 +266,6 @@ const JobDataService = {
             throw error;
         }
     },
-
 
     // Delete job data
     deleteSite: async (id) => {

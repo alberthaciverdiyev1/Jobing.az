@@ -26,7 +26,7 @@ router.put('/api/jobs/:id', jobDataController.updateSite);                      
 router.delete('/api/jobs/:id', jobDataController.deleteSite);                              // DELETE
 router.post('/api/jobs/remove-duplicates', jobDataController.removeDuplicates);            // Post
 router.post('/api/jobs/request-all-sites', jobDataController.requestAllSites)               // Post
-router.post('/api/jobs/add-request',validator.addJobValidator, jobDataController.addJobRequest)                       // Post
+router.post('/api/jobs/add-request',jobDataController.addJobRequest)                       // Post
 router.get('/vakansiyalar/:id/details', jobDataController.details);                                 // Job Details
 
 // CRUD operations for job sites (JobDataController)
@@ -37,12 +37,12 @@ router.put('/api/site/:id', validator.siteValidator, siteController.update);    
 router.delete('/api/site/:id', siteController.delete);                                     // DELETE
 
 // CRUD operations for companies
-router.post('/api/companies', companyController.create);                                    // CREATE
+router.post('/api/companies', companyController.create);                                   // CREATE
 router.post('/api/companies/download-logos', companyController.downloadCompanyLogos);      // downloadCompanyLogos
 router.get('/api/companies/:id', companyController.findById);                              // READ ONE
 router.put('/api/companies/:id', validator.companyValidator, companyController.update);    // UPDATE
 router.delete('/api/companies/:id', companyController.delete);                             // DELETE
-router.post('/api/companies/remove-duplicates', companyController.removeDuplicates);          // DELETE
+router.post('/api/companies/remove-duplicates', companyController.removeDuplicates);       // DELETE
 
 // CRUD operations for categories
 router.post('/api/foreign-categories', categoryController.addForeignCategories);           // CREATE
