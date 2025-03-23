@@ -7,6 +7,7 @@ import siteController from '../Controllers/SiteController.js';
 import scrapeController from '../Controllers/ScrapeController.js';
 import viewController from "../Controllers/ViewController.js";
 import cityController from '../Controllers/CityController.js';
+import blogController from "../Controllers/Web/BlogController.js";
 
 import validator from '../Validators/Main.js'
 import visitorLogger from "../Middlewares/Visitors.js";
@@ -60,6 +61,14 @@ router.get('/api/cities', cityController.getAll);                               
 
 // CRUD operations for scrape
 router.get('/api/scrape', scrapeController.getData);                                    // READ ALL
+
+
+//Blogs
+router.get('/blogs', visitorLogger, blogController.list);
+router.get('/blog/details', visitorLogger, blogController.details);
+router.get('/blogs-list-by-ajax', blogController.listByAjax);
+router.get('/blogs-details-by-ajax/:slug', blogController.detailsByAjax);
+
 
 
 //Load Views
