@@ -1,0 +1,9 @@
+@import "./base.css";
+@import "./custom.css";
+@import "./loader.css";
+@import "./output.css";
+
+@import "./libraries/ckeditor5.min.css";
+@import "./libraries/salary_slider.min.css";
+@import "./libraries/alertify/alertify.css";
+
