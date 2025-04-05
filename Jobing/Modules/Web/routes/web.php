@@ -1,8 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Modules\Web\Http\Controllers\WebController;
+use Modules\Web\Http\Controllers\HomeController;
 
-Route::middleware(['auth', 'verified'])->group(function () {
-    Route::resource('web', WebController::class)->names('web');
-});
+    Route::get('/', [HomeController::class,'index'])->name('home');
