@@ -1,0 +1,11 @@
+{
+    "name": "API",
+    "alias": "api",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\API\\Providers\\APIServiceProvider"
+    ],
+    "files": []
+}

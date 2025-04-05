@@ -1,0 +1,11 @@
+{
+    "name": "Web",
+    "alias": "web",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Web\\Providers\\WebServiceProvider"
+    ],
+    "files": []
+}
