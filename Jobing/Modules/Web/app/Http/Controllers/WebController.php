@@ -2,12 +2,10 @@
 
 namespace Modules\Web\Http\Controllers;
 
-//use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 class WebController
 {
-
     public function home()
     {
         return view('web::home.index');
@@ -32,21 +30,27 @@ class WebController
     {
         return view('web::blog.list');
     }
-    public function blog($slug){
+
+    public function blog($slug)
+    {
         return view('web::blog.details');
     }
 
-    public function vacancies(){
+    public function vacancies()
+    {
         return view('web::vacancy.list');
     }
-    public function vacancy($slug){
+
+    public function vacancy($slug)
+    {
         return view('web::vacancy.details');
     }
+
     public function addVacancy(Request $request)
     {
         if ($request->isMethod('post')) {
             $data = $request->all();
-        }else{
+        } else {
             return view('web::vacancy.add');
         }
     }

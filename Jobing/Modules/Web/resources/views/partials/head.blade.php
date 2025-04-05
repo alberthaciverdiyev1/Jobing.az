@@ -19,12 +19,12 @@
     <!-- CDN Tailwind / remove after complete project -->
 
     <!--    <link rel="stylesheet" href="/Css/Output.css">-->
-    <link rel="stylesheet" href="@vite('Modules/Web/resources/assets/css/output.css')">
-    <link rel="stylesheet" href="@vite('Modules/Web/resources/assets/css/custom.css')">
-    <link rel="stylesheet" href="@vite('Modules/Web/resources/assets/css/loader.css')">
-    <link rel="stylesheet" href="@vite('Modules/Web/resources/assets/css/libraries/alertify/alertify.css')">
-    <link rel="stylesheet" href="@vite('Modules/Web/resources/assets/css/libraries/salary_slider.min.css')">
-    <link rel="stylesheet" href="@vite('Modules/Web/resources/assets/css/libraries/ckeditor5.min.css')">
+    @vite('Modules/Web/resources/assets/css/output.css')
+    @vite('Modules/Web/resources/assets/css/custom.css')
+    @vite('Modules/Web/resources/assets/css/loader.css')
+    @vite('Modules/Web/resources/assets/css/libraries/alertify/alertify.css')
+    @vite('Modules/Web/resources/assets/css/libraries/salary_slider.min.css')
+    @vite('Modules/Web/resources/assets/css/libraries/ckeditor5.min.css')
 
     @if(isset($css))
         @foreach($css as $c)
