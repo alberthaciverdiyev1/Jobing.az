@@ -19,7 +19,7 @@ class City extends Model
         'city_id',
     ];
 
-    public function jobs(): HasMany{
-        return $this->hasMany(Job::class);
+    public function vacancies(): HasMany{
+        return $this->hasMany(Vacancy::class);
     }
 }

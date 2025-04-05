@@ -23,7 +23,7 @@ class Category extends Model
         'hello_job_az',
     ];
 
-    public function jobs(): BelongsTo
+    public function vacancies(): BelongsTo
     {
         return $this->belongsTo(Category::class);
     }
