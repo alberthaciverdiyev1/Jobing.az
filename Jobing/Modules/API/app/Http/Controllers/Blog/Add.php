@@ -5,7 +5,7 @@ namespace Modules\API\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class AddController extends Controller
+class Add
 {
     /**
      * Display a listing of the resource.
