@@ -5,10 +5,10 @@ namespace Modules\API\Services;
 use Illuminate\Http\JsonResponse;
 use Modules\API\Interfaces\CrudInterface;
 
-class BlogService implements CrudInterface
+class VacancyService implements CrudInterface
 {
 
-    public function list(string $params): JsonResponse
+    public function list(): JsonResponse
     {
         // TODO: Implement list() method.
     }

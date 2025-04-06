@@ -1,8 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Modules\API\Http\Controllers\APIController;
+use Modules\API\Controllers\VacancyController;
 
-Route::middleware(['auth:sanctum'])->prefix('v1')->group(function () {
-    Route::apiResource('api', APIController::class)->names('api');
-});
+    Route::apiResource('vacancy', VacancyController::class)->names('vacancy');
+
+
+    //Route::group(function () {
+//});

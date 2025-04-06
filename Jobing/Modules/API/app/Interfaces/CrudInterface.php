@@ -2,47 +2,60 @@
 
 namespace Modules\API\Interfaces;
 
+use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
+/**
+ * Interface for Controllers used by Route::apiResource.
+ * Defines standard resource controller methods.
+ */
 interface CrudInterface
 {
     /**
-     * List all items
+     * Display a listing of the resource.
+     * Route: GET /api
      *
-     * @return JsonResponse
+     * @param Request $request
+     * @return ResourceCollection
      */
-    public function list(): JsonResponse;
+    public function index(Request $request): ResourceCollection;
 
     /**
-     * item details.
+     * Store a newly created resource.
+     * Route: POST /api
      *
-     * @param int $id
-     * @return JsonResponse
+     * @param Request $request
+     * @return JsonResource
      */
-    public function details(int $id): JsonResponse;
+    public function store(Request $request): JsonResource;
 
     /**
-     * Add item.
+     * Display the specified resource.
+     * Route: GET /api/{id}
      *
-     * @param array $data
-     * @return JsonResponse
+     * @param int $id Resource ID
+     * @return JsonResource
      */
-    public function add(array $data): JsonResponse;
+    public function show(int $id): JsonResource;
 
     /**
-     * Update item.
+     * Update the specified resource.
+     * Route: PUT/PATCH /api/{id}
      *
-     * @param int $id
-     * @param array $data
-     * @return JsonResponse
+     * @param Request $request
+     * @param int $id Resource ID
+     * @return JsonResource
      */
-    public function update(int $id, array $data): JsonResponse;
+    public function update(Request $request, int $id): JsonResource;
 
     /**
-     * Delete current item.
+     * Remove the specified resource.
+     * Route: DELETE /api/{id}
      *
-     * @param int $id
+     * @param int $id Resource ID
      * @return JsonResponse
      */
-    public function delete(int $id): JsonResponse;
+    public function destroy(int $id): JsonResponse;
 }

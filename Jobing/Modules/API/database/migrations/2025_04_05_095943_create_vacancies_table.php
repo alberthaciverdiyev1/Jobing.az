@@ -10,7 +10,6 @@ return new class extends Migration {
         Schema::create('vacancies', function (Blueprint $table) {
             $table->id();
             $table->string('unique_key');
-            $table->string('slug')->unique();
             $table->string('title');
             $table->string('email')->nullable();
             $table->string('phone')->nullable();
@@ -21,25 +20,25 @@ return new class extends Migration {
             $table->integer('min_age')->nullable();
             $table->integer('max_age')->nullable();
             $table->string('currency_sign')->default('₼');
-//            $table->foreignId('category_id')->references('local_category_id')->on('categories')->onDelete('cascade');
-            $table->unsignedBigInteger('category_id');
-            $table->unsignedBigInteger('sub_category_id')->nullable();
+            $table->integer('category_id')->nullable();
+            $table->integer('sub_category_id')->nullable();
             $table->string('company_name')->nullable();
-            $table->unsignedBigInteger('company_id')->nullable();
-            $table->unsignedBigInteger('city_id');
-            $table->unsignedBigInteger('education_id')->nullable();
-            $table->unsignedBigInteger('experience_id')->nullable();
+            $table->string('company_id')->nullable();
+            $table->integer('city_id')->nullable();
+            $table->integer('education_id')->nullable();
+            $table->integer('experience_id')->nullable();
             $table->string('user_name')->nullable();
             $table->boolean('is_premium')->default(false);
             $table->boolean('is_active')->default(true);
             $table->string('job_type')->nullable();
-            $table->timestamp('posted_at')->useCurrent();
+            $table->dateTime('posted_at')->nullable();
             $table->string('source_url');
             $table->string('redirect_url');
             $table->timestamps();
             $table->softDeletes();
         });
     }
+
 
     public function down(): void
     {
