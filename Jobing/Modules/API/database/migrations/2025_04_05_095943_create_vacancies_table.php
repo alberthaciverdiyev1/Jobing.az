@@ -26,7 +26,7 @@ return new class extends Migration {
             $table->unsignedBigInteger('sub_category_id')->nullable();
             $table->string('company_name')->nullable();
             $table->unsignedBigInteger('company_id')->nullable();
-            $table->foreignId('city_id')->references('id')->on('cities')->cascadeOnDelete();
+            $table->unsignedBigInteger('city_id');
             $table->unsignedBigInteger('education_id')->nullable();
             $table->unsignedBigInteger('experience_id')->nullable();
             $table->string('user_name')->nullable();
