@@ -6,10 +6,9 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Resources\Json\ResourceCollection;
-use Modules\API\Interfaces\CrudInterface;
 use Modules\API\Services\VacancyService;
 
-class VacancyController implements CrudInterface
+class VacancyController
 {
     protected VacancyService $vacancyService;
 
@@ -17,19 +16,21 @@ class VacancyController implements CrudInterface
     {
         $this->vacancyService = $vacancyService;
     }
-    public function index(Request $request): ResourceCollection
+
+    public function index(Request $request): JsonResponse
     {
-$vacancies = $this->vacancyService->index($request);
-    return new ResourceCollection($vacancies);}
+       return $this->vacancyService->index($request);
+
+    }
 
     public function store(Request $request): JsonResource
     {
         // TODO: Implement store() method.
     }
 
-    public function show(int $id): JsonResource
+    public function show(int $id): JsonResponse
     {
-        // TODO: Implement show() method.
+        return $this->vacancyService->show($id);
     }
 
     public function update(Request $request, int $id): JsonResource
