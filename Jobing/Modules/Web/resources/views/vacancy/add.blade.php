@@ -36,8 +36,10 @@
                             <label for="experience" class="block mb-2 text-sm font-medium text-gray-700">Təhsil</label>
                             <select id="experience"
                                     class="w-full p-3 border-custom  h-14 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500">
-
-
+                                    <option value="" disabled selected>@lang('Select Education')</option>
+                                    @foreach(\App\Enums\Education::toArray() as $education)
+                                        <option value="{{ $education['value'] }}">{{ $education['label'] }}</option>
+                                    @endforeach
                             </select>
                             <span class="error-message text-red-500 text-sm mt-1 hidden">Bu xana doldurulmalıdır</span>
                         </div>

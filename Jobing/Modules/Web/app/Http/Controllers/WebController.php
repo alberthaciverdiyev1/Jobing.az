@@ -2,6 +2,7 @@
 
 namespace Modules\Web\Http\Controllers;
 
+use App\Enums\Education;
 use Illuminate\Http\Request;
 
 class WebController
@@ -57,7 +58,8 @@ class WebController
 //                'libraries/ckeditor5.min.js',
                 'libraries/axios.min.js',
             ];
-            return view('web::vacancy.add',compact('js'));
+            $education = Education::toArray();
+            return view('web::vacancy.add',compact('js','education'));
         }
     }
 }
