@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', async () => {
+    console.log("aa");
     await Promise.all([getCategories(), getCities(), getEducation(), getExperience()
     ]);
     alertify.set('notifier', 'position', 'top-right');
@@ -8,46 +9,46 @@ let editorAboutJob = null;
 let allValid = true;
 let data = {};
 
-ClassicEditor
-    .create(document.querySelector('#requirements'), {
-        toolbar: [
-            'heading',
-            'bold',
-            'italic',
-            'link',
-            'bulletedList',
-            'undo',
-            'redo',
-            'indent',
-            'outdent'
-        ],
-
-    }).then(editor => {
-        editorRequirements = editor;
-    })
-    .catch(error => {
-        console.error(error);
-    });
-
-ClassicEditor
-    .create(document.querySelector('#aboutJob'), {
-        toolbar: [
-            'heading',
-            'bold',
-            'italic',
-            'link',
-            'bulletedList',
-            'undo',
-            'redo',
-            'indent',
-            'outdent'
-        ],
-    }).then(editor => {
-        editorAboutJob = editor;
-    })
-    .catch(error => {
-        console.error(error);
-    });
+// ClassicEditor
+//     .create(document.querySelector('#requirements'), {
+//         toolbar: [
+//             'heading',
+//             'bold',
+//             'italic',
+//             'link',
+//             'bulletedList',
+//             'undo',
+//             'redo',
+//             'indent',
+//             'outdent'
+//         ],
+//         ClassicEditor
+//     }).then(editor => {
+//         editorRequirements = editor;
+//     })
+//     .catch(error => {
+//         console.error(error);
+//     });
+//
+// ClassicEditor
+//     .create(document.querySelector('#aboutJob'), {
+//         toolbar: [
+//             'heading',
+//             'bold',
+//             'italic',
+//             'link',
+//             'bulletedList',
+//             'undo',
+//             'redo',
+//             'indent',
+//             'outdent'
+//         ],
+//     }).then(editor => {
+//         editorAboutJob = editor;
+//     })
+//     .catch(error => {
+//         console.error(error);
+//     });
 
 async function getCategories() {
     await axios.get('/api/categories', {

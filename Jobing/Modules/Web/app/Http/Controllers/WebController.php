@@ -51,7 +51,13 @@ class WebController
         if ($request->isMethod('post')) {
             $data = $request->all();
         } else {
-            return view('web::vacancy.add');
+            $js = [
+                'pages/vacancy/add.js',
+                'libraries/ckeditor.js',
+//                'libraries/ckeditor5.min.js',
+                'libraries/axios.min.js',
+            ];
+            return view('web::vacancy.add',compact('js'));
         }
     }
 }
