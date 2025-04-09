@@ -14,8 +14,9 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->alias([
-         'visitor_logger' => VisitorMiddleware::class,
-            'localize'=>\App\Http\Middleware\LocalizeMiddleware::class,
+            'visitor_logger' => VisitorMiddleware::class,
+            'localize' => \App\Http\Middleware\LocalizeMiddleware::class,
+            'check_internal_token' => \App\Http\Middleware\CheckInternalTokenMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

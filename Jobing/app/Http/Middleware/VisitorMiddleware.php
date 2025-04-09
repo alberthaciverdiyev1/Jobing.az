@@ -5,7 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use Modules\API\Services\VisitorService;
+use Base\app\Services\VisitorService;
 use Symfony\Component\HttpFoundation\Response;
 use Carbon\Carbon;
 
