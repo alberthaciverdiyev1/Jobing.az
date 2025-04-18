@@ -8,8 +8,8 @@ import Production from './src/Helpers/Production.js';
 import sendEmail from './src/Helpers/NodeMailer.js';
 // import i18n from 'i18n';
 import cookieParser from 'cookie-parser';
-import { requestAllSites } from "./src/Helpers/Automation.js";
-import bot, { listenTgCommands, sendTgMessage } from "./src/Helpers/TelegramBot.js";
+import {requestAllSites} from "./src/Helpers/Automation.js";
+import bot, {listenTgCommands, sendTgMessage} from "./src/Helpers/TelegramBot.js";
 import TelegramBot from 'node-telegram-bot-api';
 
 
@@ -32,13 +32,22 @@ app.set('views', './src/Views');
 app.set('trust proxy', true);
 
 app.use(express.static(path.resolve('./src/Public')));
-app.use(express.json());
+app.use(express.json({limit: '100mb'}));
+app.use(express.urlencoded({extended: true, limit: '100mb'}));
+
 app.use(cookieParser());
 // app.use(i18n.init);
-app.use((req, res, next) => { res.locals.Production = Production; next(); });
+app.use((req, res, next) => {
+    res.locals.Production = Production;
+    next();
+});
 app.use(loggerMiddleware);
 app.use('/', routes);
-app.use((req, res, next) => { res.status(404).send('404 Not Found'); next(); });
+app.use((req, res, next) => {
+    res.status(404).send('404 Not Found');
+    next();
+});
+
 
 app.use(async (err, req, res, next) => {
     const errorData = {
@@ -58,7 +67,9 @@ cron.schedule('0 9,16,20 * * *', async () => {
     await requestAllSites(true);
 });
 
-app.listen(port, '0.0.0.0', () => { console.log(`Server is running at http://localhost:${port}`); });
+app.listen(port, '0.0.0.0', () => {
+    console.log(`Server is running at http://localhost:${port}`);
+});
 
 process.on('uncaughtException', async (err) => {
     const errorData = {
