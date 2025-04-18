@@ -44,8 +44,8 @@ const jobDataController = {
                 { instance: new BossAz(), name: "BossAz" },
                 { instance: new HelloJobAz(), name: "HelloJobAz" },
                 { instance: new OfferAz(), name: "OfferAz" },
-                // { instance: new SmartJobAz(), name: "SmartJobAz" },
-                // { instance: new JobSearchAz(), name: "JobSearchAz" },
+                { instance: new SmartJobAz(), name: "SmartJobAz" },
+                { instance: new JobSearchAz(), name: "JobSearchAz" },
             ];
 
             let totalInsertedJobCount = 0;

@@ -107,8 +107,8 @@ class HelloJobAz {
 
                                     $('.vacancies__item').each((i, el) => {
                                         const urlAndId = $(el).attr('href');
-                                        const title = $(el).find('h3').text().trim();
-                                        const companyName = $(el).find('.vacancy_item_company').text().trim();
+                                        const title = $(el).find('.vacancies__title').text().trim();
+                                        const companyName = $(el).find('.vacancies__company').text().trim();
                                         const jobId = urlAndId?.split('/').pop() || null;
                                         const redirectUrl = urlAndId || null;
 
