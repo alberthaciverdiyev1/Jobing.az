@@ -10,6 +10,8 @@ import cityController from '../Controllers/CityController.js';
 
 import validator from '../Validators/Main.js'
 import visitorLogger from "../Middlewares/Visitors.js";
+import adminController from "../Controllers/AdminController.js";
+import blogController from "../Controllers/BlogController.js";
 const router = express.Router();
 
 router.post('/api/users', validator.registerValidator, userController.createUser);         // CREATE
@@ -17,6 +19,12 @@ router.get('/api/users', userController.getUsers);                              
 router.get('/api/users/:id', userController.getUserById);                                  // READ ONE
 router.put('/api/users/:id', userController.updateUser);                                   // UPDATE
 router.delete('/api/users/:id', userController.deleteUser);                                // DELETE
+
+// CRUD operations for BLOG
+router.post('/api/blog/add', blogController.create);                                             // CREATE
+router.get('/api/blogs', blogController.getAll);                                               // CREATE
+router.get('/api/blog/:id', blogController.getAll);                                               // CREATE
+
 
 // CRUD operations for job sites (JobDataController)
 router.post('/api/jobs', jobDataController.create);                                        // CREATE
@@ -70,6 +78,8 @@ router.get('/about-us', visitorLogger, viewController.aboutUs);
 router.get('/contact', visitorLogger, viewController.contactUs);
 router.get('/add-job', visitorLogger, viewController.addJob);
 router.get('/faq', visitorLogger, viewController.faq);
+router.get('/blogs', visitorLogger, viewController.blogs);
+router.get('/blogs/:slug', visitorLogger, viewController.blog);
 router.get('/statistics', viewController.statistics)
 //Enums
 router.get('/education', viewController.education);
@@ -88,8 +98,10 @@ router.post('/set-lang', (req, res) => {
 
 //Admin Panel 
 
-router.get('/admin', viewController.adminIndex);
-router.get('/admin/categories', viewController.adminCategoryView);
+router.get('/admin', adminController.adminIndex);
+router.get('/admin/categories', adminController.adminCategoryView);
+router.get('/admin/blogs', adminController.adminBlogsView);
+router.get('/admin/blogs/add', adminController.adminBlogsAddView);
 
 //Send Mail
 router.post('/send-mail', viewController.sendMail);         // CREATE

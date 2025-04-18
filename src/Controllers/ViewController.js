@@ -4,6 +4,8 @@ import CategoryService from "../Services/CategoryService.js";
 import CompanyService from "../Services/CompanyService.js";
 import JobDataService from "../Services/JobDataService.js";
 import VisitorService from "../Services/VisitorService.js";
+import Blog from "../Models/Blog.js";
+import BlogService from "../Services/BlogService.js";
 
 const ViewController = {
     home: async (req, res) => {
@@ -31,6 +33,28 @@ const ViewController = {
         };
         res.render('Main', view);
     },
+    blogs: async (req, res) => {
+        const view = {
+            title: 'Bloqlar',
+            body: "Blog/List.ejs",
+            js: "Blog.js"
+        };
+        res.render('Main', view);
+    },
+
+    blog: async (req, res) => {
+        const {slug} = req.params;
+        const blog = await BlogService.details(slug);
+        const view = {
+            title: blog.name,
+            body: 'Blog/Details.ejs',
+            js: 'Blog.js',
+            blog: blog
+        };
+        res.render('Main', view);
+
+    },
+
     aboutUs: async (req, res) => {
         const view = {
             title: 'Haqqımızda',
@@ -63,23 +87,6 @@ const ViewController = {
         };
         res.render('Main', view);
     },
-    adminIndex: async (req, res) => {
-        const view = {
-            title: 'Admin Panel',
-            body: "Home/Index.ejs",
-            js: "Index.js"
-        };
-        res.render('Admin/Main', view);
-    },
-
-    adminCategoryView: async (req, res) => {
-        const view = {
-            title: 'Categories - Admin Panel',
-            body: "Category/Index.ejs",
-            js: "Category.js"
-        };
-        res.render('Admin/Main', view);
-    },
 
 
     education: (req, res) => {
@@ -93,7 +100,7 @@ const ViewController = {
     },
     sendMail: async (req, res) => {
         const response = await sendEmail(req.body.data);
-        res.status(200).json({ status: response.status, message: response.message });
+        res.status(200).json({status: response.status, message: response.message});
 
     },
     statistics: async (req, res) => {
@@ -102,8 +109,8 @@ const ViewController = {
         const visitor = await VisitorService.count(30)
         const dailyVisitor = await VisitorService.dailyCount()
         const totalVisitor = await VisitorService.count(365)
-        res.status(200).json({ status: 200, message:"",data:{company,vacancy,visitor,totalVisitor,dailyVisitor} });
-    
+        res.status(200).json({status: 200, message: "", data: {company, vacancy, visitor, totalVisitor, dailyVisitor}});
+
     }
 };
 
