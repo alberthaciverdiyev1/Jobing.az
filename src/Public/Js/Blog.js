@@ -35,29 +35,36 @@ document.addEventListener("DOMContentLoaded", (event) => {
                         const formattedDate = `${String(createdAtDate.getMonth() + 1).padStart(2, '0')}.${String(createdAtDate.getDate()).padStart(2, '0')}.${createdAtDate.getFullYear()}`;
 
                         htmlContent += `
-                                <div class="bg-white rounded-xl border border-orange-200 overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300 flex flex-col">
-                                    <img src="${element.imageUrl}" alt="Blog Image" class="w-full h-48 object-cover">
-                                    <div class="p-5 flex flex-col flex-1">
-                                        <div class="flex items-center justify-between text-sm text-gray-500 mb-2">
-                                            <span class="flex items-center gap-1">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3"></path>
-                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6a9 9 0 100 18 9 9 0 000-18z"></path>
-                                                </svg>
-                                                ${readMinutes} dəq oxuma müddəti
-                                            </span>
-                                        </div>
-                                        <a href="${'/blogs/' + element.slug}" target="_blank"  class="text-xl font-semibold text-gray-900 mb-2">${element.name}</a>
-                                        <a href="${'/blogs/' + element.slug}" target="_blank" class="text-gray-600 text-sm mb-4 flex-1">${shortDesc}</a>
-                                        <div class="flex items-center justify-between text-sm text-gray-500 mt-auto pt-3 border-t">
-                                            <div class="flex items-center gap-2">
-                                                <img class="w-6 h-6 rounded-full" src="https://i.pravatar.cc/300?img=12" alt="Author"/>
-                                                Zhala Azimli
-                                            </div>
-                                            <span class="flex items-center gap-1">${formattedDate}</span>
-                                        </div>
-                                    </div>
-                                </div>`;
+                             <div class="bg-white rounded-xl border border-orange-200 overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300 flex flex-col">
+    <img src="${element.imageUrl}" alt="Blog Image" class="w-full h-48 object-cover">
+    <div class="p-5 flex flex-col flex-1">
+        <div class="flex items-center justify-between text-sm text-gray-500 mb-2">
+            <span class="flex items-center gap-1">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6a9 9 0 100 18 9 9 0 000-18z"></path>
+                </svg>
+                ${readMinutes} dəq oxuma müddəti
+            </span>
+        </div>
+        <a href="${'/blogs/' + element.slug}" target="_blank" class="text-xl font-semibold text-gray-900 mb-2">${element.name}</a>
+        <a href="${'/blogs/' + element.slug}" target="_blank" class="text-gray-600 text-sm mb-1 flex-1">${shortDesc}</a>
+
+        <!-- Read More Button (right aligned) -->
+        <div class="flex justify-end mb-4">
+            <a href="${'/blogs/' + element.slug}" target="_blank" class="text-orange-600 hover:text-orange-800 font-medium text-base">Ətraflı oxu →</a>
+        </div>
+
+        <div class="flex items-center justify-between text-sm text-gray-500 mt-auto pt-3 border-t">
+            <div class="flex items-center gap-2">
+                <img class="w-6 h-6 rounded-full" src="https://i.postimg.cc/y6ZkqDpx/Whats-App-Image-2025-04-19-at-04-29-43.jpg" alt="Author"/>
+                Zhala Azimli
+            </div>
+            <span class="flex items-center gap-1">${formattedDate}</span>
+        </div>
+    </div>
+</div>
+`;
 
                         axios.get(`/blogs/${element.slug}`).then(blogRes => {
                             if (blogRes.status === 200) {
