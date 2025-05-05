@@ -1,29 +1,15 @@
 import React from "react";
-
-import { Link } from "react-router-dom";
-
-// Components
 import Container from "./Container";
-import NavBar from "./NavBar";
-
-// Images
-import Logo from "../../images/Jobing.az-Logo.png";
+import Nav from "./NavBar";
+import Logo from "../../components/common/Logo";
 
 const Header = () => {
   return (
-    <header className="w-full py-2 px-4 sticky">
+    <header className="sticky top-0 z-20 w-full pr-4 shadow-[0_4px_4px_-4px_rgba(0,0,0,0.4)]">
       <Container>
-        <div className="flex justify-between items-center h-20">
-          <div className="w-48">
-            <Link to="/">
-              <img
-                src={Logo}
-                alt="logo"
-                className="w-auto object-contain"
-              />
-            </Link>
-          </div>
-          <NavBar />
+        <div className="flex items-center justify-between h-20">
+          <Logo />
+          <Nav />
         </div>
       </Container>
     </header>
