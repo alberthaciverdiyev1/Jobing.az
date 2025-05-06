@@ -2,35 +2,53 @@ import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 
+import logoSrc from "../../images/Jobing.az-Logo.png";
+
+import {
+  Home,
+  Briefcase,
+  BookOpen,
+  Info,
+  Mail,
+  PlusSquare,
+} from "lucide-react";
+
 const NavLinks = ({ onClick }) => {
   const linkClasses = ({ isActive }) =>
-    `block px-4 py-2 text-sm font-medium rounded cursor-pointer transition ${
+    `w-full flex items-center gap-3 px-4 py-3 text-sm font-medium rounded transition whitespace-nowrap ${
       isActive
         ? "bg-[#fe8012] text-white"
         : "text-[#202a38] hover:bg-[#fe8012] hover:text-white"
     }`;
 
   const addVacanciesClasses =
-    "block px-4 py-2 text-sm font-medium rounded cursor-pointer bg-[#fe8012] text-white";
+    "w-full flex items-center gap-3 px-4 py-3 text-sm font-medium rounded bg-[#fe8012] text-white whitespace-nowrap";
 
+    const iconClasses = "md:hidden"
   return (
     <>
       <NavLink to="/" end className={linkClasses} onClick={onClick}>
+        <Home size={18} className={iconClasses} />
         Ana Səhifə
       </NavLink>
       <NavLink to="/vakansiyalar" className={linkClasses} onClick={onClick}>
+        <Briefcase size={18} className={iconClasses} />
         Vakansiyalar
       </NavLink>
       <NavLink to="/bloqlar" className={linkClasses} onClick={onClick}>
+        <BookOpen size={18} className={iconClasses} />
         Bloqlar
       </NavLink>
-      <NavLink to="/elaqe" className={linkClasses} onClick={onClick}>
-        Əlaqə
-      </NavLink>
       <NavLink to="/haqqımızda" className={linkClasses} onClick={onClick}>
+        <Info size={18} className={iconClasses} />
         Haqqımızda
       </NavLink>
+      <NavLink to="/elaqe" className={linkClasses} onClick={onClick}>
+        <Mail size={18} className={iconClasses} />
+        Əlaqə
+      </NavLink>
       <NavLink to="/elan" className={addVacanciesClasses} onClick={onClick}>
+        <PlusSquare size={18} className={iconClasses} />
         Elan Yerləşdir
       </NavLink>
     </>
@@ -63,12 +81,20 @@ const Nav = () => {
           isOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
-        <div className="flex justify-end p-4">
+        <div className="flex items-center justify-between p-4 border-b">
+          {/* <img
+            width={200}
+            height={200}
+            src={logoSrc}
+            alt="Jobing Logo"
+            className=""
+          /> */}
           <button onClick={toggleNavbar}>
             <X />
           </button>
         </div>
-        <div className="flex flex-col gap-4 px-6">
+
+        <div className="flex flex-col gap-2 md:px-2 py-4">
           <NavLinks onClick={closeMenu} />
         </div>
       </div>
