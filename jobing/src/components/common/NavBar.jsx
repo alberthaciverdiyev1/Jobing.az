@@ -24,7 +24,7 @@ const NavLinks = ({ onClick }) => {
   const addVacanciesClasses =
     "w-full flex items-center gap-3 px-4 py-3 text-sm font-medium rounded bg-[#fe8012] text-white whitespace-nowrap";
 
-    const iconClasses = "md:hidden"
+  const iconClasses = "md:hidden";
   return (
     <>
       <NavLink to="/" end className={linkClasses} onClick={onClick}>
