@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -24,6 +25,7 @@
         }
     </style>
 </head>
+
 <body>
     <nav class="bg-white fixed w-full z-10 shadow-md">
         <div class="container mx-auto flex justify-between items-center py-3 px-8">
@@ -40,11 +42,17 @@
             <!-- Navigation Links -->
             <div class="desktop-menu space-x-4 hidden md:flex items-center">
                 <div class="flex space-x-4">
-                    <a href="/" class="text-gray-800 font-semibold hover:bg-filled-button-color hover:text-white px-3 py-2 rounded transition duration-300">Ana Səhifə</a>
-                    <a href="/vacancies" class="text-gray-800 font-semibold hover:bg-filled-button-color hover:text-white px-3 py-2 rounded transition duration-300">Vakansiyalar</a>
-                    <a href="/blogs" class="text-gray-800 font-semibold hover:bg-filled-button-color hover:text-white px-3 py-2 rounded transition duration-300">Bloqlar</a>
-                    <a href="/contact" class="text-gray-800 font-semibold hover:bg-filled-button-color hover:text-white px-3 py-2 rounded transition duration-300">Əlaqə</a>
-                    <a href="/about" class="text-gray-800 font-semibold hover:bg-filled-button-color hover:text-white px-3 py-2 rounded transition duration-300">Haqqımızda</a>
+                    <a href="/"
+                        class="text-gray-800 font-semibold hover:bg-filled-button-color hover:text-white px-3 py-2 rounded transition duration-300">Ana
+                        Səhifə</a>
+                    <a href="/vacancies"
+                        class="text-gray-800 font-semibold hover:bg-filled-button-color hover:text-white px-3 py-2 rounded transition duration-300">Vakansiyalar</a>
+                    <a href="/blogs"
+                        class="text-gray-800 font-semibold hover:bg-filled-button-color hover:text-white px-3 py-2 rounded transition duration-300">Bloqlar</a>
+                    <a href="/contact"
+                        class="text-gray-800 font-semibold hover:bg-filled-button-color hover:text-white px-3 py-2 rounded transition duration-300">Əlaqə</a>
+                    <a href="/about"
+                        class="text-gray-800 font-semibold hover:bg-filled-button-color hover:text-white px-3 py-2 rounded transition duration-300">Haqqımızda</a>
                 </div>
 
                 <!-- Language Selector (Hidden by default) -->
@@ -54,12 +62,15 @@
                     <option value="ru">Russian</option>
                 </select>
 
-                <a href="/add-vacancy" class="bg-filled-button-color text-white px-6 py-2 rounded hover:bg-filled-button-color duration-300">Elan Yerləşdir</a>
+                <a href="/add-vacancy"
+                    class="bg-filled-button-color text-white px-6 py-2 rounded hover:bg-filled-button-color duration-300">Elan
+                    Yerləşdir</a>
             </div>
 
             <!-- Login Button (Hidden by default) -->
             <div class="hidden md:block">
-                <a href="/auth" class="bg-filled-button-color text-white px-6 py-2 rounded-full ml-2 hover:bg-filled-button-color duration-300 hidden">Login</a>
+                <a href="/auth"
+                    class="bg-filled-button-color text-white px-6 py-2 rounded-full ml-2 hover:bg-filled-button-color duration-300 hidden">Login</a>
             </div>
 
             <!-- Mobile Menu Toggle -->
@@ -72,10 +83,12 @@
     </nav>
 
     <!-- Overlay -->
-    <div id="overlay" class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur z-10 hidden transition-opacity duration-300"></div>
+    <div id="overlay"
+        class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur z-10 hidden transition-opacity duration-300"></div>
 
     <!-- Mobile Menu (Hidden by default) -->
-    <div id="mobileMenu" class="fixed top-0 right-0 w-4/5 h-full bg-white z-20 transform translate-x-full transition-transform duration-300 ease-in-out md:hidden shadow-lg flex flex-col">
+    <div id="mobileMenu"
+        class="fixed top-0 right-0 w-4/5 h-full bg-white z-20 transform translate-x-full transition-transform duration-300 ease-in-out md:hidden shadow-lg flex flex-col">
         <div class="p-4 flex-grow">
             <div class="flex justify-between items-center mb-4">
                 <img src="images/static/LogoMobile.png" alt="Logo Mobile" class="h-8 object-cover">
@@ -85,84 +98,97 @@
             </div>
             <div class="flex flex-col h-[calc(100%-4rem)]">
                 <div class="flex-grow">
-                    <a href="/" class="text-gray-800 font-semibold hover:bg-filled-button-color hover:text-white px-3 py-4 block transition duration-300">Ana Səhifə</a>
-                    <a href="/vacancies" class="text-gray-800 font-semibold hover:bg-filled-button-color hover:text-white px-3 py-4 block transition duration-300">Vakansiyalar</a>
-                    <a href="/blogs" class="text-gray-800 font-semibold hover:bg-filled-button-color hover:text-white px-3 py-4 block transition duration-300">Bloqlar</a>
-                    <a href="/contact" class="text-gray-800 font-semibold hover:bg-filled-button-color hover:text-white px-3 py-4 block transition duration-300">Əlaqə</a>
-                    <a href="/about" class="text-gray-800 font-semibold hover:bg-filled-button-color hover:text-white px-3 py-4 block transition duration-300">Haqqımızda</a>
+                    <a href="/"
+                        class="text-gray-800 font-semibold hover:bg-filled-button-color hover:text-white px-3 py-4 block transition duration-300">Ana
+                        Səhifə</a>
+                    <a href="/vacancies"
+                        class="text-gray-800 font-semibold hover:bg-filled-button-color hover:text-white px-3 py-4 block transition duration-300">Vakansiyalar</a>
+                    <a href="/blogs"
+                        class="text-gray-800 font-semibold hover:bg-filled-button-color hover:text-white px-3 py-4 block transition duration-300">Bloqlar</a>
+                    <a href="/contact"
+                        class="text-gray-800 font-semibold hover:bg-filled-button-color hover:text-white px-3 py-4 block transition duration-300">Əlaqə</a>
+                    <a href="/about"
+                        class="text-gray-800 font-semibold hover:bg-filled-button-color hover:text-white px-3 py-4 block transition duration-300">Haqqımızda</a>
                 </div>
                 <div class="mt-auto pb-4">
-                    <a href="/add-vacancy" class="bg-filled-button-color text-white px-6 py-3 hover:bg-filled-button-color duration-300 block text-center rounded">Elan Yerləşdir</a>
+                    <a href="/add-vacancy"
+                        class="bg-filled-button-color text-white px-6 py-3 hover:bg-filled-button-color duration-300 block text-center rounded">Elan
+                        Yerləşdir</a>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Banner Section -->
-    <section class="py-24 bg-gradient-to-t from-orange-200 to-gray-50 bg-cover bg-center bg-no-repeat shadow-[0_14px_6px_rgba(253,230,138,0.5)] md:bg-[url('images/static/HomeFormBG.png')]">
-    <div class="max-w-screen-2xl mx-auto mt-20 lg:mt-32 px-1 lg:mx-36 lg:w-2/2 md:mx-16">
-        <div class="text-left ml-5 md:ml-0">
-            <h3 class="text-4xl font-semibold md:font-normal md:text-4xl md:text-[50px] text-gray-800 mb-6">
-                Minlərlə iş elanı bir platformada...
-            </h3>
-            <p class="text-gray-500">Axtarışa başla, karyera imkanlarını kəşf et</p>
-        </div>
+    <section
+        class="py-24 bg-gradient-to-t from-orange-200 to-gray-50 bg-cover bg-center bg-no-repeat shadow-[0_14px_6px_rgba(253,230,138,0.5)] md:bg-[url('images/static/HomeFormBG.png')]">
+        <div class="max-w-screen-2xl mx-auto mt-20 lg:mt-32 px-1 lg:mx-36 lg:w-2/2 md:mx-16">
+            <div class="text-left ml-5 md:ml-0">
+                <h3 class="text-4xl font-semibold md:font-normal md:text-4xl md:text-[50px] text-gray-800 mb-6">
+                    Minlərlə iş elanı bir platformada...
+                </h3>
+                <p class="text-gray-500">Axtarışa başla, karyera imkanlarını kəşf et</p>
+            </div>
 
-     <!-- Job Search Form -->
-    <div class="mt-10 bg-white rounded-lg shadow-lg p-6 w-full mx-auto">
-        <div class="flex flex-col md:flex-row items-center gap-4">
-        <!-- Job Title Input -->
-        <div class="relative flex-1 w-full md:w-auto">
-            <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
-                <i class="fas fa-search"></i>
-            </span>
-            <input type="text" placeholder="Başlıq, şəhər adı və ya şəhər"
-                    class="w-full pl-10 pr-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 bg-gray-50 border border-gray-200" />
-        </div>
-        
-        
-
-        <!-- Location Input -->
-        <div class="relative flex-1 w-full md:w-auto">
-                <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
-                    <i class="fas fa-map-marker-alt"></i>
-                </span>
-            <select class="w-full pl-10 pr-8 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 appearance-none bg-gray-50 border border-gray-200">
-                    <option value="">Bütün şəhərlər</option>
-                    <option value="baku">Bakı</option>
-                    <option value="ganja">Gəncə</option>
-            </select>
-                <span class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none">
-                    <i class="fas fa-chevron-down"></i>
-                </span>
-        </div>
+            <!-- Job Search Form -->
+            <div class="mt-10 bg-white rounded-lg shadow-lg p-6 w-full mx-auto">
+                <div class="flex flex-col md:flex-row items-center gap-4">
+                    <!-- Job Title Input -->
+                    <div class="relative flex-1 w-full md:w-auto">
+                        <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                            <i class="fas fa-search"></i>
+                        </span>
+                        <input type="text" placeholder="Başlıq, şəhər adı və ya şəhər"
+                            class="w-full pl-10 pr-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 bg-gray-50 border border-gray-200" />
+                    </div>
 
 
-        <!-- Category Select -->
-        <div class="relative flex-1 w-full md:w-auto">
-                <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
-                    <i class="fas fa-briefcase"></i>
-                </span>
-                <select class="w-full pl-10 pr-8 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 appearance-none bg-gray-50 border border-gray-200">
-                    <option value="">Bütün Kateqoriyalar</option>
-                    <option value="it">IT</option>
-                    <option value="marketing">Marketinq</option>
-                </select>
-                <span class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none">
-                    <i class="fas fa-chevron-down"></i>
-                </span>
-        </div>
 
-        <!-- Submit Button -->
-        <div class="w-full md:w-auto">
-            <button type="button" class="w-full md:w-auto bg-filled-button-color text-white px-8 py-3 rounded-lg hover:bg-filled-button-color transition focus:outline-none">
-                    Axtar
-            </button>
-        </div>
-        </div>
-    </div>
-    </div>
+                    <!-- Location Input -->
+                    <div class="relative flex-1 w-full md:w-auto">
+                        <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </span>
+                        <select
+                            class="w-full pl-10 pr-8 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 appearance-none bg-gray-50 border border-gray-200">
+                            <option value="">Bütün şəhərlər</option>
+                            <option value="baku">Bakı</option>
+                            <option value="ganja">Gəncə</option>
+                        </select>
+                        <span
+                            class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none">
+                            <i class="fas fa-chevron-down"></i>
+                        </span>
+                    </div>
 
+
+                    <!-- Category Select -->
+                    <div class="relative flex-1 w-full md:w-auto">
+                        <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                            <i class="fas fa-briefcase"></i>
+                        </span>
+                        <select
+                            class="w-full pl-10 pr-8 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 appearance-none bg-gray-50 border border-gray-200">
+                            <option value="">Bütün Kateqoriyalar</option>
+                            <option value="it">IT</option>
+                            <option value="marketing">Marketinq</option>
+                        </select>
+                        <span
+                            class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none">
+                            <i class="fas fa-chevron-down"></i>
+                        </span>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="w-full md:w-auto">
+                        <button type="button"
+                            class="w-full md:w-auto bg-filled-button-color text-white px-8 py-3 rounded-lg hover:bg-filled-button-color transition focus:outline-none">
+                            Axtar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
 
 
@@ -193,4 +219,5 @@
         });
     </script>
 </body>
-</html> 
+
+</html>
