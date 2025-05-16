@@ -58,12 +58,44 @@
             </div>
 
             <!-- Login Button (Hidden by default) -->
-            <div class="md:block">
+            <div class="hidden md:block">
                 <a href="/auth" class="bg-filled-button-color text-white px-6 py-2 rounded-full ml-2 hover:bg-filled-button-color duration-300 hidden">Login</a>
+            </div>
+
+            <!-- Mobile Menu Toggle -->
+            <div class="md:hidden">
+                <button id="menuToggle" class="text-gray-800 focus:outline-none">
+                    <i class="fas fa-bars fa-2x"></i>
+                </button>
             </div>
         </div>
     </nav>
 
-    
+    <!-- Overlay -->
+    <div id="overlay" class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur z-10 hidden transition-opacity duration-300"></div>
+
+    <!-- Mobile Menu (Hidden by default) -->
+    <div id="mobileMenu" class="fixed top-0 right-0 w-4/5 h-full bg-white z-20 transform translate-x-full transition-transform duration-300 ease-in-out md:hidden shadow-lg flex flex-col">
+        <div class="p-4 flex-grow">
+            <div class="flex justify-between items-center mb-4">
+                <img src="images/static/LogoMobile.png" alt="Logo Mobile" class="h-8 object-cover">
+                <button id="closeMenu" class="text-gray-800 focus:outline-none">
+                    <i class="fas fa-times fa-2x"></i>
+                </button>
+            </div>
+            <div class="flex flex-col h-[calc(100%-4rem)]">
+                <div class="flex-grow">
+                    <a href="/" class="text-gray-800 font-semibold hover:bg-filled-button-color hover:text-white px-3 py-4 block transition duration-300">Ana Səhifə</a>
+                    <a href="/vacancies" class="text-gray-800 font-semibold hover:bg-filled-button-color hover:text-white px-3 py-4 block transition duration-300">Vakansiyalar</a>
+                    <a href="/blogs" class="text-gray-800 font-semibold hover:bg-filled-button-color hover:text-white px-3 py-4 block transition duration-300">Bloqlar</a>
+                    <a href="/contact" class="text-gray-800 font-semibold hover:bg-filled-button-color hover:text-white px-3 py-4 block transition duration-300">Əlaqə</a>
+                    <a href="/about" class="text-gray-800 font-semibold hover:bg-filled-button-color hover:text-white px-3 py-4 block transition duration-300">Haqqımızda</a>
+                </div>
+                <div class="mt-auto pb-4">
+                    <a href="/add-vacancy" class="bg-filled-button-color text-white px-6 py-3 hover:bg-filled-button-color duration-300 block text-center rounded">Elan Yerləşdir</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html> 
