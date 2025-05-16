@@ -11,7 +11,7 @@
             theme: {
                 extend: {
                     colors: {
-                        'filled-button-color': 'rgb(256,132,20)', 
+                        'filled-button-color': 'rgb(256,132,20)', // Updated color
                     }
                 }
             }
@@ -56,5 +56,14 @@
 
                 <a href="/add-vacancy" class="bg-filled-button-color text-white px-6 py-2 rounded hover:bg-filled-button-color duration-300">Elan Yerləşdir</a>
             </div>
+
+            <!-- Login Button (Hidden by default) -->
+            <div class="md:block">
+                <a href="/auth" class="bg-filled-button-color text-white px-6 py-2 rounded-full ml-2 hover:bg-filled-button-color duration-300 hidden">Login</a>
+            </div>
+        </div>
+    </nav>
+
+    
 </body>
 </html> 
