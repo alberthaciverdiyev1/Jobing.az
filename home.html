@@ -11,7 +11,7 @@
             theme: {
                 extend: {
                     colors: {
-                        'filled-button-color': 'rgb(256,132,20)',
+                        'filled-button-color': 'rgb(256,132,20)', 
                     }
                 }
             }
@@ -46,6 +46,13 @@
                     <a href="/contact" class="text-gray-800 font-semibold hover:bg-filled-button-color hover:text-white px-3 py-2 rounded transition duration-300">Əlaqə</a>
                     <a href="/about" class="text-gray-800 font-semibold hover:bg-filled-button-color hover:text-white px-3 py-2 rounded transition duration-300">Haqqımızda</a>
                 </div>
+
+                <!-- Language Selector (Hidden by default) -->
+                <select id="language" name="language" class="w-14 border rounded hidden">
+                    <option value="en">English</option>
+                    <option value="az">Azerbaijani</option>
+                    <option value="ru">Russian</option>
+                </select>
 
                 <a href="/add-vacancy" class="bg-filled-button-color text-white px-6 py-2 rounded hover:bg-filled-button-color duration-300">Elan Yerləşdir</a>
             </div>
