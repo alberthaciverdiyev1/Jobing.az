@@ -97,5 +97,32 @@
             </div>
         </div>
     </div>
+
+    <script>
+        // Mobile menu functionality
+        const menuToggle = document.getElementById('menuToggle');
+        const closeMenu = document.getElementById('closeMenu');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const overlay = document.getElementById('overlay');
+
+        menuToggle.addEventListener('click', () => {
+            mobileMenu.classList.remove('translate-x-full');
+            overlay.classList.remove('hidden');
+            document.body.style.overflow = 'hidden'; // Prevent scrolling when menu is open
+        });
+
+        closeMenu.addEventListener('click', () => {
+            mobileMenu.classList.add('translate-x-full');
+            overlay.classList.add('hidden');
+            document.body.style.overflow = ''; // Restore scrolling
+        });
+
+        // Close menu when clicking overlay
+        overlay.addEventListener('click', () => {
+            mobileMenu.classList.add('translate-x-full');
+            overlay.classList.add('hidden');
+            document.body.style.overflow = '';
+        });
+    </script>
 </body>
 </html> 
