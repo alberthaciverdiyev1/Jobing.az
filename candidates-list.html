@@ -167,7 +167,7 @@
 </head>
 
 <body class="font-['Inter']">
-  <nav class="bg-white shadow-md fixed top-0 left-0 w-full z-50">
+  <nav id="mainNavbar" class="bg-transparent shadow-md fixed top-0 left-0 w-full z-50 transition-colors duration-300">
     <div class="max-w-7xl mx-auto px-6 md:px-4">
       <div class="flex justify-between items-center h-20">
         <!-- Logo -->
@@ -454,7 +454,7 @@
   </nav>
 
   <!-- Banner Section -->
-  <section class="relative h-[300px] overflow-hidden mt-20">
+  <section class="relative h-[380px] overflow-hidden pt-20">
         <!-- Background image with oval bottom -->
         <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('./images/static/CandidateListBanner.jpg');">
             <!-- Lighter orange gradient overlay with oval bottom -->
@@ -477,6 +477,23 @@
             </div>
         </div>
     </section>
+
+    <p>lorem</p>
+    <p>lorem</p>
+    <p>lorem</p>
+    <p>lorem</p>
+    <p>lorem</p>
+    <p>lorem</p>
+    <p>lorem</p>
+    <p>lorem</p>
+    <p>lorem</p>
+    <p>lorem</p>
+    <p>lorem</p>
+    <p>lorem</p>
+    <p>lorem</p>
+    <p>lorem</p>
+    <p>lorem</p>
+    
     
 
   <script>
@@ -561,6 +578,18 @@
         }
       }
     });
+
+    // Navbar background color change on scroll
+window.addEventListener('scroll', function() {
+  const navbar = document.getElementById('mainNavbar');
+  if (window.scrollY > 10) {
+    navbar.classList.remove('bg-transparent');
+    navbar.classList.add('bg-white');
+  } else {
+    navbar.classList.add('bg-transparent');
+    navbar.classList.remove('bg-white');
+  }
+});
   </script>
 </body>
 
