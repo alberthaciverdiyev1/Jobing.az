@@ -1002,6 +1002,44 @@
                 });
             }
         });
+
+        // Make notification toggles functional
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get all toggle switches
+            const toggles = document.querySelectorAll('input[type="checkbox"]');
+            
+            // Add click event listener to each toggle's parent div
+            toggles.forEach(toggle => {
+                const toggleParent = toggle.parentElement;
+                
+                toggleParent.addEventListener('click', function(e) {
+                    // Prevent the click from bubbling up
+                    e.stopPropagation();
+                    
+                    // Toggle the checkbox state
+                    toggle.checked = !toggle.checked;
+                    
+                    // Trigger change event
+                    const event = new Event('change');
+                    toggle.dispatchEvent(event);
+                });
+
+                // Add change event listener to each toggle
+                toggle.addEventListener('change', function() {
+                    // Here you can add code to save the toggle state
+                    console.log(`Toggle ${this.id} is now ${this.checked ? 'checked' : 'unchecked'}`);
+                    
+                    // You can also add code here to save the state to localStorage or send to server
+                    localStorage.setItem(this.id, this.checked);
+                });
+
+                // Load saved state from localStorage
+                const savedState = localStorage.getItem(toggle.id);
+                if (savedState !== null) {
+                    toggle.checked = savedState === 'true';
+                }
+            });
+        });
     </script>
 </body>
 
