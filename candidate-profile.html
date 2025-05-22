@@ -5,6 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#f9943b',
+                        secondary: '#5a6d90',
+                        success: '#84cc16',
+                        warning: '#facc15',
+                        info: '#38bdf8',
+                        danger: '#ef4444',
+                        dark: '#1e293b',
+                        muted: '#94a3b8',
+                        light: '#f8f9fc'
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
     <style>
     .dropdown-menu {
       opacity: 0;
