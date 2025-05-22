@@ -4,8 +4,558 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+    .dropdown-menu {
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-10px);
+      transition: all 0.3s ease;
+    }
+
+    .dropdown:hover .dropdown-menu {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .search-dropdown {
+      display: none;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-10px);
+      transition: all 0.3s ease;
+    }
+
+    .search-dropdown.active {
+      display: block;
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .mobile-menu {
+      transform: translateX(100%);
+      transition: transform 0.3s ease-in-out;
+    }
+
+    .mobile-menu.active {
+      transform: translateX(0);
+    }
+
+    @media (min-width: 768px) {
+      .mobile-menu {
+        transform: none;
+      }
+    }
+
+    /* Mobile dropdown styles */
+    @media (max-width: 767px) {
+      .dropdown-menu {
+        position: static !important;
+        transform: none !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        display: none;
+        width: 100% !important;
+        margin-top: 4px;
+        background: #f8f9fa;
+        border-radius: 8px;
+        box-shadow: none;
+      }
+
+      .dropdown.active .dropdown-menu {
+        display: block;
+      }
+
+      .group-hover\:block {
+        display: none !important;
+      }
+
+      .group.active .group-hover\:block {
+        display: block !important;
+        position: static !important;
+        margin-top: 4px;
+        background: #e9ecef;
+        border-radius: 8px;
+        width: 100% !important;
+        padding-left: 16px;
+        border-left: 3px solid #f8f9fa;
+      }
+
+      /* Third level dropdown styles */
+      .group .group-hover\:block .group-hover\:block {
+        background: #dee2e6;
+        padding-left: 32px;
+        border-left: 3px solid #e9ecef;
+      }
+
+      /* Second level items hover state */
+      .group.active .group-hover\:block a:hover {
+        background: #dee2e6;
+      }
+
+      /* Third level items hover state */
+      .group .group-hover\:block .group-hover\:block a:hover {
+        background: #ced4da;
+      }
+
+      .mobile-menu {
+        width: 300px !important;
+        max-height: 100vh;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .mobile-menu .flex-col {
+        padding-bottom: 20px;
+      }
+
+      /* Hide the SVG arrow in mobile view */
+      .group>a svg {
+        display: none;
+      }
+
+      /* Adjust the arrow indicator position */
+      .group>a::after {
+        content: '';
+        position: absolute;
+        right: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 8px;
+        height: 8px;
+        border-right: 2px solid #6c757d;
+        border-bottom: 2px solid #6c757d;
+        transform: translateY(-50%) rotate(-45deg);
+      }
+
+      .group.active>a::after {
+        transform: translateY(-50%) rotate(45deg);
+      }
+
+      /* Mobile menu item styles */
+      .mobile-menu .dropdown button,
+      .mobile-menu a {
+        padding: 12px 16px;
+        margin: 4px 0;
+        background: #f8f9fa;
+        border-radius: 8px;
+        transition: all 0.2s ease;
+      }
+
+      .mobile-menu .dropdown button:hover,
+      .mobile-menu a:hover {
+        background: #f1f3f5;
+      }
+
+      /* Visual indicators for nested items */
+      .group>a {
+        position: relative;
+      }
+    }
+
+    /* Blur effect for content outside navbar */
+    .blur-background {
+      filter: blur(4px);
+      pointer-events: none;
+      transition: filter 0.3s ease;
+    }
+  </style>
 </head>
 <body>
-    
+    <nav id="mainNavbar" class="bg-transparent fixed top-0 left-0 w-full z-50 transition-colors duration-300">
+    <div class="max-w-7xl mx-auto px-6 md:px-4">
+      <div class="flex justify-between items-center h-20">
+        <!-- Logo -->
+        <div class="flex-shrink-0">
+          <img class="hidden md:block h-44 w-auto" src="images/static/Logo.png" alt="Logo">
+          <img class="md:hidden h-10 w-auto" src="images/static/LogoMobile.png" alt="Mobile Logo">
+        </div>
+
+        <!-- Main Menu -->
+        <div
+          class="mobile-menu fixed md:relative inset-y-0 right-0 w-64 md:w-auto bg-white md:bg-transparent shadow-lg md:shadow-none z-50 md:z-auto">
+          <div class="flex flex-col md:flex-row md:items-center md:space-x-8 p-4 md:p-0">
+            <!-- Home Dropdown -->
+            <div class="dropdown relative">
+              <button
+                class="text-gray-800 hover:text-orange-500 font-medium flex items-center justify-between w-full md:w-auto">
+                Home
+                <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+              </button>
+              <div class="dropdown-menu absolute md:left-0 left-4 mt-2 w-48 bg-white rounded-xl shadow-lg py-2">
+                <a href="#" class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500">Hero One</a>
+                <a href="#" class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500">Hero Two</a>
+                <a href="#" class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500">Hero
+                  Three</a>
+              </div>
+            </div>
+
+            <!-- Jobs Dropdown -->
+            <div class="dropdown relative">
+              <button
+                class="text-gray-800 hover:text-orange-500 font-medium flex items-center justify-between w-full md:w-auto">
+                Jobs
+                <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+              </button>
+              <div class="dropdown-menu absolute md:left-0 left-4 mt-2 w-48 bg-white rounded-xl shadow-lg py-2">
+                <a href="#" class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500">Job
+                  Categories</a>
+                <div class="relative group">
+                  <a href="#"
+                    class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500 flex justify-between items-center">
+                    Job Grids
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                  </a>
+                  <div
+                    class="absolute md:left-full left-4 top-0 w-48 bg-white rounded-xl shadow-lg py-2 hidden group-hover:block">
+                    <a href="#" class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500">Job Grid
+                      One</a>
+                    <a href="#" class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500">Job Grid
+                      Two</a>
+                    <a href="#" class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500">Job Grid
+                      Three</a>
+                    <a href="#" class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500">Job Grid
+                      Four</a>
+                  </div>
+                </div>
+                <div class="relative group">
+                  <a href="#"
+                    class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500 flex justify-between items-center">
+                    Job Lists
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                  </a>
+                  <div
+                    class="absolute md:left-full left-4 top-0 w-48 bg-white rounded-xl shadow-lg py-2 hidden group-hover:block">
+                    <a href="#" class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500">Job List
+                      One</a>
+                    <a href="#" class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500">Job List
+                      Two</a>
+                  </div>
+                </div>
+                <div class="relative group">
+                  <a href="#"
+                    class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500 flex justify-between items-center">
+                    Job Details
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                  </a>
+                  <div
+                    class="absolute md:left-full left-4 top-0 w-48 bg-white rounded-xl shadow-lg py-2 hidden group-hover:block">
+                    <a href="#" class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500">Job
+                      Detail One</a>
+                    <a href="#" class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500">Job
+                      Detail Two</a>
+                    <a href="#" class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500">Job
+                      Detail Three</a>
+                  </div>
+                </div>
+                <a href="#" class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500">Job
+                  Apply</a>
+                <a href="#" class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500">Job
+                  Post</a>
+                <a href="#" class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500">
+                  Career</a>
+              </div>
+            </div>
+
+            <!-- Employers Dropdown -->
+            <div class="dropdown relative">
+              <button
+                class="text-gray-800 hover:text-orange-500 font-medium flex items-center justify-between w-full md:w-auto">
+                Employers
+                <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+              </button>
+              <div class="dropdown-menu absolute md:left-0 left-4 mt-2 w-48 bg-white rounded-xl shadow-lg py-2">
+                <a href="#" class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500">Employers</a>
+                <a href="#" class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500">Employer
+                  Profile</a>
+              </div>
+            </div>
+
+            <!-- Candidates Dropdown -->
+            <div class="dropdown relative">
+              <button
+                class="text-gray-800 hover:text-orange-500 font-medium flex items-center justify-between w-full md:w-auto">
+                Candidates
+                <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+              </button>
+              <div class="dropdown-menu absolute md:left-0 left-4 mt-2 w-48 bg-white rounded-xl shadow-lg py-2">
+                <a href="#"
+                  class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500">Candidates</a>
+                <a href="#" class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500">Candidates
+                  Profile</a>
+                <a href="#" class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500">Profile
+                  Settings</a>
+              </div>
+            </div>
+
+            <!-- Pages Dropdown -->
+            <div class="dropdown relative">
+              <button
+                class="text-gray-800 hover:text-orange-500 font-medium flex items-center justify-between w-full md:w-auto">
+                Pages
+                <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+              </button>
+              <div class="dropdown-menu absolute md:left-0 left-4 mt-2 w-48 bg-white rounded-xl shadow-lg py-2">
+                <a href="#" class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500">About Us</a>
+                <a href="#" class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500">Services</a>
+                <a href="#" class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500">Pricing</a>
+                <div class="relative group">
+                  <a href="#"
+                    class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500 flex justify-between items-center">
+                    Help Center
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                  </a>
+                  <div
+                    class="absolute md:left-full left-4 top-0 w-48 bg-white rounded-xl shadow-lg py-2 hidden group-hover:block">
+                    <a href="#" class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500">
+                      Overview</a>
+                    <a href="#" class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500">
+                      FAQS</a>
+                    <a href="#" class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500">
+                      Guides</a>
+                    <a href="#" class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500">
+                      Support</a>
+                  </div>
+                </div>
+                <div class="relative group">
+                  <a href="#"
+                    class="block px-4 py-2 text-gray-800 hover:bg-orange-50 hover:text-orange-500 flex justify-between items-center">
+                    Blog
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                  </a>
+                  <div
+                    class="absolute md:left-full left-4 top-0 w-48 bg-white rounded-xl shadow-lg py-2 hidden group-hover:block">
+                    <a href="#" class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500">
+                      Blogs</a>
+                    <a href="#" class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500">Blog
+                      Sidebar</a>
+                    <a href="#" class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500">Blog
+                      Detail</a>
+                  </div>
+                </div>
+                <div class="relative group">
+                  <a href="#"
+                    class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500 flex justify-between items-center">
+                    Auth Pages
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                  </a>
+                  <div
+                    class="absolute md:left-full left-4 top-0 w-48 bg-white rounded-xl shadow-lg py-2 hidden group-hover:block">
+                    <a href="#" class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500">
+                      Login</a>
+                    <a href="#" class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500">
+                      Signup</a>
+                    <a href="#" class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500">
+                      Forgot Password</a>
+                    <a href="#" class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500">
+                      Lock Screen</a>
+                  </div>
+                </div>
+                <div class="relative group">
+                  <a href="#"
+                    class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500 flex justify-between items-center">
+                    Utility
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                  </a>
+                  <div
+                    class="absolute md:left-full left-4 top-0 w-48 bg-white rounded-xl shadow-lg py-2 hidden group-hover:block">
+                    <a href="#" class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500">
+                      Terms of Services</a>
+                    <a href="#" class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500">
+                      Privacy Policy</a>
+                  </div>
+                </div>
+                <div class="relative group">
+                  <a href="#"
+                    class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500 flex justify-between items-center">
+                    Special
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                  </a>
+                  <div
+                    class="absolute md:left-full left-4 top-0 w-48 bg-white rounded-xl shadow-lg py-2 hidden group-hover:block">
+                    <a href="#" class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500">
+                      Coming Soon</a>
+                    <a href="#" class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500">
+                      Maintenance</a>
+                    <a href="#" class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500"> 404!
+                      Error</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Contact Us -->
+            <a href="#" class="text-gray-800 hover:text-orange-500 font-medium">Contact Us</a>
+          </div>
+        </div>
+
+        <!-- Right Side Icons -->
+        <div class="flex items-center space-x-6">
+          <!-- Search Button -->
+          <div class="relative">
+            <button onclick="toggleSearch()" class="bg-orange-500 text-white p-2 rounded-full hover:bg-orange-600">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+              </svg>
+            </button>
+            <!-- Search Dropdown -->
+            <div id="searchDropdown"
+              class="search-dropdown absolute right-0 mt-2 w-80 bg-white rounded-xl shadow-lg p-4">
+              <input type="text" placeholder="Search..."
+                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500">
+            </div>
+          </div>
+
+          <!-- Profile Picture -->
+          <div class="w-10 h-10 rounded-full border-2 border-orange-500 overflow-hidden">
+            <img src="https://via.placeholder.com/40" alt="Profile" class="w-full h-full object-cover">
+          </div>
+
+          <!-- Mobile Menu Button -->
+          <button id="mobileMenuButton" class="md:hidden p-2 rounded-md hover:bg-gray-100 focus:outline-none">
+            <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <script>
+    function toggleSearch() {
+      const searchDropdown = document.getElementById('searchDropdown');
+      searchDropdown.classList.toggle('active');
+    }
+
+    // Close search dropdown when clicking outside
+    document.addEventListener('click', function (event) {
+      const searchDropdown = document.getElementById('searchDropdown');
+      const searchButton = event.target.closest('button');
+
+      if (!searchButton && !searchDropdown.contains(event.target)) {
+        searchDropdown.classList.remove('active');
+      }
+    });
+
+    // Mobile menu toggle
+    const mobileMenuButton = document.getElementById('mobileMenuButton');
+    const mobileMenu = document.querySelector('.mobile-menu');
+    const body = document.body;
+    const mainContent = document.querySelector('body > *:not(nav)');
+
+    mobileMenuButton.addEventListener('click', () => {
+      mobileMenu.classList.toggle('active');
+      if (mobileMenu.classList.contains('active')) {
+        mainContent.classList.add('blur-background');
+      } else {
+        mainContent.classList.remove('blur-background');
+      }
+    });
+
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', (event) => {
+      if (!mobileMenu.contains(event.target) && !mobileMenuButton.contains(event.target)) {
+        mobileMenu.classList.remove('active');
+        mainContent.classList.remove('blur-background');
+      }
+    });
+
+    // Close mobile menu when window is resized to desktop view
+    window.addEventListener('resize', () => {
+      if (window.innerWidth >= 768) {
+        mobileMenu.classList.remove('active');
+        mainContent.classList.remove('blur-background');
+      }
+    });
+
+    // Mobile dropdown toggle
+    document.querySelectorAll('.dropdown button').forEach(button => {
+      button.addEventListener('click', (e) => {
+        if (window.innerWidth < 768) {
+          e.preventDefault();
+          e.stopPropagation();
+          const dropdown = button.closest('.dropdown');
+          dropdown.classList.toggle('active');
+        }
+      });
+    });
+
+    // Mobile nested dropdown toggle
+    document.querySelectorAll('.group > a').forEach(link => {
+      link.addEventListener('click', (e) => {
+        if (window.innerWidth < 768) {
+          e.preventDefault();
+          e.stopPropagation();
+          const group = link.closest('.group');
+          group.classList.toggle('active');
+        }
+      });
+    });
+
+    // Close dropdowns when clicking outside the navbar
+    document.addEventListener('click', (event) => {
+      if (window.innerWidth < 768) {
+        const isInsideNavbar = event.target.closest('nav');
+        if (!isInsideNavbar) {
+          document.querySelectorAll('.dropdown.active, .group.active').forEach(element => {
+            element.classList.remove('active');
+          });
+        }
+      }
+    });
+
+    // Navbar background color change on scroll
+    window.addEventListener('scroll', function () {
+      const navbar = document.getElementById('mainNavbar');
+      if (window.scrollY > 10) {
+        navbar.classList.remove('bg-transparent');
+        navbar.classList.add('bg-white');
+      } else {
+        navbar.classList.add('bg-transparent');
+        navbar.classList.remove('bg-white');
+      }
+    });
+
+    //scroll top button appears when you scroll down
+    const scrollButton = document.getElementById('scrollButton');
+
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 100) {
+        scrollButton.classList.remove('opacity-0', 'pointer-events-none');
+      } else {
+        scrollButton.classList.add('opacity-0', 'pointer-events-none');
+      }
+    });
+  </script>
 </body>
 </html>
