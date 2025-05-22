@@ -36,6 +36,21 @@
             transition: all 0.3s ease;
         }
 
+        /* Add skill bar animation */
+        @keyframes skillFill {
+            from {
+                width: 0;
+            }
+            to {
+                width: var(--skill-width);
+            }
+        }
+
+        .skill-bar-fill {
+            animation: skillFill 1.5s ease-out forwards;
+            width: 0;
+        }
+
         .dropdown:hover .dropdown-menu {
             opacity: 1;
             visibility: visible;
@@ -597,7 +612,7 @@
                                         <span class="text-sm font-medium">84%</span>
                                     </div>
                                     <div class="w-full bg-gray-200 rounded-full h-2">
-                                        <div class="bg-primary h-2 rounded-full" style="width: 84%"></div>
+                                        <div class="bg-primary h-2 rounded-full skill-bar-fill" style="--skill-width: 84%"></div>
                                     </div>
                                 </div>
                                 <div>
@@ -606,7 +621,7 @@
                                         <span class="text-sm font-medium">75%</span>
                                     </div>
                                     <div class="w-full bg-gray-200 rounded-full h-2">
-                                        <div class="bg-primary h-2 rounded-full" style="width: 75%"></div>
+                                        <div class="bg-primary h-2 rounded-full skill-bar-fill" style="--skill-width: 75%"></div>
                                     </div>
                                 </div>
                                 <div>
@@ -615,7 +630,7 @@
                                         <span class="text-sm font-medium">79%</span>
                                     </div>
                                     <div class="w-full bg-gray-200 rounded-full h-2">
-                                        <div class="bg-primary h-2 rounded-full" style="width: 79%"></div>
+                                        <div class="bg-primary h-2 rounded-full skill-bar-fill" style="--skill-width: 79%"></div>
                                     </div>
                                 </div>
                             </div>
@@ -627,7 +642,7 @@
                                         <span class="text-sm font-medium">79%</span>
                                     </div>
                                     <div class="w-full bg-gray-200 rounded-full h-2">
-                                        <div class="bg-primary h-2 rounded-full" style="width: 79%"></div>
+                                        <div class="bg-primary h-2 rounded-full skill-bar-fill" style="--skill-width: 79%"></div>
                                     </div>
                                 </div>
                                 <div>
@@ -636,7 +651,7 @@
                                         <span class="text-sm font-medium">85%</span>
                                     </div>
                                     <div class="w-full bg-gray-200 rounded-full h-2">
-                                        <div class="bg-primary h-2 rounded-full" style="width: 85%"></div>
+                                        <div class="bg-primary h-2 rounded-full skill-bar-fill" style="--skill-width: 85%"></div>
                                     </div>
                                 </div>
                                 <div>
@@ -645,7 +660,7 @@
                                         <span class="text-sm font-medium">65%</span>
                                     </div>
                                     <div class="w-full bg-gray-200 rounded-full h-2">
-                                        <div class="bg-primary h-2 rounded-full" style="width: 65%"></div>
+                                        <div class="bg-primary h-2 rounded-full skill-bar-fill" style="--skill-width: 65%"></div>
                                     </div>
                                 </div>
                             </div>
