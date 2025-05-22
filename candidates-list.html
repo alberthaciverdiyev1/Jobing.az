@@ -1461,9 +1461,13 @@
     mobileMenuButton.addEventListener('click', () => {
       mobileMenu.classList.toggle('active');
       if (mobileMenu.classList.contains('active')) {
-        mainContent.classList.add('blur-background');
+        document.querySelectorAll('body > *:not(nav)').forEach(element => {
+          element.classList.add('blur-background');
+        });
       } else {
-        mainContent.classList.remove('blur-background');
+        document.querySelectorAll('body > *:not(nav)').forEach(element => {
+          element.classList.remove('blur-background');
+        });
       }
     });
 
@@ -1471,7 +1475,9 @@
     document.addEventListener('click', (event) => {
       if (!mobileMenu.contains(event.target) && !mobileMenuButton.contains(event.target)) {
         mobileMenu.classList.remove('active');
-        mainContent.classList.remove('blur-background');
+        document.querySelectorAll('body > *:not(nav)').forEach(element => {
+          element.classList.remove('blur-background');
+        });
       }
     });
 
@@ -1479,7 +1485,9 @@
     window.addEventListener('resize', () => {
       if (window.innerWidth >= 768) {
         mobileMenu.classList.remove('active');
-        mainContent.classList.remove('blur-background');
+        document.querySelectorAll('body > *:not(nav)').forEach(element => {
+          element.classList.remove('blur-background');
+        });
       }
     });
 
