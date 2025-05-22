@@ -1425,6 +1425,14 @@
         </p>
       </div>
     </div>
+
+    <!-- Scroll to Top Button -->
+    <button id="scrollButton" onclick="window.scrollTo({ top: 0, behavior: 'smooth' })"
+      class="fixed bottom-8 right-8 bg-orange-500 text-white p-3 rounded-lg transition-colors opacity-0 pointer-events-none transition-opacity duration-300 border-2 border-orange-800">
+      <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+      </svg>
+    </button>
   </footer>
 
 
@@ -1520,6 +1528,17 @@
       } else {
         navbar.classList.add('bg-transparent');
         navbar.classList.remove('bg-white');
+      }
+    });
+
+    //scroll top button appears when you scroll down
+    const scrollButton = document.getElementById('scrollButton');
+
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 100) {
+        scrollButton.classList.remove('opacity-0', 'pointer-events-none');
+      } else {
+        scrollButton.classList.add('opacity-0', 'pointer-events-none');
       }
     });
   </script>
