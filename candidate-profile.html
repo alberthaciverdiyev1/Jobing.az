@@ -815,7 +815,27 @@
             }
         });
 
-        
+        // Settings button toggle between main content and settings section
+        document.addEventListener('DOMContentLoaded', function () {
+            const settingsBtn = document.querySelector('a[href="/candidate-profile-setting"]');
+            const mainContent = document.getElementById('main-profile-content');
+            const settingsSection = document.getElementById('settings-section');
+            let showingSettings = false;
+            if (settingsBtn && mainContent && settingsSection) {
+                settingsBtn.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    if (!showingSettings) {
+                        mainContent.classList.add('hidden');
+                        settingsSection.classList.remove('hidden');
+                        showingSettings = true;
+                    } else {
+                        settingsSection.classList.add('hidden');
+                        mainContent.classList.remove('hidden');
+                        showingSettings = false;
+                    }
+                });
+            }
+        });
     </script>
 </body>
 
