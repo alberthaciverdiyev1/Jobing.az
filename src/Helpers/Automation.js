@@ -18,7 +18,7 @@ export async function requestAllSites(main = false) {
         // const response = await axios.post(`http://localhost:${port}/api/jobs`, null, {
 
         const response = await axios.post(`https://jobing.az/api/jobs`, null, {
-            cancelToken: cancelTokenSource.token 
+            cancelToken: cancelTokenSource.token
         });
 
         if (response.status === 200 || response.status === 201) {
