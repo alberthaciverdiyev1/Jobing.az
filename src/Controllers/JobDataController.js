@@ -219,7 +219,7 @@ const jobDataController = {
 
             sendEmail({
                 title: "Jobing.az",
-                text: "Sizin vakansiyanız yoxlanis ucun Jobing.az komandasina gonderildi. Qisa zaman icinde cavab verilecekdir."
+                text: "Sizin vakansiyanız yoxlaniş üçün Jobing.az komandasına göndərildi. Qısa zaman içində sizə geri dönüş ediləcək."
             }, req.body.data.email, "support - Jobing.az")
             data.id = jobs.id
             await sendNewJobRequest(data)

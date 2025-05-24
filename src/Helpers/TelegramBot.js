@@ -7,11 +7,11 @@ import VisitorService from "../Services/VisitorService.js";
 
 let sendTo = null;
 
-// const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN, { polling: true });
-const bot = new TelegramBot(process.env.TELEGRAM_CHECK_JOB_BOT_TOKEN, { polling: true });
+const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN, { polling: true });
+// const bot = new TelegramBot(process.env.TELEGRAM_CHECK_JOB_BOT_TOKEN, { polling: true });
 
 export async function sendTgMessage(data = 'Test') {
-    await bot.sendMessage('@jobingazz', data);
+    await bot.sendMessage('@jobingaz1', data);
 }
 export async function sendNewJobRequest(jobData) {
     const textMessage = `
@@ -61,11 +61,11 @@ bot.on('callback_query', async (callbackQuery) => {
         );
 
         sendEmail(
-            { title: "Jobing.az", text: "Sizin vakansiyanız saytda dərc edildi" },
+            { title: "Jobing.az", text: "Sizin vakansiyanız saytda dərc edildi." },
             sendTo,
             "support - Jobing.az"
         );
-       let message = await jobDataService.updateJob(jobId,true);
+        let message = await jobDataService.updateJob(jobId, true);
         await bot.sendMessage(
             chatId,
             `✅ ${message} ✅`
@@ -73,12 +73,12 @@ bot.on('callback_query', async (callbackQuery) => {
     }
 
     if (action === 'reject') {
-        
+
         await bot.sendMessage(
             chatId,
             `❌ Rejected by: ${callbackQuery.from.username}`
         );
-        let message = await jobDataService.updateJob(jobId,false);
+        let message = await jobDataService.updateJob(jobId, false);
 
         await bot.sendMessage(
             chatId,
@@ -109,7 +109,7 @@ export const listenTgCommands = async (msg) => {
     }
     if (msg.text === '/views') {
         let count = await VisitorService.dailyCount();
-        console.log({count})
+        console.log({ count })
         await bot.sendMessage(msg.chat.id, `Daily visitor count: ${count}`);
     }
 };
