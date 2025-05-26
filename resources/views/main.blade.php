@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <!-- Head -->
-<%- include('Partials/Head') %>
+@include('partials.head')
 <body class="bg-gray-100 flex flex-col min-h-screen">
 <!-- Mobil Menuu -->
-<%- include('Partials/MobileMenu') %>
+@include('partials.mobile_menu')
 <!-- Navbar -->
-<%- include('Partials/Navbar') %>
+@include('partials.navbar')
 <!-- body -->
-<%- include(body) %>
+@yield('page')
 <!-- Footer -->
-<%- include('Partials/Footer') %>
+@include('partials.footer')
 <!-- Js -->
-<%- include('Partials/Js') %>
+@include('partials.js')
 </body>
 
 </html>
