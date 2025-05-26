@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "61eccc5dc89e08e92f1eea8940ff4dae",
+    "content-hash": "68b07d3f31057c66c002cfd97c4069e8",
     "packages": [
         {
             "name": "brick/math",
@@ -2007,119 +2007,64 @@
             "time": "2024-12-08T08:18:47+00:00"
         },
         {
-            "name": "livewire/flux",
-            "version": "v2.1.6",
+            "name": "mongodb/laravel-mongodb",
+            "version": "5.4.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/livewire/flux.git",
-                "reference": "142429b12718f87dbd1763c4cb2966b532bc8942"
+                "url": "https://github.com/mongodb/laravel-mongodb.git",
+                "reference": "d56aefaa2471dd8231bd052e46be366c5d797b07"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/livewire/flux/zipball/142429b12718f87dbd1763c4cb2966b532bc8942",
-                "reference": "142429b12718f87dbd1763c4cb2966b532bc8942",
+                "url": "https://api.github.com/repos/mongodb/laravel-mongodb/zipball/d56aefaa2471dd8231bd052e46be366c5d797b07",
+                "reference": "d56aefaa2471dd8231bd052e46be366c5d797b07",
                 "shasum": ""
             },
             "require": {
-                "illuminate/console": "^10.0|^11.0|^12.0",
-                "illuminate/support": "^10.0|^11.0|^12.0",
-                "illuminate/view": "^10.0|^11.0|^12.0",
-                "laravel/prompts": "^0.1|^0.2|^0.3",
-                "livewire/livewire": "^3.5.19",
+                "composer-runtime-api": "^2.0.0",
+                "ext-mongodb": "^1.21|^2",
+                "illuminate/cache": "^10.36|^11|^12",
+                "illuminate/container": "^10.0|^11|^12",
+                "illuminate/database": "^10.30|^11|^12",
+                "illuminate/events": "^10.0|^11|^12",
+                "illuminate/support": "^10.0|^11|^12",
+                "mongodb/mongodb": "^1.21|^2",
                 "php": "^8.1",
-                "symfony/console": "^6.0|^7.0"
+                "symfony/http-foundation": "^6.4|^7"
             },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "aliases": {
-                        "Flux": "Flux\\Flux"
-                    },
-                    "providers": [
-                        "Flux\\FluxServiceProvider"
-                    ]
-                }
+            "conflict": {
+                "illuminate/bus": "< 10.37.2"
             },
-            "autoload": {
-                "psr-4": {
-                    "Flux\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "proprietary"
-            ],
-            "authors": [
-                {
-                    "name": "Caleb Porzio",
-                    "email": "calebporzio@gmail.com"
-                }
-            ],
-            "description": "The official UI component library for Livewire.",
-            "keywords": [
-                "components",
-                "flux",
-                "laravel",
-                "livewire",
-                "ui"
-            ],
-            "support": {
-                "issues": "https://github.com/livewire/flux/issues",
-                "source": "https://github.com/livewire/flux/tree/v2.1.6"
-            },
-            "time": "2025-05-01T20:27:37+00:00"
-        },
-        {
-            "name": "livewire/livewire",
-            "version": "v3.6.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/livewire/livewire.git",
-                "reference": "56aa1bb63a46e06181c56fa64717a7287e19115e"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/livewire/livewire/zipball/56aa1bb63a46e06181c56fa64717a7287e19115e",
-                "reference": "56aa1bb63a46e06181c56fa64717a7287e19115e",
-                "shasum": ""
-            },
-            "require": {
-                "illuminate/database": "^10.0|^11.0|^12.0",
-                "illuminate/routing": "^10.0|^11.0|^12.0",
-                "illuminate/support": "^10.0|^11.0|^12.0",
-                "illuminate/validation": "^10.0|^11.0|^12.0",
-                "laravel/prompts": "^0.1.24|^0.2|^0.3",
-                "league/mime-type-detection": "^1.9",
-                "php": "^8.1",
-                "symfony/console": "^6.0|^7.0",
-                "symfony/http-kernel": "^6.2|^7.0"
+            "replace": {
+                "jenssegers/mongodb": "self.version"
             },
             "require-dev": {
-                "calebporzio/sushi": "^2.1",
-                "laravel/framework": "^10.15.0|^11.0|^12.0",
-                "mockery/mockery": "^1.3.1",
-                "orchestra/testbench": "^8.21.0|^9.0|^10.0",
-                "orchestra/testbench-dusk": "^8.24|^9.1|^10.0",
-                "phpunit/phpunit": "^10.4|^11.5",
-                "psy/psysh": "^0.11.22|^0.12"
+                "doctrine/coding-standard": "12.0.x-dev",
+                "laravel/scout": "^10.3",
+                "league/flysystem-gridfs": "^3.28",
+                "league/flysystem-read-only": "^3.0",
+                "mockery/mockery": "^1.4.4",
+                "orchestra/testbench": "^8.0|^9.0|^10.0",
+                "phpstan/phpstan": "^1.10",
+                "phpunit/phpunit": "^10.3|^11.5.3",
+                "rector/rector": "^1.2",
+                "spatie/laravel-query-builder": "^5.6|^6"
+            },
+            "suggest": {
+                "league/flysystem-gridfs": "Filesystem storage in MongoDB with GridFS"
             },
             "type": "library",
             "extra": {
                 "laravel": {
-                    "aliases": {
-                        "Livewire": "Livewire\\Livewire"
-                    },
                     "providers": [
-                        "Livewire\\LivewireServiceProvider"
+                        "MongoDB\\Laravel\\MongoDBServiceProvider",
+                        "MongoDB\\Laravel\\MongoDBBusServiceProvider"
                     ]
                 }
             },
             "autoload": {
-                "files": [
-                    "src/helpers.php"
-                ],
                 "psr-4": {
-                    "Livewire\\": "src/"
+                    "MongoDB\\Laravel\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -2128,94 +2073,118 @@
             ],
             "authors": [
                 {
-                    "name": "Caleb Porzio",
-                    "email": "calebporzio@gmail.com"
-                }
-            ],
-            "description": "A front-end framework for Laravel.",
-            "support": {
-                "issues": "https://github.com/livewire/livewire/issues",
-                "source": "https://github.com/livewire/livewire/tree/v3.6.3"
-            },
-            "funding": [
+                    "name": "Andreas Braun",
+                    "email": "andreas.braun@mongodb.com",
+                    "role": "Leader"
+                },
                 {
-                    "url": "https://github.com/livewire",
-                    "type": "github"
+                    "name": "Jérôme Tamarelle",
+                    "email": "jerome.tamarelle@mongodb.com",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "Jeremy Mikola",
+                    "email": "jmikola@gmail.com",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "Jens Segers",
+                    "homepage": "https://jenssegers.com",
+                    "role": "Creator"
                 }
             ],
-            "time": "2025-04-12T22:26:52+00:00"
+            "description": "A MongoDB based Eloquent model and Query builder for Laravel",
+            "homepage": "https://github.com/mongodb/laravel-mongodb",
+            "keywords": [
+                "database",
+                "eloquent",
+                "laravel",
+                "model",
+                "mongo",
+                "mongodb"
+            ],
+            "support": {
+                "issues": "https://www.mongodb.com/support",
+                "security": "https://www.mongodb.com/security",
+                "source": "https://github.com/mongodb/laravel-mongodb/tree/5.4.1"
+            },
+            "time": "2025-04-22T08:22:29+00:00"
         },
         {
-            "name": "livewire/volt",
-            "version": "v1.7.1",
+            "name": "mongodb/mongodb",
+            "version": "1.21.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/livewire/volt.git",
-                "reference": "ba3e609fd4c71f8b5783f024baf51715e48e93a6"
+                "url": "https://github.com/mongodb/mongo-php-library.git",
+                "reference": "37bc8df3a67ddf8380704a5ba5dbd00e92ec1f6a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/livewire/volt/zipball/ba3e609fd4c71f8b5783f024baf51715e48e93a6",
-                "reference": "ba3e609fd4c71f8b5783f024baf51715e48e93a6",
+                "url": "https://api.github.com/repos/mongodb/mongo-php-library/zipball/37bc8df3a67ddf8380704a5ba5dbd00e92ec1f6a",
+                "reference": "37bc8df3a67ddf8380704a5ba5dbd00e92ec1f6a",
                 "shasum": ""
             },
             "require": {
-                "laravel/framework": "^10.38.2|^11.0|^12.0",
-                "livewire/livewire": "^3.6.1",
-                "php": "^8.1"
+                "composer-runtime-api": "^2.0",
+                "ext-mongodb": "^1.21.0",
+                "php": "^8.1",
+                "psr/log": "^1.1.4|^2|^3"
+            },
+            "replace": {
+                "mongodb/builder": "*"
             },
             "require-dev": {
-                "laravel/folio": "^1.1",
-                "mockery/mockery": "^1.6",
-                "orchestra/testbench": "^8.15.0|^9.0|^10.0",
-                "pestphp/pest": "^2.9.5|^3.0",
-                "phpstan/phpstan": "^1.10"
+                "doctrine/coding-standard": "^12.0",
+                "phpunit/phpunit": "^10.5.35",
+                "rector/rector": "^1.2",
+                "squizlabs/php_codesniffer": "^3.7",
+                "vimeo/psalm": "6.5.*"
             },
             "type": "library",
             "extra": {
-                "laravel": {
-                    "providers": [
-                        "Livewire\\Volt\\VoltServiceProvider"
-                    ]
-                },
                 "branch-alias": {
                     "dev-master": "1.x-dev"
                 }
             },
             "autoload": {
                 "files": [
-                    "functions.php"
+                    "src/functions.php"
                 ],
                 "psr-4": {
-                    "Livewire\\Volt\\": "src/"
+                    "MongoDB\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "MIT"
+                "Apache-2.0"
             ],
             "authors": [
                 {
-                    "name": "Taylor Otwell",
-                    "email": "taylor@laravel.com"
+                    "name": "Andreas Braun",
+                    "email": "andreas.braun@mongodb.com"
                 },
                 {
-                    "name": "Nuno Maduro",
-                    "email": "nuno@laravel.com"
+                    "name": "Jeremy Mikola",
+                    "email": "jmikola@gmail.com"
+                },
+                {
+                    "name": "Jérôme Tamarelle",
+                    "email": "jerome.tamarelle@mongodb.com"
                 }
             ],
-            "description": "An elegantly crafted functional API for Laravel Livewire.",
-            "homepage": "https://github.com/livewire/volt",
+            "description": "MongoDB driver library",
+            "homepage": "https://jira.mongodb.org/browse/PHPLIB",
             "keywords": [
-                "laravel",
-                "livewire",
-                "volt"
+                "database",
+                "driver",
+                "mongodb",
+                "persistence"
             ],
             "support": {
-                "issues": "https://github.com/livewire/volt/issues",
-                "source": "https://github.com/livewire/volt"
+                "issues": "https://github.com/mongodb/mongo-php-library/issues",
+                "source": "https://github.com/mongodb/mongo-php-library/tree/1.21.1"
             },
-            "time": "2025-04-08T15:13:36+00:00"
+            "time": "2025-02-28T17:24:20+00:00"
         },
         {
             "name": "monolog/monolog",
