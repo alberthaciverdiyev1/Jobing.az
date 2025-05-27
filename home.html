@@ -13,9 +13,21 @@
                 extend: {
                     colors: {
                         'filled-button-color': 'rgb(256,132,20)', // Updated color
+                    },
+                    keyframes: {
+                        'slide-underline': {
+                            '0%': { transform: 'scaleX(0)', transformOrigin: 'left' },
+                            '50%': { transform: 'scaleX(1)', transformOrigin: 'left' },
+                            '51%': { transform: 'scaleX(1)', transformOrigin: 'right' },
+                            '100%': { transform: 'scaleX(0)', transformOrigin: 'right' }
+                        }
+                    },
+                    animation: {
+                        'slide-underline': 'slide-underline 1s ease-in-out infinite'
                     }
                 }
             }
+
         }
     </script>
     <style>
