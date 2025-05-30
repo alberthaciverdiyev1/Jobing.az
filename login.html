@@ -295,6 +295,28 @@
             document.querySelectorAll('.auth-section').forEach(s => s.classList.add('hidden'));
             document.getElementById(`${section}-section`).classList.remove('hidden');
         }
+
+        // Tab switching functionality
+        document.querySelectorAll('[data-tab]').forEach(tab => {
+            tab.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetId = tab.getAttribute('data-tab');
+                
+                // Update active tab
+                document.querySelectorAll('[data-tab]').forEach(t => {
+                    t.classList.remove('bg-orange-500', 'text-white', 'hover:bg-orange-600');
+                    t.classList.add('bg-gray-200', 'text-gray-700', 'hover:bg-gray-300');
+                });
+                tab.classList.remove('bg-gray-200', 'text-gray-700', 'hover:bg-gray-300');
+                tab.classList.add('bg-orange-500', 'text-white', 'hover:bg-orange-600');
+
+                // Show target content
+                document.querySelectorAll('.tab-pane').forEach(pane => {
+                    pane.classList.add('hidden');
+                });
+                document.getElementById(targetId).classList.remove('hidden');
+            });
+        });
     </script>
 </body>
 
