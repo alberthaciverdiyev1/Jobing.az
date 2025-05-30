@@ -289,6 +289,12 @@
                 forgotPasswordContainer.classList.add('hidden');
             }
         }
+
+        // Function to switch between login and register sections
+        function switchAuth(section) {
+            document.querySelectorAll('.auth-section').forEach(s => s.classList.add('hidden'));
+            document.getElementById(`${section}-section`).classList.remove('hidden');
+        }
     </script>
 </body>
 
