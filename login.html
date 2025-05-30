@@ -255,6 +255,15 @@
             e.preventDefault();
             console.log('Forgot password form submitted');
         });
+        document.getElementById('candidate-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            console.log('Candidate form submitted');
+        });
+
+        document.getElementById('employer-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            console.log('Employer form submitted');
+        });
 
         // Password toggle functionality
         document.querySelectorAll('.toggle-password').forEach(button => {
