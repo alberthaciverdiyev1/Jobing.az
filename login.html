@@ -70,6 +70,35 @@
                         </p>
                     </div>
                 </div>
+                <!-- Forgot Password Form -->
+                <div id="forgot-password-container" class="hidden">
+                    <div class="text-center mb-6">
+                        <h3 class="text-2xl text font-bold text-gray-800">Reset Password</h3>
+                        <p class="text-gray-600 mt-2">Please enter your email address</p>
+                    </div>
+
+                    <form class="space-y-4" id="forgot-password-form">
+                        <div class="space-y-2">
+                            <label class="block text-sm font-medium text-gray-700">Email <span
+                                    class="text-red-500">*</span></label>
+                            <input type="email" name="email"
+                                class="w-full px-3 py-2 bg-gray-100 rounded-md outline-none focus:outline-none focus:ring-0 focus:bg-white border border-transparent focus:border-orange-500 transition-all duration-700 ease-in-out"
+                                placeholder="Enter your email" required>
+                        </div>
+
+                        <button type="submit"
+                            class="w-full bg-orange-500 text-white py-2 px-4 rounded-md hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 transition-colors">
+                            Get New Password
+                        </button>
+                    </form>
+
+                    <div class="mt-6 text-left">
+                        <button onclick="switchLoginForm('login')"
+                            class="text-orange-500 hover:text-orange-600 font-medium">
+                            Back to Login
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -80,10 +109,14 @@
             e.preventDefault();
             console.log('Login form submitted');
         });
+        document.getElementById('forgot-password-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            console.log('Forgot password form submitted');
+        });
 
         // Password toggle functionality
         document.querySelectorAll('.toggle-password').forEach(button => {
-            button.addEventListener('click', function() {
+            button.addEventListener('click', function () {
                 const input = this.previousElementSibling;
                 const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
                 input.setAttribute('type', type);
@@ -91,6 +124,20 @@
                 this.querySelector('i').classList.toggle('fa-eye-slash');
             });
         });
+
+        // Function to switch between login and forgot password forms
+        function switchLoginForm(form) {
+            const loginContainer = document.getElementById('login-form-container');
+            const forgotPasswordContainer = document.getElementById('forgot-password-container');
+            
+            if (form === 'forgot-password') {
+                loginContainer.classList.add('hidden');
+                forgotPasswordContainer.classList.remove('hidden');
+            } else {
+                loginContainer.classList.remove('hidden');
+                forgotPasswordContainer.classList.add('hidden');
+            }
+        }
     </script>
 </body>
 
