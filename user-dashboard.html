@@ -164,6 +164,49 @@
             transition: filter 0.3s ease;
         }
     </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    scrollbar: {
+                        DEFAULT: {
+                            size: '5px',
+                            track: '#fff7ed',
+                            thumb: '#ffedd5',
+                            'thumb-hover': '#fdba74',
+                        },
+                    },
+                },
+            },
+            plugins: [
+                function({ addUtilities }) {
+                    const newUtilities = {
+                        '.scrollbar-custom': {
+                            '&::-webkit-scrollbar': {
+                                width: '5px',
+                                display: 'none',
+                            },
+                            '&:hover::-webkit-scrollbar': {
+                                display: 'block',
+                            },
+                            '&::-webkit-scrollbar-track': {
+                                background: '#fff7ed',
+                                borderRadius: '5px',
+                            },
+                            '&::-webkit-scrollbar-thumb': {
+                                background: '#ffedd5',
+                                borderRadius: '5px',
+                            },
+                            '&::-webkit-scrollbar-thumb:hover': {
+                                background: '#fdba74',
+                            },
+                        },
+                    }
+                    addUtilities(newUtilities)
+                }
+            ],
+        }
+    </script>
 </head>
 
 <body>
