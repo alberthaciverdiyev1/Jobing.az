@@ -897,6 +897,128 @@
                 sidebarToggle.style.display = 'block';
             }
         });
+
+        // Sample data
+        const sampleData = {
+            labels: [
+                'May 23, 2025', 'May 25, 2025', 'May 27, 2025', 
+                'May 29, 2025', 'May 31, 2025', 'June 2, 2025', 
+                'June 4, 2025', 'June 6, 2025'
+            ],
+            data: [230, 250, 280, 300, 280, 130, 420, 10]
+        };
+
+        // Initialize Chart
+        const ctx = document.getElementById('pageViewsChart').getContext('2d');
+        let pageViewsChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: sampleData.labels,
+                datasets: [{
+                    label: 'Page Views',
+                    data: sampleData.data,
+                    borderColor: '#1967D2',
+                    backgroundColor: 'rgba(25, 103, 210, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                        backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                        titleColor: '#1F2937',
+                        bodyColor: '#1F2937',
+                        borderColor: '#E5E7EB',
+                        borderWidth: 1,
+                        padding: 10,
+                        displayColors: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 450,
+                        ticks: {
+                            stepSize: 50,
+                            callback: function(value) {
+                                return value.toLocaleString();
+                            }
+                        },
+                        grid: {
+                            display: true,
+                            color: 'rgba(0, 0, 0, 0.05)'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                            maxRotation: 45,
+                            minRotation: 45
+                        }
+                    }
+                },
+                interaction: {
+                    mode: 'nearest',
+                    axis: 'x',
+                    intersect: false
+                }
+            }
+        });
+
+        // Function to generate dates for the selected period
+        function generateDates(days) {
+            const dates = [];
+            const today = new Date();
+            for (let i = days - 1; i >= 0; i--) {
+                const date = new Date(today);
+                date.setDate(date.getDate() - i);
+                dates.push(date.toLocaleDateString('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                    year: 'numeric'
+                }));
+            }
+            return dates;
+        }
+
+        // Function to generate mock data
+        function generateMockData(days) {
+            return Array.from({length: days}, () => Math.floor(Math.random() * 450));
+        }
+
+        // Function to update chart data
+        function updateChartData(jobId, days) {
+            const dates = generateDates(days);
+            const data = generateMockData(days);
+            
+            pageViewsChart.data.labels = dates;
+            pageViewsChart.data.datasets[0].data = data;
+            pageViewsChart.update();
+        }
+
+        // Event Listeners
+        document.getElementById('jobSelect').addEventListener('change', function() {
+            const days = document.getElementById('daysSelect').value;
+            updateChartData(this.value, days);
+        });
+
+        document.getElementById('daysSelect').addEventListener('change', function() {
+            const jobId = document.getElementById('jobSelect').value;
+            updateChartData(jobId, this.value);
+        });
+
+        // Initial load with sample data
+        updateChartData('4540', 15);
     </script>
 </body>
 
