@@ -7,6 +7,7 @@
     <title>Document</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         .dropdown-menu {
             opacity: 0;
@@ -725,6 +726,36 @@
                 </div>
             </div>
         </div>
+
+        <!-- Page Views Chart Section -->
+        <div class="container mx-auto px-4 py-8">
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <h3 class="text-xl font-semibold text-gray-800 mb-6">Page Views</h3>
+            
+            <!-- Chart Container -->
+            <div class="mb-6 h-[400px]">
+                <canvas id="pageViewsChart"></canvas>
+            </div>
+
+            <!-- Filters -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Jobs</label>
+                    <select id="jobSelect" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                        <option value="4540">Junior Graphic Designer (Web)</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Number Days</label>
+                    <select id="daysSelect" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                        <option value="30">30 days</option>
+                        <option value="15" selected>15 days</option>
+                        <option value="7">7 days</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
     </main>
 
     <script>
