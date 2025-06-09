@@ -164,6 +164,25 @@
             pointer-events: none;
             transition: filter 0.3s ease;
         }
+        @layer utilities {
+            .scrollbar-custom {
+                scrollbar-width: thin;
+                scrollbar-color: #888 #f1f1f1;
+            }
+            .scrollbar-custom::-webkit-scrollbar {
+                width: 6px;
+            }
+            .scrollbar-custom::-webkit-scrollbar-track {
+                background: #f1f1f1;
+            }
+            .scrollbar-custom::-webkit-scrollbar-thumb {
+                background: #888;
+                border-radius: 3px;
+            }
+            .scrollbar-custom::-webkit-scrollbar-thumb:hover {
+                background: #555;
+            }
+        }
     </style>
     <script>
         tailwind.config = {
@@ -207,6 +226,7 @@
                 }
             ],
         }
+        
     </script>
 </head>
 
@@ -763,7 +783,7 @@
                 <!-- Notifications Section -->
                 <div class="bg-white rounded-lg shadow-sm p-6 flex-[2_2_0%] min-w-0 lg:max-w-lg xl:max-w-xl w-full">
                     <h3 class="text-xl font-semibold text-gray-800 mb-4">Notifications</h3>
-                    <div class="custom-scrollbar max-h-[600px] overflow-y-auto">
+                    <div class="scrollbar-custom max-h-[600px] overflow-y-auto">
                         <ul class="space-y-4">
                             <li class="flex items-start space-x-4 p-3 hover:bg-gray-50 rounded-lg transition-colors">
                                 <span class="flex-shrink-0 w-10 h-10 bg-purple-50 rounded-full flex items-center justify-center">
