@@ -1406,6 +1406,105 @@
 
         // Initial load with sample data
         updateChartData('4540', 15);
+
+        //Recent Applicants Actions
+
+        // Initialize all cards
+        document.querySelectorAll('.applicant-card').forEach(card => {
+            const createMeetingBtn = card.querySelector('.create-meeting-btn');
+            const approveBtn = card.querySelector('.approve-btn');
+            const rejectBtn = card.querySelector('.reject-btn');
+            const downloadBtn = card.querySelector('.download-btn');
+            const undoBtn = card.querySelector('.undo-btn');
+            const statusBadge = card.querySelector('.status-badge');
+            const clockIcon = card.querySelector('.clock-icon');
+
+            // Modal functionality
+            const modal = document.getElementById('modal');
+            const closeModalBtn = document.getElementById('closeModal');
+
+            createMeetingBtn.onclick = () => {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            };
+
+            closeModalBtn.onclick = () => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            };
+
+            window.onclick = (e) => {
+                if (e.target === modal) {
+                    modal.classList.add('hidden');
+                    modal.classList.remove('flex');
+                }
+            };
+
+            // Approve functionality
+            approveBtn.onclick = () => {
+                statusBadge.textContent = 'Approved';
+                statusBadge.className = 'inline-block mt-1 text-xs font-medium text-green-700 bg-green-100 px-2 py-0.5 rounded';
+                approveBtn.classList.add('hidden');
+                rejectBtn.classList.add('hidden');
+                undoBtn.classList.remove('hidden');
+                clockIcon.classList.add('hidden');
+            };
+
+            // Reject functionality
+            rejectBtn.onclick = () => {
+                statusBadge.textContent = 'Rejected';
+                statusBadge.className = 'inline-block mt-1 text-xs font-medium text-red-700 bg-red-100 px-2 py-0.5 rounded';
+                approveBtn.classList.add('hidden');
+                rejectBtn.classList.add('hidden');
+                createMeetingBtn.classList.add('hidden');
+                downloadBtn.classList.add('hidden');
+                undoBtn.classList.remove('hidden');
+                clockIcon.classList.add('hidden');
+            };
+
+            // Undo functionality
+            undoBtn.onclick = () => {
+                statusBadge.textContent = 'Pending';
+                statusBadge.className = 'inline-block mt-1 text-xs font-medium text-blue-700 bg-blue-100 px-2 py-0.5 rounded';
+                approveBtn.classList.remove('hidden');
+                rejectBtn.classList.remove('hidden');
+                createMeetingBtn.classList.remove('hidden');
+                downloadBtn.classList.remove('hidden');
+                undoBtn.classList.add('hidden');
+                clockIcon.classList.remove('hidden');
+            };
+
+            // Download CV functionality
+            downloadBtn.onclick = () => {
+                // Get the applicant's name from the card
+                const applicantName = card.querySelector('h3').textContent;
+                // Create a temporary link element
+                const link = document.createElement('a');
+                // Set the download attribute and filename
+                link.download = `${applicantName.toLowerCase().replace(/\s+/g, '-')}-cv.pdf`;
+                // For demo purposes, we'll use a placeholder URL
+                // In a real application, this would be the actual CV file URL
+                link.href = '#';
+                // Simulate click
+                link.click();
+                // Show a notification (you can customize this)
+                alert('CV download started');
+            };
+
+            // Remove functionality
+            const removeBtn = card.querySelector('.remove-btn');
+            removeBtn.onclick = () => {
+                if (confirm('Are you sure you want to remove this applicant?')) {
+                    // Add a fade-out animation
+                    card.style.transition = 'opacity 0.3s ease';
+                    card.style.opacity = '0';
+                    // Remove the card after animation
+                    setTimeout(() => {
+                        card.remove();
+                    }, 300);
+                }
+            };
+        });
     </script>
 </body>
 
