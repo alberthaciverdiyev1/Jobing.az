@@ -950,7 +950,162 @@
             </div>
         </div>
 
-        
+        <div class="max-w-4xl mx-auto p-6">
+            <h2 class="text-2xl font-bold mb-6">Recent Applicants</h2>
+
+            <!-- Applicant Cards Container -->
+            <div id="applicantsContainer" class="space-y-4">
+                <!-- Card 1 -->
+                <div
+                    class="applicant-card bg-white rounded-lg shadow p-4 flex flex-col md:flex-row justify-between items-start md:items-center">
+                    <div>
+                        <h3 class="text-xl font-semibold">Zefanya</h3>
+                        <p class="text-sm text-gray-600">Position: Junior Graphic Designer (Web)</p>
+                        <p class="text-sm text-gray-500 flex items-center gap-1">
+                            <span class="clock-icon text-orange-500"><i class="far fa-clock"></i></span>
+                            Applied date: June 5, 2025
+                        </p>
+                        <span
+                            class="status-badge inline-block mt-1 text-xs font-medium text-blue-700 bg-blue-100 px-2 py-0.5 rounded">Pending</span>
+                    </div>
+
+                    <div class="flex justify-between items-center w-full md:w-auto mt-4 md:mt-0">
+                        <div class="flex gap-2">
+                            <button
+                                class="tooltip action-btn create-meeting-btn bg-orange-500 hover:bg-orange-600 text-white p-1.5 rounded-md transition-colors"
+                                data-tooltip="Create Meeting">
+                                <i class="fas fa-plus text-sm"></i>
+                            </button>
+                            <button
+                                class="tooltip action-btn approve-btn bg-orange-500 hover:bg-orange-600 text-white p-1.5 rounded-md transition-colors"
+                                data-tooltip="Approve">
+                                <i class="fas fa-check text-sm"></i>
+                            </button>
+                            <button
+                                class="tooltip action-btn reject-btn bg-orange-500 hover:bg-orange-600 text-white p-1.5 rounded-md transition-colors"
+                                data-tooltip="Reject">
+                                <i class="fas fa-times text-sm"></i>
+                            </button>
+                            <button
+                                class="tooltip action-btn download-btn bg-orange-500 hover:bg-orange-600 text-white p-1.5 rounded-md transition-colors"
+                                data-tooltip="Download CV">
+                                <i class="fas fa-download text-sm"></i>
+                            </button>
+                            <button
+                                class="tooltip action-btn undo-btn hidden bg-orange-500 hover:bg-orange-600 text-white p-1.5 rounded-md transition-colors"
+                                data-tooltip="Undo">
+                                <i class="fas fa-undo text-sm"></i>
+                            </button>
+                        </div>
+                        <button
+                            class="tooltip action-btn remove-btn bg-orange-500 hover:bg-orange-600 text-white p-1.5 rounded-md transition-colors ml-4"
+                            data-tooltip="Remove">
+                            <i class="fas fa-trash text-sm"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div
+                    class="applicant-card bg-white rounded-lg shadow p-4 flex flex-col md:flex-row justify-between items-start md:items-center">
+                    <div>
+                        <h3 class="text-xl font-semibold">Sarah Johnson</h3>
+                        <p class="text-sm text-gray-600">Position: Senior Frontend Developer</p>
+                        <p class="text-sm text-gray-500 flex items-center gap-1">
+                            <span class="clock-icon text-orange-500 hidden"><i class="far fa-clock"></i></span>
+                            Applied date: June 4, 2025
+                        </p>
+                        <span
+                            class="status-badge inline-block mt-1 text-xs font-medium text-green-700 bg-green-100 px-2 py-0.5 rounded">Approved</span>
+                    </div>
+
+                    <div class="flex justify-between items-center w-full md:w-auto mt-4 md:mt-0">
+                        <div class="flex gap-2">
+                            <button
+                                class="tooltip action-btn create-meeting-btn bg-orange-500 hover:bg-orange-600 text-white p-1.5 rounded-md transition-colors"
+                                data-tooltip="Create Meeting">
+                                <i class="fas fa-plus text-sm"></i>
+                            </button>
+                            <button
+                                class="tooltip action-btn approve-btn hidden bg-orange-500 hover:bg-orange-600 text-white p-1.5 rounded-md transition-colors"
+                                data-tooltip="Approve">
+                                <i class="fas fa-check text-sm"></i>
+                            </button>
+                            <button
+                                class="tooltip action-btn reject-btn hidden bg-orange-500 hover:bg-orange-600 text-white p-1.5 rounded-md transition-colors"
+                                data-tooltip="Reject">
+                                <i class="fas fa-times text-sm"></i>
+                            </button>
+                            <button
+                                class="tooltip action-btn download-btn bg-orange-500 hover:bg-orange-600 text-white p-1.5 rounded-md transition-colors"
+                                data-tooltip="Download CV">
+                                <i class="fas fa-download text-sm"></i>
+                            </button>
+                            <button
+                                class="tooltip action-btn undo-btn bg-orange-500 hover:bg-orange-600 text-white p-1.5 rounded-md transition-colors"
+                                data-tooltip="Undo">
+                                <i class="fas fa-undo text-sm"></i>
+                            </button>
+                        </div>
+                        <button
+                            class="tooltip action-btn remove-btn bg-orange-500 hover:bg-orange-600 text-white p-1.5 rounded-md transition-colors ml-4"
+                            data-tooltip="Remove">
+                            <i class="fas fa-trash text-sm"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div
+                    class="applicant-card bg-white rounded-lg shadow p-4 flex flex-col md:flex-row justify-between items-start md:items-center">
+                    <div>
+                        <h3 class="text-xl font-semibold">Michael Chen</h3>
+                        <p class="text-sm text-gray-600">Position: UI/UX Designer</p>
+                        <p class="text-sm text-gray-500 flex items-center gap-1">
+                            <span class="clock-icon text-orange-500 hidden"><i class="far fa-clock"></i></span>
+                            Applied date: June 3, 2025
+                        </p>
+                        <span
+                            class="status-badge inline-block mt-1 text-xs font-medium text-red-700 bg-red-100 px-2 py-0.5 rounded">Rejected</span>
+                    </div>
+
+                    <div class="flex justify-between items-center w-full md:w-auto mt-4 md:mt-0">
+                        <div class="flex gap-2">
+                            <button
+                                class="tooltip action-btn create-meeting-btn hidden bg-orange-500 hover:bg-orange-600 text-white p-1.5 rounded-md transition-colors"
+                                data-tooltip="Create Meeting">
+                                <i class="fas fa-plus text-sm"></i>
+                            </button>
+                            <button
+                                class="tooltip action-btn approve-btn hidden bg-orange-500 hover:bg-orange-600 text-white p-1.5 rounded-md transition-colors"
+                                data-tooltip="Approve">
+                                <i class="fas fa-check text-sm"></i>
+                            </button>
+                            <button
+                                class="tooltip action-btn reject-btn hidden bg-orange-500 hover:bg-orange-600 text-white p-1.5 rounded-md transition-colors"
+                                data-tooltip="Reject">
+                                <i class="fas fa-times text-sm"></i>
+                            </button>
+                            <button
+                                class="tooltip action-btn download-btn hidden bg-orange-500 hover:bg-orange-600 text-white p-1.5 rounded-md transition-colors"
+                                data-tooltip="Download CV">
+                                <i class="fas fa-download text-sm"></i>
+                            </button>
+                            <button
+                                class="tooltip action-btn undo-btn bg-orange-500 hover:bg-orange-600 text-white p-1.5 rounded-md transition-colors"
+                                data-tooltip="Undo">
+                                <i class="fas fa-undo text-sm"></i>
+                            </button>
+                        </div>
+                        <button
+                            class="tooltip action-btn remove-btn bg-orange-500 hover:bg-orange-600 text-white p-1.5 rounded-md transition-colors ml-4"
+                            data-tooltip="Remove">
+                            <i class="fas fa-trash text-sm"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </main>
 
     <script>
