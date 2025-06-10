@@ -765,14 +765,7 @@
                     </div>
 
                     <!-- Filters -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Jobs</label>
-                            <select id="jobSelect"
-                                class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                                <option value="4540">Junior Graphic Designer (Web)</option>
-                            </select>
-                        </div>
+                    <div class="grid grid-cols-1 gap-6">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Number Days</label>
                             <select id="daysSelect"
@@ -782,172 +775,167 @@
                                 <option value="7">7 days</option>
                             </select>
                         </div>
-                    </div>
-                </div>
-
-                <!-- Notifications Section -->
-                <div class="bg-white rounded-lg shadow-sm p-6 flex-[2_2_0%] min-w-0 lg:max-w-lg xl:max-w-xl w-full">
-                    <h3 class="text-xl font-semibold text-gray-800 mb-4">Notifications</h3>
-                    <div class="scrollbar-custom max-h-[600px] overflow-y-auto">
-                        <ul class="space-y-4">
-                            <li class="flex items-start space-x-4 p-3 hover:bg-gray-50 rounded-lg transition-colors">
-                                <span
-                                    class="flex-shrink-0 w-10 h-10 bg-purple-50 rounded-full flex items-center justify-center">
-                                    <i class="fas fa-briefcase text-purple-600"></i>
-                                </span>
-                                <div class="flex-1">
-                                    <div class="text-gray-500">
-                                        A new application is submitted on your job
-                                        <a href="#" class="text-gray-900 font-medium hover:text-gray-700">Senior
-                                            Frontend Developer</a>
-                                        by <a href="#"
-                                            class="text-gray-900 font-medium hover:text-gray-700">john_doe</a>.
-                                    </div>
-                                    <small class="text-gray-400 text-sm">Just now</small>
-                                </div>
-                            </li>
-                            <li class="flex items-start space-x-4 p-3 hover:bg-gray-50 rounded-lg transition-colors">
-                                <span
-                                    class="flex-shrink-0 w-10 h-10 bg-blue-50 rounded-full flex items-center justify-center">
-                                    <i class="fas fa-user-check text-blue-600"></i>
-                                </span>
-                                <div class="flex-1">
-                                    <div class="text-gray-500">
-                                        Your profile has been viewed by
-                                        <a href="#" class="text-gray-900 font-medium hover:text-gray-700">TechCorp
-                                            Inc.</a>
-                                    </div>
-                                    <small class="text-gray-400 text-sm">5 minutes ago</small>
-                                </div>
-                            </li>
-                            <li class="flex items-start space-x-4 p-3 hover:bg-gray-50 rounded-lg transition-colors">
-                                <span
-                                    class="flex-shrink-0 w-10 h-10 bg-pink-50 rounded-full flex items-center justify-center">
-                                    <i class="fas fa-envelope text-pink-600"></i>
-                                </span>
-                                <div class="flex-1">
-                                    <div class="text-gray-500">
-                                        New message from
-                                        <a href="#" class="text-gray-900 font-medium hover:text-gray-700">Sarah
-                                            Johnson</a>
-                                        regarding your application
-                                    </div>
-                                    <small class="text-gray-400 text-sm">1 hour ago</small>
-                                </div>
-                            </li>
-                            <li class="flex items-start space-x-4 p-3 hover:bg-gray-50 rounded-lg transition-colors">
-                                <span
-                                    class="flex-shrink-0 w-10 h-10 bg-purple-50 rounded-full flex items-center justify-center">
-                                    <i class="fas fa-briefcase text-purple-600"></i>
-                                </span>
-                                <div class="flex-1">
-                                    <div class="text-gray-500">
-                                        A new application is submitted on your job
-                                        <a href="#" class="text-gray-900 font-medium hover:text-gray-700">Junior Graphic
-                                            Designer (Web)</a>
-                                        by <a href="#"
-                                            class="text-gray-900 font-medium hover:text-gray-700">zefanya</a>.
-                                    </div>
-                                    <small class="text-gray-400 text-sm">2 days ago</small>
-                                </div>
-                            </li>
-                            <li class="flex items-start space-x-4 p-3 hover:bg-gray-50 rounded-lg transition-colors">
-                                <span
-                                    class="flex-shrink-0 w-10 h-10 bg-yellow-50 rounded-full flex items-center justify-center">
-                                    <i class="fas fa-star text-yellow-600"></i>
-                                </span>
-                                <div class="flex-1">
-                                    <div class="text-gray-500">
-                                        Your job posting
-                                        <a href="#" class="text-gray-900 font-medium hover:text-gray-700">Senior Backend
-                                            Developer</a>
-                                        has been featured
-                                    </div>
-                                    <small class="text-gray-400 text-sm">3 days ago</small>
-                                </div>
-                            </li>
-                            <li class="flex items-start space-x-4 p-3 hover:bg-gray-50 rounded-lg transition-colors">
-                                <span
-                                    class="flex-shrink-0 w-10 h-10 bg-purple-50 rounded-full flex items-center justify-center">
-                                    <i class="fas fa-briefcase text-purple-600"></i>
-                                </span>
-                                <div class="flex-1">
-                                    <div class="text-gray-500">
-                                        A new application is submitted on your job
-                                        <a href="#" class="text-gray-900 font-medium hover:text-gray-700">Junior Graphic
-                                            Designer (Web)</a>
-                                        by <a href="#"
-                                            class="text-gray-900 font-medium hover:text-gray-700">cosejaj346</a>.
-                                    </div>
-                                    <small class="text-gray-400 text-sm">3 days ago</small>
-                                </div>
-                            </li>
-                            <li class="flex items-start space-x-4 p-3 hover:bg-gray-50 rounded-lg transition-colors">
-                                <span
-                                    class="flex-shrink-0 w-10 h-10 bg-green-50 rounded-full flex items-center justify-center">
-                                    <i class="fas fa-calendar-check text-green-600"></i>
-                                </span>
-                                <div class="flex-1">
-                                    <div class="text-gray-500">
-                                        Interview scheduled with
-                                        <a href="#"
-                                            class="text-gray-900 font-medium hover:text-gray-700">InnovateTech</a>
-                                        for tomorrow at 2:00 PM
-                                    </div>
-                                    <small class="text-gray-400 text-sm">4 days ago</small>
-                                </div>
-                            </li>
-                            <li class="flex items-start space-x-4 p-3 hover:bg-gray-50 rounded-lg transition-colors">
-                                <span
-                                    class="flex-shrink-0 w-10 h-10 bg-purple-50 rounded-full flex items-center justify-center">
-                                    <i class="fas fa-briefcase text-purple-600"></i>
-                                </span>
-                                <div class="flex-1">
-                                    <div class="text-gray-500">
-                                        A new application is submitted on your job
-                                        <a href="#" class="text-gray-900 font-medium hover:text-gray-700">Junior Graphic
-                                            Designer (Web)</a>
-                                        by <a href="#"
-                                            class="text-gray-900 font-medium hover:text-gray-700">sossoukouessi95</a>.
-                                    </div>
-                                    <small class="text-gray-400 text-sm">4 days ago</small>
-                                </div>
-                            </li>
-                            <li class="flex items-start space-x-4 p-3 hover:bg-gray-50 rounded-lg transition-colors">
-                                <span
-                                    class="flex-shrink-0 w-10 h-10 bg-red-50 rounded-full flex items-center justify-center">
-                                    <i class="fas fa-bell text-red-600"></i>
-                                </span>
-                                <div class="flex-1">
-                                    <div class="text-gray-500">
-                                        New job matching your skills:
-                                        <a href="#" class="text-gray-900 font-medium hover:text-gray-700">Full Stack
-                                            Developer</a>
-                                        at <a href="#"
-                                            class="text-gray-900 font-medium hover:text-gray-700">TechStart</a>
-                                    </div>
-                                    <small class="text-gray-400 text-sm">5 days ago</small>
-                                </div>
-                            </li>
-                            <li class="flex items-start space-x-4 p-3 hover:bg-gray-50 rounded-lg transition-colors">
-                                <span
-                                    class="flex-shrink-0 w-10 h-10 bg-purple-50 rounded-full flex items-center justify-center">
-                                    <i class="fas fa-briefcase text-purple-600"></i>
-                                </span>
-                                <div class="flex-1">
-                                    <div class="text-gray-500">
-                                        A new application is submitted on your job
-                                        <a href="#" class="text-gray-900 font-medium hover:text-gray-700">Junior Graphic
-                                            Designer (Web)</a>
-                                        by <a href="#" class="text-gray-900 font-medium hover:text-gray-700">test</a>.
-                                    </div>
-                                    <small class="text-gray-400 text-sm">1 week ago</small>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
                 </div>
             </div>
+
+            <!-- Notifications Section -->
+            <div class="bg-white rounded-lg shadow-sm p-6 flex-[2_2_0%] min-w-0 lg:max-w-lg xl:max-w-xl w-full">
+                <h3 class="text-xl font-semibold text-gray-800 mb-4">Notifications</h3>
+                <div class="scrollbar-custom max-h-[600px] overflow-y-auto">
+                    <ul class="space-y-4">
+                        <li class="flex items-start space-x-4 p-3 hover:bg-gray-50 rounded-lg transition-colors">
+                            <span
+                                class="flex-shrink-0 w-10 h-10 bg-purple-50 rounded-full flex items-center justify-center">
+                                <i class="fas fa-briefcase text-purple-600"></i>
+                            </span>
+                            <div class="flex-1">
+                                <div class="text-gray-500">
+                                    A new application is submitted on your job
+                                    <a href="#" class="text-gray-900 font-medium hover:text-gray-700">Senior
+                                        Frontend Developer</a>
+                                    by <a href="#" class="text-gray-900 font-medium hover:text-gray-700">john_doe</a>.
+                                </div>
+                                <small class="text-gray-400 text-sm">Just now</small>
+                            </div>
+                        </li>
+                        <li class="flex items-start space-x-4 p-3 hover:bg-gray-50 rounded-lg transition-colors">
+                            <span
+                                class="flex-shrink-0 w-10 h-10 bg-blue-50 rounded-full flex items-center justify-center">
+                                <i class="fas fa-user-check text-blue-600"></i>
+                            </span>
+                            <div class="flex-1">
+                                <div class="text-gray-500">
+                                    Your profile has been viewed by
+                                    <a href="#" class="text-gray-900 font-medium hover:text-gray-700">TechCorp
+                                        Inc.</a>
+                                </div>
+                                <small class="text-gray-400 text-sm">5 minutes ago</small>
+                            </div>
+                        </li>
+                        <li class="flex items-start space-x-4 p-3 hover:bg-gray-50 rounded-lg transition-colors">
+                            <span
+                                class="flex-shrink-0 w-10 h-10 bg-pink-50 rounded-full flex items-center justify-center">
+                                <i class="fas fa-envelope text-pink-600"></i>
+                            </span>
+                            <div class="flex-1">
+                                <div class="text-gray-500">
+                                    New message from
+                                    <a href="#" class="text-gray-900 font-medium hover:text-gray-700">Sarah
+                                        Johnson</a>
+                                    regarding your application
+                                </div>
+                                <small class="text-gray-400 text-sm">1 hour ago</small>
+                            </div>
+                        </li>
+                        <li class="flex items-start space-x-4 p-3 hover:bg-gray-50 rounded-lg transition-colors">
+                            <span
+                                class="flex-shrink-0 w-10 h-10 bg-purple-50 rounded-full flex items-center justify-center">
+                                <i class="fas fa-briefcase text-purple-600"></i>
+                            </span>
+                            <div class="flex-1">
+                                <div class="text-gray-500">
+                                    A new application is submitted on your job
+                                    <a href="#" class="text-gray-900 font-medium hover:text-gray-700">Junior Graphic
+                                        Designer (Web)</a>
+                                    by <a href="#" class="text-gray-900 font-medium hover:text-gray-700">zefanya</a>.
+                                </div>
+                                <small class="text-gray-400 text-sm">2 days ago</small>
+                            </div>
+                        </li>
+                        <li class="flex items-start space-x-4 p-3 hover:bg-gray-50 rounded-lg transition-colors">
+                            <span
+                                class="flex-shrink-0 w-10 h-10 bg-yellow-50 rounded-full flex items-center justify-center">
+                                <i class="fas fa-star text-yellow-600"></i>
+                            </span>
+                            <div class="flex-1">
+                                <div class="text-gray-500">
+                                    Your job posting
+                                    <a href="#" class="text-gray-900 font-medium hover:text-gray-700">Senior Backend
+                                        Developer</a>
+                                    has been featured
+                                </div>
+                                <small class="text-gray-400 text-sm">3 days ago</small>
+                            </div>
+                        </li>
+                        <li class="flex items-start space-x-4 p-3 hover:bg-gray-50 rounded-lg transition-colors">
+                            <span
+                                class="flex-shrink-0 w-10 h-10 bg-purple-50 rounded-full flex items-center justify-center">
+                                <i class="fas fa-briefcase text-purple-600"></i>
+                            </span>
+                            <div class="flex-1">
+                                <div class="text-gray-500">
+                                    A new application is submitted on your job
+                                    <a href="#" class="text-gray-900 font-medium hover:text-gray-700">Junior Graphic
+                                        Designer (Web)</a>
+                                    by <a href="#" class="text-gray-900 font-medium hover:text-gray-700">cosejaj346</a>.
+                                </div>
+                                <small class="text-gray-400 text-sm">3 days ago</small>
+                            </div>
+                        </li>
+                        <li class="flex items-start space-x-4 p-3 hover:bg-gray-50 rounded-lg transition-colors">
+                            <span
+                                class="flex-shrink-0 w-10 h-10 bg-green-50 rounded-full flex items-center justify-center">
+                                <i class="fas fa-calendar-check text-green-600"></i>
+                            </span>
+                            <div class="flex-1">
+                                <div class="text-gray-500">
+                                    Interview scheduled with
+                                    <a href="#" class="text-gray-900 font-medium hover:text-gray-700">InnovateTech</a>
+                                    for tomorrow at 2:00 PM
+                                </div>
+                                <small class="text-gray-400 text-sm">4 days ago</small>
+                            </div>
+                        </li>
+                        <li class="flex items-start space-x-4 p-3 hover:bg-gray-50 rounded-lg transition-colors">
+                            <span
+                                class="flex-shrink-0 w-10 h-10 bg-purple-50 rounded-full flex items-center justify-center">
+                                <i class="fas fa-briefcase text-purple-600"></i>
+                            </span>
+                            <div class="flex-1">
+                                <div class="text-gray-500">
+                                    A new application is submitted on your job
+                                    <a href="#" class="text-gray-900 font-medium hover:text-gray-700">Junior Graphic
+                                        Designer (Web)</a>
+                                    by <a href="#"
+                                        class="text-gray-900 font-medium hover:text-gray-700">sossoukouessi95</a>.
+                                </div>
+                                <small class="text-gray-400 text-sm">4 days ago</small>
+                            </div>
+                        </li>
+                        <li class="flex items-start space-x-4 p-3 hover:bg-gray-50 rounded-lg transition-colors">
+                            <span
+                                class="flex-shrink-0 w-10 h-10 bg-red-50 rounded-full flex items-center justify-center">
+                                <i class="fas fa-bell text-red-600"></i>
+                            </span>
+                            <div class="flex-1">
+                                <div class="text-gray-500">
+                                    New job matching your skills:
+                                    <a href="#" class="text-gray-900 font-medium hover:text-gray-700">Full Stack
+                                        Developer</a>
+                                    at <a href="#" class="text-gray-900 font-medium hover:text-gray-700">TechStart</a>
+                                </div>
+                                <small class="text-gray-400 text-sm">5 days ago</small>
+                            </div>
+                        </li>
+                        <li class="flex items-start space-x-4 p-3 hover:bg-gray-50 rounded-lg transition-colors">
+                            <span
+                                class="flex-shrink-0 w-10 h-10 bg-purple-50 rounded-full flex items-center justify-center">
+                                <i class="fas fa-briefcase text-purple-600"></i>
+                            </span>
+                            <div class="flex-1">
+                                <div class="text-gray-500">
+                                    A new application is submitted on your job
+                                    <a href="#" class="text-gray-900 font-medium hover:text-gray-700">Junior Graphic
+                                        Designer (Web)</a>
+                                    by <a href="#" class="text-gray-900 font-medium hover:text-gray-700">test</a>.
+                                </div>
+                                <small class="text-gray-400 text-sm">1 week ago</small>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
         </div>
 
         <!-- Recent Applicants Section -->
@@ -1539,7 +1527,7 @@
         }
 
         // Function to update chart data
-        function updateChartData(jobId, days) {
+        function updateChartData(days) {
             const dates = generateDates(days);
             const data = generateMockData(days);
 
@@ -1549,18 +1537,14 @@
         }
 
         // Event Listeners
-        document.getElementById('jobSelect').addEventListener('change', function () {
-            const days = document.getElementById('daysSelect').value;
-            updateChartData(this.value, days);
-        });
+        
 
         document.getElementById('daysSelect').addEventListener('change', function () {
-            const jobId = document.getElementById('jobSelect').value;
-            updateChartData(jobId, this.value);
+            updateChartData(this.value);
         });
 
         // Initial load with sample data
-        updateChartData('4540', 15);
+        updateChartData(15);
 
         //Recent Applicants Actions
 
