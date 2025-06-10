@@ -1461,6 +1461,28 @@
         // Initial load with sample data
         updateChartData(15);
 
+
+        // Initialize all recent applied job cards
+        document.querySelectorAll('.job-card').forEach(card => {
+            const bookmarkBtn = card.querySelector('.bookmark-btn');
+
+            // Bookmark functionality
+            bookmarkBtn.onclick = () => {
+                const icon = bookmarkBtn.querySelector('i');
+                if (icon.classList.contains('far')) {
+                    icon.classList.remove('far');
+                    icon.classList.add('fas');
+                    bookmarkBtn.classList.remove('text-gray-400');
+                    bookmarkBtn.classList.add('text-orange-500');
+                } else {
+                    icon.classList.remove('fas');
+                    icon.classList.add('far');
+                    bookmarkBtn.classList.remove('text-orange-500');
+                    bookmarkBtn.classList.add('text-gray-400');
+                }
+            };
+        });
+
         //scroll top button appears when you scroll down
         const scrollButton = document.getElementById('scrollButton');
 
