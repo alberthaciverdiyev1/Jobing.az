@@ -1,0 +1,1645 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Candidate Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .dropdown-menu {
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+        }
+
+        .dropdown:hover .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .search-dropdown {
+            display: none;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+        }
+
+        .search-dropdown.active {
+            display: block;
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .mobile-menu {
+            transform: translateX(100%);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .mobile-menu.active {
+            transform: translateX(0);
+        }
+
+        @media (min-width: 768px) {
+            .mobile-menu {
+                transform: none;
+            }
+        }
+
+        /* Mobile dropdown styles */
+        @media (max-width: 767px) {
+            .dropdown-menu {
+                position: static !important;
+                transform: none !important;
+                opacity: 1 !important;
+                visibility: visible !important;
+                display: none;
+                width: 100% !important;
+                margin-top: 4px;
+                background: #f8f9fa;
+                border-radius: 8px;
+                box-shadow: none;
+            }
+
+            .dropdown.active .dropdown-menu {
+                display: block;
+            }
+
+            .group-hover\:block {
+                display: none !important;
+            }
+
+            .group.active .group-hover\:block {
+                display: block !important;
+                position: static !important;
+                margin-top: 4px;
+                background: #e9ecef;
+                border-radius: 8px;
+                width: 100% !important;
+                padding-left: 16px;
+                border-left: 3px solid #f8f9fa;
+            }
+
+            /* Third level dropdown styles */
+            .group .group-hover\:block .group-hover\:block {
+                background: #dee2e6;
+                padding-left: 32px;
+                border-left: 3px solid #e9ecef;
+            }
+
+            /* Second level items hover state */
+            .group.active .group-hover\:block a:hover {
+                background: #dee2e6;
+            }
+
+            /* Third level items hover state */
+            .group .group-hover\:block .group-hover\:block a:hover {
+                background: #ced4da;
+            }
+
+            .mobile-menu {
+                width: 300px !important;
+                max-height: 100vh;
+                overflow-y: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .mobile-menu .flex-col {
+                padding-bottom: 20px;
+            }
+
+            /* Hide the SVG arrow in mobile view */
+            .group>a svg {
+                display: none;
+            }
+
+            /* Adjust the arrow indicator position */
+            .group>a::after {
+                content: '';
+                position: absolute;
+                right: 16px;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 8px;
+                height: 8px;
+                border-right: 2px solid #6c757d;
+                border-bottom: 2px solid #6c757d;
+                transform: translateY(-50%) rotate(-45deg);
+            }
+
+            .group.active>a::after {
+                transform: translateY(-50%) rotate(45deg);
+            }
+
+            /* Mobile menu item styles */
+            .mobile-menu .dropdown button,
+            .mobile-menu a {
+                padding: 12px 16px;
+                margin: 4px 0;
+                background: #f8f9fa;
+                border-radius: 8px;
+                transition: all 0.2s ease;
+            }
+
+            .mobile-menu .dropdown button:hover,
+            .mobile-menu a:hover {
+                background: #f1f3f5;
+            }
+
+            /* Visual indicators for nested items */
+            .group>a {
+                position: relative;
+            }
+        }
+
+        /* Blur effect for content outside navbar */
+        .blur-background {
+            filter: blur(4px);
+            pointer-events: none;
+            transition: filter 0.3s ease;
+        }
+
+        @layer utilities {
+            .scrollbar-custom {
+                scrollbar-width: thin;
+                scrollbar-color: #888 #f1f1f1;
+            }
+
+            .scrollbar-custom::-webkit-scrollbar {
+                width: 6px;
+            }
+
+            .scrollbar-custom::-webkit-scrollbar-track {
+                background: #f1f1f1;
+            }
+
+            .scrollbar-custom::-webkit-scrollbar-thumb {
+                background: #888;
+                border-radius: 3px;
+            }
+
+            .scrollbar-custom::-webkit-scrollbar-thumb:hover {
+                background: #555;
+            }
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    scrollbar: {
+                        DEFAULT: {
+                            size: '5px',
+                            track: '#fff7ed',
+                            thumb: '#ffedd5',
+                            'thumb-hover': '#fdba74',
+                        },
+                    },
+                },
+            },
+            plugins: [
+                function ({ addUtilities }) {
+                    const newUtilities = {
+                        '.scrollbar-custom': {
+                            '&::-webkit-scrollbar': {
+                                width: '5px',
+                                display: 'none',
+                            },
+                            '&:hover::-webkit-scrollbar': {
+                                display: 'block',
+                            },
+                            '&::-webkit-scrollbar-track': {
+                                background: '#fff7ed',
+                                borderRadius: '5px',
+                            },
+                            '&::-webkit-scrollbar-thumb': {
+                                background: '#ffedd5',
+                                borderRadius: '5px',
+                            },
+                            '&::-webkit-scrollbar-thumb:hover': {
+                                background: '#fdba74',
+                            },
+                        },
+                    }
+                    addUtilities(newUtilities)
+                }
+            ],
+        }
+
+    </script>
+</head>
+
+<body>
+    <nav id="mainNavbar" class="bg-transparent fixed top-0 left-0 w-full z-50 transition-colors duration-300">
+        <div class="max-w-7xl mx-auto px-6 md:px-4">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo -->
+                <div class="flex-shrink-0">
+                    <img class="hidden md:block h-44 w-auto" src="images/static/Logo.png" alt="Logo">
+                    <img class="md:hidden h-10 w-auto" src="images/static/LogoMobile.png" alt="Mobile Logo">
+                </div>
+
+                <!-- Main Menu -->
+                <div
+                    class="mobile-menu fixed md:relative inset-y-0 right-0 w-64 md:w-auto bg-white md:bg-transparent shadow-lg md:shadow-none z-50 md:z-auto">
+                    <div class="flex flex-col md:flex-row md:items-center md:space-x-8 p-4 md:p-0">
+                        <!-- Home Dropdown -->
+                        <div class="dropdown relative">
+                            <button
+                                class="text-gray-800 hover:text-orange-500 font-medium flex items-center justify-between w-full md:w-auto">
+                                Home
+                                <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </button>
+                            <div
+                                class="dropdown-menu absolute md:left-0 left-4 mt-2 w-48 bg-white rounded-xl shadow-lg py-2">
+                                <a href="#"
+                                    class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500">Hero
+                                    One</a>
+                                <a href="#"
+                                    class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500">Hero
+                                    Two</a>
+                                <a href="#"
+                                    class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500">Hero
+                                    Three</a>
+                            </div>
+                        </div>
+
+                        <!-- Jobs Dropdown -->
+                        <div class="dropdown relative">
+                            <button
+                                class="text-gray-800 hover:text-orange-500 font-medium flex items-center justify-between w-full md:w-auto">
+                                Jobs
+                                <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </button>
+                            <div
+                                class="dropdown-menu absolute md:left-0 left-4 mt-2 w-48 bg-white rounded-xl shadow-lg py-2">
+                                <a href="#"
+                                    class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500">Job
+                                    Categories</a>
+                                <div class="relative group">
+                                    <a href="#"
+                                        class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500 flex justify-between items-center">
+                                        Job Grids
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M9 5l7 7-7 7"></path>
+                                        </svg>
+                                    </a>
+                                    <div
+                                        class="absolute md:left-full left-4 top-0 w-48 bg-white rounded-xl shadow-lg py-2 hidden group-hover:block">
+                                        <a href="#"
+                                            class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500">Job
+                                            Grid
+                                            One</a>
+                                        <a href="#"
+                                            class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500">Job
+                                            Grid
+                                            Two</a>
+                                        <a href="#"
+                                            class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500">Job
+                                            Grid
+                                            Three</a>
+                                        <a href="#"
+                                            class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500">Job
+                                            Grid
+                                            Four</a>
+                                    </div>
+                                </div>
+                                <div class="relative group">
+                                    <a href="#"
+                                        class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500 flex justify-between items-center">
+                                        Job Lists
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M9 5l7 7-7 7"></path>
+                                        </svg>
+                                    </a>
+                                    <div
+                                        class="absolute md:left-full left-4 top-0 w-48 bg-white rounded-xl shadow-lg py-2 hidden group-hover:block">
+                                        <a href="#"
+                                            class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500">Job
+                                            List
+                                            One</a>
+                                        <a href="#"
+                                            class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500">Job
+                                            List
+                                            Two</a>
+                                    </div>
+                                </div>
+                                <div class="relative group">
+                                    <a href="#"
+                                        class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500 flex justify-between items-center">
+                                        Job Details
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M9 5l7 7-7 7"></path>
+                                        </svg>
+                                    </a>
+                                    <div
+                                        class="absolute md:left-full left-4 top-0 w-48 bg-white rounded-xl shadow-lg py-2 hidden group-hover:block">
+                                        <a href="#"
+                                            class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500">Job
+                                            Detail One</a>
+                                        <a href="#"
+                                            class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500">Job
+                                            Detail Two</a>
+                                        <a href="#"
+                                            class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500">Job
+                                            Detail Three</a>
+                                    </div>
+                                </div>
+                                <a href="#"
+                                    class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500">Job
+                                    Apply</a>
+                                <a href="#"
+                                    class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500">Job
+                                    Post</a>
+                                <a href="#"
+                                    class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500">
+                                    Career</a>
+                            </div>
+                        </div>
+
+                        <!-- Employers Dropdown -->
+                        <div class="dropdown relative">
+                            <button
+                                class="text-gray-800 hover:text-orange-500 font-medium flex items-center justify-between w-full md:w-auto">
+                                Employers
+                                <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </button>
+                            <div
+                                class="dropdown-menu absolute md:left-0 left-4 mt-2 w-48 bg-white rounded-xl shadow-lg py-2">
+                                <a href="#"
+                                    class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500">Employers</a>
+                                <a href="#"
+                                    class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500">Employer
+                                    Profile</a>
+                            </div>
+                        </div>
+
+                        <!-- Candidates Dropdown -->
+                        <div class="dropdown relative">
+                            <button
+                                class="text-gray-800 hover:text-orange-500 font-medium flex items-center justify-between w-full md:w-auto">
+                                Candidates
+                                <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </button>
+                            <div
+                                class="dropdown-menu absolute md:left-0 left-4 mt-2 w-48 bg-white rounded-xl shadow-lg py-2">
+                                <a href="#"
+                                    class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500">Candidates</a>
+                                <a href="#"
+                                    class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500">Candidates
+                                    Profile</a>
+                                <a href="#"
+                                    class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500">Profile
+                                    Settings</a>
+                            </div>
+                        </div>
+
+                        <!-- Pages Dropdown -->
+                        <div class="dropdown relative">
+                            <button
+                                class="text-gray-800 hover:text-orange-500 font-medium flex items-center justify-between w-full md:w-auto">
+                                Pages
+                                <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </button>
+                            <div
+                                class="dropdown-menu absolute md:left-0 left-4 mt-2 w-48 bg-white rounded-xl shadow-lg py-2">
+                                <a href="#"
+                                    class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500">About
+                                    Us</a>
+                                <a href="#"
+                                    class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500">Services</a>
+                                <a href="#"
+                                    class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500">Pricing</a>
+                                <div class="relative group">
+                                    <a href="#"
+                                        class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500 flex justify-between items-center">
+                                        Help Center
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M9 5l7 7-7 7"></path>
+                                        </svg>
+                                    </a>
+                                    <div
+                                        class="absolute md:left-full left-4 top-0 w-48 bg-white rounded-xl shadow-lg py-2 hidden group-hover:block">
+                                        <a href="#"
+                                            class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500">
+                                            Overview</a>
+                                        <a href="#"
+                                            class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500">
+                                            FAQS</a>
+                                        <a href="#"
+                                            class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500">
+                                            Guides</a>
+                                        <a href="#"
+                                            class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500">
+                                            Support</a>
+                                    </div>
+                                </div>
+                                <div class="relative group">
+                                    <a href="#"
+                                        class="block px-4 py-2 text-gray-800 hover:bg-orange-50 hover:text-orange-500 flex justify-between items-center">
+                                        Blog
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M9 5l7 7-7 7"></path>
+                                        </svg>
+                                    </a>
+                                    <div
+                                        class="absolute md:left-full left-4 top-0 w-48 bg-white rounded-xl shadow-lg py-2 hidden group-hover:block">
+                                        <a href="#"
+                                            class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500">
+                                            Blogs</a>
+                                        <a href="#"
+                                            class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500">Blog
+                                            Sidebar</a>
+                                        <a href="#"
+                                            class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500">Blog
+                                            Detail</a>
+                                    </div>
+                                </div>
+                                <div class="relative group">
+                                    <a href="#"
+                                        class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500 flex justify-between items-center">
+                                        Auth Pages
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M9 5l7 7-7 7"></path>
+                                        </svg>
+                                    </a>
+                                    <div
+                                        class="absolute md:left-full left-4 top-0 w-48 bg-white rounded-xl shadow-lg py-2 hidden group-hover:block">
+                                        <a href="#"
+                                            class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500">
+                                            Login</a>
+                                        <a href="#"
+                                            class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500">
+                                            Signup</a>
+                                        <a href="#"
+                                            class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500">
+                                            Forgot Password</a>
+                                        <a href="#"
+                                            class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500">
+                                            Lock Screen</a>
+                                    </div>
+                                </div>
+                                <div class="relative group">
+                                    <a href="#"
+                                        class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500 flex justify-between items-center">
+                                        Utility
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M9 5l7 7-7 7"></path>
+                                        </svg>
+                                    </a>
+                                    <div
+                                        class="absolute md:left-full left-4 top-0 w-48 bg-white rounded-xl shadow-lg py-2 hidden group-hover:block">
+                                        <a href="#"
+                                            class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500">
+                                            Terms of Services</a>
+                                        <a href="#"
+                                            class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500">
+                                            Privacy Policy</a>
+                                    </div>
+                                </div>
+                                <div class="relative group">
+                                    <a href="#"
+                                        class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500 flex justify-between items-center">
+                                        Special
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M9 5l7 7-7 7"></path>
+                                        </svg>
+                                    </a>
+                                    <div
+                                        class="absolute md:left-full left-4 top-0 w-48 bg-white rounded-xl shadow-lg py-2 hidden group-hover:block">
+                                        <a href="#"
+                                            class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500">
+                                            Coming Soon</a>
+                                        <a href="#"
+                                            class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500">
+                                            Maintenance</a>
+                                        <a href="#"
+                                            class="block px-4 py-2 text-gray-900 hover:bg-orange-50 hover:text-orange-500">
+                                            404!
+                                            Error</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Contact Us -->
+                        <a href="#" class="text-gray-800 hover:text-orange-500 font-medium">Contact Us</a>
+                    </div>
+                </div>
+
+                <!-- Right Side Icons -->
+                <div class="flex items-center space-x-6">
+                    <!-- Search Button -->
+                    <div class="relative">
+                        <button onclick="toggleSearch()"
+                            class="bg-orange-500 text-white p-2 rounded-full hover:bg-orange-600">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                            </svg>
+                        </button>
+                        <!-- Search Dropdown -->
+                        <div id="searchDropdown"
+                            class="search-dropdown absolute right-0 mt-2 w-80 bg-white rounded-xl shadow-lg p-4">
+                            <input type="text" placeholder="Search..."
+                                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500">
+                        </div>
+                    </div>
+
+                    <!-- Profile Picture -->
+                    <div class="w-10 h-10 rounded-full border-2 border-orange-500 overflow-hidden">
+                        <img src="./images/static/ProfilePicture.jpg" alt="Profile" class="w-full h-full object-cover">
+                    </div>
+
+                    <!-- Mobile Menu Button -->
+                    <button id="mobileMenuButton" class="md:hidden p-2 rounded-md hover:bg-gray-100 focus:outline-none">
+                        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Toggle Button -->
+    <button id="sidebarToggle" class="lg:hidden fixed top-25 left-4 z-50 p-2 rounded-md bg-orange-500 text-white">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Sidebar -->
+    <aside id="sidebar"
+        class="fixed top-20 left-0 w-[80%] lg:w-[30%] h-[calc(100vh-5rem)] bg-white shadow-lg transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out z-40">
+        <!-- Mobile Close Button -->
+        <button id="closeSidebar" class="lg:hidden absolute top-4 right-4 p-2 text-gray-600 hover:text-gray-800">
+            <i class="fas fa-times text-xl"></i>
+        </button>
+
+        <div class="p-4 h-full overflow-y-auto scrollbar-custom">
+            <!-- User Profile Section -->
+            <div class="flex items-center space-x-4 mb-6 ml-2">
+                <div class="w-24 h-24 rounded-xl overflow-hidden border-2 border-orange-200">
+                    <img src="./images/static/ProfilePicture.jpg" alt="Profile" class="w-full h-full object-cover">
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-800">Employer</h3>
+                    <p class="text-sm text-gray-600">New York</p>
+                    <a href="#"
+                        class="inline-block mt-2 px-1.5 py-1.5 text-sm bg-orange-500 text-white rounded-md hover:bg-orange-600 transition-colors duration-200">View
+                        Profile</a>
+                </div>
+            </div>
+
+            <!-- Navigation Menu -->
+            <nav class="space-y-2">
+                <a href="#" class="flex items-center space-x-3 p-3 rounded-lg bg-orange-50 text-orange-600 ml-2">
+                    <i class="far fa-clipboard w-5"></i>
+                    <span>User Dashboard</span>
+                </a>
+                <a href="#"
+                    class="flex items-center space-x-3 p-3 rounded-lg hover:bg-orange-50 hover:text-orange-600 text-gray-700 transition-colors duration-200 ml-2">
+                    <i class="far fa-user w-5"></i>
+                    <span>Profile</span>
+                </a>
+                <a href="#"
+                    class="flex items-center space-x-3 p-3 rounded-lg hover:bg-orange-50 hover:text-orange-600 text-gray-700 transition-colors duration-200 ml-2">
+                    <i class="far fa-file-alt w-5"></i>
+                    <span>My Jobs</span>
+                </a>
+                <a href="#"
+                    class="flex items-center space-x-3 p-3 rounded-lg hover:bg-orange-50 hover:text-orange-600 text-gray-700 transition-colors duration-200 ml-2">
+                    <i class="far fa-pen-to-square w-5"></i>
+                    <span>Submit Job</span>
+                </a>
+                <a href="#"
+                    class="flex items-center space-x-3 p-3 rounded-lg hover:bg-orange-50 hover:text-orange-600 text-gray-700 transition-colors duration-200 ml-2">
+                    <i class="far fa-address-card w-5"></i>
+                    <span>Applicants Jobs</span>
+                </a>
+                <a href="#"
+                    class="flex items-center space-x-3 p-3 rounded-lg hover:bg-orange-50 hover:text-orange-600 text-gray-700 transition-colors duration-200 ml-2">
+                    <i class="far fa-bookmark w-5"></i>
+                    <span>Shortlist Candidates</span>
+                </a>
+                <a href="#"
+                    class="flex items-center space-x-3 p-3 rounded-lg hover:bg-orange-50 hover:text-orange-600 text-gray-700 transition-colors duration-200 ml-2">
+                    <i class="far fa-bell w-5"></i>
+                    <span>Candidate Alerts</span>
+                </a>
+                <a href="#"
+                    class="flex items-center space-x-3 p-3 rounded-lg hover:bg-orange-50 hover:text-orange-600 text-gray-700 transition-colors duration-200 ml-2">
+                    <i class="far fa-folder-open w-5"></i>
+                    <span>Packages</span>
+                </a>
+                <a href="#"
+                    class="flex items-center space-x-3 p-3 rounded-lg hover:bg-orange-50 hover:text-orange-600 text-gray-700 transition-colors duration-200 ml-2">
+                    <i class="far fa-comments w-5"></i>
+                    <span>Messages</span>
+                </a>
+                <a href="#"
+                    class="flex items-center space-x-3 p-3 rounded-lg hover:bg-orange-50 hover:text-orange-600 text-gray-700 transition-colors duration-200 ml-2">
+                    <i class="far fa-calendar-check w-5"></i>
+                    <span>Meetings</span>
+                </a>
+                <a href="#"
+                    class="flex items-center space-x-3 p-3 rounded-lg hover:bg-orange-50 hover:text-orange-600 text-gray-700 transition-colors duration-200 ml-2">
+                    <i class="fas fa-lock w-5"></i>
+                    <span>Change Password</span>
+                </a>
+                <a href="#"
+                    class="flex items-center space-x-3 p-3 rounded-lg hover:bg-orange-50 hover:text-orange-600 text-gray-700 transition-colors duration-200 ml-2">
+                    <i class="far fa-trash-can w-5"></i>
+                    <span>Delete Profile</span>
+                </a>
+                <a href="#"
+                    class="flex items-center space-x-3 p-3 rounded-lg hover:bg-orange-50 hover:text-orange-600 text-gray-700 transition-colors duration-200 ml-2">
+                    <i class="fas fa-power-off w-5"></i>
+                    <span>Logout</span>
+                </a>
+            </nav>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="lg:ml-[30%] p-8 mt-20">
+
+        <!-- Applications statistics section -->
+        <div id="dashboard-stats" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <h3 class="text-2xl font-semibold text-gray-900 mb-8">Applications statistics</h3>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Posted Jobs Card -->
+                <div class="bg-white rounded-lg shadow-sm p-6 transition-all duration-200 hover:scale-105">
+                    <div class="flex items-center justify-between">
+                        <div class="p-4 rounded-xl bg-blue-100">
+                            <i class="fas fa-briefcase text-blue-600 text-2xl"></i>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-3xl font-bold text-blue-600">1</div>
+                            <span class="text-gray-600">Posted Jobs</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Applications Card -->
+                <div class="bg-white rounded-lg shadow-sm p-6 transition-all duration-200 hover:scale-105">
+                    <div class="flex items-center justify-between">
+                        <div class="p-4 rounded-xl bg-red-100">
+                            <i class="fas fa-file-alt text-red-600 text-2xl"></i>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-3xl font-bold text-red-600">982</div>
+                            <span class="text-gray-600">Application</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reviews Card -->
+                <div class="bg-white rounded-lg shadow-sm p-6 transition-all duration-200 hover:scale-105">
+                    <div class="flex items-center justify-between">
+                        <div class="p-4 rounded-xl bg-yellow-100">
+                            <i class="fas fa-comments text-yellow-600 text-2xl"></i>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-3xl font-bold text-yellow-600">0</div>
+                            <span class="text-gray-600">Review</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Shortlisted Card -->
+                <div class="bg-white rounded-lg shadow-sm p-6 transition-all duration-200 hover:scale-105">
+                    <div class="flex items-center justify-between">
+                        <div class="p-4 rounded-xl bg-green-100">
+                            <i class="fas fa-bookmark text-green-600 text-2xl"></i>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-3xl font-bold text-green-600">2</div>
+                            <span class="text-gray-600">Shortlisted</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page Views Chart Section and Notifications Section side by side on large screens -->
+        <div class="container mx-auto px-4 py-8">
+            <div class="flex flex-col lg:flex-row gap-8">
+                <!-- Chart Section -->
+                <div class="bg-white rounded-lg shadow-md p-6 flex-[4_4_0%] min-w-0">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-6">Page Views</h3>
+
+                    <!-- Chart Container -->
+                    <div class="mb-6 h-[400px]">
+                        <canvas id="pageViewsChart"></canvas>
+                    </div>
+
+                    <!-- Filters -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Jobs</label>
+                            <select id="jobSelect"
+                                class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                <option value="4540">Junior Graphic Designer (Web)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Number Days</label>
+                            <select id="daysSelect"
+                                class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                <option value="30">30 days</option>
+                                <option value="15" selected>15 days</option>
+                                <option value="7">7 days</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Notifications Section -->
+                <div class="bg-white rounded-lg shadow-sm p-6 flex-[2_2_0%] min-w-0 lg:max-w-lg xl:max-w-xl w-full">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">Notifications</h3>
+                    <div class="scrollbar-custom max-h-[600px] overflow-y-auto">
+                        <ul class="space-y-4">
+                            <li class="flex items-start space-x-4 p-3 hover:bg-gray-50 rounded-lg transition-colors">
+                                <span
+                                    class="flex-shrink-0 w-10 h-10 bg-purple-50 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-briefcase text-purple-600"></i>
+                                </span>
+                                <div class="flex-1">
+                                    <div class="text-gray-500">
+                                        A new application is submitted on your job
+                                        <a href="#" class="text-gray-900 font-medium hover:text-gray-700">Senior
+                                            Frontend Developer</a>
+                                        by <a href="#"
+                                            class="text-gray-900 font-medium hover:text-gray-700">john_doe</a>.
+                                    </div>
+                                    <small class="text-gray-400 text-sm">Just now</small>
+                                </div>
+                            </li>
+                            <li class="flex items-start space-x-4 p-3 hover:bg-gray-50 rounded-lg transition-colors">
+                                <span
+                                    class="flex-shrink-0 w-10 h-10 bg-blue-50 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-user-check text-blue-600"></i>
+                                </span>
+                                <div class="flex-1">
+                                    <div class="text-gray-500">
+                                        Your profile has been viewed by
+                                        <a href="#" class="text-gray-900 font-medium hover:text-gray-700">TechCorp
+                                            Inc.</a>
+                                    </div>
+                                    <small class="text-gray-400 text-sm">5 minutes ago</small>
+                                </div>
+                            </li>
+                            <li class="flex items-start space-x-4 p-3 hover:bg-gray-50 rounded-lg transition-colors">
+                                <span
+                                    class="flex-shrink-0 w-10 h-10 bg-pink-50 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-envelope text-pink-600"></i>
+                                </span>
+                                <div class="flex-1">
+                                    <div class="text-gray-500">
+                                        New message from
+                                        <a href="#" class="text-gray-900 font-medium hover:text-gray-700">Sarah
+                                            Johnson</a>
+                                        regarding your application
+                                    </div>
+                                    <small class="text-gray-400 text-sm">1 hour ago</small>
+                                </div>
+                            </li>
+                            <li class="flex items-start space-x-4 p-3 hover:bg-gray-50 rounded-lg transition-colors">
+                                <span
+                                    class="flex-shrink-0 w-10 h-10 bg-purple-50 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-briefcase text-purple-600"></i>
+                                </span>
+                                <div class="flex-1">
+                                    <div class="text-gray-500">
+                                        A new application is submitted on your job
+                                        <a href="#" class="text-gray-900 font-medium hover:text-gray-700">Junior Graphic
+                                            Designer (Web)</a>
+                                        by <a href="#"
+                                            class="text-gray-900 font-medium hover:text-gray-700">zefanya</a>.
+                                    </div>
+                                    <small class="text-gray-400 text-sm">2 days ago</small>
+                                </div>
+                            </li>
+                            <li class="flex items-start space-x-4 p-3 hover:bg-gray-50 rounded-lg transition-colors">
+                                <span
+                                    class="flex-shrink-0 w-10 h-10 bg-yellow-50 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-star text-yellow-600"></i>
+                                </span>
+                                <div class="flex-1">
+                                    <div class="text-gray-500">
+                                        Your job posting
+                                        <a href="#" class="text-gray-900 font-medium hover:text-gray-700">Senior Backend
+                                            Developer</a>
+                                        has been featured
+                                    </div>
+                                    <small class="text-gray-400 text-sm">3 days ago</small>
+                                </div>
+                            </li>
+                            <li class="flex items-start space-x-4 p-3 hover:bg-gray-50 rounded-lg transition-colors">
+                                <span
+                                    class="flex-shrink-0 w-10 h-10 bg-purple-50 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-briefcase text-purple-600"></i>
+                                </span>
+                                <div class="flex-1">
+                                    <div class="text-gray-500">
+                                        A new application is submitted on your job
+                                        <a href="#" class="text-gray-900 font-medium hover:text-gray-700">Junior Graphic
+                                            Designer (Web)</a>
+                                        by <a href="#"
+                                            class="text-gray-900 font-medium hover:text-gray-700">cosejaj346</a>.
+                                    </div>
+                                    <small class="text-gray-400 text-sm">3 days ago</small>
+                                </div>
+                            </li>
+                            <li class="flex items-start space-x-4 p-3 hover:bg-gray-50 rounded-lg transition-colors">
+                                <span
+                                    class="flex-shrink-0 w-10 h-10 bg-green-50 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-calendar-check text-green-600"></i>
+                                </span>
+                                <div class="flex-1">
+                                    <div class="text-gray-500">
+                                        Interview scheduled with
+                                        <a href="#"
+                                            class="text-gray-900 font-medium hover:text-gray-700">InnovateTech</a>
+                                        for tomorrow at 2:00 PM
+                                    </div>
+                                    <small class="text-gray-400 text-sm">4 days ago</small>
+                                </div>
+                            </li>
+                            <li class="flex items-start space-x-4 p-3 hover:bg-gray-50 rounded-lg transition-colors">
+                                <span
+                                    class="flex-shrink-0 w-10 h-10 bg-purple-50 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-briefcase text-purple-600"></i>
+                                </span>
+                                <div class="flex-1">
+                                    <div class="text-gray-500">
+                                        A new application is submitted on your job
+                                        <a href="#" class="text-gray-900 font-medium hover:text-gray-700">Junior Graphic
+                                            Designer (Web)</a>
+                                        by <a href="#"
+                                            class="text-gray-900 font-medium hover:text-gray-700">sossoukouessi95</a>.
+                                    </div>
+                                    <small class="text-gray-400 text-sm">4 days ago</small>
+                                </div>
+                            </li>
+                            <li class="flex items-start space-x-4 p-3 hover:bg-gray-50 rounded-lg transition-colors">
+                                <span
+                                    class="flex-shrink-0 w-10 h-10 bg-red-50 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-bell text-red-600"></i>
+                                </span>
+                                <div class="flex-1">
+                                    <div class="text-gray-500">
+                                        New job matching your skills:
+                                        <a href="#" class="text-gray-900 font-medium hover:text-gray-700">Full Stack
+                                            Developer</a>
+                                        at <a href="#"
+                                            class="text-gray-900 font-medium hover:text-gray-700">TechStart</a>
+                                    </div>
+                                    <small class="text-gray-400 text-sm">5 days ago</small>
+                                </div>
+                            </li>
+                            <li class="flex items-start space-x-4 p-3 hover:bg-gray-50 rounded-lg transition-colors">
+                                <span
+                                    class="flex-shrink-0 w-10 h-10 bg-purple-50 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-briefcase text-purple-600"></i>
+                                </span>
+                                <div class="flex-1">
+                                    <div class="text-gray-500">
+                                        A new application is submitted on your job
+                                        <a href="#" class="text-gray-900 font-medium hover:text-gray-700">Junior Graphic
+                                            Designer (Web)</a>
+                                        by <a href="#" class="text-gray-900 font-medium hover:text-gray-700">test</a>.
+                                    </div>
+                                    <small class="text-gray-400 text-sm">1 week ago</small>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Applicants Section -->
+        <div class="max-w-4xl mx-auto p-6">
+            <h2 class="text-2xl font-bold mb-6">Recent Applicants</h2>
+
+            <!-- Applicant Cards Container -->
+            <div id="applicantsContainer" class="space-y-4">
+                <!-- Card 1 -->
+                <div
+                    class="applicant-card bg-white rounded-lg shadow p-4 flex flex-col md:flex-row justify-between items-start md:items-center">
+                    <div>
+                        <h3 class="text-xl font-semibold">Zefanya</h3>
+                        <p class="text-sm text-gray-600">Position: Junior Graphic Designer (Web)</p>
+                        <p class="text-sm text-gray-500 flex items-center gap-1">
+                            <span class="clock-icon text-orange-500"><i class="far fa-clock"></i></span>
+                            Applied date: June 5, 2025
+                        </p>
+                        <span
+                            class="status-badge inline-block mt-1 text-xs font-medium text-blue-700 bg-blue-100 px-2 py-0.5 rounded">Pending</span>
+                    </div>
+
+                    <div class="flex justify-between items-center w-full md:w-auto mt-4 md:mt-0">
+                        <div class="flex gap-2">
+                            <button
+                                class="tooltip action-btn create-meeting-btn bg-orange-500 hover:bg-orange-600 text-white p-1.5 rounded-md transition-colors"
+                                data-tooltip="Create Meeting">
+                                <i class="fas fa-plus text-sm"></i>
+                            </button>
+                            <button
+                                class="tooltip action-btn approve-btn bg-orange-500 hover:bg-orange-600 text-white p-1.5 rounded-md transition-colors"
+                                data-tooltip="Approve">
+                                <i class="fas fa-check text-sm"></i>
+                            </button>
+                            <button
+                                class="tooltip action-btn reject-btn bg-orange-500 hover:bg-orange-600 text-white p-1.5 rounded-md transition-colors"
+                                data-tooltip="Reject">
+                                <i class="fas fa-times text-sm"></i>
+                            </button>
+                            <button
+                                class="tooltip action-btn download-btn bg-orange-500 hover:bg-orange-600 text-white p-1.5 rounded-md transition-colors"
+                                data-tooltip="Download CV">
+                                <i class="fas fa-download text-sm"></i>
+                            </button>
+                            <button
+                                class="tooltip action-btn undo-btn hidden bg-orange-500 hover:bg-orange-600 text-white p-1.5 rounded-md transition-colors"
+                                data-tooltip="Undo">
+                                <i class="fas fa-undo text-sm"></i>
+                            </button>
+                        </div>
+                        <button
+                            class="tooltip action-btn remove-btn bg-orange-500 hover:bg-orange-600 text-white p-1.5 rounded-md transition-colors ml-4"
+                            data-tooltip="Remove">
+                            <i class="fas fa-trash text-sm"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div
+                    class="applicant-card bg-white rounded-lg shadow p-4 flex flex-col md:flex-row justify-between items-start md:items-center">
+                    <div>
+                        <h3 class="text-xl font-semibold">Sarah Johnson</h3>
+                        <p class="text-sm text-gray-600">Position: Senior Frontend Developer</p>
+                        <p class="text-sm text-gray-500 flex items-center gap-1">
+                            <span class="clock-icon text-orange-500 hidden"><i class="far fa-clock"></i></span>
+                            Applied date: June 4, 2025
+                        </p>
+                        <span
+                            class="status-badge inline-block mt-1 text-xs font-medium text-green-700 bg-green-100 px-2 py-0.5 rounded">Approved</span>
+                    </div>
+
+                    <div class="flex justify-between items-center w-full md:w-auto mt-4 md:mt-0">
+                        <div class="flex gap-2">
+                            <button
+                                class="tooltip action-btn create-meeting-btn bg-orange-500 hover:bg-orange-600 text-white p-1.5 rounded-md transition-colors"
+                                data-tooltip="Create Meeting">
+                                <i class="fas fa-plus text-sm"></i>
+                            </button>
+                            <button
+                                class="tooltip action-btn approve-btn hidden bg-orange-500 hover:bg-orange-600 text-white p-1.5 rounded-md transition-colors"
+                                data-tooltip="Approve">
+                                <i class="fas fa-check text-sm"></i>
+                            </button>
+                            <button
+                                class="tooltip action-btn reject-btn hidden bg-orange-500 hover:bg-orange-600 text-white p-1.5 rounded-md transition-colors"
+                                data-tooltip="Reject">
+                                <i class="fas fa-times text-sm"></i>
+                            </button>
+                            <button
+                                class="tooltip action-btn download-btn bg-orange-500 hover:bg-orange-600 text-white p-1.5 rounded-md transition-colors"
+                                data-tooltip="Download CV">
+                                <i class="fas fa-download text-sm"></i>
+                            </button>
+                            <button
+                                class="tooltip action-btn undo-btn bg-orange-500 hover:bg-orange-600 text-white p-1.5 rounded-md transition-colors"
+                                data-tooltip="Undo">
+                                <i class="fas fa-undo text-sm"></i>
+                            </button>
+                        </div>
+                        <button
+                            class="tooltip action-btn remove-btn bg-orange-500 hover:bg-orange-600 text-white p-1.5 rounded-md transition-colors ml-4"
+                            data-tooltip="Remove">
+                            <i class="fas fa-trash text-sm"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div
+                    class="applicant-card bg-white rounded-lg shadow p-4 flex flex-col md:flex-row justify-between items-start md:items-center">
+                    <div>
+                        <h3 class="text-xl font-semibold">Michael Chen</h3>
+                        <p class="text-sm text-gray-600">Position: UI/UX Designer</p>
+                        <p class="text-sm text-gray-500 flex items-center gap-1">
+                            <span class="clock-icon text-orange-500 hidden"><i class="far fa-clock"></i></span>
+                            Applied date: June 3, 2025
+                        </p>
+                        <span
+                            class="status-badge inline-block mt-1 text-xs font-medium text-red-700 bg-red-100 px-2 py-0.5 rounded">Rejected</span>
+                    </div>
+
+                    <div class="flex justify-between items-center w-full md:w-auto mt-4 md:mt-0">
+                        <div class="flex gap-2">
+                            <button
+                                class="tooltip action-btn create-meeting-btn hidden bg-orange-500 hover:bg-orange-600 text-white p-1.5 rounded-md transition-colors"
+                                data-tooltip="Create Meeting">
+                                <i class="fas fa-plus text-sm"></i>
+                            </button>
+                            <button
+                                class="tooltip action-btn approve-btn hidden bg-orange-500 hover:bg-orange-600 text-white p-1.5 rounded-md transition-colors"
+                                data-tooltip="Approve">
+                                <i class="fas fa-check text-sm"></i>
+                            </button>
+                            <button
+                                class="tooltip action-btn reject-btn hidden bg-orange-500 hover:bg-orange-600 text-white p-1.5 rounded-md transition-colors"
+                                data-tooltip="Reject">
+                                <i class="fas fa-times text-sm"></i>
+                            </button>
+                            <button
+                                class="tooltip action-btn download-btn hidden bg-orange-500 hover:bg-orange-600 text-white p-1.5 rounded-md transition-colors"
+                                data-tooltip="Download CV">
+                                <i class="fas fa-download text-sm"></i>
+                            </button>
+                            <button
+                                class="tooltip action-btn undo-btn bg-orange-500 hover:bg-orange-600 text-white p-1.5 rounded-md transition-colors"
+                                data-tooltip="Undo">
+                                <i class="fas fa-undo text-sm"></i>
+                            </button>
+                        </div>
+                        <button
+                            class="tooltip action-btn remove-btn bg-orange-500 hover:bg-orange-600 text-white p-1.5 rounded-md transition-colors ml-4"
+                            data-tooltip="Remove">
+                            <i class="fas fa-trash text-sm"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Hidden Modal for Create Meeting-->
+        <div id="modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+            <div class="bg-white rounded-lg w-full max-w-md p-6 relative">
+                <h3 class="text-xl font-bold mb-4">Create Meeting</h3>
+                <form class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium">Date</label>
+                        <input type="date" class="w-full border border-gray-300 rounded p-2" required />
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium">Time</label>
+                        <input type="time" class="w-full border border-gray-300 rounded p-2" required />
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium">Time Duration (minutes)</label>
+                        <input type="number" placeholder="30" class="w-full border border-gray-300 rounded p-2"
+                            required />
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium">Message</label>
+                        <textarea class="w-full border border-gray-300 rounded p-2" placeholder="Message..."
+                            required></textarea>
+                    </div>
+                    <div class="flex items-center">
+                        <input type="checkbox" id="zoomToggle" class="mr-2">
+                        <label for="zoomToggle" class="text-sm">Zoom Meeting</label>
+                    </div>
+                    <div class="flex justify-between items-center mt-6">
+                        <button type="button" id="closeModal" class="text-gray-600 hover:underline">Cancel</button>
+                        <button type="submit"
+                            class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded">Create
+                            Meeting</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <footer class="bg-white relative">
+    <!-- CTA Section -->
+    <div class="container mx-auto px-6 py-12">
+      <div class="grid grid-cols-1 lg:grid-cols-12 items-center gap-6">
+        <!-- Logo Section -->
+        <div class="lg:col-span-1">
+          <img class="h-8 w-auto" src="images/static/LogoMobile.png" alt="Mobile Logo">
+        </div>
+
+        <!-- CTA Text -->
+        <div class="lg:col-span-5">
+          <h3 class="text-2xl md:text-3xl font-bold text-orange-700 mb-4">
+            Şirkət Haqqında
+          </h3>
+          <p class="text-gray-700 text-lg leading-relaxed mb-6 lg:mb-0">
+            <a href="/" class="text-gray-700 hover:text-[#e88328] transition-colors font-medium">Jobing.az</a> - Azərbaycan bazarında iş axtarışını
+            asanlaşdıran platformamız istifadəçilərə geniş iş elanları təklif edir və hər bir istifadəçinin
+            ehtiyaclarına uyğun iş tapma təcrübəsi təmin edir.
+          </p>
+        </div>
+
+        <!-- Buttons -->
+        <div class="lg:col-span-6 flex flex-wrap gap-4 justify-start lg:justify-end">
+          <button class="bg-[#f99439] hover:bg-[#e88328] text-white px-6 py-2 rounded-md transition-colors">
+            Apply Now
+          </button>
+          <button
+            class="bg-white hover:bg-gray-100 text-[#f99439] px-6 py-2 rounded-md border border-[#f99439] transition-colors">
+            Contact Us
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Footer -->
+    <div class="container mx-auto px-6 py-8 border-t border-gray-200">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Quick Links -->
+        <div class="space-y-4">
+          <h4 class="text-orange-700 font-bold text-xl mb-4">Sürətli keçid</h4>
+          <ul class="space-y-3">
+            <li><a href="#" class="text-gray-700 hover:text-[#e88328] transition-colors font-medium">Ana Səhifə</a></li>
+            <li><a href="#" class="text-gray-700 hover:text-[#e88328] transition-colors font-medium">Vakansiyalar</a></li>
+            <li><a href="#" class="text-gray-700 hover:text-[#e88328] transition-colors font-medium">Əlavə</a></li>
+            <li><a href="#" class="text-gray-700 hover:text-[#e88328] transition-colors font-medium">Haqqımızda</a></li>
+            <li><a href="#" class="text-gray-700 hover:text-[#e88328] transition-colors font-medium">TVS</a></li>
+          </ul>
+        </div>
+
+        <!-- Additional Links -->
+        <div class="space-y-4">
+          <h4 class="text-orange-700 font-bold text-xl mb-4">Əlavə</h4>
+          <div class="space-y-3">
+            <p class="text-gray-700 font-medium">Ödənişsiz Müştəri Xidməti</p>
+            <a href="tel:+9944709990569" class="text-gray-700 hover:text-[#e88328] transition-colors block font-semibold text-lg">+994470-999-05-69</a>
+            <p class="text-gray-700 font-medium">Dəstəyə Ehtiyacınız var?</p>
+            <a href="mailto:contact@jobing.az" class="text-gray-700 hover:text-[#e88328] transition-colors block font-semibold text-lg">contact@jobing.az</a>
+          </div>
+        </div>
+
+        <!-- Languages -->
+        <div class="space-y-4">
+          <h4 class="text-orange-700 font-bold text-xl mb-4">Dillər</h4>
+          <ul class="space-y-3">
+            <li><a href="#" class="text-gray-700 hover:text-[#e88328] transition-colors font-medium">Azərbaycanca</a></li>
+            <li><a href="#" class="text-gray-700 hover:text-[#e88328] transition-colors font-medium">İngiliscə</a></li>
+            <li><a href="#" class="text-gray-700 hover:text-[#e88328] transition-colors font-medium">Rusca</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Social Icons and Bottom Bar -->
+      <div class="mt-8 pt-8 border-t border-gray-200 flex flex-col md:flex-row justify-between items-center">
+        <div class="flex gap-4 order-1 md:order-2 mb-4 md:mb-0">
+          <!-- Facebook -->
+          <a href="#" class="p-2 border border-gray-200 rounded-md text-gray-600 hover:text-blue-600 transition-colors duration-300">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M18.77 7.46H14.5v-1.9c0-.9.6-1.1 1-1.1h3V.5h-4.33C10.24.5 9.5 3.44 9.5 5.32v2.15h-3v4h3v12h5v-12h3.85l.42-4z" />
+            </svg>
+          </a>
+
+          <!-- Twitter -->
+          <a href="#" class="p-2 border border-gray-200 rounded-md text-gray-600 hover:text-sky-500 transition-colors duration-300">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z" />
+            </svg>
+          </a>
+
+          <!-- LinkedIn -->
+          <a href="#" class="p-2 border border-gray-200 rounded-md text-gray-600 hover:text-blue-700 transition-colors duration-300">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+            </svg>
+          </a>
+
+          <!-- WhatsApp -->
+          <a href="#" class="p-2 border border-gray-200 rounded-md text-gray-600 hover:text-green-600 transition-colors duration-300">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+            </svg>
+          </a>
+
+          <!-- Instagram -->
+          <a href="#" class="p-2 border border-gray-200 rounded-md text-gray-600 hover:text-pink-600 transition-colors duration-300">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.788.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558.788-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913-.306-.789-.718-1.459-1.384-2.126C21.319 1.347 20.651.935 19.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.012 15.26 0 12 0zm0 2.16c3.203 0 3.585.016 4.85.071 1.17.055 1.805.249 2.227.415.562.217.96.477 1.382.896.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.015 3.585-.074 4.85c-.061 1.17-.256 1.805-.421 2.227-.224.562-.479.96-.899 1.382-.419.419-.824.679-1.38.896-.42.164-1.065.36-2.235.413-1.274.057-1.649.07-4.859.07-3.211 0-3.586-.015-4.859-.074-1.171-.061-1.816-.256-2.236-.421-.569-.224-.96-.479-1.379-.899-.421-.419-.69-.824-.9-1.38-.165-.42-.359-1.065-.42-2.235-.045-1.26-.061-1.649-.061-4.844 0-3.196.016-3.586.061-4.861.061-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689 1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06l.045.03zm0 3.678c-3.405 0-6.162 2.76-6.162 6.162 0 3.405 2.76 6.162 6.162 6.162 3.405 0 6.162-2.76 6.162-6.162 0-3.405-2.76-6.162-6.162-6.162zM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm7.846-10.405c0 .795-.646 1.44-1.44 1.44-.795 0-1.44-.646-1.44-1.44 0-.794.646-1.439 1.44-1.439.793-.001 1.44.645 1.44 1.439z" />
+            </svg>
+          </a>
+        </div>
+        <p class="text-black text-sm order-2 md:order-1">
+          © 2024 - 2025 Jobing.az. All rights reserved.
+        </p>
+      </div>
+    </div>
+
+    <!-- Scroll to Top Button -->
+    <button id="scrollButton" onclick="window.scrollTo({ top: 0, behavior: 'smooth' })"
+      class="fixed bottom-8 right-6 bg-[#f99439] text-white p-3 rounded-lg transition-colors opacity-0 pointer-events-none transition-opacity duration-300 border-2 border-white">
+      <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+      </svg>
+    </button>
+  </footer>
+    </main>
+
+    <script>
+        function toggleSearch() {
+            const searchDropdown = document.getElementById('searchDropdown');
+            searchDropdown.classList.toggle('active');
+        }
+
+        // Close search dropdown when clicking outside
+        document.addEventListener('click', function (event) {
+            const searchDropdown = document.getElementById('searchDropdown');
+            const searchButton = event.target.closest('button');
+
+            if (!searchButton && !searchDropdown.contains(event.target)) {
+                searchDropdown.classList.remove('active');
+            }
+        });
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobileMenuButton');
+        const mobileMenu = document.querySelector('.mobile-menu');
+        const body = document.body;
+        const mainContent = document.querySelector('body > *:not(nav)');
+
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('active');
+            if (mobileMenu.classList.contains('active')) {
+                document.querySelectorAll('body > *:not(nav)').forEach(element => {
+                    element.classList.add('blur-background');
+                });
+            } else {
+                document.querySelectorAll('body > *:not(nav)').forEach(element => {
+                    element.classList.remove('blur-background');
+                });
+            }
+        });
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', (event) => {
+            if (!mobileMenu.contains(event.target) && !mobileMenuButton.contains(event.target)) {
+                mobileMenu.classList.remove('active');
+                document.querySelectorAll('body > *:not(nav)').forEach(element => {
+                    element.classList.remove('blur-background');
+                });
+            }
+        });
+
+        // Close mobile menu when window is resized to desktop view
+        window.addEventListener('resize', () => {
+            if (window.innerWidth >= 768) {
+                mobileMenu.classList.remove('active');
+                document.querySelectorAll('body > *:not(nav)').forEach(element => {
+                    element.classList.remove('blur-background');
+                });
+            }
+        });
+
+        // Mobile dropdown toggle
+        document.querySelectorAll('.dropdown button').forEach(button => {
+            button.addEventListener('click', (e) => {
+                if (window.innerWidth < 768) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const dropdown = button.closest('.dropdown');
+                    dropdown.classList.toggle('active');
+                }
+            });
+        });
+
+        // Mobile nested dropdown toggle
+        document.querySelectorAll('.group > a').forEach(link => {
+            link.addEventListener('click', (e) => {
+                if (window.innerWidth < 768) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const group = link.closest('.group');
+                    group.classList.toggle('active');
+                }
+            });
+        });
+
+        // Close dropdowns when clicking outside the navbar
+        document.addEventListener('click', (event) => {
+            if (window.innerWidth < 768) {
+                const isInsideNavbar = event.target.closest('nav');
+                if (!isInsideNavbar) {
+                    document.querySelectorAll('.dropdown.active, .group.active').forEach(element => {
+                        element.classList.remove('active');
+                    });
+                }
+            }
+        });
+
+        // Navbar background color change on scroll
+        window.addEventListener('scroll', function () {
+            const navbar = document.getElementById('mainNavbar');
+            if (window.scrollY > 10) {
+                navbar.classList.remove('bg-transparent');
+                navbar.classList.add('bg-white');
+            } else {
+                navbar.classList.add('bg-transparent');
+                navbar.classList.remove('bg-white');
+            }
+        });
+
+        // Mobile sidebar toggle functionality
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const closeSidebar = document.getElementById('closeSidebar');
+        const sidebar = document.getElementById('sidebar');
+        let isSidebarOpen = false;
+
+        function toggleSidebar(show) {
+            isSidebarOpen = show;
+            sidebar.style.transform = show ? 'translateX(0)' : 'translateX(-100%)';
+            sidebarToggle.style.display = show ? 'none' : 'block';
+        }
+
+        sidebarToggle.addEventListener('click', () => {
+            toggleSidebar(true);
+        });
+
+        closeSidebar.addEventListener('click', () => {
+            toggleSidebar(false);
+        });
+
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', (e) => {
+            if (window.innerWidth < 1024 && isSidebarOpen && !sidebar.contains(e.target) && !sidebarToggle.contains(e.target)) {
+                toggleSidebar(false);
+            }
+        });
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            if (window.innerWidth >= 1024) {
+                sidebar.style.transform = 'translateX(0)';
+                sidebarToggle.style.display = 'none';
+            } else if (!isSidebarOpen) {
+                sidebar.style.transform = 'translateX(-100%)';
+                sidebarToggle.style.display = 'block';
+            }
+        });
+
+        // Sample data
+        const sampleData = {
+            labels: [
+                'May 23, 2025', 'May 25, 2025', 'May 27, 2025',
+                'May 29, 2025', 'May 31, 2025', 'June 2, 2025',
+                'June 4, 2025', 'June 6, 2025'
+            ],
+            data: [230, 250, 280, 300, 280, 130, 420, 10]
+        };
+
+        // Initialize Chart
+        const ctx = document.getElementById('pageViewsChart').getContext('2d');
+        let pageViewsChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: sampleData.labels,
+                datasets: [{
+                    label: 'Page Views',
+                    data: sampleData.data,
+                    borderColor: '#1967D2',
+                    backgroundColor: 'rgba(25, 103, 210, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                        backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                        titleColor: '#1F2937',
+                        bodyColor: '#1F2937',
+                        borderColor: '#E5E7EB',
+                        borderWidth: 1,
+                        padding: 10,
+                        displayColors: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 450,
+                        ticks: {
+                            stepSize: 50,
+                            callback: function (value) {
+                                return value.toLocaleString();
+                            }
+                        },
+                        grid: {
+                            display: true,
+                            color: 'rgba(0, 0, 0, 0.05)'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                            maxRotation: 45,
+                            minRotation: 45
+                        }
+                    }
+                },
+                interaction: {
+                    mode: 'nearest',
+                    axis: 'x',
+                    intersect: false
+                }
+            }
+        });
+
+        // Function to generate dates for the selected period
+        function generateDates(days) {
+            const dates = [];
+            const today = new Date();
+            for (let i = days - 1; i >= 0; i--) {
+                const date = new Date(today);
+                date.setDate(date.getDate() - i);
+                dates.push(date.toLocaleDateString('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                    year: 'numeric'
+                }));
+            }
+            return dates;
+        }
+
+        // Function to generate mock data
+        function generateMockData(days) {
+            return Array.from({ length: days }, () => Math.floor(Math.random() * 450));
+        }
+
+        // Function to update chart data
+        function updateChartData(jobId, days) {
+            const dates = generateDates(days);
+            const data = generateMockData(days);
+
+            pageViewsChart.data.labels = dates;
+            pageViewsChart.data.datasets[0].data = data;
+            pageViewsChart.update();
+        }
+
+        // Event Listeners
+        document.getElementById('jobSelect').addEventListener('change', function () {
+            const days = document.getElementById('daysSelect').value;
+            updateChartData(this.value, days);
+        });
+
+        document.getElementById('daysSelect').addEventListener('change', function () {
+            const jobId = document.getElementById('jobSelect').value;
+            updateChartData(jobId, this.value);
+        });
+
+        // Initial load with sample data
+        updateChartData('4540', 15);
+
+        //Recent Applicants Actions
+
+        // Initialize all cards
+        document.querySelectorAll('.applicant-card').forEach(card => {
+            const createMeetingBtn = card.querySelector('.create-meeting-btn');
+            const approveBtn = card.querySelector('.approve-btn');
+            const rejectBtn = card.querySelector('.reject-btn');
+            const downloadBtn = card.querySelector('.download-btn');
+            const undoBtn = card.querySelector('.undo-btn');
+            const statusBadge = card.querySelector('.status-badge');
+            const clockIcon = card.querySelector('.clock-icon');
+
+            // Modal functionality
+            const modal = document.getElementById('modal');
+            const closeModalBtn = document.getElementById('closeModal');
+
+            createMeetingBtn.onclick = () => {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            };
+
+            closeModalBtn.onclick = () => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            };
+
+            window.onclick = (e) => {
+                if (e.target === modal) {
+                    modal.classList.add('hidden');
+                    modal.classList.remove('flex');
+                }
+            };
+
+            // Approve functionality
+            approveBtn.onclick = () => {
+                statusBadge.textContent = 'Approved';
+                statusBadge.className = 'inline-block mt-1 text-xs font-medium text-green-700 bg-green-100 px-2 py-0.5 rounded';
+                approveBtn.classList.add('hidden');
+                rejectBtn.classList.add('hidden');
+                undoBtn.classList.remove('hidden');
+                clockIcon.classList.add('hidden');
+            };
+
+            // Reject functionality
+            rejectBtn.onclick = () => {
+                statusBadge.textContent = 'Rejected';
+                statusBadge.className = 'inline-block mt-1 text-xs font-medium text-red-700 bg-red-100 px-2 py-0.5 rounded';
+                approveBtn.classList.add('hidden');
+                rejectBtn.classList.add('hidden');
+                createMeetingBtn.classList.add('hidden');
+                downloadBtn.classList.add('hidden');
+                undoBtn.classList.remove('hidden');
+                clockIcon.classList.add('hidden');
+            };
+
+            // Undo functionality
+            undoBtn.onclick = () => {
+                statusBadge.textContent = 'Pending';
+                statusBadge.className = 'inline-block mt-1 text-xs font-medium text-blue-700 bg-blue-100 px-2 py-0.5 rounded';
+                approveBtn.classList.remove('hidden');
+                rejectBtn.classList.remove('hidden');
+                createMeetingBtn.classList.remove('hidden');
+                downloadBtn.classList.remove('hidden');
+                undoBtn.classList.add('hidden');
+                clockIcon.classList.remove('hidden');
+            };
+
+            // Download CV functionality
+            downloadBtn.onclick = () => {
+                // Get the applicant's name from the card
+                const applicantName = card.querySelector('h3').textContent;
+                // Create a temporary link element
+                const link = document.createElement('a');
+                // Set the download attribute and filename
+                link.download = `${applicantName.toLowerCase().replace(/\s+/g, '-')}-cv.pdf`;
+                // For demo purposes, we'll use a placeholder URL
+                // In a real application, this would be the actual CV file URL
+                link.href = '#';
+                // Simulate click
+                link.click();
+                // Show a notification (you can customize this)
+                alert('CV download started');
+            };
+
+            // Remove functionality
+            const removeBtn = card.querySelector('.remove-btn');
+            removeBtn.onclick = () => {
+                if (confirm('Are you sure you want to remove this applicant?')) {
+                    // Add a fade-out animation
+                    card.style.transition = 'opacity 0.3s ease';
+                    card.style.opacity = '0';
+                    // Remove the card after animation
+                    setTimeout(() => {
+                        card.remove();
+                    }, 300);
+                }
+            };
+        });
+
+        //scroll top button appears when you scroll down
+        const scrollButton = document.getElementById('scrollButton');
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 100) {
+                scrollButton.classList.remove('opacity-0', 'pointer-events-none');
+            } else {
+                scrollButton.classList.add('opacity-0', 'pointer-events-none');
+            }
+        });
+    </script>
+</body>
+
+</html>
