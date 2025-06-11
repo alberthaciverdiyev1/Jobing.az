@@ -7,6 +7,8 @@
     <title>Jobing - Login & Register</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Add Google Sign-In API -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 
 <body class="bg-gray-100 min-h-screen">
@@ -61,6 +63,35 @@
                             Login
                         </button>
                     </form>
+
+                    <div class="mt-4">
+                        <div class="relative">
+                            <div class="absolute inset-0 flex items-center">
+                                <div class="w-full border-t border-gray-300"></div>
+                            </div>
+                            <div class="relative flex justify-center text-sm">
+                                <span class="px-2 bg-white text-gray-500">Or continue with</span>
+                            </div>
+                        </div>
+
+                        <div class="mt-4">
+                            <div id="g_id_onload"
+                                data-client_id="45717110554-35n2ascfj8g2mpciapk0bofqjjaups8p.apps.googleusercontent.com"
+                                data-context="signin"
+                                data-callback="handleGoogleSignIn"
+                                data-auto_prompt="false"
+                                data-error_callback="handleGoogleError">
+                            </div>
+                            <div class="g_id_signin w-full"
+                                data-type="standard"
+                                data-size="large"
+                                data-theme="outline"
+                                data-text="signin_with"
+                                data-shape="rectangular"
+                                data-logo_alignment="left">
+                            </div>
+                        </div>
+                    </div>
 
                     <div class="mt-6 text-center">
                         <p class="text-gray-600">
@@ -175,6 +206,35 @@
                                     Register now
                                 </button>
                             </form>
+
+                            <div class="mt-4">
+                                <div class="relative">
+                                    <div class="absolute inset-0 flex items-center">
+                                        <div class="w-full border-t border-gray-300"></div>
+                                    </div>
+                                    <div class="relative flex justify-center text-sm">
+                                        <span class="px-2 bg-white text-gray-500">Or continue with</span>
+                                    </div>
+                                </div>
+
+                                <div class="mt-4">
+                                    <div id="g_id_onload_register"
+                                        data-client_id="45717110554-35n2ascfj8g2mpciapk0bofqjjaups8p.apps.googleusercontent.com"
+                                        data-context="signup"
+                                        data-callback="handleGoogleSignUp"
+                                        data-auto_prompt="false"
+                                        data-error_callback="handleGoogleError">
+                                    </div>
+                                    <div class="g_id_signin w-full"
+                                        data-type="standard"
+                                        data-size="large"
+                                        data-theme="outline"
+                                        data-text="signup_with"
+                                        data-shape="rectangular"
+                                        data-logo_alignment="left">
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                         <!-- Employer Form -->
@@ -317,6 +377,64 @@
                 document.getElementById(targetId).classList.remove('hidden');
             });
         });
+
+        // Google Sign-In handler
+        function handleGoogleSignIn(response) {
+            try {
+                // Handle the Google Sign-In response
+                const credential = response.credential;
+                const payload = JSON.parse(atob(credential.split('.')[1]));
+                
+                // Here you would typically send this to your backend
+                console.log('Google Sign-In successful:', payload);
+                
+                // You can access user information like:
+                const email = payload.email;
+                const name = payload.name;
+                const picture = payload.picture;
+                
+                // Redirect to appropriate dashboard based on user type
+                // This should be handled by your backend
+                window.location.href = '/user-dashboard.html';
+            } catch (error) {
+                console.error('Error handling Google Sign-In:', error);
+                alert('An error occurred during sign in. Please try again.');
+            }
+        }
+
+        // Google Sign-Up handler
+        function handleGoogleSignUp(response) {
+            try {
+                // Handle the Google Sign-Up response
+                const credential = response.credential;
+                const payload = JSON.parse(atob(credential.split('.')[1]));
+                
+                // Here you would typically send this to your backend
+                console.log('Google Sign-Up successful:', payload);
+                
+                // You can access user information like:
+                const email = payload.email;
+                const name = payload.name;
+                const picture = payload.picture;
+                
+                // Redirect to appropriate dashboard based on user type
+                // This should be handled by your backend
+                window.location.href = '/user-dashboard.html';
+            } catch (error) {
+                console.error('Error handling Google Sign-Up:', error);
+                alert('An error occurred during sign up. Please try again.');
+            }
+        }
+
+        // Google Error handler
+        function handleGoogleError(error) {
+            console.error('Google Sign-In Error:', error);
+            if (error.type === 'invalid_client') {
+                alert('Google Sign-In is not properly configured. Please contact support.');
+            } else {
+                alert('An error occurred with Google Sign-In. Please try again.');
+            }
+        }
     </script>
 </body>
 
