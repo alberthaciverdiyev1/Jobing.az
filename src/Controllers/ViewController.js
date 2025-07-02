@@ -33,6 +33,14 @@ const ViewController = {
         };
         res.render('Main', view);
     },
+    resumes: async (req, res) => {
+        const view = {
+            title: 'CV-lər',
+            body: "Jobs/Index.ejs",
+            js: "Jobs.js"
+        };
+        res.render('Main', view);
+    },
     blogs: async (req, res) => {
         const view = {
             title: 'Bloqlar',

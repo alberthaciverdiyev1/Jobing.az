@@ -413,3 +413,158 @@ input[type="range"]::-moz-range-thumb {
 .default-html ul li {
   margin: 0.5em 0;
 }
+ .dropdown-menu {
+   opacity: 0;
+   visibility: hidden;
+   transform: translateY(-10px);
+   transition: all 0.3s ease;
+ }
+
+.dropdown:hover .dropdown-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.search-dropdown {
+  display: none;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all 0.3s ease;
+}
+
+.search-dropdown.active {
+  display: block;
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.mobile-menu {
+  transform: translateX(100%);
+  transition: transform 0.3s ease-in-out;
+}
+
+.mobile-menu.active {
+  transform: translateX(0);
+}
+
+@media (min-width: 768px) {
+  .mobile-menu {
+    transform: none;
+  }
+}
+
+/* Mobile dropdown styles */
+@media (max-width: 767px) {
+  .dropdown-menu {
+    position: static !important;
+    transform: none !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: none;
+    width: 100% !important;
+    margin-top: 4px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: none;
+  }
+
+  .dropdown.active .dropdown-menu {
+    display: block;
+  }
+
+  .group-hover\:block {
+    display: none !important;
+  }
+
+  .group.active .group-hover\:block {
+    display: block !important;
+    position: static !important;
+    margin-top: 4px;
+    background: #e9ecef;
+    border-radius: 8px;
+    width: 100% !important;
+    padding-left: 16px;
+    border-left: 3px solid #f8f9fa;
+  }
+
+  /* Third level dropdown styles */
+  .group .group-hover\:block .group-hover\:block {
+    background: #dee2e6;
+    padding-left: 32px;
+    border-left: 3px solid #e9ecef;
+  }
+
+  /* Second level items hover state */
+  .group.active .group-hover\:block a:hover {
+    background: #dee2e6;
+  }
+
+  /* Third level items hover state */
+  .group .group-hover\:block .group-hover\:block a:hover {
+    background: #ced4da;
+  }
+
+  .mobile-menu {
+    width: 300px !important;
+    max-height: 100vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .mobile-menu .flex-col {
+    padding-bottom: 20px;
+  }
+
+  /* Hide the SVG arrow in mobile view */
+  .group>a svg {
+    display: none;
+  }
+
+  /* Adjust the arrow indicator position */
+  .group>a::after {
+    content: '';
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 8px;
+    height: 8px;
+    border-right: 2px solid #6c757d;
+    border-bottom: 2px solid #6c757d;
+    transform: translateY(-50%) rotate(-45deg);
+  }
+
+  .group.active>a::after {
+    transform: translateY(-50%) rotate(45deg);
+  }
+
+  /* Mobile menu item styles */
+  .mobile-menu .dropdown button,
+  .mobile-menu a {
+    padding: 12px 16px;
+    margin: 4px 0;
+    background: #f8f9fa;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+  }
+
+  .mobile-menu .dropdown button:hover,
+  .mobile-menu a:hover {
+    background: #f1f3f5;
+  }
+
+  /* Visual indicators for nested items */
+  .group>a {
+    position: relative;
+  }
+}
+
+/* Blur effect for content outside navbar */
+.blur-background {
+  filter: blur(4px);
+  pointer-events: none;
+  transition: filter 0.3s ease;
+}
