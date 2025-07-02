@@ -74,6 +74,8 @@ router.get('/api/scrape', scrapeController.getData);                            
 router.get('/', viewController.home);
 router.get('/auth', viewController.auth);
 router.get('/vakansiyalar', visitorLogger, viewController.jobs);
+router.get('/resumes',visitorLogger,viewController.resumes)
+
 router.get('/about-us', visitorLogger, viewController.aboutUs);
 router.get('/contact', visitorLogger, viewController.contactUs);
 router.get('/add-job', visitorLogger, viewController.addJob);
