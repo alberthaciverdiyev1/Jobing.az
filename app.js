@@ -1,6 +1,6 @@
 import express from 'express';
 import path from 'path';
-import cron from 'node-cron';
+// import cron from 'node-cron';
 import routes from './src/Routes/Main.js';
 import sequelize from './src/Config/Database.js';
 import loggerMiddleware from './src/Middlewares/Logger.js';
@@ -9,8 +9,8 @@ import sendEmail from './src/Helpers/NodeMailer.js';
 // import i18n from 'i18n';
 import cookieParser from 'cookie-parser';
 import {requestAllSites} from "./src/Helpers/Automation.js";
-import bot, {listenTgCommands, sendTgMessage} from "./src/Helpers/TelegramBot.js";
-import TelegramBot from 'node-telegram-bot-api';
+// import bot, {listenTgCommands, sendTgMessage} from "./src/Helpers/TelegramBot.js";
+// import TelegramBot from 'node-telegram-bot-api';
 
 
 const to = process.env.CRON_MAIL_USER;
@@ -25,7 +25,7 @@ const to = process.env.CRON_MAIL_USER;
 const app = express();
 const port = process.env.PR_PORT || 3000;
 
-bot.on('message', listenTgCommands);
+// bot.on('message', listenTgCommands);
 
 app.set('view engine', 'ejs');
 app.set('views', './src/Views');
@@ -59,13 +59,13 @@ app.use(async (err, req, res, next) => {
 });
 
 
-cron.schedule('0 13 * * 5', async () => {
-    await requestAllSites();
-});
+// cron.schedule('0 13 * * 5', async () => {
+//     await requestAllSites();
+// });
 
-cron.schedule('0 9,16,20 * * *', async () => {
-    await requestAllSites(true);
-});
+// cron.schedule('0 9,16,20 * * *', async () => {
+//     await requestAllSites(true);
+// });
 
 app.listen(port, '0.0.0.0', () => {
     console.log(`Server is running at http://localhost:${port}`);
