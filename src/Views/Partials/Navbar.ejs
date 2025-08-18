@@ -6,11 +6,13 @@
                 <!-- Desktop logo -->
                 <img src="/Images/Static/Logo.png" alt="Logo" class="hidden lg:block w-56 h-12 object-cover">
 
-                    <select id="language" name="language" class="w-14 border-0 rounded">
-                        <option value="en">EN</option>
-                        <option value="az">AZE</option>
-                        <option value="ru">RU</option>
-                    </select>
+                <select id="language" name="language"
+                    class="appearance-none bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer">
+                    <option class="bg-white text-gray-700 hover:bg-blue-100">EN</option>
+                    <option class="bg-white text-gray-700 hover:bg-blue-100">AZE</option>
+                    <option class="bg-white text-gray-700 hover:bg-blue-100">RU</option>
+                </select>
+
 
                 <!-- Mobile logo -->
                 <img src="/Images/Static/LogoMobile.png" alt="Logo Mobile" class="block lg:hidden h-8 object-cover">
@@ -21,18 +23,24 @@
         <!-- Navigation Links -->
         <div class="desktop-menu space-x-4 hidden md:flex">
             <a href="/"
-                class="text-gray-800 font-semibold hover:filled-button-color hover:text-white px-3 py-2 rounded transition duration-300">Home
-                Səhifə</a>
+                class="text-gray-800 font-semibold border-b-2 border-transparent px-3 py-2 rounded hover:text-[#FE8011] hover:border-[#FE8011] transition-colors duration-300">
+                Ana Səhifə
+            </a>
             <a href="/vakansiyalar"
-                class="text-gray-800 font-semibold hover:filled-button-color hover:text-white px-3 py-2 rounded transition duration-300">Vakansiyalar</a>
+                class="text-gray-800 font-semibold border-b-2 border-transparent px-3 py-2 rounded hover:text-[#FE8011] hover:border-[#FE8011] transition-colors duration-300">
+                Vakansiyalar</a>
             <a href="/resumes"
-                class="text-gray-800 font-semibold hover:filled-button-color hover:text-white px-3 py-2 rounded transition duration-300">CV-lər</a>
+                class="text-gray-800 font-semibold border-b-2 border-transparent px-3 py-2 rounded hover:text-[#FE8011] hover:border-[#FE8011] transition-colors duration-300">
+                CV-lər</a>
             <a href="/blogs"
-                class="text-gray-800 font-semibold hover:filled-button-color hover:text-white px-3 py-2 rounded transition duration-300">Bloqlar</a>
+                class="text-gray-800 font-semibold border-b-2 border-transparent px-3 py-2 rounded hover:text-[#FE8011] hover:border-[#FE8011] transition-colors duration-300">
+                Bloqlar</a>
             <a href="/contact"
-                class="text-gray-800 font-semibold hover:filled-button-color hover:text-white px-3 py-2 rounded transition duration-300">Əlaqə</a>
+                class="text-gray-800 font-semibold border-b-2 border-transparent px-3 py-2 rounded hover:text-[#FE8011] hover:border-[#FE8011] transition-colors duration-300">
+                Əlaqə</a>
             <a href="/about-us"
-                class="text-gray-800 font-semibold hover:filled-button-color hover:text-white px-3 py-2 rounded transition duration-300">Haqqımızda</a>
+                class="text-gray-800 font-semibold border-b-2 border-transparent px-3 py-2 rounded hover:text-[#FE8011] hover:border-[#FE8011] transition-colors duration-300">
+                Haqqımızda</a>
 
             <% if (Production(false)) { %>
                 <select id="language" name="language" class="w-14 border rounded">
@@ -42,12 +50,15 @@
                 </select>
                 <% } %>
 
-                <form class="flex flex-row justify-between items-center w-[85px] h-[45px] rotate-180 opacity-100 rounded-[10px] border-2 p-[5px] gap-[5px]">
+                    <form
+                        class="flex flex-row justify-between items-center w-[85px] h-[45px] rotate-180 opacity-100 rounded-[10px] border-[#FE8011] border-2 p-[5px] gap-[5px]"
+                        id="lightDark">
 
-                    <button class="w-[35px] h-[35px] rotate-0 opacity-100 rounded-[10px]" >☀</button>
-                    <button class="w-[35px] h-[35px] rotate-180 opacity-100" >🌙</button>
+                        <button class="w-[35px] h-[35px] rotate-0 opacity-100 rounded-[10px] bg-[#FE8011]"
+                            id="lightButton">☀</button>
+                        <button class="w-[35px] h-[35px] rotate-180 opacity-100" id="darkButton">🌙</button>
 
-                </form>
+                    </form>
 
                     <a href="/add-job"
                         class="filled-button-color text-white px-6 py-2 rounded ml-2 hover:filled-button-color duration-300">Elan
