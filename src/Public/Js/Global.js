@@ -29,12 +29,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
     }
 
 
-document.getElementById("lightButton").onclick = function(event) {
-    event.preventDefault(); // formun submit olmasının qarşısını alır
-    const nav = document.getElementsByTagName("nav")[0];
-    nav.style.backgroundColor = "black";
-
-}
 
 
     // document.getElementById("language").addEventListener('change', function () {
