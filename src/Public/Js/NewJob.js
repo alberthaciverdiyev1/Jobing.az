@@ -148,7 +148,7 @@ async function validateData(data) {
     }
 
     // Validate required fields
-    const requiredFields = ['email', 'username', 'phone', 'experience', 'companyName', 'category', 'city', 'position', 'education'];
+    const requiredFields = ['email', 'companyName', 'position'];
 
     requiredFields.forEach(key => {
         const element = document.getElementById(key);
@@ -184,6 +184,20 @@ async function validateData(data) {
     } else {
         document.getElementById('about-error')?.classList.add('hidden');
         document.querySelector('.form-control-wrapper:has(#aboutJob)')?.classList.remove('!border-red-500');
+    }
+
+    // Salary required (at least one of min or max)
+    const minS = document.getElementById('minSalary');
+    const maxS = document.getElementById('maxSalary');
+    if (!validatedData.minSalary && !validatedData.maxSalary) {
+        minS?.classList.add('border-red-500', '!border-red-500');
+        maxS?.classList.add('border-red-500', '!border-red-500');
+        document.getElementById('salary-error')?.classList.remove('hidden');
+        allValid = false;
+    } else {
+        minS?.classList.remove('border-red-500', '!border-red-500');
+        maxS?.classList.remove('border-red-500', '!border-red-500');
+        document.getElementById('salary-error')?.classList.add('hidden');
     }
 
     return { allValid, validatedData };

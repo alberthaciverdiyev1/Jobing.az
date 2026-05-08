@@ -49,57 +49,56 @@ export function createJobCard(element, compact = false) {
     const title = capitalizeFirstLetter(element.title);
     const company = capitalizeFirstLetter(element.companyName);
     const location = element.location;
+    const logoFallback = company.charAt(0);
 
     if (compact) {
         // Compact version for home page grid
-        return `<div class="job-card" data-original-link="${element.redirectUrl}">
-            <div class="flex items-start gap-4">
-                <div class="w-12 h-12 rounded-xl bg-gray-100 border border-gray-200 flex-shrink-0 overflow-hidden flex items-center justify-center">
-                    <img src="${logoUrl}" alt="${company}" class="w-full h-full object-cover" onerror="this.parentElement.innerHTML='<span class=\\'text-lg font-bold text-gray-400\\'>${company.charAt(0)}</span>'">
+        return `<div class="group bg-white rounded-xl border border-gray-100 p-4 cursor-pointer transition-all duration-200 hover:-translate-y-1 hover:shadow-lg hover:shadow-orange-500/5 hover:border-orange-200" data-original-link="${element.redirectUrl}">
+            <div class="flex items-start gap-3.5">
+                <div class="w-11 h-11 rounded-lg bg-gray-50 border border-gray-100 flex-shrink-0 overflow-hidden flex items-center justify-center">
+                    <img src="${logoUrl}" alt="${company}" class="w-full h-full object-cover" onerror="this.parentElement.innerHTML='<span class=\\'text-sm font-bold text-gray-300\\'>${logoFallback}</span>'">
                 </div>
                 <div class="flex-1 min-w-0">
-                    <h3 class="font-semibold text-gray-900 text-sm leading-snug mb-1 line-clamp-2">${title}</h3>
-                    <p class="text-xs text-gray-500 mb-1">
-                        <i class="fas fa-building mr-1 text-gray-400"></i>${company}
-                    </p>
-                    <div class="flex flex-wrap items-center gap-2 text-xs text-gray-400">
-                        <span><i class="fas fa-calendar-alt mr-0.5 text-gray-300"></i>${postedDate}</span>
-                        <span><i class="fas fa-map-marker-alt mr-0.5 text-gray-300"></i>${location}</span>
+                    <h3 class="font-semibold text-gray-900 text-sm leading-snug mb-0.5 line-clamp-2 group-hover:text-primary-500 transition-colors">${title}</h3>
+                    <p class="text-xs text-gray-400 mb-1">${company}</p>
+                    <div class="flex flex-wrap items-center gap-2.5 text-[11px] text-gray-400">
+                        <span><i class="far fa-calendar mr-0.5"></i>${postedDate}</span>
+                        <span><i class="fas fa-map-marker-alt mr-0.5"></i>${location}</span>
                     </div>
                 </div>
             </div>
-            <div class="flex items-center justify-between mt-3 pt-3 border-t border-gray-50">
-                <span class="job-tag ${element.sourceUrl === 'jobing' ? 'jobing' : 'full-time'}">
+            <div class="flex items-center justify-between mt-3 pt-2.5 border-t border-gray-50">
+                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-medium ${element.sourceUrl === 'jobing' ? 'bg-orange-50 text-orange-700' : 'bg-blue-50 text-blue-700'}">
                     ${element.sourceUrl}
                 </span>
-                ${salaryText ? `<span class="text-sm font-semibold text-gray-900">${salaryText}</span>` : ''}
+                ${salaryText ? `<span class="text-xs font-semibold text-gray-900">${salaryText}</span>` : ''}
             </div>
         </div>`;
     }
 
     // Full version for jobs listing page
-    return `<div class="job-card" data-original-link="${element.redirectUrl}">
+    return `<div class="group bg-white rounded-xl border border-gray-100 p-5 cursor-pointer transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-orange-500/5 hover:border-orange-200" data-original-link="${element.redirectUrl}">
         <div class="flex items-start gap-4">
-            <div class="w-14 h-14 rounded-xl bg-gray-50 border border-gray-200 flex-shrink-0 overflow-hidden flex items-center justify-center">
-                <img src="${logoUrl}" alt="${company}" class="w-full h-full object-cover" onerror="this.parentElement.innerHTML='<span class=\\'text-xl font-bold text-gray-300\\'>${company.charAt(0)}</span>'">
+            <div class="w-14 h-14 rounded-xl bg-gray-50 border border-gray-100 flex-shrink-0 overflow-hidden flex items-center justify-center shadow-sm">
+                <img src="${logoUrl}" alt="${company}" class="w-full h-full object-cover" onerror="this.parentElement.innerHTML='<span class=\\'text-lg font-bold text-gray-300\\'>${logoFallback}</span>'">
             </div>
             <div class="flex-1 min-w-0">
-                <div class="flex items-start justify-between gap-2">
-                    <h3 class="font-semibold text-gray-900 text-base leading-snug mb-1">${title}</h3>
-                    ${salaryText ? `<span class="text-sm font-semibold text-primary-500 whitespace-nowrap flex-shrink-0">${salaryText}</span>` : ''}
+                <div class="flex items-start justify-between gap-3 mb-1">
+                    <div class="min-w-0 flex-1">
+                        <h3 class="font-semibold text-gray-900 text-[15px] leading-snug mb-0.5 group-hover:text-primary-500 transition-colors line-clamp-2">${title}</h3>
+                        <p class="text-sm text-gray-400">${company}</p>
+                    </div>
+                    ${salaryText ? `<span class="text-sm font-bold text-primary-500 whitespace-nowrap flex-shrink-0 mt-0.5">${salaryText}</span>` : ''}
                 </div>
-                <p class="text-sm text-gray-500 mb-2">
-                    <i class="fas fa-building mr-1 text-gray-400"></i>${company}
-                </p>
-                <div class="flex flex-wrap items-center gap-3 text-xs text-gray-400">
-                    <span><i class="fas fa-calendar-alt mr-0.5"></i>${postedDate}</span>
-                    <span><i class="fas fa-map-marker-alt mr-0.5"></i>${location}</span>
+                <div class="flex flex-wrap items-center gap-3 text-xs text-gray-400 mt-2">
+                    <span class="inline-flex items-center gap-1"><i class="far fa-calendar text-gray-300"></i>${postedDate}</span>
+                    <span class="inline-flex items-center gap-1"><i class="fas fa-map-marker-alt text-gray-300"></i>${location}</span>
                 </div>
                 <div class="flex flex-wrap items-center gap-2 mt-3">
-                    <span class="job-tag ${element.sourceUrl === 'jobing' ? 'jobing' : 'full-time'}">
+                    <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-medium ${element.sourceUrl === 'jobing' ? 'bg-orange-50 text-orange-700' : 'bg-blue-50 text-blue-700'}">
                         ${element.sourceUrl}
                     </span>
-                    ${element.isPremium ? '<span class="job-tag" style="background:#fef3c7;color:#92400e;">premium</span>' : ''}
+                    ${element.isPremium ? '<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-medium bg-amber-50 text-amber-700">premium</span>' : ''}
                 </div>
             </div>
         </div>
