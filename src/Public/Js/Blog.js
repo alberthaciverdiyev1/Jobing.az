@@ -35,8 +35,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
                         const formattedDate = `${String(createdAtDate.getMonth() + 1).padStart(2, '0')}.${String(createdAtDate.getDate()).padStart(2, '0')}.${createdAtDate.getFullYear()}`;
 
                         htmlContent += `
-                             <div class="bg-white rounded-xl border border-orange-200 overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300 flex flex-col">
-    <img src="${element.imageUrl}" alt="Blog Image" class="w-full h-48 object-cover">
+                     <div class="bg-white rounded-xl border border-gray-100 overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-0.5 flex flex-col">
+    <img src="${element.imageUrl}" alt="Blog Image" class="w-full h-48 object-cover" onerror="this.onerror=null;this.src='/Images/DefaultCompany.png'">
     <div class="p-5 flex flex-col flex-1">
         <div class="flex items-center justify-between text-sm text-gray-500 mb-2">
             <span class="flex items-center gap-1">
@@ -44,23 +44,17 @@ document.addEventListener("DOMContentLoaded", (event) => {
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3"></path>
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 6a9 9 0 100 18 9 9 0 000-18z"></path>
                 </svg>
-                ${readMinutes} dəq oxuma müddəti
+                ${readMinutes} dəq oxuma
             </span>
         </div>
-        <a href="${'/blogs/' + element.slug}" target="_blank" class="text-xl font-semibold text-gray-900 mb-2">${element.name}</a>
-        <a href="${'/blogs/' + element.slug}" target="_blank" class="text-gray-600 text-sm mb-1 flex-1">${shortDesc}</a>
+        <a href="${'/blogs/' + element.slug}" target="_blank" class="text-lg font-semibold text-gray-900 mb-2 hover:text-primary-500 transition-colors">${element.name}</a>
+        <a href="${'/blogs/' + element.slug}" target="_blank" class="text-gray-500 text-sm mb-4 flex-1 leading-relaxed">${shortDesc}</a>
 
-        <!-- Read More Button (right aligned) -->
-        <div class="flex justify-end mb-4">
-            <a href="${'/blogs/' + element.slug}" target="_blank" class="text-orange-600 hover:text-orange-800 font-medium text-base">Ətraflı oxu →</a>
-        </div>
-
-        <div class="flex items-center justify-between text-sm text-gray-500 mt-auto pt-3 border-t">
+        <div class="flex items-center justify-between text-sm text-gray-400 pt-3 border-t border-gray-100">
             <div class="flex items-center gap-2">
-                <img class="w-6 h-6 rounded-full" src="https://i.postimg.cc/y6ZkqDpx/Whats-App-Image-2025-04-19-at-04-29-43.jpg" alt="Author"/>
-                Zhala Azimli
+                <span>Zhala Azimli</span>
             </div>
-            <span class="flex items-center gap-1">${formattedDate}</span>
+            <span>${formattedDate}</span>
         </div>
     </div>
 </div>
