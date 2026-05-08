@@ -242,7 +242,8 @@ const jobDataController = {
                 title: 'Iş haqqında',
                 body: "Jobs/Details.ejs",
                 data: data,
-                js: 'Details.js'
+                js: 'Details.js',
+                currentPage: 'jobs'
             };
 
 

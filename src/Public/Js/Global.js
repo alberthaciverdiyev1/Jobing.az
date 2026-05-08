@@ -1,45 +1,28 @@
-document.addEventListener("DOMContentLoaded", (event) => {
-    document.querySelectorAll('.desktop-menu a').forEach(link => {
-        if (link.href === window.location.href) {
-            link.classList.add('active');
-        }
-    });
-    document.querySelectorAll('#mobile-menu a').forEach(link => {
-        if (link.href === window.location.href) {
-            link.classList.add('active');
-        }
-    });
+document.addEventListener("DOMContentLoaded", () => {
+    // Mobile menu toggle
+    const menuToggle = document.getElementById("menuToggle");
+    const menuClose = document.getElementById("menuClose");
+    const mobileMenu = document.getElementById("mobile-menu");
+    const menuBackdrop = document.getElementById("menuBackdrop");
 
-    document.getElementById("menuToggle").onclick = function () {
-        document.getElementById("mobile-menu").classList.toggle("open");
-        document.getElementById("menuBackdrop").classList.toggle("open");
-    };
-
-    document.getElementById("menuClose").onclick = function () {
-        document.getElementById("mobile-menu").classList.remove("open");
-        document.getElementById("menuBackdrop").classList.remove("open");
-    };
-
-    document.getElementById("menuBackdrop").onclick = function () {
-        document.getElementById("mobile-menu").classList.remove("open");
-        document.getElementById("menuBackdrop").classList.remove("open");
-    };
-    document.getElementsByClassName("fa-chevron-up").onclick = function () {
-        this.item
+    if (menuToggle && mobileMenu) {
+        menuToggle.onclick = function () {
+            mobileMenu.classList.toggle("open");
+            if (menuBackdrop) menuBackdrop.classList.toggle("open");
+        };
     }
 
+    if (menuClose && mobileMenu) {
+        menuClose.onclick = function () {
+            mobileMenu.classList.remove("open");
+            if (menuBackdrop) menuBackdrop.classList.remove("open");
+        };
+    }
 
-    // document.getElementById("language").addEventListener('change', function () {
-        
-    //     const selectedLanguage = this.value;
-    //     axios.post('/set-lang', { language: selectedLanguage })
-    //         .then(function (response) {
-    //             console.log('Success:', response.data);
-    //             location.reload();
-    //         })
-    //         .catch(function (error) {
-    //             console.error('Error:', error);
-    //         });
-    // });
-
+    if (menuBackdrop && mobileMenu) {
+        menuBackdrop.onclick = function () {
+            mobileMenu.classList.remove("open");
+            menuBackdrop.classList.remove("open");
+        };
+    }
 });
