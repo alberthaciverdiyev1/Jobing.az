@@ -3,6 +3,7 @@ import { createJobCard, noDataCard } from './Helpers.js';
 document.addEventListener('DOMContentLoaded', async () => {
     await Promise.all([getCategories(), getCities(), getEducation(), getExperience()]);
     restoreFilters();
+    setupMobileFilter();
 });
 
 let offset = 0,
@@ -17,21 +18,61 @@ function debounce(func, wait) {
     };
 }
 
-// ========== FILTER TOGGLE ==========
-const filterToggleBtn = document.getElementById('filterToggleBtn');
-const mobileFilterBtn = document.getElementById('mobile-filter-btn');
-const filterPanel = document.getElementById('filterPanel');
+// ========== MOBILE FILTER OVERLAY ==========
+function setupMobileFilter() {
+    const sidebar = document.querySelector('aside');
+    const mobileBtn = document.getElementById('mobile-filter-btn');
+    if (!sidebar || !mobileBtn) return;
 
-function toggleFilterPanel() {
-    filterPanel?.classList.toggle('hidden');
-    if (filterPanel) {
-        const icon = filterToggleBtn?.querySelector('.fa-chevron-down');
-        if (icon) icon.style.transform = filterPanel.classList.contains('hidden') ? '' : 'rotate(180deg)';
+    // Create mobile overlay
+    const overlay = document.createElement('div');
+    overlay.className = 'fixed inset-0 bg-black/40 backdrop-blur-sm z-50 hidden lg:hidden';
+    overlay.id = 'filter-overlay';
+    document.body.appendChild(overlay);
+
+    // Move sidebar into overlay on mobile
+    const closeBtn = document.createElement('button');
+    closeBtn.className = 'absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-lg bg-gray-100 text-gray-500 hover:bg-gray-200 transition-colors';
+    closeBtn.innerHTML = '<i class="fas fa-times"></i>';
+
+    const panel = document.createElement('div');
+    panel.className = 'fixed top-0 left-0 h-full w-[300px] bg-white z-50 overflow-y-auto transform -translate-x-full transition-transform duration-300 lg:hidden';
+    panel.id = 'filter-panel';
+    document.body.appendChild(panel);
+
+    mobileBtn.addEventListener('click', () => {
+        panel.classList.toggle('-translate-x-full');
+        panel.classList.toggle('translate-x-0');
+        overlay.classList.toggle('hidden');
+        document.body.classList.toggle('overflow-hidden');
+    });
+
+    overlay.addEventListener('click', closeMobileFilter);
+    closeBtn.addEventListener('click', closeMobileFilter);
+
+    function closeMobileFilter() {
+        panel.classList.add('-translate-x-full');
+        panel.classList.remove('translate-x-0');
+        overlay.classList.add('hidden');
+        document.body.classList.remove('overflow-hidden');
+    }
+
+    // Clone sidebar content into mobile panel
+    const sidebarContent = sidebar.querySelector('div'); // the filter card
+    if (sidebarContent) {
+        const cloned = sidebarContent.cloneNode(true);
+        cloned.classList.remove('lg:sticky', 'lg:top-28');
+        panel.appendChild(closeBtn);
+        panel.appendChild(cloned);
     }
 }
 
-filterToggleBtn?.addEventListener('click', toggleFilterPanel);
-mobileFilterBtn?.addEventListener('click', toggleFilterPanel);
+// ========== FILTER TOGGLE (mobile) ==========
+const filterToggleBtn = document.getElementById('filterToggleBtn');
+
+filterToggleBtn?.addEventListener('click', () => {
+    document.getElementById('filterPanel')?.classList.toggle('hidden');
+});
 
 // Advanced filter toggle
 document.getElementById('toggleAdvanced')?.addEventListener('click', function () {

@@ -31,43 +31,11 @@
             <span class="text-[10px] font-medium">Bloqlar</span>
         </a>
 
-        <!-- More -->
-        <button id="bottomNavMore"
-                class="flex flex-col items-center justify-center gap-0.5 w-16 py-1 text-gray-400">
-            <i class="fas fa-ellipsis-h text-xl"></i>
-            <span class="text-[10px] font-medium">Daha çox</span>
-        </button>
+        <!-- About -->
+        <a href="/about-us"
+           class="flex flex-col items-center justify-center gap-0.5 w-16 py-1 <%= currentPage === 'about' ? 'text-primary-500' : 'text-gray-400' %>">
+            <i class="fas fa-circle-info text-xl"></i>
+            <span class="text-[10px] font-medium">Haqqında</span>
+        </a>
     </div>
 </nav>
-
-<script>
-(function() {
-    const moreBtn = document.getElementById('bottomNavMore');
-    const menuToggle = document.getElementById('menuToggle');
-    const mobileMenu = document.getElementById('mobile-menu');
-    const menuBackdrop = document.getElementById('menuBackdrop');
-
-    if (moreBtn && mobileMenu) {
-        moreBtn.addEventListener('click', function() {
-            mobileMenu.classList.toggle('open');
-            if (menuBackdrop) menuBackdrop.classList.toggle('open');
-        });
-    }
-
-    // Close mobile menu when a link inside it is clicked
-    if (mobileMenu) {
-        mobileMenu.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', function() {
-                mobileMenu.classList.remove('open');
-                if (menuBackdrop) menuBackdrop.classList.remove('open');
-            });
-        });
-    }
-
-    // Add safe area padding for iPhone X+ notch
-    const nav = document.querySelector('.safe-area-bottom');
-    if (nav && CSS.supports('padding-bottom', 'env(safe-area-inset-bottom)')) {
-        nav.style.paddingBottom = 'env(safe-area-inset-bottom)';
-    }
-})();
-</script>
