@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run *)",
+      "Bash(timeout 10 node app.js)",
+      "Bash(curl -s http://localhost:3000)",
+      "Bash(curl -s http://localhost:3000/vakansiyalar)",
+      "Bash(timeout 8 node app.js)",
+      "Bash(timeout 6 node app.js)",
+      "Bash(curl -s http://localhost:3000/add-job)"
+    ]
+  }
+}

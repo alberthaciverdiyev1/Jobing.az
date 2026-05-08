@@ -11,9 +11,9 @@ const ViewController = {
     home: async (req, res) => {
         const view = {
             title: 'Ana Səhifə',
-            body: "Home/NewHome.ejs",
-            // body: "Home/Index.ejs",
-            js: "Home.js"
+            body: "Home/Index.ejs",
+            js: "Home.js",
+            currentPage: 'home'
         };
         res.render('Main', view);
     },
@@ -21,7 +21,8 @@ const ViewController = {
         const view = {
             title: 'Auth',
             body: "Auth/Index.ejs",
-            js: "Auth.js"
+            js: "Auth.js",
+            currentPage: 'auth'
         };
         res.render('Main', view);
     },
@@ -29,7 +30,8 @@ const ViewController = {
         const view = {
             title: 'Vakansiyalar',
             body: "Jobs/Index.ejs",
-            js: "Jobs.js"
+            js: "Jobs.js",
+            currentPage: 'jobs'
         };
         res.render('Main', view);
     },
@@ -37,7 +39,8 @@ const ViewController = {
         const view = {
             title: 'CV-lər',
             body: "Jobs/Index.ejs",
-            js: "Jobs.js"
+            js: "Jobs.js",
+            currentPage: 'resumes'
         };
         res.render('Main', view);
     },
@@ -45,7 +48,8 @@ const ViewController = {
         const view = {
             title: 'Bloqlar',
             body: "Blog/List.ejs",
-            js: "Blog.js"
+            js: "Blog.js",
+            currentPage: 'blogs'
         };
         res.render('Main', view);
     },
@@ -57,17 +61,18 @@ const ViewController = {
             title: blog.name,
             body: 'Blog/Details.ejs',
             js: 'Blog.js',
+            currentPage: 'blogs',
             blog: blog
         };
         res.render('Main', view);
-
     },
 
     aboutUs: async (req, res) => {
         const view = {
             title: 'Haqqımızda',
             body: "AboutUs/Index.ejs",
-            js: null
+            js: null,
+            currentPage: 'about'
         };
         res.render('Main', view);
     },
@@ -75,7 +80,8 @@ const ViewController = {
         const view = {
             title: 'Tez-tez verilən suallar',
             body: "AboutUs/Faq.ejs",
-            js: null
+            js: null,
+            currentPage: 'faq'
         };
         res.render('Main', view);
     },
@@ -83,7 +89,8 @@ const ViewController = {
         const view = {
             title: 'Bizimlə Əlaqə',
             body: "ContactUs/Index.ejs",
-            js: 'ContactUs.js'
+            js: 'ContactUs.js',
+            currentPage: 'contact'
         };
         res.render('Main', view);
     },
@@ -91,15 +98,14 @@ const ViewController = {
         const view = {
             title: 'Yeni vakansiya',
             body: "Jobs/Add.ejs",
-            js: 'NewJob.js'
+            js: 'NewJob.js',
+            currentPage: 'add-job'
         };
         res.render('Main', view);
     },
 
-
     education: (req, res) => {
         const educationData = Enums.Education;
-
         res.status(200).json(educationData);
     },
     experience: (req, res) => {
@@ -109,16 +115,14 @@ const ViewController = {
     sendMail: async (req, res) => {
         const response = await sendEmail(req.body.data);
         res.status(200).json({status: response.status, message: response.message});
-
     },
     statistics: async (req, res) => {
-        const company = await CompanyService.count()
-        const vacancy = await JobDataService.count()
-        const visitor = await VisitorService.count(30)
-        const dailyVisitor = await VisitorService.dailyCount()
-        const totalVisitor = await VisitorService.count(365)
+        const company = await CompanyService.count();
+        const vacancy = await JobDataService.count();
+        const visitor = await VisitorService.count(30);
+        const dailyVisitor = await VisitorService.dailyCount();
+        const totalVisitor = await VisitorService.count(365);
         res.status(200).json({status: 200, message: "", data: {company, vacancy, visitor, totalVisitor, dailyVisitor}});
-
     }
 };
 

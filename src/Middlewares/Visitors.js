@@ -24,8 +24,8 @@ const visitorLogger = async (req, res, next) => {
 
         next();
     } catch (error) {
-        console.error("Error logging visitor:", error);
-        next(error);
+        console.error("Error logging visitor:", error.message);
+        next();
     }
 };
 

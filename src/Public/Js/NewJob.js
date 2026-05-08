@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', async () => {
-    await Promise.all([getCategories(), getCities(), getEducation(), getExperience()
-    ]);
+    await Promise.all([getCategories(), getCities(), getEducation(), getExperience()]);
     alertify.set('notifier', 'position', 'top-right');
+    setupFileUpload();
 });
 let editorRequirements = null;
 let editorAboutJob = null;
@@ -21,7 +21,6 @@ ClassicEditor
             'indent',
             'outdent'
         ],
-
     }).then(editor => {
         editorRequirements = editor;
     })
@@ -49,39 +48,51 @@ ClassicEditor
         console.error(error);
     });
 
-async function getCategories() {
-    await axios.get('/api/categories', {
-        params: { website: "BossAz" }
-    }).then(res => {
-        let h = '<option value="" disabled selected>Kategoriyanı seçin</option>';
-        if (res.status === 200) {
-            res.data.forEach(element => {
-                h += ` <option value=${element.localCategoryId}>${element.categoryName}</option>`
-                document.getElementById("category").innerHTML = h;
-            });
-        }
-    }).catch(error => {
-        console.error("Error fetching categories:", error);
-    });
+function setupFileUpload() {
+    const fileInput = document.getElementById('companyImage');
+    const fileLabel = fileInput?.previousElementSibling;
+    if (!fileInput || !fileLabel) return;
 
+    fileInput.addEventListener('change', function() {
+        if (this.files && this.files[0]) {
+            const name = this.files[0].name;
+            const textEl = fileLabel.querySelector('p:first-child');
+            const subEl = fileLabel.querySelector('p:last-child');
+            if (textEl) textEl.textContent = name;
+            if (subEl) subEl.textContent = (this.files[0].size / 1024).toFixed(1) + ' KB';
+            fileLabel.classList.add('!border-primary-500', '!bg-primary-50/30');
+        }
+    });
 }
+
+async function getCategories() {
+    await axios.get('/api/categories', { params: { website: "BossAz" } })
+        .then(res => {
+            let h = '<option value="" disabled selected>Kategoriyanı seçin</option>';
+            if (res.status === 200) {
+                res.data.forEach(element => {
+                    h += `<option value="${element.localCategoryId}">${element.categoryName}</option>`;
+                });
+                document.getElementById("category").innerHTML = h;
+            }
+        }).catch(error => {
+            console.error("Error fetching categories:", error);
+        });
+}
+
 async function getCities() {
-    await axios.get('/api/cities', {
-        params: { site: "BossAz" }
-    })
+    await axios.get('/api/cities', { params: { site: "BossAz" } })
         .then(res => {
             if (res.status === 200) {
                 let h = '<option value="" disabled selected>Şəhəri seçin</option>';
                 res.data.forEach(element => {
-                    h += `<option value=${element.cityId}>${element.name}</option>`
-                })
+                    h += `<option value="${element.cityId}">${element.name}</option>`;
+                });
                 document.getElementById("city").innerHTML = h;
             }
-        })
-        .catch(error => {
+        }).catch(error => {
             console.error("Error fetching cities:", error);
         });
-
 }
 
 async function getEducation() {
@@ -89,37 +100,30 @@ async function getEducation() {
         .then(res => {
             let htmlContent = '<option value="" disabled selected>Təhsili seçin</option>';
             if (res.status === 200) {
-                Object.entries(res.data).forEach((education) => {
-                    htmlContent += `<option value=${education[1]}>${education[0]}</option>`;
+                Object.entries(res.data).forEach(([name, id]) => {
+                    htmlContent += `<option value="${id}">${name}</option>`;
                 });
             }
             document.getElementById("education").innerHTML = htmlContent;
-        })
-        .catch(error => {
-            console.error("Error fetching categories:", error);
+        }).catch(error => {
+            console.error("Error fetching education:", error);
         });
-
 }
-
 
 async function getExperience() {
     await axios.get('/experience')
         .then(res => {
-            let htmlContent = '<option value="" disabled selected>Experience seçin</option>';
+            let htmlContent = '<option value="" disabled selected>Təcrübə səviyyəsini seçin</option>';
             if (res.status === 200) {
-                Object.entries(res.data).forEach((experience) => {
-                    htmlContent += `<option value=${experience[1]}>${experience[0]}</option>`;
+                Object.entries(res.data).forEach(([name, id]) => {
+                    htmlContent += `<option value="${id}">${name}</option>`;
                 });
             }
             document.getElementById("experience").innerHTML = htmlContent;
-
         }).catch(error => {
             console.error("Error fetching experiences:", error);
         });
-
 }
-
-
 
 async function validateData(data) {
     allValid = true;
@@ -135,7 +139,7 @@ async function validateData(data) {
     validatedData.maxAge = validatedData.maxAge > 65 ? 65 : validatedData.maxAge;
     if (validatedData.maxAge < 18) validatedData.maxAge = 18;
 
-    // Swapping logic
+    // Swap if min > max
     if (validatedData.minSalary > validatedData.maxSalary) {
         [validatedData.minSalary, validatedData.maxSalary] = [validatedData.maxSalary, validatedData.minSalary];
     }
@@ -143,33 +147,44 @@ async function validateData(data) {
         [validatedData.minAge, validatedData.maxAge] = [validatedData.maxAge, validatedData.minAge];
     }
 
-    // DOM updates
-    Object.keys(data).forEach((key) => {
-        if (key === "companyImage" || key === "maxAge" || key === "maxSalary" || key === "minSalary") return;
+    // Validate required fields
+    const requiredFields = ['email', 'username', 'phone', 'experience', 'companyName', 'category', 'city', 'position', 'education'];
 
+    requiredFields.forEach(key => {
         const element = document.getElementById(key);
         if (!element) return;
-        if (key === "requirements" && !data[key]) document.getElementById("requirements-error").classList.remove("hidden");
-        if (key === "aboutJob" && !data[key]) document.getElementById("about-error").classList.remove("hidden");
 
-        const errorMessage = element.closest("div").querySelector("span");
+        const errorSpan = element.closest('div')?.parentElement?.querySelector('.error-message') ||
+                          element.parentElement?.parentElement?.querySelector('.error-message');
 
         if (!data[key]) {
-            if (errorMessage) {
-                errorMessage.classList.remove("hidden");
-            }
-            element.classList.add("border-red-500");
+            element.classList.add('border-red-500', '!border-red-500');
+            if (errorSpan) errorSpan.classList.remove('hidden');
             allValid = false;
         } else {
-            if (errorMessage) {
-                errorMessage.classList.add("hidden");
-                if (key === "requirements") document.getElementById("requirements-error").classList.add("hidden");
-                if (key === "aboutJob") document.getElementById("about-error").classList.add("hidden");
-
-            }
-            element.classList.remove("border-red-500");
+            element.classList.remove('border-red-500', '!border-red-500');
+            if (errorSpan) errorSpan.classList.add('hidden');
         }
     });
+
+    // CKEditor fields
+    if (!data.requirements) {
+        document.getElementById('requirements-error')?.classList.remove('hidden');
+        document.querySelector('.form-control-wrapper:has(#requirements)')?.classList.add('!border-red-500');
+        allValid = false;
+    } else {
+        document.getElementById('requirements-error')?.classList.add('hidden');
+        document.querySelector('.form-control-wrapper:has(#requirements)')?.classList.remove('!border-red-500');
+    }
+
+    if (!data.aboutJob) {
+        document.getElementById('about-error')?.classList.remove('hidden');
+        document.querySelector('.form-control-wrapper:has(#aboutJob)')?.classList.add('!border-red-500');
+        allValid = false;
+    } else {
+        document.getElementById('about-error')?.classList.add('hidden');
+        document.querySelector('.form-control-wrapper:has(#aboutJob)')?.classList.remove('!border-red-500');
+    }
 
     return { allValid, validatedData };
 }
@@ -182,7 +197,7 @@ document.getElementById('addJob').addEventListener("click", async () => {
         if (companyImageElement?.files?.[0]) {
             companyImageBase64 = await fileToBase64(companyImageElement.files[0]);
         }
-console.log(companyImageBase64,companyImageElement);
+
         const requirementsEditorData = editorRequirements ? await editorRequirements.getData() : '';
         const aboutJobEditorData = editorAboutJob ? await editorAboutJob.getData() : '';
 
@@ -216,9 +231,27 @@ console.log(companyImageBase64,companyImageElement);
                     const element = document.getElementById(key);
                     if (element) element.value = '';
                 });
-                if (companyImageElement) companyImageElement.value = null;
+                if (companyImageElement) {
+                    companyImageElement.value = null;
+                    // Reset file upload label
+                    const label = companyImageElement.previousElementSibling;
+                    if (label) {
+                        const textEl = label.querySelector('p:first-child');
+                        const subEl = label.querySelector('p:last-child');
+                        if (textEl) textEl.textContent = 'Şəkil seçin';
+                        if (subEl) subEl.textContent = 'PNG, JPG max 5MB';
+                        label.classList.remove('!border-primary-500', '!bg-primary-50/30');
+                    }
+                }
                 if (editorRequirements) editorRequirements.setData('');
                 if (editorAboutJob) editorAboutJob.setData('');
+                // Clear validation states
+                document.querySelectorAll('.border-red-500').forEach(el => {
+                    el.classList.remove('border-red-500', '!border-red-500');
+                });
+                document.querySelectorAll('.error-message').forEach(el => {
+                    el.classList.add('hidden');
+                });
             } else {
                 alertify.error(response.data.message);
             }
@@ -230,70 +263,6 @@ console.log(companyImageBase64,companyImageElement);
         console.error(error);
     }
 });
-// document.getElementById('addJob').addEventListener("click", async () => {
-//     const companyImageElement = document.getElementById("company-image");
-//     let companyImageBase64 = null;
-
-//     if (companyImageElement && companyImageElement.files && companyImageElement.files[0]) {
-//         companyImageBase64 = await fileToBase64(companyImageElement.files[0]);
-//     }
-//     const requirementsEditorData = editorRequirements ? await editorRequirements.getData() : '';
-//     const aboutJobEditorData = editorAboutJob ? await editorAboutJob.getData() : '';
-
-//     data = {
-//         email: document.getElementById("email")?.value.trim(),
-//         username: document.getElementById("username")?.value.trim(),
-//         phone: document.getElementById("phone")?.value.trim(),
-//         experience: document.getElementById("experience")?.value.trim(),
-//         companyName: document.getElementById("companyName")?.value.trim(),
-//         companyImage: companyImageBase64,
-//         category: document.getElementById("category")?.value,
-//         city: document.getElementById("city")?.value,
-//         position: document.getElementById("position")?.value.trim(),
-//         education: document.getElementById("education")?.value,
-//         minSalary: !isNaN(Number(document.getElementById("minSalary")?.value)) ? document.getElementById("minSalary")?.value : 0,
-//         maxSalary: !isNaN(Number(document.getElementById("maxSalary")?.value)) ? document.getElementById("maxSalary")?.value : 0,
-//         minAge: document.getElementById("minAge")?.value,
-//         maxAge: document.getElementById("maxAge")?.value,
-//         requirements: requirementsEditorData.trim(),
-//         aboutJob: aboutJobEditorData.trim(),
-//     };
-
-//     await validateData(data);
-
-//     if (allValid) {
-//         // alertify.success("Məlumat uğurla əlavə edildi!");
-//         axios.post('/api/jobs/add-request', { data: data }).then(async res => {
-
-//             if (res.data.status === 200) {
-//                 alertify.success(res.data.message);
-//                 Object.keys(data).forEach((key) => {
-//                     const element = document.getElementById(key);
-//                     if (element) {
-//                         if (element.tagName === "INPUT" || element.tagName === "TEXTAREA") {
-//                             element.value = "";
-//                         } else if (element.tagName === "SELECT") {
-//                             element.selectedIndex = 0;
-//                         }
-//                     }
-//                 });
-//                 data = {};
-
-//                 if (companyImageElement) companyImageElement.value = null;
-//                 if (editorRequirements) editorRequirements.setData('');
-//                 if (editorAboutJob) editorAboutJob.setData('');
-
-//             } else {
-//                 await validateData(res.data.data);
-//                 data = {};
-//                 alertify.error(res.data.message);
-//             }
-//         });
-
-//     } else {
-//         alertify.error("Zəhmət olmasa bütün məcburi xanaları doldurun!");
-//     }
-// });
 
 function fileToBase64(file) {
     return new Promise((resolve, reject) => {
