@@ -125,6 +125,68 @@ body {
   display: none;
 }
 
+/* ========== ANIMATIONS ========== */
+.animate-stagger > * {
+  opacity: 0;
+  animation: fadeInUp 0.5s ease-out forwards;
+}
+.animate-stagger > *:nth-child(1) { animation-delay: 0ms; }
+.animate-stagger > *:nth-child(2) { animation-delay: 60ms; }
+.animate-stagger > *:nth-child(3) { animation-delay: 120ms; }
+.animate-stagger > *:nth-child(4) { animation-delay: 180ms; }
+.animate-stagger > *:nth-child(5) { animation-delay: 240ms; }
+.animate-stagger > *:nth-child(6) { animation-delay: 300ms; }
+.animate-stagger > *:nth-child(7) { animation-delay: 360ms; }
+.animate-stagger > *:nth-child(8) { animation-delay: 420ms; }
+.animate-stagger > *:nth-child(9) { animation-delay: 480ms; }
+.animate-stagger > *:nth-child(10) { animation-delay: 540ms; }
+.animate-stagger > *:nth-child(11) { animation-delay: 600ms; }
+.animate-stagger > *:nth-child(12) { animation-delay: 660ms; }
+
+/* ========== BACK TO TOP BUTTON ========== */
+#scrollTopBtn {
+  box-shadow: 0 4px 16px rgba(255, 140, 0, 0.35);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 9999;
+}
+#scrollTopBtn:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 8px 24px rgba(255, 140, 0, 0.45);
+}
+#scrollTopBtn:active {
+  transform: scale(0.95);
+}
+#scrollTopBtn.visible {
+  animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+#scrollTopBtn.hidden {
+  animation: popOut 0.3s ease-in forwards;
+}
+
+@keyframes popIn {
+  0% { opacity: 0; transform: scale(0.5) translateY(20px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+@keyframes popOut {
+  0% { opacity: 1; transform: scale(1) translateY(0); }
+  100% { opacity: 0; transform: scale(0.5) translateY(20px); pointer-events: none; }
+}
+
+/* ========== CARD SECTION SPACING ========== */
+#card-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* ========== FILTER OVERLAY (mobile) ========== */
+#filter-overlay {
+  animation: fadeIn 0.2s ease-out;
+}
+#filter-panel {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
 /* ========== PROCESS SECTION ========== */
 .process-section {
   position: relative;
