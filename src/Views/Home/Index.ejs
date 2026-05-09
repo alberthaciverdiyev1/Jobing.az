@@ -1,54 +1,62 @@
 <!-- ============================================ -->
 <!-- HERO SECTION -->
 <!-- ============================================ -->
-<section class="relative overflow-hidden pt-28 pb-16 md:pt-36 md:pb-24 animate-fade-in"
-         style="background: linear-gradient(to bottom, #fff7ed 0%, #f9fafb 50%, #ffffff 100%);">
-    <!-- Background Image -->
-    <div class="absolute inset-0 opacity-[0.08] md:opacity-[0.06] bg-cover bg-center bg-no-repeat"
-         style="background-image: url('/Images/Static/HomeFormBG.png');"></div>
+<section class="relative overflow-hidden pt-28 pb-16 md:pt-36 md:pb-24"
+         style="background: linear-gradient(165deg, #fff7ed 0%, #fffbeb 30%, #f9fafb 60%, #ffffff 100%);">
+    <!-- Decorative Elements -->
+    <div class="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+        <div class="absolute -top-40 -right-40 w-80 h-80 rounded-full bg-primary-500/5 blur-3xl"></div>
+        <div class="absolute -bottom-40 -left-40 w-96 h-96 rounded-full bg-amber-500/5 blur-3xl"></div>
+        <div class="absolute top-1/3 left-1/6 w-4 h-4 rounded-full bg-primary-300/30 animate-pulse-subtle" style="animation-delay: 0s;"></div>
+        <div class="absolute top-1/4 right-1/5 w-3 h-3 rounded-full bg-amber-300/30 animate-pulse-subtle" style="animation-delay: 1s;"></div>
+        <div class="absolute bottom-1/3 right-1/3 w-5 h-5 rounded-full bg-primary-400/20 animate-pulse-subtle" style="animation-delay: 2s;"></div>
+    </div>
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div class="max-w-5xl mx-auto text-center">
-            <!-- Badge -->
-            <div class="inline-flex items-center gap-2 bg-primary-500/10 text-primary-600 text-sm font-medium px-4 py-1.5 rounded-full mb-6">
-                <span class="w-2 h-2 bg-primary-500 rounded-full animate-pulse"></span>
+    <div class="max-w-[1440px] mx-auto px-3 sm:px-4 lg:px-6 relative z-10">
+        <div class="max-w-4xl mx-auto text-center">
+            <!-- Live Badge -->
+            <div class="inline-flex items-center gap-2.5 bg-white shadow-sm border border-primary-100 text-primary-600 text-sm font-medium px-5 py-2 rounded-full mb-6 animate-fade-in-down">
+                <span class="relative flex h-2 w-2">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-primary-500"></span>
+                </span>
                 Azərbaycanda 10,000+ vakansiya
             </div>
 
-            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-gray-900 leading-tight mb-6">
+            <h1 class="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-extrabold text-gray-900 leading-[1.1] tracking-tight mb-6 animate-fade-in-up">
                 Karyeranın yeni
-                <span class="text-primary-500">səhifəsi</span>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary-500 to-amber-500">səhifəsi</span>
             </h1>
 
-            <p class="text-lg sm:text-xl text-gray-500 max-w-2xl mx-auto mb-10">
+            <p class="text-base sm:text-lg lg:text-xl text-gray-500 max-w-2xl mx-auto mb-8 sm:mb-10 animate-fade-in-up" style="animation-delay: 100ms;">
                 Minlərlə iş elanı arasından sənə ən uyğun olanı tap. Yeni karyera imkanlarını kəşf et.
             </p>
 
             <!-- Search Form -->
-            <div class="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl shadow-gray-200/60 p-4 sm:p-6">
+            <div class="bg-white/90 backdrop-blur-md rounded-2xl shadow-xl shadow-gray-200/50 border border-gray-100/80 p-4 sm:p-6 animate-fade-in-up" style="animation-delay: 200ms;">
                 <form action="/vakansiyalar" method="GET" class="flex flex-col sm:flex-row gap-3 sm:gap-4">
                     <div class="flex-1 relative">
-                        <span class="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400">
-                            <i class="fas fa-search text-lg"></i>
+                        <span class="absolute left-4 sm:left-5 top-1/2 -translate-y-1/2 text-gray-400">
+                            <i class="fas fa-search"></i>
                         </span>
                         <input type="text" name="keyword" id="keyword"
                                placeholder="Vəzifə, şirkət və ya şəhər..."
-                               class="w-full pl-14 pr-5 py-4 sm:py-5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all duration-200 text-gray-900 placeholder:text-gray-400 text-base sm:text-lg">
+                               class="w-full pl-11 sm:pl-14 pr-4 py-3.5 sm:py-4 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all duration-200 text-gray-900 placeholder:text-gray-400 text-sm sm:text-base">
                     </div>
-                    <div class="sm:w-56 relative">
-                        <span class="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400">
-                            <i class="fas fa-map-marker-alt text-lg"></i>
+                    <div class="sm:w-56 lg:w-72 relative">
+                        <span class="absolute left-4 sm:left-5 top-1/2 -translate-y-1/2 text-gray-400">
+                            <i class="fas fa-map-marker-alt"></i>
                         </span>
                         <select id="city-select" name="cityId"
-                                class="w-full pl-14 pr-12 py-4 sm:py-5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all duration-200 text-gray-900 appearance-none cursor-pointer text-base sm:text-lg">
+                                class="w-full pl-11 sm:pl-14 pr-10 py-3.5 sm:py-4 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all duration-200 text-gray-900 appearance-none cursor-pointer text-sm sm:text-base">
                             <option value="">Bütün şəhərlər</option>
                         </select>
-                        <span class="absolute right-5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
-                            <i class="fas fa-chevron-down"></i>
+                        <span class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
+                            <i class="fas fa-chevron-down text-xs"></i>
                         </span>
                     </div>
                     <button type="submit"
-                            class="bg-primary-500 hover:bg-primary-600 text-white font-semibold px-10 py-4 sm:py-5 rounded-xl transition-all duration-200 shadow-sm hover:shadow-md flex items-center justify-center gap-2 sm:w-auto text-base sm:text-lg">
+                            class="bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white font-semibold px-8 sm:px-10 py-3.5 sm:py-4 rounded-xl transition-all duration-200 shadow-sm hover:shadow-md hover:shadow-primary-500/20 active:scale-[0.98] flex items-center justify-center gap-2 text-sm sm:text-base">
                         <i class="fas fa-search"></i>
                         <span>Axtar</span>
                     </button>
@@ -56,12 +64,28 @@
             </div>
 
             <!-- Trending Keywords -->
-            <div class="flex flex-wrap items-center justify-center gap-2 mt-6 sm:mt-8 text-sm">
-                <span class="text-gray-400">Populyar:</span>
-                <a href="/vakansiyalar?keyword=Proqramist" class="px-3 py-1.5 bg-white border border-gray-200 rounded-full text-gray-600 hover:border-primary-500 hover:text-primary-500 hover:bg-primary-50/50 transition-all">Proqramist</a>
-                <a href="/vakansiyalar?keyword=Design" class="px-3 py-1.5 bg-white border border-gray-200 rounded-full text-gray-600 hover:border-primary-500 hover:text-primary-500 hover:bg-primary-50/50 transition-all">Dizayner</a>
-                <a href="/vakansiyalar?keyword=Manager" class="px-3 py-1.5 bg-white border border-gray-200 rounded-full text-gray-600 hover:border-primary-500 hover:text-primary-500 hover:bg-primary-50/50 transition-all">Menecer</a>
-                <a href="/vakansiyalar?keyword=Marketinq" class="px-3 py-1.5 bg-white border border-gray-200 rounded-full text-gray-600 hover:border-primary-500 hover:text-primary-500 hover:bg-primary-50/50 transition-all">Marketinq</a>
+            <div class="flex flex-wrap items-center justify-center gap-2 mt-6 sm:mt-8 animate-fade-in-up" style="animation-delay: 300ms;">
+                <span class="text-gray-400 text-xs sm:text-sm">Populyar:</span>
+                <a href="/vakansiyalar?keyword=Proqramist"
+                   class="group inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-gray-200 rounded-full text-xs sm:text-sm text-gray-600 hover:border-primary-500 hover:text-primary-500 hover:bg-primary-50/50 transition-all shadow-sm hover:shadow">
+                    <i class="fas fa-code text-[10px] text-gray-300 group-hover:text-primary-400 transition-colors"></i>
+                    Proqramist
+                </a>
+                <a href="/vakansiyalar?keyword=Design"
+                   class="group inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-gray-200 rounded-full text-xs sm:text-sm text-gray-600 hover:border-primary-500 hover:text-primary-500 hover:bg-primary-50/50 transition-all shadow-sm hover:shadow">
+                    <i class="fas fa-paint-brush text-[10px] text-gray-300 group-hover:text-primary-400 transition-colors"></i>
+                    Dizayner
+                </a>
+                <a href="/vakansiyalar?keyword=Manager"
+                   class="group inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-gray-200 rounded-full text-xs sm:text-sm text-gray-600 hover:border-primary-500 hover:text-primary-500 hover:bg-primary-50/50 transition-all shadow-sm hover:shadow">
+                    <i class="fas fa-chart-line text-[10px] text-gray-300 group-hover:text-primary-400 transition-colors"></i>
+                    Menecer
+                </a>
+                <a href="/vakansiyalar?keyword=Marketinq"
+                   class="group inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-gray-200 rounded-full text-xs sm:text-sm text-gray-600 hover:border-primary-500 hover:text-primary-500 hover:bg-primary-50/50 transition-all shadow-sm hover:shadow">
+                    <i class="fas fa-bullhorn text-[10px] text-gray-300 group-hover:text-primary-400 transition-colors"></i>
+                    Marketinq
+                </a>
             </div>
         </div>
     </div>
@@ -70,21 +94,23 @@
 <!-- ============================================ -->
 <!-- STATS SECTION -->
 <!-- ============================================ -->
-<section class="-mt-8 relative z-20 hidden md:block">
-    <div class="max-w-5xl mx-auto px-4 sm:px-6">
-        <div class="bg-white rounded-2xl shadow-lg shadow-gray-200/50 border border-gray-100 px-8 py-6 grid grid-cols-2 md:grid-cols-4 gap-6">
-            <% const stats = [
-                { id: 'vacancy', value: '0', label: 'Vakansiya', icon: 'fa-briefcase' },
-                { id: 'company', value: '0', label: 'Şirkət', icon: 'fa-building' },
-                { id: 'visitor', value: '0', label: 'Aylıq Ziyarətçi', icon: 'fa-users' },
-                { id: 'totalVisitor', value: '0', label: 'Ümumi Ziyarətçi', icon: 'fa-chart-line' },
-            ]; %>
-            <% stats.forEach(stat => { %>
-                <div class="text-center">
-                    <div class="text-2xl font-bold text-primary-500" id="<%= stat.id %>"><%= stat.value %></div>
-                    <div class="text-xs sm:text-sm text-gray-500 mt-1"><%= stat.label %></div>
-                </div>
-            <% }); %>
+<section class="relative z-20 -mt-6 md:-mt-8">
+    <div class="max-w-[1440px] mx-auto px-3 sm:px-4">
+        <div class="bg-white/95 backdrop-blur-sm rounded-2xl shadow-lg shadow-gray-200/40 border border-gray-100/80 px-4 sm:px-8 py-5 sm:py-6">
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6">
+                <% const stats = [
+                    { id: 'vacancy', value: '0', label: 'Vakansiya' },
+                    { id: 'company', value: '0', label: 'Şirkət' },
+                    { id: 'visitor', value: '0', label: 'Aylıq Ziyarətçi' },
+                    { id: 'totalVisitor', value: '0', label: 'Ümumi Ziyarətçi' },
+                ]; %>
+                <% stats.forEach(stat => { %>
+                    <div class="text-center">
+                        <div class="text-xl sm:text-2xl lg:text-3xl font-bold text-primary-500 leading-none mb-1" id="<%= stat.id %>"><%= stat.value %></div>
+                        <div class="text-[11px] sm:text-sm text-gray-500"><%= stat.label %></div>
+                    </div>
+                <% }); %>
+            </div>
         </div>
     </div>
 </section>
@@ -92,22 +118,23 @@
 <!-- ============================================ -->
 <!-- RECENT JOBS SECTION -->
 <!-- ============================================ -->
-<section class="py-16 sm:py-20 bg-gray-50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<section class="py-16 sm:py-20 bg-gray-50/80">
+    <div class="max-w-[1440px] mx-auto px-3 sm:px-4 lg:px-6">
         <!-- Section Header -->
-        <div class="text-center mb-12">
-            <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-3">
+        <div class="text-center mb-10 sm:mb-14 animate-fade-in-up">
+            <span class="inline-block text-xs font-semibold text-primary-500 bg-primary-50 px-3 py-1 rounded-full mb-4">Son Vakansiyalar</span>
+            <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-3 tracking-tight">
                 Ən Son Vakansiyalar
             </h2>
-            <p class="text-gray-500 text-lg max-w-xl mx-auto">
+            <p class="text-gray-500 text-base sm:text-lg max-w-xl mx-auto">
                 Karyera arzularını reallaşdırmağa buradan başla
             </p>
         </div>
 
         <!-- Job Cards Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-5" id="home-card-section">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5" id="home-card-section">
             <!-- Cards loaded dynamically via JS -->
-            <div class="col-span-full flex items-center justify-center py-20">
+            <div class="col-span-full flex items-center justify-center py-20 animate-fade-in">
                 <div class="flex flex-col items-center gap-3">
                     <div class="w-8 h-8 border-2 border-primary-500/30 border-t-primary-500 rounded-full animate-spin"></div>
                     <span class="text-gray-400 text-sm">Vakansiyalar yüklənir...</span>
@@ -116,11 +143,11 @@
         </div>
 
         <!-- View All Button -->
-        <div class="text-center mt-12">
+        <div class="text-center mt-10 sm:mt-14 animate-fade-in-up">
             <a href="/vakansiyalar"
-               class="inline-flex items-center gap-2 bg-white hover:bg-gray-50 text-gray-700 font-medium px-8 py-3.5 rounded-xl border border-gray-200 transition-all duration-200 shadow-sm hover:shadow-md">
-                Bütün Vakansiyalar
-                <i class="fas fa-arrow-right text-sm"></i>
+               class="group inline-flex items-center gap-2.5 bg-white hover:bg-gray-50 text-gray-700 font-medium px-8 py-3.5 rounded-xl border border-gray-200 transition-all duration-200 shadow-sm hover:shadow-md hover:border-gray-300 active:scale-[0.98]">
+                <span>Bütün Vakansiyalar</span>
+                <i class="fas fa-arrow-right text-sm group-hover:translate-x-0.5 transition-transform"></i>
             </a>
         </div>
     </div>
@@ -129,41 +156,55 @@
 <!-- ============================================ -->
 <!-- HOW IT WORKS SECTION -->
 <!-- ============================================ -->
-<section class="py-16 sm:py-20 bg-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-14 animate-fade-in-up">
-            <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-3">
+<section class="py-16 sm:py-20 bg-gradient-to-b from-white to-gray-50/50 relative overflow-hidden">
+    <!-- Subtle background pattern -->
+    <div class="absolute inset-0 pointer-events-none" aria-hidden="true">
+        <div class="absolute top-1/4 left-0 w-72 h-72 bg-primary-500/3 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-1/4 right-0 w-96 h-96 bg-amber-500/3 rounded-full blur-3xl"></div>
+    </div>
+
+    <div class="max-w-[1440px] mx-auto px-3 sm:px-4 lg:px-6 relative z-10">
+        <div class="text-center mb-14 sm:mb-18 animate-fade-in-up">
+            <span class="inline-block text-xs font-semibold text-primary-500 bg-primary-50 px-4 py-1.5 rounded-full mb-4 border border-primary-100">İşləmə Prinsipi</span>
+            <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-3 tracking-tight">
                 Platforma necə işləyir?
             </h2>
-            <p class="text-gray-500 text-lg max-w-xl mx-auto">
+            <p class="text-gray-500 text-base sm:text-lg max-w-xl mx-auto">
                 Bütün iş imkanları üçün tək ünvan
             </p>
         </div>
 
-        <!-- Mobile: horizontal scroll, Desktop: grid -->
-        <div class="flex md:grid md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 overflow-x-auto snap-x snap-mandatory scrollbar-hide pb-4 md:pb-0 -mx-4 sm:-mx-6 md:mx-0 px-4 sm:px-6 md:px-0"
-             style="-webkit-overflow-scrolling: touch; scroll-snap-type: x mandatory;">
-            <% const steps = [
-                { img: '/Images/Static/WhoWeAre1.png', title: 'Hesab yaratmadan', subtitle: 'axtarış et' },
-                { img: '/Images/Static/WhoWeAre3.png', title: 'Bütün iş elanlarını', subtitle: 'kəşf et' },
-                { img: '/Images/Static/WhoWeAre2.png', title: 'Ən uyğun olanı', subtitle: 'tap' },
-                { img: '/Images/Static/WhoWeAre4.png', title: 'İş elanına', subtitle: 'keçid et' },
-            ]; %>
-            <% steps.forEach((step, i) => { %>
-                <div class="text-center group min-w-[220px] md:min-w-0 snap-start">
-                    <!-- Step Number -->
-                    <div class="w-12 h-12 rounded-full bg-primary-50 text-primary-500 font-bold text-lg flex items-center justify-center mx-auto mb-6 group-hover:bg-primary-500 group-hover:text-white transition-all duration-300">
-                        <%= i + 1 %>
+        <!-- Steps: desktop grid with connection lines -->
+        <div class="relative">
+            <!-- Desktop connector line (hidden on mobile) -->
+            <div class="hidden lg:block absolute top-[72px] left-[calc(12.5%+40px)] right-[calc(12.5%+40px)] h-0.5 bg-gradient-to-r from-primary-200 via-amber-200 to-primary-200"></div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+                <% const steps = [
+                    { img: '/Images/Static/WhoWeAre1.png', title: 'Hesab yaratmadan', subtitle: 'axtarış et', desc: 'Qeydiyyat tələb olunmur, birbaşa axtarışa başla' },
+                    { img: '/Images/Static/WhoWeAre3.png', title: 'Bütün iş elanlarını', subtitle: 'kəşf et', desc: 'Minlərlə vakansiyanı bir platformada topla' },
+                    { img: '/Images/Static/WhoWeAre2.png', title: 'Ən uyğun olanı', subtitle: 'tap', desc: 'Filtrlərlə sənə uyğun işləri asanlıqla tap' },
+                    { img: '/Images/Static/WhoWeAre4.png', title: 'İş elanına', subtitle: 'keçid et', desc: 'Bir kliklə iş elanına müraciət et' },
+                ]; %>
+                <% steps.forEach((step, i) => { %>
+                    <div class="group relative bg-white rounded-2xl border border-gray-100 p-6 sm:p-8 text-center hover:shadow-xl hover:shadow-primary-500/8 hover:border-primary-200/60 transition-all duration-400 hover:-translate-y-1.5 animate-fade-in-up" style="animation-delay: <%= i * 120 %>ms;">
+                        <!-- Step Number Circle -->
+                        <div class="relative mx-auto w-[72px] h-[72px] rounded-full bg-gradient-to-br from-primary-50 to-amber-50 border-2 border-primary-100 flex items-center justify-center mb-6 group-hover:border-primary-300 group-hover:shadow-lg group-hover:shadow-primary-500/15 transition-all duration-300">
+                            <span class="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-br from-primary-500 to-amber-500"><%= i + 1 %></span>
+                        </div>
+
+                        <!-- Icon -->
+                        <div class="w-24 h-24 mx-auto mb-5 flex items-center justify-center">
+                            <img src="<%= step.img %>" alt="<%= step.title %>"
+                                 class="h-[72px] w-auto transition-all duration-500 group-hover:scale-110">
+                        </div>
+
+                        <h4 class="text-lg font-bold text-gray-900 mb-1"><%= step.title %></h4>
+                        <p class="text-primary-500 font-semibold mb-2"><%= step.subtitle %></p>
+                        <p class="text-gray-400 text-xs leading-relaxed"><%= step.desc %></p>
                     </div>
-                    <!-- Icon -->
-                    <div class="w-28 h-28 mx-auto mb-5 flex items-center justify-center">
-                        <img src="<%= step.img %>" alt="<%= step.title %>"
-                             class="h-24 w-auto transition-transform duration-300 group-hover:scale-110">
-                    </div>
-                    <h4 class="text-lg font-semibold text-gray-900"><%= step.title %></h4>
-                    <p class="text-gray-500"><%= step.subtitle %></p>
-                </div>
-            <% }); %>
+                <% }); %>
+            </div>
         </div>
     </div>
 </section>
@@ -171,20 +212,27 @@
 <!-- ============================================ -->
 <!-- CTA SECTION -->
 <!-- ============================================ -->
-<section class="py-16 sm:py-20 bg-gray-50">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <div class="bg-white rounded-2xl shadow-lg shadow-gray-200/50 border border-gray-100 p-8 sm:p-12 lg:p-16">
-            <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
-                İşəgötürənsən?
-            </h2>
-            <p class="text-gray-500 text-lg mb-8 max-w-lg mx-auto">
-                Vakansiyanızı paylaşın, ən uyğun namizədlər sizi tapsın
-            </p>
-            <a href="/add-job"
-               class="inline-flex items-center gap-2 bg-primary-500 hover:bg-primary-600 text-white font-medium px-8 py-3.5 rounded-xl transition-all duration-200 shadow-sm hover:shadow-md">
-                <i class="fas fa-plus-circle"></i>
-                Elan Yerləşdir
-            </a>
+<section class="py-16 sm:py-20 bg-gray-50/80">
+    <div class="max-w-[1000px] mx-auto px-3 sm:px-4 lg:px-6 text-center animate-fade-in-up">
+        <div class="relative overflow-hidden bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 rounded-3xl p-8 sm:p-12 lg:p-16 shadow-2xl">
+            <!-- Decorative elements -->
+            <div class="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-primary-500/10 to-transparent rounded-full -translate-y-1/2 translate-x-1/2"></div>
+            <div class="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-tr from-amber-500/10 to-transparent rounded-full translate-y-1/2 -translate-x-1/2"></div>
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[radial-gradient(ellipse_at_center,_rgba(255,140,0,0.06)_0%,_transparent_70%)]"></div>
+
+            <div class="relative z-10">
+                <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 tracking-tight">
+                    İşəgötürənsən?
+                </h2>
+                <p class="text-gray-300 text-base sm:text-lg mb-8 max-w-lg mx-auto leading-relaxed">
+                    Vakansiyanızı paylaşın, ən uyğun namizədlər sizi tapsın
+                </p>
+                <a href="/add-job"
+                   class="group inline-flex items-center gap-2.5 bg-primary-500 hover:bg-primary-600 text-white font-semibold px-8 sm:px-10 py-3.5 sm:py-4 rounded-xl transition-all duration-200 shadow-lg shadow-primary-500/25 hover:shadow-xl hover:shadow-primary-500/30 active:scale-[0.98]">
+                    <i class="fas fa-plus-circle group-hover:rotate-90 transition-transform duration-300"></i>
+                    Elan Yerləşdir
+                </a>
+            </div>
         </div>
     </div>
 </section>

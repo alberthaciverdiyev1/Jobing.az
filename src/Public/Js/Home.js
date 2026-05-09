@@ -2,117 +2,114 @@ import { createJobCard, noDataCard } from './Helpers.js';
 
 document.addEventListener("DOMContentLoaded", () => {
 
+    // ========== LOAD JOBS ==========
     async function getJobs() {
-        await axios.get('/api/jobs', {
-            params: { 'allJobs': true }
-        }).then(res => {
-            let htmlContent = '';
+        try {
+            const res = await axios.get('/api/jobs', {
+                params: { allJobs: true }
+            });
 
-            if (res.status === 200) {
-                if (res.data.totalCount) {
-                    let data = res.data.jobs.slice(0, 12);
-                    data.forEach(element => {
-                        htmlContent += createJobCard(element, true);
-                    });
-
-                    document.getElementById("home-card-section").innerHTML = htmlContent;
-                } else {
-                    document.getElementById("home-card-section").innerHTML = noDataCard();
-                }
+            if (res.status === 200 && res.data.totalCount) {
+                const data = res.data.jobs.slice(0, 12);
+                const htmlContent = data.map(el => createJobCard(el, true)).join('');
+                document.getElementById("home-card-section").innerHTML = htmlContent;
 
                 document.querySelectorAll('.job-card').forEach(card => {
                     card.addEventListener('click', function () {
                         const originalLink = this.getAttribute('data-original-link');
-                        window.open(originalLink, '_blank');
+                        if (originalLink) window.open(originalLink, '_blank');
                     });
                 });
+            } else {
+                document.getElementById("home-card-section").innerHTML = noDataCard();
             }
-        }).catch(error => {
+        } catch (error) {
             console.error("Error fetching jobs:", error);
-        });
+            document.getElementById("home-card-section").innerHTML = noDataCard();
+        }
     }
 
-    getJobs();
-
+    // ========== LOAD CATEGORIES ==========
     async function getCategories() {
-        let o = `<option value="">Bütün Kateqoriyalar</option>`;
-        await axios.get('/api/categories', {
-            params: { site: "bossAz" }
-        })
-            .then(res => {
-                if (res.status === 200) {
-                    Object.values(res.data).forEach(element => {
-                        o += `<option value="${element.localCategoryId}">${element.categoryName}</option>`
-                    });
-                    document.getElementById("category-select").innerHTML = o;
-                }
-            })
-            .catch(error => {
-                console.error("Error fetching categories:", error);
+        try {
+            const res = await axios.get('/api/categories', {
+                params: { site: "bossAz" }
             });
+            if (res.status === 200) {
+                const select = document.getElementById("category-select");
+                if (!select) return;
+                let html = '<option value="">Bütün Kateqoriyalar</option>';
+                Object.values(res.data).forEach(element => {
+                    html += `<option value="${element.localCategoryId}">${element.categoryName}</option>`;
+                });
+                select.innerHTML = html;
+            }
+        } catch (error) {
+            console.error("Error fetching categories:", error);
+        }
     }
 
-    getCategories();
-
+    // ========== LOAD CITIES ==========
     async function getCities() {
-        let o = `<option value="">Bütün Şəhərlər</option>`;
-
-        await axios.get('/api/cities', {
-            params: { site: "BossAz" }
-        })
-            .then(res => {
-                if (res.status === 200) {
-                    res.data.forEach(element => {
-                        o += `
-                        <option value="${element.cityId}">${element.name}</option>`
-                    })
-                    document.getElementById("city-select").innerHTML = o;
-                }
-            })
-            .catch(error => {
-                console.error("Error fetching cities:", error);
+        try {
+            const res = await axios.get('/api/cities', {
+                params: { site: "BossAz" }
             });
+            if (res.status === 200) {
+                const select = document.getElementById("city-select");
+                if (!select) return;
+                let html = '<option value="">Bütün Şəhərlər</option>';
+                res.data.forEach(element => {
+                    html += `<option value="${element.cityId}">${element.name}</option>`;
+                });
+                select.innerHTML = html;
+            }
+        } catch (error) {
+            console.error("Error fetching cities:", error);
+        }
     }
 
-    getCities();
-
+    // ========== LOAD STATISTICS ==========
     async function getStatistics() {
-        await axios.get('/statistics')
-            .then(res => {
-                if (res.status === 200) {
-                    document.getElementById("vacancy").innerText = res.data.data.vacancy || 0;
-                    document.getElementById("company").innerText = res.data.data.company || 0;
-                    document.getElementById("visitor").innerText = res.data.data.visitor || 0;
-                    document.getElementById("totalVisitor").innerText = res.data.data.totalVisitor || 0;
-                }
-            })
-            .catch(error => {
-                console.error("Error fetching statistics:", error);
-            });
+        try {
+            const res = await axios.get('/statistics');
+            if (res.status === 200) {
+                const stats = ['vacancy', 'company', 'visitor', 'totalVisitor'];
+                stats.forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) {
+                        const val = res.data.data[id] || 0;
+                        el.innerText = val;
+                    }
+                });
+            }
+        } catch (error) {
+            console.error("Error fetching statistics:", error);
+        }
     }
 
-    getStatistics();
-
+    // ========== HERO SEARCH REDIRECT ==========
     document.getElementById("filter-jobs")?.addEventListener("click", () => {
         const categorySelect = document.getElementById('category-select');
         const citySelect = document.getElementById('city-select');
         const keywordInput = document.getElementById('keyword');
 
-        const categoryId = categorySelect?.value || 'all';
-        const cityId = citySelect?.value || 'all';
-        const keyword = keywordInput?.value?.trim().toLowerCase() || '';
+        const categoryId = categorySelect?.value || null;
+        const cityId = citySelect?.value || null;
+        const keyword = keywordInput?.value?.trim() || null;
 
-        const baseUrl = `${window.location.origin}/vakansiyalar`;
-        const params = new URLSearchParams({
-            minSalary: 0,
-            maxSalary: 5000,
-            offset: 0,
-            ...(categoryId && { categoryId }),
-            ...(cityId && { cityId }),
-            ...(keyword && { keyword }),
-        });
+        const params = new URLSearchParams();
+        if (categoryId) params.set('categoryId', categoryId);
+        if (cityId) params.set('cityId', cityId);
+        if (keyword) params.set('keyword', keyword);
 
-        window.location.href = `${baseUrl}?${params.toString()}`;
+        const qs = params.toString();
+        window.location.href = '/vakansiyalar' + (qs ? '?' + qs : '');
     });
 
+    // ========== INIT ==========
+    getJobs();
+    getCategories();
+    getCities();
+    getStatistics();
 });

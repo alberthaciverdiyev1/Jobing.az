@@ -1,24 +1,30 @@
 <!-- Mobile Bottom Navigation (Instagram-style) -->
-<nav class="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 safe-area-bottom">
-    <div class="flex items-center justify-around h-16">
+<nav class="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-lg border-t border-gray-200 safe-area-bottom shadow-[0_-2px_20px_rgba(0,0,0,0.06)]">
+    <div class="flex items-center justify-around h-[68px] px-2">
         <!-- Home -->
         <a href="/"
-           class="flex flex-col items-center justify-center gap-0.5 w-16 py-1 <%= currentPage === 'home' ? 'text-primary-500' : 'text-gray-400' %>">
-            <i class="fas fa-home text-xl"></i>
+           class="flex flex-col items-center justify-center gap-0.5 w-16 py-1 <%= currentPage === 'home' ? 'text-primary-500' : 'text-gray-400 hover:text-gray-600' %> transition-colors">
+            <div class="relative">
+                <i class="fas fa-home text-xl"></i>
+                <% if (currentPage === 'home') { %><span class="absolute -bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-primary-500"></span><% } %>
+            </div>
             <span class="text-[10px] font-medium">Ana Səhifə</span>
         </a>
 
         <!-- Jobs -->
         <a href="/vakansiyalar"
-           class="flex flex-col items-center justify-center gap-0.5 w-16 py-1 <%= currentPage === 'jobs' ? 'text-primary-500' : 'text-gray-400' %>">
-            <i class="fas fa-search text-xl"></i>
+           class="flex flex-col items-center justify-center gap-0.5 w-16 py-1 <%= currentPage === 'jobs' ? 'text-primary-500' : 'text-gray-400 hover:text-gray-600' %> transition-colors">
+            <div class="relative">
+                <i class="fas fa-search text-xl"></i>
+                <% if (currentPage === 'jobs') { %><span class="absolute -bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-primary-500"></span><% } %>
+            </div>
             <span class="text-[10px] font-medium">Vakansiyalar</span>
         </a>
 
         <!-- Add Job (Prominent Center) -->
         <a href="/add-job"
            class="flex flex-col items-center justify-center -mt-4">
-            <div class="w-14 h-14 bg-primary-500 rounded-2xl shadow-lg shadow-primary-500/30 flex items-center justify-center text-white hover:bg-primary-600 transition-colors">
+            <div class="w-14 h-14 bg-gradient-to-br from-primary-500 to-primary-600 rounded-2xl shadow-lg shadow-primary-500/30 flex items-center justify-center text-white hover:scale-105 active:scale-95 transition-all duration-200">
                 <i class="fas fa-plus text-2xl"></i>
             </div>
             <span class="text-[10px] font-medium text-gray-400 mt-1">Elan</span>
@@ -26,15 +32,21 @@
 
         <!-- Blogs -->
         <a href="/blogs"
-           class="flex flex-col items-center justify-center gap-0.5 w-16 py-1 <%= currentPage === 'blogs' ? 'text-primary-500' : 'text-gray-400' %>">
-            <i class="fas fa-newspaper text-xl"></i>
+           class="flex flex-col items-center justify-center gap-0.5 w-16 py-1 <%= currentPage === 'blogs' ? 'text-primary-500' : 'text-gray-400 hover:text-gray-600' %> transition-colors">
+            <div class="relative">
+                <i class="fas fa-newspaper text-xl"></i>
+                <% if (currentPage === 'blogs') { %><span class="absolute -bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-primary-500"></span><% } %>
+            </div>
             <span class="text-[10px] font-medium">Bloqlar</span>
         </a>
 
         <!-- About -->
         <a href="/about-us"
-           class="flex flex-col items-center justify-center gap-0.5 w-16 py-1 <%= currentPage === 'about' ? 'text-primary-500' : 'text-gray-400' %>">
-            <i class="fas fa-circle-info text-xl"></i>
+           class="flex flex-col items-center justify-center gap-0.5 w-16 py-1 <%= currentPage === 'about' ? 'text-primary-500' : 'text-gray-400 hover:text-gray-600' %> transition-colors">
+            <div class="relative">
+                <i class="fas fa-circle-info text-xl"></i>
+                <% if (currentPage === 'about') { %><span class="absolute -bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-primary-500"></span><% } %>
+            </div>
             <span class="text-[10px] font-medium">Haqqında</span>
         </a>
     </div>

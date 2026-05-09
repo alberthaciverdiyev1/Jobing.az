@@ -1,20 +1,20 @@
-<section class="bg-gray-50 min-h-screen pt-24 pb-16">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<section class="bg-gray-50 min-h-screen pt-24 pb-16 md:pb-24">
+    <div class="max-w-[1440px] mx-auto px-3 sm:px-4 lg:px-6">
         <!-- Page Header -->
         <div class="flex items-center justify-between mb-6 animate-fade-in">
             <div>
-                <h1 class="text-3xl font-bold text-gray-900">Vakansiyalar</h1>
-                <p class="text-gray-500 mt-1">Sənə uyğun işi tap</p>
+                <h1 class="text-2xl sm:text-3xl font-bold text-gray-900">Vakansiyalar</h1>
+                <p class="text-gray-500 text-sm sm:text-base mt-1">Sənə uyğun işi tap</p>
             </div>
         </div>
 
         <!-- ============================================ -->
-        <!-- SIDEBAR + CONTENT LAYOUT -->
+        <!-- DESKTOP LAYOUT: SIDEBAR + CONTENT -->
         <!-- ============================================ -->
         <div class="flex flex-col lg:flex-row gap-6">
 
-            <!-- ========== SIDEBAR FILTERS ========== -->
-            <aside class="lg:w-[280px] lg:flex-shrink-0 animate-fade-in-up">
+            <!-- ========== DESKTOP SIDEBAR ========== -->
+            <aside class="hidden lg:block lg:w-[320px] lg:flex-shrink-0 animate-fade-in-up">
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 lg:sticky lg:top-28">
                     <!-- Sidebar Header -->
                     <div class="flex items-center justify-between mb-4 pb-4 border-b border-gray-100">
@@ -24,114 +24,24 @@
                         </h3>
                         <button id="clearFilters" class="text-xs text-gray-400 hover:text-primary-500 transition-colors">Təmizlə</button>
                     </div>
-
-                    <!-- Search -->
-                    <div class="mb-4">
-                        <label class="block text-xs font-medium text-gray-500 mb-1.5">Açar söz</label>
-                        <div class="relative">
-                            <input type="text" id="search"
-                                   placeholder="Vəzifə, şirkət..."
-                                   class="w-full pl-9 pr-3 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all duration-200 placeholder:text-gray-400">
-                            <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
-                        </div>
-                    </div>
-
-                    <!-- Job Type -->
-                    <div class="mb-4">
-                        <label class="block text-xs font-medium text-gray-500 mb-1.5">İş Tipi</label>
-                        <div class="flex gap-2" id="job-type-tabs">
-                            <button class="job-type-btn active flex-1 px-3 py-2 text-xs font-medium rounded-xl bg-primary-500 text-white transition-all" data-type="all">Hamısı</button>
-                            <button class="job-type-btn flex-1 px-3 py-2 text-xs font-medium rounded-xl bg-gray-100 text-gray-600 hover:bg-gray-200 transition-all" data-type="jobing">Jobing</button>
-                        </div>
-                    </div>
-
-                    <!-- Category -->
-                    <div class="mb-4">
-                        <label class="block text-xs font-medium text-gray-500 mb-1.5">Kateqoriya</label>
-                        <div class="relative">
-                            <select id="category-select-filter"
-                                    class="w-full px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all text-gray-900 appearance-none cursor-pointer">
-                                <option value="">Bütün Kateqoriyalar</option>
-                            </select>
-                            <span class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
-                                <i class="fas fa-chevron-down text-xs"></i>
-                            </span>
-                        </div>
-                    </div>
-
-                    <!-- City -->
-                    <div class="mb-4">
-                        <label class="block text-xs font-medium text-gray-500 mb-1.5">Şəhər</label>
-                        <div class="relative">
-                            <select id="city-select-filter"
-                                    class="w-full px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all text-gray-900 appearance-none cursor-pointer">
-                                <option value="">Bütün Şəhərlər</option>
-                            </select>
-                            <span class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
-                                <i class="fas fa-chevron-down text-xs"></i>
-                            </span>
-                        </div>
-                    </div>
-
-                    <!-- Advanced Filters Toggle -->
-                    <div class="mb-4 pt-4 border-t border-gray-100">
-                        <button id="toggleAdvanced"
-                                class="text-xs text-primary-500 hover:text-primary-600 transition-colors flex items-center gap-1 w-full">
-                            <i class="fas fa-plus-circle"></i>
-                            Ətraflı filtrlər
-                        </button>
-                    </div>
-
-                    <!-- Advanced Filters -->
-                    <div id="advancedFilters" class="hidden space-y-4 mb-4">
-                        <!-- Education -->
-                        <div>
-                            <label class="block text-xs font-medium text-gray-500 mb-1.5">Təhsil</label>
-                            <div class="relative">
-                                <select id="education-select"
-                                        class="w-full px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all text-gray-900 appearance-none cursor-pointer">
-                                    <option value="">Bütün təhsil səviyyələri</option>
-                                </select>
-                                <span class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
-                                    <i class="fas fa-chevron-down text-xs"></i>
-                                </span>
-                            </div>
-                        </div>
-                        <!-- Experience -->
-                        <div>
-                            <label class="block text-xs font-medium text-gray-500 mb-1.5">Təcrübə</label>
-                            <div class="relative">
-                                <select id="experience-select"
-                                        class="w-full px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all text-gray-900 appearance-none cursor-pointer">
-                                    <option value="">Bütün təcrübə səviyyələri</option>
-                                </select>
-                                <span class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
-                                    <i class="fas fa-chevron-down text-xs"></i>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Apply Button -->
-                    <button id="applyFiltersBtn"
-                            class="w-full bg-primary-500 hover:bg-primary-600 text-white text-sm font-medium px-5 py-2.5 rounded-xl transition-all shadow-sm">
-                        <i class="fas fa-search mr-1.5"></i>
-                        Tətbiq et
-                    </button>
+                    <!-- Desktop filter content -->
+                    <%- include('../Partials/FilterContent') %>
                 </div>
             </aside>
 
             <!-- ========== JOB LISTINGS ========== -->
             <div class="flex-1 min-w-0">
-                <!-- Results Count & Mobile Filter -->
-                <div class="flex items-center justify-between mb-4">
+                <!-- Results Count & Mobile Filter Button -->
+                <div class="flex items-center justify-between mb-4 animate-fade-in">
                     <p class="text-sm text-gray-500">
                         <span id="job-count">0</span> vakansiya tapıldı
                     </p>
+                    <!-- Mobile Filter Trigger -->
                     <button id="mobile-filter-btn"
-                            class="lg:hidden inline-flex items-center gap-2 text-sm font-medium text-gray-700 bg-white border border-gray-200 px-4 py-2 rounded-xl hover:bg-gray-50 transition-colors shadow-sm">
+                            class="lg:hidden inline-flex items-center gap-2 text-sm font-medium text-gray-700 bg-white border border-gray-200 px-4 py-2.5 rounded-xl hover:bg-gray-50 hover:border-gray-300 transition-all shadow-sm active:scale-95">
                         <i class="fas fa-sliders-h text-primary-500"></i>
                         Filtrlər
+                        <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-primary-500 text-white text-[10px] font-bold" id="active-filter-count">0</span>
                     </button>
                 </div>
 
@@ -144,6 +54,52 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- MOBILE FILTER BOTTOM SHEET -->
+    <!-- ============================================ -->
+    <div id="mobile-filter-overlay" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-[60] hidden lg:!hidden">
+        <!-- Backdrop click zone covers entire screen -->
+        <div id="mobile-filter-backdrop" class="absolute inset-0"></div>
+
+        <!-- Bottom Sheet Panel -->
+        <div id="mobile-filter-sheet"
+             class="absolute bottom-0 left-0 right-0 bg-white rounded-t-3xl shadow-2xl max-h-[88vh] flex flex-col transform translate-y-full transition-transform duration-400 ease-out">
+
+            <!-- Sheet Handle -->
+            <div class="flex justify-center pt-3 pb-1 flex-shrink-0">
+                <div class="w-10 h-1 rounded-full bg-gray-300"></div>
+            </div>
+
+            <!-- Sheet Header -->
+            <div class="flex items-center justify-between px-5 py-3 border-b border-gray-100 flex-shrink-0">
+                <h3 class="font-semibold text-gray-900 flex items-center gap-2">
+                    <i class="fas fa-sliders-h text-primary-500 text-sm"></i>
+                    Filtrlər
+                </h3>
+                <div class="flex items-center gap-3">
+                    <button id="mobile-clear-filters" class="text-xs text-gray-400 hover:text-primary-500 transition-colors">Təmizlə</button>
+                    <button id="mobile-filter-close" class="w-8 h-8 flex items-center justify-center rounded-lg bg-gray-100 text-gray-500 hover:bg-gray-200 transition-colors">
+                        <i class="fas fa-times text-sm"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Sheet Body (scrollable) -->
+            <div class="flex-1 overflow-y-auto p-5 custom-scroll">
+                <%- include('../Partials/FilterContent') %>
+            </div>
+
+            <!-- Sheet Footer: Mobile Apply Button -->
+            <div class="p-4 border-t border-gray-100 flex-shrink-0">
+                <button id="mobile-apply-filters"
+                        class="w-full bg-primary-500 hover:bg-primary-600 text-white font-medium px-5 py-3 rounded-xl transition-all shadow-sm shadow-primary-500/20 active:scale-[0.98]">
+                    <i class="fas fa-search mr-2"></i>
+                    Nəticələri göstər
+                </button>
             </div>
         </div>
     </div>

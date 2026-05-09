@@ -1,27 +1,27 @@
-<nav id="navbar" class="fixed w-full z-50 transition-all duration-300">
-    <div class="max-w-7xl mx-auto flex justify-between items-center py-4 px-4 sm:px-6 lg:px-8">
+<nav id="navbar" class="fixed w-full z-50 transition-all duration-500">
+    <div class="max-w-[1440px] mx-auto flex justify-between items-center py-3 sm:py-4 px-3 sm:px-4 lg:px-6">
         <!-- Logo -->
         <a href="/" class="flex-shrink-0">
-            <img src="/Images/Static/Logo.png" alt="Jobing.az" class="hidden sm:block h-14 w-auto">
+            <img src="/Images/Static/Logo.png" alt="Jobing.az" class="hidden sm:block h-12 lg:h-14 w-auto transition-all duration-300">
             <img src="/Images/Static/LogoMobile.png" alt="Jobing.az" class="block sm:hidden h-8 w-auto">
         </a>
 
         <!-- Desktop Navigation -->
         <div class="hidden md:flex items-center gap-1">
             <a href="/"
-               class="nav-link <%= currentPage === 'home' ? '!text-primary-500 !bg-primary-50/50' : 'text-gray-700 hover:text-primary-500' %>">Ana Səhifə</a>
+               class="nav-link <%= currentPage === 'home' ? '!text-primary-500 !bg-primary-50/50 !font-semibold' : 'text-gray-600 hover:text-primary-500' %>">Ana Səhifə</a>
             <a href="/vakansiyalar"
-               class="nav-link <%= currentPage === 'jobs' ? '!text-primary-500 !bg-primary-50/50' : 'text-gray-700 hover:text-primary-500' %>">Vakansiyalar</a>
+               class="nav-link <%= currentPage === 'jobs' ? '!text-primary-500 !bg-primary-50/50 !font-semibold' : 'text-gray-600 hover:text-primary-500' %>">Vakansiyalar</a>
             <a href="/blogs"
-               class="nav-link <%= currentPage === 'blogs' ? '!text-primary-500 !bg-primary-50/50' : 'text-gray-700 hover:text-primary-500' %>">Bloqlar</a>
+               class="nav-link <%= currentPage === 'blogs' ? '!text-primary-500 !bg-primary-50/50 !font-semibold' : 'text-gray-600 hover:text-primary-500' %>">Bloqlar</a>
             <a href="/about-us"
-               class="nav-link <%= currentPage === 'about' ? '!text-primary-500 !bg-primary-50/50' : 'text-gray-700 hover:text-primary-500' %>">Haqqımızda</a>
+               class="nav-link <%= currentPage === 'about' ? '!text-primary-500 !bg-primary-50/50 !font-semibold' : 'text-gray-600 hover:text-primary-500' %>">Haqqımızda</a>
             <a href="/contact"
-               class="nav-link <%= currentPage === 'contact' ? '!text-primary-500 !bg-primary-50/50' : 'text-gray-700 hover:text-primary-500' %>">Əlaqə</a>
+               class="nav-link <%= currentPage === 'contact' ? '!text-primary-500 !bg-primary-50/50 !font-semibold' : 'text-gray-600 hover:text-primary-500' %>">Əlaqə</a>
 
             <div class="ml-4 pl-4 border-l border-gray-200">
                 <a href="/add-job"
-                   class="inline-flex items-center gap-2 bg-primary-500 hover:bg-primary-600 text-white font-medium px-5 py-2.5 rounded-xl transition-all duration-200 shadow-sm hover:shadow-md">
+                   class="inline-flex items-center gap-2 bg-primary-500 hover:bg-primary-600 text-white font-medium px-5 py-2.5 rounded-xl transition-all duration-200 shadow-sm hover:shadow-md hover:shadow-primary-500/20 active:scale-[0.97]">
                     <i class="fas fa-plus-circle text-sm"></i>
                     Elan Yerləşdir
                 </a>
@@ -38,7 +38,12 @@
             <% } %>
         </div>
 
-        <!-- Mobile spacer (empty) -->
+        <!-- Mobile: Post Job Button -->
+        <a href="/add-job"
+           class="md:hidden inline-flex items-center gap-2 bg-primary-500 hover:bg-primary-600 text-white text-sm font-medium px-4 py-2 rounded-xl transition-all shadow-sm active:scale-95">
+            <i class="fas fa-plus-circle text-xs"></i>
+            <span>Elan</span>
+        </a>
     </div>
 </nav>
 
@@ -49,23 +54,24 @@
     if (!navbar) return;
     const isHome = window.location.pathname === '/';
     const updateNavbar = () => {
-        if (window.scrollY > 60) {
+        if (window.scrollY > 40) {
             navbar.classList.remove('bg-transparent');
-            navbar.classList.add('bg-white/95', 'backdrop-blur-md', 'shadow-sm');
+            navbar.classList.add('bg-white/95', 'backdrop-blur-lg', 'shadow-sm');
+            if (isHome) navbar.classList.add('shadow-[0_1px_3px_rgba(0,0,0,0.06)]');
         } else {
             if (isHome) {
                 navbar.classList.add('bg-transparent');
-                navbar.classList.remove('bg-white/95', 'backdrop-blur-md', 'shadow-sm');
+                navbar.classList.remove('bg-white/95', 'backdrop-blur-lg', 'shadow-sm', 'shadow-[0_1px_3px_rgba(0,0,0,0.06)]');
             } else {
                 navbar.classList.remove('bg-transparent');
-                navbar.classList.add('bg-white/95', 'backdrop-blur-md', 'shadow-sm');
+                navbar.classList.add('bg-white/95', 'backdrop-blur-lg', 'shadow-sm');
             }
         }
     };
     if (isHome) {
         navbar.classList.add('bg-transparent');
     } else {
-        navbar.classList.add('bg-white/95', 'backdrop-blur-md', 'shadow-sm');
+        navbar.classList.add('bg-white/95', 'backdrop-blur-lg', 'shadow-sm');
     }
     window.addEventListener('scroll', updateNavbar, { passive: true });
 })();
