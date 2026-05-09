@@ -27,7 +27,7 @@ export function capitalizeFirstLetter(text) {
 }
 
 /**
- * Premium job card — redesigned from scratch
+ * Modern job card — clean, professional, scannable
  */
 export function createJobCard(element, compact = false) {
     const logoUrl = (element.companyImageUrl && element.companyImageUrl !== "/nologo.png" && !element.companyImageUrl.startsWith('http'))
@@ -49,66 +49,83 @@ export function createJobCard(element, compact = false) {
     const title = capitalizeFirstLetter(element.title);
     const company = capitalizeFirstLetter(element.companyName);
     const location = element.location;
-    const logoFallback = company.charAt(0);
     const defaultImg = "../Images/DefaultCompany.png";
     const imgError = `this.onerror=null;this.src='${defaultImg}'`;
 
+    // Shared meta row: date + location
+    const metaHtml = `<div class="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-gray-400">
+        <span class="inline-flex items-center gap-1.5">
+            <i class="far fa-calendar text-gray-300"></i>${postedDate}
+        </span>
+        <span class="text-gray-200 text-[8px]">|</span>
+        <span class="inline-flex items-center gap-1.5">
+            <i class="fas fa-map-marker-alt text-gray-300"></i>${location || 'Azərbaycan'}
+        </span>
+    </div>`;
+
+    // Source tag
+    const sourceHtml = `<span class="inline-flex items-center px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md text-[10px] sm:text-[11px] font-medium ${element.sourceUrl === 'jobing' ? 'bg-orange-50 text-orange-700 border border-orange-200/50' : 'bg-blue-50 text-blue-700 border border-blue-200/50'}">
+        ${element.sourceUrl}
+    </span>`;
+
+    // Premium badge
+    const premiumHtml = element.isPremium
+        ? `<span class="inline-flex items-center gap-1 px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md text-[10px] sm:text-[11px] font-medium bg-gradient-to-r from-amber-50 to-yellow-50 text-amber-700 border border-amber-200/50"><i class="fas fa-crown text-[9px]"></i> Premium</span>`
+        : '';
+
     if (compact) {
-        // Compact version — for home page grid
-        return `<div class="job-card group bg-white rounded-xl border border-gray-100 p-4 cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-orange-500/5 hover:border-orange-200 animate-fade-in-up" data-original-link="${element.redirectUrl}">
-            <div class="flex items-start gap-3.5">
-                <div class="w-11 h-11 rounded-lg bg-gradient-to-br from-gray-50 to-gray-100 border border-gray-100 flex-shrink-0 overflow-hidden flex items-center justify-center shadow-sm">
+        // ————— COMPACT CARD (homepage grid) —————
+        return `<div class="group bg-white rounded-xl border border-gray-100 p-4 cursor-pointer transition-all duration-300 hover:-translate-y-[3px] hover:shadow-lg hover:shadow-orange-500/8 hover:border-orange-200 active:scale-[0.99] animate-fade-in-up" data-original-link="${element.redirectUrl}">
+            <div class="flex items-start gap-3">
+                <!-- Logo -->
+                <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-gray-50 to-gray-100 border border-gray-100 flex-shrink-0 overflow-hidden flex items-center justify-center shadow-sm">
                     <img src="${logoUrl}" alt="${company}" class="w-full h-full object-cover" onerror="${imgError}">
                 </div>
+                <!-- Content -->
                 <div class="flex-1 min-w-0">
-                    <div class="flex items-start justify-between gap-2">
+                    <div class="flex items-start justify-between gap-2 mb-1">
                         <h3 class="font-semibold text-gray-900 text-sm leading-snug line-clamp-2 group-hover:text-primary-500 transition-colors duration-200">${title}</h3>
-                        ${salaryText ? `<span class="text-xs font-bold text-primary-500 whitespace-nowrap flex-shrink-0">${salaryText}</span>` : ''}
+                        ${salaryText ? `<span class="text-xs font-bold text-primary-500 whitespace-nowrap flex-shrink-0 bg-primary-50/80 px-2 py-0.5 rounded-md">${salaryText}</span>` : ''}
                     </div>
-                    <p class="text-xs text-gray-400 mt-0.5 mb-1.5">${company}</p>
-                    <div class="flex flex-wrap items-center gap-2.5 text-[11px] text-gray-400">
+                    <p class="text-xs text-gray-500 mb-1.5 font-medium">${company}</p>
+                    <div class="flex flex-wrap items-center gap-2 text-[11px] text-gray-400 mb-2">
                         <span><i class="far fa-calendar mr-0.5 text-gray-300"></i>${postedDate}</span>
-                        <span><i class="fas fa-map-marker-alt mr-0.5 text-gray-300"></i>${location}</span>
+                        <span><i class="fas fa-map-marker-alt mr-0.5 text-gray-300"></i>${location || 'Azərbaycan'}</span>
                     </div>
-                    <div class="flex items-center gap-2 mt-2.5 pt-2.5 border-t border-gray-50">
-                        <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-medium ${element.sourceUrl === 'jobing' ? 'bg-orange-50 text-orange-700 border border-orange-200/50' : 'bg-blue-50 text-blue-700 border border-blue-200/50'}">
-                            ${element.sourceUrl}
-                        </span>
+                    <div class="flex items-center gap-1.5 pt-2 border-t border-gray-50">
+                        ${sourceHtml}
+                        ${premiumHtml}
                     </div>
                 </div>
             </div>
         </div>`;
     }
 
-    // Full version — for jobs listing page
-    return `<div class="job-card group bg-white rounded-2xl border border-gray-100 p-5 cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-orange-500/5 hover:border-orange-200/50 animate-fade-in-up" data-original-link="${element.redirectUrl}">
-        <div class="flex gap-4">
-            <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-gray-50 to-gray-100 border border-gray-100 flex-shrink-0 overflow-hidden flex items-center justify-center shadow-sm mt-0.5">
+    // ————— FULL CARD (vacancies listing) —————
+    return `<div class="group bg-white rounded-2xl border border-gray-100 p-5 sm:p-6 cursor-pointer transition-all duration-300 hover:-translate-y-[3px] hover:shadow-xl hover:shadow-orange-500/10 hover:border-orange-200 active:scale-[0.99] animate-fade-in-up" data-original-link="${element.redirectUrl}">
+        <div class="flex gap-4 sm:gap-5">
+            <!-- Logo -->
+            <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-xl bg-gradient-to-br from-gray-50 to-gray-100 border border-gray-100 flex-shrink-0 overflow-hidden flex items-center justify-center shadow-sm mt-0.5">
                 <img src="${logoUrl}" alt="${company}" class="w-full h-full object-cover" onerror="${imgError}">
             </div>
-            <div class="flex-1 min-w-0">
-                <div class="flex items-start justify-between gap-3 mb-1">
-                    <h3 class="font-semibold text-gray-900 text-[15px] leading-snug line-clamp-2 group-hover:text-primary-500 transition-colors duration-200">${title}</h3>
-                    ${salaryText ? `<span class="inline-flex items-center text-sm font-bold text-primary-500 whitespace-nowrap flex-shrink-0 bg-primary-50/60 px-2.5 py-1 rounded-lg">${salaryText}</span>` : ''}
+            <!-- Content -->
+            <div class="flex-1 min-w-0 flex flex-col">
+                <!-- Title + Salary -->
+                <div class="flex items-start justify-between gap-3 mb-1.5">
+                    <h3 class="text-base sm:text-lg font-bold text-gray-900 leading-snug line-clamp-2 group-hover:text-primary-500 transition-colors duration-200 pr-2">${title}</h3>
+                    ${salaryText ? `<span class="inline-flex items-center text-sm font-bold text-primary-500 whitespace-nowrap flex-shrink-0 bg-primary-50/80 px-3 py-1 rounded-lg border border-primary-100">${salaryText}</span>` : ''}
                 </div>
-                <p class="text-sm text-gray-400 flex items-center gap-1.5 mb-2">
+                <!-- Company -->
+                <p class="text-sm text-gray-500 font-medium mb-2 flex items-center gap-1.5">
                     <i class="fas fa-building text-gray-300 text-[10px]"></i>
                     ${company}
                 </p>
-                <div class="flex flex-wrap items-center gap-3 text-xs text-gray-400 mb-3">
-                    <span class="inline-flex items-center gap-1.5">
-                        <i class="far fa-calendar text-gray-300"></i>${postedDate}
-                    </span>
-                    <span class="text-gray-200">|</span>
-                    <span class="inline-flex items-center gap-1.5">
-                        <i class="fas fa-map-marker-alt text-gray-300"></i>${location}
-                    </span>
-                </div>
-                <div class="flex flex-wrap items-center gap-2">
-                    <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-[11px] font-medium ${element.sourceUrl === 'jobing' ? 'bg-gradient-to-r from-orange-50 to-amber-50 text-orange-700 border border-orange-200/50' : 'bg-gradient-to-r from-blue-50 to-indigo-50 text-blue-700 border border-blue-200/50'}">
-                        ${element.sourceUrl}
-                    </span>
-                    ${element.isPremium ? '<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-medium bg-gradient-to-r from-amber-50 to-yellow-50 text-amber-700 border border-amber-200/50"><i class="fas fa-crown text-[9px]"></i> premium</span>' : ''}
+                <!-- Meta -->
+                ${metaHtml}
+                <!-- Tags -->
+                <div class="flex flex-wrap items-center gap-2 mt-3 pt-3 border-t border-gray-50">
+                    ${sourceHtml}
+                    ${premiumHtml}
                 </div>
             </div>
         </div>

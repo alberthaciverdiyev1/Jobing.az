@@ -3,94 +3,66 @@ import { createJobCard, noDataCard } from './Helpers.js';
 document.addEventListener('DOMContentLoaded', async () => {
     await Promise.all([getCategories(), getCities(), getEducation(), getExperience()]);
     restoreFilters();
-    setupMobileFilter();
+    setupMobileFilterSheet();
 });
 
 let offset = 0,
     allJobs = true,
     loading = false;
 
-function debounce(func, wait) {
-    let timeout;
-    return function (...args) {
-        clearTimeout(timeout);
-        timeout = setTimeout(() => func.apply(this, args), wait);
-    };
-}
+// ========== MOBILE FILTER BOTTOM SHEET ==========
+function setupMobileFilterSheet() {
+    const overlay = document.getElementById('mobile-filter-overlay');
+    const sheet = document.getElementById('mobile-filter-sheet');
+    const openBtn = document.getElementById('mobile-filter-btn');
+    const closeBtn = document.getElementById('mobile-filter-close');
+    const backdrop = document.getElementById('mobile-filter-backdrop');
+    const mobileApply = document.getElementById('mobile-apply-filters');
 
-// ========== MOBILE FILTER OVERLAY ==========
-function setupMobileFilter() {
-    const sidebar = document.querySelector('aside');
-    const mobileBtn = document.getElementById('mobile-filter-btn');
-    if (!sidebar || !mobileBtn) return;
+    if (!overlay || !sheet) return;
 
-    // Create mobile overlay
-    const overlay = document.createElement('div');
-    overlay.className = 'fixed inset-0 bg-black/40 backdrop-blur-sm z-50 hidden lg:hidden';
-    overlay.id = 'filter-overlay';
-    document.body.appendChild(overlay);
+    function openSheet() {
+        overlay.classList.remove('hidden');
+        // Trigger reflow before adding translate class for animation
+        requestAnimationFrame(() => {
+            sheet.classList.remove('translate-y-full');
+            sheet.classList.add('translate-y-0');
+        });
+        document.body.classList.add('overflow-hidden');
+    }
 
-    // Move sidebar into overlay on mobile
-    const closeBtn = document.createElement('button');
-    closeBtn.className = 'absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-lg bg-gray-100 text-gray-500 hover:bg-gray-200 transition-colors';
-    closeBtn.innerHTML = '<i class="fas fa-times"></i>';
+    function closeSheet() {
+        sheet.classList.remove('translate-y-0');
+        sheet.classList.add('translate-y-full');
+        document.body.classList.remove('overflow-hidden');
+        // Hide overlay after transition
+        setTimeout(() => {
+            overlay.classList.add('hidden');
+        }, 300);
+    }
 
-    const panel = document.createElement('div');
-    panel.className = 'fixed top-0 left-0 h-full w-[300px] bg-white z-50 overflow-y-auto transform -translate-x-full transition-transform duration-300 lg:hidden';
-    panel.id = 'filter-panel';
-    document.body.appendChild(panel);
+    openBtn?.addEventListener('click', openSheet);
+    closeBtn?.addEventListener('click', closeSheet);
+    backdrop?.addEventListener('click', closeSheet);
 
-    mobileBtn.addEventListener('click', () => {
-        panel.classList.toggle('-translate-x-full');
-        panel.classList.toggle('translate-x-0');
-        overlay.classList.toggle('hidden');
-        document.body.classList.toggle('overflow-hidden');
+    // Mobile apply: trigger filter + close
+    mobileApply?.addEventListener('click', () => {
+        offset = 0;
+        fetchJobs();
+        closeSheet();
     });
 
-    overlay.addEventListener('click', closeMobileFilter);
-    closeBtn.addEventListener('click', closeMobileFilter);
-
-    function closeMobileFilter() {
-        panel.classList.add('-translate-x-full');
-        panel.classList.remove('translate-x-0');
-        overlay.classList.add('hidden');
-        document.body.classList.remove('overflow-hidden');
-    }
-
-    // Clone sidebar content into mobile panel
-    const sidebarContent = sidebar.querySelector('div'); // the filter card
-    if (sidebarContent) {
-        const cloned = sidebarContent.cloneNode(true);
-        cloned.classList.remove('lg:sticky', 'lg:top-28');
-        panel.appendChild(closeBtn);
-        panel.appendChild(cloned);
-    }
+    // Sync mobile clear with desktop clear
+    document.getElementById('mobile-clear-filters')?.addEventListener('click', function () {
+        clearAllFilters();
+        offset = 0;
+        fetchJobs();
+        closeSheet();
+    });
 }
 
-// ========== FILTER TOGGLE (mobile) ==========
-const filterToggleBtn = document.getElementById('filterToggleBtn');
-
-filterToggleBtn?.addEventListener('click', () => {
-    document.getElementById('filterPanel')?.classList.toggle('hidden');
-});
-
-// Advanced filter toggle
-document.getElementById('toggleAdvanced')?.addEventListener('click', function () {
-    const advanced = document.getElementById('advancedFilters');
-    advanced?.classList.toggle('hidden');
-    this.innerHTML = advanced?.classList.contains('hidden')
-        ? '<i class="fas fa-plus-circle"></i> Ətraflı filtrlər'
-        : '<i class="fas fa-minus-circle"></i> Daralt';
-});
-
-// Apply filters
-document.getElementById('applyFiltersBtn')?.addEventListener('click', () => {
-    offset = 0;
-    fetchJobs();
-});
-
-// Clear filters
-document.getElementById('clearFilters')?.addEventListener('click', function () {
+// ========== SHARED FILTER HELPERS ==========
+function clearAllFilters() {
     document.getElementById('search').value = '';
     document.getElementById('category-select-filter').value = '';
     document.getElementById('city-select-filter').value = '';
@@ -108,6 +80,44 @@ document.getElementById('clearFilters')?.addEventListener('click', function () {
         allBtn.classList.remove('bg-gray-100', 'text-gray-600');
         allBtn.classList.add('active', 'bg-primary-500', 'text-white');
     }
+    updateActiveFilterCount();
+}
+
+function updateActiveFilterCount() {
+    const count = [
+        document.getElementById('search')?.value || '',
+        document.getElementById('category-select-filter')?.value || '',
+        document.getElementById('city-select-filter')?.value || '',
+        document.getElementById('education-select')?.value || '',
+        document.getElementById('experience-select')?.value || '',
+    ].filter(v => v !== '').length;
+
+    const badge = document.getElementById('active-filter-count');
+    if (badge) {
+        badge.textContent = count;
+        badge.classList.toggle('hidden', count === 0);
+    }
+}
+
+// ========== DESKTOP FILTER EVENTS ==========
+// Advanced filter toggle
+document.getElementById('toggleAdvanced')?.addEventListener('click', function () {
+    const advanced = document.getElementById('advancedFilters');
+    advanced?.classList.toggle('hidden');
+    this.innerHTML = advanced?.classList.contains('hidden')
+        ? '<i class="fas fa-plus-circle"></i> Ətraflı filtrlər'
+        : '<i class="fas fa-minus-circle"></i> Daralt';
+});
+
+// Apply filters
+document.getElementById('applyFiltersBtn')?.addEventListener('click', () => {
+    offset = 0;
+    fetchJobs();
+});
+
+// Clear filters
+document.getElementById('clearFilters')?.addEventListener('click', function () {
+    clearAllFilters();
     fetchJobs();
 });
 
@@ -144,6 +154,7 @@ async function getCategories() {
                 h += `<option value="${el.localCategoryId}">${el.categoryName}</option>`;
             });
             document.getElementById('category-select-filter').innerHTML = h;
+            updateActiveFilterCount();
         }
     } catch (err) { console.error(err); }
 }
@@ -215,6 +226,7 @@ function restoreFilters() {
     if (cityId) document.getElementById('city-select-filter').value = cityId;
     if (educationId) document.getElementById('education-select').value = educationId;
     if (experienceLevel) document.getElementById('experience-select').value = experienceLevel;
+    updateActiveFilterCount();
     fetchJobs();
 }
 
@@ -240,6 +252,7 @@ async function fetchJobs() {
     };
 
     updateURLParams(filters);
+    updateActiveFilterCount();
 
     if (!offset) showLoader();
 
@@ -298,7 +311,7 @@ function hideLoader() {
 
 function loadMoreBtn() {
     return `<div class="flex items-center justify-center mt-6">
-        <button class="inline-flex items-center gap-2 bg-white hover:bg-gray-50 text-gray-700 font-medium px-6 py-3 rounded-xl border border-gray-200 transition-all shadow-sm hover:shadow-md" id="load-more-btn">
+        <button class="inline-flex items-center gap-2 bg-white hover:bg-gray-50 text-gray-700 font-medium px-6 py-3 rounded-xl border border-gray-200 transition-all shadow-sm hover:shadow-md active:scale-[0.98]" id="load-more-btn">
             Daha Çox <i class="fas fa-chevron-down text-xs"></i>
         </button>
     </div>`;
