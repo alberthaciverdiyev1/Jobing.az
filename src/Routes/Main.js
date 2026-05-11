@@ -275,6 +275,7 @@ router.get('/api/hr/application-counts', authMiddleware.authenticate, authMiddle
 // USER APPLICATION API (user views own applications)
 // ============================================================
 router.get('/api/applications', authMiddleware.authenticate, authMiddleware.authorize('user'), applicationController.getMyApplications);
+router.post('/api/applications', authMiddleware.authenticate, authMiddleware.authorize('user'), applicationController.create);
 router.put('/api/applications/:id/respond', authMiddleware.authenticate, authMiddleware.authorize('user'), applicationController.userRespond);
 
 // ============================================================

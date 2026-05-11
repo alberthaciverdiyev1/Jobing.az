@@ -240,8 +240,8 @@ const jobDataController = {
             const experienceData = Object.entries(Enums.Experience)
                 .filter(([key, value]) => Number(value) === data.experienceId);
 
-            data.education = educationData[0][0];
-            data.experience = experienceData[0][0];
+            data.education = educationData.length > 0 ? educationData[0][0] : null;
+            data.experience = experienceData.length > 0 ? experienceData[0][0] : null;
             const view = {
                 title: 'Iş haqqında',
                 body: "Jobs/Details.ejs",
