@@ -3,12 +3,12 @@
         <!-- Header -->
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8 animate-fade-in-up">
             <div>
-                <h1 class="text-2xl sm:text-3xl font-bold text-gray-900">CV-lər</h1>
-                <p class="text-gray-500 mt-1">İş axtaranların CV-lərinə baxın</p>
+                <h1 class="text-2xl sm:text-3xl font-bold text-gray-900"><%= __('cv.listTitle') %></h1>
+                <p class="text-gray-500 mt-1"><%= __('cv.listSubtitle') %></p>
             </div>
             <div class="flex gap-3">
                 <div class="relative">
-                    <input type="text" id="cv-search" placeholder="CV axtar..." class="pl-9 pr-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 w-full sm:w-64">
+                    <input type="text" id="cv-search" placeholder="<%= __('cv.searchPlaceholder') %>" class="pl-9 pr-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 w-full sm:w-64">
                     <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
                 </div>
             </div>
@@ -19,7 +19,7 @@
             <div class="col-span-full flex items-center justify-center py-20">
                 <div class="flex flex-col items-center gap-3">
                     <div class="w-8 h-8 border-2 border-primary-500/30 border-t-primary-500 rounded-full animate-spin"></div>
-                    <span class="text-gray-400 text-sm">CV-lər yüklənir...</span>
+                    <span class="text-gray-400 text-sm"><%= __('cv.loading') %></span>
                 </div>
             </div>
         </div>

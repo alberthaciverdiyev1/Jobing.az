@@ -3,9 +3,9 @@
 
         <!-- ========== BREADCRUMB ========== -->
         <nav class="flex items-center gap-2 text-sm text-gray-400 mb-6 pt-6 animate-fade-in-down">
-            <a href="/" class="hover:text-primary-500 transition-colors">Ana Səhifə</a>
+            <a href="/" class="hover:text-primary-500 transition-colors"><%= __('jobDetail.breadcrumbHome') %></a>
             <i class="fas fa-chevron-right text-[10px]"></i>
-            <a href="/vakansiyalar" class="hover:text-primary-500 transition-colors">Vakansiyalar</a>
+            <a href="/vakansiyalar" class="hover:text-primary-500 transition-colors"><%= __('jobDetail.breadcrumbJobs') %></a>
             <i class="fas fa-chevron-right text-[10px]"></i>
             <span class="text-gray-600 truncate max-w-[200px] font-medium"><%= data.title %></span>
         </nav>
@@ -54,7 +54,7 @@
                                     <span class="text-gray-200 hidden sm:inline">|</span>
                                     <span class="inline-flex items-center gap-1.5">
                                         <i class="far fa-clock"></i>
-                                        Son müraciət: <%= new Date(new Date(data.postedAt).setDate(new Date(data.postedAt).getDate() + 30)).toLocaleString('az-AZ', { day: '2-digit', month: 'long', year: 'numeric' }) %>
+                                        <%= __('jobDetail.lastDate') %>:<%= new Date(new Date(data.postedAt).setDate(new Date(data.postedAt).getDate() + 30)).toLocaleString('az-AZ', { day: '2-digit', month: 'long', year: 'numeric' }) %>
                                     </span>
                                 </div>
 
@@ -62,7 +62,7 @@
                                 <div class="flex flex-wrap items-center justify-center sm:justify-start gap-2 mt-4">
                                     <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-100">
                                         <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse-subtle"></span>
-                                        Aktiv
+                                        <%= __('jobDetail.active') %>
                                     </span>
                                     <% if (data.education) { %>
                                         <span class="inline-flex items-center px-3 py-1 rounded-lg text-xs font-medium bg-purple-50 text-purple-700 border border-purple-100"><i class="fas fa-graduation-cap mr-1 text-[10px]"></i><%= data.education %></span>
@@ -79,7 +79,7 @@
                                     <% } else { %>
                                         <span class="inline-flex items-center gap-1 px-3 py-1 rounded-lg text-xs font-medium bg-gray-50 text-gray-500 border border-gray-100">
                                             <i class="fas fa-handshake"></i>
-                                            Razılaşma yolu ilə
+                                            <%= __('jobDetail.salaryNegotiable') %>
                                         </span>
                                     <% } %>
                                 </div>
@@ -90,47 +90,47 @@
 
                 <!-- ===== JOB OVERVIEW STRIP ===== -->
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 sm:p-6 animate-fade-in-up" style="animation-delay: 50ms">
-                    <h2 class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-4">Vakansiya haqqında qısa</h2>
+                    <h2 class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-4"><%= __('jobDetail.overview') %></h2>
                     <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
                         <div class="text-center p-3 rounded-xl bg-gray-50/80">
                             <div class="w-9 h-9 mx-auto mb-2 rounded-lg bg-primary-50 flex items-center justify-center text-primary-500">
                                 <i class="fas fa-money-bill-wave text-sm"></i>
                             </div>
-                            <p class="text-xs text-gray-400 mb-0.5">Maaş</p>
+                            <p class="text-xs text-gray-400 mb-0.5"><%= __('jobDetail.salary') %></p>
                             <% if (data.minSalary || data.maxSalary) { %>
                                 <p class="text-sm font-semibold text-gray-900"><%= data.minSalary || '' %><% if (data.minSalary && data.maxSalary) { %>-<% } %><%= data.maxSalary || '' %> ₼</p>
                             <% } else { %>
-                                <p class="text-sm font-semibold text-gray-500">Razılaşma</p>
+                                <p class="text-sm font-semibold text-gray-500"><%= __('jobDetail.salaryNegotiable') %></p>
                             <% } %>
                         </div>
                         <div class="text-center p-3 rounded-xl bg-gray-50/80">
                             <div class="w-9 h-9 mx-auto mb-2 rounded-lg bg-blue-50 flex items-center justify-center text-blue-500">
                                 <i class="fas fa-map-marker-alt text-sm"></i>
                             </div>
-                            <p class="text-xs text-gray-400 mb-0.5">Şəhər</p>
+                            <p class="text-xs text-gray-400 mb-0.5"><%= __('jobDetail.city') %></p>
                             <p class="text-sm font-semibold text-gray-900"><%= data.location %></p>
                         </div>
                         <div class="text-center p-3 rounded-xl bg-gray-50/80">
                             <div class="w-9 h-9 mx-auto mb-2 rounded-lg bg-purple-50 flex items-center justify-center text-purple-500">
                                 <i class="fas fa-graduation-cap text-sm"></i>
                             </div>
-                            <p class="text-xs text-gray-400 mb-0.5">Təhsil</p>
-                            <p class="text-sm font-semibold text-gray-900"><%= data.education ? data.education : 'Tələb yoxdur' %></p>
+                            <p class="text-xs text-gray-400 mb-0.5"><%= __('jobDetail.education') %></p>
+                            <p class="text-sm font-semibold text-gray-900"><%= data.education ? data.education : __('jobDetail.noRequirement') %></p>
                         </div>
                         <div class="text-center p-3 rounded-xl bg-gray-50/80">
                             <div class="w-9 h-9 mx-auto mb-2 rounded-lg bg-emerald-50 flex items-center justify-center text-emerald-500">
                                 <i class="fas fa-briefcase text-sm"></i>
                             </div>
-                            <p class="text-xs text-gray-400 mb-0.5">Təcrübə</p>
-                            <p class="text-sm font-semibold text-gray-900"><%= data.experience ? data.experience : 'Tələb yoxdur' %></p>
+                            <p class="text-xs text-gray-400 mb-0.5"><%= __('jobDetail.experience') %></p>
+                            <p class="text-sm font-semibold text-gray-900"><%= data.experience ? data.experience : __('jobDetail.noRequirement') %></p>
                         </div>
                         <div class="text-center p-3 rounded-xl bg-gray-50/80">
                             <div class="w-9 h-9 mx-auto mb-2 rounded-lg bg-amber-50 flex items-center justify-center text-amber-500">
                                 <i class="fas fa-user text-sm"></i>
                             </div>
-                            <p class="text-xs text-gray-400 mb-0.5">Yaş</p>
+                            <p class="text-xs text-gray-400 mb-0.5"><%= __('jobDetail.age') %></p>
                             <p class="text-sm font-semibold text-gray-900">
-                                <%= data.minAge && data.maxAge ? `${data.minAge}-${data.maxAge}` : data.minAge ? `${data.minAge}+` : data.maxAge ? `-${data.maxAge}` : 'Qeyd olunmayıb' %>
+                                <%= data.minAge && data.maxAge ? `${data.minAge}-${data.maxAge}` : data.minAge ? `${data.minAge}+` : data.maxAge ? `-${data.maxAge}` : __('jobDetail.notSpecified') %>
                             </p>
                         </div>
                     </div>
@@ -143,8 +143,8 @@
                             <i class="fas fa-file-alt text-sm"></i>
                         </div>
                         <div>
-                            <h2 class="text-lg font-bold text-gray-900">Vakansiyanın təsviri</h2>
-                            <p class="text-xs text-gray-400">Vəzifə öhdəlikləri və tələblər</p>
+                            <h2 class="text-lg font-bold text-gray-900"><%= __('jobDetail.description') %></h2>
+                            <p class="text-xs text-gray-400"><%= __('jobDetail.descriptionSub') %></p>
                         </div>
                     </div>
                     <div class="default-html text-gray-700 leading-relaxed text-sm sm:text-base">
@@ -159,22 +159,22 @@
                             <i class="fas fa-briefcase text-sm"></i>
                         </div>
                         <div>
-                            <h2 class="text-lg font-bold text-gray-900">Oxşar Vakansiyalar</h2>
-                            <p class="text-xs text-gray-400">Eyni kateqoriyadan digər elanlar</p>
+                            <h2 class="text-lg font-bold text-gray-900"><%= __('jobDetail.similarJobs') %></h2>
+                            <p class="text-xs text-gray-400"><%= __('jobDetail.similarJobsSub') %></p>
                         </div>
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4" id="home-card-section">
                         <div class="col-span-full flex items-center justify-center py-10">
                             <div class="flex flex-col items-center gap-3">
                                 <div class="w-6 h-6 border-2 border-primary-500/30 border-t-primary-500 rounded-full animate-spin"></div>
-                                <span class="text-gray-400 text-sm">Yüklənir...</span>
+                                <span class="text-gray-400 text-sm"><%= __('common.loading') %></span>
                             </div>
                         </div>
                     </div>
                     <div class="text-center mt-6 pt-4 border-t border-gray-50">
                         <a href="/vakansiyalar"
                            class="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl border border-gray-200 text-sm font-medium text-gray-600 hover:text-primary-500 hover:border-primary-200 hover:bg-primary-50/30 transition-all duration-200">
-                            Bütün Vakansiyalar
+                            <%= __('jobDetail.viewAll') %>
                             <i class="fas fa-arrow-right text-xs"></i>
                         </a>
                     </div>
@@ -186,13 +186,13 @@
                         <button onclick="openApplyModal()"
                            class="flex-1 inline-flex items-center justify-center gap-2 bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white font-medium px-7 py-3.5 rounded-xl transition-all duration-200 shadow-sm hover:shadow-md active:scale-[0.98]">
                             <i class="fas fa-paper-plane"></i>
-                            Müraciət Et
+                            <%= __('jobDetail.apply') %>
                         </button>
                     <% } else if (typeof user === 'undefined' || !user) { %>
                         <a href="/auth"
                            class="flex-1 inline-flex items-center justify-center gap-2 bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white font-medium px-7 py-3.5 rounded-xl transition-all duration-200 shadow-sm hover:shadow-md active:scale-[0.98]">
                             <i class="fas fa-paper-plane"></i>
-                            Müraciət Et
+                            <%= __('jobDetail.apply') %>
                         </a>
                     <% } %>
                     <% if (data.phone) { %>
@@ -224,7 +224,7 @@
                                     <h3 class="font-semibold text-gray-900 truncate"><%= data.companyName %></h3>
                                     <a href="/vakansiyalar?keyword=<%= data.companyName %>"
                                        class="text-sm text-primary-500 hover:text-primary-600 transition-colors">
-                                        Şirkətin bütün vakansiyaları →
+                                        <%= __('jobDetail.companyJobs') %> →
                                     </a>
                                 </div>
                             </div>
@@ -232,47 +232,47 @@
                             <!-- Detail list -->
                             <ul class="space-y-3 mt-4">
                                 <li class="flex items-center justify-between">
-                                    <span class="text-sm text-gray-400 flex items-center gap-2"><i class="fas fa-tag text-gray-300 w-3.5"></i>Kategoriya</span>
+                                    <span class="text-sm text-gray-400 flex items-center gap-2"><i class="fas fa-tag text-gray-300 w-3.5"></i><%= __('jobDetail.sidebarCategory') %></span>
                                     <span class="text-sm font-medium text-gray-900"><%= data.category %></span>
                                 </li>
                                 <li class="flex items-center justify-between">
-                                    <span class="text-sm text-gray-400 flex items-center gap-2"><i class="fas fa-money-bill-wave text-gray-300 w-3.5"></i>Maaş</span>
+                                    <span class="text-sm text-gray-400 flex items-center gap-2"><i class="fas fa-money-bill-wave text-gray-300 w-3.5"></i><%= __('jobDetail.salary') %></span>
                                     <% if (data.minSalary || data.maxSalary) { %>
                                         <span class="text-sm font-semibold text-primary-500">
                                             <%= data.minSalary || '' %><% if (data.minSalary && data.maxSalary) { %> - <% } %><%= data.maxSalary || '' %>
                                             <i class="fa-solid fa-manat-sign text-[10px]"></i>
                                         </span>
                                     <% } else { %>
-                                        <span class="text-sm text-gray-500">Razılaşma yolu ilə</span>
+                                        <span class="text-sm text-gray-500"><%= __('jobDetail.salaryNegotiable') %></span>
                                     <% } %>
                                 </li>
                                 <li class="flex items-center justify-between">
-                                    <span class="text-sm text-gray-400 flex items-center gap-2"><i class="fas fa-map-marker-alt text-gray-300 w-3.5"></i>Şəhər</span>
+                                    <span class="text-sm text-gray-400 flex items-center gap-2"><i class="fas fa-map-marker-alt text-gray-300 w-3.5"></i><%= __('jobDetail.city') %></span>
                                     <span class="text-sm font-medium text-gray-900"><%= data.location %></span>
                                 </li>
                                 <li class="flex items-center justify-between">
-                                    <span class="text-sm text-gray-400 flex items-center gap-2"><i class="fas fa-graduation-cap text-gray-300 w-3.5"></i>Təhsil</span>
+                                    <span class="text-sm text-gray-400 flex items-center gap-2"><i class="fas fa-graduation-cap text-gray-300 w-3.5"></i><%= __('jobDetail.education') %></span>
                                     <span class="text-sm font-medium text-gray-900"><%= data.education ? data.education : '-' %></span>
                                 </li>
                                 <li class="flex items-center justify-between">
-                                    <span class="text-sm text-gray-400 flex items-center gap-2"><i class="fas fa-briefcase text-gray-300 w-3.5"></i>Təcrübə</span>
+                                    <span class="text-sm text-gray-400 flex items-center gap-2"><i class="fas fa-briefcase text-gray-300 w-3.5"></i><%= __('jobDetail.experience') %></span>
                                     <span class="text-sm font-medium text-gray-900"><%= data.experience ? data.experience : '-' %></span>
                                 </li>
                                 <% if (data.minAge || data.maxAge) { %>
                                 <li class="flex items-center justify-between">
-                                    <span class="text-sm text-gray-400 flex items-center gap-2"><i class="fas fa-user text-gray-300 w-3.5"></i>Yaş</span>
+                                    <span class="text-sm text-gray-400 flex items-center gap-2"><i class="fas fa-user text-gray-300 w-3.5"></i><%= __('jobDetail.age') %></span>
                                     <span class="text-sm font-medium text-gray-900"><%= data.minAge && data.maxAge ? `${data.minAge}-${data.maxAge}` : data.minAge ? `${data.minAge}+` : `-${data.maxAge}` %></span>
                                 </li>
                                 <% } %>
                                 <li class="flex items-center justify-between pt-2 border-t border-gray-50">
-                                    <span class="text-sm text-gray-400 flex items-center gap-2"><i class="far fa-calendar-alt text-gray-300 w-3.5"></i>Bitmə</span>
+                                    <span class="text-sm text-gray-400 flex items-center gap-2"><i class="far fa-calendar-alt text-gray-300 w-3.5"></i><%= __('jobDetail.sidebarDeadline') %></span>
                                     <span class="text-sm font-medium text-gray-900">
                                         <%= new Date(new Date(data.postedAt).setDate(new Date(data.postedAt).getDate() + 30)).toLocaleString('az-AZ', { day: '2-digit', month: 'short', year: 'numeric' }) %>
                                     </span>
                                 </li>
                                 <% if (data.userName) { %>
                                 <li class="flex items-center justify-between">
-                                    <span class="text-sm text-gray-400 flex items-center gap-2"><i class="fas fa-user-tie text-gray-300 w-3.5"></i>Əlaqə</span>
+                                    <span class="text-sm text-gray-400 flex items-center gap-2"><i class="fas fa-user-tie text-gray-300 w-3.5"></i><%= __('jobDetail.sidebarContact') %></span>
                                     <span class="text-sm font-medium text-gray-900"><%= data.userName %></span>
                                 </li>
                                 <% } %>
@@ -286,25 +286,25 @@
                             <button onclick="openApplyModal()"
                                class="block w-full bg-white text-primary-600 hover:bg-primary-50 font-semibold py-3.5 px-6 rounded-xl text-center transition-all duration-200 shadow-sm hover:shadow-md active:scale-[0.98]">
                                 <i class="fas fa-paper-plane mr-2"></i>
-                                Müraciət Et
+                                <%= __('jobDetail.apply') %>
                             </button>
                         <% } else if (typeof user === 'undefined' || !user) { %>
                             <a href="/auth"
                                class="block w-full bg-white text-primary-600 hover:bg-primary-50 font-semibold py-3.5 px-6 rounded-xl text-center transition-all duration-200 shadow-sm hover:shadow-md">
                                 <i class="fas fa-paper-plane mr-2"></i>
-                                Müraciət Et
+                                <%= __('jobDetail.apply') %>
                             </a>
                         <% } else { %>
-                            <p class="text-sm text-white/80 text-center py-2">Siz vakansiyalara müraciət edə bilməzsiniz</p>
+                            <p class="text-sm text-white/80 text-center py-2"><%= __('jobDetail.youCannotApply') %></p>
                         <% } %>
-                        <p class="text-xs text-white/60 text-center mt-2">Müraciət etmək üçün CV-nizi seçin</p>
+                        <p class="text-xs text-white/60 text-center mt-2"><%= __('jobDetail.applySub') %></p>
                     </div>
 
                     <!-- Contact Info -->
                     <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
                         <h3 class="font-semibold text-gray-900 mb-3 flex items-center gap-2 text-sm">
                             <i class="fas fa-address-card text-gray-400"></i>
-                            Əlaqə məlumatları
+                            <%= __('jobDetail.contactInfo') %>
                         </h3>
                         <div class="space-y-2.5">
                             <% if (data.phone) { %>
@@ -330,7 +330,7 @@
                     <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
                         <h3 class="font-semibold text-gray-900 mb-4 flex items-center gap-2 text-sm">
                             <i class="fas fa-share-alt text-gray-400"></i>
-                            Paylaş
+                            <%= __('jobDetail.share') %>
                         </h3>
                         <div class="flex items-center gap-2.5">
                             <a href="https://www.facebook.com/sharer/sharer.php?u=<%=data.redirectUrl%>"
@@ -370,10 +370,10 @@
     <div class="fixed inset-0 bg-black/50 backdrop-blur-sm"></div>
     <div class="relative bg-white rounded-2xl shadow-xl max-w-md w-full p-6 animate-scale-in">
       <div class="flex items-center justify-between mb-4">
-        <h3 class="text-lg font-semibold text-gray-900">CV seçin</h3>
+        <h3 class="text-lg font-semibold text-gray-900"><%= __('modal.selectCV') %></h3>
         <button onclick="closeCvModal()" class="w-8 h-8 rounded-lg hover:bg-gray-100 flex items-center justify-center text-gray-400 hover:text-gray-600 transition-colors">&times;</button>
       </div>
-      <p class="text-sm text-gray-400 mb-4">Müraciət etmək üçün CV-nizi seçin</p>
+      <p class="text-sm text-gray-400 mb-4"><%= __('modal.selectCVDesc') %></p>
       <div id="cvListContainer" class="space-y-3">
         <div class="text-center py-8">
           <div class="w-6 h-6 border-2 border-primary-500/30 border-t-primary-500 rounded-full animate-spin mx-auto"></div>
@@ -391,11 +391,11 @@
       <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-amber-100 flex items-center justify-center">
         <i class="fas fa-exclamation-triangle text-2xl text-amber-500"></i>
       </div>
-      <h3 class="text-lg font-semibold text-gray-900 mb-2">CV tapılmadı</h3>
-      <p class="text-sm text-gray-500 mb-6">Hələ heç bir CV-niz yoxdur. Müraciət etmək üçün əvvəlcə CV yaratmalısınız.</p>
+      <h3 class="text-lg font-semibold text-gray-900 mb-2"><%= __('modal.noCVTitle') %></h3>
+      <p class="text-sm text-gray-500 mb-6"><%= __('modal.noCVDesc') %></p>
       <div class="flex gap-3 justify-center">
-        <button onclick="closeNoCvModal()" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 text-sm font-medium">Bağla</button>
-        <a href="/cv/create" class="px-4 py-2 bg-gradient-to-r from-primary-500 to-primary-600 text-white rounded-lg hover:from-primary-600 hover:to-primary-700 text-sm font-medium shadow-sm">CV Yarat</a>
+        <button onclick="closeNoCvModal()" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 text-sm font-medium"><%= __('modal.close') %></button>
+        <a href="/cv/create" class="px-4 py-2 bg-gradient-to-r from-primary-500 to-primary-600 text-white rounded-lg hover:from-primary-600 hover:to-primary-700 text-sm font-medium shadow-sm"><%= __('modal.createCV') %></a>
       </div>
     </div>
   </div>
@@ -409,11 +409,11 @@
       <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-green-100 flex items-center justify-center">
         <i class="fas fa-check-circle text-2xl text-green-500"></i>
       </div>
-      <h3 class="text-lg font-semibold text-gray-900 mb-2">Müraciət göndərildi</h3>
-      <p class="text-sm text-gray-500 mb-6">Müraciətiniz uğurla qeydə alındı. Cavabı panelinizdən izləyə bilərsiniz.</p>
+      <h3 class="text-lg font-semibold text-gray-900 mb-2"><%= __('modal.successTitle') %></h3>
+      <p class="text-sm text-gray-500 mb-6"><%= __('modal.successDesc') %></p>
       <div class="flex gap-3 justify-center">
-        <button onclick="closeSuccessModal()" class="px-4 py-2 bg-gradient-to-r from-primary-500 to-primary-600 text-white rounded-lg hover:from-primary-600 hover:to-primary-700 text-sm font-medium shadow-sm">Bağla</button>
-        <a href="/dashboard" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 text-sm font-medium">Panelim</a>
+        <button onclick="closeSuccessModal()" class="px-4 py-2 bg-gradient-to-r from-primary-500 to-primary-600 text-white rounded-lg hover:from-primary-600 hover:to-primary-700 text-sm font-medium shadow-sm"><%= __('modal.close') %></button>
+        <a href="/dashboard" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 text-sm font-medium"><%= __('modal.panelim') %></a>
       </div>
     </div>
   </div>

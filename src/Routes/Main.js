@@ -3,6 +3,9 @@ import viewRoutes from './ViewRoutes.js';
 import apiRoutes from './ApiRoutes.js';
 import adminRoutes from './AdminRoutes.js';
 import hrRoutes from './HrRoutes.js';
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
+const i18n = require('i18n');
 
 const router = express.Router();
 

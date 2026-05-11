@@ -3,11 +3,11 @@
         <!-- Header -->
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8 animate-fade-in-up">
             <div>
-                <h1 class="text-2xl sm:text-3xl font-bold text-gray-900">Şirkətlər</h1>
-                <p class="text-gray-500 mt-1">Bütün şirkətlər və onların vakansiyaları</p>
+                <h1 class="text-2xl sm:text-3xl font-bold text-gray-900"><%= __('company.listTitle') %></h1>
+                <p class="text-gray-500 mt-1"><%= __('company.listSubtitle') %></p>
             </div>
             <div class="relative">
-                <input type="text" id="company-search" placeholder="Şirkət axtar..." class="pl-9 pr-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 w-full sm:w-64">
+                <input type="text" id="company-search" placeholder="<%= __('company.searchPlaceholder') %>" class="pl-9 pr-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 w-full sm:w-64">
                 <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
             </div>
         </div>
@@ -17,7 +17,7 @@
             <div class="col-span-full flex items-center justify-center py-20">
                 <div class="flex flex-col items-center gap-3">
                     <div class="w-8 h-8 border-2 border-primary-500/30 border-t-primary-500 rounded-full animate-spin"></div>
-                    <span class="text-gray-400 text-sm">Şirkətlər yüklənir...</span>
+                    <span class="text-gray-400 text-sm"><%= __('company.loading') %></span>
                 </div>
             </div>
         </div>

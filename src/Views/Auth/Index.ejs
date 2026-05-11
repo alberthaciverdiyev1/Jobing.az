@@ -8,22 +8,22 @@
             <div class="w-16 h-16 mx-auto bg-gradient-to-br from-primary-50 to-amber-50 rounded-2xl flex items-center justify-center mb-4 shadow-sm border border-primary-100">
                 <i class="fas fa-user text-2xl text-primary-500"></i>
             </div>
-            <h1 class="text-3xl font-bold text-gray-900 mb-2">Xoş Gəlmisiniz</h1>
-            <p class="text-gray-500">Daxil olun və ya yeni hesab yaradın</p>
+            <h1 class="text-3xl font-bold text-gray-900 mb-2"><%= __('auth.welcome') %></h1>
+            <p class="text-gray-500"><%= __('auth.welcomeSub') %></p>
         </div>
 
         <!-- Main Card -->
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8 animate-fade-in-up">
             <!-- Tabs -->
             <div class="flex bg-gray-100 rounded-xl p-1 mb-8">
-                <button type="button" id="login-tab" class="flex-1 py-2.5 text-sm font-semibold rounded-lg transition-all duration-200 bg-white text-gray-900 shadow-sm">Daxil Ol</button>
-                <button type="button" id="register-tab" class="flex-1 py-2.5 text-sm font-semibold rounded-lg transition-all duration-200 text-gray-500 hover:text-gray-700">Qeydiyyat</button>
+                <button type="button" id="login-tab" class="flex-1 py-2.5 text-sm font-semibold rounded-lg transition-all duration-200 bg-white text-gray-900 shadow-sm"><%= __('auth.login') %></button>
+                <button type="button" id="register-tab" class="flex-1 py-2.5 text-sm font-semibold rounded-lg transition-all duration-200 text-gray-500 hover:text-gray-700"><%= __('auth.register') %></button>
             </div>
 
             <!-- ==================== LOGIN FORM ==================== -->
             <form id="login-form" class="space-y-5">
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Email</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-1.5"><%= __('auth.email') %></label>
                     <div class="relative">
                         <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"><i class="fas fa-envelope"></i></span>
                         <input type="email" id="login-email" placeholder="email@example.com" required
@@ -31,7 +31,7 @@
                     </div>
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Şifrə</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-1.5"><%= __('auth.password') %></label>
                     <div class="relative">
                         <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"><i class="fas fa-lock"></i></span>
                         <input type="password" id="login-password" placeholder="••••••••" required
@@ -41,13 +41,13 @@
                 <div class="flex items-center justify-between">
                     <label class="flex items-center gap-2 cursor-pointer">
                         <input type="checkbox" id="login-remember" class="w-4 h-4 rounded border-gray-300 text-primary-500 focus:ring-primary-500 accent-primary-500">
-                        <span class="text-sm text-gray-600">Məni xatırla</span>
+                        <span class="text-sm text-gray-600"><%= __('auth.remember') %></span>
                     </label>
                 </div>
                 <button type="submit"
                         class="w-full bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white font-semibold py-3.5 rounded-xl transition-all duration-200 shadow-sm hover:shadow-md hover:shadow-primary-500/20 active:scale-[0.98] flex items-center justify-center gap-2">
                     <i class="fas fa-sign-in-alt"></i>
-                    <span>Daxil Ol</span>
+                    <span><%= __('auth.loginButton') %></span>
                 </button>
             </form>
 
@@ -56,12 +56,12 @@
                 <!-- Name -->
                 <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1.5">Ad</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1.5"><%= __('auth.name') %></label>
                         <input type="text" id="reg-name" placeholder="Adınız" required
                                class="w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all duration-200 text-gray-900 placeholder:text-gray-400">
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1.5">Soyad</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1.5"><%= __('auth.surname') %></label>
                         <input type="text" id="reg-surname" placeholder="Soyadınız" required
                                class="w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all duration-200 text-gray-900 placeholder:text-gray-400">
                     </div>
@@ -77,7 +77,7 @@
                 </div>
                 <!-- Phone -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Telefon (istəyə bağlı)</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-1.5"><%= __('auth.phone') %></label>
                     <div class="relative">
                         <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"><i class="fas fa-phone"></i></span>
                         <input type="tel" id="reg-phone" placeholder="+994 XX XXX XX XX"
@@ -89,23 +89,23 @@
                     <label class="block text-sm font-medium text-gray-700 mb-1.5">Şifrə</label>
                     <div class="relative">
                         <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"><i class="fas fa-lock"></i></span>
-                        <input type="password" id="reg-password" placeholder="Ən az 6 simvol" required
+                        <input type="password" id="reg-password" placeholder="<%= __('auth.passPlaceholder') %>" required
                                class="w-full pl-11 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all duration-200 text-gray-900 placeholder:text-gray-400">
                     </div>
                 </div>
                 <!-- Confirm Password -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Şifrə Təkrarı</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-1.5"><%= __('auth.confirmPassword') %></label>
                     <div class="relative">
                         <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"><i class="fas fa-lock"></i></span>
-                        <input type="password" id="reg-confirm-password" placeholder="Şifrəni təkrar daxil edin" required
+                        <input type="password" id="reg-confirm-password" placeholder="<%= __('auth.confirmPassPlaceholder') %>" required
                                class="w-full pl-11 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all duration-200 text-gray-900 placeholder:text-gray-400">
                     </div>
                 </div>
 
                 <!-- Role Selection -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-3">Hesab növü</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-3"><%= __('auth.accountType') %></label>
                     <div class="grid grid-cols-2 gap-3">
                         <button type="button" id="role-user"
                                 class="role-selector active flex items-center gap-3 p-4 rounded-xl border-2 border-primary-500 bg-primary-50/30 transition-all duration-200">
@@ -113,8 +113,8 @@
                                 <i class="fas fa-user"></i>
                             </div>
                             <div class="text-left">
-                                <p class="text-sm font-semibold text-gray-900">İstifadəçi</p>
-                                <p class="text-xs text-gray-500">CV yerləşdir</p>
+                                <p class="text-sm font-semibold text-gray-900"><%= __('auth.roleUser') %></p>
+                                <p class="text-xs text-gray-500"><%= __('auth.postCV') %></p>
                             </div>
                         </button>
                         <button type="button" id="role-company"
@@ -123,8 +123,8 @@
                                 <i class="fas fa-building"></i>
                             </div>
                             <div class="text-left">
-                                <p class="text-sm font-semibold text-gray-900">Şirkət</p>
-                                <p class="text-xs text-gray-500">Elan yerləşdir</p>
+                                <p class="text-sm font-semibold text-gray-900"><%= __('auth.roleCompany') %></p>
+                                <p class="text-xs text-gray-500"><%= __('auth.postJob') %></p>
                             </div>
                         </button>
                     </div>
@@ -133,7 +133,7 @@
 
                 <!-- Company Name (shown only for company role) -->
                 <div id="company-name-field" class="hidden">
-                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Şirkət Adı <span class="text-red-500">*</span></label>
+                    <label class="block text-sm font-medium text-gray-700 mb-1.5"><%= __('auth.companyName') %> <span class="text-red-500">*</span></label>
                     <div class="relative">
                         <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"><i class="fas fa-building"></i></span>
                         <input type="text" id="reg-company-name" placeholder="Şirkətinizin adı"
@@ -144,7 +144,7 @@
                 <button type="submit"
                         class="w-full bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white font-semibold py-3.5 rounded-xl transition-all duration-200 shadow-sm hover:shadow-md hover:shadow-primary-500/20 active:scale-[0.98] flex items-center justify-center gap-2">
                     <i class="fas fa-user-plus"></i>
-                    <span>Qeydiyyatdan Keç</span>
+                    <span><%= __('auth.registerButton') %></span>
                 </button>
             </form>
         </div>
@@ -152,7 +152,7 @@
         <!-- Info Text -->
         <p class="text-center text-xs text-gray-400 mt-6 animate-fade-in-up">
             <i class="fas fa-shield-alt mr-1 text-primary-400"></i>
-            Məlumatlarınız təhlükəsiz şəkildə qorunur
+            <%= __('auth.secure') %>
         </p>
     </div>
 </section>
