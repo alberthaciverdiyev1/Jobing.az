@@ -261,7 +261,7 @@ async function fetchJobs() {
         let html = '';
 
         if (res.status === 200 && res.data.totalCount) {
-            res.data.jobs.forEach(el => { html += createJobCard(el, false); });
+            res.data.jobs.forEach(el => { html += createJobCard(el, true); });
 
             const countEl = document.getElementById('job-count');
             if (countEl) countEl.textContent = res.data.totalCount;
@@ -302,7 +302,7 @@ async function fetchJobs() {
 function showLoader() {
     const section = document.getElementById('card-section');
     if (!section) return;
-    section.innerHTML = `<div class="flex items-center justify-center min-h-[400px] bg-white rounded-2xl border border-gray-100 shadow-sm">
+    section.innerHTML = `<div class="col-span-full flex items-center justify-center min-h-[400px] bg-white rounded-2xl border border-gray-100 shadow-sm">
         <div class="flex flex-col items-center gap-3">
             <div class="w-8 h-8 border-2 border-primary-500/30 border-t-primary-500 rounded-full animate-spin"></div>
             <span class="text-gray-400 text-sm">Yüklənir...</span>
@@ -316,7 +316,7 @@ function hideLoader() {
 }
 
 function loadMoreBtn() {
-    return `<div class="flex items-center justify-center mt-6">
+    return `<div class="col-span-full flex items-center justify-center mt-6">
         <button class="inline-flex items-center gap-2 bg-white hover:bg-gray-50 text-gray-700 font-medium px-6 py-3 rounded-xl border border-gray-200 transition-all shadow-sm hover:shadow-md active:scale-[0.98]" id="load-more-btn">
             Daha Çox <i class="fas fa-chevron-down text-xs"></i>
         </button>
@@ -329,7 +329,7 @@ document.addEventListener('click', function (e) {
         const btn = e.target.closest('#load-more-btn');
         btn.remove();
         document.getElementById('card-section').insertAdjacentHTML('beforeend',
-            `<div class="flex justify-center py-6" id="load-more-spinner">
+            `<div class="col-span-full flex justify-center py-6" id="load-more-spinner">
                 <div class="w-6 h-6 border-2 border-primary-500/30 border-t-primary-500 rounded-full animate-spin"></div>
             </div>`);
         offset += 100;
