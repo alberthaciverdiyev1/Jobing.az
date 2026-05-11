@@ -7,6 +7,7 @@ import VisitorService from "../Services/VisitorService.js";
 import Blog from "../Models/Blog.js";
 import BlogService from "../Services/BlogService.js";
 import CVService from "../Services/CVService.js";
+import NewsService from "../Services/NewsService.js";
 
 const ViewController = {
     home: async (req, res) => {
@@ -72,6 +73,47 @@ const ViewController = {
             blog: blog
         };
         res.render('Main', view);
+    },
+
+    // ============================================
+    // NEWS
+    // ============================================
+    newsList: async (req, res) => {
+        try {
+            const categories = await NewsService.getCategories();
+            const view = {
+                title: 'Xəbərlər',
+                body: "News/List.ejs",
+                js: "NewsList.js",
+                currentPage: 'news',
+                categories
+            };
+            res.render('Main', view);
+        } catch (error) {
+            console.error('newsList error:', error.message);
+            res.render('Partials/Error.ejs');
+        }
+    },
+
+    newsDetail: async (req, res) => {
+        const { slug } = req.params;
+        try {
+            const news = await NewsService.details(slug);
+            const mostRead = await NewsService.getMostRead();
+            const similar = await NewsService.getSimilar(news.category, slug);
+            const view = {
+                title: news.title,
+                body: 'News/Detail.ejs',
+                js: 'NewsDetail.js',
+                currentPage: 'news',
+                news,
+                mostRead,
+                similar
+            };
+            res.render('Main', view);
+        } catch {
+            res.status(404).render('Partials/Error.ejs');
+        }
     },
 
     aboutUs: async (req, res) => {

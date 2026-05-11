@@ -10,6 +10,7 @@ import authController from '../Controllers/AuthController.js';
 import cvController from '../Controllers/CVController.js';
 import applicationController from '../Controllers/ApplicationController.js';
 import viewController from '../Controllers/ViewController.js';
+import newsController from '../Controllers/NewsController.js';
 import validator from '../Validators/Main.js';
 import authMiddleware from '../Middlewares/Auth.js';
 
@@ -23,6 +24,14 @@ router.post('/api/auth/login', validator.loginValidator, authController.login);
 router.post('/api/auth/logout', authController.logout);
 router.get('/api/auth/logout', authController.logout);
 router.get('/api/auth/me', authController.getMe);
+
+// ============================================================
+// NEWS API (public)
+// ============================================================
+router.get('/api/news', newsController.publicList);
+router.get('/api/news/:slug', newsController.publicDetail);
+router.get('/api/news-categories', newsController.getCategories);
+router.get('/api/news-most-read', newsController.getMostRead);
 
 // ============================================================
 // CV (protected — user)

@@ -11,6 +11,7 @@ import { logError } from '../Middlewares/Logger.js';
 const router = express.Router();
 
 // Mount route groups
+// Mount route groups
 router.use(viewRoutes);
 router.use(apiRoutes);
 router.use(adminRoutes);

@@ -5,6 +5,7 @@
 		"companies": "Companies",
 		"cvs": "Resumes",
 		"blogs": "Blog",
+		"news": "News",
 		"about": "About",
 		"contact": "Contact",
 		"postJob": "Post a Job",
@@ -251,6 +252,16 @@
 	},
 	"blogs": {
 		"title": "Blog"
+	},
+	"news": {
+		"title": "News",
+		"loading": "Loading news...",
+		"mostRead": "Most Read",
+		"similar": "Similar News",
+		"noNews": "No news yet",
+		"emptyMessage": "No news found",
+		"readMore": "Load More",
+		"views": "reads"
 	},
 	"errors": {
 		"notFound": "Page not found",

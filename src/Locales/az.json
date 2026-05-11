@@ -5,6 +5,7 @@
 		"companies": "Şirkətlər",
 		"cvs": "CV-lər",
 		"blogs": "Bloqlar",
+		"news": "Xəbərlər",
 		"about": "Haqqımızda",
 		"contact": "Əlaqə",
 		"postJob": "Elan Yerləşdir",
@@ -251,6 +252,16 @@
 	},
 	"blogs": {
 		"title": "Bloqlar"
+	},
+	"news": {
+		"title": "Xəbərlər",
+		"loading": "Xəbərlər yüklənir...",
+		"mostRead": "Ən çox oxunanlar",
+		"similar": "Oxşar Xəbərlər",
+		"noNews": "Hələ xəbər yoxdur",
+		"emptyMessage": "Heç bir xəbər tapılmadı",
+		"readMore": "Daha çox",
+		"views": "oxunma"
 	},
 	"errors": {
 		"notFound": "Səhifə tapılmadı",

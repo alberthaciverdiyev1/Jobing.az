@@ -41,14 +41,14 @@
             <span class="text-[10px] font-medium"><%= __('nav.cvs') %></span>
         </a>
 
-        <!-- About -->
-        <a href="/about-us"
-           class="flex flex-col items-center justify-center gap-0.5 w-16 py-1 <%= currentPage === 'about' ? 'text-primary-500' : 'text-gray-400 hover:text-gray-600' %> transition-colors">
+        <!-- News -->
+        <a href="/xeberler"
+           class="flex flex-col items-center justify-center gap-0.5 w-14 py-1 <%= currentPage === 'news' ? 'text-primary-500' : 'text-gray-400 hover:text-gray-600' %> transition-colors">
             <div class="relative">
-                <i class="fas fa-circle-info text-xl"></i>
-                <% if (currentPage === 'about') { %><span class="absolute -bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-primary-500"></span><% } %>
+                <i class="fas fa-newspaper text-xl"></i>
+                <% if (currentPage === 'news') { %><span class="absolute -bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-primary-500"></span><% } %>
             </div>
-            <span class="text-[10px] font-medium"><%= __('nav.about') %></span>
+            <span class="text-[10px] font-medium"><%= __('nav.news') %></span>
         </a>
 
         <!-- Profile / Login -->
