@@ -203,7 +203,7 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             <% topCategories.forEach(function(cat, idx) { %>
             <a href="/vakansiyalar?categoryId=<%= cat.categoryId %>"
-               class="group relative bg-white rounded-2xl p-6 border border-gray-100 hover:border-primary-200/50 hover:shadow-xl hover:shadow-primary-500/5 hover:-translate-y-1 transition-all duration-300">
+               class="group relative bg-white rounded-2xl p-6 border border-primary-200/50 hover:border-primary-300 hover:shadow-xl hover:shadow-primary-500/5 hover:-translate-y-1 transition-all duration-300">
                 <!-- Gradient accent bar -->
                 <div class="absolute top-0 left-6 right-6 h-0.5 bg-gradient-to-r from-primary-400 to-primary-500 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 scale-x-0 group-hover:scale-x-100"></div>
 
@@ -218,10 +218,6 @@
                             <span class="text-xs text-gray-400"><%= __('categories.vacancyCount') %></span>
                         </div>
                     </div>
-                </div>
-                <div class="mt-4 pt-4 border-t border-gray-50 flex items-center justify-between">
-                    <span class="text-xs font-medium text-gray-300 group-hover:text-primary-400 transition-colors"><%= __('categories.browse') %></span>
-                    <i class="fas fa-arrow-right text-xs text-gray-300 group-hover:text-primary-400 group-hover:translate-x-1.5 transition-all duration-300"></i>
                 </div>
             </a>
             <% }); %>
