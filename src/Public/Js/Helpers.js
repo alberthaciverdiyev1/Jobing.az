@@ -117,7 +117,7 @@ export function createJobCard(element, compact = false) {
  * Empty state card
  */
 export function noDataCard() {
-    return `<div class="flex items-center justify-center py-16">
+    return `<div class="col-span-full flex items-center justify-center py-16">
         <div class="text-center">
             <div class="w-12 h-12 mx-auto bg-gray-100 rounded-full flex items-center justify-center mb-3">
                 <i class="fas fa-search text-gray-400"></i>
