@@ -41,26 +41,6 @@
             <span class="text-[10px] font-medium"><%= __('nav.cvs') %></span>
         </a>
 
-        <!-- Blogs -->
-        <a href="/blogs"
-           class="flex flex-col items-center justify-center gap-0.5 w-14 py-1 <%= currentPage === 'blogs' ? 'text-primary-500' : 'text-gray-400 hover:text-gray-600' %> transition-colors">
-            <div class="relative">
-                <i class="fas fa-blog text-xl"></i>
-                <% if (currentPage === 'blogs') { %><span class="absolute -bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-primary-500"></span><% } %>
-            </div>
-            <span class="text-[10px] font-medium"><%= __('nav.blogs') %></span>
-        </a>
-
-        <!-- News -->
-        <a href="/xeberler"
-           class="flex flex-col items-center justify-center gap-0.5 w-14 py-1 <%= currentPage === 'news' ? 'text-primary-500' : 'text-gray-400 hover:text-gray-600' %> transition-colors">
-            <div class="relative">
-                <i class="fas fa-newspaper text-xl"></i>
-                <% if (currentPage === 'news') { %><span class="absolute -bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-primary-500"></span><% } %>
-            </div>
-            <span class="text-[10px] font-medium"><%= __('nav.news') %></span>
-        </a>
-
         <!-- Profile / Login -->
         <% if (typeof user !== 'undefined' && user) { %>
             <a href="<%= user.role === 'company' || user.role === 'hr' ? '/hr/dashboard' : '/dashboard' %>"
