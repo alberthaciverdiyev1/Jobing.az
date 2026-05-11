@@ -27,6 +27,10 @@ const categorySchema = new Schema({
         type: String,
         default: ''
     },
+    icon: {
+        type: String,
+        default: 'fa-folder'
+    },
     bossAz: {
         type: String,
         required: false

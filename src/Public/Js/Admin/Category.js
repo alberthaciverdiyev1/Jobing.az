@@ -3,6 +3,17 @@ let editingCategoryId = null;
 document.addEventListener('DOMContentLoaded', () => {
     loadCategories();
     document.getElementById('categoryForm').addEventListener('submit', handleCategorySubmit);
+    document.getElementById('categoryIcon').addEventListener('input', function() {
+        const val = this.value.trim();
+        const wrap = document.getElementById('iconPreviewWrap');
+        const preview = document.getElementById('categoryIconPreview');
+        if (val) {
+            preview.className = 'fas ' + val + ' text-gray-600 text-xl';
+            wrap.classList.remove('hidden');
+        } else {
+            wrap.classList.add('hidden');
+        }
+    });
 });
 
 async function loadCategories() {
@@ -18,10 +29,7 @@ async function loadCategories() {
         tbody.innerHTML = data.map(c => `
             <tr class="border-b hover:bg-gray-50">
                 <td class="px-5 py-3">
-                    ${c.logoUrl
-                        ? `<img src="${escapeHtml(c.logoUrl)}" alt="logo" class="w-8 h-8 object-contain rounded">`
-                        : `<span class="text-gray-300 text-xs">—</span>`
-                    }
+                    <i class="fas ${c.icon || 'fa-folder'} text-gray-500 text-lg"></i>
                 </td>
                 <td class="px-5 py-3 font-medium text-gray-900">${escapeHtml(c.categoryName)}</td>
                 <td class="px-5 py-3">${c.bossAz || '-'}</td>
@@ -47,11 +55,10 @@ function openCategoryModal() {
     editingCategoryId = null;
     document.getElementById('categoryForm').reset();
     document.getElementById('categoryId').value = '';
-    document.getElementById('categoryLogoUrl').value = '';
     document.getElementById('categoryModalTitle').textContent = 'Add Category';
     document.getElementById('categoryModal').classList.remove('hidden');
     document.body.classList.add('modal-open');
-    document.getElementById('logoUploadSection').classList.add('hidden');
+    document.getElementById('iconPreviewWrap').classList.add('hidden');
 }
 
 function closeCategoryModal() {
@@ -71,22 +78,17 @@ async function editCategory(id) {
         document.getElementById('offerAz').value = data.offerAz || '';
         document.getElementById('jobSearch').value = data.jobSearch || '';
         document.getElementById('helloJobAz').value = data.helloJobAz || '';
-        document.getElementById('categoryLogoUrl').value = data.logoUrl || '';
+        document.getElementById('categoryIcon').value = data.icon || '';
         document.getElementById('categoryModal').classList.remove('hidden');
         document.body.classList.add('modal-open');
 
-        // Show logo upload section
-        const logoSection = document.getElementById('logoUploadSection');
-        logoSection.classList.remove('hidden');
-        const preview = document.getElementById('logoPreview');
-        const removeBtn = document.getElementById('removeLogoBtn');
-        if (data.logoUrl) {
-            preview.src = data.logoUrl;
-            preview.classList.remove('hidden');
-            removeBtn.classList.remove('hidden');
+        const wrap = document.getElementById('iconPreviewWrap');
+        const preview = document.getElementById('categoryIconPreview');
+        if (data.icon) {
+            preview.className = 'fas ' + data.icon + ' text-gray-600 text-xl';
+            wrap.classList.remove('hidden');
         } else {
-            preview.classList.add('hidden');
-            removeBtn.classList.add('hidden');
+            wrap.classList.add('hidden');
         }
     } catch (err) {
         alert('Error loading category: ' + err.message);
@@ -111,69 +113,21 @@ async function handleCategorySubmit(e) {
         smartJobAz: document.getElementById('smartJobAz').value,
         offerAz: document.getElementById('offerAz').value,
         jobSearch: document.getElementById('jobSearch').value,
-        helloJobAz: document.getElementById('helloJobAz').value
+        helloJobAz: document.getElementById('helloJobAz').value,
+        icon: document.getElementById('categoryIcon').value.trim() || 'fa-folder'
     };
 
     try {
         if (editingCategoryId) {
             await axios.put(`/api/admin/categories/${editingCategoryId}`, payload);
         } else {
-            const response = await axios.post('/api/admin/categories', payload);
-            // If created with logo, upload it
-            const logoFile = document.getElementById('logoInput').files[0];
-            if (logoFile && response.data._id) {
-                await uploadLogoForCategory(response.data._id, logoFile);
-            }
+            await axios.post('/api/admin/categories', payload);
         }
         closeCategoryModal();
         loadCategories();
     } catch (err) {
         alert('Error saving category: ' + err.message);
     }
-}
-
-async function uploadCategoryLogo(input) {
-    const file = input.files[0];
-    if (!file) return;
-
-    if (!editingCategoryId) {
-        // Show preview only, upload happens after save
-        const reader = new FileReader();
-        reader.onload = function (e) {
-            const preview = document.getElementById('logoPreview');
-            preview.src = e.target.result;
-            preview.classList.remove('hidden');
-            document.getElementById('removeLogoBtn').classList.remove('hidden');
-        };
-        reader.readAsDataURL(file);
-        return;
-    }
-
-    await uploadLogoForCategory(editingCategoryId, file);
-}
-
-async function uploadLogoForCategory(categoryId, file) {
-    const formData = new FormData();
-    formData.append('logo', file);
-    try {
-        const { data } = await axios.post(`/api/admin/categories/${categoryId}/upload-logo`, formData, {
-            headers: { 'Content-Type': 'multipart/form-data' }
-        });
-        document.getElementById('categoryLogoUrl').value = data.logoUrl;
-        const preview = document.getElementById('logoPreview');
-        preview.src = data.logoUrl;
-        preview.classList.remove('hidden');
-        document.getElementById('removeLogoBtn').classList.remove('hidden');
-    } catch (err) {
-        alert('Error uploading logo: ' + err.message);
-    }
-}
-
-function removeCategoryLogo() {
-    document.getElementById('logoPreview').classList.add('hidden');
-    document.getElementById('removeLogoBtn').classList.add('hidden');
-    document.getElementById('logoInput').value = '';
-    document.getElementById('categoryLogoUrl').value = '';
 }
 
 function escapeHtml(text) {
