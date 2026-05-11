@@ -42,8 +42,8 @@ export function createJobCard(element, compact = false) {
             ? +element.minSalary + ' - '
             : "") + ((+element.maxSalary !== null && +element.maxSalary !== 0)
             ? +element.maxSalary + " " + element.currencySign
-            : (!element.minSalary && !element.maxSalary ? "" : ""))
-    );
+            : "")
+    ) || "Razılaşma Yolu ilə";
 
     const postedDate = element.postedAt ? element.postedAt.slice(0, 10) : '';
     const title = capitalizeFirstLetter(element.title);
