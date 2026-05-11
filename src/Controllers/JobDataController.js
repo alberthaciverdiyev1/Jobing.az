@@ -189,8 +189,10 @@ const jobDataController = {
             }
             let description = `${req.body.data.aboutJob + '<h4 class="text-lg font-bold text-gray-800">Tələblər:</h4>' + req.body.data.requirements}`;
             const uniqueKey = req.body.data.position + '-' + req.body.data.companyName + '-' + req.body.data.city + '-' + Date.now();
+            const slugBase = req.body.data.position || 'vakansiya';
             let data = {
                 title: req.body.data.position,
+                slug: slugBase.toLowerCase().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '').slice(0, 80) + '-' + Date.now().toString().slice(-6),
                 description: description,
                 location: (await CityService.findById(req.body.data.city))?.name,
                 minSalary: req.body.data.minSalary,
@@ -208,7 +210,7 @@ const jobDataController = {
                 isActive: false,
                 email: req.body.data.email,
                 phone: req.body.data.phone,
-                redirectUrl: '/vakansiyalar/' + encodeURIComponent(uniqueKey) + '/details',
+                redirectUrl: '/vakansiyalar/' + encodeURIComponent(data.slug) + '/details',
                 uniqueKey,
             }
             // companyImage: null,

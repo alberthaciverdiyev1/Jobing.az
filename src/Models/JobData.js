@@ -8,6 +8,10 @@ const jobSchema = new Schema({
         type: String,
         required: true
     },
+    slug: {
+        type: String,
+        default: null
+    },
     title: {
         type: String,
         required: true

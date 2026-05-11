@@ -124,10 +124,10 @@ async function fetchCompanies(reset = false) {
     companyIsLoading = false;
 }
 
-function loadMoreCompanies() {
+window.loadMoreCompanies = function() {
     companyPage++;
     fetchCompanies(false);
-}
+};
 
 // ============================================
 // COMPANY DETAIL
@@ -166,7 +166,7 @@ async function loadCompanyDetail() {
         container.innerHTML = '<div class="divide-y divide-gray-50">' + jobs.map(job => {
             const detailLink = (job.redirectUrl && job.redirectUrl !== '#')
                 ? job.redirectUrl
-                : `/vakansiyalar/${job.uniqueKey || job._id}/details`;
+                : `/vakansiyalar/${job.slug || job.uniqueKey || job._id}/details`;
             const date = job.postedAt ? new Date(job.postedAt).toLocaleDateString('az-AZ') : '';
 
             return `<a href="${detailLink}" class="flex items-center justify-between p-5 sm:px-6 hover:bg-gray-50/50 transition-colors group">

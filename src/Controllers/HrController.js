@@ -192,6 +192,9 @@ const HrController = {
             data.postedBy = req.user._id;
             data.sourceUrl = data.sourceUrl || 'jobing.az';
             data.uniqueKey = data.uniqueKey || `${data.title}-${data.companyName}-${Date.now()}`;
+            data.slug = data.slug || (data.title
+                ? data.title.toLowerCase().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '').slice(0, 80) + '-' + Date.now().toString().slice(-6)
+                : 'vakansiya-' + Date.now().toString().slice(-6));
             data.isActive = true;
 
             if (req.user.role === 'company') {
