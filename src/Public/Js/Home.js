@@ -17,7 +17,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 document.querySelectorAll('.job-card').forEach(card => {
                     card.addEventListener('click', function () {
                         const originalLink = this.getAttribute('data-original-link');
-                        if (originalLink) window.open(originalLink, '_blank');
+                        if (originalLink) {
+                            if (originalLink.startsWith('/')) {
+                                window.location.href = originalLink;
+                            } else {
+                                window.open(originalLink, '_blank');
+                            }
+                        }
                     });
                 });
             } else {

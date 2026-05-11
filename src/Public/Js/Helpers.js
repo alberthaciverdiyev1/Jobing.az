@@ -78,7 +78,7 @@ export function createJobCard(element, compact = false) {
 
     if (compact) {
         // ————— COMPACT CARD (homepage grid) —————
-        return `<div class="group bg-white rounded-xl border border-gray-100 p-4 cursor-pointer transition-all duration-300 hover:-translate-y-[3px] hover:shadow-lg hover:shadow-orange-500/8 hover:border-orange-200 active:scale-[0.99] animate-fade-in-up" data-original-link="${detailLink}">
+        return `<div class="job-card group bg-white rounded-xl border border-gray-100 p-4 cursor-pointer transition-all duration-300 hover:-translate-y-[3px] hover:shadow-lg hover:shadow-orange-500/8 hover:border-orange-200 active:scale-[0.99] animate-fade-in-up" data-original-link="${detailLink}">
             <div class="flex items-start gap-3">
                 <!-- Logo -->
                 <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-gray-50 to-gray-100 border border-gray-100 flex-shrink-0 overflow-hidden flex items-center justify-center shadow-sm">
@@ -105,7 +105,7 @@ export function createJobCard(element, compact = false) {
     }
 
     // ————— FULL CARD (vacancies listing) —————
-    return `<div class="group bg-white rounded-2xl border border-gray-100 p-5 sm:p-6 cursor-pointer transition-all duration-300 hover:-translate-y-[3px] hover:shadow-xl hover:shadow-orange-500/10 hover:border-orange-200 active:scale-[0.99] animate-fade-in-up" data-original-link="${detailLink}">
+    return `<div class="job-card group bg-white rounded-2xl border border-gray-100 p-5 sm:p-6 cursor-pointer transition-all duration-300 hover:-translate-y-[3px] hover:shadow-xl hover:shadow-orange-500/10 hover:border-orange-200 active:scale-[0.99] animate-fade-in-up" data-original-link="${detailLink}">
         <div class="flex gap-4 sm:gap-5">
             <!-- Logo -->
             <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-xl bg-gradient-to-br from-gray-50 to-gray-100 border border-gray-100 flex-shrink-0 overflow-hidden flex items-center justify-center shadow-sm mt-0.5">

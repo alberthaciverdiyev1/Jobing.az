@@ -24,7 +24,13 @@ document.addEventListener('DOMContentLoaded', async () => {
                 document.querySelectorAll('.job-card').forEach(card => {
                     card.addEventListener('click', function () {
                         const originalLink = this.getAttribute('data-original-link');
-                        window.open(originalLink, '_blank');
+                        if (originalLink) {
+                            if (originalLink.startsWith('/')) {
+                                window.location.href = originalLink;
+                            } else {
+                                window.open(originalLink, '_blank');
+                            }
+                        }
                     });
                 });
             }
