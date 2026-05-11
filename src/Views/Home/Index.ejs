@@ -1,103 +1,71 @@
 <!-- ============================================ -->
-<!-- HERO SECTION — Clean with Depth -->
+<!-- HERO — Apple-inspired Minimal -->
 <!-- ============================================ -->
-<section class="relative bg-white pt-28 pb-16 md:pt-36 md:pb-20 overflow-hidden">
-    <!-- Subtle background glow -->
-    <div class="absolute inset-0 pointer-events-none">
-        <div class="absolute -top-40 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-gradient-to-b from-primary-100/40 via-primary-50/20 to-transparent rounded-full blur-3xl"></div>
-        <div class="absolute top-20 right-0 w-[300px] h-[300px] bg-blue-50/30 rounded-full blur-3xl"></div>
-        <div class="absolute top-20 left-0 w-[300px] h-[300px] bg-purple-50/30 rounded-full blur-3xl"></div>
-    </div>
-    <div class="relative max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="max-w-3xl mx-auto text-center animate-fade-in-up">
-            <!-- Badge -->
-            <div class="inline-flex items-center gap-2 bg-primary-50 text-primary-600 text-sm font-medium px-4 py-1.5 rounded-full mb-5 border border-primary-100">
-                <span class="w-1.5 h-1.5 rounded-full bg-primary-500"></span>
-                <%= __('hero.badge') %>
-            </div>
-
-            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight mb-4 tracking-tight">
+<section class="bg-white pt-28 pb-20 md:pt-36 md:pb-28">
+    <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-3xl mx-auto text-center">
+            <h1 class="text-[2.25rem] sm:text-[3rem] lg:text-[3.5rem] font-bold text-gray-900 leading-[1.1] tracking-[-0.02em] mb-4">
                 <%= __('hero.title') %>
                 <span class="text-primary-500"><%= __('hero.titleHighlight') %></span>
             </h1>
-
-            <p class="text-base sm:text-lg text-gray-500 max-w-xl mx-auto mb-8 leading-relaxed">
+            <p class="text-lg sm:text-xl text-gray-400 max-w-xl mx-auto mb-10 leading-relaxed">
                 <%= __('hero.subtitle') %>
             </p>
 
-            <!-- Search Form -->
-            <div class="bg-white rounded-2xl border border-gray-200 shadow-lg shadow-gray-200/50 p-3">
-                <form action="/vakansiyalar" method="GET" class="flex flex-col sm:flex-row gap-3">
+            <!-- Search — floating card -->
+            <div class="bg-white rounded-2xl border border-gray-100 shadow-xl shadow-gray-200/40 p-2">
+                <form action="/vakansiyalar" method="GET" class="flex flex-col sm:flex-row gap-2">
                     <div class="flex-1 relative">
-                        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
-                            <i class="fas fa-search text-sm"></i>
-                        </span>
                         <input type="text" name="keyword" id="keyword"
                                placeholder="<%= __('hero.searchPlaceholder') %>"
-                               class="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all text-sm">
+                               class="w-full pl-4 pr-4 py-3.5 bg-transparent border-0 focus:outline-none text-sm placeholder:text-gray-300">
                     </div>
-                    <div class="sm:w-48 relative">
-                        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
-                            <i class="fas fa-map-marker-alt text-sm"></i>
-                        </span>
+                    <div class="sm:w-44 relative border-t sm:border-t-0 sm:border-l border-gray-100">
                         <select id="city-select" name="cityId"
-                                class="w-full pl-10 pr-8 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all text-sm appearance-none cursor-pointer">
-                            <option value=""><%= __('hero.cityPlaceholder') %></option>
+                                class="w-full pl-4 pr-8 py-3.5 bg-transparent border-0 focus:outline-none text-sm appearance-none cursor-pointer text-gray-400">
+                            <option value="" class="text-gray-400"><%= __('hero.cityPlaceholder') %></option>
                         </select>
                     </div>
                     <button type="submit"
-                            class="bg-primary-500 hover:bg-primary-600 text-white font-medium px-8 py-3 rounded-xl transition-all duration-200 text-sm shadow-sm shadow-primary-200 hover:shadow-md hover:shadow-primary-300">
-                        <i class="fas fa-search mr-2"></i>
+                            class="bg-primary-500 hover:bg-primary-600 text-white font-medium px-8 py-3.5 rounded-xl transition-all duration-200 text-sm">
                         <%= __('hero.search') %>
                     </button>
                 </form>
             </div>
 
-            <!-- Trending Keywords -->
-            <div class="flex flex-wrap items-center justify-center gap-2 mt-6">
-                <span class="text-xs text-gray-400 font-medium"><%= __('hero.trending') %></span>
+            <!-- Trending -->
+            <div class="flex flex-wrap items-center justify-center gap-2 mt-5">
+                <span class="text-[11px] text-gray-300 font-medium tracking-wide uppercase"><%= __('hero.trending') %></span>
                 <a href="/vakansiyalar?keyword=Proqramist"
-                   class="px-3 py-1.5 bg-gray-50 border border-gray-200 rounded-lg text-xs text-gray-600 hover:border-primary-200 hover:text-primary-600 hover:bg-primary-50 transition-all">
-                    Proqramist
-                </a>
+                   class="px-3 py-1.5 text-[13px] text-gray-500 hover:text-gray-900 transition-colors">Proqramist</a>
                 <a href="/vakansiyalar?keyword=Design"
-                   class="px-3 py-1.5 bg-gray-50 border border-gray-200 rounded-lg text-xs text-gray-600 hover:border-primary-200 hover:text-primary-600 hover:bg-primary-50 transition-all">
-                    Dizayner
-                </a>
+                   class="px-3 py-1.5 text-[13px] text-gray-500 hover:text-gray-900 transition-colors">Dizayner</a>
                 <a href="/vakansiyalar?keyword=Manager"
-                   class="px-3 py-1.5 bg-gray-50 border border-gray-200 rounded-lg text-xs text-gray-600 hover:border-primary-200 hover:text-primary-600 hover:bg-primary-50 transition-all">
-                    Menecer
-                </a>
+                   class="px-3 py-1.5 text-[13px] text-gray-500 hover:text-gray-900 transition-colors">Menecer</a>
                 <a href="/vakansiyalar?keyword=Marketinq"
-                   class="px-3 py-1.5 bg-gray-50 border border-gray-200 rounded-lg text-xs text-gray-600 hover:border-primary-200 hover:text-primary-600 hover:bg-primary-50 transition-all">
-                    Marketinq
-                </a>
+                   class="px-3 py-1.5 text-[13px] text-gray-500 hover:text-gray-900 transition-colors">Marketinq</a>
             </div>
         </div>
     </div>
 </section>
 
 <!-- ============================================ -->
-<!-- STATS SECTION — Highlight Band -->
+<!-- STATS — Simple numbers, clean divider -->
 <!-- ============================================ -->
-<section class="hidden sm:block bg-gradient-to-r from-primary-50 via-white to-blue-50 border-y border-primary-100/50 animate-fade-in-up" style="animation-delay: 200ms;">
+<section class="hidden sm:block bg-gray-50 border-y border-gray-100">
     <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div class="grid grid-cols-4 gap-8">
+        <div class="flex items-center justify-center gap-12 md:gap-20">
             <% const stats = [
-                { id: 'vacancy', value: '0', label: __('stats.vacancy'), icon: 'fa-briefcase', color: 'text-primary-500' },
-                { id: 'company', value: '0', label: __('stats.company'), icon: 'fa-building', color: 'text-emerald-500' },
-                { id: 'visitor', value: '0', label: __('stats.monthlyVisitors'), icon: 'fa-calendar-check', color: 'text-violet-500' },
-                { id: 'totalVisitor', value: '0', label: __('stats.totalVisitors'), icon: 'fa-users', color: 'text-amber-500' },
+                { id: 'vacancy', value: '0', label: __('stats.vacancy') },
+                { id: 'company', value: '0', label: __('stats.company') },
+                { id: 'visitor', value: '0', label: __('stats.monthlyVisitors') },
+                { id: 'totalVisitor', value: '0', label: __('stats.totalVisitors') },
             ]; %>
-            <% stats.forEach(stat => { %>
-                <div class="flex items-center gap-4 px-6 py-4 bg-white/80 backdrop-blur-sm rounded-xl border border-gray-100 shadow-sm">
-                    <div class="w-12 h-12 rounded-xl bg-gray-50 flex items-center justify-center shrink-0">
-                        <i class="fas <%= stat.icon %> <%= stat.color %> text-lg"></i>
-                    </div>
-                    <div>
-                        <div class="text-2xl font-bold text-gray-900" id="<%= stat.id %>"><%= stat.value %></div>
-                        <div class="text-xs text-gray-500"><%= stat.label %></div>
-                    </div>
+            <% stats.forEach((stat, i) => { %>
+                <% if (i > 0) { %><div class="w-px h-10 bg-gray-200 hidden md:block"></div><% } %>
+                <div class="text-center">
+                    <div class="text-2xl font-bold text-gray-900" id="<%= stat.id %>"><%= stat.value %></div>
+                    <div class="text-sm text-gray-400 mt-0.5"><%= stat.label %></div>
                 </div>
             <% }); %>
         </div>
@@ -105,31 +73,24 @@
 </section>
 
 <!-- ============================================ -->
-<!-- CATEGORIES SECTION -->
+<!-- CATEGORIES — 8 items, icon circles -->
 <!-- ============================================ -->
 <% if (typeof topCategories !== 'undefined' && topCategories.length > 0) { %>
-<section class="py-16 sm:py-20 bg-gray-50 animate-fade-in-up" style="animation-delay: 250ms;">
+<section class="py-20 sm:py-24 bg-white">
     <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
-        <!-- Section header with accent bar -->
-        <div class="mb-10">
-            <div class="w-8 h-1 bg-primary-500 rounded-full mb-4"></div>
-            <p class="text-xs font-semibold text-primary-500 mb-1 tracking-wider uppercase"><%= __('categories.section') %></p>
-            <h2 class="text-2xl sm:text-3xl font-bold text-gray-900"><%= __('categories.title') %></h2>
-            <p class="text-gray-500 text-sm sm:text-base mt-1.5"><%= __('categories.subtitle') %></p>
+        <div class="text-center mb-14">
+            <h2 class="text-[1.75rem] sm:text-[2.25rem] font-bold text-gray-900 tracking-[-0.015em]"><%= __('categories.title') %></h2>
+            <p class="text-gray-400 text-base mt-2"><%= __('categories.subtitle') %></p>
         </div>
-        <% const iconColors = [
-            'from-violet-500 to-purple-600', 'from-emerald-500 to-teal-600', 'from-orange-500 to-amber-600',
-            'from-sky-500 to-blue-600'
-        ]; %>
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            <% topCategories.forEach(function(cat, idx) { %>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-x-6 gap-y-8">
+            <% topCategories.forEach(function(cat) { %>
             <a href="/vakansiyalar?categoryId=<%= cat.categoryId %>"
-               class="group bg-white border border-gray-100 rounded-xl p-6 hover:border-gray-200 hover:shadow-lg hover:shadow-gray-200/50 transition-all duration-200 flex flex-col items-center text-center">
-                <div class="w-14 h-14 mb-4 flex items-center justify-center rounded-xl bg-gradient-to-br <%= iconColors[idx % iconColors.length] %> shadow-sm group-hover:scale-110 group-hover:shadow-md transition-all duration-200">
-                    <i class="fas <%= cat.icon || 'fa-folder' %> text-white text-lg"></i>
+               class="group flex flex-col items-center text-center px-2">
+                <div class="w-16 h-16 mb-4 flex items-center justify-center rounded-full bg-gray-50 group-hover:bg-primary-50 transition-colors duration-200">
+                    <i class="fas <%= cat.icon || 'fa-folder' %> text-xl text-gray-600 group-hover:text-primary-500 transition-colors duration-200"></i>
                 </div>
-                <h3 class="text-sm font-semibold text-gray-900 group-hover:text-primary-600 transition-colors line-clamp-2 leading-snug"><%= cat.name %></h3>
-                <p class="text-xs text-gray-400 mt-2 font-medium"><%= cat.count %> <%= __('categories.vacancyCount') %></p>
+                <h3 class="text-sm font-semibold text-gray-900 group-hover:text-primary-600 transition-colors leading-snug"><%= cat.name %></h3>
+                <p class="text-xs text-gray-400 mt-1"><%= cat.count %> <%= __('categories.vacancyCount') %></p>
             </a>
             <% }); %>
         </div>
@@ -138,76 +99,66 @@
 <% } %>
 
 <!-- ============================================ -->
-<!-- RECENT JOBS SECTION -->
+<!-- RECENT JOBS -->
 <!-- ============================================ -->
-<section class="py-16 sm:py-20 bg-white animate-fade-in-up" style="animation-delay: 300ms;">
+<section class="py-20 sm:py-24 bg-gray-50">
     <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
-        <!-- Section header with accent bar -->
-        <div class="mb-10">
-            <div class="w-8 h-1 bg-primary-500 rounded-full mb-4"></div>
-            <p class="text-xs font-semibold text-primary-500 mb-1 tracking-wider uppercase"><%= __('recentJobs.section') %></p>
-            <h2 class="text-2xl sm:text-3xl font-bold text-gray-900">
+        <div class="text-center mb-14">
+            <h2 class="text-[1.75rem] sm:text-[2.25rem] font-bold text-gray-900 tracking-[-0.015em]">
                 <%= __('recentJobs.title') %>
             </h2>
-            <p class="text-gray-500 text-sm sm:text-base mt-1.5">
+            <p class="text-gray-400 text-base mt-2">
                 <%= __('recentJobs.subtitle') %>
             </p>
         </div>
 
-        <!-- Job Cards Grid -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="home-card-section">
-            <div class="col-span-full flex items-center justify-center py-20">
+            <div class="col-span-full flex items-center justify-center py-24">
                 <div class="flex flex-col items-center gap-3">
-                    <div class="w-7 h-7 border-[3px] border-primary-200 border-t-primary-500 rounded-full animate-spin"></div>
-                    <span class="text-gray-400 text-sm"><%= __('recentJobs.loading') %></span>
+                    <div class="w-6 h-6 border-2 border-gray-200 border-t-gray-900 rounded-full animate-spin"></div>
+                    <span class="text-sm text-gray-400"><%= __('recentJobs.loading') %></span>
                 </div>
             </div>
         </div>
 
-        <!-- View All -->
-        <div class="text-center mt-10">
+        <div class="text-center mt-12">
             <a href="/vakansiyalar"
-               class="inline-flex items-center gap-2.5 px-6 py-3 bg-primary-500 hover:bg-primary-600 text-white text-sm font-medium rounded-xl transition-all duration-200 shadow-sm shadow-primary-200 hover:shadow-md hover:shadow-primary-300">
-                <%= __('recentJobs.viewAll') %>
-                <i class="fas fa-arrow-right text-xs"></i>
+               class="inline-flex items-center gap-2 text-sm font-medium text-primary-500 hover:text-primary-600 transition-colors">
+                <%= __('recentJobs.viewAll') %> <i class="fas fa-arrow-right text-xs"></i>
             </a>
         </div>
     </div>
 </section>
 
 <!-- ============================================ -->
-<!-- HOW IT WORKS SECTION -->
+<!-- HOW IT WORKS -->
 <!-- ============================================ -->
-<section class="py-16 sm:py-20 bg-gray-50">
+<section class="py-20 sm:py-24 bg-white">
     <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
-        <!-- Section header with accent bar -->
-        <div class="mb-12">
-            <div class="w-8 h-1 bg-primary-500 rounded-full mb-4"></div>
-            <p class="text-xs font-semibold text-primary-500 mb-1 tracking-wider uppercase"><%= __('howItWorks.section') %></p>
-            <h2 class="text-2xl sm:text-3xl font-bold text-gray-900">
+        <div class="text-center mb-14">
+            <h2 class="text-[1.75rem] sm:text-[2.25rem] font-bold text-gray-900 tracking-[-0.015em]">
                 <%= __('howItWorks.title') %>
             </h2>
-            <p class="text-gray-500 text-sm sm:text-base mt-1.5">
+            <p class="text-gray-400 text-base mt-2">
                 <%= __('howItWorks.subtitle') %>
             </p>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             <% const steps = [
-                { img: '/Images/Static/WhoWeAre1.png', title: __('howItWorks.step1Title'), subtitle: __('howItWorks.step1Sub'), desc: __('howItWorks.step1Desc') },
-                { img: '/Images/Static/WhoWeAre3.png', title: __('howItWorks.step2Title'), subtitle: __('howItWorks.step2Sub'), desc: __('howItWorks.step2Desc') },
-                { img: '/Images/Static/WhoWeAre2.png', title: __('howItWorks.step3Title'), subtitle: __('howItWorks.step3Sub'), desc: __('howItWorks.step3Desc') },
-                { img: '/Images/Static/WhoWeAre4.png', title: __('howItWorks.step4Title'), subtitle: __('howItWorks.step4Sub'), desc: __('howItWorks.step4Desc') },
+                { img: '/Images/Static/WhoWeAre1.png', title: __('howItWorks.step1Title'), desc: __('howItWorks.step1Desc') },
+                { img: '/Images/Static/WhoWeAre3.png', title: __('howItWorks.step2Title'), desc: __('howItWorks.step2Desc') },
+                { img: '/Images/Static/WhoWeAre2.png', title: __('howItWorks.step3Title'), desc: __('howItWorks.step3Desc') },
+                { img: '/Images/Static/WhoWeAre4.png', title: __('howItWorks.step4Title'), desc: __('howItWorks.step4Desc') },
             ]; %>
             <% steps.forEach((step, i) => { %>
-                <div class="bg-white border border-gray-100 rounded-xl p-6 hover:border-gray-200 hover:shadow-lg hover:shadow-gray-200/50 transition-all duration-200">
-                    <div class="flex items-center gap-3 mb-4">
-                        <span class="w-7 h-7 rounded-full bg-primary-500 text-white text-xs font-bold flex items-center justify-center"><%= i + 1 %></span>
-                        <span class="text-xs font-medium text-gray-400 uppercase tracking-wider"><%= step.subtitle %></span>
+                <div class="text-center">
+                    <div class="w-12 h-12 mx-auto mb-5 flex items-center justify-center rounded-full bg-gray-50">
+                        <span class="text-sm font-semibold text-gray-500"><%= i + 1 %></span>
                     </div>
-                    <img src="<%= step.img %>" alt="<%= step.title %>" class="h-10 w-auto mb-4 opacity-80">
-                    <h4 class="text-sm font-semibold text-gray-900 mb-2"><%= step.title %></h4>
-                    <p class="text-xs text-gray-400 leading-relaxed"><%= step.desc %></p>
+                    <img src="<%= step.img %>" alt="<%= step.title %>" class="h-10 w-auto mx-auto mb-4 opacity-60">
+                    <h4 class="text-base font-semibold text-gray-900 mb-1.5"><%= step.title %></h4>
+                    <p class="text-sm text-gray-400 leading-relaxed max-w-[220px] mx-auto"><%= step.desc %></p>
                 </div>
             <% }); %>
         </div>
