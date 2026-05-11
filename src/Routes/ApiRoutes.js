@@ -38,6 +38,7 @@ router.delete('/api/cv/:id', authMiddleware.authenticate, authMiddleware.authori
 // PUBLIC CV & COMPANY API
 // ============================================================
 router.get('/api/public/cvs', cvController.publicList);
+router.get('/api/public/cvs/:id', cvController.publicDetail);
 router.get('/api/public/companies', companyController.publicList);
 router.get('/api/public/companies/:id', companyController.publicDetail);
 

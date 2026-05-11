@@ -1,71 +1,132 @@
 // ============================================
-// COMPANY LIST
+// COMPANY LIST - Load More Pagination
 // ============================================
 if (document.getElementById('company-grid')) {
-    document.addEventListener('DOMContentLoaded', loadCompanies);
+    document.addEventListener('DOMContentLoaded', initCompanyList);
 }
 
-async function loadCompanies() {
+let companyPage = 1;
+let companyIsLoading = false;
+let companyHasMore = true;
+let companySearch = '';
+const COMPANY_LIMIT = 12;
+
+function initCompanyList() {
     const grid = document.getElementById('company-grid');
     const searchInput = document.getElementById('company-search');
 
-    async function fetchAndRender(search = '') {
+    // Add load more button after grid
+    const loadMoreWrap = document.createElement('div');
+    loadMoreWrap.id = 'load-more-wrap';
+    loadMoreWrap.className = 'text-center mt-8 animate-fade-in-up';
+    grid.parentNode.appendChild(loadMoreWrap);
+
+    fetchCompanies(true);
+
+    let searchTimer;
+    searchInput?.addEventListener('input', () => {
+        clearTimeout(searchTimer);
+        searchTimer = setTimeout(() => {
+            companySearch = searchInput.value.trim();
+            companyPage = 1;
+            companyHasMore = true;
+            grid.innerHTML = '';
+            document.getElementById('load-more-wrap').innerHTML = '';
+            fetchCompanies(true);
+        }, 400);
+    });
+}
+
+async function fetchCompanies(reset = false) {
+    if (companyIsLoading || (!reset && !companyHasMore)) return;
+    companyIsLoading = true;
+
+    const grid = document.getElementById('company-grid');
+    const loadMoreWrap = document.getElementById('load-more-wrap');
+
+    if (reset) {
         grid.innerHTML = `<div class="col-span-full flex items-center justify-center py-20">
             <div class="flex flex-col items-center gap-3">
                 <div class="w-8 h-8 border-2 border-primary-500/30 border-t-primary-500 rounded-full animate-spin"></div>
                 <span class="text-gray-400 text-sm">Şirkətlər yüklənir...</span>
             </div>
         </div>`;
+        loadMoreWrap.innerHTML = '';
+    } else {
+        loadMoreWrap.innerHTML = `<div class="flex justify-center py-4">
+            <div class="w-6 h-6 border-2 border-primary-500/30 border-t-primary-500 rounded-full animate-spin"></div>
+        </div>`;
+    }
 
-        try {
-            const res = await axios.get('/api/public/companies');
-            let companies = res.data;
+    try {
+        const res = await axios.get('/api/public/companies', {
+            params: { page: companyPage, limit: COMPANY_LIMIT, search: companySearch }
+        });
+        const data = res.data;
+        const companies = data.companies || [];
+        companyHasMore = companyPage < data.totalPages;
 
-            if (search) {
-                const q = search.toLowerCase();
-                companies = companies.filter(c => c.companyName.toLowerCase().includes(q));
-            }
+        if (reset) {
+            grid.innerHTML = '';
+        }
 
-            if (companies.length === 0) {
-                grid.innerHTML = `<div class="col-span-full text-center py-20">
-                    <div class="w-16 h-16 mx-auto bg-gray-100 rounded-full flex items-center justify-center mb-4">
-                        <i class="fas fa-building text-2xl text-gray-400"></i>
+        if (companies.length === 0 && companyPage === 1) {
+            grid.innerHTML = `<div class="col-span-full text-center py-20">
+                <div class="w-16 h-16 mx-auto bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                    <i class="fas fa-building text-2xl text-gray-400"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-900 mb-1">Şirkət tapılmadı</h3>
+                <p class="text-sm text-gray-500">Axtarışınıza uyğun şirkət yoxdur</p>
+            </div>`;
+            loadMoreWrap.innerHTML = '';
+            companyIsLoading = false;
+            return;
+        }
+
+        // Append companies to grid
+        companies.forEach(c => {
+            const div = document.createElement('div');
+            const logo = getCompanyLogo(c.imageUrl);
+            div.innerHTML = `<a href="/sirket/${c._id}" class="block bg-white rounded-2xl border border-gray-100 p-5 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 group">
+                <div class="flex items-center gap-4">
+                    <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-gray-50 to-gray-100 border border-gray-100 overflow-hidden flex items-center justify-center flex-shrink-0 shadow-sm">
+                        <img src="${logo}" alt="${escapeHtml(c.companyName)}" class="w-full h-full object-cover" onerror="this.onerror=null;this.src='/Images/DefaultCompany.png'">
                     </div>
-                    <h3 class="text-lg font-semibold text-gray-900 mb-1">Şirkət tapılmadı</h3>
-                    <p class="text-sm text-gray-500">Axtarışınıza uyğun şirkət yoxdur</p>
-                </div>`;
-                return;
-            }
-
-            grid.innerHTML = companies.map(c => {
-                const logo = getCompanyLogo(c.imageUrl);
-                return `<a href="/sirket/${c._id}" class="block bg-white rounded-2xl border border-gray-100 p-5 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 group">
-                    <div class="flex items-center gap-4">
-                        <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-gray-50 to-gray-100 border border-gray-100 overflow-hidden flex items-center justify-center flex-shrink-0 shadow-sm">
-                            <img src="${logo}" alt="${escapeHtml(c.companyName)}" class="w-full h-full object-cover" onerror="this.onerror=null;this.src='/Images/DefaultCompany.png'">
-                        </div>
-                        <div class="min-w-0 flex-1">
-                            <h3 class="font-semibold text-gray-900 group-hover:text-primary-500 transition-colors truncate">${escapeHtml(c.companyName)}</h3>
-                            <p class="text-sm text-gray-400">${c.vacancyCount} vakansiya</p>
-                        </div>
-                        <i class="fas fa-chevron-right text-xs text-gray-300 group-hover:text-primary-400 transition-colors"></i>
+                    <div class="min-w-0 flex-1">
+                        <h3 class="font-semibold text-gray-900 group-hover:text-primary-500 transition-colors truncate">${escapeHtml(c.companyName)}</h3>
+                        <p class="text-sm text-gray-400">${c.vacancyCount} vakansiya</p>
                     </div>
-                </a>`;
-            }).join('');
-        } catch {
+                    <i class="fas fa-chevron-right text-xs text-gray-300 group-hover:text-primary-400 transition-colors"></i>
+                </div>
+            </a>`;
+            grid.appendChild(div.firstElementChild);
+        });
+
+        // Update load more button
+        if (companyHasMore) {
+            loadMoreWrap.innerHTML = `<button onclick="loadMoreCompanies()" class="inline-flex items-center gap-2 bg-white hover:bg-gray-50 text-primary-500 font-medium px-8 py-3 rounded-xl border-2 border-primary-200 hover:border-primary-300 transition-all duration-200 shadow-sm hover:shadow-md active:scale-[0.98]">
+                <i class="fas fa-chevron-down text-xs"></i>
+                Daha Çox
+            </button>`;
+        } else {
+            loadMoreWrap.innerHTML = '';
+        }
+
+    } catch {
+        if (reset) {
             grid.innerHTML = `<div class="col-span-full text-center py-20">
                 <p class="text-gray-500">Şirkətlər yüklənə bilmədi</p>
             </div>`;
         }
+        loadMoreWrap.innerHTML = '';
     }
 
-    let searchTimer;
-    searchInput?.addEventListener('input', () => {
-        clearTimeout(searchTimer);
-        searchTimer = setTimeout(() => fetchAndRender(searchInput.value.trim()), 400);
-    });
+    companyIsLoading = false;
+}
 
-    fetchAndRender();
+function loadMoreCompanies() {
+    companyPage++;
+    fetchCompanies(false);
 }
 
 // ============================================

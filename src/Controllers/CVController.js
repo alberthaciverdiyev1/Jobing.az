@@ -154,6 +154,19 @@ const CVController = {
         }
     },
 
+    // Public: single CV detail
+    publicDetail: async (req, res) => {
+        try {
+            const cv = await CVService.findPublicById(req.params.id);
+            if (!cv) {
+                return res.status(404).json({ error: 'CV tapılmadı' });
+            }
+            res.json({ cv });
+        } catch (err) {
+            res.status(500).json({ error: err.message });
+        }
+    },
+
     // Delete CV
     delete: async (req, res) => {
         try {

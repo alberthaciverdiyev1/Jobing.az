@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const edu = cv.education && cv.education.length > 0 ? cv.education[0] : null;
             const date = cv.createdAt ? new Date(cv.createdAt).toLocaleDateString('az-AZ') : '';
 
-            return `<div class="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 cursor-pointer group">
+            return `<a href="/cv-ler/${cv._id}" class="block bg-white rounded-2xl border border-gray-100 p-5 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 group">
                 <div class="flex items-start gap-3 mb-3">
                     <div class="w-10 h-10 rounded-xl bg-primary-50 flex items-center justify-center text-primary-500 flex-shrink-0">
                         <i class="fas fa-user text-sm"></i>
@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <i class="fas fa-graduation-cap"></i>
                     <span>${escapeHtml(edu.school || '')}</span>
                 </div>` : ''}
-            </div>`;
+            </a>`;
         }).join('');
     }
 

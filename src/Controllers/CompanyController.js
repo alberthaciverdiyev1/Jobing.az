@@ -78,10 +78,15 @@ const CompanyController = {
         }
     },
 
-    // Public: list all companies with vacancy counts
+    // Public: list companies with pagination and vacancy counts
     publicList: async (req, res) => {
         try {
-            const companies = await CompanyService.getAll();
+            const page = parseInt(req.query.page) || 1;
+            const limit = parseInt(req.query.limit) || 12;
+            const search = req.query.search || '';
+
+            const { companies, total, page: currentPage, totalPages } = await CompanyService.getPaginated(page, limit, search);
+
             const result = await Promise.all(companies.map(async (c) => {
                 const vacancyCount = await JobData.countDocuments({ companyName: c.companyName, isActive: true });
                 return {
@@ -92,7 +97,13 @@ const CompanyController = {
                     vacancyCount
                 };
             }));
-            res.json(result.filter(c => c.vacancyCount > 0 || c.companyName));
+
+            res.json({
+                companies: result.filter(c => c.vacancyCount > 0 || c.companyName),
+                total,
+                page: currentPage,
+                totalPages
+            });
         } catch (error) {
             res.status(500).json({ error: error.message });
         }

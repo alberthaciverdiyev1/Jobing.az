@@ -1,0 +1,112 @@
+<section class="min-h-screen bg-gradient-to-b from-gray-50 to-white pt-24 md:pt-28 pb-20">
+    <div class="max-w-4xl mx-auto px-3 sm:px-4 lg:px-6">
+        <!-- Breadcrumb -->
+        <nav class="flex items-center gap-2 text-sm text-gray-400 mb-6 animate-fade-in-down">
+            <a href="/" class="hover:text-primary-500 transition-colors"><%= __('nav.home') %></a>
+            <i class="fas fa-chevron-right text-[10px]"></i>
+            <a href="/cv-ler" class="hover:text-primary-500 transition-colors"><%= __('nav.cvs') %></a>
+            <i class="fas fa-chevron-right text-[10px]"></i>
+            <span class="text-gray-600 truncate max-w-[200px]" id="cv-name-breadcrumb">CV</span>
+        </nav>
+
+        <!-- Loading State -->
+        <div id="cv-loading" class="flex items-center justify-center py-20">
+            <div class="flex flex-col items-center gap-3">
+                <div class="w-8 h-8 border-2 border-primary-500/30 border-t-primary-500 rounded-full animate-spin"></div>
+                <span class="text-gray-400 text-sm">CV yüklənir...</span>
+            </div>
+        </div>
+
+        <!-- Error State -->
+        <div id="cv-error" class="hidden text-center py-20">
+            <div class="w-16 h-16 mx-auto bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                <i class="fas fa-file-alt text-2xl text-gray-400"></i>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-900 mb-1">CV tapılmadı</h3>
+            <p class="text-sm text-gray-500 mb-6">Bu CV mövcud deyil və ya silinib</p>
+            <a href="/cv-ler" class="inline-flex items-center gap-2 text-primary-500 hover:text-primary-600 font-medium">
+                <i class="fas fa-arrow-left"></i> Bütün CV-lər
+            </a>
+        </div>
+
+        <!-- CV Content -->
+        <div id="cv-content" class="hidden space-y-6 animate-fade-in-up">
+            <!-- Header Card -->
+            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+                <div class="h-2 bg-gradient-to-r from-primary-400 via-primary-500 to-primary-600"></div>
+                <div class="p-6 sm:p-8">
+                    <div class="flex items-start gap-4">
+                        <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary-50 to-amber-50 flex items-center justify-center text-primary-500 flex-shrink-0 border border-primary-100">
+                            <i class="fas fa-user text-2xl"></i>
+                        </div>
+                        <div class="min-w-0 flex-1">
+                            <h1 id="cv-fullname" class="text-2xl sm:text-3xl font-bold text-gray-900"></h1>
+                            <p id="cv-date" class="text-sm text-gray-400 mt-1"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Summary -->
+            <div id="cv-summary-section" class="hidden bg-white rounded-2xl border border-gray-100 shadow-sm p-6 sm:p-8">
+                <h2 class="text-lg font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                    <i class="fas fa-quote-left text-primary-500 text-sm"></i>
+                    Haqqında
+                </h2>
+                <p id="cv-summary" class="text-gray-600 leading-relaxed"></p>
+            </div>
+
+            <!-- Skills -->
+            <div id="cv-skills-section" class="hidden bg-white rounded-2xl border border-gray-100 shadow-sm p-6 sm:p-8">
+                <h2 class="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                    <i class="fas fa-code text-primary-500 text-sm"></i>
+                    Bacarıqlar
+                </h2>
+                <div id="cv-skills" class="flex flex-wrap gap-2"></div>
+            </div>
+
+            <!-- Experience -->
+            <div id="cv-experience-section" class="hidden bg-white rounded-2xl border border-gray-100 shadow-sm p-6 sm:p-8">
+                <h2 class="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                    <i class="fas fa-briefcase text-primary-500 text-sm"></i>
+                    Təcrübə
+                </h2>
+                <div id="cv-experience" class="space-y-6"></div>
+            </div>
+
+            <!-- Education -->
+            <div id="cv-education-section" class="hidden bg-white rounded-2xl border border-gray-100 shadow-sm p-6 sm:p-8">
+                <h2 class="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                    <i class="fas fa-graduation-cap text-primary-500 text-sm"></i>
+                    Təhsil
+                </h2>
+                <div id="cv-education" class="space-y-6"></div>
+            </div>
+
+            <!-- Languages -->
+            <div id="cv-languages-section" class="hidden bg-white rounded-2xl border border-gray-100 shadow-sm p-6 sm:p-8">
+                <h2 class="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                    <i class="fas fa-language text-primary-500 text-sm"></i>
+                    Dillər
+                </h2>
+                <div id="cv-languages" class="flex flex-wrap gap-3"></div>
+            </div>
+
+            <!-- Links -->
+            <div id="cv-links-section" class="hidden bg-white rounded-2xl border border-gray-100 shadow-sm p-6 sm:p-8">
+                <h2 class="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                    <i class="fas fa-link text-primary-500 text-sm"></i>
+                    Linklər
+                </h2>
+                <div id="cv-links" class="flex flex-wrap gap-4"></div>
+            </div>
+
+            <!-- Back link -->
+            <div class="text-center pt-2">
+                <a href="/cv-ler" class="inline-flex items-center gap-2 text-primary-500 hover:text-primary-600 font-medium transition-colors">
+                    <i class="fas fa-arrow-left"></i> Bütün CV-lər
+                </a>
+            </div>
+        </div>
+    </div>
+</section>

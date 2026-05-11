@@ -23,6 +23,7 @@ router.get('/vakansiyalar/:id/details', jobDataController.details);
 
 // Public CV & Company listing pages
 router.get('/cv-ler', visitorLogger, viewController.cvList);
+router.get('/cv-ler/:id', visitorLogger, viewController.cvDetail);
 router.get('/sirketler', visitorLogger, viewController.companyList);
 router.get('/sirket/:id', visitorLogger, viewController.companyDetail);
 
