@@ -364,7 +364,7 @@ const JobDataService = {
                 { $match: { isActive: true } },
                 { $group: { _id: '$categoryId', count: { $sum: 1 } } },
                 { $sort: { count: -1 } },
-                { $limit: 10 },
+                { $limit: 4 },
                 {
                     $lookup: {
                         from: 'categories',
