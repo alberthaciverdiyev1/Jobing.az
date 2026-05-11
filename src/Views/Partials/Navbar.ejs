@@ -25,7 +25,7 @@
                 <!-- Post Job Button (hidden for user role) -->
                 <% if (!user || user.role !== 'user') { %>
                 <a href="/add-job"
-                   class="inline-flex items-center gap-2 bg-primary-500 hover:bg-primary-600 text-white font-medium px-5 py-2.5 rounded-xl transition-all duration-200 shadow-sm hover:shadow-md hover:shadow-primary-500/20 active:scale-[0.97]">
+                   class="inline-flex items-center gap-2 bg-primary-500 hover:bg-primary-600 text-white font-medium px-5 py-2.5 rounded-xl transition-all duration-200 shadow-sm hover:shadow-md hover:shadow-primary-500/20 hover:scale-[1.02] active:scale-[0.97]">
                     <i class="fas fa-plus-circle text-sm"></i>
                     <%= __('nav.postJob') %>
                 </a>
