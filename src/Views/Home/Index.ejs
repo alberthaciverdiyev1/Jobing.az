@@ -203,20 +203,16 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             <% topCategories.forEach(function(cat, idx) { %>
             <a href="/vakansiyalar?categoryId=<%= cat.categoryId %>"
-               class="group relative bg-white rounded-2xl p-6 border border-primary-200/50 hover:border-primary-300 hover:shadow-xl hover:shadow-primary-500/5 hover:-translate-y-1 transition-all duration-300">
+               class="group relative bg-white rounded-2xl p-6 border border-primary-200/50 hover:border-primary-300 hover:shadow-xl hover:shadow-primary-500/5 hover:-translate-y-1 hover:bg-primary-50/20 transition-all duration-300">
                 <!-- Gradient accent bar -->
                 <div class="absolute top-0 left-6 right-6 h-0.5 bg-gradient-to-r from-primary-400 to-primary-500 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 scale-x-0 group-hover:scale-x-100"></div>
 
-                <div class="flex flex-col items-start gap-4">
+                <div class="flex items-center gap-4">
                     <div class="w-14 h-14 flex-shrink-0 flex items-center justify-center rounded-2xl bg-gradient-to-br from-primary-50 to-orange-50 group-hover:from-primary-100 group-hover:to-orange-100 group-hover:shadow-md group-hover:shadow-primary-500/10 transition-all duration-300">
                         <i class="fas <%= cat.icon || 'fa-folder' %> text-xl text-primary-500 group-hover:text-primary-600 group-hover:scale-110 transition-all duration-300"></i>
                     </div>
-                    <div class="min-w-0 w-full">
-                        <h3 class="text-base font-semibold text-gray-900 group-hover:text-primary-600 transition-colors leading-snug truncate"><%= cat.name %></h3>
-                        <div class="flex items-center gap-2 mt-2">
-                            <span class="text-xs font-bold text-primary-500 bg-primary-50 px-2.5 py-1 rounded-full group-hover:bg-primary-100 transition-colors"><%= cat.count %></span>
-                            <span class="text-xs text-gray-400"><%= __('categories.vacancyCount') %></span>
-                        </div>
+                    <div class="min-w-0 flex-1">
+                        <h3 class="text-base font-semibold text-gray-900 group-hover:text-primary-600 transition-colors leading-snug"><%= cat.name %></h3>
                     </div>
                 </div>
             </a>
