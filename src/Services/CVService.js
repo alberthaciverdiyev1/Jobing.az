@@ -38,6 +38,21 @@ const CVService = {
         );
     },
 
+    // Public list of active CVs (limited fields for privacy)
+    findPublicList: async (page = 1, limit = 20) => {
+        const skip = (page - 1) * limit;
+        const filter = { deletedAt: null, isActive: true, type: 'created' };
+        const total = await CV.countDocuments(filter);
+        const cvs = await CV.find(filter)
+            .populate('userId', 'name surname')
+            .select('title fullName skills education summary createdAt')
+            .sort({ createdAt: -1 })
+            .skip(skip)
+            .limit(limit)
+            .lean();
+        return { cvs, total, page, totalPages: Math.ceil(total / limit) };
+    },
+
     deleteFile: async (fileUrl) => {
         if (!fileUrl) return;
         const filePath = path.resolve('.' + fileUrl);

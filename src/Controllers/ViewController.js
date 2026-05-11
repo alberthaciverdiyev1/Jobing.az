@@ -195,6 +195,39 @@ const ViewController = {
         const response = await sendEmail(req.body.data);
         res.status(200).json({status: response.status, message: response.message});
     },
+    // CV List page
+    cvList: async (req, res) => {
+        const view = {
+            title: 'CV-lər',
+            body: "CV/List.ejs",
+            js: "CVList.js",
+            currentPage: 'cv-list'
+        };
+        res.render('Main', view);
+    },
+
+    // Company List page
+    companyList: async (req, res) => {
+        const view = {
+            title: 'Şirkətlər',
+            body: "Company/List.ejs",
+            js: "Company.js",
+            currentPage: 'company-list'
+        };
+        res.render('Main', view);
+    },
+
+    // Company Detail page
+    companyDetail: async (req, res) => {
+        const view = {
+            title: 'Şirkət',
+            body: "Company/Detail.ejs",
+            js: "Company.js",
+            currentPage: 'company-detail'
+        };
+        res.render('Main', view);
+    },
+
     statistics: async (req, res) => {
         const company = await CompanyService.count();
         const vacancy = await JobDataService.count();
