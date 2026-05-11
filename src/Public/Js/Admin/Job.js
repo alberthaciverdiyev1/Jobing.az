@@ -238,6 +238,17 @@ async function toggleJobActive(id) {
     }
 }
 
+async function removeDuplicateJobs() {
+    if (!confirm('Are you sure you want to remove duplicate jobs from the last 30 days?')) return;
+    try {
+        var { data } = await axios.post('/api/admin/jobs/remove-duplicates');
+        alert(data.message || 'Operation completed');
+        loadJobs(currentPage);
+    } catch (err) {
+        alert('Error removing duplicates: ' + (err.response && err.response.data && err.response.data.error ? err.response.data.error : err.message));
+    }
+}
+
 async function handleJobSubmit(e) {
     e.preventDefault();
     var description = getJobEditorData();

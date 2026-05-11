@@ -8,6 +8,7 @@ import Blog from '../Models/Blog.js';
 import CV from '../Models/CV.js';
 import Visitor from '../Models/Visitor.js';
 import VisitorService from '../Services/VisitorService.js';
+import JobService from '../Services/JobDataService.js';
 import Enums from '../Config/Enums.js';
 
 // ============================================================
@@ -311,6 +312,15 @@ const AdminController = {
             job.isActive = !job.isActive;
             await job.save();
             res.json({ isActive: job.isActive });
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    },
+
+    removeDuplicateJobs: async (req, res) => {
+        try {
+            const result = await JobService.removeDuplicates();
+            res.json(result);
         } catch (error) {
             res.status(500).json({ error: error.message });
         }

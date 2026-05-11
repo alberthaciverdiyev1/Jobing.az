@@ -179,6 +179,7 @@ router.post('/api/admin/jobs', authMiddleware.authenticate, authMiddleware.autho
 router.put('/api/admin/jobs/:id', authMiddleware.authenticate, authMiddleware.authorize('admin'), adminController.updateJob);
 router.delete('/api/admin/jobs/:id', authMiddleware.authenticate, authMiddleware.authorize('admin'), adminController.deleteJob);
 router.patch('/api/admin/jobs/:id/toggle', authMiddleware.authenticate, authMiddleware.authorize('admin'), adminController.toggleJobActive);
+router.post('/api/admin/jobs/remove-duplicates', authMiddleware.authenticate, authMiddleware.authorize('admin'), adminController.removeDuplicateJobs);
 
 // Companies
 router.get('/api/admin/companies', authMiddleware.authenticate, authMiddleware.authorize('admin'), adminController.getCompanies);
