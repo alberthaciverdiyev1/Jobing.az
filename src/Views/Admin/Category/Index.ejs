@@ -1,74 +1,75 @@
-<div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-14">
-    <div class="pb-4 bg-white">
-        <label for="table-search" class="sr-only">Search</label>
-        <div class="relative mt-1">
-            <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
-                <svg class="w-4 h-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                    viewBox="0 0 20 20">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
-                </svg>
-            </div>
-            <input type="text" id="table-search"
-                class="block pt-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
-                placeholder="Search for items">
-        </div>
-    </div>
-    <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+<div class="p-6">
+  <div class="flex items-center justify-between mb-6">
+    <h1 class="text-2xl font-bold text-gray-800">Category Management</h1>
+    <button onclick="openCategoryModal()" class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 text-sm font-medium">+ Add Category</button>
+  </div>
+
+  <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm text-left text-gray-500">
         <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-            <tr>
-                <th scope="col" class="p-4">
-                    No.
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    Category name
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    Boss.az C.id
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    Boss.az SC.id
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    SmartJob.az C.id
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    SmartJob.az SC.id
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    Busy.az C.id
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    Busy.az SC.id
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    Submit
-                </th>
-            </tr>
+          <tr>
+            <th class="px-5 py-3">Category Name</th>
+            <th class="px-5 py-3">Boss.az</th>
+            <th class="px-5 py-3">SmartJob.az</th>
+            <th class="px-5 py-3">Offer.az</th>
+            <th class="px-5 py-3">JobSearch</th>
+            <th class="px-5 py-3">HelloJob.az</th>
+            <th class="px-5 py-3">Actions</th>
+          </tr>
         </thead>
         <tbody id="categoryBody">
-            <tr class="bg-white border-b hover:bg-gray-50 ">
-                <td class="w-4 p-4">
-                    <div class="flex items-center">
-                       1
-                    </div>
-                </td>
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                    Apple MacBook Pro 17"
-                </th>
-                <td class="px-6 py-4">
-                    Silver
-                </td>
-                <td class="px-6 py-4">
-                    Laptop
-                </td>
-                <td class="px-6 py-4">
-                    $2999
-                </td>
-                <td class="px-6 py-4">
-                    <a href="#" class="font-medium text-blue-600 hover:underline">Edit</a>
-                </td>
-            </tr>
+          <tr>
+            <td colspan="7" class="px-5 py-8 text-center text-gray-400">Loading...</td>
+          </tr>
         </tbody>
-    </table>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Category Modal -->
+<div id="categoryModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
+  <div class="flex items-center justify-center min-h-screen px-4">
+    <div class="fixed inset-0 bg-black opacity-50"></div>
+    <div class="relative bg-white rounded-lg shadow-xl max-w-lg w-full p-6">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-lg font-semibold text-gray-900" id="categoryModalTitle">Add Category</h3>
+        <button onclick="closeCategoryModal()" class="text-gray-400 hover:text-gray-600">&times;</button>
+      </div>
+      <form id="categoryForm" class="space-y-4">
+        <input type="hidden" id="categoryId">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Category Name *</label>
+          <input type="text" id="categoryName" required class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500">
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Boss.az ID</label>
+            <input type="text" id="bossAz" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">SmartJob.az ID</label>
+            <input type="text" id="smartJobAz" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Offer.az ID</label>
+            <input type="text" id="offerAz" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">JobSearch ID</label>
+            <input type="text" id="jobSearch" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">HelloJob.az ID</label>
+            <input type="text" id="helloJobAz" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm">
+          </div>
+        </div>
+        <div class="flex justify-end gap-3 pt-4">
+          <button type="button" onclick="closeCategoryModal()" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 text-sm">Cancel</button>
+          <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 text-sm">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
 </div>

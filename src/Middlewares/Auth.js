@@ -38,11 +38,13 @@ const authMiddleware = {
 
     /** Restrict to one or more roles */
     authorize: (...roles) => (req, res, next) => {
+        const isApi = req.path.startsWith('/api/');
         if (!req.user) {
+            if (isApi) return res.status(401).json({ error: 'Daxil olmaq tələb olunur' });
             return res.redirect('/auth');
         }
         if (!roles.includes(req.user.role)) {
-            // Redirect to the appropriate dashboard
+            if (isApi) return res.status(403).json({ error: 'Bu əməliyyat üçün icazəniz yoxdur' });
             if (req.user.role === 'company') {
                 return res.redirect('/company/dashboard');
             }

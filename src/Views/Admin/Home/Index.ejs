@@ -1,99 +1,144 @@
-  <div class="p-4 border-2 border-gray-200 border-dashed rounded-lg mt-14">
-    <div class="grid grid-cols-3 gap-4 mb-4">
-       <div class="flex items-center justify-center h-24 rounded bg-gray-50">
-          <p class="text-2xl text-gray-400">
-             <svg class="w-3.5 h-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16"/>
-             </svg>
-          </p>
-       </div>
-       <div class="flex items-center justify-center h-24 rounded bg-gray-50">
-          <p class="text-2xl text-gray-400">
-             <svg class="w-3.5 h-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16"/>
-             </svg>
-          </p>
-       </div>
-       <div class="flex items-center justify-center h-24 rounded bg-gray-50">
-          <p class="text-2xl text-gray-400">
-             <svg class="w-3.5 h-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16"/>
-             </svg>
-          </p>
-       </div>
+<div class="p-6">
+  <h1 class="text-2xl font-bold text-gray-800 mb-6">Dashboard</h1>
+
+  <!-- Stats Cards -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-5">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm font-medium text-gray-500">Total Jobs</p>
+          <p class="text-3xl font-bold text-gray-800 mt-1"><%= stats.totalJobs || 0 %></p>
+        </div>
+        <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center">
+          <svg class="w-6 h-6 text-blue-600" fill="currentColor" viewBox="0 0 20 20"><path d="M6 15h8V5H6v10Zm-2 0V5H2V3h16v2h-2v10h2v2H2v-2h2ZM4 3V1h12v2H4Z"/></svg>
+        </div>
+      </div>
     </div>
-    <div class="flex items-center justify-center h-48 mb-4 rounded bg-gray-50">
-       <p class="text-2xl text-gray-400">
-          <svg class="w-3.5 h-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16"/>
-          </svg>
-       </p>
+
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-5">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm font-medium text-gray-500">Companies</p>
+          <p class="text-3xl font-bold text-gray-800 mt-1"><%= stats.totalCompanies || 0 %></p>
+        </div>
+        <div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center">
+          <svg class="w-6 h-6 text-green-600" fill="currentColor" viewBox="0 0 20 18"><path d="M14 2a3.963 3.963 0 0 0-1.4.267 6.439 6.439 0 0 1-1.331 6.638A4 4 0 1 0 14 2Zm1 9h-1.264A6.957 6.957 0 0 1 15 15v2a2.97 2.97 0 0 1-.184 1H19a1 1 0 0 0 1-1v-1a5.006 5.006 0 0 0-5-5ZM6.5 9a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9ZM8 10H5a5.006 5.006 0 0 0-5 5v2a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-2a5.006 5.006 0 0 0-5-5Z"/></svg>
+        </div>
+      </div>
     </div>
-    <div class="grid grid-cols-2 gap-4 mb-4">
-       <div class="flex items-center justify-center rounded bg-gray-50 h-28">
-          <p class="text-2xl text-gray-400">
-             <svg class="w-3.5 h-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16"/>
-             </svg>
-          </p>
-       </div>
-       <div class="flex items-center justify-center rounded bg-gray-50 h-28">
-          <p class="text-2xl text-gray-400">
-             <svg class="w-3.5 h-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16"/>
-             </svg>
-          </p>
-       </div>
-       <div class="flex items-center justify-center rounded bg-gray-50 h-28">
-          <p class="text-2xl text-gray-400">
-             <svg class="w-3.5 h-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16"/>
-             </svg>
-          </p>
-       </div>
-       <div class="flex items-center justify-center rounded bg-gray-50 h-28">
-          <p class="text-2xl text-gray-400">
-             <svg class="w-3.5 h-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16"/>
-             </svg>
-          </p>
-       </div>
+
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-5">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm font-medium text-gray-500">Users</p>
+          <p class="text-3xl font-bold text-gray-800 mt-1"><%= stats.totalUsers || 0 %></p>
+        </div>
+        <div class="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center">
+          <svg class="w-6 h-6 text-purple-600" fill="currentColor" viewBox="0 0 20 18"><path d="M10 0C4.5 0 0 5 0 10s4.5 10 10 10 10-5 10-10S15.5 0 10 0zm0 15a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/></svg>
+        </div>
+      </div>
     </div>
-    <div class="flex items-center justify-center h-48 mb-4 rounded bg-gray-50">
-       <p class="text-2xl text-gray-400">
-          <svg class="w-3.5 h-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16"/>
-          </svg>
-       </p>
+
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-5">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm font-medium text-gray-500">CVs / Resumes</p>
+          <p class="text-3xl font-bold text-gray-800 mt-1"><%= stats.totalCvs || 0 %></p>
+        </div>
+        <div class="w-12 h-12 rounded-full bg-orange-100 flex items-center justify-center">
+          <svg class="w-6 h-6 text-orange-600" fill="currentColor" viewBox="0 0 20 20"><path d="M4 0h12a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2zm3 4a1 1 0 0 0 0 2h6a1 1 0 0 0 0-2H7zm0 3a1 1 0 0 0 0 2h6a1 1 0 0 0 0-2H7zm0 3a1 1 0 0 0 0 2h4a1 1 0 0 0 0-2H7z"/></svg>
+        </div>
+      </div>
     </div>
-    <div class="grid grid-cols-2 gap-4">
-       <div class="flex items-center justify-center rounded bg-gray-50 h-28">
-          <p class="text-2xl text-gray-400">
-             <svg class="w-3.5 h-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16"/>
-             </svg>
-          </p>
-       </div>
-       <div class="flex items-center justify-center rounded bg-gray-50 h-28">
-          <p class="text-2xl text-gray-400">
-             <svg class="w-3.5 h-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16"/>
-             </svg>
-          </p>
-       </div>
-       <div class="flex items-center justify-center rounded bg-gray-50 h-28">
-          <p class="text-2xl text-gray-400">
-             <svg class="w-3.5 h-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16"/>
-             </svg>
-          </p>
-       </div>
-       <div class="flex items-center justify-center rounded bg-gray-50 h-28">
-          <p class="text-2xl text-gray-400">
-             <svg class="w-3.5 h-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16"/>
-             </svg>
-          </p>
-       </div>
+
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-5">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm font-medium text-gray-500">Blog Posts</p>
+          <p class="text-3xl font-bold text-gray-800 mt-1"><%= stats.totalBlogs || 0 %></p>
+        </div>
+        <div class="w-12 h-12 rounded-full bg-pink-100 flex items-center justify-center">
+          <svg class="w-6 h-6 text-pink-600" fill="currentColor" viewBox="0 0 20 20"><path d="m17.418 3.623-.018-.008a6.713 6.713 0 0 0-2.4-.569V2h1a1 1 0 1 0 0-2h-2a1 1 0 0 0-1 1v2H9.89A6.977 6.977 0 0 1 12 8v5h-2V8A5 5 0 1 0 0 8v6a1 1 0 0 0 1 1h8v4a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-4h6a1 1 0 0 0 1-1V8a5 5 0 0 0-2.582-4.377Z"/></svg>
+        </div>
+      </div>
     </div>
- </div>
+
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-5">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm font-medium text-gray-500">Total Visitors</p>
+          <p class="text-3xl font-bold text-gray-800 mt-1"><%= stats.totalVisitors || 0 %></p>
+        </div>
+        <div class="w-12 h-12 rounded-full bg-teal-100 flex items-center justify-center">
+          <svg class="w-6 h-6 text-teal-600" fill="currentColor" viewBox="0 0 20 18"><path d="M10 0C4.5 0 0 5 0 10s4.5 10 10 10 10-5 10-10S15.5 0 10 0zm0 15a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/></svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-5">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm font-medium text-gray-500">Scraping Sites</p>
+          <p class="text-3xl font-bold text-gray-800 mt-1"><%= stats.totalSites || 0 %></p>
+        </div>
+        <div class="w-12 h-12 rounded-full bg-indigo-100 flex items-center justify-center">
+          <svg class="w-6 h-6 text-indigo-600" fill="currentColor" viewBox="0 0 20 18"><path d="M10 0C4.477 0 0 4.477 0 10s4.477 10 10 10 10-4.477 10-10S15.523 0 10 0zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8z"/></svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-5">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm font-medium text-gray-500">Daily Visitors</p>
+          <p class="text-3xl font-bold text-gray-800 mt-1"><%= stats.dailyVisitors || 0 %></p>
+        </div>
+        <div class="w-12 h-12 rounded-full bg-cyan-100 flex items-center justify-center">
+          <svg class="w-6 h-6 text-cyan-600" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a8 8 0 100 16 8 8 0 000-16zm0 14a6 6 0 110-12 6 6 0 010 12zm-1-5h2v2H9v-2zm0-6h2v4H9V5z"/></svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Jobs Table -->
+  <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+    <div class="px-5 py-4 border-b border-gray-200 flex items-center justify-between">
+      <h2 class="text-lg font-semibold text-gray-800">Recent Jobs</h2>
+      <a href="/admin/jobs" class="text-sm text-indigo-600 hover:text-indigo-800 font-medium">View All</a>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm text-left text-gray-500">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+          <tr>
+            <th class="px-5 py-3">Title</th>
+            <th class="px-5 py-3">Company</th>
+            <th class="px-5 py-3">Status</th>
+            <th class="px-5 py-3">Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (recentJobs && recentJobs.length > 0) { %>
+            <% recentJobs.forEach(function(job) { %>
+            <tr class="border-b hover:bg-gray-50">
+              <td class="px-5 py-3 font-medium text-gray-900 max-w-xs truncate"><%= job.title %></td>
+              <td class="px-5 py-3"><%= job.companyName || '-' %></td>
+              <td class="px-5 py-3">
+                <% if (job.isActive) { %>
+                  <span class="px-2 py-1 text-xs font-medium text-green-700 bg-green-100 rounded-full">Active</span>
+                <% } else { %>
+                  <span class="px-2 py-1 text-xs font-medium text-red-700 bg-red-100 rounded-full">Inactive</span>
+                <% } %>
+              </td>
+              <td class="px-5 py-3"><%= job.createdAt ? new Date(job.createdAt).toLocaleDateString() : '-' %></td>
+            </tr>
+            <% }); %>
+          <% } else { %>
+            <tr>
+              <td colspan="4" class="px-5 py-8 text-center text-gray-400">No jobs found</td>
+            </tr>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

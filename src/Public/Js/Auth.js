@@ -72,7 +72,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     alertify.success(res.data.message);
                     // Redirect based on role
                     const role = res.data.user.role;
-                    if (role === 'company') {
+                    if (role === 'admin') {
+                        window.location.href = '/admin/dashboard';
+                    } else if (role === 'company') {
                         window.location.href = '/company/dashboard';
                     } else {
                         window.location.href = '/dashboard';
@@ -128,7 +130,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (res.status === 201) {
                     alertify.success(res.data.message);
                     const userRole = res.data.user.role;
-                    if (userRole === 'company') {
+                    if (userRole === 'admin') {
+                        window.location.href = '/admin/dashboard';
+                    } else if (userRole === 'company') {
                         window.location.href = '/company/dashboard';
                     } else {
                         window.location.href = '/dashboard';

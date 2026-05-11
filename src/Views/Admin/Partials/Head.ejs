@@ -2,21 +2,46 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>
-        <%= title %>
-    </title>
+    <title><%= title %></title>
 
     <!-- FontAwesome CDN -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
 
-    <!-- CDN Tailwind / remove after complete project -->
+    <!-- CDN Tailwind -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- CDN Tailwind / remove after complete project -->
 
-    <!-- Tailwind CSS -->
+    <!-- Admin Styles -->
     <link rel="stylesheet" href="/Admin/Css/Satoshi.css">
     <link rel="stylesheet" href="/Admin/Css/Loader.css">
-    <link rel="stylesheet" href="/Css/Base.css">
-    <link rel="stylesheet" href="style.css">
 
+    <!-- Custom Admin Styles -->
+    <style>
+      body { font-family: 'Satoshi', sans-serif; background-color: #f1f5f9; }
+      .sidebar-active { background-color: #eef2ff !important; color: #4f46e5 !important; }
+      .sidebar-active svg { color: #4f46e5 !important; }
+      .modal-open { overflow: hidden; }
+      .table-row-hover:hover { background-color: #f8fafc; }
+      .badge { display: inline-flex; align-items: center; padding: 0.125rem 0.625rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 500; }
+      .badge-green { background-color: #dcfce7; color: #166534; }
+      .badge-red { background-color: #fee2e2; color: #991b1b; }
+      .badge-blue { background-color: #dbeafe; color: #1e40af; }
+      .badge-yellow { background-color: #fef9c3; color: #854d0e; }
+      .badge-purple { background-color: #f3e8ff; color: #6b21a8; }
+      .badge-gray { background-color: #f3f4f6; color: #374151; }
+      .sidebar-link.active { background-color: #eef2ff !important; color: #4f46e5 !important; }
+      .sidebar-link.active svg { color: #4f46e5 !important; }
+    </style>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        var path = window.location.pathname;
+        document.querySelectorAll('.sidebar-link').forEach(function(link) {
+          var href = link.getAttribute('href');
+          if (href && href !== '/admin/dashboard' && path.startsWith(href)) {
+            link.classList.add('active');
+          } else if (href === '/admin/dashboard' && (path === '/admin' || path === '/admin/dashboard')) {
+            link.classList.add('active');
+          }
+        });
+      });
+    </script>
 </head>

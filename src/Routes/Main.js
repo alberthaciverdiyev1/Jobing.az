@@ -24,6 +24,7 @@ const router = express.Router();
 router.post('/api/auth/register', validator.registerValidator, authController.register);
 router.post('/api/auth/login', validator.loginValidator, authController.login);
 router.post('/api/auth/logout', authController.logout);
+router.get('/api/auth/logout', authController.logout);
 router.get('/api/auth/me', authController.getMe);
 
 // ============================================================
@@ -144,12 +145,92 @@ router.post('/set-lang', (req, res) => {
 });
 
 // ============================================================
-// ADMIN PANEL
+// ADMIN PANEL PAGES (protected - admin role required)
 // ============================================================
-router.get('/admin', adminController.adminIndex);
-router.get('/admin/categories', adminController.adminCategoryView);
-router.get('/admin/blogs', adminController.adminBlogsView);
-router.get('/admin/blogs/add', adminController.adminBlogsAddView);
+router.get('/admin', authMiddleware.authenticate, authMiddleware.authorize('admin'), adminController.adminIndex);
+router.get('/admin/dashboard', authMiddleware.authenticate, authMiddleware.authorize('admin'), adminController.adminIndex);
+router.get('/admin/jobs', authMiddleware.authenticate, authMiddleware.authorize('admin'), adminController.adminJobsView);
+router.get('/admin/companies', authMiddleware.authenticate, authMiddleware.authorize('admin'), adminController.adminCompaniesView);
+router.get('/admin/users', authMiddleware.authenticate, authMiddleware.authorize('admin'), adminController.adminUsersView);
+router.get('/admin/categories', authMiddleware.authenticate, authMiddleware.authorize('admin'), adminController.adminCategoriesView);
+router.get('/admin/cities', authMiddleware.authenticate, authMiddleware.authorize('admin'), adminController.adminCitiesView);
+router.get('/admin/sites', authMiddleware.authenticate, authMiddleware.authorize('admin'), adminController.adminSitesView);
+router.get('/admin/blogs', authMiddleware.authenticate, authMiddleware.authorize('admin'), adminController.adminBlogsView);
+router.get('/admin/blogs/add', authMiddleware.authenticate, authMiddleware.authorize('admin'), adminController.adminBlogsAddView);
+router.get('/admin/blogs/edit/:id', authMiddleware.authenticate, authMiddleware.authorize('admin'), adminController.adminBlogsEditView);
+router.get('/admin/cvs', authMiddleware.authenticate, authMiddleware.authorize('admin'), adminController.adminCvsView);
+router.get('/admin/visitors', authMiddleware.authenticate, authMiddleware.authorize('admin'), adminController.adminVisitorsView);
+router.get('/admin/settings', authMiddleware.authenticate, authMiddleware.authorize('admin'), adminController.adminSettingsView);
+
+// ============================================================
+// ADMIN API (protected - admin role required)
+// ============================================================
+
+// Dashboard
+router.get('/api/admin/stats', authMiddleware.authenticate, authMiddleware.authorize('admin'), adminController.dashboardStats);
+
+// Jobs
+router.get('/api/admin/jobs', authMiddleware.authenticate, authMiddleware.authorize('admin'), adminController.getJobs);
+router.get('/api/admin/jobs/:id', authMiddleware.authenticate, authMiddleware.authorize('admin'), adminController.getJob);
+router.post('/api/admin/jobs', authMiddleware.authenticate, authMiddleware.authorize('admin'), adminController.createJob);
+router.put('/api/admin/jobs/:id', authMiddleware.authenticate, authMiddleware.authorize('admin'), adminController.updateJob);
+router.delete('/api/admin/jobs/:id', authMiddleware.authenticate, authMiddleware.authorize('admin'), adminController.deleteJob);
+router.patch('/api/admin/jobs/:id/toggle', authMiddleware.authenticate, authMiddleware.authorize('admin'), adminController.toggleJobActive);
+
+// Companies
+router.get('/api/admin/companies', authMiddleware.authenticate, authMiddleware.authorize('admin'), adminController.getCompanies);
+router.get('/api/admin/companies/:id', authMiddleware.authenticate, authMiddleware.authorize('admin'), adminController.getCompany);
+router.post('/api/admin/companies', authMiddleware.authenticate, authMiddleware.authorize('admin'), adminController.createCompany);
+router.put('/api/admin/companies/:id', authMiddleware.authenticate, authMiddleware.authorize('admin'), adminController.updateCompany);
+router.delete('/api/admin/companies/:id', authMiddleware.authenticate, authMiddleware.authorize('admin'), adminController.deleteCompany);
+
+// Users
+router.get('/api/admin/users', authMiddleware.authenticate, authMiddleware.authorize('admin'), adminController.getUsers);
+router.get('/api/admin/users/:id', authMiddleware.authenticate, authMiddleware.authorize('admin'), adminController.getUser);
+router.post('/api/admin/users', authMiddleware.authenticate, authMiddleware.authorize('admin'), adminController.createUser);
+router.put('/api/admin/users/:id', authMiddleware.authenticate, authMiddleware.authorize('admin'), adminController.updateUser);
+router.delete('/api/admin/users/:id', authMiddleware.authenticate, authMiddleware.authorize('admin'), adminController.deleteUser);
+
+// Categories
+router.get('/api/admin/categories', authMiddleware.authenticate, authMiddleware.authorize('admin'), adminController.getCategories);
+router.get('/api/admin/categories/:id', authMiddleware.authenticate, authMiddleware.authorize('admin'), adminController.getCategory);
+router.post('/api/admin/categories', authMiddleware.authenticate, authMiddleware.authorize('admin'), adminController.createCategory);
+router.put('/api/admin/categories/:id', authMiddleware.authenticate, authMiddleware.authorize('admin'), adminController.updateCategory);
+router.delete('/api/admin/categories/:id', authMiddleware.authenticate, authMiddleware.authorize('admin'), adminController.deleteCategory);
+
+// Cities
+router.get('/api/admin/cities', authMiddleware.authenticate, authMiddleware.authorize('admin'), adminController.getCities);
+router.get('/api/admin/cities/:id', authMiddleware.authenticate, authMiddleware.authorize('admin'), adminController.getCity);
+router.post('/api/admin/cities', authMiddleware.authenticate, authMiddleware.authorize('admin'), adminController.createCity);
+router.put('/api/admin/cities/:id', authMiddleware.authenticate, authMiddleware.authorize('admin'), adminController.updateCity);
+router.delete('/api/admin/cities/:id', authMiddleware.authenticate, authMiddleware.authorize('admin'), adminController.deleteCity);
+
+// Sites
+router.get('/api/admin/sites', authMiddleware.authenticate, authMiddleware.authorize('admin'), adminController.getSites);
+router.get('/api/admin/sites/:id', authMiddleware.authenticate, authMiddleware.authorize('admin'), adminController.getSite);
+router.post('/api/admin/sites', authMiddleware.authenticate, authMiddleware.authorize('admin'), adminController.createSite);
+router.put('/api/admin/sites/:id', authMiddleware.authenticate, authMiddleware.authorize('admin'), adminController.updateSite);
+router.delete('/api/admin/sites/:id', authMiddleware.authenticate, authMiddleware.authorize('admin'), adminController.deleteSite);
+
+// Blogs
+router.get('/api/admin/blogs', authMiddleware.authenticate, authMiddleware.authorize('admin'), adminController.getBlogs);
+router.get('/api/admin/blogs/:id', authMiddleware.authenticate, authMiddleware.authorize('admin'), adminController.getBlog);
+router.post('/api/admin/blogs', authMiddleware.authenticate, authMiddleware.authorize('admin'), adminController.createBlog);
+router.put('/api/admin/blogs/:id', authMiddleware.authenticate, authMiddleware.authorize('admin'), adminController.updateBlog);
+router.delete('/api/admin/blogs/:id', authMiddleware.authenticate, authMiddleware.authorize('admin'), adminController.deleteBlog);
+
+// CVs
+router.get('/api/admin/cvs', authMiddleware.authenticate, authMiddleware.authorize('admin'), adminController.getCvs);
+router.get('/api/admin/cvs/:id', authMiddleware.authenticate, authMiddleware.authorize('admin'), adminController.getCv);
+router.delete('/api/admin/cvs/:id', authMiddleware.authenticate, authMiddleware.authorize('admin'), adminController.deleteCv);
+
+// Visitors
+router.get('/api/admin/visitors', authMiddleware.authenticate, authMiddleware.authorize('admin'), adminController.getVisitors);
+
+// Scraping triggers
+router.post('/api/admin/scrape/all', authMiddleware.authenticate, authMiddleware.authorize('admin'), adminController.triggerScrapeAll);
+router.post('/api/admin/scrape/main', authMiddleware.authenticate, authMiddleware.authorize('admin'), adminController.triggerScrapeMain);
+router.post('/api/admin/scrape/cancel', authMiddleware.authenticate, authMiddleware.authorize('admin'), adminController.cancelScraping);
 
 // ============================================================
 // SEND MAIL
