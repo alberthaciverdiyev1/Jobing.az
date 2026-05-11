@@ -50,6 +50,7 @@ app.use(authMiddleware.setUser);
 app.use(i18n.init);
 app.use((req, res, next) => {
     res.locals.Production = Production;
+    res.locals.req = req;
     next();
 });
 app.use('/', routes);

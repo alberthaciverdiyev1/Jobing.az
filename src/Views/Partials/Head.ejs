@@ -1,25 +1,97 @@
 <head>
     <meta charset="UTF-8" />
-    <meta name="google-site-verification" content="DKxrd6e6GbNPPd0KnuDbbsMtnVgmKDdA2jgk3QC-MJc" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- <title>Ən Son Vakansiyalar - Mühasib, Proqramist və Daha Çox | Jobing.az</title> -->
-    <meta name="google-adsense-account" content="ca-pub-6130649958615254">
-    <meta name="description" content="Azərbaycanda ən son vakansiyalar! Bütün yeni iş elanlarını Jobing.az-da tapın.">
-    <meta name="keywords"
-        content="hellojob, vakansiya, boss.az vakansiya, restoran vakansiya, otel vakansiya, iş elanları, ən son vakansiyalar, jobing.az">
-    <title>
-        <%= title %>
-    </title>
 
-    <!-- Inter Font -->
+    <!-- Primary Meta -->
+    <title><%= typeof title !== 'undefined' ? title : 'Jobing.az' %> | Jobing.az</title>
+    <meta name="description" content="<%= typeof description !== 'undefined' ? description : 'Azərbaycanda ən son vakansiyalar, iş elanları və karyera imkanları. Jobing.az ilə iş axtarışınızı başlayın.' %>">
+    <meta name="keywords" content="vakansiya, iş elanları, iş axtarışı, Azərbaycan vakansiyalar, jobing.az, boss.az, hello job, karyera">
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large">
+    <meta name="google-site-verification" content="DKxrd6e6GbNPPd0KnuDbbsMtnVgmKDdA2jgk3QC-MJc" />
+    <meta name="google-adsense-account" content="ca-pub-6130649958615254">
+    <link rel="canonical" href="<%= typeof canonical !== 'undefined' ? canonical : 'https://jobing.az' + (req && req.originalUrl ? req.originalUrl.split('?')[0] : '/') %>" />
+
+    <!-- Hreflang -->
+    <link rel="alternate" href="https://jobing.az<%= req ? req.originalUrl.split('?')[0] : '/' %>" hreflang="az" />
+    <link rel="alternate" href="https://jobing.az/en<%= req ? req.originalUrl.split('?')[0] : '/' %>" hreflang="en" />
+    <link rel="alternate" href="https://jobing.az/ru<%= req ? req.originalUrl.split('?')[0] : '/' %>" hreflang="ru" />
+    <link rel="alternate" href="https://jobing.az<%= req ? req.originalUrl.split('?')[0] : '/' %>" hreflang="x-default" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="<%= typeof ogType !== 'undefined' ? ogType : 'website' %>" />
+    <meta property="og:title" content="<%= typeof ogTitle !== 'undefined' ? ogTitle : (typeof title !== 'undefined' ? title : 'Jobing.az') %>" />
+    <meta property="og:description" content="<%= typeof ogDescription !== 'undefined' ? ogDescription : (typeof description !== 'undefined' ? description : '') %>" />
+    <meta property="og:url" content="<%= typeof canonical !== 'undefined' ? canonical : 'https://jobing.az' + (req && req.originalUrl ? req.originalUrl.split('?')[0] : '/') %>" />
+    <meta property="og:image" content="<%= typeof ogImage !== 'undefined' ? ogImage : 'https://jobing.az/Images/Static/Logo.png' %>" />
+    <meta property="og:site_name" content="Jobing.az" />
+    <meta property="og:locale" content="az_AZ" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="<%= typeof ogTitle !== 'undefined' ? ogTitle : (typeof title !== 'undefined' ? title : 'Jobing.az') %>" />
+    <meta name="twitter:description" content="<%= typeof ogDescription !== 'undefined' ? ogDescription : (typeof description !== 'undefined' ? description : '') %>" />
+    <meta name="twitter:image" content="<%= typeof ogImage !== 'undefined' ? ogImage : 'https://jobing.az/Images/Static/Logo.png' %>" />
+
+    <!-- JSON-LD: Organization -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Jobing.az",
+        "url": "https://jobing.az",
+        "logo": "https://jobing.az/Images/Static/Logo.png",
+        "sameAs": [
+            "https://www.facebook.com/profile.php?id=61569206672024",
+            "https://www.linkedin.com/company/jobing-az/",
+            "https://www.instagram.com/jobing.az/"
+        ],
+        "description": "Azərbaycanın ən böyük iş axtarış platforması",
+        "address": {
+            "@type": "PostalAddress",
+            "addressCountry": "AZ"
+        }
+    }
+    </script>
+
+    <!-- JSON-LD: WebSite -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Jobing.az",
+        "url": "https://jobing.az",
+        "potentialAction": {
+            "@type": "SearchAction",
+            "target": {
+                "@type": "EntryPoint",
+                "urlTemplate": "https://jobing.az/vakansiyalar?keyword={search_term_string}"
+            },
+            "query-input": "required name=search_term_string"
+        }
+    }
+    </script>
+
+    <!-- JSON-LD: BreadcrumbList (default) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Ana Səhifə", "item": "https://jobing.az/" },
+            { "@type": "ListItem", "position": 2, "name": "<%= typeof title !== 'undefined' ? title : 'Jobing.az' %>", "item": "https://jobing.az<%= req ? req.originalUrl.split('?')[0] : '/' %>" }
+        ]
+    }
+    </script>
+
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
-    <!-- FontAwesome CDN -->
+    <!-- FontAwesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet" />
 
-    <!-- Tailwind CSS via CDN -->
+    <!-- Tailwind -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -76,39 +148,33 @@
         }
     </script>
 
+    <!-- Styles -->
     <link rel="stylesheet" href="/Css/Output.css">
     <link rel="stylesheet" href="/Css/Custom.css">
     <link rel="stylesheet" href="/Css/Loader.css">
     <link rel="stylesheet" href="/Css/Libraries/Alertify/alertify.min.css">
     <link rel="stylesheet" href="/Css/Libraries/salarySlider.min.css">
     <link rel="stylesheet" href="/Css/Libraries/Ckeditor5.min.css">
-    <!-- <link rel="stylesheet" href="/Css/Libraries/Ckeditor/ckeditor5-editor.css"> -->
 
     <style>
         .modal-open { overflow: hidden; }
     </style>
 
     <!-- Favicons -->
-    <link rel="icon" href="Images/Favicons/favicon.ico" type="image/x-icon">
-    <!-- Apple Touch Icon -->
+    <link rel="icon" href="/Images/Favicons/favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-    <!-- Favicon 32x32 ve 16x16 -->
-    <link rel="icon" href="Images/Favicons/favicon-32x32.png" type="image/png" sizes="32x32">
-    <link rel="icon" href="Images/Favicons/favicon-16x16.png" type="image/png" sizes="16x16">
-    <!-- Web App Manifest -->
-    <link rel="manifest" href="Images/Favicons/site.webmanifest">
-    <!-- Android Chrome Icons -->
-    <link rel="icon" href="Images/Favicons/android-chrome-192x192.png" type="image/png" sizes="192x192">
-    <link rel="icon" href="Images/Favicons/android-chrome-512x512.png" type="image/png" sizes="512x512">
+    <link rel="icon" href="/Images/Favicons/favicon-32x32.png" type="image/png" sizes="32x32">
+    <link rel="icon" href="/Images/Favicons/favicon-16x16.png" type="image/png" sizes="16x16">
+    <link rel="manifest" href="/Images/Favicons/site.webmanifest">
+    <link rel="icon" href="/Images/Favicons/android-chrome-192x192.png" type="image/png" sizes="192x192">
+    <link rel="icon" href="/Images/Favicons/android-chrome-512x512.png" type="image/png" sizes="512x512">
 
-
-    <!-- Google tag (gtag.js) -->
+    <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-2932L7DPW8"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
-
         gtag('config', 'G-2932L7DPW8');
     </script>
     <meta name="google-adsense-account" content="ca-pub-8722833871752467">

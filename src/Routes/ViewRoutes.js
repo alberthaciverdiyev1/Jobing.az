@@ -21,6 +21,10 @@ router.get('/blogs', visitorLogger, viewController.blogs);
 router.get('/blogs/:slug', visitorLogger, viewController.blog);
 router.get('/vakansiyalar/:id/details', jobDataController.details);
 
+// SEO: Sitemap & Robots
+router.get('/sitemap.xml', viewController.sitemap);
+router.get('/robots.txt', viewController.robots);
+
 // Public CV & Company listing pages
 router.get('/cv-ler', visitorLogger, viewController.cvList);
 router.get('/cv-ler/:id', visitorLogger, viewController.cvDetail);

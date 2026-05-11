@@ -245,8 +245,18 @@ const jobDataController = {
 
             data.education = educationData.length > 0 ? educationData[0][0] : null;
             data.experience = experienceData.length > 0 ? experienceData[0][0] : null;
+
+            const plainDescription = data.description
+                ? data.description.replace(/<[^>]*>/g, '').trim().slice(0, 300)
+                : null;
+
             const view = {
-                title: 'Iş haqqında',
+                title: data.title,
+                description: `${data.title} — ${data.companyName}. ${data.location}. Maaş: ${data.minSalary || ''}${data.minSalary && data.maxSalary ? ' - ' : ''}${data.maxSalary || ''} AZN. ${plainDescription || ''}`,
+                ogTitle: `${data.title} — ${data.companyName}`,
+                ogDescription: `${data.title} vakansiyası. ${data.companyName} şirkəti ${data.location} üçün işçi axtarır. Maaş: ${data.minSalary || ''}${data.minSalary && data.maxSalary ? ' - ' : ''}${data.maxSalary || ''} AZN.`,
+                ogImage: data.companyImage || undefined,
+                ogType: 'article',
                 body: "Jobs/Details.ejs",
                 data: data,
                 js: 'Details.js',

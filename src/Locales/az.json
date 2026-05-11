@@ -43,7 +43,8 @@
 		"section": "Kateqoriyalar",
 		"title": "Populyar Kateqoriyalar",
 		"subtitle": "Ən çox vakansiya olan kateqoriyalar",
-		"vacancyCount": "vakansiya"
+		"vacancyCount": "vakansiya",
+		"browse": "Bax"
 	},
 	"howItWorks": {
 		"section": "İşləmə Prinsipi",
