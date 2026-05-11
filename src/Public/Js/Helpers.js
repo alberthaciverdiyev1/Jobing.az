@@ -46,7 +46,7 @@ export function createJobCard(element, compact = false) {
 
     const detailLink = (element.redirectUrl && element.redirectUrl !== "#")
         ? element.redirectUrl
-        : `/vakansiyalar/${element.uniqueKey || element._id}/details`;
+        : `/vakansiyalar/${element.slug || element.uniqueKey || element._id}/details`;
 
     const postedDate = element.postedAt ? element.postedAt.slice(0, 10) : '';
     const title = capitalizeFirstLetter(element.title);

@@ -2,6 +2,18 @@ import JobData from '../Models/JobData.js';
 import mongoose from 'mongoose';
 import Company from "../Models/Company.js";
 
+function generateSlug(title, suffix) {
+    const slug = title
+        .toLowerCase()
+        .replace(/[^a-z0-9\s-]/g, '')
+        .replace(/\s+/g, '-')
+        .replace(/-+/g, '-')
+        .replace(/^-|-$/g, '')
+        .slice(0, 80);
+    const shortSuffix = suffix ? String(suffix).slice(-6) : Date.now().toString().slice(-6);
+    return `${slug}-${shortSuffix}`;
+}
+
 const JobDataService = {
     // Create new job data (insert multiple records)
     create: async (data) => {
@@ -232,6 +244,7 @@ const JobDataService = {
             const job = new JobData(data);
             const savedJob = await job.save();
             savedJob.uniqueKey = savedJob._id.toString();
+            savedJob.slug = generateSlug(data.title || 'job', savedJob._id.toString());
             await savedJob.save();
             return { status: 200, message: 'Məlumat uğurla əlavə edildi!', "id": savedJob._id };
         } catch (error) {
@@ -244,7 +257,13 @@ const JobDataService = {
         try {
             const job = await JobData.aggregate([
                 {
-                    $match: { uniqueKey: id }
+                    $match: {
+                        $or: [
+                            { slug: id },
+                            { uniqueKey: id },
+                            { _id: mongoose.Types.ObjectId.isValid(id) ? new mongoose.Types.ObjectId(id) : undefined }
+                        ].filter(Boolean)
+                    }
                 },
                 {
                     $lookup: {
@@ -262,6 +281,7 @@ const JobDataService = {
                 {
                     $project: {
                         uniqueKey: 1,
+                        slug: 1,
                         title: 1,
                         email: 1,
                         phone: 1,
