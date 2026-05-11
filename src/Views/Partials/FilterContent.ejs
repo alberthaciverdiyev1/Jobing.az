@@ -28,19 +28,25 @@
     <!-- Category -->
     <div class="mb-4">
         <label class="block text-xs font-medium text-gray-500 mb-1"><%= __('jobs.category') %></label>
-        <select id="category-select-filter"
-                class="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all text-gray-900 appearance-none cursor-pointer">
-            <option value=""><%= __('jobs.allCategories') %></option>
-        </select>
+        <div class="relative">
+            <i class="fas fa-chevron-down absolute right-3 top-1/2 -translate-y-1/2 text-gray-300 text-[10px] pointer-events-none"></i>
+            <select id="category-select-filter"
+                    class="w-full px-3 py-2 bg-white border border-gray-200 hover:border-gray-300 focus:border-primary-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/10 transition-all text-gray-900 appearance-none cursor-pointer">
+                <option value=""><%= __('jobs.allCategories') %></option>
+            </select>
+        </div>
     </div>
 
     <!-- City -->
     <div class="mb-4">
         <label class="block text-xs font-medium text-gray-500 mb-1"><%= __('jobs.city') %></label>
-        <select id="city-select-filter"
-                class="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all text-gray-900 appearance-none cursor-pointer">
-            <option value=""><%= __('jobs.allCities') %></option>
-        </select>
+        <div class="relative">
+            <i class="fas fa-chevron-down absolute right-3 top-1/2 -translate-y-1/2 text-gray-300 text-[10px] pointer-events-none"></i>
+            <select id="city-select-filter"
+                    class="w-full px-3 py-2 bg-white border border-gray-200 hover:border-gray-300 focus:border-primary-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/10 transition-all text-gray-900 appearance-none cursor-pointer">
+                <option value=""><%= __('jobs.allCities') %></option>
+            </select>
+        </div>
     </div>
 
     <!-- Advanced Filters Toggle -->
@@ -56,17 +62,23 @@
     <div id="advancedFilters" class="hidden space-y-3 mb-4">
         <div>
             <label class="block text-xs font-medium text-gray-500 mb-1"><%= __('jobs.education') %></label>
-            <select id="education-select"
-                    class="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all text-gray-900 appearance-none cursor-pointer">
-                <option value=""><%= __('jobs.allEducation') %></option>
-            </select>
+            <div class="relative">
+                <i class="fas fa-chevron-down absolute right-3 top-1/2 -translate-y-1/2 text-gray-300 text-[10px] pointer-events-none"></i>
+                <select id="education-select"
+                        class="w-full px-3 py-2 bg-white border border-gray-200 hover:border-gray-300 focus:border-primary-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/10 transition-all text-gray-900 appearance-none cursor-pointer">
+                    <option value=""><%= __('jobs.allEducation') %></option>
+                </select>
+            </div>
         </div>
         <div>
             <label class="block text-xs font-medium text-gray-500 mb-1"><%= __('jobs.experience') %></label>
-            <select id="experience-select"
-                    class="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all text-gray-900 appearance-none cursor-pointer">
-                <option value=""><%= __('jobs.allExperience') %></option>
-            </select>
+            <div class="relative">
+                <i class="fas fa-chevron-down absolute right-3 top-1/2 -translate-y-1/2 text-gray-300 text-[10px] pointer-events-none"></i>
+                <select id="experience-select"
+                        class="w-full px-3 py-2 bg-white border border-gray-200 hover:border-gray-300 focus:border-primary-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/10 transition-all text-gray-900 appearance-none cursor-pointer">
+                    <option value=""><%= __('jobs.allExperience') %></option>
+                </select>
+            </div>
         </div>
     </div>
 
