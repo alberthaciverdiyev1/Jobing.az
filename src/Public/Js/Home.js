@@ -1,6 +1,11 @@
 import { createJobCard, noDataCard } from './Helpers.js';
+import { createCustomSelect } from './Components/CustomSelect.js';
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
+
+    // Init custom selects immediately (empty, will refresh after data loads)
+    const citySelect = document.getElementById('city-select');
+    const csCity = citySelect ? createCustomSelect(citySelect) : null;
 
     // ========== LOAD JOBS ==========
     async function getJobs() {
@@ -69,6 +74,8 @@ document.addEventListener("DOMContentLoaded", () => {
                     html += `<option value="${element.cityId}">${element.name}</option>`;
                 });
                 select.innerHTML = html;
+                // Refresh custom select with loaded options
+                if (csCity) csCity.refresh();
             }
         } catch (error) {
             console.error("Error fetching cities:", error);
@@ -94,28 +101,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // ========== HERO SEARCH REDIRECT ==========
-    document.getElementById("filter-jobs")?.addEventListener("click", () => {
-        const categorySelect = document.getElementById('category-select');
-        const citySelect = document.getElementById('city-select');
-        const keywordInput = document.getElementById('keyword');
-
-        const categoryId = categorySelect?.value || null;
-        const cityId = citySelect?.value || null;
-        const keyword = keywordInput?.value?.trim() || null;
-
-        const params = new URLSearchParams();
-        if (categoryId) params.set('categoryId', categoryId);
-        if (cityId) params.set('cityId', cityId);
-        if (keyword) params.set('keyword', keyword);
-
-        const qs = params.toString();
-        window.location.href = '/vakansiyalar' + (qs ? '?' + qs : '');
-    });
-
     // ========== INIT ==========
-    getJobs();
-    getCategories();
-    getCities();
-    getStatistics();
+    await Promise.all([getJobs(), getCategories(), getCities(), getStatistics()]);
 });

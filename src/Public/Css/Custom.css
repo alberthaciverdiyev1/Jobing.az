@@ -456,3 +456,58 @@ html {
 .job-card {
   transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 }
+
+/* ========== CUSTOM SELECT (Select2-like) ========== */
+.custom-select-dropdown {
+  animation: dropdownIn 0.15s ease-out;
+}
+
+@keyframes dropdownIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.custom-select-trigger .fa-chevron-down {
+  transition: transform 0.2s ease;
+}
+
+.custom-select-trigger .fa-chevron-down.rotate-180 {
+  transform: rotate(180deg);
+}
+
+.custom-select-options {
+  scrollbar-width: thin;
+  scrollbar-color: #d1d5db transparent;
+}
+
+.custom-select-options::-webkit-scrollbar {
+  width: 4px;
+}
+
+.custom-select-options::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-select-options::-webkit-scrollbar-thumb {
+  background-color: #d1d5db;
+  border-radius: 9999px;
+}
+
+.custom-select-option.selected {
+  background-color: rgba(255, 140, 0, 0.08);
+  color: #FF8C00;
+}
+
+.custom-select-option:hover {
+  background-color: #f9fafb;
+}
+
+.custom-select-search::placeholder {
+  color: #d1d5db;
+}

@@ -48,6 +48,13 @@ app.use(express.urlencoded({extended: true, limit: '100mb'}));
 app.use(cookieParser());
 app.use(authMiddleware.setUser);
 app.use(i18n.init);
+// Force Azerbaijani locale when no language cookie is set
+app.use((req, res, next) => {
+    if (!req.cookies.lang) {
+        req.setLocale('az');
+    }
+    next();
+});
 app.use((req, res, next) => {
     res.locals.Production = Production;
     res.locals.req = req;

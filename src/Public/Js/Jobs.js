@@ -1,7 +1,19 @@
 import { createJobCard, noDataCard } from './Helpers.js';
+import { createCustomSelect } from './Components/CustomSelect.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
+    // Init custom selects immediately (empty, will refresh after data loads)
+    const csCategory = createCustomSelect(document.getElementById('category-select-filter'));
+    const csCity = createCustomSelect(document.getElementById('city-select-filter'));
+    const csEducation = createCustomSelect(document.getElementById('education-select'));
+    const csExperience = createCustomSelect(document.getElementById('experience-select'));
+
+    const customSelects = [csCategory, csCity, csEducation, csExperience].filter(Boolean);
+
+    // Load filter data, then refresh custom selects
     await Promise.all([getCategories(), getCities(), getEducation(), getExperience()]);
+    customSelects.forEach(cs => cs.refresh());
+
     restoreFilters();
     setupMobileFilterSheet();
 });
@@ -23,7 +35,6 @@ function setupMobileFilterSheet() {
 
     function openSheet() {
         overlay.classList.remove('hidden');
-        // Trigger reflow before adding translate class for animation
         requestAnimationFrame(() => {
             sheet.classList.remove('translate-y-full');
             sheet.classList.add('translate-y-0');
@@ -35,7 +46,6 @@ function setupMobileFilterSheet() {
         sheet.classList.remove('translate-y-0');
         sheet.classList.add('translate-y-full');
         document.body.classList.remove('overflow-hidden');
-        // Hide overlay after transition
         setTimeout(() => {
             overlay.classList.add('hidden');
         }, 300);
@@ -45,14 +55,12 @@ function setupMobileFilterSheet() {
     closeBtn?.addEventListener('click', closeSheet);
     backdrop?.addEventListener('click', closeSheet);
 
-    // Mobile apply: trigger filter + close
     mobileApply?.addEventListener('click', () => {
         offset = 0;
         fetchJobs();
         closeSheet();
     });
 
-    // Sync mobile clear with desktop clear
     document.getElementById('mobile-clear-filters')?.addEventListener('click', function () {
         clearAllFilters();
         offset = 0;
@@ -70,7 +78,6 @@ function clearAllFilters() {
     document.getElementById('experience-select').value = '';
     offset = 0;
     allJobs = true;
-    // Reset job type tabs
     document.querySelectorAll('.job-type-btn').forEach(btn => {
         btn.classList.remove('active', 'bg-primary-500', 'text-white');
         btn.classList.add('bg-gray-100', 'text-gray-600');
@@ -100,7 +107,6 @@ function updateActiveFilterCount() {
 }
 
 // ========== DESKTOP FILTER EVENTS ==========
-// Advanced filter toggle
 document.getElementById('toggleAdvanced')?.addEventListener('click', function () {
     const advanced = document.getElementById('advancedFilters');
     advanced?.classList.toggle('hidden');
@@ -109,19 +115,16 @@ document.getElementById('toggleAdvanced')?.addEventListener('click', function ()
         : '<i class="fas fa-minus-circle"></i> Daralt';
 });
 
-// Apply filters
 document.getElementById('applyFiltersBtn')?.addEventListener('click', () => {
     offset = 0;
     fetchJobs();
 });
 
-// Clear filters
 document.getElementById('clearFilters')?.addEventListener('click', function () {
     clearAllFilters();
     fetchJobs();
 });
 
-// Search on enter
 document.getElementById('search')?.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') {
         offset = 0;
@@ -129,7 +132,6 @@ document.getElementById('search')?.addEventListener('keydown', (e) => {
     }
 });
 
-// Job type tabs
 document.querySelectorAll('.job-type-btn').forEach(btn => {
     btn.addEventListener('click', function () {
         document.querySelectorAll('.job-type-btn').forEach(b => {
@@ -323,7 +325,6 @@ function loadMoreBtn() {
     </div>`;
 }
 
-// Load more handler
 document.addEventListener('click', function (e) {
     if (e.target.closest('#load-more-btn')) {
         const btn = e.target.closest('#load-more-btn');
