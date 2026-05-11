@@ -104,18 +104,21 @@
             <h2 class="text-2xl sm:text-3xl font-bold text-gray-900"><%= __('categories.title') %></h2>
             <p class="text-gray-500 text-sm sm:text-base mt-1"><%= __('categories.subtitle') %></p>
         </div>
+        <% const iconColors = [
+            'from-violet-500 to-purple-600', 'from-emerald-500 to-teal-600', 'from-orange-500 to-amber-600',
+            'from-sky-500 to-blue-600', 'from-rose-500 to-pink-600', 'from-cyan-500 to-teal-600',
+            'from-amber-500 to-orange-600', 'from-indigo-500 to-violet-600', 'from-lime-500 to-green-600',
+            'from-red-500 to-rose-600'
+        ]; %>
         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-            <% topCategories.forEach(function(cat) { %>
-            <a href="/vakansiyalar?categoryId=<%= cat.categoryId %>" class="bg-white border border-gray-200 rounded-lg p-4 hover:border-gray-300 hover:shadow-sm transition-all flex flex-col items-center text-center group">
-                <div class="w-12 h-12 mb-3 flex items-center justify-center bg-gray-50 rounded-lg">
-                    <% if (cat.logoUrl) { %>
-                    <img src="<%= cat.logoUrl %>" alt="<%= cat.name %>" class="w-8 h-8 object-contain" onerror="this.onerror=null;this.style.display='none';this.parentElement.innerHTML='<i class=\\'fas fa-folder text-gray-300 text-xl\\'></i>'">
-                    <% } else { %>
-                    <i class="fas fa-folder text-gray-300 text-xl"></i>
-                    <% } %>
+            <% topCategories.forEach(function(cat, idx) { %>
+            <a href="/vakansiyalar?categoryId=<%= cat.categoryId %>"
+               class="group relative bg-white border border-gray-100 rounded-xl p-5 hover:border-gray-200 hover:shadow-md transition-all duration-200 flex flex-col items-center text-center">
+                <div class="w-14 h-14 mb-3 flex items-center justify-center rounded-xl bg-gradient-to-br <%= iconColors[idx % iconColors.length] %> shadow-sm group-hover:shadow-md transition-shadow">
+                    <i class="fas <%= cat.icon || 'fa-folder' %> text-white text-lg"></i>
                 </div>
-                <h3 class="text-sm font-medium text-gray-900 group-hover:text-primary-500 transition-colors line-clamp-2"><%= cat.name %></h3>
-                <p class="text-xs text-gray-400 mt-1"><%= cat.count %> <%= __('categories.vacancyCount') %></p>
+                <h3 class="text-sm font-semibold text-gray-900 group-hover:text-primary-600 transition-colors line-clamp-2 leading-snug"><%= cat.name %></h3>
+                <p class="text-xs text-gray-400 mt-1.5 font-medium"><%= cat.count %> <%= __('categories.vacancyCount') %></p>
             </a>
             <% }); %>
         </div>

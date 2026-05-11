@@ -380,6 +380,7 @@ const JobDataService = {
                         categoryId: '$_id',
                         name: { $ifNull: ['$category.categoryName', 'Digər'] },
                         logoUrl: { $ifNull: ['$category.logoUrl', ''] },
+                        icon: { $ifNull: ['$category.icon', 'fa-folder'] },
                         count: 1
                     }
                 }
