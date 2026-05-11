@@ -8,6 +8,7 @@ import Blog from "../Models/Blog.js";
 import BlogService from "../Services/BlogService.js";
 import CVService from "../Services/CVService.js";
 import NewsService from "../Services/NewsService.js";
+import JobData from "../Models/JobData.js";
 
 const ViewController = {
     home: async (req, res) => {
@@ -19,6 +20,7 @@ const ViewController = {
         }
         const view = {
             title: 'Ana Səhifə',
+            description: 'Azərbaycanda ən son vakansiyalar, iş elanları və karyera imkanları. Jobing.az ilə iş axtarışınızı başlayın.',
             body: "Home/Index.ejs",
             js: "Home.js",
             currentPage: 'home',
@@ -35,6 +37,7 @@ const ViewController = {
         }
         const view = {
             title: 'Giriş / Qeydiyyat',
+            description: 'Jobing.az-a daxil olun və ya yeni hesab yaradın. İş axtarışı və elan yerləşdirmə üçün qeydiyyatdan keçin.',
             body: "Auth/Index.ejs",
             js: "Auth.js",
             currentPage: 'auth'
@@ -44,6 +47,7 @@ const ViewController = {
     jobs: async (req, res) => {
         const view = {
             title: 'Vakansiyalar',
+            description: 'Azərbaycandakı ən son vakansiya elanları. Minlərlə iş imkanı arasından sizə uyğun olanı tapın.',
             body: "Jobs/Index.ejs",
             js: "Jobs.js",
             currentPage: 'jobs'
@@ -53,6 +57,7 @@ const ViewController = {
     resumes: async (req, res) => {
         const view = {
             title: 'CV-lər',
+            description: 'İş axtaranların CV-ləri. Namizədlərin təcrübə və bacarıqlarını kəşf edin.',
             body: "Jobs/Index.ejs",
             js: "Jobs.js",
             currentPage: 'resumes'
@@ -62,6 +67,7 @@ const ViewController = {
     blogs: async (req, res) => {
         const view = {
             title: 'Bloqlar',
+            description: 'Karyera məsləhətləri, iş axtarışı strategiyaları və peşəkar inkişaf haqqında bloq yazıları.',
             body: "Blog/List.ejs",
             js: "Blog.js",
             currentPage: 'blogs'
@@ -74,6 +80,11 @@ const ViewController = {
         const blog = await BlogService.details(slug);
         const view = {
             title: blog.name,
+            description: blog.description || blog.name,
+            ogTitle: blog.name,
+            ogDescription: blog.description || blog.name,
+            ogImage: blog.imageUrl || undefined,
+            ogType: 'article',
             body: 'Blog/Details.ejs',
             js: 'Blog.js',
             currentPage: 'blogs',
@@ -90,6 +101,7 @@ const ViewController = {
             const categories = await NewsService.getCategories();
             const view = {
                 title: 'Xəbərlər',
+                description: 'Ən son iş və karyera xəbərləri. Azərbaycanda iş dünyası haqqında güncəl məlumatlar.',
                 body: "News/List.ejs",
                 js: "NewsList.js",
                 currentPage: 'news',
@@ -110,6 +122,11 @@ const ViewController = {
             const similar = await NewsService.getSimilar(news.category, slug);
             const view = {
                 title: news.title,
+                description: news.description || news.title,
+                ogTitle: news.title,
+                ogDescription: news.description || news.title,
+                ogImage: news.imageUrl || undefined,
+                ogType: 'article',
                 body: 'News/Detail.ejs',
                 js: 'NewsDetail.js',
                 currentPage: 'news',
@@ -126,6 +143,7 @@ const ViewController = {
     aboutUs: async (req, res) => {
         const view = {
             title: 'Haqqımızda',
+            description: 'Jobing.az - Azərbaycanın ən böyük iş axtarış platforması. Missiyamız iş axtaranlar və işəgötürənləri bir araya gətirməkdir.',
             body: "AboutUs/Index.ejs",
             js: null,
             currentPage: 'about'
@@ -135,6 +153,7 @@ const ViewController = {
     faq: async (req, res) => {
         const view = {
             title: 'Tez-tez verilən suallar',
+            description: 'İş axtarışı, CV yaratma, elan yerləşdirmə və digər mövzularda ən çox verilən suallar.',
             body: "AboutUs/Faq.ejs",
             js: null,
             currentPage: 'faq'
@@ -144,6 +163,7 @@ const ViewController = {
     contactUs: async (req, res) => {
         const view = {
             title: 'Bizimlə Əlaqə',
+            description: 'Jobing.az ilə əlaqə saxlayın. Suallarınız, təklif və rəyləriniz üçün bizə yazın.',
             body: "ContactUs/Index.ejs",
             js: 'ContactUs.js',
             currentPage: 'contact'
@@ -157,6 +177,7 @@ const ViewController = {
         }
         const view = {
             title: 'Yeni vakansiya',
+            description: 'Şirkətiniz üçün yeni vakansiya elanı yerləşdirin. İş axtaran ən uyğun namizədlərə çatın.',
             body: "Jobs/Add.ejs",
             js: 'NewJob.js',
             currentPage: 'add-job'
@@ -169,6 +190,7 @@ const ViewController = {
         const cvs = await CVService.findByUser(req.user._id);
         const view = {
             title: 'Mənim Panelim',
+            description: 'CV-lərinizi idarə edin, müraciətlərinizi izləyin.',
             body: "Dashboard/Index.ejs",
             js: "Dashboard.js",
             currentPage: 'dashboard',
@@ -182,6 +204,7 @@ const ViewController = {
         const jobs = await JobDataService.findByCompany(req.user.companyName);
         const view = {
             title: 'Şirkət Paneli',
+            description: 'Vakansiyalarınızı idarə edin, müraciətlərə baxın.',
             body: "Dashboard/Company.ejs",
             js: "Dashboard.js",
             currentPage: 'company-dashboard',
@@ -198,6 +221,7 @@ const ViewController = {
         }
         const view = {
             title: 'Şirkət Profili',
+            description: 'Şirkət məlumatlarınızı redaktə edin və profilinizi yeniləyin.',
             body: "Dashboard/CompanySettings.ejs",
             js: "CompanySettings.js",
             currentPage: 'company-settings',
@@ -210,6 +234,7 @@ const ViewController = {
     cvCreate: async (req, res) => {
         const view = {
             title: 'CV Yarat',
+            description: 'Peşəkar CV-nizi yaradın və işəgötürənlərə nümayiş etdirin.',
             body: "CV/Create.ejs",
             js: "CV.js",
             currentPage: 'cv-create'
@@ -221,6 +246,7 @@ const ViewController = {
     cvUpload: async (req, res) => {
         const view = {
             title: 'CV Yüklə',
+            description: 'Mövcud CV-nizi yükləyin və işəgötürənlərlə paylaşın.',
             body: "CV/Upload.ejs",
             js: "CV.js",
             currentPage: 'cv-upload'
@@ -237,6 +263,7 @@ const ViewController = {
             }
             const view = {
                 title: 'CV Redaktə Et',
+                description: 'CV-nizi redaktə edin və yeniləyin.',
                 body: "CV/Create.ejs",
                 js: "CV.js",
                 currentPage: 'cv-edit',
@@ -264,6 +291,7 @@ const ViewController = {
     cvList: async (req, res) => {
         const view = {
             title: 'CV-lər',
+            description: 'İş axtaranların peşəkar CV-ləri. Namizədlərin təcrübə və bacarıqlarını kəşf edin.',
             body: "CV/List.ejs",
             js: "CVList.js",
             currentPage: 'cv-list'
@@ -275,6 +303,7 @@ const ViewController = {
     cvDetail: async (req, res) => {
         const view = {
             title: 'CV',
+            description: 'Namizədin CV profili, təcrübə və bacarıqları.',
             body: "CV/Detail.ejs",
             js: "CVDetail.js",
             currentPage: 'cv-detail'
@@ -286,6 +315,7 @@ const ViewController = {
     companyList: async (req, res) => {
         const view = {
             title: 'Şirkətlər',
+            description: 'Azərbaycanda fəaliyyət göstərən şirkətlər və onların vakansiyaları.',
             body: "Company/List.ejs",
             js: "Company.js",
             currentPage: 'company-list'
@@ -297,11 +327,102 @@ const ViewController = {
     companyDetail: async (req, res) => {
         const view = {
             title: 'Şirkət',
+            description: 'Şirkət profili və aktiv vakansiyaları.',
             body: "Company/Detail.ejs",
             js: "Company.js",
             currentPage: 'company-detail'
         };
         res.render('Main', view);
+    },
+
+    // ============================================
+    // SEO: Sitemap
+    // ============================================
+    sitemap: async (req, res) => {
+        try {
+            const baseUrl = 'https://jobing.az';
+            const today = new Date().toISOString().split('T')[0];
+
+            // Static pages
+            const staticPages = [
+                { loc: '/', priority: '1.00', changefreq: 'daily' },
+                { loc: '/vakansiyalar', priority: '0.90', changefreq: 'hourly' },
+                { loc: '/sirketler', priority: '0.80', changefreq: 'daily' },
+                { loc: '/cv-ler', priority: '0.70', changefreq: 'daily' },
+                { loc: '/blogs', priority: '0.70', changefreq: 'weekly' },
+                { loc: '/xeberler', priority: '0.70', changefreq: 'daily' },
+                { loc: '/about-us', priority: '0.50', changefreq: 'monthly' },
+                { loc: '/contact', priority: '0.50', changefreq: 'monthly' },
+                { loc: '/faq', priority: '0.50', changefreq: 'monthly' },
+            ];
+
+            // Fetch active jobs for dynamic URLs
+            const jobs = await JobData.find({ isActive: true })
+                .select('slug updatedAt')
+                .sort({ updatedAt: -1 })
+                .limit(50000)
+                .lean();
+
+            const jobUrls = jobs.filter(j => j.slug).map(j => ({
+                loc: `/vakansiyalar/${j.slug}/details`,
+                priority: '0.80',
+                changefreq: 'daily',
+                lastmod: j.updatedAt ? new Date(j.updatedAt).toISOString().split('T')[0] : today
+            }));
+
+            // Fetch blogs
+            const blogs = await Blog.find({ isActive: true })
+                .select('slug updatedAt')
+                .sort({ updatedAt: -1 })
+                .lean();
+
+            const blogUrls = blogs.filter(b => b.slug).map(b => ({
+                loc: `/blogs/${b.slug}`,
+                priority: '0.60',
+                changefreq: 'weekly',
+                lastmod: b.updatedAt ? new Date(b.updatedAt).toISOString().split('T')[0] : today
+            }));
+
+            const allUrls = [...staticPages, ...jobUrls, ...blogUrls];
+
+            let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
+            xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
+            allUrls.forEach(u => {
+                xml += '  <url>\n';
+                xml += `    <loc>${baseUrl}${u.loc}</loc>\n`;
+                if (u.lastmod) xml += `    <lastmod>${u.lastmod}</lastmod>\n`;
+                xml += `    <changefreq>${u.changefreq}</changefreq>\n`;
+                xml += `    <priority>${u.priority}</priority>\n`;
+                xml += '  </url>\n';
+            });
+            xml += '</urlset>';
+
+            res.header('Content-Type', 'application/xml');
+            res.send(xml);
+        } catch (error) {
+            console.error('Sitemap error:', error.message);
+            res.status(500).send('Sitemap generation failed');
+        }
+    },
+
+    // ============================================
+    // SEO: Robots.txt
+    // ============================================
+    robots: async (req, res) => {
+        res.type('text/plain');
+        res.send(`User-agent: *
+Allow: /
+Disallow: /dashboard
+Disallow: /company/*
+Disallow: /hr/*
+Disallow: /admin/*
+Disallow: /cv/create
+Disallow: /cv/upload
+Disallow: /cv/edit/*
+Disallow: /add-job
+
+Sitemap: https://jobing.az/sitemap.xml
+`);
     },
 
     statistics: async (req, res) => {

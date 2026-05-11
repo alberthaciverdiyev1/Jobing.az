@@ -43,7 +43,8 @@
 		"section": "Categories",
 		"title": "Popular Categories",
 		"subtitle": "Categories with the most job vacancies",
-		"vacancyCount": "vacancies"
+		"vacancyCount": "vacancies",
+		"browse": "Browse"
 	},
 	"howItWorks": {
 		"section": "How It Works",

@@ -305,6 +305,7 @@ const JobDataService = {
                         postedAt: 1,
                         createdAt: 1,
                         updatedAt: 1,
+                        jobType: 1,
                         category: 1,
                     }
                 }
@@ -357,11 +358,13 @@ const JobDataService = {
         });
     },
 
-    /** Get top 10 categories with most active job listings */
+    /** Get top 8 categories with most active job listings from the last 30 days */
     getTopCategories: async () => {
         try {
+            const thirtyDaysAgo = new Date();
+            thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
             return await JobData.aggregate([
-                { $match: { isActive: true } },
+                { $match: { isActive: true, createdAt: { $gte: thirtyDaysAgo } } },
                 { $group: { _id: '$categoryId', count: { $sum: 1 } } },
                 { $sort: { count: -1 } },
                 { $limit: 8 },

@@ -10,6 +10,61 @@
             <span class="text-gray-600 truncate max-w-[200px] font-medium"><%= data.title %></span>
         </nav>
 
+        <!-- ========== JSON-LD: JobPosting ========== -->
+        <% const _desc = (data.description || '').replace(/<[^>]*>/g, '').trim(); %>
+        <% const _jobTypeMap = { '0x001': 'FULL_TIME', '0x002': 'PART_TIME', '0x003': 'CONTRACTOR', '0x004': 'INTERN', '0x005': 'OTHER' }; %>
+        <% const _empType = data.jobType ? (_jobTypeMap[String(data.jobType)] || 'FULL_TIME') : 'FULL_TIME'; %>
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "JobPosting",
+            "title": <%- JSON.stringify(data.title) %>,
+            "description": <%- JSON.stringify(_desc.slice(0, 5000)) %>,
+            "datePosted": <%- JSON.stringify(new Date(data.postedAt).toISOString().split('T')[0]) %>,
+            "validThrough": <%- JSON.stringify(new Date(new Date(data.postedAt).setDate(new Date(data.postedAt).getDate() + 30)).toISOString().split('T')[0]) %>,
+            "hiringOrganization": {
+                "@type": "Organization",
+                "name": <%- JSON.stringify(data.companyName || '') %>,
+                "sameAs": "https://jobing.az",
+                "logo": <%- JSON.stringify(data.companyImage || 'https://jobing.az/Images/DefaultCompany.png') %>
+            },
+            "jobLocation": {
+                "@type": "Place",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressLocality": <%- JSON.stringify(data.location || '') %>,
+                    "addressCountry": "AZ"
+                }
+            },
+            <% if (data.minSalary || data.maxSalary) { %>
+            "baseSalary": {
+                "@type": "MonetaryAmount",
+                "currency": "AZN",
+                "value": {
+                    "@type": "QuantitativeValue",
+                    <% if (data.minSalary && data.maxSalary) { %>
+                    "minValue": <%= Number(data.minSalary) %>,
+                    "maxValue": <%= Number(data.maxSalary) %>,
+                    <% } else if (data.minSalary) { %>
+                    "value": <%= Number(data.minSalary) %>,
+                    <% } else { %>
+                    "value": <%= Number(data.maxSalary) %>,
+                    <% } %>
+                    "unitText": "MONTH"
+                }
+            },
+            <% } %>
+            "employmentType": <%- JSON.stringify(_empType) %>,
+            "educationRequirements": <%- JSON.stringify(data.education || 'Qeyd olunmayıb') %>,
+            "experienceRequirements": <%- JSON.stringify(data.experience || 'Qeyd olunmayıb') %>,
+            "identifier": {
+                "@type": "PropertyValue",
+                "name": <%- JSON.stringify(data.companyName || '') %>,
+                "value": <%- JSON.stringify(String(data._id || '')) %>
+            }
+        }
+        </script>
+
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8 items-start">
 
             <!-- ========== MAIN CONTENT ========== -->
