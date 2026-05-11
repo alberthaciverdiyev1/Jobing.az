@@ -36,14 +36,13 @@ export function createJobCard(element, compact = false) {
             ? element.companyImageUrl
             : "../Images/DefaultCompany.png");
 
-    const salaryText = ((+element.minSalary === +element.maxSalary && +element.minSalary !== null && +element.minSalary !== 0)
-        ? +element.minSalary + " " + element.currencySign
-        : ((+element.minSalary !== null && +element.minSalary !== 0)
-            ? +element.minSalary + ' - '
-            : "") + ((+element.maxSalary !== null && +element.maxSalary !== 0)
-            ? +element.maxSalary + " " + element.currencySign
-            : "")
-    ) || "Razılaşma Yolu ilə";
+    const hasMin = element.minSalary != null && !isNaN(+element.minSalary) && +element.minSalary > 0;
+    const hasMax = element.maxSalary != null && !isNaN(+element.maxSalary) && +element.maxSalary > 0;
+    const salaryText = hasMin || hasMax
+        ? (hasMin && hasMax && +element.minSalary === +element.maxSalary
+            ? +element.minSalary + " " + element.currencySign
+            : (hasMin ? +element.minSalary : '') + (hasMin && hasMax ? ' - ' : '') + (hasMax ? +element.maxSalary + " " + element.currencySign : ''))
+        : "Razılaşma Yolu ilə";
 
     const detailLink = (element.redirectUrl && element.redirectUrl !== "#")
         ? element.redirectUrl
