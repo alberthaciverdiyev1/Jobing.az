@@ -6,6 +6,7 @@ import JobDataService from "../Services/JobDataService.js";
 import VisitorService from "../Services/VisitorService.js";
 import Blog from "../Models/Blog.js";
 import BlogService from "../Services/BlogService.js";
+import CVService from "../Services/CVService.js";
 
 const ViewController = {
     home: async (req, res) => {
@@ -18,8 +19,12 @@ const ViewController = {
         res.render('Main', view);
     },
     auth: async (req, res) => {
+        // If already logged in, redirect to dashboard
+        if (req.user) {
+            return req.user.role === 'company' ? res.redirect('/company/dashboard') : res.redirect('/dashboard');
+        }
         const view = {
-            title: 'Auth',
+            title: 'Giriş / Qeydiyyat',
             body: "Auth/Index.ejs",
             js: "Auth.js",
             currentPage: 'auth'
@@ -104,6 +109,74 @@ const ViewController = {
         res.render('Main', view);
     },
 
+    // Dashboard - User
+    userDashboard: async (req, res) => {
+        const cvs = await CVService.findByUser(req.user._id);
+        const view = {
+            title: 'Mənim Panelim',
+            body: "Dashboard/Index.ejs",
+            js: "Dashboard.js",
+            currentPage: 'dashboard',
+            cvs
+        };
+        res.render('Main', view);
+    },
+
+    // Dashboard - Company
+    companyDashboard: async (req, res) => {
+        const jobs = await JobDataService.findByCompany(req.user.companyName);
+        const view = {
+            title: 'Şirkət Paneli',
+            body: "Dashboard/Company.ejs",
+            js: "Dashboard.js",
+            currentPage: 'company-dashboard',
+            jobs
+        };
+        res.render('Main', view);
+    },
+
+    // CV Create page
+    cvCreate: async (req, res) => {
+        const view = {
+            title: 'CV Yarat',
+            body: "CV/Create.ejs",
+            js: "CV.js",
+            currentPage: 'cv-create'
+        };
+        res.render('Main', view);
+    },
+
+    // CV Upload page
+    cvUpload: async (req, res) => {
+        const view = {
+            title: 'CV Yüklə',
+            body: "CV/Upload.ejs",
+            js: "CV.js",
+            currentPage: 'cv-upload'
+        };
+        res.render('Main', view);
+    },
+
+    // CV Edit page
+    cvEdit: async (req, res) => {
+        try {
+            const cv = await CVService.findByIdAndUser(req.params.id, req.user._id);
+            if (!cv) {
+                return res.status(404).send('CV tapılmadı');
+            }
+            const view = {
+                title: 'CV Redaktə Et',
+                body: "CV/Create.ejs",
+                js: "CV.js",
+                currentPage: 'cv-edit',
+                cv
+            };
+            res.render('Main', view);
+        } catch {
+            res.status(500).send('Xəta baş verdi');
+        }
+    },
+
     education: (req, res) => {
         const educationData = Enums.Education;
         res.status(200).json(educationData);
@@ -122,7 +195,7 @@ const ViewController = {
         const visitor = await VisitorService.count(30);
         const dailyVisitor = await VisitorService.dailyCount();
         const totalVisitor = await VisitorService.count(365);
-        res.status(200).json({status: 200, message: "", data: {company, vacancy, visitor, totalVisitor, dailyVisitor}});
+        res.status(200).json({status: 200, message: "", data: {company, vacancy, visitor, dailyVisitor, totalVisitor}});
     }
 };
 

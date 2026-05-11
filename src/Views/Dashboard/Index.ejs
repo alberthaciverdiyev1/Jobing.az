@@ -1,0 +1,143 @@
+<!-- ============================================ -->
+<!-- USER DASHBOARD -->
+<!-- ============================================ -->
+<section class="min-h-screen bg-gray-50 pt-24 md:pt-28 pb-20">
+    <div class="max-w-5xl mx-auto px-3 sm:px-4 lg:px-6">
+        <!-- Dashboard Header -->
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8 animate-fade-in-up">
+            <div>
+                <h1 class="text-2xl sm:text-3xl font-bold text-gray-900">Mənim Panelim</h1>
+                <p class="text-gray-500 mt-1"><%= user.name %> <%= user.surname %>, CV-lərinizi idarə edin</p>
+            </div>
+            <div class="flex gap-3">
+                <a href="/cv/create"
+                   class="inline-flex items-center gap-2 bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white font-medium px-5 py-2.5 rounded-xl transition-all duration-200 shadow-sm hover:shadow-md active:scale-[0.97]">
+                    <i class="fas fa-plus-circle"></i>
+                    CV Yarat
+                </a>
+                <a href="/cv/upload"
+                   class="inline-flex items-center gap-2 bg-white hover:bg-gray-50 text-gray-700 font-medium px-5 py-2.5 rounded-xl border border-gray-200 transition-all duration-200 shadow-sm hover:shadow-md active:scale-[0.97]">
+                    <i class="fas fa-upload"></i>
+                    CV Yüklə
+                </a>
+            </div>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8 animate-fade-in-up" style="animation-delay: 100ms;">
+            <div class="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-xl bg-primary-50 flex items-center justify-center text-primary-500">
+                        <i class="fas fa-file-alt text-xl"></i>
+                    </div>
+                    <div>
+                        <p class="text-2xl font-bold text-gray-900"><%= cvs.length %></p>
+                        <p class="text-sm text-gray-500">Cəmi CV</p>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-xl bg-green-50 flex items-center justify-center text-green-500">
+                        <i class="fas fa-pen text-xl"></i>
+                    </div>
+                    <div>
+                        <p class="text-2xl font-bold text-gray-900"><%= cvs.filter(c => c.type === 'created').length %></p>
+                        <p class="text-sm text-gray-500">Yaradılmış CV</p>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center text-blue-500">
+                        <i class="fas fa-cloud-upload-alt text-xl"></i>
+                    </div>
+                    <div>
+                        <p class="text-2xl font-bold text-gray-900"><%= cvs.filter(c => c.type === 'uploaded').length %></p>
+                        <p class="text-sm text-gray-500">Yüklənmiş CV</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CV List -->
+        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden animate-fade-in-up" style="animation-delay: 200ms;">
+            <div class="px-6 py-5 border-b border-gray-100">
+                <h2 class="text-lg font-semibold text-gray-900">CV-lərim</h2>
+            </div>
+
+            <% if (cvs.length === 0) { %>
+                <div class="text-center py-16">
+                    <div class="w-16 h-16 mx-auto bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                        <i class="fas fa-file-alt text-2xl text-gray-400"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-1">Hələ CV yoxdur</h3>
+                    <p class="text-gray-500 text-sm mb-6">CV yaradın və ya mövcud CV-nizi yükləyin</p>
+                    <div class="flex justify-center gap-3">
+                        <a href="/cv/create" class="inline-flex items-center gap-2 bg-primary-500 hover:bg-primary-600 text-white font-medium px-5 py-2.5 rounded-xl transition-all">
+                            <i class="fas fa-plus-circle"></i> CV Yarat
+                        </a>
+                        <a href="/cv/upload" class="inline-flex items-center gap-2 bg-white hover:bg-gray-50 text-gray-700 font-medium px-5 py-2.5 rounded-xl border border-gray-200 transition-all">
+                            <i class="fas fa-upload"></i> CV Yüklə
+                        </a>
+                    </div>
+                </div>
+            <% } else { %>
+                <div class="divide-y divide-gray-50" id="cv-list">
+                    <% cvs.forEach(cv => { %>
+                        <div class="flex items-center justify-between p-5 sm:px-6 hover:bg-gray-50/50 transition-colors">
+                            <div class="flex items-center gap-4 min-w-0">
+                                <div class="w-11 h-11 rounded-xl <%= cv.type === 'created' ? 'bg-primary-50 text-primary-500' : 'bg-blue-50 text-blue-500' %> flex items-center justify-center flex-shrink-0">
+                                    <i class="fas <%= cv.type === 'created' ? 'fa-file-alt' : 'fa-file-upload' %>"></i>
+                                </div>
+                                <div class="min-w-0">
+                                    <p class="font-semibold text-gray-900 truncate"><%= cv.title %></p>
+                                    <p class="text-xs text-gray-400">
+                                        <%= cv.type === 'created' ? 'Yaradıldı' : 'Yükləndi' %>
+                                        • <%= new Date(cv.createdAt).toLocaleDateString('az-AZ') %>
+                                        <% if (cv.fileName) { %> • <%= cv.fileName %><% } %>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-2 flex-shrink-0">
+                                <a href="/cv/edit/<%= cv._id %>"
+                                   class="p-2 rounded-lg text-gray-400 hover:text-primary-500 hover:bg-primary-50 transition-all" title="Redaktə et">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <button type="button" data-cv-id="<%= cv._id %>"
+                                        class="delete-cv-btn p-2 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 transition-all" title="Sil">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    <% }); %>
+                </div>
+            <% } %>
+        </div>
+
+        <!-- Account Info -->
+        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mt-6 animate-fade-in-up" style="animation-delay: 300ms;">
+            <h2 class="text-lg font-semibold text-gray-900 mb-4">Hesab Məlumatları</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <p class="text-xs text-gray-400 uppercase tracking-wider">Ad</p>
+                    <p class="text-gray-900 font-medium"><%= user.name %> <%= user.surname %></p>
+                </div>
+                <div>
+                    <p class="text-xs text-gray-400 uppercase tracking-wider">Email</p>
+                    <p class="text-gray-900 font-medium"><%= user.email %></p>
+                </div>
+                <% if (user.phone) { %>
+                <div>
+                    <p class="text-xs text-gray-400 uppercase tracking-wider">Telefon</p>
+                    <p class="text-gray-900 font-medium"><%= user.phone %></p>
+                </div>
+                <% } %>
+                <div>
+                    <p class="text-xs text-gray-400 uppercase tracking-wider">Hesab növü</p>
+                    <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-medium bg-primary-50 text-primary-700">İstifadəçi</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

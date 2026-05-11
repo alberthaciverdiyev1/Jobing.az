@@ -19,31 +19,46 @@
             <a href="/contact"
                class="nav-link <%= currentPage === 'contact' ? '!text-primary-500 !bg-primary-50/50 !font-semibold' : 'text-gray-600 hover:text-primary-500' %>">Əlaqə</a>
 
-            <div class="ml-4 pl-4 border-l border-gray-200">
+            <div class="ml-4 pl-4 border-l border-gray-200 flex items-center gap-3">
+                <!-- Post Job Button -->
                 <a href="/add-job"
                    class="inline-flex items-center gap-2 bg-primary-500 hover:bg-primary-600 text-white font-medium px-5 py-2.5 rounded-xl transition-all duration-200 shadow-sm hover:shadow-md hover:shadow-primary-500/20 active:scale-[0.97]">
                     <i class="fas fa-plus-circle text-sm"></i>
                     Elan Yerləşdir
                 </a>
-            </div>
 
-            <% if (Production(false)) { %>
-                <div class="ml-3">
+                <!-- Auth: Show login if not logged in, user menu if logged in -->
+                <% if (typeof user !== 'undefined' && user) { %>
+                    <%- include('UserMenu') %>
+                <% } else { %>
                     <a href="/auth"
                        class="inline-flex items-center gap-2 border-2 border-primary-500 text-primary-500 hover:bg-primary-50 font-medium px-5 py-2 rounded-xl transition-all duration-200">
                         <i class="fas fa-user text-sm"></i>
                         Daxil Ol
                     </a>
-                </div>
-            <% } %>
+                <% } %>
+            </div>
         </div>
 
         <!-- Mobile: Post Job Button -->
-        <a href="/add-job"
-           class="md:hidden inline-flex items-center gap-2 bg-primary-500 hover:bg-primary-600 text-white text-sm font-medium px-4 py-2 rounded-xl transition-all shadow-sm active:scale-95">
-            <i class="fas fa-plus-circle text-xs"></i>
-            <span>Elan</span>
-        </a>
+        <div class="md:hidden flex items-center gap-2">
+            <% if (typeof user !== 'undefined' && user) { %>
+                <a href="<%= user.role === 'company' ? '/company/dashboard' : '/dashboard' %>"
+                   class="inline-flex items-center gap-2 bg-primary-50 text-primary-600 text-sm font-medium px-3 py-2 rounded-xl transition-all">
+                    <i class="fas fa-user"></i>
+                </a>
+            <% } else { %>
+                <a href="/auth"
+                   class="inline-flex items-center gap-2 text-primary-500 border-2 border-primary-500 text-sm font-medium px-3 py-2 rounded-xl">
+                    <i class="fas fa-user"></i>
+                </a>
+            <% } %>
+            <a href="/add-job"
+               class="inline-flex items-center gap-2 bg-primary-500 hover:bg-primary-600 text-white text-sm font-medium px-4 py-2 rounded-xl transition-all shadow-sm active:scale-95">
+                <i class="fas fa-plus-circle text-xs"></i>
+                <span>Elan</span>
+            </a>
+        </div>
     </div>
 </nav>
 

@@ -12,70 +12,114 @@ import validator from '../Validators/Main.js'
 import visitorLogger from "../Middlewares/Visitors.js";
 import adminController from "../Controllers/AdminController.js";
 import blogController from "../Controllers/BlogController.js";
+import authController from "../Controllers/AuthController.js";
+import cvController from "../Controllers/CVController.js";
+import authMiddleware from "../Middlewares/Auth.js";
+
 const router = express.Router();
 
+// ============================================================
+// AUTH ROUTES
+// ============================================================
+router.post('/api/auth/register', validator.registerValidator, authController.register);
+router.post('/api/auth/login', validator.loginValidator, authController.login);
+router.post('/api/auth/logout', authController.logout);
+router.get('/api/auth/me', authController.getMe);
+
+// ============================================================
+// CV ROUTES (protected - user role required)
+// ============================================================
+router.post('/api/cv', authMiddleware.authenticate, authMiddleware.authorize('user'), cvController.create);
+router.post('/api/cv/upload', authMiddleware.authenticate, authMiddleware.authorize('user'), cvController.upload);
+router.get('/api/cv', authMiddleware.authenticate, authMiddleware.authorize('user'), cvController.list);
+router.get('/api/cv/:id', authMiddleware.authenticate, authMiddleware.authorize('user'), cvController.getById);
+router.put('/api/cv/:id', authMiddleware.authenticate, authMiddleware.authorize('user'), cvController.update);
+router.delete('/api/cv/:id', authMiddleware.authenticate, authMiddleware.authorize('user'), cvController.delete);
+
+// ============================================================
+// DASHBOARD ROUTES (protected)
+// ============================================================
+router.get('/dashboard', authMiddleware.authenticate, authMiddleware.authorize('user'), viewController.userDashboard);
+router.get('/company/dashboard', authMiddleware.authenticate, authMiddleware.authorize('company'), viewController.companyDashboard);
+
+// CV view routes (protected)
+router.get('/cv/create', authMiddleware.authenticate, authMiddleware.authorize('user'), viewController.cvCreate);
+router.get('/cv/upload', authMiddleware.authenticate, authMiddleware.authorize('user'), viewController.cvUpload);
+router.get('/cv/edit/:id', authMiddleware.authenticate, authMiddleware.authorize('user'), viewController.cvEdit);
+
+// ============================================================
+// LEGACY API ROUTES (User - will be deprecated)
+// ============================================================
 router.post('/api/users', validator.registerValidator, userController.createUser);         // CREATE
 router.get('/api/users', userController.getUsers);                                         // READ ALL
 router.get('/api/users/:id', userController.getUserById);                                  // READ ONE
 router.put('/api/users/:id', userController.updateUser);                                   // UPDATE
 router.delete('/api/users/:id', userController.deleteUser);                                // DELETE
 
-// CRUD operations for BLOG
-router.post('/api/blog/add', blogController.create);                                             // CREATE
-router.get('/api/blogs', blogController.getAll);                                               // CREATE
-router.get('/api/blog/:id', blogController.getAll);                                               // CREATE
+// ============================================================
+// BLOG ROUTES
+// ============================================================
+router.post('/api/blog/add', blogController.create);
+router.get('/api/blogs', blogController.getAll);
+router.get('/api/blog/:id', blogController.getAll);
 
+// ============================================================
+// JOB DATA ROUTES
+// ============================================================
+router.post('/api/jobs', jobDataController.create);
+router.get('/api/jobs', jobDataController.getAll);
+router.get('/api/jobs/:id', jobDataController.getSiteById);
+router.put('/api/jobs/:id', jobDataController.updateSite);
+router.delete('/api/jobs/:id', jobDataController.deleteSite);
+router.post('/api/jobs/remove-duplicates', jobDataController.removeDuplicates);
+router.post('/api/jobs/request-all-sites', jobDataController.requestAllSites)
+router.post('/api/jobs/add-request', validator.addJobValidator, jobDataController.addJobRequest)
+router.get('/vakansiyalar/:id/details', jobDataController.details);
 
-// CRUD operations for job sites (JobDataController)
-router.post('/api/jobs', jobDataController.create);                                        // CREATE
-router.get('/api/jobs', jobDataController.getAll);                                         // READ ALL
-router.get('/api/jobs/:id', jobDataController.getSiteById);                                // READ ONE
-router.put('/api/jobs/:id', jobDataController.updateSite);                                 // UPDATE
-router.delete('/api/jobs/:id', jobDataController.deleteSite);                              // DELETE
-router.post('/api/jobs/remove-duplicates', jobDataController.removeDuplicates);            // Post
-router.post('/api/jobs/request-all-sites', jobDataController.requestAllSites)               // Post
-router.post('/api/jobs/add-request',validator.addJobValidator, jobDataController.addJobRequest)                       // Post
-router.get('/vakansiyalar/:id/details', jobDataController.details);                                 // Job Details
+// ============================================================
+// SITE ROUTES
+// ============================================================
+router.post('/api/site', validator.siteValidator, siteController.create);
+router.get('/api/site', siteController.getAll);
+router.get('/api/site/:id', siteController.findById);
+router.put('/api/site/:id', validator.siteValidator, siteController.update);
+router.delete('/api/site/:id', siteController.delete);
 
-// CRUD operations for job sites (JobDataController)
-router.post('/api/site', validator.siteValidator, siteController.create);                  // CREATE
-router.get('/api/site', siteController.getAll);                                            // READ ALL
-router.get('/api/site/:id', siteController.findById);                                      // READ ONE
-router.put('/api/site/:id', validator.siteValidator, siteController.update);               // UPDATE
-router.delete('/api/site/:id', siteController.delete);                                     // DELETE
+// ============================================================
+// COMPANY ROUTES
+// ============================================================
+router.post('/api/companies', companyController.create);
+router.post('/api/companies/download-logos', companyController.downloadCompanyLogos);
+router.get('/api/companies/:id', companyController.findById);
+router.put('/api/companies/:id', validator.companyValidator, companyController.update);
+router.delete('/api/companies/:id', companyController.delete);
+router.post('/api/companies/remove-duplicates', companyController.removeDuplicates);
 
-// CRUD operations for companies
-router.post('/api/companies', companyController.create);                                    // CREATE
-router.post('/api/companies/download-logos', companyController.downloadCompanyLogos);      // downloadCompanyLogos
-router.get('/api/companies/:id', companyController.findById);                              // READ ONE
-router.put('/api/companies/:id', validator.companyValidator, companyController.update);    // UPDATE
-router.delete('/api/companies/:id', companyController.delete);                             // DELETE
-router.post('/api/companies/remove-duplicates', companyController.removeDuplicates);          // DELETE
+// ============================================================
+// CATEGORY ROUTES
+// ============================================================
+router.post('/api/foreign-categories', categoryController.addForeignCategories);
+router.get('/api/foreign-categories', categoryController.getForeignCategories);
+router.get('/api/categories', categoryController.getLocalCategories);
 
-// CRUD operations for categories
-router.post('/api/foreign-categories', categoryController.addForeignCategories);           // CREATE
-router.get('/api/foreign-categories', categoryController.getForeignCategories);            // READ ALL
-router.get('/api/categories', categoryController.getLocalCategories);                      // READ ALL
-// router.get('/categories/:id', categoryController.findById);                             // READ ONE
-// router.put('/categories/:id',validator.companyValidator, categoryController.update);    // UPDATE
-// router.delete('/categories/:id', categoryController.delete);                            // DELETE
+// ============================================================
+// CITY ROUTES
+// ============================================================
+router.post('/api/cities', cityController.create);
+router.get('/api/cities', cityController.getAll);
 
+// ============================================================
+// SCRAPE ROUTES
+// ============================================================
+router.get('/api/scrape', scrapeController.getData);
 
-// CRUD operations for Cities
-router.post('/api/cities', cityController.create);                                           // CREATE
-router.get('/api/cities', cityController.getAll);                                           // READ ALL
-
-
-// CRUD operations for scrape
-router.get('/api/scrape', scrapeController.getData);                                    // READ ALL
-
-
-//Load Views
+// ============================================================
+// VIEW ROUTES
+// ============================================================
 router.get('/', viewController.home);
 router.get('/auth', viewController.auth);
 router.get('/vakansiyalar', visitorLogger, viewController.jobs);
-router.get('/resumes',visitorLogger,viewController.resumes)
-
+router.get('/resumes', visitorLogger, viewController.resumes)
 router.get('/about-us', visitorLogger, viewController.aboutUs);
 router.get('/contact', visitorLogger, viewController.contactUs);
 router.get('/add-job', visitorLogger, viewController.addJob);
@@ -83,35 +127,40 @@ router.get('/faq', visitorLogger, viewController.faq);
 router.get('/blogs', visitorLogger, viewController.blogs);
 router.get('/blogs/:slug', visitorLogger, viewController.blog);
 router.get('/statistics', viewController.statistics)
-//Enums
+
+// Enums
 router.get('/education', viewController.education);
 router.get('/experience', viewController.experience);
 
-//Change language
+// Change language
 router.post('/set-lang', (req, res) => {
     const { language } = req.body;
     if (i18n.getLocales().includes(language)) {
-        res.cookie('lang', language);  // Set language in cookie
+        res.cookie('lang', language);
         res.send({ message: 'Language updated successfully' });
     } else {
         res.status(400).send({ error: 'Invalid language' });
     }
 });
 
-//Admin Panel 
-
+// ============================================================
+// ADMIN PANEL
+// ============================================================
 router.get('/admin', adminController.adminIndex);
 router.get('/admin/categories', adminController.adminCategoryView);
 router.get('/admin/blogs', adminController.adminBlogsView);
 router.get('/admin/blogs/add', adminController.adminBlogsAddView);
 
-//Send Mail
-router.post('/send-mail', viewController.sendMail);         // CREATE
+// ============================================================
+// SEND MAIL
+// ============================================================
+router.post('/send-mail', viewController.sendMail);
 
-
+// ============================================================
+// 404 HANDLER
+// ============================================================
 router.use((req, res) => {
     res.render('Partials/Error.ejs');
-    // res.status(404).render('error', { message: 'Page Not Found' });
 });
 
 router.use((err, req, res, next) => {

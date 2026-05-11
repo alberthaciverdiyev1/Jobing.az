@@ -1,0 +1,96 @@
+<!-- User Menu Dropdown -->
+<div class="relative" id="user-menu-container">
+    <button id="user-menu-button" class="flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-gray-100 transition-all duration-200 group">
+        <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-primary-500 to-primary-600 flex items-center justify-center text-white text-sm font-bold shadow-sm">
+            <%= user.name.charAt(0).toUpperCase() %><%= user.surname.charAt(0).toUpperCase() %>
+        </div>
+        <span class="hidden lg:block text-sm font-medium text-gray-700 group-hover:text-gray-900"><%= user.name %></span>
+        <i class="fas fa-chevron-down text-[10px] text-gray-400 group-hover:text-gray-600 transition-transform duration-200" id="user-menu-chevron"></i>
+    </button>
+
+    <!-- Dropdown -->
+    <div id="user-menu-dropdown" class="hidden absolute right-0 mt-2 w-64 bg-white rounded-2xl shadow-xl border border-gray-100 py-2 animate-scale-in z-50">
+        <!-- User Info -->
+        <div class="px-4 py-3 border-b border-gray-50">
+            <p class="font-semibold text-gray-900 text-sm"><%= user.name %> <%= user.surname %></p>
+            <p class="text-xs text-gray-400"><%= user.email %></p>
+            <span class="inline-flex items-center gap-1 mt-1.5 px-2 py-0.5 rounded-md text-[10px] font-medium <%= user.role === 'company' ? 'bg-purple-50 text-purple-700' : 'bg-primary-50 text-primary-700' %>">
+                <i class="fas <%= user.role === 'company' ? 'fa-building' : 'fa-user' %>"></i>
+                <%= user.role === 'company' ? 'Şirkət' : 'İstifadəçi' %>
+            </span>
+        </div>
+
+        <!-- Menu Items -->
+        <div class="py-1">
+            <% if (user.role === 'company') { %>
+                <a href="/company/dashboard" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-600 transition-colors">
+                    <i class="fas fa-chart-pie w-4 text-center text-gray-400"></i>
+                    Şirkət Paneli
+                </a>
+                <a href="/add-job" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-600 transition-colors">
+                    <i class="fas fa-plus-circle w-4 text-center text-gray-400"></i>
+                    Yeni Elan
+                </a>
+            <% } else { %>
+                <a href="/dashboard" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-600 transition-colors">
+                    <i class="fas fa-chart-pie w-4 text-center text-gray-400"></i>
+                    Mənim Panelim
+                </a>
+                <a href="/cv/create" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-600 transition-colors">
+                    <i class="fas fa-file-alt w-4 text-center text-gray-400"></i>
+                    CV Yarat
+                </a>
+                <a href="/cv/upload" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-600 transition-colors">
+                    <i class="fas fa-upload w-4 text-center text-gray-400"></i>
+                    CV Yüklə
+                </a>
+            <% } %>
+        </div>
+
+        <!-- Logout -->
+        <div class="border-t border-gray-50 pt-1">
+            <button id="logout-btn" class="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors">
+                <i class="fas fa-sign-out-alt w-4 text-center"></i>
+                Çıxış
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+(function() {
+    const button = document.getElementById('user-menu-button');
+    const dropdown = document.getElementById('user-menu-dropdown');
+    const chevron = document.getElementById('user-menu-chevron');
+
+    if (!button || !dropdown) return;
+
+    button.addEventListener('click', function(e) {
+        e.stopPropagation();
+        dropdown.classList.toggle('hidden');
+        if (chevron) chevron.style.transform = dropdown.classList.contains('hidden') ? '' : 'rotate(180deg)';
+    });
+
+    document.addEventListener('click', function(e) {
+        if (!dropdown.classList.contains('hidden')) {
+            dropdown.classList.add('hidden');
+            if (chevron) chevron.style.transform = '';
+        }
+    });
+
+    // Logout
+    const logoutBtn = document.getElementById('logout-btn');
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', async function() {
+            try {
+                const res = await axios.post('/api/auth/logout');
+                if (res.status === 200) {
+                    window.location.href = '/';
+                }
+            } catch (err) {
+                window.location.href = '/';
+            }
+        });
+    }
+})();
+</script>
