@@ -42,6 +42,7 @@ function renderCompaniesTable(data) {
             <td class="px-5 py-3">${c.website ? `<a href="${c.website}" target="_blank" class="text-indigo-600 hover:underline text-sm">${c.website}</a>` : '-'}</td>
             <td class="px-5 py-3">
                 <div class="flex items-center gap-2">
+                    <button onclick="showCompanyDetail('${c._id}')" class="text-blue-600 hover:text-blue-800 text-sm font-medium">View</button>
                     <button onclick="editCompany('${c._id}')" class="text-indigo-600 hover:text-indigo-800 text-sm font-medium">Edit</button>
                     <button onclick="deleteCompany('${c._id}')" class="text-red-600 hover:text-red-800 text-sm font-medium">Delete</button>
                 </div>
@@ -97,6 +98,54 @@ async function deleteCompany(id) {
     } catch (err) {
         alert('Error deleting company: ' + err.message);
     }
+}
+
+// ========== Company Detail with Vacancies ==========
+
+async function showCompanyDetail(id) {
+    try {
+        const { data } = await axios.get(`/api/admin/companies/${id}`);
+        const content = document.getElementById('companyDetailContent');
+
+        var jobsHtml = '';
+        if (data.jobs && data.jobs.length > 0) {
+            jobsHtml = '<div class="mt-3 pt-3 border-t"><p class="text-xs text-gray-500 uppercase font-medium mb-2">Vacancies (' + data.jobs.length + ')</p><div class="space-y-2 max-h-64 overflow-y-auto">';
+            data.jobs.forEach(function(job) {
+                var badgeClass = job.isActive ? 'badge-green' : 'badge-red';
+                var badgeLabel = job.isActive ? 'Active' : 'Inactive';
+                jobsHtml += '<div class="flex items-center justify-between p-2 bg-gray-50 rounded-lg text-sm">' +
+                    '<span class="font-medium text-gray-800 truncate max-w-xs">' + escapeHtml(job.title) + '</span>' +
+                    '<span class="badge ' + badgeClass + ' flex-shrink-0">' + badgeLabel + '</span>' +
+                    '</div>';
+            });
+            jobsHtml += '</div></div>';
+        } else {
+            jobsHtml = '<div class="mt-3 pt-3 border-t text-sm text-gray-400">No vacancies found</div>';
+        }
+
+        content.innerHTML =
+            '<div class="flex items-center gap-3 pb-3 border-b">' +
+                (data.imageUrl
+                    ? '<img src="' + data.imageUrl + '" alt="' + escapeHtml(data.companyName) + '" class="w-14 h-14 rounded-lg object-cover">'
+                    : '<div class="w-14 h-14 rounded-lg bg-indigo-100 flex items-center justify-center text-indigo-600 font-bold text-xl">' + (data.companyName || '?').charAt(0) + '</div>') +
+                '<div>' +
+                    '<h3 class="text-lg font-semibold text-gray-900">' + escapeHtml(data.companyName) + '</h3>' +
+                    (data.website ? '<a href="' + data.website + '" target="_blank" class="text-sm text-indigo-600 hover:underline">' + data.website + '</a>' : '') +
+                    '<p class="text-sm text-gray-500">' + (data.jobCount || 0) + ' total vacancies</p>' +
+                '</div>' +
+            '</div>' +
+            jobsHtml;
+
+        document.getElementById('companyDetailModal').classList.remove('hidden');
+        document.body.classList.add('modal-open');
+    } catch (err) {
+        alert('Error loading company details: ' + err.message);
+    }
+}
+
+function closeCompanyDetail() {
+    document.getElementById('companyDetailModal').classList.add('hidden');
+    document.body.classList.remove('modal-open');
 }
 
 async function handleCompanySubmit(e) {

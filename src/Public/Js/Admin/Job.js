@@ -46,6 +46,11 @@ function resolveExperience(val) {
     return enumsCache.experience[val] || val || '-';
 }
 
+function resolveSiteName(val) {
+    if (!enumsCache || !enumsCache.sites) return val || '-';
+    return enumsCache.sites[val] || val || '-';
+}
+
 // ========== Jobs List ==========
 
 async function loadJobs(page) {
@@ -99,6 +104,7 @@ function renderJobsTable(data) {
             '<td class="px-5 py-3">' + createdDate + '</td>' +
             '<td class="px-5 py-3">' +
                 '<div class="flex items-center gap-2">' +
+                    '<button onclick="showJobDetail(\'' + job._id + '\')" class="text-blue-600 hover:text-blue-800 text-sm font-medium">View</button>' +
                     '<button onclick="editJob(\'' + job._id + '\')" class="text-indigo-600 hover:text-indigo-800 text-sm font-medium">Edit</button>' +
                     '<button onclick="toggleJobActive(\'' + job._id + '\')" class="text-amber-600 hover:text-amber-800 text-sm font-medium">' + toggleLabel + '</button>' +
                     '<button onclick="deleteJob(\'' + job._id + '\')" class="text-red-600 hover:text-red-800 text-sm font-medium">Delete</button>' +
@@ -247,6 +253,53 @@ async function removeDuplicateJobs() {
     } catch (err) {
         alert('Error removing duplicates: ' + (err.response && err.response.data && err.response.data.error ? err.response.data.error : err.message));
     }
+}
+
+// ========== Job Detail ==========
+
+async function showJobDetail(id) {
+    try {
+        var { data } = await axios.get('/api/admin/jobs/' + id);
+        var content = document.getElementById('jobDetailContent');
+        var description = data.description ? data.description.substring(0, 500) : '-';
+        var salaryHtml = '-';
+        if (data.minSalary || data.maxSalary) {
+            salaryHtml = (data.minSalary || '') + (data.minSalary && data.maxSalary ? ' - ' : '') + (data.maxSalary || '') + ' AZN';
+        }
+
+        content.innerHTML =
+            '<div class="border-b pb-3 mb-3">' +
+                '<h3 class="text-lg font-semibold text-gray-900">' + escapeHtml(data.title) + '</h3>' +
+                '<p class="text-sm text-gray-500">' + escapeHtml(data.companyName || '-') + ' &middot; ' + escapeHtml(data.location || '-') + '</p>' +
+            '</div>' +
+            '<div class="grid grid-cols-2 gap-3 text-sm">' +
+                '<div><span class="text-xs text-gray-500 font-medium">Job Type</span><p class="text-gray-800">' + resolveJobType(data.jobType) + '</p></div>' +
+                '<div><span class="text-xs text-gray-500 font-medium">Salary</span><p class="text-gray-800">' + salaryHtml + '</p></div>' +
+                (data.educationId ? '<div><span class="text-xs text-gray-500 font-medium">Education</span><p class="text-gray-800">' + resolveEducation(data.educationId) + '</p></div>' : '') +
+                (data.experienceId ? '<div><span class="text-xs text-gray-500 font-medium">Experience</span><p class="text-gray-800">' + resolveExperience(data.experienceId) + '</p></div>' : '') +
+                '<div><span class="text-xs text-gray-500 font-medium">Source</span><p class="text-gray-800">' + resolveSiteName(data.sourceUrl) + '</p></div>' +
+                '<div><span class="text-xs text-gray-500 font-medium">Email</span><p class="text-gray-800">' + escapeHtml(data.email || '-') + '</p></div>' +
+                '<div><span class="text-xs text-gray-500 font-medium">Phone</span><p class="text-gray-800">' + escapeHtml(data.phone || '-') + '</p></div>' +
+                '<div><span class="text-xs text-gray-500 font-medium">Status</span><p class="text-gray-800"><span class="badge ' + (data.isActive ? 'badge-green' : 'badge-red') + '">' + (data.isActive ? 'Active' : 'Inactive') + '</span></p></div>' +
+                '<div><span class="text-xs text-gray-500 font-medium">Premium</span><p class="text-gray-800">' + (data.isPremium ? 'Yes' : 'No') + '</p></div>' +
+                (data.sourceUrl ? '<div class="col-span-2"><span class="text-xs text-gray-500 font-medium">Source URL</span><p class="text-gray-800 truncate"><a href="' + escapeHtml(data.sourceUrl) + '" target="_blank" class="text-indigo-600 hover:underline">' + escapeHtml(data.sourceUrl) + '</a></p></div>' : '') +
+            '</div>' +
+            (description && description !== '-' ? '<div class="mt-3 pt-3 border-t"><span class="text-xs text-gray-500 font-medium">Description</span><div class="text-sm text-gray-700 mt-1 prose prose-sm max-w-none">' + description + '</div></div>' : '') +
+            '<div class="mt-3 pt-3 border-t text-xs text-gray-400">' +
+                'Created: ' + (data.createdAt ? new Date(data.createdAt).toLocaleString() : '-') +
+                ' &middot; Posted: ' + (data.postedAt ? new Date(data.postedAt).toLocaleString() : '-') +
+            '</div>';
+
+        document.getElementById('jobDetailModal').classList.remove('hidden');
+        document.body.classList.add('modal-open');
+    } catch (err) {
+        alert('Error loading job details: ' + err.message);
+    }
+}
+
+function closeJobDetail() {
+    document.getElementById('jobDetailModal').classList.add('hidden');
+    document.body.classList.remove('modal-open');
 }
 
 async function handleJobSubmit(e) {

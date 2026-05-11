@@ -72,13 +72,13 @@ const VisitorService = {
         const result = await Visitor.aggregate([
             {
                 $match: {
-                    createdAt: { $gte: startOfDay, $lte: endOfDay }
+                    lastVisit: { $gte: startOfDay, $lte: endOfDay }
                 }
             },
             {
                 $group: {
                     _id: null,
-                    totalVisits: { $sum: "$visitCount" }
+                    totalVisits: { $sum: 1 }
                 }
             }
         ]);

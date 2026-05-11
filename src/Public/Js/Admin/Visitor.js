@@ -146,7 +146,7 @@ function renderDailyChart(dailyStats) {
         return '<div class="flex flex-col items-center gap-1 flex-1">' +
             '<span class="text-xs text-gray-400">' + d.visits + '</span>' +
             '<div class="w-full bg-indigo-100 rounded-t relative" style="height: 80px;">' +
-            '<div class="absolute bottom-0 w-full bg-indigo-500 rounded-t transition-all duration-300 hover:bg-indigo-600" style="height: ' + height + '%;" title="' + label + ': ' + d.visits + ' visits"></div>' +
+            '<div class="absolute bottom-0 w-full bg-indigo-500 rounded-t transition-all duration-300 hover:bg-indigo-600" style="height: ' + height + '%;" title="' + label + ': ' + d.visits + ' unique visitors"></div>' +
             '</div>' +
             '<span class="text-xs text-gray-500 truncate w-full text-center" style="font-size: 9px;">' + label + '</span>' +
             '</div>';

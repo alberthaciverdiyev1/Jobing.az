@@ -52,6 +52,30 @@ function destroyBlogEditor() {
     }
 }
 
+async function uploadBlogImage(prefix) {
+    var fileInput = document.getElementById(prefix + 'ImageFile');
+    var file = fileInput && fileInput.files[0];
+    if (!file) { alert('Please select an image file'); return; }
+
+    var formData = new FormData();
+    formData.append('image', file);
+
+    try {
+        var { data } = await axios.post('/api/admin/blogs/upload-image', formData, {
+            headers: { 'Content-Type': 'multipart/form-data' }
+        });
+        document.getElementById(prefix + 'ImageUrl').value = data.url;
+        var preview = document.getElementById(prefix + 'ImagePreview');
+        var previewImg = document.getElementById(prefix + 'ImagePreviewImg');
+        if (preview && previewImg) {
+            preview.classList.remove('hidden');
+            previewImg.src = data.url;
+        }
+    } catch (err) {
+        alert('Error uploading image: ' + (err.response && err.response.data && err.response.data.error ? err.response.data.error : err.message));
+    }
+}
+
 // ============================================================
 // LIST BLOGS
 // ============================================================

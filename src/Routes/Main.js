@@ -160,6 +160,7 @@ router.get('/admin/blogs/add', authMiddleware.authenticate, authMiddleware.autho
 router.get('/admin/blogs/edit/:id', authMiddleware.authenticate, authMiddleware.authorize('admin'), adminController.adminBlogsEditView);
 router.get('/admin/cvs', authMiddleware.authenticate, authMiddleware.authorize('admin'), adminController.adminCvsView);
 router.get('/admin/visitors', authMiddleware.authenticate, authMiddleware.authorize('admin'), adminController.adminVisitorsView);
+router.get('/admin/logs', authMiddleware.authenticate, authMiddleware.authorize('admin'), adminController.adminLogsView);
 router.get('/admin/settings', authMiddleware.authenticate, authMiddleware.authorize('admin'), adminController.adminSettingsView);
 
 // ============================================================
@@ -222,6 +223,10 @@ router.get('/api/admin/blogs/:id', authMiddleware.authenticate, authMiddleware.a
 router.post('/api/admin/blogs', authMiddleware.authenticate, authMiddleware.authorize('admin'), adminController.createBlog);
 router.put('/api/admin/blogs/:id', authMiddleware.authenticate, authMiddleware.authorize('admin'), adminController.updateBlog);
 router.delete('/api/admin/blogs/:id', authMiddleware.authenticate, authMiddleware.authorize('admin'), adminController.deleteBlog);
+router.post('/api/admin/blogs/upload-image', authMiddleware.authenticate, authMiddleware.authorize('admin'), adminController.uploadBlogImage);
+
+// Error Logs
+router.get('/api/admin/logs', authMiddleware.authenticate, authMiddleware.authorize('admin'), adminController.getLogs);
 
 // CVs
 router.get('/api/admin/cvs', authMiddleware.authenticate, authMiddleware.authorize('admin'), adminController.getCvs);

@@ -31,8 +31,8 @@
       .badge-gray { background-color: #f3f4f6; color: #374151; }
       .sidebar-link.active { background-color: #eef2ff !important; color: #4f46e5 !important; }
       .sidebar-link.active svg { color: #4f46e5 !important; }
-      /* Ensure modals are above everything */
-      .fixed.inset-0.z-50 { z-index: 9998 !important; }
+      /* Z-index layers: sidebar (9998) < modals (99999) < navbar (999999) */
+      .fixed.inset-0.z-50 { z-index: 99999 !important; }
       /* CKEditor inside modal fix */
       .ck-editor__editable { min-height: 200px; }
       .ck.ck-editor { width: 100% !important; }

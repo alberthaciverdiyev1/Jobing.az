@@ -69,3 +69,19 @@
     </div>
   </div>
 </div>
+
+<!-- Company Detail Modal -->
+<div id="companyDetailModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
+  <div class="flex items-center justify-center min-h-screen px-4">
+    <div class="fixed inset-0 bg-black opacity-50"></div>
+    <div class="relative bg-white rounded-lg shadow-xl max-w-3xl w-full p-6">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-lg font-semibold text-gray-900">Company Details</h3>
+        <button onclick="closeCompanyDetail()" class="text-gray-400 hover:text-gray-600">&times;</button>
+      </div>
+      <div id="companyDetailContent" class="space-y-3">
+        <p class="text-center text-gray-400">Loading...</p>
+      </div>
+    </div>
+  </div>
+</div>
