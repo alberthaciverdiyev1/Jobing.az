@@ -1,53 +1,46 @@
 <!-- ============================================ -->
-<!-- HERO SECTION — Modern Redesign -->
+<!-- HERO SECTION — Clean & Modern -->
 <!-- ============================================ -->
-<section class="relative bg-gradient-to-br from-primary-600 via-primary-700 to-indigo-800 pt-28 pb-20 md:pt-40 md:pb-28 overflow-hidden">
-    <!-- Background Pattern -->
-    <div class="absolute inset-0 opacity-10">
-        <div class="absolute top-0 right-0 w-96 h-96 bg-white rounded-full blur-3xl -translate-y-1/2 translate-x-1/4"></div>
-        <div class="absolute bottom-0 left-0 w-80 h-80 bg-indigo-300 rounded-full blur-3xl translate-y-1/3 -translate-x-1/4"></div>
-    </div>
-    <div class="absolute inset-0" style="background-image: url('data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'0.05\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
-
-    <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div class="max-w-3xl mx-auto text-center">
+<section class="bg-white border-b border-gray-100 pt-28 pb-16 md:pt-36 md:pb-20">
+    <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-3xl mx-auto text-center animate-fade-in-up">
             <!-- Badge -->
-            <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm text-white/90 text-sm font-medium px-4 py-1.5 rounded-full mb-6 border border-white/10 animate-fade-in-up">
-                <span class="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse"></span>
+            <div class="inline-flex items-center gap-2 bg-primary-50 text-primary-600 text-sm font-medium px-4 py-1.5 rounded-full mb-5">
+                <span class="w-1.5 h-1.5 rounded-full bg-primary-500"></span>
                 <%= __('hero.badge') %>
             </div>
 
-            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight mb-4 animate-fade-in-up" style="animation-delay: 50ms;">
+            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight mb-4">
                 <%= __('hero.title') %>
-                <span class="text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-orange-400"><%= __('hero.titleHighlight') %></span>
+                <span class="text-primary-500"><%= __('hero.titleHighlight') %></span>
             </h1>
 
-            <p class="text-lg sm:text-xl text-white/70 max-w-xl mx-auto mb-10 animate-fade-in-up" style="animation-delay: 100ms;">
+            <p class="text-base sm:text-lg text-gray-500 max-w-xl mx-auto mb-8">
                 <%= __('hero.subtitle') %>
             </p>
 
             <!-- Search Form -->
-            <div class="bg-white/10 backdrop-blur-md rounded-2xl border border-white/10 p-2 animate-fade-in-up" style="animation-delay: 150ms;">
-                <form action="/vakansiyalar" method="GET" class="flex flex-col sm:flex-row gap-2">
+            <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-3">
+                <form action="/vakansiyalar" method="GET" class="flex flex-col sm:flex-row gap-3">
                     <div class="flex-1 relative">
-                        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-white/40">
+                        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
                             <i class="fas fa-search text-sm"></i>
                         </span>
                         <input type="text" name="keyword" id="keyword"
                                placeholder="<%= __('hero.searchPlaceholder') %>"
-                               class="w-full pl-10 pr-4 py-3.5 bg-white/95 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400/50 transition-all text-sm text-gray-900 placeholder-gray-400">
+                               class="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all text-sm">
                     </div>
                     <div class="sm:w-48 relative">
                         <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
                             <i class="fas fa-map-marker-alt text-sm"></i>
                         </span>
                         <select id="city-select" name="cityId"
-                                class="w-full pl-10 pr-8 py-3.5 bg-white/95 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400/50 transition-all text-sm text-gray-900 appearance-none cursor-pointer">
+                                class="w-full pl-10 pr-8 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all text-sm appearance-none cursor-pointer">
                             <option value=""><%= __('hero.cityPlaceholder') %></option>
                         </select>
                     </div>
                     <button type="submit"
-                            class="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold px-8 py-3.5 rounded-xl transition-all duration-200 text-sm shadow-lg shadow-orange-500/25 hover:shadow-orange-500/40 active:scale-[0.98]">
+                            class="bg-primary-500 hover:bg-primary-600 text-white font-medium px-6 py-3 rounded-lg transition-all duration-200 text-sm">
                         <i class="fas fa-search mr-2"></i>
                         <%= __('hero.search') %>
                     </button>
@@ -55,22 +48,22 @@
             </div>
 
             <!-- Trending Keywords -->
-            <div class="flex flex-wrap items-center justify-center gap-2 mt-6 animate-fade-in-up" style="animation-delay: 200ms;">
-                <span class="text-xs text-white/50"><%= __('hero.trending') %></span>
+            <div class="flex flex-wrap items-center justify-center gap-2 mt-5">
+                <span class="text-xs text-gray-400"><%= __('hero.trending') %></span>
                 <a href="/vakansiyalar?keyword=Proqramist"
-                   class="px-3 py-1 bg-white/10 backdrop-blur-sm rounded-md text-xs text-white/70 hover:bg-white/20 hover:text-white transition-all border border-white/10">
+                   class="px-3 py-1 bg-gray-50 border border-gray-200 rounded-md text-xs text-gray-600 hover:border-gray-300 hover:text-gray-900 transition-all">
                     Proqramist
                 </a>
                 <a href="/vakansiyalar?keyword=Design"
-                   class="px-3 py-1 bg-white/10 backdrop-blur-sm rounded-md text-xs text-white/70 hover:bg-white/20 hover:text-white transition-all border border-white/10">
+                   class="px-3 py-1 bg-gray-50 border border-gray-200 rounded-md text-xs text-gray-600 hover:border-gray-300 hover:text-gray-900 transition-all">
                     Dizayner
                 </a>
                 <a href="/vakansiyalar?keyword=Manager"
-                   class="px-3 py-1 bg-white/10 backdrop-blur-sm rounded-md text-xs text-white/70 hover:bg-white/20 hover:text-white transition-all border border-white/10">
+                   class="px-3 py-1 bg-gray-50 border border-gray-200 rounded-md text-xs text-gray-600 hover:border-gray-300 hover:text-gray-900 transition-all">
                     Menecer
                 </a>
                 <a href="/vakansiyalar?keyword=Marketinq"
-                   class="px-3 py-1 bg-white/10 backdrop-blur-sm rounded-md text-xs text-white/70 hover:bg-white/20 hover:text-white transition-all border border-white/10">
+                   class="px-3 py-1 bg-gray-50 border border-gray-200 rounded-md text-xs text-gray-600 hover:border-gray-300 hover:text-gray-900 transition-all">
                     Marketinq
                 </a>
             </div>
