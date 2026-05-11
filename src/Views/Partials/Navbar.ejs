@@ -58,19 +58,15 @@
             </div>
         </div>
 
-        <!-- Mobile: Post Job Button & Language Switcher -->
+        <!-- Mobile: Profile, Language & Post Job -->
         <div class="md:hidden flex items-center gap-2">
-            <% if (typeof user !== 'undefined' && user) { %>
-                <a href="<%= user.role === 'company' || user.role === 'hr' ? '/hr/dashboard' : '/dashboard' %>"
-                   class="inline-flex items-center gap-2 bg-primary-50 text-primary-600 text-sm font-medium px-3 py-2 rounded-xl transition-all">
-                    <i class="fas fa-user"></i>
-                </a>
-            <% } else { %>
-                <a href="/auth"
-                   class="inline-flex items-center gap-2 text-primary-500 border-2 border-primary-500 text-sm font-medium px-3 py-2 rounded-xl">
-                    <i class="fas fa-user"></i>
-                </a>
-            <% } %>
+            <% const mobileProfileLink = (typeof user !== 'undefined' && user)
+                ? (user.role === 'company' ? '/company/dashboard' : user.role === 'hr' ? '/hr/dashboard' : '/dashboard')
+                : '/auth'; %>
+            <a href="<%= mobileProfileLink %>"
+               class="inline-flex items-center gap-2 <%= typeof user !== 'undefined' && user ? 'bg-primary-50 text-primary-600' : 'text-primary-500 border-2 border-primary-500' %> text-sm font-medium px-3 py-2 rounded-xl transition-all">
+                <i class="fas fa-user"></i>
+            </a>
 
             <!-- Mobile Language Toggle -->
             <div class="flex items-center gap-0.5 bg-gray-100 rounded-lg p-0.5">
