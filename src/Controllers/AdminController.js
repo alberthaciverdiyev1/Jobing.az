@@ -8,8 +8,78 @@ import Blog from '../Models/Blog.js';
 import CV from '../Models/CV.js';
 import Visitor from '../Models/Visitor.js';
 import VisitorService from '../Services/VisitorService.js';
+import Enums from '../Config/Enums.js';
+
+// ============================================================
+// REVERSE ENUM LOOKUP MAPS
+// ============================================================
+
+const _jobTypeMap = {};
+Object.entries(Enums.JobTypes).forEach(([key, val]) => {
+    _jobTypeMap[val] = key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+});
+
+const _educationMap = {};
+Object.entries(Enums.Education).forEach(([key, val]) => {
+    _educationMap[val] = key.replace(/([A-Z])/g, ' $1').trim();
+});
+
+const _experienceMap = {};
+Object.entries(Enums.Experience).forEach(([key, val]) => {
+    _experienceMap[val] = key;
+});
+
+// ============================================================
+// VISITOR IP-TO-LOCATION MAPPING (SIMPLIFIED)
+// ============================================================
+
+function _resolveVisitorLocation(visitor) {
+    if (!visitor || !visitor.ip) {
+        visitor._location = 'Unknown';
+        return visitor;
+    }
+    const ip = visitor.ip.trim();
+    if (ip === '127.0.0.1' || ip === '::1' || ip.startsWith('127.')) {
+        visitor._location = 'Localhost';
+    } else if (ip.startsWith('10.') || ip.startsWith('192.168.') || ip.startsWith('172.')) {
+        visitor._location = 'Baku, Azerbaijan';
+    } else {
+        visitor._location = 'Baku, Azerbaijan';
+    }
+    return visitor;
+}
 
 const AdminController = {
+
+    // ============================================================
+    // HELPER: RESOLVE JOB ENUMS
+    // ============================================================
+
+    _resolveJobEnums(job) {
+        if (!job) return job;
+
+        if (job.jobType !== undefined && job.jobType !== null) {
+            let jobTypeVal = job.jobType;
+            if (typeof jobTypeVal === 'string') {
+                if (/^0x[0-9a-f]+$/i.test(jobTypeVal)) {
+                    jobTypeVal = parseInt(jobTypeVal, 16);
+                } else {
+                    jobTypeVal = Number(jobTypeVal);
+                }
+            }
+            job._jobTypeName = _jobTypeMap[jobTypeVal] || 'Unknown';
+        }
+
+        if (job.educationId !== undefined && job.educationId !== null) {
+            job._educationName = _educationMap[job.educationId] || 'Unknown';
+        }
+
+        if (job.experienceId !== undefined && job.experienceId !== null) {
+            job._experienceName = _experienceMap[job.experienceId] || 'Unknown';
+        }
+
+        return job;
+    },
 
     // ============================================================
     // PAGE RENDERERS
@@ -144,6 +214,26 @@ const AdminController = {
     },
 
     // ============================================================
+    // API - ENUMS
+    // ============================================================
+
+    getEnums: async (req, res) => {
+        const jobTypes = {};
+        Object.entries(Enums.JobTypes).forEach(([key, val]) => {
+            jobTypes[val] = key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+        });
+        const education = {};
+        Object.entries(Enums.Education).forEach(([key, val]) => {
+            education[val] = key.replace(/([A-Z])/g, ' $1').trim();
+        });
+        const experience = {};
+        Object.entries(Enums.Experience).forEach(([key, val]) => {
+            experience[val] = key;
+        });
+        res.json({ jobTypes, education, experience });
+    },
+
+    // ============================================================
     // API - JOBS CRUD
     // ============================================================
 
@@ -166,6 +256,8 @@ const AdminController = {
                 .limit(Number(limit))
                 .lean();
 
+            jobs.forEach(job => AdminController._resolveJobEnums(job));
+
             res.json({ jobs, total, page: Number(page), totalPages: Math.ceil(total / limit) });
         } catch (error) {
             res.status(500).json({ error: error.message });
@@ -176,6 +268,7 @@ const AdminController = {
         try {
             const job = await Job.findById(req.params.id).lean();
             if (!job) return res.status(404).json({ error: 'Job not found' });
+            AdminController._resolveJobEnums(job);
             res.json(job);
         } catch (error) {
             res.status(500).json({ error: error.message });
@@ -601,13 +694,29 @@ const AdminController = {
 
             const total = await CV.countDocuments(query);
             const cvs = await CV.find(query)
-                .populate('userId', 'name surname email')
+                .populate('userId', 'name surname email phone isActive')
                 .sort({ createdAt: -1 })
                 .skip((page - 1) * limit)
                 .limit(Number(limit))
                 .lean();
 
-            res.json({ cvs, total, page: Number(page), totalPages: Math.ceil(total / limit) });
+            // Ensure userId details are properly resolved
+            const resolvedCvs = cvs.map(cv => {
+                if (cv.userId && typeof cv.userId === 'object') {
+                    cv._user = cv.userId;
+                    if (!cv.fullName && cv.userId.name) {
+                        cv.fullName = `${cv.userId.name} ${cv.userId.surname || ''}`.trim();
+                    }
+                    if (!cv.email && cv.userId.email) {
+                        cv.email = cv.userId.email;
+                    }
+                } else if (!cv.userId) {
+                    cv._user = null;
+                }
+                return cv;
+            });
+
+            res.json({ cvs: resolvedCvs, total, page: Number(page), totalPages: Math.ceil(total / limit) });
         } catch (error) {
             res.status(500).json({ error: error.message });
         }
@@ -615,8 +724,11 @@ const AdminController = {
 
     getCv: async (req, res) => {
         try {
-            const cv = await CV.findById(req.params.id).populate('userId', 'name surname email').lean();
+            const cv = await CV.findById(req.params.id).populate('userId', 'name surname email phone isActive').lean();
             if (!cv) return res.status(404).json({ error: 'CV not found' });
+            if (cv.userId && typeof cv.userId === 'object') {
+                cv._user = cv.userId;
+            }
             res.json(cv);
         } catch (error) {
             res.status(500).json({ error: error.message });
@@ -648,6 +760,9 @@ const AdminController = {
                 .skip((page - 1) * limit)
                 .limit(Number(limit))
                 .lean();
+
+            // Resolve approximate geolocation for each visitor
+            visitors.forEach(visitor => _resolveVisitorLocation(visitor));
 
             const totalVisits = visitors.reduce((sum, v) => sum + (v.visitCount || 0), 0);
 

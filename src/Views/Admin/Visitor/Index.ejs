@@ -15,6 +15,14 @@
     </div>
   </div>
 
+  <!-- Visitor Map -->
+  <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-5 mb-6">
+    <h2 class="text-lg font-semibold text-gray-800 mb-4">Visitor Locations</h2>
+    <div id="visitorMap" class="w-full h-96 bg-gray-50 rounded-lg" style="min-height: 400px;">
+      <div class="flex items-center justify-center h-full text-gray-400">Loading map...</div>
+    </div>
+  </div>
+
   <!-- Daily Stats Chart -->
   <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-5 mb-6">
     <h2 class="text-lg font-semibold text-gray-800 mb-4">Daily Visits (Last 30 Days)</h2>
@@ -48,3 +56,7 @@
     <div id="pagination" class="px-5 py-3 border-t border-gray-200 flex items-center justify-between"></div>
   </div>
 </div>
+
+<style>
+  #visitorMap .leaflet-container { border-radius: 0.5rem; }
+</style>
