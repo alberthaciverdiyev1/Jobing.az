@@ -3,8 +3,8 @@
         <!-- Page Header -->
         <div class="flex items-center justify-between mb-6 animate-fade-in">
             <div>
-                <h1 class="text-2xl sm:text-3xl font-bold text-gray-900">Vakansiyalar</h1>
-                <p class="text-gray-500 text-sm sm:text-base mt-1">Sənə uyğun işi tap</p>
+                <h1 class="text-2xl sm:text-3xl font-bold text-gray-900"><%= __('jobs.title') %></h1>
+                <p class="text-gray-500 text-sm sm:text-base mt-1"><%= __('jobs.subtitle') %></p>
             </div>
         </div>
 
@@ -20,9 +20,9 @@
                     <div class="flex items-center justify-between mb-4 pb-4 border-b border-gray-100">
                         <h3 class="font-semibold text-gray-900 flex items-center gap-2">
                             <i class="fas fa-sliders-h text-primary-500 text-sm"></i>
-                            Filtrlər
+                            <%= __('jobs.filters') %>
                         </h3>
-                        <button id="clearFilters" class="text-xs text-gray-400 hover:text-primary-500 transition-colors">Təmizlə</button>
+                        <button id="clearFilters" class="text-xs text-gray-400 hover:text-primary-500 transition-colors"><%= __('jobs.clear') %></button>
                     </div>
                     <!-- Desktop filter content -->
                     <%- include('../Partials/FilterContent') %>
@@ -34,13 +34,13 @@
                 <!-- Results Count & Mobile Filter Button -->
                 <div class="flex items-center justify-between mb-4 animate-fade-in">
                     <p class="text-sm text-gray-500">
-                        <span id="job-count">0</span> vakansiya tapıldı
+                        <span id="job-count">0</span> <%= __('jobs.results') %>
                     </p>
                     <!-- Mobile Filter Trigger -->
                     <button id="mobile-filter-btn"
                             class="lg:hidden inline-flex items-center gap-2 text-sm font-medium text-gray-700 bg-white border border-gray-200 px-4 py-2.5 rounded-xl hover:bg-gray-50 hover:border-gray-300 transition-all shadow-sm active:scale-95">
                         <i class="fas fa-sliders-h text-primary-500"></i>
-                        Filtrlər
+                        <%= __('jobs.filters') %>
                         <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-primary-500 text-white text-[10px] font-bold" id="active-filter-count">0</span>
                     </button>
                 </div>
@@ -50,7 +50,7 @@
                     <div class="flex items-center justify-center min-h-[400px] bg-white rounded-2xl border border-gray-100 shadow-sm">
                         <div class="flex flex-col items-center gap-3">
                             <div class="w-8 h-8 border-2 border-primary-500/30 border-t-primary-500 rounded-full animate-spin"></div>
-                            <span class="text-gray-400 text-sm">Yüklənir...</span>
+                            <span class="text-gray-400 text-sm"><%= __('jobs.loading') %></span>
                         </div>
                     </div>
                 </div>
@@ -78,10 +78,10 @@
             <div class="flex items-center justify-between px-5 py-3 border-b border-gray-100 flex-shrink-0">
                 <h3 class="font-semibold text-gray-900 flex items-center gap-2">
                     <i class="fas fa-sliders-h text-primary-500 text-sm"></i>
-                    Filtrlər
+                    <%= __('jobs.filters') %>
                 </h3>
                 <div class="flex items-center gap-3">
-                    <button id="mobile-clear-filters" class="text-xs text-gray-400 hover:text-primary-500 transition-colors">Təmizlə</button>
+                    <button id="mobile-clear-filters" class="text-xs text-gray-400 hover:text-primary-500 transition-colors"><%= __('jobs.clear') %></button>
                     <button id="mobile-filter-close" class="w-8 h-8 flex items-center justify-center rounded-lg bg-gray-100 text-gray-500 hover:bg-gray-200 transition-colors">
                         <i class="fas fa-times text-sm"></i>
                     </button>
@@ -98,7 +98,7 @@
                 <button id="mobile-apply-filters"
                         class="w-full bg-primary-500 hover:bg-primary-600 text-white font-medium px-5 py-3 rounded-xl transition-all shadow-sm shadow-primary-500/20 active:scale-[0.98]">
                     <i class="fas fa-search mr-2"></i>
-                    Nəticələri göstər
+                    <%= __('jobs.showResults') %>
                 </button>
             </div>
         </div>

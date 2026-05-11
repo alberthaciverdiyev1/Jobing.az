@@ -2,9 +2,9 @@
     <div class="max-w-5xl mx-auto px-3 sm:px-4 lg:px-6">
         <!-- Breadcrumb -->
         <nav class="flex items-center gap-2 text-sm text-gray-400 mb-6 animate-fade-in-down">
-            <a href="/" class="hover:text-primary-500 transition-colors">Ana Səhifə</a>
+            <a href="/" class="hover:text-primary-500 transition-colors"><%= __('nav.home') %></a>
             <i class="fas fa-chevron-right text-[10px]"></i>
-            <a href="/sirketler" class="hover:text-primary-500 transition-colors">Şirkətlər</a>
+            <a href="/sirketler" class="hover:text-primary-500 transition-colors"><%= __('nav.companies') %></a>
             <i class="fas fa-chevron-right text-[10px]"></i>
             <span class="text-gray-600 truncate max-w-[200px]" id="company-name-breadcrumb">Şirkət</span>
         </nav>
@@ -25,7 +25,7 @@
         <!-- Vacancies -->
         <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden animate-fade-in-up" style="animation-delay: 100ms;">
             <div class="px-6 py-5 border-b border-gray-100">
-                <h2 class="text-lg font-semibold text-gray-900">Vakansiyalar</h2>
+                <h2 class="text-lg font-semibold text-gray-900"><%= __('company.vacancyTitle') %></h2>
             </div>
             <div id="company-jobs">
                 <div class="text-center py-12">

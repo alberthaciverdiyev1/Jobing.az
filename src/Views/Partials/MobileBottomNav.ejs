@@ -8,7 +8,7 @@
                 <i class="fas fa-home text-xl"></i>
                 <% if (currentPage === 'home') { %><span class="absolute -bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-primary-500"></span><% } %>
             </div>
-            <span class="text-[10px] font-medium">Ana Səhifə</span>
+            <span class="text-[10px] font-medium"><%= __('nav.home') %></span>
         </a>
 
         <!-- Jobs -->
@@ -18,7 +18,7 @@
                 <i class="fas fa-search text-xl"></i>
                 <% if (currentPage === 'jobs') { %><span class="absolute -bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-primary-500"></span><% } %>
             </div>
-            <span class="text-[10px] font-medium">Vakansiyalar</span>
+            <span class="text-[10px] font-medium"><%= __('nav.jobs') %></span>
         </a>
 
         <!-- Companies -->
@@ -28,7 +28,7 @@
                 <i class="fas fa-building text-xl"></i>
                 <% if (currentPage === 'company-list' || currentPage === 'company-detail') { %><span class="absolute -bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-primary-500"></span><% } %>
             </div>
-            <span class="text-[10px] font-medium">Şirkətlər</span>
+            <span class="text-[10px] font-medium"><%= __('nav.companies') %></span>
         </a>
 
         <!-- CVs -->
@@ -38,7 +38,7 @@
                 <i class="fas fa-file-alt text-xl"></i>
                 <% if (currentPage === 'cv-list') { %><span class="absolute -bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-primary-500"></span><% } %>
             </div>
-            <span class="text-[10px] font-medium">CV-lər</span>
+            <span class="text-[10px] font-medium"><%= __('nav.cvs') %></span>
         </a>
 
         <!-- About -->
@@ -48,7 +48,7 @@
                 <i class="fas fa-circle-info text-xl"></i>
                 <% if (currentPage === 'about') { %><span class="absolute -bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-primary-500"></span><% } %>
             </div>
-            <span class="text-[10px] font-medium">Haqqında</span>
+            <span class="text-[10px] font-medium"><%= __('nav.about') %></span>
         </a>
 
         <!-- Profile / Login -->
@@ -59,7 +59,7 @@
                     <i class="fas fa-user text-xl"></i>
                     <% if (currentPage === 'dashboard' || currentPage === 'company-dashboard') { %><span class="absolute -bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-primary-500"></span><% } %>
                 </div>
-                <span class="text-[10px] font-medium">Profil</span>
+                <span class="text-[10px] font-medium"><%= __('nav.profile') %></span>
             </a>
         <% } else { %>
             <a href="/auth"
@@ -67,7 +67,7 @@
                 <div class="relative">
                     <i class="fas fa-sign-in-alt text-xl"></i>
                 </div>
-                <span class="text-[10px] font-medium">Daxil Ol</span>
+                <span class="text-[10px] font-medium"><%= __('nav.login') %></span>
             </a>
         <% } %>
     </div>

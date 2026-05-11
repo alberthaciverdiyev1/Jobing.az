@@ -7,7 +7,9 @@ import sequelize from './src/Config/Database.js';
 import loggerMiddleware from './src/Middlewares/Logger.js';
 import Production from './src/Helpers/Production.js';
 import sendEmail from './src/Helpers/NodeMailer.js';
-// import i18n from 'i18n';
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
+const i18n = require('i18n');
 import cookieParser from 'cookie-parser';
 import {requestAllSites} from "./src/Helpers/Automation.js";
 import bot, {listenTgCommands, sendTgMessage} from "./src/Helpers/TelegramBot.js";
@@ -16,13 +18,14 @@ import authMiddleware from './src/Middlewares/Auth.js';
 
 
 const to = process.env.CRON_MAIL_USER;
-//
-// i18n.configure({
-//     locales: ['en', 'ru', 'az'],
-//     directory: './src/locales',
-//     defaultLocale: 'az',
-//     cookie: 'lang'
-// });
+i18n.configure({
+    locales: ['az', 'en', 'ru'],
+    directory: './src/locales',
+    defaultLocale: 'az',
+    cookie: 'lang',
+    objectNotation: true,
+    updateFiles: false
+});
 
 const app = express();
 const port = process.env.PR_PORT || 3000;
@@ -40,7 +43,7 @@ app.use(express.urlencoded({extended: true, limit: '100mb'}));
 
 app.use(cookieParser());
 app.use(authMiddleware.setUser);
-// app.use(i18n.init);
+app.use(i18n.init);
 app.use((req, res, next) => {
     res.locals.Production = Production;
     next();
