@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import express from 'express';
 import path from 'path';
 import cron from 'node-cron';
@@ -11,6 +12,7 @@ import cookieParser from 'cookie-parser';
 import {requestAllSites} from "./src/Helpers/Automation.js";
 import bot, {listenTgCommands, sendTgMessage} from "./src/Helpers/TelegramBot.js";
 import TelegramBot from 'node-telegram-bot-api';
+import authMiddleware from './src/Middlewares/Auth.js';
 
 
 const to = process.env.CRON_MAIL_USER;
@@ -32,10 +34,12 @@ app.set('views', './src/Views');
 app.set('trust proxy', true);
 
 app.use(express.static(path.resolve('./src/Public')));
+app.use('/uploads', express.static(path.resolve('./uploads')));
 app.use(express.json({limit: '100mb'}));
 app.use(express.urlencoded({extended: true, limit: '100mb'}));
 
 app.use(cookieParser());
+app.use(authMiddleware.setUser);
 // app.use(i18n.init);
 app.use((req, res, next) => {
     res.locals.Production = Production;

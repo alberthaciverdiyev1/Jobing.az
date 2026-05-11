@@ -4,45 +4,71 @@ import CompanyController from "../Controllers/CompanyController.js";
 const Validators = {
 
     registerValidator: (req, res, next) => {
-        const { username, email, password, confirmPassword } = req.body;
-        if (!username) {
-            return res.status(400).json({ error: "Username is required" });
+        const { name, surname, email, password, confirmPassword, role, companyName } = req.body;
+
+        if (!name) {
+            return res.status(400).json({ error: "Ad tələb olunur" });
+        }
+        if (!validator.isLength(name, { min: 2, max: 50 })) {
+            return res.status(400).json({ error: "Ad 2-50 simvol olmalıdır" });
         }
 
-        if (!validator.isLength(username, { min: 3, max: 20 })) {
-            return res.status(400).json({ error: "Username must be between 3 and 20 characters long" });
+        if (!surname) {
+            return res.status(400).json({ error: "Soyad tələb olunur" });
+        }
+        if (!validator.isLength(surname, { min: 2, max: 50 })) {
+            return res.status(400).json({ error: "Soyad 2-50 simvol olmalıdır" });
         }
 
         if (!email) {
-            return res.status(400).json({ error: "Email is required" });
+            return res.status(400).json({ error: "Email tələb olunur" });
         }
-
         if (!validator.isEmail(email)) {
-            return res.status(400).json({ error: "Please enter a valid email address" });
+            return res.status(400).json({ error: "Düzgün email daxil edin" });
         }
 
         if (!password) {
-            return res.status(400).json({ error: "Password is required" });
+            return res.status(400).json({ error: "Şifrə tələb olunur" });
         }
-
         if (!validator.isLength(password, { min: 6 })) {
-            return res.status(400).json({ error: "Password must be at least 6 characters long" });
+            return res.status(400).json({ error: "Şifrə ən az 6 simvol olmalıdır" });
         }
 
         if (!confirmPassword) {
-            return res.status(400).json({ error: "Password is required" });
-        }
-
-        if (!validator.isLength(confirmPassword, { min: 6 })) {
-            return res.status(400).json({ error: "Password must be at least 6 characters long" });
+            return res.status(400).json({ error: "Şifrə təkrarı tələb olunur" });
         }
 
         if (!validator.equals(password, confirmPassword)) {
-            return res.status(400).json({ error: "Passwords do not match" });
+            return res.status(400).json({ error: "Şifrələr uyğun gəlmir" });
+        }
+
+        if (role === 'company' && !companyName) {
+            return res.status(400).json({ error: "Şirkət adı tələb olunur" });
+        }
+
+        if (role && !['user', 'company'].includes(role)) {
+            return res.status(400).json({ error: "Yanlış rol" });
         }
 
         next();
     },
+
+    loginValidator: (req, res, next) => {
+        const { email, password } = req.body;
+
+        if (!email) {
+            return res.status(400).json({ error: "Email tələb olunur" });
+        }
+        if (!validator.isEmail(email)) {
+            return res.status(400).json({ error: "Düzgün email daxil edin" });
+        }
+        if (!password) {
+            return res.status(400).json({ error: "Şifrə tələb olunur" });
+        }
+
+        next();
+    },
+
     siteValidator: (req, res, next) => {
         const { name, url } = req.body;
         if (!name) {
@@ -91,7 +117,7 @@ const Validators = {
             email: 0,
             phone: 0,
         };
-    
+
         const data = {
             title: req.body.data.position || defaultValues.title,
             minSalary: req.body.data.minSalary || defaultValues.minSalary,
@@ -107,12 +133,12 @@ const Validators = {
             email: req.body.data.email || defaultValues.email,
             phone: req.body.data.phone || defaultValues.phone,
         };
-    
+
         // Email format validation
         if (!data.email || !/^\S+@\S+\.\S+$/.test(data.email)) {
             data.email = defaultValues.email;
         }
-    
+
         // Required field validation
         const requiredFields = [
             "title",
@@ -125,9 +151,9 @@ const Validators = {
             "experienceId",
             "phone",
         ];
-    
+
         const hasValidationError = requiredFields.some((field) => !data[field]);
-    
+
         if (hasValidationError) {
             return res.status(200).json({
                 status: 400,
@@ -135,10 +161,10 @@ const Validators = {
                 data,
             });
         }
-    
+
         next();
     },
-    
+
 
 }
 export default Validators;

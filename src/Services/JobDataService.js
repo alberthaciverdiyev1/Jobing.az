@@ -315,6 +315,17 @@ const JobDataService = {
     },
     
 
+    findByCompany: async (companyName) => {
+        try {
+            if (!companyName) return [];
+            return JobData.find({ companyName, isActive: true })
+                .sort({ createdAt: -1 })
+                .limit(50);
+        } catch (error) {
+            throw new Error('Error fetching company jobs: ' + error.message);
+        }
+    },
+
     count: async () => {
         const thirtyDaysAgo = new Date();
         thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
