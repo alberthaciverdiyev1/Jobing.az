@@ -4,7 +4,9 @@ import path from 'path';
 import cron from 'node-cron';
 import routes from './src/Routes/Main.js';
 import sequelize from './src/Config/Database.js';
-import loggerMiddleware from './src/Middlewares/Logger.js';
+import logger, { errorLogger, patchConsoleError, logError } from './src/Middlewares/Logger.js';
+// Patch console.error globally so PM2/console errors also get logged to files
+patchConsoleError();
 import Production from './src/Helpers/Production.js';
 import sendEmail from './src/Helpers/NodeMailer.js';
 import { createRequire } from 'module';
@@ -48,21 +50,26 @@ app.use((req, res, next) => {
     res.locals.Production = Production;
     next();
 });
-app.use(loggerMiddleware);
 app.use('/', routes);
 app.use((req, res, next) => {
     res.status(404).send('404 Not Found');
     next();
 });
 
+// Error-logging middleware — placed after routes to catch all route errors
+app.use(errorLogger);
 
+// Global Express error handler — logs + emails + responds
 app.use(async (err, req, res, next) => {
+    logError(err, { source: 'global-error-handler', method: req?.method, url: req?.originalUrl || req?.url });
     const errorData = {
         title: 'Global Error',
         text: `${err.stack}`
     };
-    await sendEmail(errorData, to);
-    res.status(500).send('Something went wrong!');
+    try { await sendEmail(errorData, to); } catch {}
+    if (!res.headersSent) {
+        res.status(500).send('Something went wrong!');
+    }
 });
 
 
@@ -79,6 +86,7 @@ app.listen(port, '0.0.0.0', () => {
 });
 
 process.on('uncaughtException', async (err) => {
+    logError(err, { source: 'uncaughtException' });
     const errorData = {
         title: 'Uncaught Exception',
         text: `${err.stack}`
@@ -88,6 +96,8 @@ process.on('uncaughtException', async (err) => {
 });
 
 process.on('unhandledRejection', async (reason, promise) => {
+    const err = reason instanceof Error ? reason : new Error(String(reason));
+    logError(err, { source: 'unhandledRejection' });
     const errorData = {
         title: 'Unhandled Promise Rejection',
         text: `Promise: ${promise}, Reason: ${reason}`

@@ -6,6 +6,7 @@ import hrRoutes from './HrRoutes.js';
 import { createRequire } from 'module';
 const require = createRequire(import.meta.url);
 const i18n = require('i18n');
+import { logError } from '../Middlewares/Logger.js';
 
 const router = express.Router();
 
@@ -37,6 +38,7 @@ router.use((req, res) => {
 });
 
 router.use((err, req, res, next) => {
+    logError(err, { source: 'main-router-error', url: req?.originalUrl || req?.url });
     console.error('Route error:', err.message);
     console.error(err.stack?.split('\n').slice(0, 3).join('\n'));
     res.render('Partials/Error.ejs');
