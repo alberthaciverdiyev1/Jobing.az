@@ -65,11 +65,6 @@ export function createJobCard(element, compact = false) {
     // Source tag
     const sourceTag = `<span class="text-xs text-gray-400">${element.sourceUrl}</span>`;
 
-    const jobId = element._id || element.uniqueKey || '';
-    const favBtn = `<button type="button" onclick="event.stopPropagation();event.preventDefault();Favorites.toggle('${jobId}',this)" class="favorite-btn flex-shrink-0 transition-colors duration-200 text-base text-gray-300 hover:text-red-400" title="Favorilərə əlavə et">
-        <i class="far fa-heart"></i>
-    </button>`;
-
     if (compact) {
         // ————— COMPACT CARD (homepage grid) —————
         return `<div class="job-card group bg-white border border-gray-100 rounded-lg p-4 cursor-pointer transition-all duration-200 hover:border-gray-200 hover:shadow-sm hover:-translate-y-0.5 active:border-gray-300" data-original-link="${detailLink}">
@@ -88,7 +83,6 @@ export function createJobCard(element, compact = false) {
                         <span><i class="fas fa-map-marker-alt mr-1"></i>${location || 'Azərbaycan'}</span>
                     </div>
                 </div>
-                ${favBtn}
             </div>
         </div>`;
     }
@@ -112,10 +106,7 @@ export function createJobCard(element, compact = false) {
                     <span><i class="fas fa-map-marker-alt mr-1"></i>${location || 'Azərbaycan'}</span>
                 </div>
                 <div class="flex items-center justify-between mt-3 pt-3 border-t border-gray-50">
-                    <div class="flex items-center gap-2">
-                        ${sourceTag}
-                    </div>
-                    ${favBtn}
+                    ${sourceTag}
                 </div>
             </div>
         </div>

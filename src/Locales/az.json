@@ -39,6 +39,12 @@
 		"viewAll": "Bütün Vakansiyalar",
 		"loading": "Vakansiyalar yüklənir..."
 	},
+	"categories": {
+		"section": "Kateqoriyalar",
+		"title": "Populyar Kateqoriyalar",
+		"subtitle": "Ən çox vakansiya olan kateqoriyalar",
+		"vacancyCount": "vakansiya"
+	},
 	"howItWorks": {
 		"section": "İşləmə Prinsipi",
 		"title": "Platforma necə işləyir?",

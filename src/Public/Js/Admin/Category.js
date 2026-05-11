@@ -11,12 +11,18 @@ async function loadCategories() {
         const tbody = document.getElementById('categoryBody');
 
         if (!data || data.length === 0) {
-            tbody.innerHTML = `<tr><td colspan="7" class="px-5 py-8 text-center text-gray-400">No categories found</td></tr>`;
+            tbody.innerHTML = `<tr><td colspan="8" class="px-5 py-8 text-center text-gray-400">No categories found</td></tr>`;
             return;
         }
 
         tbody.innerHTML = data.map(c => `
             <tr class="border-b hover:bg-gray-50">
+                <td class="px-5 py-3">
+                    ${c.logoUrl
+                        ? `<img src="${escapeHtml(c.logoUrl)}" alt="logo" class="w-8 h-8 object-contain rounded">`
+                        : `<span class="text-gray-300 text-xs">—</span>`
+                    }
+                </td>
                 <td class="px-5 py-3 font-medium text-gray-900">${escapeHtml(c.categoryName)}</td>
                 <td class="px-5 py-3">${c.bossAz || '-'}</td>
                 <td class="px-5 py-3">${c.smartJobAz || '-'}</td>
@@ -33,7 +39,7 @@ async function loadCategories() {
         `).join('');
     } catch (err) {
         document.getElementById('categoryBody').innerHTML =
-            `<tr><td colspan="7" class="px-5 py-8 text-center text-red-400">Error: ${err.message}</td></tr>`;
+            `<tr><td colspan="8" class="px-5 py-8 text-center text-red-400">Error: ${err.message}</td></tr>`;
     }
 }
 
@@ -41,9 +47,11 @@ function openCategoryModal() {
     editingCategoryId = null;
     document.getElementById('categoryForm').reset();
     document.getElementById('categoryId').value = '';
+    document.getElementById('categoryLogoUrl').value = '';
     document.getElementById('categoryModalTitle').textContent = 'Add Category';
     document.getElementById('categoryModal').classList.remove('hidden');
     document.body.classList.add('modal-open');
+    document.getElementById('logoUploadSection').classList.add('hidden');
 }
 
 function closeCategoryModal() {
@@ -63,8 +71,23 @@ async function editCategory(id) {
         document.getElementById('offerAz').value = data.offerAz || '';
         document.getElementById('jobSearch').value = data.jobSearch || '';
         document.getElementById('helloJobAz').value = data.helloJobAz || '';
+        document.getElementById('categoryLogoUrl').value = data.logoUrl || '';
         document.getElementById('categoryModal').classList.remove('hidden');
         document.body.classList.add('modal-open');
+
+        // Show logo upload section
+        const logoSection = document.getElementById('logoUploadSection');
+        logoSection.classList.remove('hidden');
+        const preview = document.getElementById('logoPreview');
+        const removeBtn = document.getElementById('removeLogoBtn');
+        if (data.logoUrl) {
+            preview.src = data.logoUrl;
+            preview.classList.remove('hidden');
+            removeBtn.classList.remove('hidden');
+        } else {
+            preview.classList.add('hidden');
+            removeBtn.classList.add('hidden');
+        }
     } catch (err) {
         alert('Error loading category: ' + err.message);
     }
@@ -95,13 +118,62 @@ async function handleCategorySubmit(e) {
         if (editingCategoryId) {
             await axios.put(`/api/admin/categories/${editingCategoryId}`, payload);
         } else {
-            await axios.post('/api/admin/categories', payload);
+            const response = await axios.post('/api/admin/categories', payload);
+            // If created with logo, upload it
+            const logoFile = document.getElementById('logoInput').files[0];
+            if (logoFile && response.data._id) {
+                await uploadLogoForCategory(response.data._id, logoFile);
+            }
         }
         closeCategoryModal();
         loadCategories();
     } catch (err) {
         alert('Error saving category: ' + err.message);
     }
+}
+
+async function uploadCategoryLogo(input) {
+    const file = input.files[0];
+    if (!file) return;
+
+    if (!editingCategoryId) {
+        // Show preview only, upload happens after save
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            const preview = document.getElementById('logoPreview');
+            preview.src = e.target.result;
+            preview.classList.remove('hidden');
+            document.getElementById('removeLogoBtn').classList.remove('hidden');
+        };
+        reader.readAsDataURL(file);
+        return;
+    }
+
+    await uploadLogoForCategory(editingCategoryId, file);
+}
+
+async function uploadLogoForCategory(categoryId, file) {
+    const formData = new FormData();
+    formData.append('logo', file);
+    try {
+        const { data } = await axios.post(`/api/admin/categories/${categoryId}/upload-logo`, formData, {
+            headers: { 'Content-Type': 'multipart/form-data' }
+        });
+        document.getElementById('categoryLogoUrl').value = data.logoUrl;
+        const preview = document.getElementById('logoPreview');
+        preview.src = data.logoUrl;
+        preview.classList.remove('hidden');
+        document.getElementById('removeLogoBtn').classList.remove('hidden');
+    } catch (err) {
+        alert('Error uploading logo: ' + err.message);
+    }
+}
+
+function removeCategoryLogo() {
+    document.getElementById('logoPreview').classList.add('hidden');
+    document.getElementById('removeLogoBtn').classList.add('hidden');
+    document.getElementById('logoInput').value = '';
+    document.getElementById('categoryLogoUrl').value = '';
 }
 
 function escapeHtml(text) {

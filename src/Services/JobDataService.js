@@ -355,6 +355,38 @@ const JobDataService = {
         return JobData.countDocuments({
             createdAt: { $gte: thirtyDaysAgo }
         });
+    },
+
+    /** Get top 10 categories with most active job listings */
+    getTopCategories: async () => {
+        try {
+            return await JobData.aggregate([
+                { $match: { isActive: true } },
+                { $group: { _id: '$categoryId', count: { $sum: 1 } } },
+                { $sort: { count: -1 } },
+                { $limit: 10 },
+                {
+                    $lookup: {
+                        from: 'categories',
+                        localField: '_id',
+                        foreignField: 'localCategoryId',
+                        as: 'category'
+                    }
+                },
+                { $unwind: { path: '$category', preserveNullAndEmptyArrays: true } },
+                {
+                    $project: {
+                        _id: 0,
+                        categoryId: '$_id',
+                        name: { $ifNull: ['$category.categoryName', 'Digər'] },
+                        logoUrl: { $ifNull: ['$category.logoUrl', ''] },
+                        count: 1
+                    }
+                }
+            ]);
+        } catch (error) {
+            throw new Error('Error fetching top categories: ' + error.message);
+        }
     }
 };
 

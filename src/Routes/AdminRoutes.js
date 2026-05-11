@@ -19,6 +19,9 @@ router.get('/admin/sites', ...admin, adminController.adminSitesView);
 router.get('/admin/blogs', ...admin, adminController.adminBlogsView);
 router.get('/admin/blogs/add', ...admin, adminController.adminBlogsAddView);
 router.get('/admin/blogs/edit/:id', ...admin, adminController.adminBlogsEditView);
+router.get('/admin/news', ...admin, adminController.adminNewsView);
+router.get('/admin/news/add', ...admin, adminController.adminNewsAddView);
+router.get('/admin/news/edit/:id', ...admin, adminController.adminNewsEditView);
 router.get('/admin/cvs', ...admin, adminController.adminCvsView);
 router.get('/admin/visitors', ...admin, adminController.adminVisitorsView);
 router.get('/admin/logs', ...admin, adminController.adminLogsView);
@@ -61,6 +64,7 @@ router.get('/api/admin/categories/:id', ...admin, adminController.getCategory);
 router.post('/api/admin/categories', ...admin, adminController.createCategory);
 router.put('/api/admin/categories/:id', ...admin, adminController.updateCategory);
 router.delete('/api/admin/categories/:id', ...admin, adminController.deleteCategory);
+router.post('/api/admin/categories/:id/upload-logo', ...admin, adminController.uploadCategoryLogo);
 
 // Cities
 router.get('/api/admin/cities', ...admin, adminController.getCities);
@@ -83,6 +87,13 @@ router.post('/api/admin/blogs', ...admin, adminController.createBlog);
 router.put('/api/admin/blogs/:id', ...admin, adminController.updateBlog);
 router.delete('/api/admin/blogs/:id', ...admin, adminController.deleteBlog);
 router.post('/api/admin/blogs/upload-image', ...admin, adminController.uploadBlogImage);
+
+// News
+router.get('/api/admin/news', ...admin, adminController.getNews);
+router.get('/api/admin/news/:id', ...admin, adminController.getNewsItem);
+router.post('/api/admin/news', ...admin, adminController.createNews);
+router.put('/api/admin/news/:id', ...admin, adminController.updateNews);
+router.delete('/api/admin/news/:id', ...admin, adminController.deleteNews);
 
 // Logs, CVs, Visitors
 router.get('/api/admin/logs', ...admin, adminController.getLogs);

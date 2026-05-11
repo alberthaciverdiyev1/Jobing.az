@@ -43,11 +43,6 @@ const userSchema = new Schema({
         type: String,
         default: ''
     },
-    favorites: [{
-        type: Schema.Types.ObjectId,
-        ref: 'Job',
-        default: []
-    }],
     isActive: {
         type: Boolean,
         default: true
