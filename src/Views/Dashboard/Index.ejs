@@ -156,3 +156,23 @@
         </div>
     </div>
 </section>
+
+<!-- User Response Modal -->
+<div id="userRespondModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
+  <div class="flex items-center justify-center min-h-screen px-4">
+    <div class="fixed inset-0 bg-black opacity-50" onclick="closeRespondModal()"></div>
+    <div class="relative bg-white rounded-2xl shadow-xl max-w-md w-full p-6">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-lg font-semibold text-gray-900">Cavabınız</h3>
+        <button onclick="closeRespondModal()" class="text-gray-400 hover:text-gray-600 text-2xl leading-none">&times;</button>
+      </div>
+      <p class="text-sm text-gray-500 mb-4">Şirkətin qərarına cavabınızı yazın</p>
+      <input type="hidden" id="respondApplicationId">
+      <textarea id="respondMessage" rows="4" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500 resize-none" placeholder="Cavabınız..."></textarea>
+      <div class="flex justify-end gap-3 mt-4">
+        <button onclick="closeRespondModal()" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 text-sm">İmtina</button>
+        <button onclick="submitUserRespond()" class="px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 text-sm">Göndər</button>
+      </div>
+    </div>
+  </div>
+</div>
