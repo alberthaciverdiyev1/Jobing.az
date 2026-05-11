@@ -20,12 +20,14 @@
                class="nav-link <%= currentPage === 'contact' ? '!text-primary-500 !bg-primary-50/50 !font-semibold' : 'text-gray-600 hover:text-primary-500' %>">Əlaqə</a>
 
             <div class="ml-4 pl-4 border-l border-gray-200 flex items-center gap-3">
-                <!-- Post Job Button -->
+                <!-- Post Job Button (hidden for user role) -->
+                <% if (!user || user.role !== 'user') { %>
                 <a href="/add-job"
                    class="inline-flex items-center gap-2 bg-primary-500 hover:bg-primary-600 text-white font-medium px-5 py-2.5 rounded-xl transition-all duration-200 shadow-sm hover:shadow-md hover:shadow-primary-500/20 active:scale-[0.97]">
                     <i class="fas fa-plus-circle text-sm"></i>
                     Elan Yerləşdir
                 </a>
+                <% } %>
 
                 <!-- Auth: Show login if not logged in, user menu if logged in -->
                 <% if (typeof user !== 'undefined' && user) { %>
@@ -43,7 +45,7 @@
         <!-- Mobile: Post Job Button -->
         <div class="md:hidden flex items-center gap-2">
             <% if (typeof user !== 'undefined' && user) { %>
-                <a href="<%= user.role === 'company' ? '/company/dashboard' : '/dashboard' %>"
+                <a href="<%= user.role === 'company' || user.role === 'hr' ? '/hr/dashboard' : '/dashboard' %>"
                    class="inline-flex items-center gap-2 bg-primary-50 text-primary-600 text-sm font-medium px-3 py-2 rounded-xl transition-all">
                     <i class="fas fa-user"></i>
                 </a>
@@ -53,11 +55,13 @@
                     <i class="fas fa-user"></i>
                 </a>
             <% } %>
+            <% if (!user || user.role !== 'user') { %>
             <a href="/add-job"
                class="inline-flex items-center gap-2 bg-primary-500 hover:bg-primary-600 text-white text-sm font-medium px-4 py-2 rounded-xl transition-all shadow-sm active:scale-95">
                 <i class="fas fa-plus-circle text-xs"></i>
                 <span>Elan</span>
             </a>
+            <% } %>
         </div>
     </div>
 </nav>

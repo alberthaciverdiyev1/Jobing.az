@@ -14,6 +14,8 @@ import adminController from "../Controllers/AdminController.js";
 import blogController from "../Controllers/BlogController.js";
 import authController from "../Controllers/AuthController.js";
 import cvController from "../Controllers/CVController.js";
+import hrController from "../Controllers/HrController.js";
+import applicationController from "../Controllers/ApplicationController.js";
 import authMiddleware from "../Middlewares/Auth.js";
 
 const router = express.Router();
@@ -240,6 +242,40 @@ router.get('/api/admin/visitors', authMiddleware.authenticate, authMiddleware.au
 router.post('/api/admin/scrape/all', authMiddleware.authenticate, authMiddleware.authorize('admin'), adminController.triggerScrapeAll);
 router.post('/api/admin/scrape/main', authMiddleware.authenticate, authMiddleware.authorize('admin'), adminController.triggerScrapeMain);
 router.post('/api/admin/scrape/cancel', authMiddleware.authenticate, authMiddleware.authorize('admin'), adminController.cancelScraping);
+
+// ============================================================
+// HR MODULE PAGES (protected - company, hr, admin roles)
+// ============================================================
+router.get('/hr', authMiddleware.authenticate, authMiddleware.authorize('company', 'hr', 'admin'), hrController.hrDashboard);
+router.get('/hr/dashboard', authMiddleware.authenticate, authMiddleware.authorize('company', 'hr', 'admin'), hrController.hrDashboard);
+router.get('/hr/jobs', authMiddleware.authenticate, authMiddleware.authorize('company', 'hr', 'admin'), hrController.hrJobsView);
+router.get('/hr/applications', authMiddleware.authenticate, authMiddleware.authorize('company', 'hr', 'admin'), hrController.hrApplicationsView);
+router.get('/hr/applications/:id', authMiddleware.authenticate, authMiddleware.authorize('company', 'hr', 'admin'), hrController.hrApplicationDetailView);
+router.get('/hr/interviews', authMiddleware.authenticate, authMiddleware.authorize('company', 'hr', 'admin'), hrController.hrInterviewsView);
+
+// ============================================================
+// HR MODULE API (protected - company, hr, admin roles)
+// ============================================================
+router.get('/api/hr/stats', authMiddleware.authenticate, authMiddleware.authorize('company', 'hr', 'admin'), hrController.getStats);
+router.get('/api/hr/jobs', authMiddleware.authenticate, authMiddleware.authorize('company', 'hr', 'admin'), hrController.getJobs);
+router.post('/api/hr/jobs', authMiddleware.authenticate, authMiddleware.authorize('company', 'hr', 'admin'), hrController.createJob);
+router.put('/api/hr/jobs/:id', authMiddleware.authenticate, authMiddleware.authorize('company', 'hr', 'admin'), hrController.updateJob);
+router.patch('/api/hr/jobs/:id/toggle', authMiddleware.authenticate, authMiddleware.authorize('company', 'hr', 'admin'), hrController.toggleJobActive);
+router.get('/api/hr/applications', authMiddleware.authenticate, authMiddleware.authorize('company', 'hr', 'admin'), hrController.getApplications);
+router.get('/api/hr/applications/:id', authMiddleware.authenticate, authMiddleware.authorize('company', 'hr', 'admin'), hrController.getApplication);
+router.put('/api/hr/applications/:id/status', authMiddleware.authenticate, authMiddleware.authorize('company', 'hr', 'admin'), hrController.updateApplicationStatus);
+router.post('/api/hr/applications/:id/interview', authMiddleware.authenticate, authMiddleware.authorize('company', 'hr', 'admin'), hrController.scheduleInterview);
+router.put('/api/hr/applications/:id/interview/cancel', authMiddleware.authenticate, authMiddleware.authorize('company', 'hr', 'admin'), hrController.cancelInterview);
+router.get('/api/hr/cvs/:id', authMiddleware.authenticate, authMiddleware.authorize('company', 'hr', 'admin'), hrController.getCv);
+router.get('/api/hr/companies', authMiddleware.authenticate, authMiddleware.authorize('company', 'hr', 'admin'), hrController.getCompanies);
+router.get('/api/hr/enums', authMiddleware.authenticate, authMiddleware.authorize('company', 'hr', 'admin'), hrController.getEnums);
+router.get('/api/hr/application-counts', authMiddleware.authenticate, authMiddleware.authorize('company', 'hr', 'admin'), hrController.getApplicationCounts);
+
+// ============================================================
+// USER APPLICATION API (user views own applications)
+// ============================================================
+router.get('/api/applications', authMiddleware.authenticate, authMiddleware.authorize('user'), applicationController.getMyApplications);
+router.put('/api/applications/:id/respond', authMiddleware.authenticate, authMiddleware.authorize('user'), applicationController.userRespond);
 
 // ============================================================
 // SEND MAIL

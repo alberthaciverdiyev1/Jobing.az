@@ -74,8 +74,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     const role = res.data.user.role;
                     if (role === 'admin') {
                         window.location.href = '/admin/dashboard';
-                    } else if (role === 'company') {
-                        window.location.href = '/company/dashboard';
+                    } else if (role === 'company' || role === 'hr') {
+                        window.location.href = '/hr/dashboard';
                     } else {
                         window.location.href = '/dashboard';
                     }
@@ -132,8 +132,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     const userRole = res.data.user.role;
                     if (userRole === 'admin') {
                         window.location.href = '/admin/dashboard';
-                    } else if (userRole === 'company') {
-                        window.location.href = '/company/dashboard';
+                    } else if (userRole === 'company' || userRole === 'hr') {
+                        window.location.href = '/hr/dashboard';
                     } else {
                         window.location.href = '/dashboard';
                     }

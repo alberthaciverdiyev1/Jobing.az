@@ -45,14 +45,18 @@ Object.entries(Enums.SitesWithId).forEach(([key, val]) => {
 // Blog image upload config
 const blogImageStorage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, 'uploads/blog/');
+        const dir = path.join(process.cwd(), 'uploads', 'blog');
+        if (!fs.existsSync(dir)) {
+            fs.mkdirSync(dir, { recursive: true });
+        }
+        cb(null, dir);
     },
     filename: (req, file, cb) => {
         const ext = path.extname(file.originalname);
         cb(null, `blog-${uuidv4()}${ext}`);
     }
 });
-const uploadBlogImage = multer({
+const blogUploadMiddleware = multer({
     storage: blogImageStorage,
     fileFilter: (req, file, cb) => {
         const allowed = /\.(jpg|jpeg|png|gif|webp|svg)$/i;
@@ -472,7 +476,7 @@ const AdminController = {
 
     getUser: async (req, res) => {
         try {
-            const user = await User.findById(req.params.id).select('-password').lean();
+            const user = await User.findById(req.params.id).select('-password').populate('companyIds', 'companyName').lean();
             if (!user) return res.status(404).json({ error: 'User not found' });
             const jobCount = user.role === 'company'
                 ? await Job.countDocuments({ companyName: user.companyName })
@@ -736,7 +740,7 @@ const AdminController = {
     },
 
     uploadBlogImage: async (req, res) => {
-        uploadBlogImage(req, res, (err) => {
+        blogUploadMiddleware(req, res, (err) => {
             if (err) {
                 return res.status(400).json({ error: err.message || 'Image upload failed' });
             }

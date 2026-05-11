@@ -48,6 +48,9 @@ const authMiddleware = {
             if (req.user.role === 'company') {
                 return res.redirect('/company/dashboard');
             }
+            if (req.user.role === 'hr') {
+                return res.redirect('/hr/dashboard');
+            }
             return res.redirect('/dashboard');
         }
         next();

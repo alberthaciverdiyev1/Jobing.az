@@ -1,9 +1,12 @@
 let currentPage = 1;
 let editingUserId = null;
+let allCompanies = [];
 
 document.addEventListener('DOMContentLoaded', () => {
     loadUsers();
+    loadCompaniesList();
     document.getElementById('userForm').addEventListener('submit', handleUserSubmit);
+    toggleCompanySelect();
 });
 
 async function loadUsers(page = 1) {
@@ -37,7 +40,7 @@ function renderUsersTable(data) {
         <tr class="border-b hover:bg-gray-50 cursor-pointer" onclick="showUserDetail('${u._id}')">
             <td class="px-5 py-3 font-medium text-gray-900">${escapeHtml(u.name)} ${escapeHtml(u.surname || '')}</td>
             <td class="px-5 py-3">${escapeHtml(u.email)}</td>
-            <td class="px-5 py-3"><span class="badge ${u.role === 'admin' ? 'badge-purple' : u.role === 'company' ? 'badge-blue' : 'badge-gray'}">${u.role}</span></td>
+            <td class="px-5 py-3"><span class="badge ${u.role === 'admin' ? 'badge-purple' : u.role === 'company' ? 'badge-blue' : u.role === 'hr' ? 'badge-emerald' : 'badge-gray'}">${u.role}</span></td>
             <td class="px-5 py-3">${escapeHtml(u.companyName || '-')}</td>
             <td class="px-5 py-3">${u.phone || '-'}</td>
             <td class="px-5 py-3">
@@ -91,6 +94,17 @@ async function editUser(id) {
         document.getElementById('userRole').value = data.role || 'user';
         document.getElementById('userPhone').value = data.phone || '';
         document.getElementById('userCompanyName').value = data.companyName || '';
+        // Set companyIds for HR users
+        if (data.role === 'hr' && data.companyIds) {
+            var sel = document.getElementById('userCompanyIds');
+            if (sel) {
+                Array.from(sel.options).forEach(function(opt) {
+                    opt.selected = data.companyIds.some(function(cid) {
+                        return cid.toString() === opt.value || (cid._id && cid._id.toString() === opt.value);
+                    });
+                });
+            }
+        }
         document.getElementById('userModal').classList.remove('hidden');
         document.body.classList.add('modal-open');
     } catch (err) {
@@ -127,6 +141,7 @@ async function showUserDetail(id) {
                 <div><span class="text-xs text-gray-500">Status</span><p class="text-sm font-medium">${data.isActive ? 'Active' : 'Inactive'}</p></div>
                 ${data.jobCount !== undefined ? `<div><span class="text-xs text-gray-500">Jobs</span><p class="text-sm font-medium">${data.jobCount}</p></div>` : ''}
                 ${data.cvCount !== undefined ? `<div><span class="text-xs text-gray-500">CVs</span><p class="text-sm font-medium">${data.cvCount}</p></div>` : ''}
+                ${data.companyIds && data.companyIds.length > 0 ? `<div class="col-span-2"><span class="text-xs text-gray-500">Assigned Companies</span><p class="text-sm font-medium">${data.companyIds.map(function(c) { return c.companyName || c; }).join(', ')}</p></div>` : ''}
                 <div><span class="text-xs text-gray-500">Joined</span><p class="text-sm font-medium">${data.createdAt ? new Date(data.createdAt).toLocaleDateString() : '-'}</p></div>
             </div>`;
         document.getElementById('userDetailModal').classList.remove('hidden');
@@ -143,15 +158,22 @@ function closeUserDetailModal() {
 
 async function handleUserSubmit(e) {
     e.preventDefault();
-    const payload = {
+    var role = document.getElementById('userRole').value;
+    var payload = {
         name: document.getElementById('userName').value,
         surname: document.getElementById('userSurname').value,
         email: document.getElementById('userEmail').value,
-        role: document.getElementById('userRole').value,
+        role: role,
         phone: document.getElementById('userPhone').value,
         companyName: document.getElementById('userCompanyName').value
     };
-    const password = document.getElementById('userPassword').value;
+    if (role === 'hr') {
+        var sel = document.getElementById('userCompanyIds');
+        if (sel) {
+            payload.companyIds = Array.from(sel.selectedOptions).map(function(opt) { return opt.value; });
+        }
+    }
+    var password = document.getElementById('userPassword').value;
     if (password) payload.password = password;
 
     try {
@@ -164,6 +186,31 @@ async function handleUserSubmit(e) {
         loadUsers(currentPage);
     } catch (err) {
         alert('Error saving user: ' + (err.response?.data?.error || err.message));
+    }
+}
+
+async function loadCompaniesList() {
+    try {
+        var res = await axios.get('/api/admin/companies', { params: { limit: 1000 } });
+        allCompanies = res.data.companies || [];
+        var sel = document.getElementById('userCompanyIds');
+        if (sel) {
+            sel.innerHTML = '';
+            allCompanies.forEach(function(c) {
+                var opt = document.createElement('option');
+                opt.value = c._id;
+                opt.textContent = c.companyName || c.companyId || c._id;
+                sel.appendChild(opt);
+            });
+        }
+    } catch (err) { console.error('Failed to load companies', err); }
+}
+
+function toggleCompanySelect() {
+    var role = document.getElementById('userRole')?.value;
+    var field = document.getElementById('companyIdsField');
+    if (field) {
+        field.classList.toggle('hidden', role !== 'hr');
     }
 }
 

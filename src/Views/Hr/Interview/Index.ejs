@@ -1,0 +1,40 @@
+<div class="space-y-4">
+  <div class="flex items-center justify-between">
+    <h1 class="text-2xl font-bold text-gray-800">Interviews</h1>
+  </div>
+
+  <!-- Stats -->
+  <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+    <div class="bg-white rounded-xl border border-gray-200 p-4">
+      <p class="text-sm text-gray-500">Pending</p>
+      <p id="statPending" class="text-xl font-bold text-amber-600 mt-1">0</p>
+    </div>
+    <div class="bg-white rounded-xl border border-gray-200 p-4">
+      <p class="text-sm text-gray-500">Confirmed</p>
+      <p id="statConfirmed" class="text-xl font-bold text-emerald-600 mt-1">0</p>
+    </div>
+    <div class="bg-white rounded-xl border border-gray-200 p-4">
+      <p class="text-sm text-gray-500">Cancelled</p>
+      <p id="statCancelled" class="text-xl font-bold text-red-600 mt-1">0</p>
+    </div>
+  </div>
+
+  <!-- Table -->
+  <div class="bg-white rounded-xl border border-gray-200 overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead class="bg-gray-50 border-b border-gray-200">
+          <tr>
+            <th class="text-left px-5 py-3 font-medium text-gray-600">Applicant</th>
+            <th class="text-left px-5 py-3 font-medium text-gray-600">Job</th>
+            <th class="text-left px-5 py-3 font-medium text-gray-600">Date & Time</th>
+            <th class="text-left px-5 py-3 font-medium text-gray-600">Location</th>
+            <th class="text-left px-5 py-3 font-medium text-gray-600">Status</th>
+            <th class="text-right px-5 py-3 font-medium text-gray-600">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="interviewsTableBody" class="divide-y divide-gray-100"></tbody>
+      </table>
+    </div>
+  </div>
+</div>

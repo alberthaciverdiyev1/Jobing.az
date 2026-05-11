@@ -21,7 +21,9 @@ const ViewController = {
     auth: async (req, res) => {
         // If already logged in, redirect to dashboard
         if (req.user) {
-            return req.user.role === 'company' ? res.redirect('/company/dashboard') : res.redirect('/dashboard');
+            if (req.user.role === 'company') return res.redirect('/company/dashboard');
+            if (req.user.role === 'hr') return res.redirect('/hr/dashboard');
+            return res.redirect('/dashboard');
         }
         const view = {
             title: 'Giriş / Qeydiyyat',
@@ -100,6 +102,10 @@ const ViewController = {
         res.render('Main', view);
     },
     addJob: async (req, res) => {
+        // Only company, hr, and admin users can post jobs
+        if (req.user && req.user.role === 'user') {
+            return res.redirect('/dashboard');
+        }
         const view = {
             title: 'Yeni vakansiya',
             body: "Jobs/Add.ejs",
