@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import User from '../Models/User.js';
+import CompanyService from '../Services/CompanyService.js';
 import { JWT_SECRET } from '../Middlewares/Auth.js';
 
 const generateToken = (user, rememberMe = false) => {
@@ -27,6 +28,19 @@ const AuthController = {
             });
 
             await user.save();
+
+            // Auto-create Company record for company role
+            if (role === 'company' && companyName) {
+                try {
+                    await CompanyService.createFromRegistration({
+                        companyName,
+                        email,
+                        phone
+                    });
+                } catch (companyErr) {
+                    console.error('Company auto-create failed:', companyErr.message);
+                }
+            }
 
             const token = generateToken(user);
             const maxAge = 7 * 24 * 60 * 60 * 1000;

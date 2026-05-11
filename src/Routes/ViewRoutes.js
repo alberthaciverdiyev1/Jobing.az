@@ -32,6 +32,7 @@ router.get('/sirket/:id', visitorLogger, viewController.companyDetail);
 // ============================================================
 router.get('/dashboard', authMiddleware.authenticate, authMiddleware.authorize('user'), viewController.userDashboard);
 router.get('/company/dashboard', authMiddleware.authenticate, authMiddleware.authorize('company'), viewController.companyDashboard);
+router.get('/company/settings', authMiddleware.authenticate, authMiddleware.authorize('company'), viewController.companySettings);
 router.get('/cv/create', authMiddleware.authenticate, authMiddleware.authorize('user'), viewController.cvCreate);
 router.get('/cv/upload', authMiddleware.authenticate, authMiddleware.authorize('user'), viewController.cvUpload);
 router.get('/cv/edit/:id', authMiddleware.authenticate, authMiddleware.authorize('user'), viewController.cvEdit);

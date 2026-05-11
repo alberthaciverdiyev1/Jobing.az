@@ -3,53 +3,48 @@
   Reusable filter controls. Used by:
     - Desktop: sidebar layout
     - Mobile: bottom sheet overlay
-  The wrapping container is provided by the parent template.
 -->
 <div class="filter-content">
     <!-- Search -->
     <div class="mb-4">
-        <label class="block text-xs font-medium text-gray-500 mb-1.5"><%= __('jobs.keyword') %></label>
+        <label class="block text-xs font-medium text-gray-500 mb-1"><%= __('jobs.keyword') %></label>
         <div class="relative">
             <input type="text" id="search"
                    placeholder="<%= __('jobs.searchPlaceholder') %>"
-                   class="w-full pl-9 pr-3 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all duration-200 placeholder:text-gray-400">
+                   class="w-full pl-9 pr-3 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all placeholder:text-gray-400">
             <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
         </div>
     </div>
 
     <!-- Job Type -->
     <div class="mb-4">
-        <label class="block text-xs font-medium text-gray-500 mb-1.5"><%= __('jobs.jobType') %></label>
-        <div class="flex gap-2" id="job-type-tabs">
-            <button class="job-type-btn active flex-1 px-3 py-2 text-xs font-medium rounded-xl bg-primary-500 text-white transition-all" data-type="all"><%= __('jobs.allTypes') %></button>
-            <button class="job-type-btn flex-1 px-3 py-2 text-xs font-medium rounded-xl bg-gray-100 text-gray-600 hover:bg-gray-200 transition-all" data-type="jobing"><%= __('jobs.jobingJobs') %></button>
+        <label class="block text-xs font-medium text-gray-500 mb-1"><%= __('jobs.jobType') %></label>
+        <div class="flex gap-1.5" id="job-type-tabs">
+            <button class="job-type-btn active flex-1 px-3 py-1.5 text-xs font-medium rounded-md bg-primary-500 text-white transition-all" data-type="all"><%= __('jobs.allTypes') %></button>
+            <button class="job-type-btn flex-1 px-3 py-1.5 text-xs font-medium rounded-md bg-gray-100 text-gray-600 hover:bg-gray-200 transition-all" data-type="jobing"><%= __('jobs.jobingJobs') %></button>
         </div>
     </div>
 
     <!-- Category -->
     <div class="mb-4">
-        <label class="block text-xs font-medium text-gray-500 mb-1.5"><%= __('jobs.category') %></label>
-        <div class="relative">
-            <select id="category-select-filter"
-                    class="w-full px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all text-gray-900 appearance-none cursor-pointer">
-                <option value=""><%= __('jobs.allCategories') %></option>
-            </select>
-        </div>
+        <label class="block text-xs font-medium text-gray-500 mb-1"><%= __('jobs.category') %></label>
+        <select id="category-select-filter"
+                class="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all text-gray-900 appearance-none cursor-pointer">
+            <option value=""><%= __('jobs.allCategories') %></option>
+        </select>
     </div>
 
     <!-- City -->
     <div class="mb-4">
-        <label class="block text-xs font-medium text-gray-500 mb-1.5"><%= __('jobs.city') %></label>
-        <div class="relative">
-            <select id="city-select-filter"
-                    class="w-full px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all text-gray-900 appearance-none cursor-pointer">
-                <option value=""><%= __('jobs.allCities') %></option>
-            </select>
-        </div>
+        <label class="block text-xs font-medium text-gray-500 mb-1"><%= __('jobs.city') %></label>
+        <select id="city-select-filter"
+                class="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all text-gray-900 appearance-none cursor-pointer">
+            <option value=""><%= __('jobs.allCities') %></option>
+        </select>
     </div>
 
     <!-- Advanced Filters Toggle -->
-    <div class="mb-4 pt-4 border-t border-gray-100">
+    <div class="mb-3 pt-3 border-t border-gray-100">
         <button id="toggleAdvanced"
                 class="text-xs text-primary-500 hover:text-primary-600 transition-colors flex items-center gap-1 w-full">
             <i class="fas fa-plus-circle"></i>
@@ -58,38 +53,26 @@
     </div>
 
     <!-- Advanced Filters -->
-    <div id="advancedFilters" class="hidden space-y-4 mb-4">
-        <!-- Education -->
+    <div id="advancedFilters" class="hidden space-y-3 mb-4">
         <div>
-            <label class="block text-xs font-medium text-gray-500 mb-1.5"><%= __('jobs.education') %></label>
-            <div class="relative">
-                <select id="education-select"
-                        class="w-full px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all text-gray-900 appearance-none cursor-pointer">
-                    <option value=""><%= __('jobs.allEducation') %></option>
-                </select>
-                <span class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
-                    <i class="fas fa-chevron-down text-xs"></i>
-                </span>
-            </div>
+            <label class="block text-xs font-medium text-gray-500 mb-1"><%= __('jobs.education') %></label>
+            <select id="education-select"
+                    class="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all text-gray-900 appearance-none cursor-pointer">
+                <option value=""><%= __('jobs.allEducation') %></option>
+            </select>
         </div>
-        <!-- Experience -->
         <div>
-            <label class="block text-xs font-medium text-gray-500 mb-1.5"><%= __('jobs.experience') %></label>
-            <div class="relative">
-                <select id="experience-select"
-                        class="w-full px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all text-gray-900 appearance-none cursor-pointer">
-                    <option value=""><%= __('jobs.allExperience') %></option>
-                </select>
-                <span class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
-                    <i class="fas fa-chevron-down text-xs"></i>
-                </span>
-            </div>
+            <label class="block text-xs font-medium text-gray-500 mb-1"><%= __('jobs.experience') %></label>
+            <select id="experience-select"
+                    class="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all text-gray-900 appearance-none cursor-pointer">
+                <option value=""><%= __('jobs.allExperience') %></option>
+            </select>
         </div>
     </div>
 
     <!-- Apply Button -->
     <button id="applyFiltersBtn"
-            class="hidden sm:block w-full bg-primary-500 hover:bg-primary-600 text-white text-sm font-medium px-5 py-2.5 rounded-xl transition-all shadow-sm">
+            class="hidden sm:block w-full bg-primary-500 hover:bg-primary-600 text-white text-sm font-medium px-5 py-2 rounded-lg transition-all">
         <i class="fas fa-search mr-1.5"></i>
         <%= __('jobs.apply') %>
     </button>

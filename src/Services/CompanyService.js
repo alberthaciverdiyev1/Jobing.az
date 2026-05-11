@@ -6,7 +6,7 @@ import path from "path";
 import axios from "axios";
 
 const CompanyService = {
-    // Create a company
+    // Create a company from array (scraped data)
     create: async (data) => {
         try {
             if (!Array.isArray(data)) {
@@ -284,6 +284,57 @@ const CompanyService = {
             return { status: 200, message: 'Məlumat uğurla əlavə edildi!' };
         } catch (error) {
             throw new Error('Error adding company: ' + error.message);
+        }
+    },
+
+    /**
+     * Find a company by companyName. Returns null if not found.
+     */
+    findByCompanyName: async (companyName) => {
+        try {
+            return await Company.findOne({ companyName }).lean();
+        } catch (error) {
+            throw new Error('Error finding company: ' + error.message);
+        }
+    },
+
+    /**
+     * Create a company record from registration data (company role).
+     * If one already exists with the same name, returns the existing one.
+     */
+    createFromRegistration: async ({ companyName, email, phone, website }) => {
+        try {
+            const existing = await Company.findOne({ companyName });
+            if (existing) return existing;
+
+            const company = new Company({ companyName, email, phone, website });
+            return await company.save();
+        } catch (error) {
+            throw new Error('Error creating company from registration: ' + error.message);
+        }
+    },
+
+    /**
+     * Update company profile — only sets fields that are provided.
+     */
+    updateProfile: async (companyId, updateData) => {
+        try {
+            const allowed = [
+                'companyName', 'description', 'phone', 'email', 'address',
+                'website', 'workingHours', 'socialLinks', 'foundedYear',
+                'employeeCount', 'industry', 'imageUrl', 'bannerUrl'
+            ];
+            const update = {};
+            for (const key of allowed) {
+                if (updateData[key] !== undefined) {
+                    update[key] = updateData[key];
+                }
+            }
+            const company = await Company.findByIdAndUpdate(companyId, update, { new: true });
+            if (!company) throw new Error('Company not found');
+            return company;
+        } catch (error) {
+            throw new Error('Error updating company profile: ' + error.message);
         }
     }
 
