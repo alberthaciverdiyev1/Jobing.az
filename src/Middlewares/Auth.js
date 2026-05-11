@@ -22,6 +22,7 @@ const authMiddleware = {
         } catch {
             res.clearCookie('token');
         }
+        if (!res.locals.user) res.locals.user = null;
         next();
     },
 
