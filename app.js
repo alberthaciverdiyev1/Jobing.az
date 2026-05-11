@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import express from 'express';
 import path from 'path';
+import { fileURLToPath } from 'url';
 import cron from 'node-cron';
 import routes from './src/Routes/Main.js';
 import sequelize from './src/Config/Database.js';
@@ -18,11 +19,12 @@ import bot, {listenTgCommands, sendTgMessage} from "./src/Helpers/TelegramBot.js
 import TelegramBot from 'node-telegram-bot-api';
 import authMiddleware from './src/Middlewares/Auth.js';
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const to = process.env.CRON_MAIL_USER;
 i18n.configure({
     locales: ['az', 'en', 'ru'],
-    directory: './src/locales',
+    directory: path.join(__dirname, 'src', 'locales'),
     defaultLocale: 'az',
     cookie: 'lang',
     objectNotation: true,
