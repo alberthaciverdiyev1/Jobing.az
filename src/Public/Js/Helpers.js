@@ -30,11 +30,18 @@ export function capitalizeFirstLetter(text) {
  * Professional job card — clean, minimal, scannable
  */
 export function createJobCard(element, compact = false) {
-    const logoUrl = (element.companyImageUrl && element.companyImageUrl !== "/nologo.png" && !element.companyImageUrl.startsWith('http'))
-        ? element.companyImageUrl.replace(/src\/Public/g, '..')
-        : (element.companyImageUrl && element.companyImageUrl.startsWith('http')
-            ? element.companyImageUrl
-            : "../Images/DefaultCompany.png");
+    let logoUrl = "../Images/DefaultCompany.png";
+    if (element.companyImageUrl && element.companyImageUrl !== "/nologo.png") {
+        if (element.companyImageUrl.startsWith('http')) {
+            logoUrl = element.companyImageUrl;
+        } else if (element.companyImageUrl.startsWith('/uploads/')) {
+            logoUrl = element.companyImageUrl;
+        } else if (element.companyImageUrl.includes('src/Public/')) {
+            logoUrl = '../' + element.companyImageUrl.slice(element.companyImageUrl.indexOf('src/Public/') + 11);
+        } else {
+            logoUrl = element.companyImageUrl.replace(/\\/g, '/');
+        }
+    }
 
     const hasMin = element.minSalary != null && !isNaN(+element.minSalary) && +element.minSalary > 0;
     const hasMax = element.maxSalary != null && !isNaN(+element.maxSalary) && +element.maxSalary > 0;
@@ -58,9 +65,14 @@ export function createJobCard(element, compact = false) {
     // Source tag
     const sourceTag = `<span class="text-xs text-gray-400">${element.sourceUrl}</span>`;
 
+    const jobId = element._id || element.uniqueKey || '';
+    const favBtn = `<button type="button" onclick="event.stopPropagation();event.preventDefault();Favorites.toggle('${jobId}',this)" class="favorite-btn flex-shrink-0 transition-colors duration-200 text-base text-gray-300 hover:text-red-400" title="Favorilərə əlavə et">
+        <i class="far fa-heart"></i>
+    </button>`;
+
     if (compact) {
         // ————— COMPACT CARD (homepage grid) —————
-        return `<div class="job-card group bg-white border border-gray-100 rounded-lg p-4 cursor-pointer transition-all duration-200 hover:border-gray-200 active:border-gray-300" data-original-link="${detailLink}">
+        return `<div class="job-card group bg-white border border-gray-100 rounded-lg p-4 cursor-pointer transition-all duration-200 hover:border-gray-200 hover:shadow-sm hover:-translate-y-0.5 active:border-gray-300" data-original-link="${detailLink}">
             <div class="flex items-start gap-3">
                 <div class="w-10 h-10 rounded-lg bg-gray-50 border border-gray-100 flex-shrink-0 overflow-hidden flex items-center justify-center">
                     <img src="${logoUrl}" alt="${company}" class="w-full h-full object-cover" onerror="${imgError}">
@@ -76,12 +88,13 @@ export function createJobCard(element, compact = false) {
                         <span><i class="fas fa-map-marker-alt mr-1"></i>${location || 'Azərbaycan'}</span>
                     </div>
                 </div>
+                ${favBtn}
             </div>
         </div>`;
     }
 
     // ————— FULL CARD (vacancies listing) —————
-    return `<div class="job-card group bg-white border border-gray-100 rounded-lg p-5 cursor-pointer transition-all duration-200 hover:border-gray-200 active:border-gray-300" data-original-link="${detailLink}">
+    return `<div class="job-card group bg-white border border-gray-100 rounded-lg p-5 cursor-pointer transition-all duration-200 hover:border-gray-200 hover:shadow-sm hover:-translate-y-0.5 active:border-gray-300" data-original-link="${detailLink}">
         <div class="flex gap-4">
             <div class="w-12 h-12 rounded-lg bg-gray-50 border border-gray-100 flex-shrink-0 overflow-hidden flex items-center justify-center">
                 <img src="${logoUrl}" alt="${company}" class="w-full h-full object-cover" onerror="${imgError}">
@@ -98,8 +111,11 @@ export function createJobCard(element, compact = false) {
                     <span><i class="far fa-calendar mr-1"></i>${postedDate}</span>
                     <span><i class="fas fa-map-marker-alt mr-1"></i>${location || 'Azərbaycan'}</span>
                 </div>
-                <div class="mt-3 pt-3 border-t border-gray-50 flex items-center gap-2">
-                    ${sourceTag}
+                <div class="flex items-center justify-between mt-3 pt-3 border-t border-gray-50">
+                    <div class="flex items-center gap-2">
+                        ${sourceTag}
+                    </div>
+                    ${favBtn}
                 </div>
             </div>
         </div>

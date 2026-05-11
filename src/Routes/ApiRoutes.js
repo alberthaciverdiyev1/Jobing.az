@@ -121,6 +121,13 @@ router.get('/experience', viewController.experience);
 router.get('/statistics', viewController.statistics);
 
 // ============================================================
+// FAVORITE JOBS (protected — user)
+// ============================================================
+router.post('/api/favorites/:jobId', authMiddleware.authenticate, authMiddleware.authorize('user'), jobDataController.toggleFavorite);
+router.get('/api/favorites', authMiddleware.authenticate, authMiddleware.authorize('user'), jobDataController.getFavorites);
+router.get('/api/favorites/ids', authMiddleware.authenticate, authMiddleware.authorize('user'), jobDataController.getFavoriteIds);
+
+// ============================================================
 // MAIL
 // ============================================================
 router.post('/send-mail', viewController.sendMail);
