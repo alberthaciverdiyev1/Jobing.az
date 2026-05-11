@@ -43,6 +43,25 @@ const CompanyService = {
     count: async () => {
         return Company.countDocuments();
     },
+    // Get paginated companies with search
+    getPaginated: async (page = 1, limit = 12, search = '') => {
+        try {
+            const filter = {};
+            if (search) {
+                filter.companyName = { $regex: search, $options: 'i' };
+            }
+            const total = await Company.countDocuments(filter);
+            const companies = await Company.find(filter)
+                .sort({ companyName: 1 })
+                .skip((page - 1) * limit)
+                .limit(limit)
+                .lean();
+            return { companies, total, page, totalPages: Math.ceil(total / limit) };
+        } catch (error) {
+            throw new Error('Error retrieving companies: ' + error.message);
+        }
+    },
+
     // Get all companies
     getAll: async () => {
         try {

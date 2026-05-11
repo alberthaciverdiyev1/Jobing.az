@@ -53,6 +53,14 @@ const CVService = {
         return { cvs, total, page, totalPages: Math.ceil(total / limit) };
     },
 
+    // Public detail - single CV with limited fields
+    findPublicById: async (id) => {
+        return CV.findOne({ _id: id, deletedAt: null, isActive: true, type: 'created' })
+            .populate('userId', 'name surname')
+            .select('title fullName summary skills education experience languages linkedin website createdAt')
+            .lean();
+    },
+
     deleteFile: async (fileUrl) => {
         if (!fileUrl) return;
         const filePath = path.resolve('.' + fileUrl);

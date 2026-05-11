@@ -206,6 +206,17 @@ const ViewController = {
         res.render('Main', view);
     },
 
+    // CV Detail page
+    cvDetail: async (req, res) => {
+        const view = {
+            title: 'CV',
+            body: "CV/Detail.ejs",
+            js: "CVDetail.js",
+            currentPage: 'cv-detail'
+        };
+        res.render('Main', view);
+    },
+
     // Company List page
     companyList: async (req, res) => {
         const view = {
