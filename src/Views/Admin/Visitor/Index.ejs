@@ -1,0 +1,50 @@
+<div class="p-6">
+  <div class="flex items-center justify-between mb-6">
+    <h1 class="text-2xl font-bold text-gray-800">Visitor Statistics</h1>
+  </div>
+
+  <!-- Overview Cards -->
+  <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-5">
+      <p class="text-sm text-gray-500">Total Unique Visitors</p>
+      <p id="totalVisitors" class="text-3xl font-bold text-gray-800 mt-1">0</p>
+    </div>
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-5">
+      <p class="text-sm text-gray-500">Total Visits</p>
+      <p id="totalVisits" class="text-3xl font-bold text-gray-800 mt-1">0</p>
+    </div>
+  </div>
+
+  <!-- Daily Stats Chart -->
+  <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-5 mb-6">
+    <h2 class="text-lg font-semibold text-gray-800 mb-4">Daily Visits (Last 30 Days)</h2>
+    <div id="dailyChart" class="w-full h-64 bg-gray-50 rounded-lg flex items-center justify-center text-gray-400">
+      Loading chart data...
+    </div>
+  </div>
+
+  <!-- Visitors Table -->
+  <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+    <div class="px-5 py-4 border-b border-gray-200">
+      <h2 class="text-lg font-semibold text-gray-800">Visitor Log</h2>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm text-left text-gray-500">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+          <tr>
+            <th class="px-5 py-3">IP Address</th>
+            <th class="px-5 py-3">Visit Count</th>
+            <th class="px-5 py-3">Last Visit</th>
+            <th class="px-5 py-3">User Agent</th>
+          </tr>
+        </thead>
+        <tbody id="visitorsTableBody">
+          <tr>
+            <td colspan="4" class="px-5 py-8 text-center text-gray-400">Loading...</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div id="pagination" class="px-5 py-3 border-t border-gray-200 flex items-center justify-between"></div>
+  </div>
+</div>

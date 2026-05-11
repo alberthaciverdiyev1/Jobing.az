@@ -84,6 +84,9 @@ const AuthController = {
 
     logout: async (req, res) => {
         res.clearCookie('token', { path: '/' });
+        if (req.method === 'GET') {
+            return res.redirect('/auth');
+        }
         res.json({ message: 'Çıxış edildi' });
     },
 

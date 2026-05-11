@@ -1,0 +1,57 @@
+<div class="p-6">
+  <div class="flex items-center justify-between mb-6">
+    <h1 class="text-2xl font-bold text-gray-800">CV / Resume Management</h1>
+  </div>
+
+  <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-6">
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div>
+        <label class="block text-sm font-medium text-gray-600 mb-1">Search</label>
+        <input type="text" id="searchInput" placeholder="Name, email, phone..." class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500">
+      </div>
+      <div class="flex items-end">
+        <button onclick="loadCvs()" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 text-sm font-medium">Filter</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm text-left text-gray-500">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+          <tr>
+            <th class="px-5 py-3">Full Name</th>
+            <th class="px-5 py-3">Email</th>
+            <th class="px-5 py-3">Phone</th>
+            <th class="px-5 py-3">Type</th>
+            <th class="px-5 py-3">User</th>
+            <th class="px-5 py-3">Date</th>
+            <th class="px-5 py-3">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="cvsTableBody">
+          <tr>
+            <td colspan="7" class="px-5 py-8 text-center text-gray-400">Loading...</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div id="pagination" class="px-5 py-3 border-t border-gray-200 flex items-center justify-between"></div>
+  </div>
+</div>
+
+<!-- CV Detail Modal -->
+<div id="cvDetailModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
+  <div class="flex items-center justify-center min-h-screen px-4">
+    <div class="fixed inset-0 bg-black opacity-50"></div>
+    <div class="relative bg-white rounded-lg shadow-xl max-w-2xl w-full p-6">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-lg font-semibold text-gray-900">CV Details</h3>
+        <button onclick="closeCvDetailModal()" class="text-gray-400 hover:text-gray-600">&times;</button>
+      </div>
+      <div id="cvDetailContent" class="space-y-3">
+        <p class="text-center text-gray-400">Loading...</p>
+      </div>
+    </div>
+  </div>
+</div>

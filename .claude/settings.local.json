@@ -42,7 +42,9 @@
       "Bash(node --check src/Public/Js/Auth.js)",
       "Bash(node --check src/Public/Js/Dashboard.js)",
       "Bash(node --check src/Public/Js/CV.js)",
-      "Bash(taskkill /F /IM node.exe)"
+      "Bash(taskkill /F /IM node.exe)",
+      "Bash(Get-ChildItem -Recurse -Depth 1 -Name \"C:\\\\Workspace\\\\FoxSoft\\\\Jobing.az\")",
+      "Bash(node --check src/Controllers/AdminController.js)"
     ]
   }
 }

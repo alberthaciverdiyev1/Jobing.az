@@ -1,99 +1,136 @@
-document.addEventListener('DOMContentLoaded', async () => {
-    alertify.set('notifier', 'position', 'top-right');
-});
-let editorDescription = null;
-let allValid = true;
-let data = {};
+document.addEventListener('DOMContentLoaded', () => {
+    // Blog list page
+    if (document.getElementById('blogsTableBody')) {
+        loadBlogs();
+    }
 
+    // Add blog form
+    if (document.getElementById('addBlogForm')) {
+        initAddBlogForm();
+    }
 
-ClassicEditor
-    .create(document.querySelector('#description'), {})
-    .then(editor => {
-        editor.ui.view.editable.element.style.height = '100px';
-        editorDescription = editor;
-    })
-    .catch(error => {
-        console.error(error);
-    });
-
-
-
-async function validateData(data) {
-    allValid = true;
-    const validatedData = { ...data };
-
-
-    // DOM updates
-    Object.keys(data).forEach((key) => {
-        if (key === "image") return;
-
-        const element = document.getElementById(key);
-        if (!element) return;
-        if (key === "description" && !data[key]) document.getElementById("description-error").classList.remove("hidden");
-
-        const errorMessage = element.closest("div").querySelector("span");
-
-        if (!data[key]) {
-            if (errorMessage) {
-                errorMessage.classList.remove("hidden");
-            }
-            element.classList.add("border-red-500");
-            allValid = false;
-        } else {
-            if (errorMessage) {
-                errorMessage.classList.add("hidden");
-                if (key === "description") document.getElementById("description-error").classList.add("hidden");
-            }
-            element.classList.remove("border-red-500");
-        }
-    });
-
-    return { allValid, validatedData };
-}
-
-document.getElementById('addBlog').addEventListener("click", async () => {
-    try {
-        const image = document.getElementById("image");
-        let imageBase64 = null;
-
-        if (image?.files?.[0]) {
-            imageBase64 = await fileToBase64(image.files[0]);
-        }
-        const descriptionEditorData = editorDescription ? await editorDescription.getData() : '';
-
-        const data = {
-            name: document.getElementById("name")?.value.trim(),
-            description: descriptionEditorData,
-            status: document.getElementById("status")?.value.trim(),
-            imageUrl: imageBase64,
-
-        };
-
-        // const { allValid, validatedData } = await validateData(data);
-        // console.log({ allValid, validatedData });
-        // if (allValid) {
-        if (true){
-            // const response = await axios.post('/api/blog/add', { data: validatedData });
-            const response = await axios.post('/api/blog/add', { data: data });
-            if (response.data.status === 201) {
-                location.reload();
-            } else {
-                alertify.error(response.data.message);
-            }
-        } else {
-            alertify.error("Zəhmət olmasa bütün məcburi xanaları doldurun!");
-        }
-    } catch (error) {
-        alertify.error("Xəta baş verdi, zəhmət olmasa yenidən cəhd edin.");
-        console.error(error);
+    // Edit blog form
+    if (document.getElementById('editBlogForm')) {
+        initEditBlogForm();
     }
 });
 
-function fileToBase64(file) {
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = (error) => reject(error);
-        reader.readAsDataURL(file);
+// ============================================================
+// LIST BLOGS
+// ============================================================
+async function loadBlogs() {
+    try {
+        const { data } = await axios.get('/api/admin/blogs');
+        const tbody = document.getElementById('blogsTableBody');
+
+        if (!data || data.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="5" class="px-5 py-8 text-center text-gray-400">No blogs found</td></tr>`;
+            return;
+        }
+
+        tbody.innerHTML = data.map(blog => `
+            <tr class="border-b hover:bg-gray-50">
+                <td class="px-5 py-3 font-medium text-gray-900 max-w-xs truncate">${escapeHtml(blog.name)}</td>
+                <td class="px-5 py-3 text-sm text-gray-500">${blog.slug || '-'}</td>
+                <td class="px-5 py-3">
+                    <span class="badge ${blog.isActive ? 'badge-green' : 'badge-red'}">${blog.isActive ? 'Active' : 'Inactive'}</span>
+                </td>
+                <td class="px-5 py-3 text-sm">${blog.createdAt ? new Date(blog.createdAt).toLocaleDateString() : '-'}</td>
+                <td class="px-5 py-3">
+                    <div class="flex items-center gap-2">
+                        <a href="/admin/blogs/edit/${blog._id}" class="text-indigo-600 hover:text-indigo-800 text-sm font-medium">Edit</a>
+                        <button onclick="deleteBlog('${blog._id}')" class="text-red-600 hover:text-red-800 text-sm font-medium">Delete</button>
+                    </div>
+                </td>
+            </tr>
+        `).join('');
+    } catch (err) {
+        document.getElementById('blogsTableBody').innerHTML =
+            `<tr><td colspan="5" class="px-5 py-8 text-center text-red-400">Error: ${err.message}</td></tr>`;
+    }
+}
+
+let deleteBlogId = null;
+
+function deleteBlog(id) {
+    deleteBlogId = id;
+    document.getElementById('deleteModal').classList.remove('hidden');
+    document.body.classList.add('modal-open');
+}
+
+function closeDeleteModal() {
+    deleteBlogId = null;
+    document.getElementById('deleteModal').classList.add('hidden');
+    document.body.classList.remove('modal-open');
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const confirmBtn = document.getElementById('confirmDeleteBtn');
+    if (confirmBtn) {
+        confirmBtn.addEventListener('click', async () => {
+            if (!deleteBlogId) return;
+            try {
+                await axios.delete(`/api/admin/blogs/${deleteBlogId}`);
+                closeDeleteModal();
+                loadBlogs();
+            } catch (err) {
+                alert('Error deleting blog: ' + err.message);
+                closeDeleteModal();
+            }
+        });
+    }
+});
+
+// ============================================================
+// ADD BLOG
+// ============================================================
+function initAddBlogForm() {
+    document.getElementById('addBlogForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const payload = {
+            name: document.getElementById('addName').value,
+            slug: document.getElementById('addSlug').value || undefined,
+            description: document.getElementById('addDescription').value,
+            imageUrl: document.getElementById('addImageUrl').value || undefined,
+            isActive: document.getElementById('addIsActive').checked
+        };
+
+        try {
+            await axios.post('/api/admin/blogs', payload);
+            window.location.href = '/admin/blogs';
+        } catch (err) {
+            alert('Error saving blog: ' + (err.response?.data?.error || err.message));
+        }
     });
+}
+
+// ============================================================
+// EDIT BLOG
+// ============================================================
+function initEditBlogForm() {
+    document.getElementById('editBlogForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const blogId = window.location.pathname.split('/').pop();
+        const payload = {
+            name: document.getElementById('editName').value,
+            slug: document.getElementById('editSlug').value || undefined,
+            description: document.getElementById('editDescription').value,
+            imageUrl: document.getElementById('editImageUrl').value || undefined,
+            isActive: document.getElementById('editIsActive').checked
+        };
+
+        try {
+            await axios.put(`/api/admin/blogs/${blogId}`, payload);
+            window.location.href = '/admin/blogs';
+        } catch (err) {
+            alert('Error updating blog: ' + (err.response?.data?.error || err.message));
+        }
+    });
+}
+
+function escapeHtml(text) {
+    if (!text) return '';
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
 }
