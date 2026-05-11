@@ -1,4 +1,4 @@
-<!-- Mobile Bottom Navigation (Instagram-style) -->
+    <!-- Mobile Bottom Navigation (Instagram-style) -->
 <nav class="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-lg border-t border-gray-200 safe-area-bottom shadow-[0_-2px_20px_rgba(0,0,0,0.06)]">
     <div class="flex items-center justify-around h-[68px] px-2">
         <!-- Home -->
@@ -21,23 +21,24 @@
             <span class="text-[10px] font-medium">Vakansiyalar</span>
         </a>
 
-        <!-- Add Job (Prominent Center) -->
-        <a href="/add-job"
-           class="flex flex-col items-center justify-center -mt-4">
-            <div class="w-14 h-14 bg-gradient-to-br from-primary-500 to-primary-600 rounded-2xl shadow-lg shadow-primary-500/30 flex items-center justify-center text-white hover:scale-105 active:scale-95 transition-all duration-200">
-                <i class="fas fa-plus text-2xl"></i>
+        <!-- Companies -->
+        <a href="/sirketler"
+           class="flex flex-col items-center justify-center gap-0.5 w-16 py-1 <%= currentPage === 'company-list' || currentPage === 'company-detail' ? 'text-primary-500' : 'text-gray-400 hover:text-gray-600' %> transition-colors">
+            <div class="relative">
+                <i class="fas fa-building text-xl"></i>
+                <% if (currentPage === 'company-list' || currentPage === 'company-detail') { %><span class="absolute -bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-primary-500"></span><% } %>
             </div>
-            <span class="text-[10px] font-medium text-gray-400 mt-1">Elan</span>
+            <span class="text-[10px] font-medium">Şirkətlər</span>
         </a>
 
-        <!-- Blogs -->
-        <a href="/blogs"
-           class="flex flex-col items-center justify-center gap-0.5 w-16 py-1 <%= currentPage === 'blogs' ? 'text-primary-500' : 'text-gray-400 hover:text-gray-600' %> transition-colors">
+        <!-- CVs -->
+        <a href="/cv-ler"
+           class="flex flex-col items-center justify-center gap-0.5 w-16 py-1 <%= currentPage === 'cv-list' ? 'text-primary-500' : 'text-gray-400 hover:text-gray-600' %> transition-colors">
             <div class="relative">
-                <i class="fas fa-newspaper text-xl"></i>
-                <% if (currentPage === 'blogs') { %><span class="absolute -bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-primary-500"></span><% } %>
+                <i class="fas fa-file-alt text-xl"></i>
+                <% if (currentPage === 'cv-list') { %><span class="absolute -bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-primary-500"></span><% } %>
             </div>
-            <span class="text-[10px] font-medium">Bloqlar</span>
+            <span class="text-[10px] font-medium">CV-lər</span>
         </a>
 
         <!-- About -->
@@ -50,15 +51,23 @@
             <span class="text-[10px] font-medium">Haqqında</span>
         </a>
 
-        <!-- Profile (only when logged in) -->
+        <!-- Profile / Login -->
         <% if (typeof user !== 'undefined' && user) { %>
-            <a href="<%= user.role === 'company' ? '/company/dashboard' : '/dashboard' %>"
+            <a href="<%= user.role === 'company' || user.role === 'hr' ? '/hr/dashboard' : '/dashboard' %>"
                class="flex flex-col items-center justify-center gap-0.5 w-16 py-1 <%= currentPage === 'dashboard' || currentPage === 'company-dashboard' ? 'text-primary-500' : 'text-gray-400 hover:text-gray-600' %> transition-colors">
                 <div class="relative">
                     <i class="fas fa-user text-xl"></i>
                     <% if (currentPage === 'dashboard' || currentPage === 'company-dashboard') { %><span class="absolute -bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-primary-500"></span><% } %>
                 </div>
                 <span class="text-[10px] font-medium">Profil</span>
+            </a>
+        <% } else { %>
+            <a href="/auth"
+               class="flex flex-col items-center justify-center gap-0.5 w-16 py-1 text-gray-400 hover:text-gray-600 transition-colors">
+                <div class="relative">
+                    <i class="fas fa-sign-in-alt text-xl"></i>
+                </div>
+                <span class="text-[10px] font-medium">Daxil Ol</span>
             </a>
         <% } %>
     </div>

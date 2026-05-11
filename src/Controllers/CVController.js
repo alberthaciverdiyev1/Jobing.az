@@ -142,6 +142,18 @@ const CVController = {
         }
     },
 
+    // Public: list active CVs (limited info)
+    publicList: async (req, res) => {
+        try {
+            const page = parseInt(req.query.page) || 1;
+            const limit = parseInt(req.query.limit) || 20;
+            const result = await CVService.findPublicList(page, limit);
+            res.json(result);
+        } catch (err) {
+            res.status(500).json({ error: err.message });
+        }
+    },
+
     // Delete CV
     delete: async (req, res) => {
         try {
