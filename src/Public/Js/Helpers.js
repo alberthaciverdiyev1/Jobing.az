@@ -27,7 +27,7 @@ export function capitalizeFirstLetter(text) {
 }
 
 /**
- * Professional job card — clean, minimal, scannable
+ * Job card — large readable design
  */
 export function createJobCard(element, compact = false) {
     let logoUrl = "../Images/DefaultCompany.png";
@@ -66,47 +66,50 @@ export function createJobCard(element, compact = false) {
     const sourceTag = `<span class="text-xs text-gray-400">${element.sourceUrl}</span>`;
 
     if (compact) {
-        // ————— COMPACT CARD (homepage grid) —————
-        return `<div class="job-card group bg-white border border-gray-100 rounded-lg p-4 cursor-pointer transition-all duration-200 hover:border-gray-200 hover:shadow-sm hover:-translate-y-0.5 active:border-gray-300" data-original-link="${detailLink}">
-            <div class="flex items-start gap-3">
-                <div class="w-10 h-10 rounded-lg bg-gray-50 border border-gray-100 flex-shrink-0 overflow-hidden flex items-center justify-center">
+        // ————— COMPACT CARD (homepage grid, bigger) —————
+        return `<div class="job-card group bg-white border border-gray-100 rounded-xl p-5 cursor-pointer transition-all duration-200 hover:border-gray-200 hover:shadow-lg hover:-translate-y-1 active:border-gray-300" data-original-link="${detailLink}">
+            <div class="flex items-start gap-4">
+                <div class="w-14 h-14 rounded-xl bg-gray-50 border border-gray-100 flex-shrink-0 overflow-hidden flex items-center justify-center shadow-sm">
                     <img src="${logoUrl}" alt="${company}" class="w-full h-full object-cover" onerror="${imgError}">
                 </div>
                 <div class="flex-1 min-w-0">
-                    <div class="flex items-start justify-between gap-2">
-                        <h3 class="font-medium text-gray-900 text-sm leading-snug line-clamp-2">${title}</h3>
-                        ${salaryText ? `<span class="text-xs font-medium text-primary-500 whitespace-nowrap flex-shrink-0">${salaryText}</span>` : ''}
+                    <div class="flex items-start justify-between gap-3">
+                        <h3 class="font-semibold text-gray-900 text-base leading-snug line-clamp-2">${title}</h3>
+                        ${salaryText ? `<span class="text-sm font-semibold text-primary-500 whitespace-nowrap flex-shrink-0">${salaryText}</span>` : ''}
                     </div>
-                    <p class="text-xs text-gray-500 mt-0.5">${company}</p>
-                    <div class="flex items-center gap-3 mt-1.5 text-xs text-gray-400">
-                        <span><i class="far fa-calendar mr-1"></i>${postedDate}</span>
-                        <span><i class="fas fa-map-marker-alt mr-1"></i>${location || 'Azərbaycan'}</span>
+                    <p class="text-sm text-gray-500 mt-1 font-medium">${company}</p>
+                    <div class="flex items-center gap-4 mt-2 text-sm text-gray-400">
+                        <span><i class="far fa-calendar mr-1.5"></i>${postedDate}</span>
+                        <span><i class="fas fa-map-marker-alt mr-1.5"></i>${location || 'Azərbaycan'}</span>
                     </div>
                 </div>
             </div>
         </div>`;
     }
 
-    // ————— FULL CARD (vacancies listing) —————
-    return `<div class="job-card group bg-white border border-gray-100 rounded-lg p-5 cursor-pointer transition-all duration-200 hover:border-gray-200 hover:shadow-sm hover:-translate-y-0.5 active:border-gray-300" data-original-link="${detailLink}">
-        <div class="flex gap-4">
-            <div class="w-12 h-12 rounded-lg bg-gray-50 border border-gray-100 flex-shrink-0 overflow-hidden flex items-center justify-center">
+    // ————— FULL CARD (vacancies listing page, bigger) —————
+    return `<div class="job-card group bg-white border border-gray-100 rounded-xl p-6 cursor-pointer transition-all duration-200 hover:border-gray-200 hover:shadow-lg hover:-translate-y-1 active:border-gray-300" data-original-link="${detailLink}">
+        <div class="flex gap-5">
+            <div class="w-16 h-16 rounded-xl bg-gray-50 border border-gray-100 flex-shrink-0 overflow-hidden flex items-center justify-center shadow-sm">
                 <img src="${logoUrl}" alt="${company}" class="w-full h-full object-cover" onerror="${imgError}">
             </div>
             <div class="flex-1 min-w-0">
                 <div class="flex items-start justify-between gap-3 mb-1">
                     <div class="min-w-0">
-                        <h3 class="text-base font-semibold text-gray-900 leading-snug line-clamp-2">${title}</h3>
-                        <p class="text-sm text-gray-500 mt-0.5">${company}</p>
+                        <h3 class="text-lg font-bold text-gray-900 leading-snug line-clamp-2">${title}</h3>
+                        <p class="text-base text-gray-500 mt-1 font-medium">${company}</p>
                     </div>
-                    ${salaryText ? `<span class="text-sm font-semibold text-primary-500 whitespace-nowrap flex-shrink-0">${salaryText}</span>` : ''}
+                    ${salaryText ? `<span class="text-base font-bold text-primary-500 whitespace-nowrap flex-shrink-0">${salaryText}</span>` : ''}
                 </div>
-                <div class="flex items-center gap-4 text-xs text-gray-400 mt-2">
-                    <span><i class="far fa-calendar mr-1"></i>${postedDate}</span>
-                    <span><i class="fas fa-map-marker-alt mr-1"></i>${location || 'Azərbaycan'}</span>
+                <div class="flex items-center gap-5 text-sm text-gray-400 mt-2">
+                    <span><i class="far fa-calendar mr-1.5"></i>${postedDate}</span>
+                    <span><i class="fas fa-map-marker-alt mr-1.5"></i>${location || 'Azərbaycan'}</span>
                 </div>
-                <div class="flex items-center justify-between mt-3 pt-3 border-t border-gray-50">
+                <div class="flex items-center justify-between mt-4 pt-4 border-t border-gray-50">
                     ${sourceTag}
+                    <span class="text-xs font-medium text-primary-500 opacity-0 group-hover:opacity-100 transition-all duration-300 group-hover:translate-x-0 -translate-x-2">
+                        Ətraflı <i class="fas fa-arrow-right text-[10px] ml-1"></i>
+                    </span>
                 </div>
             </div>
         </div>
@@ -119,10 +122,10 @@ export function createJobCard(element, compact = false) {
 export function noDataCard() {
     return `<div class="col-span-full flex items-center justify-center py-16">
         <div class="text-center">
-            <div class="w-12 h-12 mx-auto bg-gray-100 rounded-full flex items-center justify-center mb-3">
-                <i class="fas fa-search text-gray-400"></i>
+            <div class="w-14 h-14 mx-auto bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                <i class="fas fa-search text-gray-400 text-lg"></i>
             </div>
-            <h3 class="text-base font-semibold text-gray-900 mb-1">Heç bir vakansiya tapılmadı</h3>
+            <h3 class="text-lg font-semibold text-gray-900 mb-1">Heç bir vakansiya tapılmadı</h3>
             <p class="text-sm text-gray-500">Xahiş edirik filtrləri dəyişib yenidən yoxlayın</p>
         </div>
     </div>`;
