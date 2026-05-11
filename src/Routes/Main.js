@@ -290,6 +290,8 @@ router.use((req, res) => {
 });
 
 router.use((err, req, res, next) => {
+    console.error('Route error:', err.message);
+    console.error(err.stack?.split('\n').slice(0, 3).join('\n'));
     res.render('Partials/Error.ejs');
 });
 
