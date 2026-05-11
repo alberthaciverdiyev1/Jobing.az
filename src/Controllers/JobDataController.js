@@ -260,7 +260,7 @@ const jobDataController = {
             res.status(500).json({ message: 'Error job details: ' + error.message });
         }
     },
-};
+
 
     // ============================================================
     // FAVORITE JOBS

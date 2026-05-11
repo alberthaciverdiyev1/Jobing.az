@@ -27,6 +27,10 @@ router.get('/cv-ler/:id', visitorLogger, viewController.cvDetail);
 router.get('/sirketler', visitorLogger, viewController.companyList);
 router.get('/sirket/:id', visitorLogger, viewController.companyDetail);
 
+// News pages
+router.get('/xeberler', visitorLogger, viewController.newsList);
+router.get('/xeberler/:slug', visitorLogger, viewController.newsDetail);
+
 // ============================================================
 // PROTECTED PAGES (User Dashboard & CV management)
 // ============================================================

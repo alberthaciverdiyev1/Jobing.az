@@ -1,0 +1,102 @@
+<!-- ============================================ -->
+<!-- NEWS DETAIL -->
+<!-- ============================================ -->
+<section class="bg-gray-50 min-h-screen pt-24 pb-16 md:pb-24">
+    <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Breadcrumb -->
+        <div class="flex items-center gap-2 text-sm text-gray-400 mb-6">
+            <a href="/" class="hover:text-primary-500 transition-colors">Ana səhifə</a>
+            <span>/</span>
+            <a href="/xeberler" class="hover:text-primary-500 transition-colors">Xəbərlər</a>
+            <span>/</span>
+            <span class="text-gray-600 truncate max-w-[200px]"><%= news.title %></span>
+        </div>
+
+        <div class="flex flex-col lg:flex-row gap-8">
+            <!-- ======== MAIN CONTENT ======== -->
+            <div class="flex-1 min-w-0">
+                <article class="bg-white rounded-lg border border-gray-200 overflow-hidden">
+                    <!-- Image -->
+                    <% if (news.imageUrl) { %>
+                    <div class="w-full h-64 sm:h-80 lg:h-96 overflow-hidden bg-gray-100">
+                        <img src="<%= news.imageUrl %>" alt="<%= news.title %>" class="w-full h-full object-cover" onerror="this.onerror=null;this.src='/Images/DefaultCompany.png'">
+                    </div>
+                    <% } %>
+
+                    <div class="p-6 sm:p-8">
+                        <!-- Meta -->
+                        <div class="flex flex-wrap items-center gap-3 text-sm text-gray-400 mb-4">
+                            <% if (news.category) { %>
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-medium bg-primary-50 text-primary-600 border border-primary-100"><%= news.category %></span>
+                            <% } %>
+                            <span><i class="far fa-calendar mr-1"></i><%= new Date(news.createdAt).toLocaleDateString('az-AZ') %></span>
+                            <span><i class="far fa-eye mr-1"></i><%= news.views || 0 %> oxunma</span>
+                        </div>
+
+                        <!-- Title -->
+                        <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-4 leading-tight"><%= news.title %></h1>
+
+                        <!-- Description -->
+                        <p class="text-gray-500 text-base mb-6 leading-relaxed"><%= news.description %></p>
+
+                        <!-- Content -->
+                        <% if (news.content) { %>
+                        <div class="text-gray-700 text-sm leading-relaxed">
+                            <%- news.content.replace(/\n/g, '<br>') %>
+                        </div>
+                        <% } %>
+                    </div>
+                </article>
+
+                <!-- ======== SIMILAR NEWS ======== -->
+                <% if (similar && similar.length > 0) { %>
+                <div class="mt-8">
+                    <h2 class="text-lg font-bold text-gray-900 mb-4">Oxşar Xəbərlər</h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <% similar.forEach(function(item) { %>
+                        <a href="/xeberler/<%= item.slug %>" class="group bg-white rounded-lg border border-gray-200 overflow-hidden hover:border-gray-300 transition-all hover:shadow-sm">
+                            <% if (item.imageUrl) { %>
+                            <div class="h-40 overflow-hidden bg-gray-100">
+                                <img src="<%= item.imageUrl %>" alt="<%= item.title %>" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" onerror="this.onerror=null;this.src='/Images/DefaultCompany.png'">
+                            </div>
+                            <% } %>
+                            <div class="p-4">
+                                <h3 class="font-semibold text-gray-900 text-sm leading-snug line-clamp-2 group-hover:text-primary-500 transition-colors"><%= item.title %></h3>
+                                <p class="text-xs text-gray-400 mt-1"><%= new Date(item.createdAt).toLocaleDateString('az-AZ') %></p>
+                            </div>
+                        </a>
+                        <% }); %>
+                    </div>
+                </div>
+                <% } %>
+            </div>
+
+            <!-- ======== SIDEBAR ======== -->
+            <aside class="lg:w-[320px] lg:flex-shrink-0">
+                <div class="lg:sticky lg:top-28 space-y-6">
+                    <!-- Most Read -->
+                    <div class="bg-white rounded-lg border border-gray-200 p-5">
+                        <h3 class="font-semibold text-gray-900 text-sm mb-4 flex items-center gap-2">
+                            <i class="fas fa-fire text-primary-500"></i> Ən çox oxunanlar
+                        </h3>
+                        <% if (mostRead && mostRead.length > 0) { %>
+                            <div class="space-y-3">
+                                <% mostRead.forEach(function(item, i) { %>
+                                <a href="/xeberler/<%= item.slug %>" class="flex gap-3 group <%= i < mostRead.length - 1 ? 'pb-3 border-b border-gray-50' : '' %>">
+                                    <span class="text-lg font-bold text-gray-200 flex-shrink-0 w-6"><%= i + 1 %></span>
+                                    <div class="min-w-0">
+                                        <p class="text-sm font-medium text-gray-900 line-clamp-2 group-hover:text-primary-500 transition-colors leading-snug"><%= item.title %></p>
+                                        <p class="text-xs text-gray-400 mt-0.5"><%= new Date(item.createdAt).toLocaleDateString('az-AZ') %></p>
+                                    </div>
+                                </a>
+                                <% }); %>
+                            </div>
+                        <% } else { %>
+                            <p class="text-sm text-gray-400">Hələ xəbər yoxdur</p>
+                        <% } %>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+</section>
