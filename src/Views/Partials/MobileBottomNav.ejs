@@ -3,7 +3,7 @@
     <div class="flex items-center justify-around h-[68px] px-2">
         <!-- Home -->
         <a href="/"
-           class="flex flex-col items-center justify-center gap-0.5 w-16 py-1 <%= currentPage === 'home' ? 'text-primary-500' : 'text-gray-400 hover:text-gray-600' %> transition-colors">
+           class="flex flex-col items-center justify-center gap-0.5 w-14 py-1 <%= currentPage === 'home' ? 'text-primary-500' : 'text-gray-400 hover:text-gray-600' %> transition-colors">
             <div class="relative">
                 <i class="fas fa-home text-xl"></i>
                 <% if (currentPage === 'home') { %><span class="absolute -bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-primary-500"></span><% } %>
@@ -13,7 +13,7 @@
 
         <!-- Jobs -->
         <a href="/vakansiyalar"
-           class="flex flex-col items-center justify-center gap-0.5 w-16 py-1 <%= currentPage === 'jobs' ? 'text-primary-500' : 'text-gray-400 hover:text-gray-600' %> transition-colors">
+           class="flex flex-col items-center justify-center gap-0.5 w-14 py-1 <%= currentPage === 'jobs' ? 'text-primary-500' : 'text-gray-400 hover:text-gray-600' %> transition-colors">
             <div class="relative">
                 <i class="fas fa-search text-xl"></i>
                 <% if (currentPage === 'jobs') { %><span class="absolute -bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-primary-500"></span><% } %>
@@ -23,7 +23,7 @@
 
         <!-- Companies -->
         <a href="/sirketler"
-           class="flex flex-col items-center justify-center gap-0.5 w-16 py-1 <%= currentPage === 'company-list' || currentPage === 'company-detail' ? 'text-primary-500' : 'text-gray-400 hover:text-gray-600' %> transition-colors">
+           class="flex flex-col items-center justify-center gap-0.5 w-14 py-1 <%= currentPage === 'company-list' || currentPage === 'company-detail' ? 'text-primary-500' : 'text-gray-400 hover:text-gray-600' %> transition-colors">
             <div class="relative">
                 <i class="fas fa-building text-xl"></i>
                 <% if (currentPage === 'company-list' || currentPage === 'company-detail') { %><span class="absolute -bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-primary-500"></span><% } %>
@@ -33,12 +33,22 @@
 
         <!-- CVs -->
         <a href="/cv-ler"
-           class="flex flex-col items-center justify-center gap-0.5 w-16 py-1 <%= currentPage === 'cv-list' ? 'text-primary-500' : 'text-gray-400 hover:text-gray-600' %> transition-colors">
+           class="flex flex-col items-center justify-center gap-0.5 w-14 py-1 <%= currentPage === 'cv-list' ? 'text-primary-500' : 'text-gray-400 hover:text-gray-600' %> transition-colors">
             <div class="relative">
                 <i class="fas fa-file-alt text-xl"></i>
                 <% if (currentPage === 'cv-list') { %><span class="absolute -bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-primary-500"></span><% } %>
             </div>
             <span class="text-[10px] font-medium"><%= __('nav.cvs') %></span>
+        </a>
+
+        <!-- Blogs -->
+        <a href="/blogs"
+           class="flex flex-col items-center justify-center gap-0.5 w-14 py-1 <%= currentPage === 'blogs' ? 'text-primary-500' : 'text-gray-400 hover:text-gray-600' %> transition-colors">
+            <div class="relative">
+                <i class="fas fa-blog text-xl"></i>
+                <% if (currentPage === 'blogs') { %><span class="absolute -bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-primary-500"></span><% } %>
+            </div>
+            <span class="text-[10px] font-medium"><%= __('nav.blogs') %></span>
         </a>
 
         <!-- News -->
@@ -54,7 +64,7 @@
         <!-- Profile / Login -->
         <% if (typeof user !== 'undefined' && user) { %>
             <a href="<%= user.role === 'company' || user.role === 'hr' ? '/hr/dashboard' : '/dashboard' %>"
-               class="flex flex-col items-center justify-center gap-0.5 w-16 py-1 <%= currentPage === 'dashboard' || currentPage === 'company-dashboard' ? 'text-primary-500' : 'text-gray-400 hover:text-gray-600' %> transition-colors">
+               class="flex flex-col items-center justify-center gap-0.5 w-14 py-1 <%= currentPage === 'dashboard' || currentPage === 'company-dashboard' ? 'text-primary-500' : 'text-gray-400 hover:text-gray-600' %> transition-colors">
                 <div class="relative">
                     <i class="fas fa-user text-xl"></i>
                     <% if (currentPage === 'dashboard' || currentPage === 'company-dashboard') { %><span class="absolute -bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-primary-500"></span><% } %>
@@ -63,7 +73,7 @@
             </a>
         <% } else { %>
             <a href="/auth"
-               class="flex flex-col items-center justify-center gap-0.5 w-16 py-1 text-gray-400 hover:text-gray-600 transition-colors">
+               class="flex flex-col items-center justify-center gap-0.5 w-14 py-1 text-gray-400 hover:text-gray-600 transition-colors">
                 <div class="relative">
                     <i class="fas fa-sign-in-alt text-xl"></i>
                 </div>
