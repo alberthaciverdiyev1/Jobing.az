@@ -11,17 +11,64 @@ const companySchema = new Schema({
         type: String,
         default: ""
     },
+    bannerUrl: {
+        type: String,
+        default: ""
+    },
     website: {
         type: String,
-        required: false
+        default: ""
+    },
+    description: {
+        type: String,
+        default: ""
+    },
+    phone: {
+        type: String,
+        default: ""
+    },
+    email: {
+        type: String,
+        default: ""
+    },
+    address: {
+        type: String,
+        default: ""
+    },
+    workingHours: {
+        monday:   { type: String, default: "" },
+        tuesday:  { type: String, default: "" },
+        wednesday:{ type: String, default: "" },
+        thursday: { type: String, default: "" },
+        friday:   { type: String, default: "" },
+        saturday: { type: String, default: "" },
+        sunday:   { type: String, default: "" }
+    },
+    socialLinks: {
+        facebook:  { type: String, default: "" },
+        instagram: { type: String, default: "" },
+        linkedin:  { type: String, default: "" },
+        twitter:   { type: String, default: "" }
+    },
+    foundedYear: {
+        type: Number,
+        default: null
+    },
+    employeeCount: {
+        type: String,
+        default: ""
+    },
+    industry: {
+        type: String,
+        default: ""
     },
     companyId: {
         type: Number,
-        required: false
+        default: null
     },
     uniqueKey: {
         type: String,
-        required: false
+        default: null
     },
     deletedAt: {
         type: Date,

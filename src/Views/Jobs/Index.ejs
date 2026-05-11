@@ -1,10 +1,10 @@
 <section class="bg-gray-50 min-h-screen pt-24 pb-16 md:pb-24">
-    <div class="max-w-[1440px] mx-auto px-3 sm:px-4 lg:px-6">
+    <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
         <!-- Page Header -->
-        <div class="flex items-center justify-between mb-6 animate-fade-in">
+        <div class="flex items-center justify-between mb-6">
             <div>
-                <h1 class="text-2xl sm:text-3xl font-bold text-gray-900"><%= __('jobs.title') %></h1>
-                <p class="text-gray-500 text-sm sm:text-base mt-1"><%= __('jobs.subtitle') %></p>
+                <h1 class="text-xl sm:text-2xl font-bold text-gray-900"><%= __('jobs.title') %></h1>
+                <p class="text-gray-500 text-sm mt-0.5"><%= __('jobs.subtitle') %></p>
             </div>
         </div>
 
@@ -14,15 +14,14 @@
         <div class="flex flex-col lg:flex-row gap-6">
 
             <!-- ========== DESKTOP SIDEBAR ========== -->
-            <aside class="hidden lg:block lg:w-[320px] lg:flex-shrink-0 animate-fade-in-up">
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 lg:sticky lg:top-28">
-                    <!-- Sidebar Header -->
-                    <div class="flex items-center justify-between mb-4 pb-4 border-b border-gray-100">
-                        <h3 class="font-semibold text-gray-900 flex items-center gap-2">
-                            <i class="fas fa-sliders-h text-primary-500 text-sm"></i>
+            <aside class="hidden lg:block lg:w-[280px] lg:flex-shrink-0">
+                <div class="bg-white rounded-lg border border-gray-200 p-5 lg:sticky lg:top-28">
+                    <div class="flex items-center justify-between mb-4 pb-3 border-b border-gray-100">
+                        <h3 class="font-semibold text-gray-900 text-sm flex items-center gap-2">
+                            <i class="fas fa-sliders-h text-primary-500 text-xs"></i>
                             <%= __('jobs.filters') %>
                         </h3>
-                        <button id="clearFilters" class="text-xs text-gray-400 hover:text-primary-500 transition-colors"><%= __('jobs.clear') %></button>
+                        <button id="clearFilters" class="text-xs text-gray-400 hover:text-gray-600 transition-colors"><%= __('jobs.clear') %></button>
                     </div>
                     <!-- Desktop filter content -->
                     <%- include('../Partials/FilterContent') %>
@@ -32,13 +31,12 @@
             <!-- ========== JOB LISTINGS ========== -->
             <div class="flex-1 min-w-0">
                 <!-- Results Count & Mobile Filter Button -->
-                <div class="flex items-center justify-between mb-4 animate-fade-in">
+                <div class="flex items-center justify-between mb-4">
                     <p class="text-sm text-gray-500">
                         <span id="job-count">0</span> <%= __('jobs.results') %>
                     </p>
-                    <!-- Mobile Filter Trigger -->
                     <button id="mobile-filter-btn"
-                            class="lg:hidden inline-flex items-center gap-2 text-sm font-medium text-gray-700 bg-white border border-gray-200 px-4 py-2.5 rounded-xl hover:bg-gray-50 hover:border-gray-300 transition-all shadow-sm active:scale-95">
+                            class="lg:hidden inline-flex items-center gap-2 text-sm font-medium text-gray-700 bg-white border border-gray-200 px-3 py-2 rounded-lg hover:bg-gray-50 transition-all">
                         <i class="fas fa-sliders-h text-primary-500"></i>
                         <%= __('jobs.filters') %>
                         <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-primary-500 text-white text-[10px] font-bold" id="active-filter-count">0</span>
@@ -47,9 +45,9 @@
 
                 <!-- Cards Container -->
                 <div id="card-section">
-                    <div class="flex items-center justify-center min-h-[400px] bg-white rounded-2xl border border-gray-100 shadow-sm">
-                        <div class="flex flex-col items-center gap-3">
-                            <div class="w-8 h-8 border-2 border-primary-500/30 border-t-primary-500 rounded-full animate-spin"></div>
+                    <div class="flex items-center justify-center min-h-[300px] bg-white rounded-lg border border-gray-200">
+                        <div class="flex flex-col items-center gap-2">
+                            <div class="w-6 h-6 border-2 border-primary-500/30 border-t-primary-500 rounded-full animate-spin"></div>
                             <span class="text-gray-400 text-sm"><%= __('jobs.loading') %></span>
                         </div>
                     </div>
@@ -67,36 +65,36 @@
 
         <!-- Bottom Sheet Panel -->
         <div id="mobile-filter-sheet"
-             class="absolute bottom-0 left-0 right-0 bg-white rounded-t-3xl shadow-2xl max-h-[88vh] flex flex-col transform translate-y-full transition-transform duration-400 ease-out">
+             class="absolute bottom-0 left-0 right-0 bg-white rounded-t-xl shadow-lg max-h-[85vh] flex flex-col transform translate-y-full transition-transform duration-300 ease-out">
 
             <!-- Sheet Handle -->
-            <div class="flex justify-center pt-3 pb-1 flex-shrink-0">
-                <div class="w-10 h-1 rounded-full bg-gray-300"></div>
+            <div class="flex justify-center pt-2 pb-1 flex-shrink-0">
+                <div class="w-8 h-1 rounded-full bg-gray-300"></div>
             </div>
 
             <!-- Sheet Header -->
-            <div class="flex items-center justify-between px-5 py-3 border-b border-gray-100 flex-shrink-0">
-                <h3 class="font-semibold text-gray-900 flex items-center gap-2">
-                    <i class="fas fa-sliders-h text-primary-500 text-sm"></i>
+            <div class="flex items-center justify-between px-4 py-3 border-b border-gray-100 flex-shrink-0">
+                <h3 class="font-semibold text-gray-900 text-sm flex items-center gap-2">
+                    <i class="fas fa-sliders-h text-primary-500 text-xs"></i>
                     <%= __('jobs.filters') %>
                 </h3>
-                <div class="flex items-center gap-3">
-                    <button id="mobile-clear-filters" class="text-xs text-gray-400 hover:text-primary-500 transition-colors"><%= __('jobs.clear') %></button>
-                    <button id="mobile-filter-close" class="w-8 h-8 flex items-center justify-center rounded-lg bg-gray-100 text-gray-500 hover:bg-gray-200 transition-colors">
-                        <i class="fas fa-times text-sm"></i>
+                <div class="flex items-center gap-2">
+                    <button id="mobile-clear-filters" class="text-xs text-gray-400 hover:text-gray-600 transition-colors"><%= __('jobs.clear') %></button>
+                    <button id="mobile-filter-close" class="w-7 h-7 flex items-center justify-center rounded-md bg-gray-100 text-gray-500 hover:bg-gray-200 transition-colors">
+                        <i class="fas fa-times text-xs"></i>
                     </button>
                 </div>
             </div>
 
-            <!-- Sheet Body (scrollable) -->
-            <div class="flex-1 overflow-y-auto p-5 custom-scroll">
+            <!-- Sheet Body -->
+            <div class="flex-1 overflow-y-auto px-4 py-4 custom-scroll">
                 <%- include('../Partials/FilterContent') %>
             </div>
 
-            <!-- Sheet Footer: Mobile Apply Button -->
+            <!-- Sheet Footer -->
             <div class="p-4 border-t border-gray-100 flex-shrink-0">
                 <button id="mobile-apply-filters"
-                        class="w-full bg-primary-500 hover:bg-primary-600 text-white font-medium px-5 py-3 rounded-xl transition-all shadow-sm shadow-primary-500/20 active:scale-[0.98]">
+                        class="w-full bg-primary-500 hover:bg-primary-600 text-white font-medium px-5 py-2.5 rounded-lg transition-all text-sm">
                     <i class="fas fa-search mr-2"></i>
                     <%= __('jobs.showResults') %>
                 </button>

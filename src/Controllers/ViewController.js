@@ -141,6 +141,22 @@ const ViewController = {
         res.render('Main', view);
     },
 
+    // Company Profile Settings
+    companySettings: async (req, res) => {
+        let company = null;
+        if (req.user.companyName) {
+            company = await CompanyService.findByCompanyName(req.user.companyName);
+        }
+        const view = {
+            title: 'Şirkət Profili',
+            body: "Dashboard/CompanySettings.ejs",
+            js: "CompanySettings.js",
+            currentPage: 'company-settings',
+            company
+        };
+        res.render('Main', view);
+    },
+
     // CV Create page
     cvCreate: async (req, res) => {
         const view = {

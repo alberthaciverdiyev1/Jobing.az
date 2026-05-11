@@ -88,6 +88,14 @@ router.delete('/api/companies/:id', companyController.delete);
 router.post('/api/companies/remove-duplicates', companyController.removeDuplicates);
 
 // ============================================================
+// COMPANY PROFILE (protected — company)
+// ============================================================
+router.get('/api/company/profile', authMiddleware.authenticate, authMiddleware.authorize('company'), companyController.getMyProfile);
+router.put('/api/company/profile', authMiddleware.authenticate, authMiddleware.authorize('company'), companyController.updateMyProfile);
+router.post('/api/company/upload-logo', authMiddleware.authenticate, authMiddleware.authorize('company'), companyController.uploadLogo);
+router.post('/api/company/upload-banner', authMiddleware.authenticate, authMiddleware.authorize('company'), companyController.uploadBanner);
+
+// ============================================================
 // CATEGORY API
 // ============================================================
 router.post('/api/foreign-categories', categoryController.addForeignCategories);

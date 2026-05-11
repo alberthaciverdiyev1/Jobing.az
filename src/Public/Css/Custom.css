@@ -452,18 +452,7 @@ html {
   }
 }
 
-/* ========== CARD HOVER IMPROVEMENTS ========== */
-.job-card::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: 1rem;
-  background: linear-gradient(135deg, rgba(255,140,0,0.03) 0%, transparent 50%);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  pointer-events: none;
-}
-
-.job-card:hover::after {
-  opacity: 1;
+/* ========== JOB CARD ========== */
+.job-card {
+  transition: border-color 0.2s ease;
 }

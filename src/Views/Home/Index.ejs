@@ -1,86 +1,69 @@
 <!-- ============================================ -->
-<!-- HERO SECTION -->
+<!-- HERO SECTION — Professional, Clean -->
 <!-- ============================================ -->
-<section class="relative overflow-hidden pt-28 pb-16 md:pt-36 md:pb-24"
-         style="background: linear-gradient(165deg, #fff7ed 0%, #fffbeb 30%, #f9fafb 60%, #ffffff 100%);">
-    <!-- Decorative Elements -->
-    <div class="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
-        <div class="absolute -top-40 -right-40 w-80 h-80 rounded-full bg-primary-500/5 blur-3xl"></div>
-        <div class="absolute -bottom-40 -left-40 w-96 h-96 rounded-full bg-amber-500/5 blur-3xl"></div>
-        <div class="absolute top-1/3 left-1/6 w-4 h-4 rounded-full bg-primary-300/30 animate-pulse-subtle" style="animation-delay: 0s;"></div>
-        <div class="absolute top-1/4 right-1/5 w-3 h-3 rounded-full bg-amber-300/30 animate-pulse-subtle" style="animation-delay: 1s;"></div>
-        <div class="absolute bottom-1/3 right-1/3 w-5 h-5 rounded-full bg-primary-400/20 animate-pulse-subtle" style="animation-delay: 2s;"></div>
-    </div>
-
-    <div class="max-w-[1440px] mx-auto px-3 sm:px-4 lg:px-6 relative z-10">
-        <div class="max-w-4xl mx-auto text-center">
-            <!-- Live Badge -->
-            <div class="inline-flex items-center gap-2.5 bg-white shadow-sm border border-primary-100 text-primary-600 text-sm font-medium px-5 py-2 rounded-full mb-6 animate-fade-in-down">
-                <span class="relative flex h-2 w-2">
-                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary-400 opacity-75"></span>
-                    <span class="relative inline-flex rounded-full h-2 w-2 bg-primary-500"></span>
-                </span>
+<section class="bg-gray-50 pt-28 pb-16 md:pt-36 md:pb-20 border-b border-gray-100">
+    <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-3xl mx-auto text-center">
+            <!-- Badge -->
+            <div class="inline-flex items-center gap-2 bg-white border border-gray-200 text-primary-600 text-sm font-medium px-4 py-1.5 rounded-full mb-5 shadow-sm">
+                <span class="w-1.5 h-1.5 rounded-full bg-primary-500"></span>
                 <%= __('hero.badge') %>
             </div>
 
-            <h1 class="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-extrabold text-gray-900 leading-[1.1] tracking-tight mb-6 animate-fade-in-up">
+            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight mb-4">
                 <%= __('hero.title') %>
-                <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary-500 to-amber-500"><%= __('hero.titleHighlight') %></span>
+                <span class="text-primary-500"><%= __('hero.titleHighlight') %></span>
             </h1>
 
-            <p class="text-base sm:text-lg lg:text-xl text-gray-500 max-w-2xl mx-auto mb-8 sm:mb-10 animate-fade-in-up" style="animation-delay: 100ms;">
+            <p class="text-base sm:text-lg text-gray-500 max-w-xl mx-auto mb-8">
                 <%= __('hero.subtitle') %>
             </p>
 
             <!-- Search Form -->
-            <div class="bg-white/90 backdrop-blur-md rounded-2xl shadow-xl shadow-gray-200/50 border border-gray-100/80 p-4 sm:p-6 animate-fade-in-up" style="animation-delay: 200ms;">
-                <form action="/vakansiyalar" method="GET" class="flex flex-col sm:flex-row gap-3 sm:gap-4">
+            <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-4">
+                <form action="/vakansiyalar" method="GET" class="flex flex-col sm:flex-row gap-3">
                     <div class="flex-1 relative">
-                        <span class="absolute left-4 sm:left-5 top-1/2 -translate-y-1/2 text-gray-400">
-                            <i class="fas fa-search"></i>
+                        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
+                            <i class="fas fa-search text-sm"></i>
                         </span>
                         <input type="text" name="keyword" id="keyword"
                                placeholder="<%= __('hero.searchPlaceholder') %>"
-                               class="w-full pl-11 sm:pl-14 pr-4 py-3.5 sm:py-4 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all duration-200 text-gray-900 placeholder:text-gray-400 text-sm sm:text-base">
+                               class="w-full pl-10 pr-4 py-3 bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all text-sm">
                     </div>
-                    <div class="sm:w-56 lg:w-72 relative">
-                        <span class="absolute left-4 sm:left-5 top-1/2 -translate-y-1/2 text-gray-400">
-                            <i class="fas fa-map-marker-alt"></i>
+                    <div class="sm:w-52 relative">
+                        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
+                            <i class="fas fa-map-marker-alt text-sm"></i>
                         </span>
                         <select id="city-select" name="cityId"
-                                class="w-full pl-11 sm:pl-14 pr-10 py-3.5 sm:py-4 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all duration-200 text-gray-900 appearance-none cursor-pointer text-sm sm:text-base">
+                                class="w-full pl-10 pr-8 py-3 bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all text-sm appearance-none cursor-pointer">
                             <option value=""><%= __('hero.cityPlaceholder') %></option>
                         </select>
                     </div>
                     <button type="submit"
-                            class="bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white font-semibold px-8 sm:px-10 py-3.5 sm:py-4 rounded-xl transition-all duration-200 shadow-sm hover:shadow-md hover:shadow-primary-500/20 active:scale-[0.98] flex items-center justify-center gap-2 text-sm sm:text-base">
-                        <i class="fas fa-search"></i>
-                        <span><%= __('hero.search') %></span>
+                            class="bg-primary-500 hover:bg-primary-600 text-white font-medium px-6 py-3 rounded-lg transition-all duration-200 text-sm">
+                        <i class="fas fa-search mr-2"></i>
+                        <%= __('hero.search') %>
                     </button>
                 </form>
             </div>
 
             <!-- Trending Keywords -->
-            <div class="flex flex-wrap items-center justify-center gap-2 mt-6 sm:mt-8 animate-fade-in-up" style="animation-delay: 300ms;">
-                <span class="text-gray-400 text-xs sm:text-sm"><%= __('hero.trending') %></span>
+            <div class="flex flex-wrap items-center justify-center gap-2 mt-5">
+                <span class="text-xs text-gray-400"><%= __('hero.trending') %></span>
                 <a href="/vakansiyalar?keyword=Proqramist"
-                   class="group inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-gray-200 rounded-full text-xs sm:text-sm text-gray-600 hover:border-primary-500 hover:text-primary-500 hover:bg-primary-50/50 transition-all shadow-sm hover:shadow">
-                    <i class="fas fa-code text-[10px] text-gray-300 group-hover:text-primary-400 transition-colors"></i>
+                   class="px-3 py-1 bg-white border border-gray-200 rounded-md text-xs text-gray-600 hover:border-gray-300 hover:text-gray-900 transition-all">
                     Proqramist
                 </a>
                 <a href="/vakansiyalar?keyword=Design"
-                   class="group inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-gray-200 rounded-full text-xs sm:text-sm text-gray-600 hover:border-primary-500 hover:text-primary-500 hover:bg-primary-50/50 transition-all shadow-sm hover:shadow">
-                    <i class="fas fa-paint-brush text-[10px] text-gray-300 group-hover:text-primary-400 transition-colors"></i>
+                   class="px-3 py-1 bg-white border border-gray-200 rounded-md text-xs text-gray-600 hover:border-gray-300 hover:text-gray-900 transition-all">
                     Dizayner
                 </a>
                 <a href="/vakansiyalar?keyword=Manager"
-                   class="group inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-gray-200 rounded-full text-xs sm:text-sm text-gray-600 hover:border-primary-500 hover:text-primary-500 hover:bg-primary-50/50 transition-all shadow-sm hover:shadow">
-                    <i class="fas fa-chart-line text-[10px] text-gray-300 group-hover:text-primary-400 transition-colors"></i>
+                   class="px-3 py-1 bg-white border border-gray-200 rounded-md text-xs text-gray-600 hover:border-gray-300 hover:text-gray-900 transition-all">
                     Menecer
                 </a>
                 <a href="/vakansiyalar?keyword=Marketinq"
-                   class="group inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-gray-200 rounded-full text-xs sm:text-sm text-gray-600 hover:border-primary-500 hover:text-primary-500 hover:bg-primary-50/50 transition-all shadow-sm hover:shadow">
-                    <i class="fas fa-bullhorn text-[10px] text-gray-300 group-hover:text-primary-400 transition-colors"></i>
+                   class="px-3 py-1 bg-white border border-gray-200 rounded-md text-xs text-gray-600 hover:border-gray-300 hover:text-gray-900 transition-all">
                     Marketinq
                 </a>
             </div>
@@ -91,23 +74,21 @@
 <!-- ============================================ -->
 <!-- STATS SECTION -->
 <!-- ============================================ -->
-<section class="relative z-20 -mt-6 md:-mt-8">
-    <div class="max-w-[1440px] mx-auto px-3 sm:px-4">
-        <div class="bg-white/95 backdrop-blur-sm rounded-2xl shadow-lg shadow-gray-200/40 border border-gray-100/80 px-4 sm:px-8 py-5 sm:py-6">
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6">
-                <% const stats = [
-                    { id: 'vacancy', value: '0', label: __('stats.vacancy') },
-                    { id: 'company', value: '0', label: __('stats.company') },
-                    { id: 'visitor', value: '0', label: __('stats.monthlyVisitors') },
-                    { id: 'totalVisitor', value: '0', label: __('stats.totalVisitors') },
-                ]; %>
-                <% stats.forEach(stat => { %>
-                    <div class="text-center">
-                        <div class="text-xl sm:text-2xl lg:text-3xl font-bold text-primary-500 leading-none mb-1" id="<%= stat.id %>"><%= stat.value %></div>
-                        <div class="text-[11px] sm:text-sm text-gray-500"><%= stat.label %></div>
-                    </div>
-                <% }); %>
-            </div>
+<section class="bg-white border-b border-gray-100">
+    <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-6">
+            <% const stats = [
+                { id: 'vacancy', value: '0', label: __('stats.vacancy') },
+                { id: 'company', value: '0', label: __('stats.company') },
+                { id: 'visitor', value: '0', label: __('stats.monthlyVisitors') },
+                { id: 'totalVisitor', value: '0', label: __('stats.totalVisitors') },
+            ]; %>
+            <% stats.forEach(stat => { %>
+                <div class="text-center">
+                    <div class="text-xl sm:text-2xl font-bold text-primary-500" id="<%= stat.id %>"><%= stat.value %></div>
+                    <div class="text-xs sm:text-sm text-gray-500 mt-0.5"><%= stat.label %></div>
+                </div>
+            <% }); %>
         </div>
     </div>
 </section>
@@ -115,36 +96,35 @@
 <!-- ============================================ -->
 <!-- RECENT JOBS SECTION -->
 <!-- ============================================ -->
-<section class="py-16 sm:py-20 bg-gray-50/80">
-    <div class="max-w-[1440px] mx-auto px-3 sm:px-4 lg:px-6">
+<section class="py-14 sm:py-18 bg-gray-50">
+    <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
         <!-- Section Header -->
-        <div class="text-center mb-10 sm:mb-14 animate-fade-in-up">
-            <span class="inline-block text-xs font-semibold text-primary-500 bg-primary-50 px-3 py-1 rounded-full mb-4"><%= __('recentJobs.section') %></span>
-            <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-3 tracking-tight">
+        <div class="mb-10">
+            <p class="text-xs font-semibold text-primary-500 mb-1"><%= __('recentJobs.section') %></p>
+            <h2 class="text-2xl sm:text-3xl font-bold text-gray-900">
                 <%= __('recentJobs.title') %>
             </h2>
-            <p class="text-gray-500 text-base sm:text-lg max-w-xl mx-auto">
+            <p class="text-gray-500 text-sm sm:text-base mt-1">
                 <%= __('recentJobs.subtitle') %>
             </p>
         </div>
 
         <!-- Job Cards Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5" id="home-card-section">
-            <!-- Cards loaded dynamically via JS -->
-            <div class="col-span-full flex items-center justify-center py-20 animate-fade-in">
-                <div class="flex flex-col items-center gap-3">
-                    <div class="w-8 h-8 border-2 border-primary-500/30 border-t-primary-500 rounded-full animate-spin"></div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3" id="home-card-section">
+            <div class="col-span-full flex items-center justify-center py-16">
+                <div class="flex flex-col items-center gap-2">
+                    <div class="w-6 h-6 border-2 border-primary-500/30 border-t-primary-500 rounded-full animate-spin"></div>
                     <span class="text-gray-400 text-sm"><%= __('recentJobs.loading') %></span>
                 </div>
             </div>
         </div>
 
-        <!-- View All Button -->
-        <div class="text-center mt-10 sm:mt-14 animate-fade-in-up">
+        <!-- View All -->
+        <div class="text-center mt-8">
             <a href="/vakansiyalar"
-               class="group inline-flex items-center gap-2.5 bg-white hover:bg-gray-50 text-gray-700 font-medium px-8 py-3.5 rounded-xl border border-gray-200 transition-all duration-200 shadow-sm hover:shadow-md hover:border-gray-300 active:scale-[0.98]">
-                <span><%= __('recentJobs.viewAll') %></span>
-                <i class="fas fa-arrow-right text-sm group-hover:translate-x-0.5 transition-transform"></i>
+               class="inline-flex items-center gap-2 text-sm font-medium text-primary-500 hover:text-primary-600 transition-colors">
+                <%= __('recentJobs.viewAll') %>
+                <i class="fas fa-arrow-right text-xs"></i>
             </a>
         </div>
     </div>
@@ -153,56 +133,36 @@
 <!-- ============================================ -->
 <!-- HOW IT WORKS SECTION -->
 <!-- ============================================ -->
-<section class="py-16 sm:py-20 bg-gradient-to-b from-white to-gray-50/50 relative overflow-hidden">
-    <!-- Subtle background pattern -->
-    <div class="absolute inset-0 pointer-events-none" aria-hidden="true">
-        <div class="absolute top-1/4 left-0 w-72 h-72 bg-primary-500/3 rounded-full blur-3xl"></div>
-        <div class="absolute bottom-1/4 right-0 w-96 h-96 bg-amber-500/3 rounded-full blur-3xl"></div>
-    </div>
-
-    <div class="max-w-[1440px] mx-auto px-3 sm:px-4 lg:px-6 relative z-10">
-        <div class="text-center mb-14 sm:mb-18 animate-fade-in-up">
-            <span class="inline-block text-xs font-semibold text-primary-500 bg-primary-50 px-4 py-1.5 rounded-full mb-4 border border-primary-100"><%= __('howItWorks.section') %></span>
-            <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-3 tracking-tight">
+<section class="py-14 sm:py-18 bg-white">
+    <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="mb-10">
+            <p class="text-xs font-semibold text-primary-500 mb-1"><%= __('howItWorks.section') %></p>
+            <h2 class="text-2xl sm:text-3xl font-bold text-gray-900">
                 <%= __('howItWorks.title') %>
             </h2>
-            <p class="text-gray-500 text-base sm:text-lg max-w-xl mx-auto">
+            <p class="text-gray-500 text-sm sm:text-base mt-1">
                 <%= __('howItWorks.subtitle') %>
             </p>
         </div>
 
-        <!-- Steps: desktop grid with connection lines -->
-        <div class="relative">
-            <!-- Desktop connector line (hidden on mobile) -->
-            <div class="hidden lg:block absolute top-[72px] left-[calc(12.5%+40px)] right-[calc(12.5%+40px)] h-0.5 bg-gradient-to-r from-primary-200 via-amber-200 to-primary-200"></div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
-                <% const steps = [
-                    { img: '/Images/Static/WhoWeAre1.png', title: __('howItWorks.step1Title'), subtitle: __('howItWorks.step1Sub'), desc: __('howItWorks.step1Desc') },
-                    { img: '/Images/Static/WhoWeAre3.png', title: __('howItWorks.step2Title'), subtitle: __('howItWorks.step2Sub'), desc: __('howItWorks.step2Desc') },
-                    { img: '/Images/Static/WhoWeAre2.png', title: __('howItWorks.step3Title'), subtitle: __('howItWorks.step3Sub'), desc: __('howItWorks.step3Desc') },
-                    { img: '/Images/Static/WhoWeAre4.png', title: __('howItWorks.step4Title'), subtitle: __('howItWorks.step4Sub'), desc: __('howItWorks.step4Desc') },
-                ]; %>
-                <% steps.forEach((step, i) => { %>
-                    <div class="group relative bg-white rounded-2xl border border-gray-100 p-6 sm:p-8 text-center hover:shadow-xl hover:shadow-primary-500/8 hover:border-primary-200/60 transition-all duration-400 hover:-translate-y-1.5 animate-fade-in-up" style="animation-delay: <%= i * 120 %>ms;">
-                        <!-- Step Number Circle -->
-                        <div class="relative mx-auto w-[72px] h-[72px] rounded-full bg-gradient-to-br from-primary-50 to-amber-50 border-2 border-primary-100 flex items-center justify-center mb-6 group-hover:border-primary-300 group-hover:shadow-lg group-hover:shadow-primary-500/15 transition-all duration-300">
-                            <span class="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-br from-primary-500 to-amber-500"><%= i + 1 %></span>
-                        </div>
-
-                        <!-- Icon -->
-                        <div class="w-24 h-24 mx-auto mb-5 flex items-center justify-center">
-                            <img src="<%= step.img %>" alt="<%= step.title %>"
-                                 class="h-[72px] w-auto transition-all duration-500 group-hover:scale-110">
-                        </div>
-
-                        <h4 class="text-lg font-bold text-gray-900 mb-1"><%= step.title %></h4>
-                        <p class="text-primary-500 font-semibold mb-2"><%= step.subtitle %></p>
-                        <p class="text-gray-400 text-xs leading-relaxed"><%= step.desc %></p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <% const steps = [
+                { img: '/Images/Static/WhoWeAre1.png', title: __('howItWorks.step1Title'), subtitle: __('howItWorks.step1Sub'), desc: __('howItWorks.step1Desc') },
+                { img: '/Images/Static/WhoWeAre3.png', title: __('howItWorks.step2Title'), subtitle: __('howItWorks.step2Sub'), desc: __('howItWorks.step2Desc') },
+                { img: '/Images/Static/WhoWeAre2.png', title: __('howItWorks.step3Title'), subtitle: __('howItWorks.step3Sub'), desc: __('howItWorks.step3Desc') },
+                { img: '/Images/Static/WhoWeAre4.png', title: __('howItWorks.step4Title'), subtitle: __('howItWorks.step4Sub'), desc: __('howItWorks.step4Desc') },
+            ]; %>
+            <% steps.forEach((step, i) => { %>
+                <div class="bg-white border border-gray-100 rounded-lg p-5 hover:border-gray-200 transition-colors">
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="w-6 h-6 rounded-full bg-primary-50 text-primary-500 text-xs font-bold flex items-center justify-center"><%= i + 1 %></span>
+                        <span class="text-xs font-medium text-gray-400"><%= step.subtitle %></span>
                     </div>
-                <% }); %>
-            </div>
+                    <img src="<%= step.img %>" alt="<%= step.title %>" class="h-12 w-auto mb-3">
+                    <h4 class="text-sm font-semibold text-gray-900 mb-1"><%= step.title %></h4>
+                    <p class="text-xs text-gray-400 leading-relaxed"><%= step.desc %></p>
+                </div>
+            <% }); %>
         </div>
     </div>
 </section>
-
