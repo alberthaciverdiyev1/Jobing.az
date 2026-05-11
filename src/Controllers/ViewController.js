@@ -11,11 +11,18 @@ import NewsService from "../Services/NewsService.js";
 
 const ViewController = {
     home: async (req, res) => {
+        let topCategories = [];
+        try {
+            topCategories = await JobDataService.getTopCategories();
+        } catch (error) {
+            console.error('home topCategories error:', error.message);
+        }
         const view = {
             title: 'Ana Səhifə',
             body: "Home/Index.ejs",
             js: "Home.js",
-            currentPage: 'home'
+            currentPage: 'home',
+            topCategories
         };
         res.render('Main', view);
     },

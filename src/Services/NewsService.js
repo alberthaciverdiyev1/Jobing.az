@@ -87,6 +87,40 @@ const NewsService = {
         }
     },
 
+    // ============================================================
+    // ADMIN METHODS
+    // ============================================================
+
+    /** Admin: list all news (including inactive, paginated) */
+    getAllAdmin: async ({ page = 1, limit = 20, search } = {}) => {
+        try {
+            const query = {};
+            if (search) query.title = { $regex: search, $options: 'i' };
+
+            const total = await News.countDocuments(query);
+            const news = await News.find(query)
+                .sort({ createdAt: -1 })
+                .skip((page - 1) * limit)
+                .limit(limit)
+                .lean();
+
+            return { news, total, page: Number(page), totalPages: Math.ceil(total / limit) };
+        } catch (error) {
+            throw new Error('Error listing news: ' + error.message);
+        }
+    },
+
+    /** Admin: find by MongoDB ID */
+    findById: async (id) => {
+        try {
+            const news = await News.findById(id);
+            if (!news) throw new Error('News not found');
+            return news;
+        } catch (error) {
+            throw new Error('Error fetching news: ' + error.message);
+        }
+    },
+
     /** Update news */
     update: async (id, data) => {
         try {

@@ -23,6 +23,10 @@ const categorySchema = new Schema({
         type: String,
         required: false
     },
+    logoUrl: {
+        type: String,
+        default: ''
+    },
     bossAz: {
         type: String,
         required: false

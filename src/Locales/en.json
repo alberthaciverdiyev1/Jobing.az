@@ -39,6 +39,12 @@
 		"viewAll": "View All Jobs",
 		"loading": "Loading jobs..."
 	},
+	"categories": {
+		"section": "Categories",
+		"title": "Popular Categories",
+		"subtitle": "Categories with the most job vacancies",
+		"vacancyCount": "vacancies"
+	},
 	"howItWorks": {
 		"section": "How It Works",
 		"title": "How does the platform work?",

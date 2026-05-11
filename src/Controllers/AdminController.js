@@ -15,6 +15,7 @@ import CV from '../Models/CV.js';
 import Visitor from '../Models/Visitor.js';
 import VisitorService from '../Services/VisitorService.js';
 import JobService from '../Services/JobDataService.js';
+import NewsService from '../Services/NewsService.js';
 import Enums from '../Config/Enums.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -69,6 +70,33 @@ const blogUploadMiddleware = multer({
     },
     limits: { fileSize: 5 * 1024 * 1024 }
 }).single('image');
+
+// Category logo upload config
+const categoryLogoStorage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        const dir = path.join(process.cwd(), 'uploads', 'category');
+        if (!fs.existsSync(dir)) {
+            fs.mkdirSync(dir, { recursive: true });
+        }
+        cb(null, dir);
+    },
+    filename: (req, file, cb) => {
+        const ext = path.extname(file.originalname);
+        cb(null, `category-${uuidv4()}${ext}`);
+    }
+});
+const categoryLogoUploadMiddleware = multer({
+    storage: categoryLogoStorage,
+    fileFilter: (req, file, cb) => {
+        const allowed = /\.(jpg|jpeg|png|gif|webp|svg)$/i;
+        if (allowed.test(path.extname(file.originalname))) {
+            cb(null, true);
+        } else {
+            cb(new Error('Only image files (jpg, jpeg, png, gif, webp, svg) are allowed'), false);
+        }
+    },
+    limits: { fileSize: 2 * 1024 * 1024 }
+}).single('logo');
 
 // ============================================================
 // VISITOR IP-TO-LOCATION MAPPING (SIMPLIFIED)
@@ -137,6 +165,7 @@ const AdminController = {
             const dailyVisitors = await VisitorService.dailyCount();
             const totalSites = await Site.countDocuments({ isActive: true });
             const totalCategories = await Category.countDocuments();
+            const totalNews = await import('../Models/News.js').then(m => m.default.countDocuments());
 
             const recentJobs = await Job.find()
                 .sort({ createdAt: -1 })
@@ -147,7 +176,7 @@ const AdminController = {
                 title: 'Admin Panel',
                 body: "Home/Index.ejs",
                 js: "Index.js",
-                stats: { totalJobs, totalCompanies, totalUsers, totalCvs, totalBlogs, totalVisitors, dailyVisitors, totalSites, totalCategories },
+                stats: { totalJobs, totalCompanies, totalUsers, totalCvs, totalBlogs, totalVisitors, dailyVisitors, totalSites, totalCategories, totalNews },
                 recentJobs
             };
             res.render('Admin/Main', view);
@@ -208,6 +237,31 @@ const AdminController = {
         }
     },
 
+    // ============================================================
+    // ADMIN NEWS PAGES
+    // ============================================================
+
+    adminNewsView: async (req, res) => {
+        const view = { title: 'News - Admin Panel', body: "News/Index.ejs", js: "News.js" };
+        res.render('Admin/Main', view);
+    },
+
+    adminNewsAddView: async (req, res) => {
+        const view = { title: 'Add News - Admin Panel', body: "News/Add.ejs", js: "News.js" };
+        res.render('Admin/Main', view);
+    },
+
+    adminNewsEditView: async (req, res) => {
+        try {
+            const news = await NewsService.findById(req.params.id);
+            if (!news) return res.redirect('/admin/news');
+            const view = { title: 'Edit News - Admin Panel', body: "News/Edit.ejs", js: "News.js", news };
+            res.render('Admin/Main', view);
+        } catch {
+            res.redirect('/admin/news');
+        }
+    },
+
     adminCvsView: async (req, res) => {
         const view = { title: 'CVs - Admin Panel', body: "Cv/Index.ejs", js: "Cv.js" };
         res.render('Admin/Main', view);
@@ -242,6 +296,7 @@ const AdminController = {
             const totalVisitors = await Visitor.countDocuments({ deletedAt: null });
             const dailyVisitors = await VisitorService.dailyCount();
             const totalSites = await Site.countDocuments({ isActive: true });
+            const totalNews = await (await import('../Models/News.js')).default.countDocuments();
 
             const jobsLast7Days = await Job.countDocuments({
                 createdAt: { $gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) }
@@ -253,7 +308,7 @@ const AdminController = {
                 .select('title companyName isActive createdAt')
                 .lean();
 
-            res.json({ totalJobs, totalCompanies, totalUsers, totalCvs, totalBlogs, totalVisitors, dailyVisitors, totalSites, jobsLast7Days, recentJobs });
+            res.json({ totalJobs, totalCompanies, totalUsers, totalCvs, totalBlogs, totalVisitors, dailyVisitors, totalSites, totalNews, jobsLast7Days, recentJobs });
         } catch (error) {
             res.status(500).json({ error: error.message });
         }
@@ -740,6 +795,56 @@ const AdminController = {
         }
     },
 
+    // ============================================================
+    // API - NEWS CRUD
+    // ============================================================
+
+    getNews: async (req, res) => {
+        try {
+            const { page = 1, limit = 20, search } = req.query;
+            const result = await NewsService.getAllAdmin({ page: Number(page), limit: Number(limit), search });
+            res.json(result);
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    },
+
+    getNewsItem: async (req, res) => {
+        try {
+            const news = await NewsService.findById(req.params.id);
+            res.json(news);
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    },
+
+    createNews: async (req, res) => {
+        try {
+            const news = await NewsService.create(req.body);
+            res.status(201).json(news);
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    },
+
+    updateNews: async (req, res) => {
+        try {
+            const news = await NewsService.update(req.params.id, req.body);
+            res.json(news);
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    },
+
+    deleteNews: async (req, res) => {
+        try {
+            await NewsService.delete(req.params.id);
+            res.json({ success: true });
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    },
+
     uploadBlogImage: async (req, res) => {
         blogUploadMiddleware(req, res, (err) => {
             if (err) {
@@ -749,6 +854,43 @@ const AdminController = {
                 return res.status(400).json({ error: 'No image file provided' });
             }
             res.json({ url: `/uploads/blog/${req.file.filename}` });
+        });
+    },
+
+    // ============================================================
+    // API - CATEGORY LOGO UPLOAD
+    // ============================================================
+
+    uploadCategoryLogo: async (req, res) => {
+        categoryLogoUploadMiddleware(req, res, async (err) => {
+            if (err) {
+                return res.status(400).json({ error: err.message || 'Logo upload failed' });
+            }
+            if (!req.file) {
+                return res.status(400).json({ error: 'No logo file provided' });
+            }
+
+            try {
+                const category = await Category.findById(req.params.id);
+                if (!category) {
+                    return res.status(404).json({ error: 'Category not found' });
+                }
+
+                // Delete old logo file if exists
+                if (category.logoUrl) {
+                    const oldPath = path.join(process.cwd(), category.logoUrl.replace(/^\//, ''));
+                    if (fs.existsSync(oldPath)) {
+                        fs.unlinkSync(oldPath);
+                    }
+                }
+
+                category.logoUrl = `/uploads/category/${req.file.filename}`;
+                await category.save();
+
+                res.json({ logoUrl: category.logoUrl });
+            } catch (error) {
+                res.status(500).json({ error: error.message });
+            }
         });
     },
 

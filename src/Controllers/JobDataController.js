@@ -260,52 +260,6 @@ const jobDataController = {
             res.status(500).json({ message: 'Error job details: ' + error.message });
         }
     },
-
-
-    // ============================================================
-    // FAVORITE JOBS
-    // ============================================================
-
-    /** Toggle a job as favorite (add if not present, remove if present) */
-    toggleFavorite: async (req, res) => {
-        try {
-            const { jobId } = req.params;
-            const user = req.user;
-
-            const index = user.favorites.indexOf(jobId);
-            if (index > -1) {
-                user.favorites.splice(index, 1);
-                await user.save();
-                return res.json({ favorited: false, message: 'Favorilərdən çıxarıldı' });
-            } else {
-                user.favorites.push(jobId);
-                await user.save();
-                return res.json({ favorited: true, message: 'Favorilərə əlavə edildi' });
-            }
-        } catch (error) {
-            res.status(500).json({ error: error.message });
-        }
-    },
-
-    /** Get user's favorite jobs with full details */
-    getFavorites: async (req, res) => {
-        try {
-            const user = req.user;
-            await user.populate('favorites');
-            res.json({ jobs: user.favorites });
-        } catch (error) {
-            res.status(500).json({ error: error.message });
-        }
-    },
-
-    /** Get just the IDs of favorited jobs (for frontend state) */
-    getFavoriteIds: async (req, res) => {
-        try {
-            res.json({ ids: req.user.favorites });
-        } catch (error) {
-            res.status(500).json({ error: error.message });
-        }
-    }
 };
 
 export default jobDataController;
