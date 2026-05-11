@@ -130,37 +130,3 @@
     </div>
 </section>
 
-<!-- ============================================ -->
-<!-- HOW IT WORKS -->
-<!-- ============================================ -->
-<section class="py-20 sm:py-24 bg-white">
-    <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-14">
-            <h2 class="text-[1.75rem] sm:text-[2.25rem] font-bold text-gray-900 tracking-[-0.015em]">
-                <%= __('howItWorks.title') %>
-            </h2>
-            <p class="text-gray-400 text-base mt-2">
-                <%= __('howItWorks.subtitle') %>
-            </p>
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            <% const steps = [
-                { img: '/Images/Static/WhoWeAre1.png', title: __('howItWorks.step1Title'), desc: __('howItWorks.step1Desc') },
-                { img: '/Images/Static/WhoWeAre3.png', title: __('howItWorks.step2Title'), desc: __('howItWorks.step2Desc') },
-                { img: '/Images/Static/WhoWeAre2.png', title: __('howItWorks.step3Title'), desc: __('howItWorks.step3Desc') },
-                { img: '/Images/Static/WhoWeAre4.png', title: __('howItWorks.step4Title'), desc: __('howItWorks.step4Desc') },
-            ]; %>
-            <% steps.forEach((step, i) => { %>
-                <div class="text-center">
-                    <div class="w-12 h-12 mx-auto mb-5 flex items-center justify-center rounded-full bg-gray-50">
-                        <span class="text-sm font-semibold text-gray-500"><%= i + 1 %></span>
-                    </div>
-                    <img src="<%= step.img %>" alt="<%= step.title %>" class="h-10 w-auto mx-auto mb-4 opacity-60">
-                    <h4 class="text-base font-semibold text-gray-900 mb-1.5"><%= step.title %></h4>
-                    <p class="text-sm text-gray-400 leading-relaxed max-w-[220px] mx-auto"><%= step.desc %></p>
-                </div>
-            <% }); %>
-        </div>
-    </div>
-</section>
