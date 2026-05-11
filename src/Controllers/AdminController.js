@@ -1,3 +1,8 @@
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import multer from 'multer';
+import { v4 as uuidv4 } from 'uuid';
 import Job from '../Models/JobData.js';
 import User from '../Models/User.js';
 import Company from '../Models/Company.js';
@@ -10,6 +15,8 @@ import Visitor from '../Models/Visitor.js';
 import VisitorService from '../Services/VisitorService.js';
 import JobService from '../Services/JobDataService.js';
 import Enums from '../Config/Enums.js';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // ============================================================
 // REVERSE ENUM LOOKUP MAPS
@@ -29,6 +36,34 @@ const _experienceMap = {};
 Object.entries(Enums.Experience).forEach(([key, val]) => {
     _experienceMap[val] = key;
 });
+
+const _siteIdMap = {};
+Object.entries(Enums.SitesWithId).forEach(([key, val]) => {
+    _siteIdMap[val] = key.replace(/([A-Z])/g, ' $1').trim();
+});
+
+// Blog image upload config
+const blogImageStorage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'uploads/blog/');
+    },
+    filename: (req, file, cb) => {
+        const ext = path.extname(file.originalname);
+        cb(null, `blog-${uuidv4()}${ext}`);
+    }
+});
+const uploadBlogImage = multer({
+    storage: blogImageStorage,
+    fileFilter: (req, file, cb) => {
+        const allowed = /\.(jpg|jpeg|png|gif|webp|svg)$/i;
+        if (allowed.test(path.extname(file.originalname))) {
+            cb(null, true);
+        } else {
+            cb(new Error('Only image files (jpg, jpeg, png, gif, webp, svg) are allowed'), false);
+        }
+    },
+    limits: { fileSize: 5 * 1024 * 1024 }
+}).single('image');
 
 // ============================================================
 // VISITOR IP-TO-LOCATION MAPPING (SIMPLIFIED)
@@ -183,6 +218,11 @@ const AdminController = {
         res.render('Admin/Main', view);
     },
 
+    adminLogsView: async (req, res) => {
+        const view = { title: 'Error Logs - Admin Panel', body: "Log/Index.ejs", js: "Log.js" };
+        res.render('Admin/Main', view);
+    },
+
     // ============================================================
     // API - DASHBOARD STATS
     // ============================================================
@@ -231,7 +271,11 @@ const AdminController = {
         Object.entries(Enums.Experience).forEach(([key, val]) => {
             experience[val] = key;
         });
-        res.json({ jobTypes, education, experience });
+        const sites = {};
+        Object.entries(Enums.SitesWithId).forEach(([key, val]) => {
+            sites[val] = key.replace(/([A-Z])/g, ' $1').trim();
+        });
+        res.json({ jobTypes, education, experience, sites });
     },
 
     // ============================================================
@@ -354,7 +398,12 @@ const AdminController = {
             const company = await Company.findById(req.params.id).lean();
             if (!company) return res.status(404).json({ error: 'Company not found' });
             const jobCount = await Job.countDocuments({ companyName: company.companyName });
-            res.json({ ...company, jobCount });
+            const jobs = await Job.find({ companyName: company.companyName })
+                .sort({ createdAt: -1 })
+                .limit(50)
+                .lean();
+            jobs.forEach(job => AdminController._resolveJobEnums(job));
+            res.json({ ...company, jobCount, jobs });
         } catch (error) {
             res.status(500).json({ error: error.message });
         }
@@ -686,6 +735,58 @@ const AdminController = {
         }
     },
 
+    uploadBlogImage: async (req, res) => {
+        uploadBlogImage(req, res, (err) => {
+            if (err) {
+                return res.status(400).json({ error: err.message || 'Image upload failed' });
+            }
+            if (!req.file) {
+                return res.status(400).json({ error: 'No image file provided' });
+            }
+            res.json({ url: `/uploads/blog/${req.file.filename}` });
+        });
+    },
+
+    // ============================================================
+    // API - ERROR LOGS
+    // ============================================================
+
+    getLogs: async (req, res) => {
+        try {
+            const { days = 1 } = req.query;
+            const logsDir = path.join(process.cwd(), 'src', 'Logs');
+            const logFiles = [];
+
+            // Collect log files for the specified number of days
+            for (let i = 0; i < Number(days); i++) {
+                const d = new Date();
+                d.setDate(d.getDate() - i);
+                const dateStr = d.toISOString().slice(0, 10);
+                const filePath = path.join(logsDir, `combined-${dateStr}.log`);
+                if (fs.existsSync(filePath)) {
+                    const content = fs.readFileSync(filePath, 'utf-8').trim();
+                    if (content) {
+                        const lines = content.split('\n').filter(Boolean);
+                        const entries = lines.map(line => {
+                            try { return JSON.parse(line); } catch { return { message: line }; }
+                        }).reverse();
+                        logFiles.push({ date: dateStr, entries });
+                    }
+                }
+            }
+
+            // Flatten and sort by timestamp descending
+            const allEntries = logFiles.flatMap(f => f.entries)
+                .filter(e => e.level === 'error' || (e.message && e.stack))
+                .sort((a, b) => new Date(b.timestamp || 0) - new Date(a.timestamp || 0))
+                .slice(0, 200);
+
+            res.json({ logs: allEntries, total: allEntries.length });
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    },
+
     // ============================================================
     // API - CVs
     // ============================================================
@@ -776,13 +877,13 @@ const AdminController = {
 
             const totalVisits = visitors.reduce((sum, v) => sum + (v.visitCount || 0), 0);
 
-            // Daily stats for chart
+            // Daily stats for chart (count unique visitors per day, not sum of visitCount)
             const dailyStats = await Visitor.aggregate([
-                { $match: { deletedAt: null } },
+                { $match: { deletedAt: null, lastVisit: { $ne: null } } },
                 { $group: {
                     _id: { $dateToString: { format: '%Y-%m-%d', date: '$lastVisit' } },
-                    visits: { $sum: '$visitCount' },
-                    count: { $sum: 1 }
+                    visits: { $sum: 1 },
+                    totalVisitsSum: { $sum: '$visitCount' }
                 }},
                 { $sort: { _id: -1 } },
                 { $limit: 30 }
