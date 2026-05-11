@@ -282,7 +282,13 @@ async function fetchJobs() {
         document.querySelectorAll('.job-card').forEach(card => {
             card.addEventListener('click', function () {
                 const link = this.getAttribute('data-original-link');
-                if (link) window.open(link, '_blank');
+                if (link) {
+                    if (link.startsWith('/')) {
+                        window.location.href = link;
+                    } else {
+                        window.open(link, '_blank');
+                    }
+                }
             });
         });
     } catch (err) {
