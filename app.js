@@ -24,7 +24,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const to = process.env.CRON_MAIL_USER;
 i18n.configure({
     locales: ['az', 'en', 'ru'],
-    directory: path.join(__dirname, 'src', 'locales'),
+    directory: path.join(__dirname, 'src', 'Locales'),
     defaultLocale: 'az',
     cookie: 'lang',
     objectNotation: true,
