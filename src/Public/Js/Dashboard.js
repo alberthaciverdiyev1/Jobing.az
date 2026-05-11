@@ -39,6 +39,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // LOAD USER APPLICATIONS
     // ============================================
     loadUserApplications();
+
+    // ============================================
+    // LOAD FAVORITE JOBS
+    // ============================================
+    loadFavoriteJobs();
 });
 
 // ============================================
@@ -177,4 +182,53 @@ function escapeHtml(text) {
     var d = document.createElement('div');
     d.textContent = text;
     return d.innerHTML;
+}
+
+// ============================================
+// LOAD FAVORITE JOBS
+// ============================================
+async function loadFavoriteJobs() {
+    var container = document.getElementById('favorite-jobs');
+    if (!container) return;
+
+    try {
+        var res = await axios.get('/api/favorites');
+        var jobs = res.data.jobs || [];
+        renderFavoriteJobs(jobs);
+    } catch {
+        container.innerHTML = '<div class="text-center py-8"><p class="text-gray-400 text-sm">Favori işlər yüklənə bilmədi</p></div>';
+    }
+}
+
+function renderFavoriteJobs(jobs) {
+    var container = document.getElementById('favorite-jobs');
+    if (!container) return;
+
+    if (jobs.length === 0) {
+        container.innerHTML = '<div class="text-center py-8">' +
+            '<div class="w-10 h-10 mx-auto bg-gray-100 rounded-full flex items-center justify-center mb-3"><i class="fas fa-heart text-gray-400"></i></div>' +
+            '<p class="text-gray-500 text-sm">Hələ favori işiniz yoxdur</p>' +
+            '<p class="text-xs text-gray-400 mt-1">İş elanlarında ürək işarəsinə klikləyərək favorilərə əlavə edin</p>' +
+            '</div>';
+        return;
+    }
+
+    var html = '<div class="divide-y divide-gray-50">';
+    jobs.forEach(function(job) {
+        var title = job.title || '-';
+        var company = job.companyName || '';
+        var date = job.postedAt ? job.postedAt.slice(0, 10) : '';
+        var link = '/vakansiyalar/' + (job.slug || job.uniqueKey || job._id) + '/details';
+
+        html += '<a href="' + link + '" class="flex items-center justify-between p-5 sm:px-6 hover:bg-gray-50/50 transition-colors group">' +
+            '<div class="min-w-0 flex-1">' +
+            '<p class="font-semibold text-gray-900 text-sm truncate group-hover:text-primary-500 transition-colors">' + escapeHtml(title) + '</p>' +
+            '<p class="text-xs text-gray-400">' + escapeHtml(company) + ' • ' + date + '</p>' +
+            '</div>' +
+            '<button type="button" onclick="event.stopPropagation();event.preventDefault();Favorites.toggle(\'' + job._id + '\',this);loadFavoriteJobs();" class="flex-shrink-0 ml-3 text-red-500 hover:text-red-600 text-base"><i class="fas fa-heart"></i></button>' +
+            '</a>';
+    });
+    html += '</div>';
+
+    container.innerHTML = html;
 }

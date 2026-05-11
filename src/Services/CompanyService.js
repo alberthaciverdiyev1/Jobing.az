@@ -208,6 +208,8 @@ const CompanyService = {
             if (!company) {
                 throw new Error('Company not found');
             }
+            if (company.imageUrl) company.imageUrl = company.imageUrl.replace(/\\/g, '/');
+            if (company.bannerUrl) company.bannerUrl = company.bannerUrl.replace(/\\/g, '/');
             return company;
         } catch (error) {
             throw new Error('Error retrieving company: ' + error.message);
@@ -271,7 +273,7 @@ const CompanyService = {
             }
 
             if (filePath) {
-                filePath = filePath.replace(/\//g, '\\');
+                filePath = filePath.replace(/\\/g, '/');
             }
             data.imageUrl = filePath || null;
             if (data.companyName) {
@@ -292,7 +294,14 @@ const CompanyService = {
      */
     findByCompanyName: async (companyName) => {
         try {
-            return await Company.findOne({ companyName }).lean();
+            const company = await Company.findOne({ companyName }).lean();
+            if (company && company.imageUrl) {
+                company.imageUrl = company.imageUrl.replace(/\\/g, '/');
+            }
+            if (company && company.bannerUrl) {
+                company.bannerUrl = company.bannerUrl.replace(/\\/g, '/');
+            }
+            return company;
         } catch (error) {
             throw new Error('Error finding company: ' + error.message);
         }

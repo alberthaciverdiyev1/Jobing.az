@@ -153,11 +153,13 @@ const JobDataService = {
 
             const totalCount = await JobData.countDocuments(query);
 
-            const jobsWithImageUrl = jobs.map(job => ({
-                ...job.toObject(),
-                companyImageUrl: job.companyDetails?.imageUrl || null
-
-            }));
+            const jobsWithImageUrl = jobs.map(job => {
+                const companyImageUrl = job.companyDetails?.imageUrl || null;
+                return {
+                    ...job.toObject(),
+                    companyImageUrl: companyImageUrl ? companyImageUrl.replace(/\\/g, '/') : null,
+                };
+            });
 
             jobsWithImageUrl.forEach(job => {
                 if (!seenUrls.has(job.redirectUrl)) {
