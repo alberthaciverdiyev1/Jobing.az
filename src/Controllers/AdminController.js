@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import os from 'os';
 import { fileURLToPath } from 'url';
 import multer from 'multer';
 import { v4 as uuidv4 } from 'uuid';
@@ -755,37 +756,90 @@ const AdminController = {
     // API - ERROR LOGS
     // ============================================================
 
+    // Read entries from a log file (supports both JSON-lines and plain text)
+    readLogFile: (filePath, maxLines = 500) => {
+        if (!fs.existsSync(filePath)) return [];
+        const content = fs.readFileSync(filePath, 'utf-8').trim();
+        if (!content) return [];
+        const lines = content.split('\n').filter(Boolean).slice(-maxLines);
+        return lines.map(line => {
+            try { return JSON.parse(line); } catch { return { message: line, timestamp: new Date().toISOString() }; }
+        });
+    },
+
+    // Read PM2 log files if they exist
+    readPm2Logs: (days = 1) => {
+        const entries = [];
+        const pm2Paths = [
+            path.join(os.homedir(), '.pm2', 'logs'),
+            path.join(os.homedir(), '.pm2', 'log'),
+            '/root/.pm2/logs',
+        ];
+
+        const cutoff = new Date();
+        cutoff.setDate(cutoff.getDate() - days);
+
+        for (const dir of pm2Paths) {
+            if (!fs.existsSync(dir)) continue;
+            try {
+                const files = fs.readdirSync(dir).filter(f => f.endsWith('-error.log') || f.endsWith('-out.log'));
+                for (const file of files) {
+                    const filePath = path.join(dir, file);
+                    const stats = fs.statSync(filePath);
+                    if (stats.mtime < cutoff) continue;
+
+                    const fileEntries = AdminController.readLogFile(filePath, 200);
+                    for (const entry of fileEntries) {
+                        entries.push({
+                            message: entry.message || entry,
+                            timestamp: entry.timestamp || stats.mtime.toISOString(),
+                            level: 'error',
+                            source: 'pm2',
+                            file: file,
+                        });
+                    }
+                }
+            } catch {}
+        }
+        return entries;
+    },
+
     getLogs: async (req, res) => {
         try {
             const { days = 1 } = req.query;
             const logsDir = path.join(process.cwd(), 'src', 'Logs');
-            const logFiles = [];
+            const allEntries = [];
 
-            // Collect log files for the specified number of days
+            // 1. Read Winston log files (JSON format)
+            const logFiles = [];
             for (let i = 0; i < Number(days); i++) {
                 const d = new Date();
                 d.setDate(d.getDate() - i);
                 const dateStr = d.toISOString().slice(0, 10);
                 const filePath = path.join(logsDir, `combined-${dateStr}.log`);
-                if (fs.existsSync(filePath)) {
-                    const content = fs.readFileSync(filePath, 'utf-8').trim();
-                    if (content) {
-                        const lines = content.split('\n').filter(Boolean);
-                        const entries = lines.map(line => {
-                            try { return JSON.parse(line); } catch { return { message: line }; }
-                        }).reverse();
-                        logFiles.push({ date: dateStr, entries });
+                const fileEntries = AdminController.readLogFile(filePath);
+                if (fileEntries.length > 0) {
+                    logFiles.push({ date: dateStr, entries: fileEntries.reverse() });
+                }
+            }
+
+            for (const f of logFiles) {
+                for (const entry of f.entries) {
+                    if (entry.level === 'error' || (entry.message && entry.stack)) {
+                        allEntries.push(entry);
                     }
                 }
             }
 
-            // Flatten and sort by timestamp descending
-            const allEntries = logFiles.flatMap(f => f.entries)
-                .filter(e => e.level === 'error' || (e.message && e.stack))
-                .sort((a, b) => new Date(b.timestamp || 0) - new Date(a.timestamp || 0))
-                .slice(0, 200);
+            // 2. Read PM2 log files
+            const pm2Entries = AdminController.readPm2Logs(Number(days));
+            allEntries.push(...pm2Entries);
 
-            res.json({ logs: allEntries, total: allEntries.length });
+            // Sort by timestamp descending
+            allEntries.sort((a, b) => new Date(b.timestamp || 0) - new Date(a.timestamp || 0));
+            const limited = allEntries.slice(0, 200);
+
+            res.json({ logs: limited, total: limited.length });
         } catch (error) {
             res.status(500).json({ error: error.message });
         }
