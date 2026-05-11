@@ -169,6 +169,9 @@ router.get('/admin/settings', authMiddleware.authenticate, authMiddleware.author
 // Dashboard
 router.get('/api/admin/stats', authMiddleware.authenticate, authMiddleware.authorize('admin'), adminController.dashboardStats);
 
+// Enums (for client-side resolution)
+router.get('/api/admin/enums', authMiddleware.authenticate, authMiddleware.authorize('admin'), adminController.getEnums);
+
 // Jobs
 router.get('/api/admin/jobs', authMiddleware.authenticate, authMiddleware.authorize('admin'), adminController.getJobs);
 router.get('/api/admin/jobs/:id', authMiddleware.authenticate, authMiddleware.authorize('admin'), adminController.getJob);

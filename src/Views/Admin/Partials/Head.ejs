@@ -20,7 +20,8 @@
       .sidebar-active { background-color: #eef2ff !important; color: #4f46e5 !important; }
       .sidebar-active svg { color: #4f46e5 !important; }
       .modal-open { overflow: hidden; }
-      .table-row-hover:hover { background-color: #f8fafc; }
+      .modal-overlay { background: rgba(0,0,0,0.5); position: fixed; inset: 0; z-index: 50; }
+      .modal-content { position: relative; z-index: 51; }
       .badge { display: inline-flex; align-items: center; padding: 0.125rem 0.625rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 500; }
       .badge-green { background-color: #dcfce7; color: #166534; }
       .badge-red { background-color: #fee2e2; color: #991b1b; }
@@ -30,18 +31,12 @@
       .badge-gray { background-color: #f3f4f6; color: #374151; }
       .sidebar-link.active { background-color: #eef2ff !important; color: #4f46e5 !important; }
       .sidebar-link.active svg { color: #4f46e5 !important; }
+      /* Ensure modals are above everything */
+      .fixed.inset-0.z-50 { z-index: 9998 !important; }
+      /* CKEditor inside modal fix */
+      .ck-editor__editable { min-height: 200px; }
+      .ck.ck-editor { width: 100% !important; }
+      /* Pagination button styles */
+      .pagination-btn { transition: all 0.15s ease; }
     </style>
-    <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        var path = window.location.pathname;
-        document.querySelectorAll('.sidebar-link').forEach(function(link) {
-          var href = link.getAttribute('href');
-          if (href && href !== '/admin/dashboard' && path.startsWith(href)) {
-            link.classList.add('active');
-          } else if (href === '/admin/dashboard' && (path === '/admin' || path === '/admin/dashboard')) {
-            link.classList.add('active');
-          }
-        });
-      });
-    </script>
 </head>
