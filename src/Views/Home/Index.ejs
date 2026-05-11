@@ -32,9 +32,10 @@
                                        class="w-full pl-10 pr-4 py-3.5 bg-transparent border-0 focus:outline-none text-sm placeholder:text-gray-300 rounded-xl">
                             </div>
                             <div class="sm:w-44 relative">
-                                <i class="fas fa-map-marker-alt absolute left-4 top-1/2 -translate-y-1/2 text-gray-300 text-sm"></i>
+                                <i class="fas fa-map-marker-alt absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm z-10"></i>
+                                <i class="fas fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-gray-300 text-[10px] pointer-events-none"></i>
                                 <select id="city-select" name="cityId"
-                                        class="w-full pl-10 pr-8 py-3.5 bg-transparent border-0 focus:outline-none text-sm appearance-none cursor-pointer text-gray-400 rounded-xl">
+                                        class="w-full pl-10 pr-8 py-3.5 bg-gray-50 border border-gray-200 focus:border-primary-300 focus:ring-2 focus:ring-primary-500/10 text-sm appearance-none cursor-pointer text-gray-500 hover:border-gray-300 hover:bg-gray-100/50 transition-all rounded-xl outline-none">
                                     <option value="" class="text-gray-400"><%= __('hero.cityPlaceholder') %></option>
                                 </select>
                             </div>
@@ -57,8 +58,8 @@
                 </div>
             </div>
 
-            <!-- Right Illustration — 3/7 width -->
-            <div class="w-full lg:w-[42.86%] flex-shrink-0">
+            <!-- Right Illustration — 3/7 width (hidden on mobile) -->
+            <div class="hidden lg:block w-full lg:w-[42.86%] flex-shrink-0">
                 <div class="relative max-w-[520px] mx-auto">
                     <!-- Main illustration SVG -->
                     <svg viewBox="0 0 520 480" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-auto">
