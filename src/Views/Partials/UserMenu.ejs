@@ -14,9 +14,9 @@
         <div class="px-4 py-3 border-b border-gray-50">
             <p class="font-semibold text-gray-900 text-sm"><%= user.name %> <%= user.surname %></p>
             <p class="text-xs text-gray-400"><%= user.email %></p>
-            <span class="inline-flex items-center gap-1 mt-1.5 px-2 py-0.5 rounded-md text-[10px] font-medium <%= user.role === 'company' ? 'bg-purple-50 text-purple-700' : 'bg-primary-50 text-primary-700' %>">
-                <i class="fas <%= user.role === 'company' ? 'fa-building' : 'fa-user' %>"></i>
-                <%= user.role === 'company' ? 'Şirkət' : 'İstifadəçi' %>
+            <span class="inline-flex items-center gap-1 mt-1.5 px-2 py-0.5 rounded-md text-[10px] font-medium <%= user.role === 'company' ? 'bg-purple-50 text-purple-700' : user.role === 'hr' ? 'bg-emerald-50 text-emerald-700' : 'bg-primary-50 text-primary-700' %>">
+                <i class="fas <%= user.role === 'company' ? 'fa-building' : user.role === 'hr' ? 'fa-users' : 'fa-user' %>"></i>
+                <%= user.role === 'company' ? 'Şirkət' : user.role === 'hr' ? 'HR' : 'İstifadəçi' %>
             </span>
         </div>
 
@@ -26,6 +26,23 @@
                 <a href="/company/dashboard" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-600 transition-colors">
                     <i class="fas fa-chart-pie w-4 text-center text-gray-400"></i>
                     Şirkət Paneli
+                </a>
+                <a href="/hr/dashboard" class="flex items-center gap-3 px-4 py-2.5 text-sm text-emerald-600 hover:bg-emerald-50 transition-colors">
+                    <i class="fas fa-users w-4 text-center"></i>
+                    HR Panel
+                </a>
+                <a href="/add-job" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-600 transition-colors">
+                    <i class="fas fa-plus-circle w-4 text-center text-gray-400"></i>
+                    Yeni Elan
+                </a>
+            <% } else if (user.role === 'hr') { %>
+                <a href="/hr/dashboard" class="flex items-center gap-3 px-4 py-2.5 text-sm text-emerald-600 hover:bg-emerald-50 transition-colors">
+                    <i class="fas fa-users w-4 text-center"></i>
+                    HR Panel
+                </a>
+                <a href="/dashboard" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-600 transition-colors">
+                    <i class="fas fa-chart-pie w-4 text-center text-gray-400"></i>
+                    Mənim Panelim
                 </a>
                 <a href="/add-job" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-600 transition-colors">
                     <i class="fas fa-plus-circle w-4 text-center text-gray-400"></i>

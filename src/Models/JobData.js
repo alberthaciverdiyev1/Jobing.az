@@ -97,6 +97,11 @@ const jobSchema = new Schema({
         type: Date,
         default: Date.now
     },
+    postedBy: {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+        default: null
+    },
     sourceUrl: {
         type: String,
         required: true

@@ -27,7 +27,7 @@ const userSchema = new Schema({
     },
     role: {
         type: String,
-        enum: ['user', 'company', 'admin'],
+        enum: ['user', 'company', 'hr', 'admin'],
         default: 'user'
     },
     companyName: {
@@ -35,6 +35,10 @@ const userSchema = new Schema({
         default: null,
         trim: true
     },
+    companyIds: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Company'
+    }],
     phone: {
         type: String,
         default: ''

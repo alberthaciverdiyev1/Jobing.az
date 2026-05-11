@@ -16,6 +16,7 @@
           <option value="">All Roles</option>
           <option value="user">User</option>
           <option value="company">Company</option>
+          <option value="hr">HR</option>
           <option value="admin">Admin</option>
         </select>
       </div>
@@ -80,9 +81,10 @@
           </div>
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-1">Role</label>
-            <select id="userRole" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500">
+            <select id="userRole" onchange="toggleCompanySelect()" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500">
               <option value="user">User</option>
               <option value="company">Company</option>
+              <option value="hr">HR</option>
               <option value="admin">Admin</option>
             </select>
           </div>
@@ -94,6 +96,11 @@
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-1">Company Name</label>
           <input type="text" id="userCompanyName" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500">
+        </div>
+        <div id="companyIdsField" class="hidden">
+          <label class="block text-sm font-medium text-gray-700 mb-1">Assigned Companies (HR)</label>
+          <select id="userCompanyIds" multiple class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500" style="min-height: 100px;"></select>
+          <p class="text-xs text-gray-400 mt-1">Hold Ctrl/Cmd to select multiple</p>
         </div>
         <div class="flex justify-end gap-3 pt-4">
           <button type="button" onclick="closeUserModal()" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 text-sm">Cancel</button>
