@@ -17,7 +17,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         const res = await axios.delete(`/api/cv/${cvId}`);
                         if (res.status === 200) {
                             alertify.success('CV silindi');
-                            // Remove the list item with animation
                             const item = this.closest('[class*="flex items-center justify-between"]');
                             if (item) {
                                 item.style.transition = 'all 0.3s ease';
@@ -25,14 +24,13 @@ document.addEventListener('DOMContentLoaded', () => {
                                 item.style.transform = 'translateX(20px)';
                                 setTimeout(() => item.remove(), 300);
                             }
-                            // Update counters
                             setTimeout(() => window.location.reload(), 500);
                         }
                     } catch (err) {
                         alertify.error(err.response?.data?.error || 'Xəta baş verdi');
                     }
                 },
-                () => {} // cancel
+                () => {}
             ).set('labels', { ok: 'Sil', cancel: 'İmtina' });
         });
     });
@@ -43,6 +41,39 @@ document.addEventListener('DOMContentLoaded', () => {
     loadUserApplications();
 });
 
+// ============================================
+// RESPOND MODAL
+// ============================================
+function showUserRespondModal(applicationId) {
+    document.getElementById('respondApplicationId').value = applicationId;
+    document.getElementById('respondMessage').value = '';
+    document.getElementById('userRespondModal').classList.remove('hidden');
+    document.body.classList.add('modal-open');
+}
+
+function closeRespondModal() {
+    document.getElementById('userRespondModal').classList.add('hidden');
+    document.body.classList.remove('modal-open');
+}
+
+async function submitUserRespond() {
+    const id = document.getElementById('respondApplicationId').value;
+    const message = document.getElementById('respondMessage').value.trim();
+    if (!id) return;
+
+    try {
+        await axios.put('/api/applications/' + id + '/respond', { message });
+        alertify.success('Cavabınız göndərildi');
+        closeRespondModal();
+        loadUserApplications();
+    } catch (err) {
+        alertify.error(err.response?.data?.error || 'Xəta baş verdi');
+    }
+}
+
+// ============================================
+// LOAD APPLICATIONS
+// ============================================
 async function loadUserApplications() {
     var container = document.getElementById('user-applications');
     if (!container) return;
@@ -75,31 +106,48 @@ function renderApplications(applications) {
         var statusBadge = getUserStatusBadge(a.status);
         var appliedDate = a.createdAt ? new Date(a.createdAt).toLocaleDateString('az-AZ') : '-';
 
-        html += '<div class="flex items-center justify-between p-5 sm:px-6 hover:bg-gray-50/50 transition-colors">' +
-            '<div class="min-w-0">' +
+        html += '<div class="p-5 sm:px-6 hover:bg-gray-50/50 transition-colors">' +
+            '<div class="flex items-center justify-between">' +
+            '<div class="min-w-0 flex-1">' +
             '<p class="font-semibold text-gray-900 text-sm truncate">' + jobTitle + '</p>' +
             '<p class="text-xs text-gray-400">' + companyName + ' • ' + appliedDate + '</p>';
 
-        // Show company response
+        // Show company response (for accepted, rejected, or interview)
         if (a.companyResponse && a.companyResponse.decision) {
-            var respText = escapeHtml(a.companyResponse.reason || '');
-            if (respText) {
-                html += '<p class="text-xs text-gray-500 mt-1">Cavab: ' + respText + '</p>';
-            }
-            // Show respond link if user hasn't responded and has a decision
+            var decisionLabel = a.companyResponse.decision === 'rejected' ? 'Rədd edildi' : 'Qəbul edildi';
+            var respText = a.companyResponse.reason ? escapeHtml(a.companyResponse.reason) : '';
+            html += '<div class="mt-2 p-2.5 rounded-lg ' + (a.companyResponse.decision === 'rejected' ? 'bg-red-50 border border-red-100' : 'bg-green-50 border border-green-100') + '">' +
+                '<p class="text-xs font-medium ' + (a.companyResponse.decision === 'rejected' ? 'text-red-600' : 'text-green-600') + '">' + decisionLabel + '</p>' +
+                (respText ? '<p class="text-xs text-gray-600 mt-0.5">' + respText + '</p>' : '') +
+                '</div>';
+
+            // Show respond button if user hasn't responded yet
             if (!a.userResponse || !a.userResponse.respondedAt) {
-                html += '<button onclick="showUserRespondModal(\'' + a._id + '\')" class="text-xs text-primary-500 hover:text-primary-700 mt-1">Cavabla</button>';
+                html += '<button onclick="showUserRespondModal(\'' + a._id + '\')" class="text-xs text-primary-500 hover:text-primary-700 mt-1.5 font-medium">Cavabla</button>';
             }
+        }
+
+        // Show user's own response after they've responded
+        if (a.userResponse && a.userResponse.respondedAt) {
+            var userMsg = a.userResponse.message ? escapeHtml(a.userResponse.message) : '';
+            html += '<div class="mt-2 p-2.5 rounded-lg bg-gray-50 border border-gray-100">' +
+                '<p class="text-xs font-medium text-gray-500">Sizin cavabınız</p>' +
+                (userMsg ? '<p class="text-xs text-gray-700 mt-0.5">' + userMsg + '</p>' : '<p class="text-xs text-gray-400 mt-0.5 italic">Cavab göndərildi</p>') +
+                '</div>';
         }
 
         // Show interview info
         if (a.interview && a.interview.scheduledAt) {
             var intDate = new Date(a.interview.scheduledAt).toLocaleString('az-AZ');
-            html += '<p class="text-xs text-amber-600 mt-1"><i class="fas fa-calendar"></i> Müsahibə: ' + intDate + '</p>';
+            html += '<div class="mt-2 p-2.5 rounded-lg bg-amber-50 border border-amber-100">' +
+                '<p class="text-xs font-medium text-amber-600"><i class="fas fa-calendar mr-1"></i>Müsahibə təyin edildi</p>' +
+                '<p class="text-xs text-gray-600 mt-0.5">' + intDate + '</p>' +
+                '</div>';
         }
 
         html += '</div>' +
-            '<div class="flex-shrink-0">' + statusBadge + '</div>' +
+            '<div class="flex-shrink-0 ml-3">' + statusBadge + '</div>' +
+            '</div>' +
             '</div>';
     });
     html += '</div>';
@@ -122,24 +170,6 @@ function getUserStatusBadge(status) {
         'interview': 'Müsahibə'
     };
     return '<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ' + cls + '">' + (labels[status] || status) + '</span>';
-}
-
-function showUserRespondModal(applicationId) {
-    alertify.prompt(
-        'Cavabınız',
-        'Şirkətin qərarına cavabınızı yazın',
-        '',
-        async function(evt, value) {
-            try {
-                await axios.put('/api/applications/' + applicationId + '/respond', { message: value || '' });
-                alertify.success('Cavabınız göndərildi');
-                loadUserApplications();
-            } catch (err) {
-                alertify.error(err.response?.data?.error || 'Xəta baş verdi');
-            }
-        },
-        function() {}
-    ).set('labels', { ok: 'Göndər', cancel: 'İmtina' });
 }
 
 function escapeHtml(text) {

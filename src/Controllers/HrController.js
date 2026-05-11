@@ -139,6 +139,7 @@ const HrController = {
             res.json({
                 totalJobs,
                 activeJobs,
+                pendingApplications: appStats.pending,
                 totalApplications,
                 interviewCount,
                 companyNames,
