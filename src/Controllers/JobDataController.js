@@ -188,6 +188,7 @@ const jobDataController = {
                 return res.status(403).json({ error: 'Users cannot post jobs' });
             }
             let description = `${req.body.data.aboutJob + '<h4 class="text-lg font-bold text-gray-800">Tələblər:</h4>' + req.body.data.requirements}`;
+            const uniqueKey = req.body.data.position + '-' + req.body.data.companyName + '-' + req.body.data.city + '-' + Date.now();
             let data = {
                 title: req.body.data.position,
                 description: description,
@@ -207,8 +208,8 @@ const jobDataController = {
                 isActive: false,
                 email: req.body.data.email,
                 phone: req.body.data.phone,
-                redirectUrl: "#",
-                uniqueKey: req.body.data.position + req.body.data.companyName + req.body.data.city,
+                redirectUrl: '/vakansiyalar/' + encodeURIComponent(uniqueKey) + '/details',
+                uniqueKey,
             }
             // companyImage: null,
             const companyData ={
