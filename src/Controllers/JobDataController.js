@@ -267,6 +267,11 @@ const jobDataController = {
 
 
             res.render('Main', view);
+
+            // Fire-and-forget: increment view count without blocking response
+            if (data._id) {
+                JobService.incrementViewCount(data._id).catch(() => {});
+            }
         } catch (error) {
             res.status(500).json({ message: 'Error job details: ' + error.message });
         }

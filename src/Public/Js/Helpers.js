@@ -67,7 +67,7 @@ export function createJobCard(element, compact = false) {
 
     if (compact) {
         // ————— COMPACT CARD (homepage grid, bigger) —————
-        return `<div class="job-card group bg-white border border-gray-200 rounded-xl p-5 cursor-pointer transition-all duration-200 hover:border-gray-300 hover:shadow-lg hover:-translate-y-1 active:border-gray-400" data-original-link="${detailLink}">
+        return `<div class="job-card group bg-white rounded-xl p-5 cursor-pointer transition-all duration-200 hover:shadow-lg hover:-translate-y-1" style="border: 1px solid #d1d5db;" data-original-link="${detailLink}">
             <div class="flex items-start gap-4">
                 <div class="w-14 h-14 rounded-xl bg-gray-50 border border-gray-100 flex-shrink-0 overflow-hidden flex items-center justify-center shadow-sm">
                     <img src="${logoUrl}" alt="${company}" class="w-full h-full object-cover" onerror="${imgError}">
@@ -88,7 +88,7 @@ export function createJobCard(element, compact = false) {
     }
 
     // ————— FULL CARD (vacancies listing page, bigger) —————
-    return `<div class="job-card group bg-white border border-gray-200 rounded-xl p-6 cursor-pointer transition-all duration-200 hover:border-gray-300 hover:shadow-lg hover:-translate-y-1 active:border-gray-400" data-original-link="${detailLink}">
+    return `<div class="job-card group bg-white rounded-xl p-6 cursor-pointer transition-all duration-200 hover:shadow-lg hover:-translate-y-1" style="border: 1px solid #d1d5db;" data-original-link="${detailLink}">
         <div class="flex gap-5">
             <div class="w-16 h-16 rounded-xl bg-gray-50 border border-gray-100 flex-shrink-0 overflow-hidden flex items-center justify-center shadow-sm">
                 <img src="${logoUrl}" alt="${company}" class="w-full h-full object-cover" onerror="${imgError}">

@@ -1,7 +1,14 @@
 import CVService from '../Services/CVService.js';
 import multer from 'multer';
 import path from 'path';
+import fs from 'fs';
 import { v4 as uuidv4 } from 'uuid';
+
+// Ensure upload directory exists
+const cvDir = 'uploads/cv/';
+if (!fs.existsSync(cvDir)) {
+    fs.mkdirSync(cvDir, { recursive: true });
+}
 
 // Configure multer for CV file uploads
 const storage = multer.diskStorage({

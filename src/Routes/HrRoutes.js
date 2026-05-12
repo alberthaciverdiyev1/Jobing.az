@@ -11,6 +11,7 @@ const hrAuth = [authMiddleware.authenticate, authMiddleware.authorize('company',
 router.get('/hr', ...hrAuth, hrController.hrDashboard);
 router.get('/hr/dashboard', ...hrAuth, hrController.hrDashboard);
 router.get('/hr/jobs', ...hrAuth, hrController.hrJobsView);
+router.get('/hr/jobs/:id', ...hrAuth, hrController.hrJobDetailView);
 router.get('/hr/applications', ...hrAuth, hrController.hrApplicationsView);
 router.get('/hr/applications/:id', ...hrAuth, hrController.hrApplicationDetailView);
 router.get('/hr/interviews', ...hrAuth, hrController.hrInterviewsView);
@@ -20,6 +21,7 @@ router.get('/hr/interviews', ...hrAuth, hrController.hrInterviewsView);
 // ============================================================
 router.get('/api/hr/stats', ...hrAuth, hrController.getStats);
 router.get('/api/hr/jobs', ...hrAuth, hrController.getJobs);
+router.get('/api/hr/jobs/:id', ...hrAuth, hrController.getJob);
 router.post('/api/hr/jobs', ...hrAuth, hrController.createJob);
 router.put('/api/hr/jobs/:id', ...hrAuth, hrController.updateJob);
 router.patch('/api/hr/jobs/:id/toggle', ...hrAuth, hrController.toggleJobActive);

@@ -1,6 +1,7 @@
 let currentPage = 1;
 let jobTypesMap = {};
 let categories = [];
+let applicationCounts = {};
 
 document.addEventListener('DOMContentLoaded', () => {
     loadEnums();
@@ -25,13 +26,13 @@ async function loadEnums() {
 
 async function loadCategories() {
     try {
-        var res = await axios.get('/api/admin/categories');
+        var res = await axios.get('/api/categories');
         categories = res.data || [];
         var sel = document.getElementById('jobCategory');
         if (sel) {
             sel.innerHTML = '<option value="">Select Category</option>';
             categories.forEach(function(c) {
-                sel.innerHTML += '<option value="' + (c.categoryId || c._id) + '">' + (c.categoryName || c.name) + '</option>';
+                sel.innerHTML += '<option value="' + c.localCategoryId + '">' + c.categoryName + '</option>';
             });
         }
     } catch (err) { console.error(err); }
@@ -74,10 +75,18 @@ async function loadJobs(page) {
 
         var res = await axios.get('/api/hr/jobs', { params: params });
         var data = res.data;
+        // Fetch application counts for all jobs
+        if (data.jobs && data.jobs.length > 0) {
+            var ids = data.jobs.map(function(j) { return j._id; }).join(',');
+            try {
+                var countRes = await axios.get('/api/hr/application-counts', { params: { jobIds: ids } });
+                applicationCounts = countRes.data || {};
+            } catch (e) { /* silent */ }
+        }
         renderJobs(data);
     } catch (err) {
         var tbody = document.getElementById('jobsTableBody');
-        if (tbody) tbody.innerHTML = '<tr><td colspan="6" class="px-5 py-8 text-center text-red-400">Error: ' + err.message + '</td></tr>';
+        if (tbody) tbody.innerHTML = '<tr><td colspan="7" class="px-5 py-8 text-center text-red-400">Error: ' + err.message + '</td></tr>';
     }
 }
 
@@ -86,7 +95,7 @@ function renderJobs(data) {
     if (!tbody) return;
 
     if (!data.jobs || data.jobs.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="6" class="px-5 py-8 text-center text-gray-400">No jobs found</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="7" class="px-5 py-8 text-center text-gray-400">No jobs found</td></tr>';
         var pag = document.getElementById('pagination');
         if (pag) pag.innerHTML = '';
         return;
@@ -97,10 +106,11 @@ function renderJobs(data) {
             '<td class="px-5 py-3 font-medium">' + escapeHtml(j.title) + '</td>' +
             '<td class="px-5 py-3 text-sm text-gray-500">' + escapeHtml(j.companyName || '-') + '</td>' +
             '<td class="px-5 py-3"><span class="px-2 py-1 text-xs rounded-full ' + (j.isActive ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700') + '">' + (j.isActive ? 'Active' : 'Inactive') + '</span></td>' +
-            '<td class="px-5 py-3 text-sm text-gray-500">-</td>' +
+            '<td class="px-5 py-3 text-sm text-gray-500">' + ((applicationCounts[j._id] && applicationCounts[j._id].total) || '-') + '</td>' +
             '<td class="px-5 py-3 text-sm text-gray-500">' + (j.createdAt ? new Date(j.createdAt).toLocaleDateString() : '-') + '</td>' +
             '<td class="px-5 py-3 text-right">' +
-            '<button onclick="toggleJob(\'' + j._id + '\')" class="px-2 py-1 text-xs ' + (j.isActive ? 'text-red-600 hover:bg-red-50' : 'text-green-600 hover:bg-green-50') + ' rounded">' + (j.isActive ? 'Deactivate' : 'Activate') + '</button>' +
+            '<a href="/hr/jobs/' + j._id + '" class="px-2 py-1 text-xs text-emerald-600 hover:bg-emerald-50 rounded">View</a>' +
+            '<button onclick="toggleJob(\'' + j._id + '\')" class="px-2 py-1 text-xs ' + (j.isActive ? 'text-red-600 hover:bg-red-50' : 'text-green-600 hover:bg-green-50') + ' rounded ml-1">' + (j.isActive ? 'Deactivate' : 'Activate') + '</button>' +
             '<button onclick="editJob(\'' + j._id + '\')" class="px-2 py-1 text-xs text-blue-600 hover:bg-blue-50 rounded ml-1">Edit</button>' +
             '</td>' +
             '</tr>';
@@ -124,23 +134,9 @@ function renderPagination(data) {
     }
 }
 
-function openCreateModal() {
-    document.getElementById('modalTitle').textContent = 'Post New Job';
-    document.getElementById('jobId').value = '';
-    ['jobTitle', 'jobLocation', 'jobEmail', 'jobPhone', 'jobMinSalary', 'jobMaxSalary', 'jobDescription'].forEach(function(id) {
-        var el = document.getElementById(id);
-        if (el) el.value = '';
-    });
-    ['jobCompany', 'jobType', 'jobCategory'].forEach(function(id) {
-        var el = document.getElementById(id);
-        if (el) el.selectedIndex = 0;
-    });
-    document.getElementById('jobModal').classList.remove('hidden');
-}
-
 async function editJob(id) {
     try {
-        var res = await axios.get('/api/admin/jobs/' + id);
+        var res = await axios.get('/api/hr/jobs/' + id);
         var j = res.data;
         document.getElementById('modalTitle').textContent = 'Edit Job';
         document.getElementById('jobId').value = j._id;

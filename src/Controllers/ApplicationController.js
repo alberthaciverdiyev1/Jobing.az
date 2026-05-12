@@ -1,6 +1,7 @@
 import ApplicationService from '../Services/ApplicationService.js';
 import Application from '../Models/Application.js';
 import JobData from '../Models/JobData.js';
+import Company from '../Models/Company.js';
 
 const ApplicationController = {
     getMyApplications: async (req, res) => {
@@ -30,11 +31,14 @@ const ApplicationController = {
                 return res.status(404).json({ error: 'Vakansiya tapılmadı' });
             }
 
+            // Look up company by name to get ObjectId for HR panel filtering
+            const company = await Company.findOne({ companyName: job.companyName }).lean();
             const application = await ApplicationService.create({
                 jobId,
                 cvId,
                 userId: req.user._id,
-                companyName: job.companyName || ''
+                companyName: job.companyName || '',
+                companyId: company?._id || null
             });
 
             res.status(201).json({ message: 'Müraciətiniz qeydə alındı', application });

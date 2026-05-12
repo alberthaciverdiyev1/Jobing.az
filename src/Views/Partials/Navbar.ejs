@@ -2,7 +2,7 @@
     <div class="max-w-[1440px] mx-auto flex justify-between items-center py-3 px-3 sm:px-4 lg:px-6">
         <!-- Logo -->
         <a href="/" class="flex-shrink-0">
-            <img src="/Images/Static/Logo.png" alt="Jobing.az" class="hidden sm:block h-12 lg:h-14 w-auto transition-all duration-300">
+            <img src="/Images/Static/Logo.png" alt="Jobing.az" class="hidden sm:block h-16 lg:h-14 w-auto transition-all duration-300">
             <img src="/Images/Static/LogoMobile.png" alt="Jobing.az" class="block sm:hidden h-8 w-auto">
         </a>
 
@@ -31,7 +31,14 @@
                 </a>
                 <% } %>
 
-                <!-- Language Switcher -->
+                <!-- Desktop Language Toggle Buttons (segmented style from mobile) -->
+                <div class="hidden md:flex items-center gap-0.5 bg-gray-100 rounded-lg p-0.5">
+                    <button onclick="changeLang('az')" class="px-2.5 py-1.5 text-xs font-semibold uppercase rounded-md transition-all <%= (typeof locale !== 'undefined' && locale === 'az') ? 'bg-white text-primary-500 shadow-sm' : 'text-gray-500 hover:text-gray-700' %>">AZ</button>
+                    <button onclick="changeLang('en')" class="px-2.5 py-1.5 text-xs font-semibold uppercase rounded-md transition-all <%= (typeof locale !== 'undefined' && locale === 'en') ? 'bg-white text-primary-500 shadow-sm' : 'text-gray-500 hover:text-gray-700' %>">EN</button>
+                    <button onclick="changeLang('ru')" class="px-2.5 py-1.5 text-xs font-semibold uppercase rounded-md transition-all <%= (typeof locale !== 'undefined' && locale === 'ru') ? 'bg-white text-primary-500 shadow-sm' : 'text-gray-500 hover:text-gray-700' %>">RU</button>
+                </div>
+
+                <!-- Language Switcher Dropdown (shown on both desktop and mobile) -->
                 <div class="relative" id="lang-switcher">
                     <button onclick="toggleLangDropdown()" class="flex items-center gap-1.5 px-2.5 py-2 rounded-lg text-gray-500 hover:text-primary-500 hover:bg-gray-50 transition-all text-sm font-medium">
                         <i class="fas fa-globe text-xs"></i>
@@ -68,11 +75,18 @@
                 <i class="fas fa-user"></i>
             </a>
 
-            <!-- Mobile Language Toggle -->
-            <div class="flex items-center gap-0.5 bg-gray-100 rounded-lg p-0.5">
-                <button onclick="changeLang('az')" class="px-2 py-1 text-[11px] font-semibold uppercase rounded-md transition-all <%= (typeof locale !== 'undefined' && locale === 'az') ? 'bg-white text-primary-500 shadow-sm' : 'text-gray-500 hover:text-gray-700' %>">AZ</button>
-                <button onclick="changeLang('en')" class="px-2 py-1 text-[11px] font-semibold uppercase rounded-md transition-all <%= (typeof locale !== 'undefined' && locale === 'en') ? 'bg-white text-primary-500 shadow-sm' : 'text-gray-500 hover:text-gray-700' %>">EN</button>
-                <button onclick="changeLang('ru')" class="px-2 py-1 text-[11px] font-semibold uppercase rounded-md transition-all <%= (typeof locale !== 'undefined' && locale === 'ru') ? 'bg-white text-primary-500 shadow-sm' : 'text-gray-500 hover:text-gray-700' %>">RU</button>
+            <!-- Mobile Language Dropdown (only, no segmented buttons) -->
+            <div class="relative">
+                <button onclick="toggleLangDropdownMobile()" class="flex items-center gap-1 px-2 py-2 rounded-lg text-gray-500 hover:text-primary-500 hover:bg-gray-100 transition-all text-sm">
+                    <i class="fas fa-globe text-xs"></i>
+                    <span class="uppercase font-semibold text-[11px]"><%= (typeof locale !== 'undefined' ? locale : 'az') %></span>
+                    <i class="fas fa-chevron-down text-[8px]"></i>
+                </button>
+                <div id="lang-dropdown-mobile" class="absolute right-0 top-full mt-1 bg-white rounded-xl shadow-lg border border-gray-100 py-1 min-w-[110px] hidden z-50 overflow-hidden">
+                    <button onclick="changeLang('az')" class="block w-full text-left px-4 py-2.5 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-500 transition-colors">AZ</button>
+                    <button onclick="changeLang('en')" class="block w-full text-left px-4 py-2.5 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-500 transition-colors">EN</button>
+                    <button onclick="changeLang('ru')" class="block w-full text-left px-4 py-2.5 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-500 transition-colors">RU</button>
+                </div>
             </div>
 
             <% if (user && user.role !== 'user') { %>
@@ -122,6 +136,10 @@ function toggleLangDropdown() {
     const d = document.getElementById('lang-dropdown');
     if (d) d.classList.toggle('hidden');
 }
+function toggleLangDropdownMobile() {
+    const d = document.getElementById('lang-dropdown-mobile');
+    if (d) d.classList.toggle('hidden');
+}
 function changeLang(lang) {
     fetch('/set-lang', {
         method: 'POST',
@@ -134,6 +152,10 @@ document.addEventListener('click', function(e) {
     if (s && !s.contains(e.target)) {
         const d = document.getElementById('lang-dropdown');
         if (d) d.classList.add('hidden');
+    }
+    const sm = document.getElementById('lang-dropdown-mobile');
+    if (sm && !e.target.closest('.relative') && !e.target.closest('#lang-dropdown-mobile')) {
+        if (sm) sm.classList.add('hidden');
     }
 });
 </script>

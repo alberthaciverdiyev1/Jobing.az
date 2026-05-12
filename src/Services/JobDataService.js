@@ -224,6 +224,10 @@ const JobDataService = {
     
 
     // Delete job data
+    incrementViewCount: async (id) => {
+        return JobData.findByIdAndUpdate(id, { $inc: { viewCount: 1 } }).exec();
+    },
+
     deleteSite: async (id) => {
         try {
             if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -305,6 +309,7 @@ const JobDataService = {
                         postedAt: 1,
                         createdAt: 1,
                         updatedAt: 1,
+                        viewCount: 1,
                         jobType: 1,
                         category: 1,
                     }

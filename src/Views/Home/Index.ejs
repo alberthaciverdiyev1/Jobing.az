@@ -32,7 +32,6 @@
                                        class="w-full pl-10 pr-4 py-3.5 bg-transparent border-0 focus:outline-none text-sm placeholder:text-gray-300 rounded-xl">
                             </div>
                             <div class="sm:w-44 relative">
-                                <i class="fas fa-map-marker-alt absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm z-10"></i>
                                 <i class="fas fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-gray-300 text-[10px] pointer-events-none"></i>
                                 <select id="city-select" name="cityId"
                                         class="w-full pl-10 pr-8 py-3.5 bg-gray-50 border border-gray-200 focus:border-primary-300 focus:ring-2 focus:ring-primary-500/10 text-sm appearance-none cursor-pointer text-gray-500 hover:border-gray-300 hover:bg-gray-100/50 transition-all rounded-xl outline-none">
@@ -48,7 +47,7 @@
                     </div>
 
                     <!-- Trending -->
-                    <div class="flex flex-wrap items-center gap-2">
+                    <div class="hidden sm:block flex flex-wrap items-center gap-2">
                         <span class="text-[11px] text-gray-300 font-semibold tracking-wider uppercase"><%= __('hero.trending') %></span>
                         <% ['Proqramist', 'Dizayner', 'Menecer', 'Marketinq', 'Satış'].forEach(function(tag) { %>
                             <a href="/vakansiyalar?keyword=<%= tag %>"
@@ -236,14 +235,14 @@
 
             <!-- Color themes for each category card -->
             <% const categoryThemes = [
-                { border: 'border-orange-200/50 hover:border-orange-300', shadow: 'hover:shadow-orange-500/5', bg: 'hover:bg-orange-50/20', bar: 'from-orange-400 to-orange-500', iconBg: 'from-orange-50 to-amber-50 group-hover:from-orange-100 group-hover:to-amber-100', iconShadow: 'hover:shadow-orange-500/10', iconColor: 'text-orange-500 group-hover:text-orange-600' },
-                { border: 'border-blue-200/50 hover:border-blue-300', shadow: 'hover:shadow-blue-500/5', bg: 'hover:bg-blue-50/20', bar: 'from-blue-400 to-blue-500', iconBg: 'from-blue-50 to-indigo-50 group-hover:from-blue-100 group-hover:to-indigo-100', iconShadow: 'hover:shadow-blue-500/10', iconColor: 'text-blue-500 group-hover:text-blue-600' },
-                { border: 'border-emerald-200/50 hover:border-emerald-300', shadow: 'hover:shadow-emerald-500/5', bg: 'hover:bg-emerald-50/20', bar: 'from-emerald-400 to-emerald-500', iconBg: 'from-emerald-50 to-teal-50 group-hover:from-emerald-100 group-hover:to-teal-100', iconShadow: 'hover:shadow-emerald-500/10', iconColor: 'text-emerald-500 group-hover:text-emerald-600' },
-                { border: 'border-purple-200/50 hover:border-purple-300', shadow: 'hover:shadow-purple-500/5', bg: 'hover:bg-purple-50/20', bar: 'from-purple-400 to-purple-500', iconBg: 'from-purple-50 to-pink-50 group-hover:from-purple-100 group-hover:to-pink-100', iconShadow: 'hover:shadow-purple-500/10', iconColor: 'text-purple-500 group-hover:text-purple-600' },
-                { border: 'border-rose-200/50 hover:border-rose-300', shadow: 'hover:shadow-rose-500/5', bg: 'hover:bg-rose-50/20', bar: 'from-rose-400 to-rose-500', iconBg: 'from-rose-50 to-red-50 group-hover:from-rose-100 group-hover:to-red-100', iconShadow: 'hover:shadow-rose-500/10', iconColor: 'text-rose-500 group-hover:text-rose-600' },
-                { border: 'border-cyan-200/50 hover:border-cyan-300', shadow: 'hover:shadow-cyan-500/5', bg: 'hover:bg-cyan-50/20', bar: 'from-cyan-400 to-cyan-500', iconBg: 'from-cyan-50 to-sky-50 group-hover:from-cyan-100 group-hover:to-sky-100', iconShadow: 'hover:shadow-cyan-500/10', iconColor: 'text-cyan-500 group-hover:text-cyan-600' },
-                { border: 'border-amber-200/50 hover:border-amber-300', shadow: 'hover:shadow-amber-500/5', bg: 'hover:bg-amber-50/20', bar: 'from-amber-400 to-amber-500', iconBg: 'from-amber-50 to-yellow-50 group-hover:from-amber-100 group-hover:to-yellow-100', iconShadow: 'hover:shadow-amber-500/10', iconColor: 'text-amber-500 group-hover:text-amber-600' },
-                { border: 'border-pink-200/50 hover:border-pink-300', shadow: 'hover:shadow-pink-500/5', bg: 'hover:bg-pink-50/20', bar: 'from-pink-400 to-pink-500', iconBg: 'from-pink-50 to-fuchsia-50 group-hover:from-pink-100 group-hover:to-fuchsia-100', iconShadow: 'hover:shadow-pink-500/10', iconColor: 'text-pink-500 group-hover:text-pink-600' },
+                { border: 'border-orange-200 hover:border-orange-300', shadow: 'hover:shadow-orange-500/10', bg: 'hover:bg-orange-50/20', bar: 'from-orange-400 to-orange-500', iconBg: 'from-orange-50 to-amber-50 group-hover:from-orange-100 group-hover:to-amber-100', iconShadow: 'hover:shadow-orange-500/10', iconColor: 'text-orange-500 group-hover:text-orange-600' },
+                { border: 'border-blue-200 hover:border-blue-300', shadow: 'hover:shadow-blue-500/10', bg: 'hover:bg-blue-50/20', bar: 'from-blue-400 to-blue-500', iconBg: 'from-blue-50 to-indigo-50 group-hover:from-blue-100 group-hover:to-indigo-100', iconShadow: 'hover:shadow-blue-500/10', iconColor: 'text-blue-500 group-hover:text-blue-600' },
+                { border: 'border-emerald-200 hover:border-emerald-300', shadow: 'hover:shadow-emerald-500/10', bg: 'hover:bg-emerald-50/20', bar: 'from-emerald-400 to-emerald-500', iconBg: 'from-emerald-50 to-teal-50 group-hover:from-emerald-100 group-hover:to-teal-100', iconShadow: 'hover:shadow-emerald-500/10', iconColor: 'text-emerald-500 group-hover:text-emerald-600' },
+                { border: 'border-purple-200 hover:border-purple-300', shadow: 'hover:shadow-purple-500/10', bg: 'hover:bg-purple-50/20', bar: 'from-purple-400 to-purple-500', iconBg: 'from-purple-50 to-pink-50 group-hover:from-purple-100 group-hover:to-pink-100', iconShadow: 'hover:shadow-purple-500/10', iconColor: 'text-purple-500 group-hover:text-purple-600' },
+                { border: 'border-rose-200 hover:border-rose-300', shadow: 'hover:shadow-rose-500/10', bg: 'hover:bg-rose-50/20', bar: 'from-rose-400 to-rose-500', iconBg: 'from-rose-50 to-red-50 group-hover:from-rose-100 group-hover:to-red-100', iconShadow: 'hover:shadow-rose-500/10', iconColor: 'text-rose-500 group-hover:text-rose-600' },
+                { border: 'border-cyan-200 hover:border-cyan-300', shadow: 'hover:shadow-cyan-500/10', bg: 'hover:bg-cyan-50/20', bar: 'from-cyan-400 to-cyan-500', iconBg: 'from-cyan-50 to-sky-50 group-hover:from-cyan-100 group-hover:to-sky-100', iconShadow: 'hover:shadow-cyan-500/10', iconColor: 'text-cyan-500 group-hover:text-cyan-600' },
+                { border: 'border-amber-200 hover:border-amber-300', shadow: 'hover:shadow-amber-500/10', bg: 'hover:bg-amber-50/20', bar: 'from-amber-400 to-amber-500', iconBg: 'from-amber-50 to-yellow-50 group-hover:from-amber-100 group-hover:to-yellow-100', iconShadow: 'hover:shadow-amber-500/10', iconColor: 'text-amber-500 group-hover:text-amber-600' },
+                { border: 'border-pink-200 hover:border-pink-300', shadow: 'hover:shadow-pink-500/10', bg: 'hover:bg-pink-50/20', bar: 'from-pink-400 to-pink-500', iconBg: 'from-pink-50 to-fuchsia-50 group-hover:from-pink-100 group-hover:to-fuchsia-100', iconShadow: 'hover:shadow-pink-500/10', iconColor: 'text-pink-500 group-hover:text-pink-600' },
             ]; %>
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
                 <% topCategories.forEach(function(cat, idx) {
