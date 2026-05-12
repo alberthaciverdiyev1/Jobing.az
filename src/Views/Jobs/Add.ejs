@@ -28,7 +28,9 @@
                                 <i class="fas fa-envelope"></i>
                             </span>
                             <input id="email" type="email" placeholder="Emailinizi daxil edin"
-                                   class="w-full pl-11 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all duration-200 text-gray-900 placeholder:text-gray-400">
+                                   value="<%= companyInfo ? companyInfo.email : '' %>"
+                                   <%= companyInfo ? 'disabled' : '' %>
+                                   class="w-full pl-11 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all duration-200 text-gray-900 placeholder:text-gray-400 <%= companyInfo ? 'opacity-75 cursor-not-allowed' : '' %>">
                         </div>
                         <span class="error-message text-red-500 text-xs mt-1.5 hidden flex items-center gap-1">
                             <i class="fas fa-exclamation-circle"></i> Bu xana doldurulmalıdır
@@ -41,7 +43,9 @@
                                 <i class="fas fa-user"></i>
                             </span>
                             <input id="username" type="text" placeholder="Adınızı daxil edin"
-                                   class="w-full pl-11 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all duration-200 text-gray-900 placeholder:text-gray-400">
+                                   value="<%= companyInfo ? (typeof user !== 'undefined' && user ? user.name || user.surname || '' : '') : '' %>"
+                                   <%= companyInfo ? 'disabled' : '' %>
+                                   class="w-full pl-11 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all duration-200 text-gray-900 placeholder:text-gray-400 <%= companyInfo ? 'opacity-75 cursor-not-allowed' : '' %>">
                         </div>
                     </div>
                     <div>
@@ -51,7 +55,9 @@
                                 <i class="fas fa-phone"></i>
                             </span>
                             <input id="phone" type="tel" placeholder="Telefon nömrəsi"
-                                   class="w-full pl-11 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all duration-200 text-gray-900 placeholder:text-gray-400">
+                                   value="<%= companyInfo ? companyInfo.phone : '' %>"
+                                   <%= companyInfo ? 'disabled' : '' %>
+                                   class="w-full pl-11 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all duration-200 text-gray-900 placeholder:text-gray-400 <%= companyInfo ? 'opacity-75 cursor-not-allowed' : '' %>">
                         </div>
                     </div>
                     <div>
@@ -96,7 +102,9 @@
                                 <i class="fas fa-building"></i>
                             </span>
                             <input id="companyName" type="text" placeholder="Şirkət adı"
-                                   class="w-full pl-11 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all duration-200 text-gray-900 placeholder:text-gray-400">
+                                   value="<%= companyInfo ? companyInfo.companyName : '' %>"
+                                   <%= companyInfo ? 'disabled' : '' %>
+                                   class="w-full pl-11 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all duration-200 text-gray-900 placeholder:text-gray-400 <%= companyInfo ? 'opacity-75 cursor-not-allowed' : '' %>">
                         </div>
                         <span class="error-message text-red-500 text-xs mt-1.5 hidden flex items-center gap-1">
                             <i class="fas fa-exclamation-circle"></i> Bu xana doldurulmalıdır
