@@ -9,6 +9,7 @@ import BlogService from "../Services/BlogService.js";
 import CVService from "../Services/CVService.js";
 import NewsService from "../Services/NewsService.js";
 import JobData from "../Models/JobData.js";
+import Company from "../Models/Company.js";
 
 const ViewController = {
     home: async (req, res) => {
@@ -171,12 +172,21 @@ const ViewController = {
         res.render('Main', view);
     },
     addJob: async (req, res) => {
+        let companyInfo = null;
+        if (req.user?.role === 'company' && req.user?.companyName) {
+            try {
+                companyInfo = await Company.findOne({ companyName: req.user.companyName })
+                    .select('companyName email phone')
+                    .lean();
+            } catch (e) { /* silent */ }
+        }
         const view = {
             title: 'Yeni vakansiya',
             description: 'Şirkətiniz üçün yeni vakansiya elanı yerləşdirin. İş axtaran ən uyğun namizədlərə çatın.',
             body: "Jobs/Add.ejs",
             js: 'NewJob.js',
-            currentPage: 'add-job'
+            currentPage: 'add-job',
+            companyInfo
         };
         res.render('Main', view);
     },
