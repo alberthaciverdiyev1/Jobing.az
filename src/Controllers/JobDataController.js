@@ -210,6 +210,7 @@ const jobDataController = {
                 isActive: false,
                 email: req.body.data.email,
                 phone: req.body.data.phone,
+                applicationMethod: req.body.data.applicationMethod || 'both',
                 redirectUrl: '/vakansiyalar/' + encodeURIComponent(data.slug) + '/details',
                 uniqueKey,
             }

@@ -113,6 +113,11 @@ const jobSchema = new Schema({
     redirectUrl: {
         type: String,
         required: true
+    },
+    applicationMethod: {
+        type: String,
+        enum: ['cv', 'contact', 'both'],
+        default: 'both'
     }
 }, {
     timestamps: true,

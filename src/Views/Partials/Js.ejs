@@ -1,9 +1,13 @@
 <% if (typeof js !== "undefined" && js) { %>
+    <% if (js === 'NewJob.js') { %>
+    <script src="/Js/Libraries/ckeditor.js"></script>
+    <link rel="stylesheet" href="/Css/Libraries/Ckeditor5.min.css">
+    <% } %>
     <script type="module" src="/Js/<%= js %>"></script>
 <% } %>
+<!-- Google AdSense (deferred) -->
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8722833871752467"
      crossorigin="anonymous"></script>
-<!-- test -->
 <ins class="adsbygoogle"
      style="display:block"
      data-ad-client="ca-pub-8722833871752467"
@@ -16,11 +20,7 @@
 
 <script type="module" src="/Js/Global.js"></script>
 <script type="module" src="/Js/Libraries/Alertify/alertify.min.js"></script>
-<script type="module" src="/Js/Libraries/saleSlieder.min.js"></script>
-<script src="/Js/Libraries/ckeditor.js"></script>
 <script src="/Js/Libraries/Axios.min.js"></script>
-<!-- <script src="https://cdn.jsdelivr.net/npm/axios@1.6.7/dist/axios.min.js"></script> -->
-<script src="https://cdn.jsdelivr.net/npm/nouislider@15.6.1/dist/nouislider.min.js"></script>
 
 
 

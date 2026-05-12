@@ -171,10 +171,6 @@ const ViewController = {
         res.render('Main', view);
     },
     addJob: async (req, res) => {
-        // Only company, hr, and admin users can post jobs
-        if (req.user && req.user.role === 'user') {
-            return res.redirect('/dashboard');
-        }
         const view = {
             title: 'Yeni vakansiya',
             description: 'Şirkətiniz üçün yeni vakansiya elanı yerləşdirin. İş axtaran ən uyğun namizədlərə çatın.',

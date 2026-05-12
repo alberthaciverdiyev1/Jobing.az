@@ -1,18 +1,43 @@
 import { createJobCard, noDataCard } from './Helpers.js';
 import { createCustomSelect } from './Components/CustomSelect.js';
 
+// ========== ELEMENT HELPERS ==========
+function filterEl(id) {
+    const prefix = isMobileOpen() ? 'mobile-' : '';
+    return document.getElementById(prefix + id);
+}
+
+function populateBoth(id) {
+    return {
+        desktop: document.getElementById(id),
+        mobile: document.getElementById('mobile-' + id),
+    };
+}
+
+function isMobileOpen() {
+    const overlay = document.getElementById('mobile-filter-overlay');
+    return overlay && !overlay.classList.contains('hidden');
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
-    // Init custom selects immediately (empty, will refresh after data loads)
-    const csCategory = createCustomSelect(document.getElementById('category-select-filter'));
-    const csCity = createCustomSelect(document.getElementById('city-select-filter'));
-    const csEducation = createCustomSelect(document.getElementById('education-select'));
-    const csExperience = createCustomSelect(document.getElementById('experience-select'));
+    // Init custom selects — desktop
+    const csCategoryDesktop = createCustomSelect(document.getElementById('category-select-filter'));
+    const csCityDesktop = createCustomSelect(document.getElementById('city-select-filter'));
+    const csEducationDesktop = createCustomSelect(document.getElementById('education-select'));
+    const csExperienceDesktop = createCustomSelect(document.getElementById('experience-select'));
 
-    const customSelects = [csCategory, csCity, csEducation, csExperience].filter(Boolean);
+    // Init custom selects — mobile
+    const csCategoryMobile = createCustomSelect(document.getElementById('mobile-category-select-filter'));
+    const csCityMobile = createCustomSelect(document.getElementById('mobile-city-select-filter'));
+    const csEducationMobile = createCustomSelect(document.getElementById('mobile-education-select'));
+    const csExperienceMobile = createCustomSelect(document.getElementById('mobile-experience-select'));
 
-    // Load filter data, then refresh custom selects
+    const allCustomSelects = [csCategoryDesktop, csCityDesktop, csEducationDesktop, csExperienceDesktop,
+                              csCategoryMobile, csCityMobile, csEducationMobile, csExperienceMobile].filter(Boolean);
+
+    // Load filter data, then refresh all custom selects
     await Promise.all([getCategories(), getCities(), getEducation(), getExperience()]);
-    customSelects.forEach(cs => cs.refresh());
+    allCustomSelects.forEach(cs => cs.refresh());
 
     restoreFilters();
     setupMobileFilterSheet();
@@ -71,32 +96,42 @@ function setupMobileFilterSheet() {
 
 // ========== SHARED FILTER HELPERS ==========
 function clearAllFilters() {
-    document.getElementById('search').value = '';
-    document.getElementById('category-select-filter').value = '';
-    document.getElementById('city-select-filter').value = '';
-    document.getElementById('education-select').value = '';
-    document.getElementById('experience-select').value = '';
+    const s = filterEl('search');
+    if (s) s.value = '';
+    const cat = filterEl('category-select-filter');
+    if (cat) cat.value = '';
+    const city = filterEl('city-select-filter');
+    if (city) city.value = '';
+    const edu = filterEl('education-select');
+    if (edu) edu.value = '';
+    const exp = filterEl('experience-select');
+    if (exp) exp.value = '';
+
     offset = 0;
     allJobs = true;
-    document.querySelectorAll('.job-type-btn').forEach(btn => {
-        btn.classList.remove('active', 'bg-primary-500', 'text-white');
-        btn.classList.add('bg-gray-100', 'text-gray-600');
-    });
-    const allBtn = document.querySelector('.job-type-btn[data-type="all"]');
-    if (allBtn) {
-        allBtn.classList.remove('bg-gray-100', 'text-gray-600');
-        allBtn.classList.add('active', 'bg-primary-500', 'text-white');
+
+    const tabContainer = filterEl('job-type-tabs');
+    if (tabContainer) {
+        tabContainer.querySelectorAll('.job-type-btn').forEach(btn => {
+            btn.classList.remove('active', 'bg-primary-500', 'text-white');
+            btn.classList.add('bg-gray-100', 'text-gray-600');
+        });
+        const allBtn = tabContainer.querySelector('.job-type-btn[data-type="all"]');
+        if (allBtn) {
+            allBtn.classList.remove('bg-gray-100', 'text-gray-600');
+            allBtn.classList.add('active', 'bg-primary-500', 'text-white');
+        }
     }
     updateActiveFilterCount();
 }
 
 function updateActiveFilterCount() {
     const count = [
-        document.getElementById('search')?.value || '',
-        document.getElementById('category-select-filter')?.value || '',
-        document.getElementById('city-select-filter')?.value || '',
-        document.getElementById('education-select')?.value || '',
-        document.getElementById('experience-select')?.value || '',
+        filterEl('search')?.value || '',
+        filterEl('category-select-filter')?.value || '',
+        filterEl('city-select-filter')?.value || '',
+        filterEl('education-select')?.value || '',
+        filterEl('experience-select')?.value || '',
     ].filter(v => v !== '').length;
 
     const badge = document.getElementById('active-filter-count');
@@ -134,7 +169,9 @@ document.getElementById('search')?.addEventListener('keydown', (e) => {
 
 document.querySelectorAll('.job-type-btn').forEach(btn => {
     btn.addEventListener('click', function () {
-        document.querySelectorAll('.job-type-btn').forEach(b => {
+        const container = this.closest('#job-type-tabs, #mobile-job-type-tabs');
+        if (!container) return;
+        container.querySelectorAll('.job-type-btn').forEach(b => {
             b.classList.remove('active', 'bg-primary-500', 'text-white');
             b.classList.add('bg-gray-100', 'text-gray-600');
         });
@@ -155,7 +192,10 @@ async function getCategories() {
             res.data.forEach(el => {
                 h += `<option value="${el.localCategoryId}">${el.categoryName}</option>`;
             });
-            document.getElementById('category-select-filter').innerHTML = h;
+            // Populate both desktop and mobile
+            const { desktop, mobile } = populateBoth('category-select-filter');
+            if (desktop) desktop.innerHTML = h;
+            if (mobile) mobile.innerHTML = h;
             updateActiveFilterCount();
         }
     } catch (err) { console.error(err); }
@@ -169,7 +209,9 @@ async function getCities() {
             res.data.forEach(el => {
                 h += `<option value="${el.cityId}">${el.name}</option>`;
             });
-            document.getElementById('city-select-filter').innerHTML = h;
+            const { desktop, mobile } = populateBoth('city-select-filter');
+            if (desktop) desktop.innerHTML = h;
+            if (mobile) mobile.innerHTML = h;
         }
     } catch (err) { console.error(err); }
 }
@@ -182,7 +224,9 @@ async function getEducation() {
             Object.entries(res.data).forEach(([name, id]) => {
                 h += `<option value="${id}">${name}</option>`;
             });
-            document.getElementById('education-select').innerHTML = h;
+            const { desktop, mobile } = populateBoth('education-select');
+            if (desktop) desktop.innerHTML = h;
+            if (mobile) mobile.innerHTML = h;
         }
     } catch (err) { console.error(err); }
 }
@@ -195,7 +239,9 @@ async function getExperience() {
             Object.entries(res.data).forEach(([name, id]) => {
                 h += `<option value="${id}">${name}</option>`;
             });
-            document.getElementById('experience-select').innerHTML = h;
+            const { desktop, mobile } = populateBoth('experience-select');
+            if (desktop) desktop.innerHTML = h;
+            if (mobile) mobile.innerHTML = h;
         }
     } catch (err) { console.error(err); }
 }
@@ -223,22 +269,27 @@ function updateURLParams(params) {
 
 function restoreFilters() {
     const { categoryId, cityId, educationId, experienceLevel, keyword } = getURLParams();
-    if (keyword) document.getElementById('search').value = keyword;
-    if (categoryId) document.getElementById('category-select-filter').value = categoryId;
-    if (cityId) document.getElementById('city-select-filter').value = cityId;
-    if (educationId) document.getElementById('education-select').value = educationId;
-    if (experienceLevel) document.getElementById('experience-select').value = experienceLevel;
+    const sEl = filterEl('search');
+    if (keyword && sEl) sEl.value = keyword;
+    const cEl = filterEl('category-select-filter');
+    if (categoryId && cEl) cEl.value = categoryId;
+    const ciEl = filterEl('city-select-filter');
+    if (cityId && ciEl) ciEl.value = cityId;
+    const eEl = filterEl('education-select');
+    if (educationId && eEl) eEl.value = educationId;
+    const xEl = filterEl('experience-select');
+    if (experienceLevel && xEl) xEl.value = experienceLevel;
     updateActiveFilterCount();
     fetchJobs();
 }
 
 function getFilterValues() {
     return {
-        categoryId: document.getElementById('category-select-filter')?.value || null,
-        cityId: document.getElementById('city-select-filter')?.value || null,
-        educationId: document.getElementById('education-select')?.value || null,
-        experienceLevel: document.getElementById('experience-select')?.value || null,
-        keyword: document.getElementById('search')?.value || '',
+        categoryId: filterEl('category-select-filter')?.value || null,
+        cityId: filterEl('city-select-filter')?.value || null,
+        educationId: filterEl('education-select')?.value || null,
+        experienceLevel: filterEl('experience-select')?.value || null,
+        keyword: filterEl('search')?.value || '',
     };
 }
 
