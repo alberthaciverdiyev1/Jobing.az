@@ -74,6 +74,23 @@ const HrController = {
         res.render('Hr/Main', view);
     },
 
+    hrJobDetailView: async (req, res) => {
+        try {
+            const job = await Job.findById(req.params.id).lean();
+            if (!job) return res.redirect('/hr/jobs');
+            _resolveJobEnums(job);
+            const view = {
+                title: 'Job Detail - HR Panel',
+                body: 'Job/Detail.ejs',
+                js: 'JobDetail.js',
+                job
+            };
+            res.render('Hr/Main', view);
+        } catch {
+            res.redirect('/hr/jobs');
+        }
+    },
+
     hrApplicationsView: async (req, res) => {
         const view = { title: 'Applications - HR Panel', body: 'Application/Index.ejs', js: 'Application.js' };
         res.render('Hr/Main', view);
@@ -119,6 +136,8 @@ const HrController = {
                 totalApplications = appStats.total;
                 interviewCount = appStats.interview;
                 companyNames = company ? [company.companyName] : [];
+                const recentRes = companyId ? await ApplicationService.findByCompany([companyId], { page: 1, limit: 5 }) : { applications: [] };
+                var recentApplications = recentRes.applications;
             } else {
                 const companyIds = user.companyIds || [];
                 totalJobs = await Job.countDocuments({ companyId: { $in: companyIds } });
@@ -128,6 +147,8 @@ const HrController = {
                 interviewCount = appStats.interview;
                 const companies = await Company.find({ _id: { $in: companyIds } }).select('companyName').lean();
                 companyNames = companies.map(c => c.companyName);
+                const recentRes = await ApplicationService.findByCompany(companyIds, { page: 1, limit: 5 });
+                var recentApplications = recentRes.applications;
             }
 
             const upcomingInterviews = await ApplicationService.getUpcomingInterviews(
@@ -143,7 +164,8 @@ const HrController = {
                 totalApplications,
                 interviewCount,
                 companyNames,
-                upcomingInterviews: upcomingInterviews.length
+                upcomingInterviews: upcomingInterviews.length,
+                recentApplications
             });
         } catch (error) {
             res.status(500).json({ error: error.message });
@@ -181,6 +203,17 @@ const HrController = {
             jobs.forEach(job => _resolveJobEnums(job));
 
             res.json({ jobs, total, page: Number(page), totalPages: Math.ceil(total / limit) });
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    },
+
+    getJob: async (req, res) => {
+        try {
+            const job = await Job.findById(req.params.id).lean();
+            if (!job) return res.status(404).json({ error: 'Job not found' });
+            _resolveJobEnums(job);
+            res.json(job);
         } catch (error) {
             res.status(500).json({ error: error.message });
         }

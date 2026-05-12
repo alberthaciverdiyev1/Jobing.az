@@ -97,6 +97,10 @@ const jobSchema = new Schema({
         type: String,
         required: false
     },
+    viewCount: {
+        type: Number,
+        default: 0
+    },
     postedAt: {
         type: Date,
         default: Date.now
