@@ -232,6 +232,7 @@ document.getElementById('addJob').addEventListener("click", async () => {
             maxAge: Number(document.getElementById("maxAge")?.value) || 65,
             requirements: requirementsEditorData.trim(),
             aboutJob: aboutJobEditorData.trim(),
+            applicationMethod: document.querySelector('input[name="applicationMethod"]:checked')?.value || 'both',
         };
 
         const { allValid, validatedData } = await validateData(data);
@@ -259,6 +260,7 @@ document.getElementById('addJob').addEventListener("click", async () => {
                 }
                 if (editorRequirements) editorRequirements.setData('');
                 if (editorAboutJob) editorAboutJob.setData('');
+                document.querySelector('input[name="applicationMethod"][value="both"]').checked = true;
                 // Clear validation states
                 document.querySelectorAll('.border-red-500').forEach(el => {
                     el.classList.remove('border-red-500', '!border-red-500');

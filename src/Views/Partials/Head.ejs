@@ -1,6 +1,6 @@
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 
     <!-- Primary Meta -->
     <title><%= typeof title !== 'undefined' ? title : 'Jobing.az' %> | Jobing.az</title>
@@ -83,78 +83,21 @@
     }
     </script>
 
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <!-- Fonts: preconnect + optimized loading -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"></noscript>
 
-    <!-- FontAwesome -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet" />
-
-    <!-- Tailwind -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
-                    },
-                    colors: {
-                        primary: {
-                            50: '#fff7ed',
-                            100: '#ffedd5',
-                            200: '#fed7aa',
-                            300: '#fdba74',
-                            400: '#fb923c',
-                            500: '#FF8C00',
-                            600: '#e67e00',
-                            700: '#cc7000',
-                            800: '#995400',
-                            900: '#663800',
-                        }
-                    },
-                    animation: {
-                        'fade-in': 'fadeIn 0.5s ease-out',
-                        'fade-in-up': 'fadeInUp 0.5s ease-out',
-                        'fade-in-down': 'fadeInDown 0.4s ease-out',
-                        'scale-in': 'scaleIn 0.3s ease-out',
-                        'pulse-subtle': 'pulseSubtle 3s ease-in-out infinite',
-                    },
-                    keyframes: {
-                        fadeIn: {
-                            '0%': { opacity: '0' },
-                            '100%': { opacity: '1' },
-                        },
-                        fadeInUp: {
-                            '0%': { opacity: '0', transform: 'translateY(24px)' },
-                            '100%': { opacity: '1', transform: 'translateY(0)' },
-                        },
-                        fadeInDown: {
-                            '0%': { opacity: '0', transform: 'translateY(-12px)' },
-                            '100%': { opacity: '1', transform: 'translateY(0)' },
-                        },
-                        scaleIn: {
-                            '0%': { opacity: '0', transform: 'scale(0.95)' },
-                            '100%': { opacity: '1', transform: 'scale(1)' },
-                        },
-                        pulseSubtle: {
-                            '0%, 100%': { opacity: '1' },
-                            '50%': { opacity: '0.7' },
-                        },
-                    },
-                },
-            },
-        }
-    </script>
+    <!-- FontAwesome (deferred) -->
+    <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"></noscript>
 
     <!-- Styles -->
     <link rel="stylesheet" href="/Css/Output.css">
     <link rel="stylesheet" href="/Css/Custom.css">
     <link rel="stylesheet" href="/Css/Loader.css">
     <link rel="stylesheet" href="/Css/Libraries/Alertify/alertify.min.css">
-    <link rel="stylesheet" href="/Css/Libraries/salarySlider.min.css">
-    <link rel="stylesheet" href="/Css/Libraries/Ckeditor5.min.css">
 
     <style>
         .modal-open { overflow: hidden; }
@@ -178,4 +121,12 @@
         gtag('config', 'G-2932L7DPW8');
     </script>
     <meta name="google-adsense-account" content="ca-pub-8722833871752467">
+
+    <!-- DNS prefetch for external resources -->
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+    <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com">
+    <link rel="dns-prefetch" href="https://www.googletagmanager.com">
+    <link rel="dns-prefetch" href="https://googleads.g.doubleclick.net">
 </head>

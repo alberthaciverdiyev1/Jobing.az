@@ -23,10 +23,10 @@ export function createCustomSelect(selectEl) {
         <i class="fas fa-chevron-down text-[10px] text-gray-300 transition-transform duration-200"></i>
     `;
 
-    // Dropdown panel
+    // Dropdown panel (fixed positioning to avoid ancestor overflow clipping)
     const dropdown = document.createElement('div');
     dropdown.className =
-        'custom-select-dropdown absolute top-full left-0 right-0 z-50 mt-1 bg-white border border-gray-200 rounded-xl shadow-lg shadow-gray-200/30 hidden overflow-hidden';
+        'custom-select-dropdown fixed z-[70] mt-1 bg-white border border-gray-200 rounded-xl shadow-lg shadow-gray-200/30 hidden overflow-hidden';
 
     // Search input
     const searchInput = document.createElement('input');
@@ -81,6 +81,14 @@ export function createCustomSelect(selectEl) {
     function openDropdown() {
         if (open) return;
         open = true;
+
+        // Position dropdown fixed relative to trigger
+        const rect = trigger.getBoundingClientRect();
+        dropdown.style.left = rect.left + 'px';
+        dropdown.style.top = (rect.bottom + 4) + 'px';
+        dropdown.style.width = rect.width + 'px';
+        dropdown.style.minWidth = '200px';
+
         dropdown.classList.remove('hidden');
         trigger.querySelector('.fa-chevron-down').classList.add('rotate-180');
         searchInput.value = '';
@@ -133,6 +141,11 @@ export function createCustomSelect(selectEl) {
         }
         if (e.key === 'Escape') closeDropdown();
     });
+
+    // Close on scroll to keep fixed positioning consistent
+    window.addEventListener('scroll', () => {
+        if (open) closeDropdown();
+    }, { passive: true });
 
     // Refresh method (call after dynamically updating options)
     function refresh() {
