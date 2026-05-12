@@ -30,13 +30,7 @@
                     <%= __('nav.postJob') %>
                 </a>
                 <% } %>
-
-                <!-- Desktop Language Toggle Buttons (segmented style from mobile) -->
-                <div class="hidden md:flex items-center gap-0.5 bg-gray-100 rounded-lg p-0.5">
-                    <button onclick="changeLang('az')" class="px-2.5 py-1.5 text-xs font-semibold uppercase rounded-md transition-all <%= (typeof locale !== 'undefined' && locale === 'az') ? 'bg-white text-primary-500 shadow-sm' : 'text-gray-500 hover:text-gray-700' %>">AZ</button>
-                    <button onclick="changeLang('en')" class="px-2.5 py-1.5 text-xs font-semibold uppercase rounded-md transition-all <%= (typeof locale !== 'undefined' && locale === 'en') ? 'bg-white text-primary-500 shadow-sm' : 'text-gray-500 hover:text-gray-700' %>">EN</button>
-                    <button onclick="changeLang('ru')" class="px-2.5 py-1.5 text-xs font-semibold uppercase rounded-md transition-all <%= (typeof locale !== 'undefined' && locale === 'ru') ? 'bg-white text-primary-500 shadow-sm' : 'text-gray-500 hover:text-gray-700' %>">RU</button>
-                </div>
+                
 
                 <!-- Language Switcher Dropdown (shown on both desktop and mobile) -->
                 <div class="relative" id="lang-switcher">
@@ -67,14 +61,6 @@
 
         <!-- Mobile: Profile, Language & Post Job -->
         <div class="md:hidden flex items-center gap-2">
-            <% const mobileProfileLink = (typeof user !== 'undefined' && user)
-                ? (user.role === 'company' ? '/company/dashboard' : user.role === 'hr' ? '/hr/dashboard' : '/dashboard')
-                : '/auth'; %>
-            <a href="<%= mobileProfileLink %>"
-               class="inline-flex items-center gap-2 <%= typeof user !== 'undefined' && user ? 'bg-primary-50 text-primary-600' : 'text-primary-500 border-2 border-primary-500' %> text-sm font-medium px-3 py-2 rounded-xl transition-all">
-                <i class="fas fa-user"></i>
-            </a>
-
             <!-- Mobile Language Dropdown (only, no segmented buttons) -->
             <div class="relative">
                 <button onclick="toggleLangDropdownMobile()" class="flex items-center gap-1 px-2 py-2 rounded-lg text-gray-500 hover:text-primary-500 hover:bg-gray-100 transition-all text-sm">
