@@ -4,7 +4,7 @@
     - Desktop: sidebar layout (no prefix)
     - Mobile: bottom sheet overlay (prefix='mobile-')
 -->
-<% const p = prefix || ''; %>
+<% var p = typeof prefix !== 'undefined' ? prefix : ''; %>
 <div class="filter-content">
     <!-- Search -->
     <div class="mb-4">
