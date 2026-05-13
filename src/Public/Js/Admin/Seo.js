@@ -81,9 +81,6 @@ function openEdit(route) {
     document.getElementById('editDescription').value = saved.description || '';
     document.getElementById('editActive').checked = saved.isActive !== undefined ? saved.isActive : true;
     document.getElementById('editNoindex').checked = saved.noindex || false;
-    document.getElementById('editOgTitle').value = saved.ogTitle || '';
-    document.getElementById('editOgDescription').value = saved.ogDescription || '';
-    document.getElementById('editOgImage').value = saved.ogImage || '';
     document.getElementById('editCanonical').value = saved.canonical || '';
     document.getElementById('editHeaderHtml').value = saved.headerHtml || '';
     document.getElementById('editBodyTopHtml').value = saved.bodyTopHtml || '';
@@ -117,9 +114,6 @@ async function saveEntry() {
             headerHtml: document.getElementById('editHeaderHtml').value,
             bodyTopHtml: document.getElementById('editBodyTopHtml').value,
             bodyBottomHtml: document.getElementById('editBodyBottomHtml').value,
-            ogTitle: document.getElementById('editOgTitle').value.trim(),
-            ogDescription: document.getElementById('editOgDescription').value.trim(),
-            ogImage: document.getElementById('editOgImage').value.trim(),
             canonical: document.getElementById('editCanonical').value.trim(),
             noindex: document.getElementById('editNoindex').checked,
             isActive: document.getElementById('editActive').checked
