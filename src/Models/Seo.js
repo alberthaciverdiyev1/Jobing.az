@@ -49,6 +49,11 @@ const seoSchema = new Schema({
         type: String,
         default: ''
     },
+    customRoute: {
+        type: String,
+        default: '',
+        trim: true
+    },
     noindex: {
         type: Boolean,
         default: false
