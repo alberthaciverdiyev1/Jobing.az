@@ -2,14 +2,23 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 
+    <%
+      var seoTitle = (typeof seo !== 'undefined' && seo && seo.title) ? seo.title : (typeof title !== 'undefined' ? title : 'Jobing.az');
+      var seoDescription = (typeof seo !== 'undefined' && seo && seo.description) ? seo.description : (typeof description !== 'undefined' ? description : 'Azərbaycanda ən son vakansiyalar, iş elanları və karyera imkanları. Jobing.az ilə iş axtarışınızı başlayın.');
+      var seoCanonical = (typeof seo !== 'undefined' && seo && seo.canonical) ? seo.canonical : (typeof canonical !== 'undefined' ? canonical : 'https://jobing.az' + (req && req.originalUrl ? req.originalUrl.split('?')[0] : '/'));
+      var seoOgTitle = (typeof seo !== 'undefined' && seo && seo.ogTitle) ? seo.ogTitle : (typeof ogTitle !== 'undefined' ? ogTitle : seoTitle);
+      var seoOgDescription = (typeof seo !== 'undefined' && seo && seo.ogDescription) ? seo.ogDescription : (typeof ogDescription !== 'undefined' ? ogDescription : seoDescription);
+      var seoOgImage = (typeof seo !== 'undefined' && seo && seo.ogImage) ? seo.ogImage : (typeof ogImage !== 'undefined' ? ogImage : 'https://jobing.az/Images/Static/Logo.png');
+    %>
+
     <!-- Primary Meta -->
-    <title><%= typeof title !== 'undefined' ? title : 'Jobing.az' %> | Jobing.az</title>
-    <meta name="description" content="<%= typeof description !== 'undefined' ? description : 'Azərbaycanda ən son vakansiyalar, iş elanları və karyera imkanları. Jobing.az ilə iş axtarışınızı başlayın.' %>">
+    <title><%= seoTitle %> | Jobing.az</title>
+    <meta name="description" content="<%= seoDescription %>">
     <meta name="keywords" content="vakansiya, iş elanları, iş axtarışı, Azərbaycan vakansiyalar, jobing.az, boss.az, hello job, karyera">
-    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large">
+    <meta name="robots" content="<%= (typeof seo !== 'undefined' && seo && seo.noindex) ? 'noindex, nofollow' : 'index, follow, max-snippet:-1, max-image-preview:large' %>">
     <meta name="google-site-verification" content="DKxrd6e6GbNPPd0KnuDbbsMtnVgmKDdA2jgk3QC-MJc" />
     <meta name="google-adsense-account" content="ca-pub-6130649958615254">
-    <link rel="canonical" href="<%= typeof canonical !== 'undefined' ? canonical : 'https://jobing.az' + (req && req.originalUrl ? req.originalUrl.split('?')[0] : '/') %>" />
+    <link rel="canonical" href="<%= seoCanonical %>" />
 
     <!-- Hreflang -->
     <link rel="alternate" href="https://jobing.az<%= req ? req.originalUrl.split('?')[0] : '/' %>" hreflang="az" />
@@ -19,18 +28,18 @@
 
     <!-- Open Graph -->
     <meta property="og:type" content="<%= typeof ogType !== 'undefined' ? ogType : 'website' %>" />
-    <meta property="og:title" content="<%= typeof ogTitle !== 'undefined' ? ogTitle : (typeof title !== 'undefined' ? title : 'Jobing.az') %>" />
-    <meta property="og:description" content="<%= typeof ogDescription !== 'undefined' ? ogDescription : (typeof description !== 'undefined' ? description : '') %>" />
-    <meta property="og:url" content="<%= typeof canonical !== 'undefined' ? canonical : 'https://jobing.az' + (req && req.originalUrl ? req.originalUrl.split('?')[0] : '/') %>" />
-    <meta property="og:image" content="<%= typeof ogImage !== 'undefined' ? ogImage : 'https://jobing.az/Images/Static/Logo.png' %>" />
+    <meta property="og:title" content="<%= seoOgTitle %>" />
+    <meta property="og:description" content="<%= seoOgDescription %>" />
+    <meta property="og:url" content="<%= seoCanonical %>" />
+    <meta property="og:image" content="<%= seoOgImage %>" />
     <meta property="og:site_name" content="Jobing.az" />
     <meta property="og:locale" content="az_AZ" />
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="<%= typeof ogTitle !== 'undefined' ? ogTitle : (typeof title !== 'undefined' ? title : 'Jobing.az') %>" />
-    <meta name="twitter:description" content="<%= typeof ogDescription !== 'undefined' ? ogDescription : (typeof description !== 'undefined' ? description : '') %>" />
-    <meta name="twitter:image" content="<%= typeof ogImage !== 'undefined' ? ogImage : 'https://jobing.az/Images/Static/Logo.png' %>" />
+    <meta name="twitter:title" content="<%= seoOgTitle %>" />
+    <meta name="twitter:description" content="<%= seoOgDescription %>" />
+    <meta name="twitter:image" content="<%= seoOgImage %>" />
 
     <!-- JSON-LD: Organization -->
     <script type="application/ld+json">
@@ -78,7 +87,7 @@
         "@type": "BreadcrumbList",
         "itemListElement": [
             { "@type": "ListItem", "position": 1, "name": "Ana Səhifə", "item": "https://jobing.az/" },
-            { "@type": "ListItem", "position": 2, "name": "<%= typeof title !== 'undefined' ? title : 'Jobing.az' %>", "item": "https://jobing.az<%= req ? req.originalUrl.split('?')[0] : '/' %>" }
+            { "@type": "ListItem", "position": 2, "name": "<%= seoTitle %>", "item": "https://jobing.az<%= req ? req.originalUrl.split('?')[0] : '/' %>" }
         ]
     }
     </script>
@@ -97,9 +106,8 @@
     <script>
     (function() {
         var theme = localStorage.getItem('theme');
-        if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        if (theme === 'dark') {
             document.documentElement.classList.add('dark');
-            if (!theme) localStorage.setItem('theme', 'dark');
         }
     })();
     </script>
@@ -141,4 +149,8 @@
     <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com">
     <link rel="dns-prefetch" href="https://www.googletagmanager.com">
     <link rel="dns-prefetch" href="https://googleads.g.doubleclick.net">
+
+    <% if (typeof seo !== 'undefined' && seo && seo.headerHtml) { %>
+      <%= seo.headerHtml %>
+    <% } %>
 </head>

@@ -18,6 +18,7 @@ import {requestAllSites} from "./src/Helpers/Automation.js";
 import bot, {listenTgCommands, sendTgMessage} from "./src/Helpers/TelegramBot.js";
 import TelegramBot from 'node-telegram-bot-api';
 import authMiddleware from './src/Middlewares/Auth.js';
+import seoMiddleware from './src/Middlewares/Seo.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -47,6 +48,7 @@ app.use(express.urlencoded({extended: true, limit: '100mb'}));
 
 app.use(cookieParser());
 app.use(authMiddleware.setUser);
+app.use(seoMiddleware);
 app.use(i18n.init);
 // Force Azerbaijani locale when no language cookie is set
 app.use((req, res, next) => {

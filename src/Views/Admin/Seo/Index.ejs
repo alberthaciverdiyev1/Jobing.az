@@ -1,0 +1,123 @@
+<div class="space-y-4">
+  <div class="flex items-center justify-between">
+    <h1 class="text-2xl font-bold text-gray-800">SEO Management</h1>
+  </div>
+
+  <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm text-left text-gray-500">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+          <tr>
+            <th class="px-5 py-3 w-32">Route</th>
+            <th class="px-5 py-3">Title</th>
+            <th class="px-5 py-3 hidden md:table-cell">Description</th>
+            <th class="px-5 py-3 w-20">Status</th>
+            <th class="px-5 py-3 w-24">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="seoTableBody">
+          <tr>
+            <td colspan="5" class="px-5 py-8 text-center text-gray-400">Yüklənir...</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Modal -->
+<div id="editModal" class="hidden fixed inset-0 z-[99999] bg-black/50 flex items-start justify-center p-4 pt-10 overflow-y-auto">
+  <div class="bg-white rounded-xl w-full max-w-2xl p-6 my-8">
+    <div class="flex items-center justify-between mb-5">
+      <h3 class="text-lg font-semibold text-gray-800">SEO Settings</h3>
+      <button onclick="closeEditModal()" class="text-gray-400 hover:text-gray-600 text-xl leading-none">&times;</button>
+    </div>
+
+    <input type="hidden" id="editId">
+
+    <div class="space-y-5">
+      <!-- Route -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Route</label>
+        <input id="editRoute" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 outline-none bg-gray-50" readonly>
+      </div>
+
+      <!-- Basic SEO -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Title</label>
+          <input id="editTitle" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="Default title shown if empty">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+          <input id="editDescription" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="Default description shown if empty">
+        </div>
+      </div>
+
+      <!-- Toggles -->
+      <div class="flex items-center gap-6">
+        <label class="flex items-center gap-2 cursor-pointer">
+          <input type="checkbox" id="editActive" class="w-4 h-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" checked>
+          <span class="text-sm text-gray-700">Active</span>
+        </label>
+        <label class="flex items-center gap-2 cursor-pointer">
+          <input type="checkbox" id="editNoindex" class="w-4 h-4 rounded border-gray-300 text-red-500 focus:ring-red-500">
+          <span class="text-sm text-gray-700">Noindex</span>
+        </label>
+      </div>
+
+      <!-- Open Graph -->
+      <div>
+        <h4 class="text-sm font-semibold text-gray-700 mb-2 pb-1 border-b border-gray-100">Open Graph</h4>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div>
+            <label class="block text-xs font-medium text-gray-500 mb-1">OG Title</label>
+            <input id="editOgTitle" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-gray-500 mb-1">OG Description</label>
+            <input id="editOgDescription" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-gray-500 mb-1">OG Image URL</label>
+            <input id="editOgImage" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+          </div>
+        </div>
+      </div>
+
+      <!-- Canonical -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Canonical URL</label>
+        <input id="editCanonical" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="Leave empty to use default">
+      </div>
+
+      <!-- Custom HTML Sections -->
+      <div>
+        <h4 class="text-sm font-semibold text-gray-700 mb-2 pb-1 border-b border-gray-100">Custom HTML Injection</h4>
+        <div class="space-y-3">
+          <div>
+            <label class="block text-xs font-medium text-gray-500 mb-1">Header HTML (&lt;head&gt;)</label>
+            <textarea id="editHeaderHtml" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 outline-none font-mono text-xs" placeholder="Custom scripts, meta tags, etc."></textarea>
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-gray-500 mb-1">Body Top HTML (after &lt;body&gt;)</label>
+            <textarea id="editBodyTopHtml" rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 outline-none font-mono text-xs"></textarea>
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-gray-500 mb-1">Body Bottom HTML (before &lt;/body&gt;)</label>
+            <textarea id="editBodyBottomHtml" rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 outline-none font-mono text-xs"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex justify-between mt-6 pt-4 border-t border-gray-200">
+      <button onclick="deleteEntry()" class="px-4 py-2 text-sm text-red-600 bg-red-50 rounded-lg hover:bg-red-100 hidden" id="deleteBtn">Remove Override</button>
+      <div></div>
+      <div class="flex gap-3">
+        <button onclick="closeEditModal()" class="px-4 py-2 text-sm text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200">Cancel</button>
+        <button onclick="saveEntry()" class="px-4 py-2 text-sm text-white bg-indigo-600 rounded-lg hover:bg-indigo-700">Save</button>
+      </div>
+    </div>
+  </div>
+</div>

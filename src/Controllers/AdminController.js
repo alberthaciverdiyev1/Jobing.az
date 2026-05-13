@@ -19,6 +19,7 @@ import JobService from '../Services/JobDataService.js';
 import NewsService from '../Services/NewsService.js';
 import RssSource from '../Models/RssSource.js';
 import RssImportService from '../Services/RssImportService.js';
+import Seo from '../Models/Seo.js';
 import Enums from '../Config/Enums.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -1208,6 +1209,86 @@ const AdminController = {
             res.json({ success: true, message: 'Scraping cancelled' });
         } catch (error) {
             res.status(500).json({ error: error.message });
+        }
+    },
+
+    // ============================================================
+    // SEO MANAGEMENT
+    // ============================================================
+
+    adminSeoView: async (req, res) => {
+        const view = { title: 'SEO Management - Admin Panel', body: "Seo/Index.ejs", js: "Seo.js" };
+        res.render('Admin/Main', view);
+    },
+
+    getSeoList: async (req, res) => {
+        try {
+            const entries = await Seo.find().sort({ route: 1 }).lean();
+            res.json({ success: true, data: entries });
+        } catch (error) {
+            res.status(500).json({ success: false, error: error.message });
+        }
+    },
+
+    getSeoDefaults: async (req, res) => {
+        const defaults = {
+            '/': { title: 'Ana Səhifə', description: 'Azərbaycanda ən son vakansiyalar, iş elanları və karyera imkanları. Jobing.az ilə iş axtarışınızı başlayın.' },
+            '/auth': { title: 'Giriş / Qeydiyyat', description: 'Jobing.az-a daxil olun və ya yeni hesab yaradın. İş axtarışı və elan yerləşdirmə üçün qeydiyyatdan keçin.' },
+            '/vakansiyalar': { title: 'Vakansiyalar', description: 'Azərbaycandakı ən son vakansiya elanları. Minlərlə iş imkanı arasından sizə uyğun olanı tapın.' },
+            '/sirketler': { title: 'Şirkətlər', description: 'Azərbaycanda fəaliyyət göstərən şirkətlər və onların vakansiyaları.' },
+            '/cv-ler': { title: 'CV-lər', description: 'İş axtaranların peşəkar CV-ləri. Namizədlərin təcrübə və bacarıqlarını kəşf edin.' },
+            '/about-us': { title: 'Haqqımızda', description: 'Jobing.az - Azərbaycanın ən böyük iş axtarış platforması. Missiyamız iş axtaranlar və işəgötürənləri bir araya gətirməkdir.' },
+            '/contact': { title: 'Bizimlə Əlaqə', description: 'Jobing.az ilə əlaqə saxlayın. Suallarınız, təklif və rəyləriniz üçün bizə yazın.' },
+            '/faq': { title: 'Tez-tez verilən suallar', description: 'İş axtarışı, CV yaratma, elan yerləşdirmə və digər mövzularda ən çox verilən suallar.' },
+            '/blogs': { title: 'Bloqlar', description: 'Karyera məsləhətləri, iş axtarışı strategiyaları və peşəkar inkişaf haqqında bloq yazıları.' },
+            '/xeberler': { title: 'Xəbərlər', description: 'Ən son iş və karyera xəbərləri. Azərbaycanda iş dünyası haqqında güncəl məlumatlar.' },
+            '/add-job': { title: 'Yeni vakansiya', description: 'Şirkətiniz üçün yeni vakansiya elanı yerləşdirin. İş axtaran ən uyğun namizədlərə çatın.' },
+            '/dashboard': { title: 'Mənim Panelim', description: 'CV-lərinizi idarə edin, müraciətlərinizi izləyin.' },
+            '/company/dashboard': { title: 'Şirkət Paneli', description: 'Vakansiyalarınızı idarə edin, müraciətlərə baxın.' }
+        };
+        res.json({ success: true, data: defaults });
+    },
+
+    saveSeo: async (req, res) => {
+        try {
+            const { route, title, description, headerHtml, bodyTopHtml, bodyBottomHtml, footerHtml, ogTitle, ogDescription, ogImage, canonical, noindex, isActive } = req.body;
+            if (!route) {
+                return res.status(400).json({ success: false, error: 'Route is required' });
+            }
+
+            const data = {
+                title: title || '',
+                description: description || '',
+                headerHtml: headerHtml || '',
+                bodyTopHtml: bodyTopHtml || '',
+                bodyBottomHtml: bodyBottomHtml || '',
+                footerHtml: footerHtml || '',
+                ogTitle: ogTitle || '',
+                ogDescription: ogDescription || '',
+                ogImage: ogImage || '',
+                canonical: canonical || '',
+                noindex: !!noindex,
+                isActive: isActive !== undefined ? isActive : true
+            };
+
+            const seo = await Seo.findOneAndUpdate(
+                { route: route.trim() },
+                { $set: data },
+                { upsert: true, new: true, setDefaultsOnInsert: true }
+            ).lean();
+
+            res.json({ success: true, data: seo });
+        } catch (error) {
+            res.status(500).json({ success: false, error: error.message });
+        }
+    },
+
+    deleteSeo: async (req, res) => {
+        try {
+            await Seo.findByIdAndDelete(req.params.id);
+            res.json({ success: true });
+        } catch (error) {
+            res.status(500).json({ success: false, error: error.message });
         }
     }
 };
