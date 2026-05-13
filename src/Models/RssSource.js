@@ -20,6 +20,11 @@ const rssSourceSchema = new Schema({
         type: Date,
         default: null
     },
+    type: {
+        type: String,
+        enum: ['news', 'blog'],
+        default: 'news'
+    },
     isActive: {
         type: Boolean,
         default: true

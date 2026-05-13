@@ -21,6 +21,7 @@ router.get('/admin/blogs/add', ...admin, adminController.adminBlogsAddView);
 router.get('/admin/blogs/edit/:id', ...admin, adminController.adminBlogsEditView);
 router.get('/admin/news', ...admin, adminController.adminNewsView);
 router.get('/admin/news/add', ...admin, adminController.adminNewsAddView);
+router.get('/admin/news/view/:id', ...admin, adminController.adminNewsViewPage);
 router.get('/admin/news/edit/:id', ...admin, adminController.adminNewsEditView);
 router.get('/admin/cvs', ...admin, adminController.adminCvsView);
 router.get('/admin/visitors', ...admin, adminController.adminVisitorsView);

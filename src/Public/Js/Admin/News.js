@@ -96,6 +96,7 @@ function loadNews(page) {
                     '<td class="px-5 py-3"><span class="badge ' + (item.isActive ? 'badge-green' : 'badge-red') + '">' + (item.isActive ? 'Active' : 'Inactive') + '</span></td>' +
                     '<td class="px-5 py-3 text-sm">' + (item.createdAt ? new Date(item.createdAt).toLocaleDateString() : '-') + '</td>' +
                     '<td class="px-5 py-3">' +
+                    '<a href="/admin/news/view/' + item._id + '" class="text-blue-600 hover:text-blue-800 text-sm font-medium me-2">View</a>' +
                     '<a href="/admin/news/edit/' + item._id + '" class="text-indigo-600 hover:text-indigo-800 text-sm font-medium me-2">Edit</a>' +
                     '<button onclick="deleteNews(\'' + item._id + '\')" class="text-red-600 hover:text-red-800 text-sm font-medium">Delete</button>' +
                     '</td></tr>';
@@ -172,6 +173,8 @@ async function handleAddNews(e) {
         description_en: document.getElementById('addDescriptionEn')?.value || '',
         description_ru: document.getElementById('addDescriptionRu')?.value || '',
         content: getNewsEditorData('addContent'),
+        content_en: document.getElementById('addContentEn')?.value || '',
+        content_ru: document.getElementById('addContentRu')?.value || '',
         isActive: document.getElementById('addIsActive').checked
     };
 
@@ -202,6 +205,8 @@ async function handleEditNews(e) {
         description_en: document.getElementById('editDescriptionEn')?.value || '',
         description_ru: document.getElementById('editDescriptionRu')?.value || '',
         content: getNewsEditorData('editContent'),
+        content_en: document.getElementById('editContentEn')?.value || '',
+        content_ru: document.getElementById('editContentRu')?.value || '',
         isActive: document.getElementById('editIsActive').checked
     };
 

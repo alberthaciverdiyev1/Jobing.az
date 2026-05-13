@@ -17,7 +17,7 @@ async function loadSources(page) {
         rssTotalPages = data.totalPages || 1;
 
         if (sources.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="6" class="px-5 py-8 text-center text-gray-400">Heç bir RSS mənbəsi yoxdur</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="7" class="px-5 py-8 text-center text-gray-400">Heç bir RSS mənbəsi yoxdur</td></tr>';
             var pagination = document.getElementById('rssPagination');
             if (pagination) pagination.innerHTML = '';
             return;
@@ -29,9 +29,12 @@ async function loadSources(page) {
                 ? '<span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-700">Aktiv</span>'
                 : '<span class="px-2 py-1 text-xs rounded-full bg-red-100 text-red-700">Deaktiv</span>';
 
+            var typeLabel = s.type === 'blog' ? '<span class="px-2 py-1 text-xs rounded-full bg-purple-100 text-purple-700">Bloq</span>' : '<span class="px-2 py-1 text-xs rounded-full bg-blue-100 text-blue-700">Xəbər</span>';
+
             return '<tr class="border-b hover:bg-gray-50">' +
                 '<td class="px-5 py-3 font-medium text-gray-900">' + escapeHtml(s.name || '-') + '</td>' +
                 '<td class="px-5 py-3 text-sm text-gray-500 max-w-[200px] truncate">' + escapeHtml(s.url) + '</td>' +
+                '<td class="px-5 py-3 text-sm">' + typeLabel + '</td>' +
                 '<td class="px-5 py-3 text-sm text-gray-500">' + escapeHtml(s.category || '-') + '</td>' +
                 '<td class="px-5 py-3 text-sm text-gray-500">' + lastFetch + '</td>' +
                 '<td class="px-5 py-3">' + statusHtml + '</td>' +
@@ -47,7 +50,7 @@ async function loadSources(page) {
         if (pagination) renderRssPagination(pagination, rssPage, rssTotalPages);
     } catch (err) {
         var tbody = document.getElementById('rssSourceTableBody');
-        if (tbody) tbody.innerHTML = '<tr><td colspan="6" class="px-5 py-8 text-center text-red-400">Xəta: ' + err.message + '</td></tr>';
+        if (tbody) tbody.innerHTML = '<tr><td colspan="7" class="px-5 py-8 text-center text-red-400">Xəta: ' + err.message + '</td></tr>';
     }
 }
 
@@ -72,6 +75,7 @@ function closeAddModal() {
     document.getElementById('sourceName').value = '';
     document.getElementById('sourceUrl').value = '';
     document.getElementById('sourceCategory').value = '';
+    document.getElementById('sourceType').value = 'news';
 }
 
 async function addSource() {
@@ -82,7 +86,8 @@ async function addSource() {
         await axios.post('/api/admin/rss-sources', {
             url: url,
             name: document.getElementById('sourceName').value.trim(),
-            category: document.getElementById('sourceCategory').value.trim()
+            category: document.getElementById('sourceCategory').value.trim(),
+            type: document.getElementById('sourceType').value
         });
         alertify.success('Mənbə əlavə edildi');
         closeAddModal();
@@ -107,7 +112,7 @@ async function importSource(id) {
     try {
         var res = await axios.post('/api/admin/rss-sources/' + id + '/import');
         var r = res.data;
-        alertify.success(r.imported + ' yeni xəbər idxal edildi, ' + r.skipped + ' keçildi');
+        alertify.success(r.imported + ' yeni məlumat idxal edildi, ' + r.skipped + ' keçildi');
         loadSources(rssPage);
     } catch (err) {
         alertify.error(err.response?.data?.error || 'İdxal xətası');
@@ -122,7 +127,7 @@ async function importAllSources() {
         results.forEach(function(r) {
             if (r.success) total += r.imported || 0;
         });
-        alertify.success('Cəmi ' + total + ' xəbər idxal edildi');
+        alertify.success('Cəmi ' + total + ' məlumat idxal edildi');
         loadSources(1);
     } catch (err) {
         alertify.error(err.response?.data?.error || 'İdxal xətası');

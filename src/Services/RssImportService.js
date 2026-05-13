@@ -1,6 +1,7 @@
 import Parser from 'rss-parser';
 import slugify from 'slugify';
 import News from '../Models/News.js';
+import Blog from '../Models/Blog.js';
 import RssSource from '../Models/RssSource.js';
 
 const parser = new Parser({
@@ -65,20 +66,23 @@ function extractImage(item) {
 }
 
 const RssImportService = {
-    /** Fetch and import news from a single RSS source */
+    /** Fetch and import from a single RSS source */
     fetchAndImport: async (source) => {
         try {
             const feed = await parser.parseURL(source.url);
             const items = feed.items || [];
             let imported = 0;
             let skipped = 0;
+            const isBlog = source.type === 'blog';
 
             for (const item of items) {
                 const title = item.title?.trim();
                 if (!title) continue;
 
-                // Deduplicate by title
-                const exists = await News.findOne({ title });
+                // Deduplicate by title (News) or name (Blog)
+                const exists = isBlog
+                    ? await Blog.findOne({ name: title })
+                    : await News.findOne({ title });
                 if (exists) {
                     skipped++;
                     continue;
@@ -92,18 +96,25 @@ const RssImportService = {
                 const slug = slugify(title, { lower: true, strict: true })
                     + '-' + Math.floor(Math.random() * 100000);
 
-                // Prepare base news data
-                const newsData = {
-                    title,
-                    slug,
-                    description: stripHtml(description),
-                    content,
-                    imageUrl,
-                    category: source.category || 'Imported',
-                    isActive: false
-                };
-
-                await News.create(newsData);
+                if (isBlog) {
+                    await Blog.create({
+                        name: title,
+                        slug,
+                        description: stripHtml(description),
+                        imageUrl,
+                        isActive: false
+                    });
+                } else {
+                    await News.create({
+                        title,
+                        slug,
+                        description: stripHtml(description),
+                        content,
+                        imageUrl,
+                        category: source.category || 'Imported',
+                        isActive: false
+                    });
+                }
                 imported++;
             }
 
