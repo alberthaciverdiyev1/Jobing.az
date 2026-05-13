@@ -13,7 +13,7 @@ function updateDarkModeIcons() {
     var isDark = document.documentElement.classList.contains('dark');
     var iconClass = isDark ? 'fa-sun text-yellow-500' : 'fa-moon';
     document.querySelectorAll('#darkModeToggle i, #darkModeToggleMobile i, .admin-dark-icon').forEach(function(icon) {
-        icon.className = 'fas ' + iconClass + ' text-sm';
+        icon.className = 'fas ' + iconClass + ' text-base';
     });
 }
 

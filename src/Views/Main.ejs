@@ -3,6 +3,9 @@
     <!-- Head -->
     <%- include('Partials/Head') %>
   <body class="bg-gray-50 font-sans text-gray-900 antialiased flex flex-col min-h-screen pb-16 md:pb-0">
+    <% if (typeof seo !== 'undefined' && seo && seo.bodyTopHtml) { %>
+      <%- seo.bodyTopHtml %>
+    <% } %>
     <!-- Navbar -->
     <%- include('Partials/Navbar') %>
     <!-- Mobile Bottom Nav -->
@@ -11,6 +14,9 @@
     <%- include(body) %>
     <!-- Footer -->
     <%- include('Partials/Footer') %>
+    <% if (typeof seo !== 'undefined' && seo && seo.bodyBottomHtml) { %>
+      <%- seo.bodyBottomHtml %>
+    <% } %>
     <!-- Js -->
     <%- include('Partials/Js') %>
   </body>

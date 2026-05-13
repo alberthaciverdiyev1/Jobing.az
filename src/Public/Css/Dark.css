@@ -399,6 +399,80 @@
     color: #64748b;
 }
 
+/* ========== AUTH PAGE ========== */
+.dark section.min-h-screen.bg-gradient-to-b.from-gray-50 {
+    background: #0f172a;
+}
+
+.dark .bg-primary-100 {
+    background-color: rgba(255, 140, 0, 0.15);
+}
+
+.dark .border-primary-100 {
+    border-color: rgba(255, 140, 0, 0.2);
+}
+
+.dark .text-red-500 {
+    color: #f87171;
+}
+
+/* ========== GRADIENT BACKGROUNDS (company logos, auth icons, etc.) ========== */
+.dark .from-gray-50,
+.dark .to-gray-100,
+.dark .to-white {
+    --tw-gradient-from: #1e293b !important;
+    --tw-gradient-to: #0f172a !important;
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important;
+}
+
+.dark .from-primary-50 {
+    --tw-gradient-from: rgba(255, 140, 0, 0.1) !important;
+}
+
+.dark .to-amber-50 {
+    --tw-gradient-to: rgba(245, 158, 11, 0.1) !important;
+}
+
+/* ========== COMPANY DETAIL ========== */
+.dark .hover\:bg-gray-50\/50:hover {
+    background-color: rgba(51, 65, 85, 0.5);
+}
+
+/* ========== PAGINATION ========== */
+.dark .border-gray-200.bg-white {
+    background-color: #1e293b;
+    border-color: #334155;
+}
+
+/* ========== SKILL TAGS IN CARDS ========== */
+.dark .bg-gray-100.text-gray-600 {
+    background-color: #334155;
+    color: #cbd5e1;
+}
+
+/* ========== ROLE SELECTOR (AUTH) ========== */
+.dark .bg-primary-50\/30 {
+    background-color: rgba(255, 140, 0, 0.08);
+}
+
+.dark .border-gray-200.hover\:border-gray-300:hover {
+    border-color: #64748b;
+}
+
+/* ========== AUTH TAB ========== */
+.dark .bg-gray-100.rounded-xl.p-1 {
+    background-color: #1e293b;
+}
+
+.dark .bg-white.text-gray-900.shadow-sm.rounded-lg {
+    background-color: #334155;
+    color: #f1f5f9;
+}
+
+.dark .hover\:text-gray-700:hover {
+    color: #cbd5e1;
+}
+
 /* ========== TRANSITION ON HTML ========== */
 html.dark,
 html.dark *,

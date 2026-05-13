@@ -28,6 +28,7 @@ router.get('/admin/visitors', ...admin, adminController.adminVisitorsView);
 router.get('/admin/logs', ...admin, adminController.adminLogsView);
 router.get('/admin/settings', ...admin, adminController.adminSettingsView);
 router.get('/admin/rss-sources', ...admin, adminController.adminRssSourcesView);
+router.get('/admin/seo', ...admin, adminController.adminSeoView);
 
 // ============================================================
 // ADMIN API
@@ -110,6 +111,12 @@ router.post('/api/admin/rss-sources', ...admin, adminController.createRssSource)
 router.post('/api/admin/rss-sources/import-all', ...admin, adminController.importAllRss);
 router.delete('/api/admin/rss-sources/:id', ...admin, adminController.deleteRssSource);
 router.post('/api/admin/rss-sources/:id/import', ...admin, adminController.importRssSource);
+
+// SEO
+router.get('/api/admin/seo', ...admin, adminController.getSeoList);
+router.get('/api/admin/seo/defaults', ...admin, adminController.getSeoDefaults);
+router.post('/api/admin/seo', ...admin, adminController.saveSeo);
+router.delete('/api/admin/seo/:id', ...admin, adminController.deleteSeo);
 
 // Scraping
 router.post('/api/admin/scrape/all', ...admin, adminController.triggerScrapeAll);
