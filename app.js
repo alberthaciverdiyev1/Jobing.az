@@ -4,7 +4,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import cron from 'node-cron';
 import routes from './src/Routes/Main.js';
-import sequelize from './src/Config/Database.js';
+import sequelize, { connectPromise } from './src/Config/Database.js';
 import logger, { errorLogger, patchConsoleError, logError } from './src/Middlewares/Logger.js';
 // Patch console.error globally so PM2/console errors also get logged to files
 patchConsoleError();
@@ -91,8 +91,16 @@ cron.schedule('0 9,16,20 * * *', async () => {
     await requestAllSites(true);
 });
 
-app.listen(port, '0.0.0.0', () => {
-    console.log(`Server is running at http://localhost:${port}`);
+// Wait for DB connection before accepting requests to prevent 500 errors from buffering timeouts
+connectPromise.then(() => {
+    app.listen(port, '0.0.0.0', () => {
+        console.log(`Server is running at http://localhost:${port}`);
+    });
+}).catch(err => {
+    console.error('Database connection failed, starting server without DB:', err.message);
+    app.listen(port, '0.0.0.0', () => {
+        console.log(`Server is running at http://localhost:${port} (NO DATABASE)`);
+    });
 });
 
 process.on('uncaughtException', async (err) => {
