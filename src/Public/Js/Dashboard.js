@@ -1,3 +1,5 @@
+var respondEditor = null;
+
 document.addEventListener('DOMContentLoaded', () => {
     alertify.set('notifier', 'position', 'top-right');
 
@@ -46,9 +48,21 @@ document.addEventListener('DOMContentLoaded', () => {
 // ============================================
 function showUserRespondModal(applicationId) {
     document.getElementById('respondApplicationId').value = applicationId;
-    document.getElementById('respondMessage').value = '';
     document.getElementById('userRespondModal').classList.remove('hidden');
     document.body.classList.add('modal-open');
+
+    var el = document.getElementById('respondMessage');
+    if (el && typeof ClassicEditor !== 'undefined' && !respondEditor) {
+        ClassicEditor.create(el, {
+            toolbar: ['heading', '|', 'bold', 'italic', 'link', 'bulletedList', '|', 'undo', 'redo']
+        }).then(function(editor) {
+            respondEditor = editor;
+        }).catch(function(err) {
+            console.error('CKEditor error:', err);
+        });
+    } else if (respondEditor) {
+        respondEditor.setData('');
+    }
 }
 
 function closeRespondModal() {
@@ -58,7 +72,7 @@ function closeRespondModal() {
 
 async function submitUserRespond() {
     const id = document.getElementById('respondApplicationId').value;
-    const message = document.getElementById('respondMessage').value.trim();
+    const message = respondEditor ? respondEditor.getData().trim() : document.getElementById('respondMessage').value.trim();
     if (!id) return;
 
     try {

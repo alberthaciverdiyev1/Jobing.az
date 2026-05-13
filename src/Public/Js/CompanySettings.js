@@ -7,6 +7,19 @@
 
     const alertContainer = document.getElementById('alertContainer');
     const alertMessage = document.getElementById('alertMessage');
+    var descEditor = null;
+
+    // Init CKEditor for description
+    var descEl = document.getElementById('description');
+    if (descEl && typeof ClassicEditor !== 'undefined') {
+        ClassicEditor.create(descEl, {
+            toolbar: ['heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote', '|', 'undo', 'redo']
+        }).then(function(editor) {
+            descEditor = editor;
+        }).catch(function(err) {
+            console.error('CKEditor error:', err);
+        });
+    }
 
     function showAlert(message, type = 'success') {
         alertContainer.classList.remove('hidden');
@@ -31,7 +44,7 @@
         submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-1.5"></i> Saxlanılır...';
 
         const data = {
-            description: document.getElementById('description').value.trim(),
+            description: descEditor ? descEditor.getData().trim() : document.getElementById('description').value.trim(),
             industry: document.getElementById('industry').value,
             foundedYear: document.getElementById('foundedYear').value ? Number(document.getElementById('foundedYear').value) : null,
             employeeCount: document.getElementById('employeeCount').value,

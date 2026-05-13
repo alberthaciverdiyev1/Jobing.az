@@ -1,4 +1,7 @@
 let currentApplicationId = null;
+var acceptEditor = null;
+var rejectEditor = null;
+var interviewNotesEditor = null;
 
 document.addEventListener('DOMContentLoaded', () => {
     var appId = window.location.pathname.split('/').pop();
@@ -131,16 +134,41 @@ function getStatusColor(status) {
 // MODAL ACTIONS
 // ============================================================
 
+function initModalEditor(id, existingEditor, callback) {
+    var el = document.getElementById(id);
+    if (!el || typeof ClassicEditor === 'undefined') {
+        if (callback) callback(null);
+        return;
+    }
+    if (existingEditor) {
+        if (callback) callback(existingEditor);
+        return;
+    }
+    var el = document.getElementById(id);
+    ClassicEditor.create(el, {
+        toolbar: ['heading', '|', 'bold', 'italic', 'link', 'bulletedList', '|', 'undo', 'redo']
+    }).then(function(editor) {
+        if (callback) callback(editor);
+    }).catch(function(err) {
+        console.error('CKEditor error:', err);
+        if (callback) callback(null);
+    });
+}
+
 function showAcceptModal() {
     document.getElementById('acceptModal').classList.remove('hidden');
+    initModalEditor('acceptReason', acceptEditor, function(editor) {
+        acceptEditor = editor;
+    });
 }
 
 async function confirmAccept() {
     if (!currentApplicationId) return;
-    var reason = document.getElementById('acceptReason').value;
+    var reason = acceptEditor ? acceptEditor.getData() : document.getElementById('acceptReason').value;
     try {
         await axios.put('/api/hr/applications/' + currentApplicationId + '/status', { decision: 'accepted', reason: reason });
         alertify.success('Application accepted');
+        if (acceptEditor) acceptEditor.setData('');
         closeModal('acceptModal');
         loadApplicationDetail(currentApplicationId);
     } catch (err) {
@@ -150,14 +178,18 @@ async function confirmAccept() {
 
 function showRejectModal() {
     document.getElementById('rejectModal').classList.remove('hidden');
+    initModalEditor('rejectReason', rejectEditor, function(editor) {
+        rejectEditor = editor;
+    });
 }
 
 async function confirmReject() {
     if (!currentApplicationId) return;
-    var reason = document.getElementById('rejectReason').value;
+    var reason = rejectEditor ? rejectEditor.getData() : document.getElementById('rejectReason').value;
     try {
         await axios.put('/api/hr/applications/' + currentApplicationId + '/status', { decision: 'rejected', reason: reason });
         alertify.success('Application rejected');
+        if (rejectEditor) rejectEditor.setData('');
         closeModal('rejectModal');
         loadApplicationDetail(currentApplicationId);
     } catch (err) {
@@ -167,6 +199,9 @@ async function confirmReject() {
 
 function showInterviewModal() {
     document.getElementById('interviewModal').classList.remove('hidden');
+    initModalEditor('interviewNotesInput', interviewNotesEditor, function(editor) {
+        interviewNotesEditor = editor;
+    });
 }
 
 async function confirmInterview() {
@@ -179,9 +214,10 @@ async function confirmInterview() {
             scheduledAt: new Date(scheduledAt).toISOString(),
             duration: Number(document.getElementById('interviewDurationInput').value) || 30,
             location: document.getElementById('interviewLocationInput').value,
-            notes: document.getElementById('interviewNotesInput').value
+            notes: interviewNotesEditor ? interviewNotesEditor.getData() : document.getElementById('interviewNotesInput').value
         });
         alertify.success('Interview scheduled');
+        if (interviewNotesEditor) interviewNotesEditor.setData('');
         closeModal('interviewModal');
         loadApplicationDetail(currentApplicationId);
     } catch (err) {

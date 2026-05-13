@@ -1,4 +1,5 @@
 var deleteNewsId = null;
+var newsEditorInstances = {};
 
 document.addEventListener('DOMContentLoaded', function() {
     var tbody = document.getElementById('newsTableBody');
@@ -10,14 +11,35 @@ document.addEventListener('DOMContentLoaded', function() {
 
     var addForm = document.getElementById('addNewsForm');
     if (addForm) {
+        initNewsEditor('addDescription');
+        initNewsEditor('addContent');
         addForm.addEventListener('submit', handleAddNews);
     }
 
     var editForm = document.getElementById('editNewsForm');
     if (editForm) {
+        initNewsEditor('editDescription');
+        initNewsEditor('editContent');
         editForm.addEventListener('submit', handleEditNews);
     }
 });
+
+function initNewsEditor(textareaId) {
+    var el = document.getElementById(textareaId);
+    if (!el || typeof ClassicEditor === 'undefined') return;
+    ClassicEditor.create(el, {
+        toolbar: ['heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote', '|', 'undo', 'redo']
+    }).then(function(editor) {
+        newsEditorInstances[textareaId] = editor;
+    }).catch(function(err) {
+        console.error('CKEditor error for ' + textareaId + ':', err);
+    });
+}
+
+function getNewsEditorData(textareaId) {
+    if (newsEditorInstances[textareaId]) return newsEditorInstances[textareaId].getData();
+    return document.getElementById(textareaId)?.value || '';
+}
 
 async function uploadNewsImage(prefix) {
     var fileInput = document.getElementById(prefix + 'ImageFile');
@@ -116,8 +138,8 @@ function handleAddNews(e) {
         slug: document.getElementById('addSlug').value || undefined,
         category: document.getElementById('addCategory').value || undefined,
         imageUrl: document.getElementById('addImageUrl').value || undefined,
-        description: document.getElementById('addDescription').value,
-        content: document.getElementById('addContent').value,
+        description: getNewsEditorData('addDescription'),
+        content: getNewsEditorData('addContent'),
         isActive: document.getElementById('addIsActive').checked
     };
 
@@ -137,8 +159,8 @@ function handleEditNews(e) {
         slug: document.getElementById('editSlug').value || undefined,
         category: document.getElementById('editCategory').value || undefined,
         imageUrl: document.getElementById('editImageUrl').value || undefined,
-        description: document.getElementById('editDescription').value,
-        content: document.getElementById('editContent').value,
+        description: getNewsEditorData('editDescription'),
+        content: getNewsEditorData('editContent'),
         isActive: document.getElementById('editIsActive').checked
     };
 

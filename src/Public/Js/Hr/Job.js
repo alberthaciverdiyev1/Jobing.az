@@ -2,6 +2,7 @@ let currentPage = 1;
 let jobTypesMap = {};
 let categories = [];
 let applicationCounts = {};
+var jobDescEditor = null;
 
 document.addEventListener('DOMContentLoaded', () => {
     loadEnums();
@@ -146,14 +147,38 @@ async function editJob(id) {
         document.getElementById('jobPhone').value = j.phone || '';
         document.getElementById('jobMinSalary').value = j.minSalary || '';
         document.getElementById('jobMaxSalary').value = j.maxSalary || '';
-        document.getElementById('jobDescription').value = j.description || '';
         if (document.getElementById('jobCompany')) document.getElementById('jobCompany').value = j.companyId || '';
         if (document.getElementById('jobType')) document.getElementById('jobType').value = j.jobType || '';
         if (document.getElementById('jobCategory')) document.getElementById('jobCategory').value = j.categoryId || '';
+        // Show modal first, then init CKEditor (needs visible container)
         document.getElementById('jobModal').classList.remove('hidden');
+        setTimeout(function() {
+            var descEl = document.getElementById('jobDescription');
+            if (descEl && typeof ClassicEditor !== 'undefined') {
+                if (jobDescEditor) {
+                    jobDescEditor.destroy().then(function() {
+                        initJobEditor(descEl, j.description || '');
+                    });
+                } else {
+                    initJobEditor(descEl, j.description || '');
+                }
+            }
+        }, 50);
     } catch (err) {
         alertify.error('Failed to load job: ' + err.message);
     }
+}
+
+function initJobEditor(el, data) {
+    if (typeof ClassicEditor === 'undefined') return;
+    ClassicEditor.create(el, {
+        toolbar: ['heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', '|', 'undo', 'redo']
+    }).then(function(editor) {
+        jobDescEditor = editor;
+        editor.setData(data || '');
+    }).catch(function(err) {
+        console.error('CKEditor error:', err);
+    });
 }
 
 async function saveJob() {
@@ -169,7 +194,7 @@ async function saveJob() {
         maxSalary: document.getElementById('jobMaxSalary').value ? Number(document.getElementById('jobMaxSalary').value) : undefined,
         jobType: document.getElementById('jobType')?.value || undefined,
         categoryId: document.getElementById('jobCategory')?.value ? Number(document.getElementById('jobCategory').value) : undefined,
-        description: document.getElementById('jobDescription').value,
+        description: jobDescEditor ? jobDescEditor.getData() : document.getElementById('jobDescription').value,
         redirectUrl: '#',
         postedAt: new Date()
     };
