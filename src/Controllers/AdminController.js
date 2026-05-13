@@ -453,6 +453,9 @@ const AdminController = {
 
     createJob: async (req, res) => {
         try {
+            if (!req.body.slug && req.body.title) {
+                req.body.slug = slugify(req.body.title, { lower: true, strict: true }) + '-' + Math.random().toString(36).substring(2, 8);
+            }
             const job = await Job.create(req.body);
             res.status(201).json(job);
         } catch (error) {
