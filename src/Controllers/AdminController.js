@@ -1237,6 +1237,7 @@ const AdminController = {
             '/vakansiyalar': { title: 'Vakansiyalar', description: 'Azərbaycandakı ən son vakansiya elanları. Minlərlə iş imkanı arasından sizə uyğun olanı tapın.' },
             '/sirketler': { title: 'Şirkətlər', description: 'Azərbaycanda fəaliyyət göstərən şirkətlər və onların vakansiyaları.' },
             '/cv-ler': { title: 'CV-lər', description: 'İş axtaranların peşəkar CV-ləri. Namizədlərin təcrübə və bacarıqlarını kəşf edin.' },
+            '/resumes': { title: 'CV-lər', description: 'İş axtaranların CV-ləri. Namizədlərin təcrübə və bacarıqlarını kəşf edin.' },
             '/about-us': { title: 'Haqqımızda', description: 'Jobing.az - Azərbaycanın ən böyük iş axtarış platforması. Missiyamız iş axtaranlar və işəgötürənləri bir araya gətirməkdir.' },
             '/contact': { title: 'Bizimlə Əlaqə', description: 'Jobing.az ilə əlaqə saxlayın. Suallarınız, təklif və rəyləriniz üçün bizə yazın.' },
             '/faq': { title: 'Tez-tez verilən suallar', description: 'İş axtarışı, CV yaratma, elan yerləşdirmə və digər mövzularda ən çox verilən suallar.' },
@@ -1244,7 +1245,10 @@ const AdminController = {
             '/xeberler': { title: 'Xəbərlər', description: 'Ən son iş və karyera xəbərləri. Azərbaycanda iş dünyası haqqında güncəl məlumatlar.' },
             '/add-job': { title: 'Yeni vakansiya', description: 'Şirkətiniz üçün yeni vakansiya elanı yerləşdirin. İş axtaran ən uyğun namizədlərə çatın.' },
             '/dashboard': { title: 'Mənim Panelim', description: 'CV-lərinizi idarə edin, müraciətlərinizi izləyin.' },
-            '/company/dashboard': { title: 'Şirkət Paneli', description: 'Vakansiyalarınızı idarə edin, müraciətlərə baxın.' }
+            '/company/dashboard': { title: 'Şirkət Paneli', description: 'Vakansiyalarınızı idarə edin, müraciətlərə baxın.' },
+            '/company/settings': { title: 'Şirkət Profili', description: 'Şirkət məlumatlarınızı redaktə edin və profilinizi yeniləyin.' },
+            '/cv/create': { title: 'CV Yarat', description: 'Peşəkar CV-nizi yaradın və işəgötürənlərə nümayiş etdirin.' },
+            '/cv/upload': { title: 'CV Yüklə', description: 'Mövcud CV-nizi yükləyin və işəgötürənlərlə paylaşın.' }
         };
         res.json({ success: true, data: defaults });
     },
