@@ -70,6 +70,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 const res = await axios.post('/api/auth/login', { email, password, rememberMe });
                 if (res.status === 200) {
                     alertify.success(res.data.message);
+                    // Check for redirect param from URL
+                    var redirect = new URLSearchParams(window.location.search).get('redirect');
+                    if (redirect) {
+                        window.location.href = redirect;
+                        return;
+                    }
                     // Redirect based on role
                     const role = res.data.user.role;
                     if (role === 'admin') {
