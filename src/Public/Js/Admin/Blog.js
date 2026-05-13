@@ -55,7 +55,7 @@ function destroyBlogEditor() {
 async function uploadBlogImage(prefix) {
     var fileInput = document.getElementById(prefix + 'ImageFile');
     var file = fileInput && fileInput.files[0];
-    if (!file) { alert('Please select an image file'); return; }
+    if (!file) return;
 
     var formData = new FormData();
     formData.append('image', file);
@@ -71,6 +71,7 @@ async function uploadBlogImage(prefix) {
             preview.classList.remove('hidden');
             previewImg.src = data.url;
         }
+        return data.url;
     } catch (err) {
         alert('Error uploading image: ' + (err.response && err.response.data && err.response.data.error ? err.response.data.error : err.message));
     }
@@ -141,13 +142,19 @@ function confirmDeleteBlog() {
 // ============================================================
 // ADD BLOG
 // ============================================================
-function handleAddBlog(e) {
+async function handleAddBlog(e) {
     e.preventDefault();
+    // Auto-upload image if file selected and no URL entered yet
+    var imageUrl = document.getElementById('addImageUrl').value || undefined;
+    if (!imageUrl) {
+        var uploaded = await uploadBlogImage('add');
+        if (uploaded) imageUrl = uploaded;
+    }
     var payload = {
         name: document.getElementById('addName').value,
         slug: document.getElementById('addSlug').value || undefined,
         description: getBlogEditorData() || document.getElementById('addDescription').value,
-        imageUrl: document.getElementById('addImageUrl').value || undefined,
+        imageUrl: imageUrl,
         isActive: document.getElementById('addIsActive').checked
     };
 
@@ -159,14 +166,20 @@ function handleAddBlog(e) {
 // ============================================================
 // EDIT BLOG
 // ============================================================
-function handleEditBlog(e) {
+async function handleEditBlog(e) {
     e.preventDefault();
     var blogId = window.location.pathname.split('/').pop();
+    // Auto-upload image if file selected and no URL entered yet
+    var imageUrl = document.getElementById('editImageUrl').value || undefined;
+    if (!imageUrl) {
+        var uploaded = await uploadBlogImage('edit');
+        if (uploaded) imageUrl = uploaded;
+    }
     var payload = {
         name: document.getElementById('editName').value,
         slug: document.getElementById('editSlug').value || undefined,
         description: getBlogEditorData() || document.getElementById('editDescription').value,
-        imageUrl: document.getElementById('editImageUrl').value || undefined,
+        imageUrl: imageUrl,
         isActive: document.getElementById('editIsActive').checked
     };
 

@@ -44,7 +44,7 @@ function getNewsEditorData(textareaId) {
 async function uploadNewsImage(prefix) {
     var fileInput = document.getElementById(prefix + 'ImageFile');
     var file = fileInput && fileInput.files[0];
-    if (!file) { alert('Please select an image file'); return; }
+    if (!file) return;
 
     var formData = new FormData();
     formData.append('image', file);
@@ -60,6 +60,7 @@ async function uploadNewsImage(prefix) {
             preview.classList.remove('hidden');
             previewImg.src = data.url;
         }
+        return data.url;
     } catch (err) {
         alert('Error uploading image: ' + (err.response && err.response.data && err.response.data.error ? err.response.data.error : err.message));
     }
@@ -131,13 +132,18 @@ function confirmDeleteNews() {
 // ============================================================
 // ADD NEWS
 // ============================================================
-function handleAddNews(e) {
+async function handleAddNews(e) {
     e.preventDefault();
+    var imageUrl = document.getElementById('addImageUrl').value || undefined;
+    if (!imageUrl) {
+        var uploaded = await uploadNewsImage('add');
+        if (uploaded) imageUrl = uploaded;
+    }
     var payload = {
         title: document.getElementById('addTitle').value,
         slug: document.getElementById('addSlug').value || undefined,
         category: document.getElementById('addCategory').value || undefined,
-        imageUrl: document.getElementById('addImageUrl').value || undefined,
+        imageUrl: imageUrl,
         description: getNewsEditorData('addDescription'),
         content: getNewsEditorData('addContent'),
         isActive: document.getElementById('addIsActive').checked
@@ -151,14 +157,19 @@ function handleAddNews(e) {
 // ============================================================
 // EDIT NEWS
 // ============================================================
-function handleEditNews(e) {
+async function handleEditNews(e) {
     e.preventDefault();
     var newsId = window.location.pathname.split('/').pop();
+    var imageUrl = document.getElementById('editImageUrl').value || undefined;
+    if (!imageUrl) {
+        var uploaded = await uploadNewsImage('edit');
+        if (uploaded) imageUrl = uploaded;
+    }
     var payload = {
         title: document.getElementById('editTitle').value,
         slug: document.getElementById('editSlug').value || undefined,
         category: document.getElementById('editCategory').value || undefined,
-        imageUrl: document.getElementById('editImageUrl').value || undefined,
+        imageUrl: imageUrl,
         description: getNewsEditorData('editDescription'),
         content: getNewsEditorData('editContent'),
         isActive: document.getElementById('editIsActive').checked

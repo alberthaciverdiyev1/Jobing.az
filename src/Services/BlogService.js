@@ -45,7 +45,7 @@ const BlogService = {
 
     getAll: async (data) => {
         try {
-            const blogs = await Blog.find(data);
+            const blogs = await Blog.find(data).sort({ createdAt: -1 });
             return {
                 status: 200,
                 message: 'Blogs retrieved successfully',
