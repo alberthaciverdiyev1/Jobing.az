@@ -46,6 +46,11 @@
                     </div>
                 </div>
 
+                <!-- Dark Mode Toggle -->
+                <button id="darkModeToggle" class="flex items-center justify-center w-9 h-9 rounded-lg text-gray-500 hover:text-yellow-500 hover:bg-gray-50 transition-all dark-mode-toggle" aria-label="Toggle dark mode">
+                    <i class="fas fa-moon text-sm"></i>
+                </button>
+
                 <!-- Auth: Show login if not logged in, user menu if logged in -->
                 <% if (typeof user !== 'undefined' && user) { %>
                     <%- include('UserMenu') %>
@@ -59,9 +64,13 @@
             </div>
         </div>
 
-        <!-- Mobile: Language Dropdown & Profile -->
+        <!-- Mobile: Language Dropdown & Dark Mode Toggle -->
         <div class="md:hidden flex items-center gap-2">
-            <!-- Mobile Language Dropdown (only, no segmented buttons) -->
+            <!-- Mobile Dark Mode Toggle -->
+            <button id="darkModeToggleMobile" class="flex items-center justify-center w-9 h-9 rounded-lg text-gray-500 hover:text-yellow-500 hover:bg-gray-100 transition-all" aria-label="Toggle dark mode">
+                <i class="fas fa-moon text-sm"></i>
+            </button>
+            <!-- Mobile Language Dropdown -->
             <div class="relative">
                 <button onclick="toggleLangDropdownMobile()" class="flex items-center gap-1 px-2 py-2 rounded-lg text-gray-500 hover:text-primary-500 hover:bg-gray-100 transition-all text-sm">
                     <i class="fas fa-globe text-xs"></i>
