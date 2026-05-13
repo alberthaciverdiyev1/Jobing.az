@@ -70,34 +70,37 @@ const BlogController = {
 
     findById: async (req, res) => {
         try {
-            const company = await CityService.findById(req.params.id);
-            if (!company) {
-                return res.status(404).json({message: 'Company not found'});
+            const blog = await BlogService.getOne(req.params.id);
+            if (!blog) {
+                return res.status(404).json({message: 'Blog not found'});
             }
-            res.status(200).json(company);
+            res.status(200).json(blog);
         } catch (error) {
-            res.status(500).json({message: 'Error retrieving company: ' + error.message});
+            res.status(500).json({message: 'Error retrieving blog: ' + error.message});
         }
     },
 
     update: async (req, res) => {
         try {
-            const company = await CityService.update(req.params.id, req.body);
-            if (!company) {
-                return res.status(404).json({message: 'Company not found'});
+            if (!req.body.slug && req.body.name) {
+                req.body.slug = slugify(req.body.name, { lower: true, strict: true }) + '-' + Math.floor(Math.random() * 100000);
             }
-            res.status(200).json(company);
+            const blog = await BlogService.update(req.params.id, req.body);
+            if (!blog) {
+                return res.status(404).json({message: 'Blog not found'});
+            }
+            res.status(200).json(blog);
         } catch (error) {
-            res.status(500).json({message: 'Error updating company: ' + error.message});
+            res.status(500).json({message: 'Error updating blog: ' + error.message});
         }
     },
 
     delete: async (req, res) => {
         try {
-            await CityService.delete(req.params.id);
-            res.status(200).json({message: 'Company successfully deleted'});
+            await BlogService.delete(req.params.id);
+            res.status(200).json({message: 'Blog successfully deleted'});
         } catch (error) {
-            res.status(500).json({message: 'Error deleting company: ' + error.message});
+            res.status(500).json({message: 'Error deleting blog: ' + error.message});
         }
     }
 };

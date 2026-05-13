@@ -1,5 +1,3 @@
-import Enums from '../Config/Enums.js';
-import City from '../Models/City.js';
 import Blog from "../Models/Blog.js";
 
 const BlogService = {
@@ -22,14 +20,14 @@ const BlogService = {
     },
     delete: async (id) => {
         try {
-            const city = await City.findById(id);
-            if (!city) {
-                throw new Error('City not found');
+            const blog = await Blog.findById(id);
+            if (!blog) {
+                throw new Error('Blog not found');
             }
-            await city.remove();
-            return {message: 'City successfully deleted'};
+            await Blog.findByIdAndDelete(id);
+            return {message: 'Blog successfully deleted'};
         } catch (error) {
-            throw new Error('Error deleting city: ' + error.message);
+            throw new Error('Error deleting blog: ' + error.message);
         }
     },
 
@@ -37,11 +35,11 @@ const BlogService = {
         try {
             const blog = await Blog.findOne({slug: slug});
             if (!blog) {
-                throw new Error('City not found');
+                throw new Error('Blog not found');
             }
             return blog;
         } catch (error) {
-            throw new Error('Error retrieving city: ' + error.message);
+            throw new Error('Error retrieving blog: ' + error.message);
         }
     },
 
@@ -57,16 +55,23 @@ const BlogService = {
             throw new Error('Error retrieving blogs: ' + error.message);
         }
     },
+    getOne: async (id) => {
+        try {
+            const blog = await Blog.findById(id);
+            return blog;
+        } catch (error) {
+            throw new Error('Error retrieving blog: ' + error.message);
+        }
+    },
     update: async (id, updateData) => {
         try {
-            const city = await City.findById(id);
-            if (!city) {
-                throw new Error('City not found');
+            const blog = await Blog.findByIdAndUpdate(id, updateData, { new: true });
+            if (!blog) {
+                throw new Error('Blog not found');
             }
-            await city.updateOne(updateData);
-            return city;
+            return blog;
         } catch (error) {
-            throw new Error('Error updating city: ' + error.message);
+            throw new Error('Error updating blog: ' + error.message);
         }
     }
 };

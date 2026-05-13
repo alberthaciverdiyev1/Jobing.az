@@ -1,7 +1,27 @@
+var cvSummaryEditor = null;
+var cvDynamicEditors = [];
+
 document.addEventListener('DOMContentLoaded', () => {
     alertify.set('notifier', 'position', 'top-right');
 
     const isEdit = window.location.pathname.includes('/edit/');
+
+    // Init CKEditor for cv-summary
+    var summaryEl = document.getElementById('cv-summary');
+    if (summaryEl && typeof ClassicEditor !== 'undefined') {
+        ClassicEditor.create(summaryEl, {
+            toolbar: ['heading', '|', 'bold', 'italic', 'link', 'bulletedList', '|', 'undo', 'redo']
+        }).then(function(editor) {
+            cvSummaryEditor = editor;
+        }).catch(function(err) {
+            console.error('CKEditor error:', err);
+        });
+    }
+
+    // Init CKEditor for existing dynamic fields (edit mode)
+    document.querySelectorAll('.edu-desc, .exp-desc').forEach(function(el) {
+        initCVTextarea(el);
+    });
 
     // ============================================
     // CV CREATE FORM
@@ -10,6 +30,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (cvForm) {
         cvForm.addEventListener('submit', async (e) => {
             e.preventDefault();
+
+            // Sync all CKEditor instances back to textareas
+            cvDynamicEditors.forEach(function(editor) {
+                editor.updateElement();
+            });
 
             // Collect skills
             const skills = [];
@@ -58,7 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 email: document.getElementById('cv-email')?.value.trim() || '',
                 phone: document.getElementById('cv-phone')?.value.trim() || '',
                 address: document.getElementById('cv-address')?.value.trim() || '',
-                summary: document.getElementById('cv-summary')?.value.trim() || '',
+                summary: cvSummaryEditor ? cvSummaryEditor.getData().trim() : document.getElementById('cv-summary')?.value.trim() || '',
                 skills,
                 education,
                 experience,
@@ -114,6 +139,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 <textarea class="edu-desc w-full mt-2 px-3 py-2.5 bg-white border border-gray-200 rounded-lg text-sm" rows="2" placeholder="Əlavə məlumat"></textarea>
             `;
             list.appendChild(div);
+            var newEduDesc = div.querySelector('.edu-desc');
+            if (newEduDesc) initCVTextarea(newEduDesc);
             addRemoveHandlers();
         });
     }
@@ -140,6 +167,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 <textarea class="exp-desc w-full mt-2 px-3 py-2.5 bg-white border border-gray-200 rounded-lg text-sm" rows="2" placeholder="Vəzifə öhdəlikləri"></textarea>
             `;
             list.appendChild(div);
+            var newExpDesc = div.querySelector('.exp-desc');
+            if (newExpDesc) initCVTextarea(newExpDesc);
             addRemoveHandlers();
         });
     }
@@ -326,3 +355,14 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+function initCVTextarea(textarea) {
+    if (!textarea || typeof ClassicEditor === 'undefined') return;
+    ClassicEditor.create(textarea, {
+        toolbar: ['bold', 'italic', 'link', 'bulletedList', '|', 'undo', 'redo']
+    }).then(function(editor) {
+        cvDynamicEditors.push(editor);
+    }).catch(function(err) {
+        console.error('CKEditor error:', err);
+    });
+}

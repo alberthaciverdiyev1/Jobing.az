@@ -77,21 +77,25 @@ const ViewController = {
     },
 
     blog: async (req, res) => {
-        const {slug} = req.params;
-        const blog = await BlogService.details(slug);
-        const view = {
-            title: blog.name,
-            description: blog.description || blog.name,
-            ogTitle: blog.name,
-            ogDescription: blog.description || blog.name,
-            ogImage: blog.imageUrl || undefined,
-            ogType: 'article',
-            body: 'Blog/Details.ejs',
-            js: 'Blog.js',
-            currentPage: 'blogs',
-            blog: blog
-        };
-        res.render('Main', view);
+        try {
+            const {slug} = req.params;
+            const blog = await BlogService.details(slug);
+            const view = {
+                title: blog.name,
+                description: blog.description || blog.name,
+                ogTitle: blog.name,
+                ogDescription: blog.description || blog.name,
+                ogImage: blog.imageUrl || undefined,
+                ogType: 'article',
+                body: 'Blog/Details.ejs',
+                js: 'Blog.js',
+                currentPage: 'blogs',
+                blog: blog
+            };
+            res.render('Main', view);
+        } catch (error) {
+            res.redirect('/blogs');
+        }
     },
 
     // ============================================
