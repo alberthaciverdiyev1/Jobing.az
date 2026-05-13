@@ -17,6 +17,8 @@ import Visitor from '../Models/Visitor.js';
 import VisitorService from '../Services/VisitorService.js';
 import JobService from '../Services/JobDataService.js';
 import NewsService from '../Services/NewsService.js';
+import RssSource from '../Models/RssSource.js';
+import RssImportService from '../Services/RssImportService.js';
 import Enums from '../Config/Enums.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -260,6 +262,56 @@ const AdminController = {
             res.render('Admin/Main', view);
         } catch {
             res.redirect('/admin/news');
+        }
+    },
+
+    adminRssSourcesView: async (req, res) => {
+        const view = { title: 'RSS Sources - Admin Panel', body: "RssSource/Index.ejs", js: "RssSource.js" };
+        res.render('Admin/Main', view);
+    },
+
+    getRssSources: async (req, res) => {
+        try {
+            const sources = await RssSource.find().sort({ createdAt: -1 }).lean();
+            res.json(sources);
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    },
+
+    createRssSource: async (req, res) => {
+        try {
+            const source = await RssSource.create(req.body);
+            res.status(201).json(source);
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    },
+
+    deleteRssSource: async (req, res) => {
+        try {
+            await RssSource.findByIdAndDelete(req.params.id);
+            res.json({ success: true });
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    },
+
+    importRssSource: async (req, res) => {
+        try {
+            const result = await RssImportService.importSingle(req.params.id);
+            res.json(result);
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    },
+
+    importAllRss: async (req, res) => {
+        try {
+            const results = await RssImportService.importAll();
+            res.json(results);
+        } catch (error) {
+            res.status(500).json({ error: error.message });
         }
     },
 
