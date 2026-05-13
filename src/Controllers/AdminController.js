@@ -1255,7 +1255,7 @@ const AdminController = {
 
     saveSeo: async (req, res) => {
         try {
-            const { route, title, description, headerHtml, bodyTopHtml, bodyBottomHtml, footerHtml, ogTitle, ogDescription, ogImage, canonical, noindex, isActive } = req.body;
+            const { route, title, description, headerHtml, bodyTopHtml, bodyBottomHtml, footerHtml, ogTitle, ogDescription, ogImage, canonical, customRoute, noindex, isActive } = req.body;
             if (!route) {
                 return res.status(400).json({ success: false, error: 'Route is required' });
             }
@@ -1271,6 +1271,7 @@ const AdminController = {
                 ogDescription: ogDescription || '',
                 ogImage: ogImage || '',
                 canonical: canonical || '',
+                customRoute: customRoute || '',
                 noindex: !!noindex,
                 isActive: isActive !== undefined ? isActive : true
             };

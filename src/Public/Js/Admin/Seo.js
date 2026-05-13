@@ -58,8 +58,12 @@ function renderTable() {
             ? '<span class="inline-block w-2 h-2 rounded-full bg-indigo-500 ml-1.5" title="Customized"></span>'
             : '';
 
+        var routeDisplay = saved && saved.customRoute
+            ? '<span class="text-indigo-600 font-medium">' + escapeHtml(saved.customRoute) + '</span><br><span class="text-gray-400 text-[10px]">original: ' + escapeHtml(route) + '</span>'
+            : '<span class="text-gray-700">' + escapeHtml(route) + '</span>';
+
         return '<tr class="border-b hover:bg-gray-50 cursor-pointer" onclick="openEdit(\'' + escapeHtml(route) + '\')">' +
-            '<td class="px-5 py-3 font-mono text-xs text-gray-700">' + escapeHtml(route) + customBadge + '</td>' +
+            '<td class="px-5 py-3 font-mono text-xs">' + routeDisplay + customBadge + '</td>' +
             '<td class="px-5 py-3">' + titleDisplay + '</td>' +
             '<td class="px-5 py-3 hidden md:table-cell">' + descDisplay + '</td>' +
             '<td class="px-5 py-3">' + statusHtml + '</td>' +
@@ -81,6 +85,7 @@ function openEdit(route) {
     document.getElementById('editDescription').value = saved.description || '';
     document.getElementById('editActive').checked = saved.isActive !== undefined ? saved.isActive : true;
     document.getElementById('editNoindex').checked = saved.noindex || false;
+    document.getElementById('editCustomRoute').value = saved.customRoute || '';
     document.getElementById('editCanonical').value = saved.canonical || '';
     document.getElementById('editHeaderHtml').value = saved.headerHtml || '';
     document.getElementById('editBodyTopHtml').value = saved.bodyTopHtml || '';
@@ -114,6 +119,7 @@ async function saveEntry() {
             headerHtml: document.getElementById('editHeaderHtml').value,
             bodyTopHtml: document.getElementById('editBodyTopHtml').value,
             bodyBottomHtml: document.getElementById('editBodyBottomHtml').value,
+            customRoute: document.getElementById('editCustomRoute').value.trim(),
             canonical: document.getElementById('editCanonical').value.trim(),
             noindex: document.getElementById('editNoindex').checked,
             isActive: document.getElementById('editActive').checked
