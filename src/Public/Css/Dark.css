@@ -168,10 +168,24 @@
     background-color: #1e293b;
 }
 
+/* Override inline job card borders (Helpers.js creates cards with style="border: 1px solid #d1d5db") */
+.dark .job-card {
+    border-color: #334155 !important;
+}
+
 /* ========== MOBILE BOTTOM NAV ========== */
-.dark .mobile-bottom-nav {
-    background-color: rgba(15, 23, 42, 0.95);
-    border-top-color: #334155;
+.dark .mobile-bottom-nav,
+.dark nav.md\:hidden.fixed.bottom-0 {
+    background-color: rgba(15, 23, 42, 0.95) !important;
+    border-top-color: #334155 !important;
+}
+
+.dark nav.md\:hidden .text-gray-400 {
+    color: #64748b;
+}
+
+.dark nav.md\:hidden .hover\:text-gray-600:hover {
+    color: #94a3b8;
 }
 
 /* ========== CUSTOM SELECT ========== */
