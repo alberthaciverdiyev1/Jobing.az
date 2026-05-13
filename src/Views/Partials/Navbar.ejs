@@ -59,7 +59,7 @@
             </div>
         </div>
 
-        <!-- Mobile: Profile, Language & Post Job -->
+        <!-- Mobile: Language Dropdown & Profile -->
         <div class="md:hidden flex items-center gap-2">
             <!-- Mobile Language Dropdown (only, no segmented buttons) -->
             <div class="relative">
@@ -74,14 +74,6 @@
                     <button onclick="changeLang('ru')" class="block w-full text-left px-4 py-2.5 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-500 transition-colors">RU</button>
                 </div>
             </div>
-
-            <% if (user && user.role !== 'user') { %>
-            <a href="/add-job"
-               class="inline-flex items-center gap-2 bg-primary-500 hover:bg-primary-600 text-white text-sm font-medium px-4 py-2 rounded-xl transition-all shadow-sm active:scale-95">
-                <i class="fas fa-plus-circle text-xs"></i>
-                <span><%= __('nav.postJob') %></span>
-            </a>
-            <% } %>
         </div>
     </div>
 </nav>

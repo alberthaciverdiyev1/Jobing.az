@@ -21,7 +21,16 @@
             <span class="text-[10px] font-medium"><%= __('nav.jobs') %></span>
         </a>
 
-        <!-- Companies -->
+        <!-- Post Job (company/hr only — big centered button) -->
+        <% if (typeof user !== 'undefined' && user && user.role !== 'user') { %>
+        <a href="/add-job"
+           class="flex items-center justify-center -mt-4">
+            <div class="w-14 h-14 rounded-full bg-gradient-to-br from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/30 flex items-center justify-center hover:scale-110 active:scale-95 transition-transform duration-200">
+                <i class="fas fa-plus text-xl"></i>
+            </div>
+        </a>
+        <% } else { %>
+        <!-- Companies (shown for non-company/hr users) -->
         <a href="/sirketler"
            class="flex flex-col items-center justify-center gap-0.5 w-14 py-1 <%= currentPage === 'company-list' || currentPage === 'company-detail' ? 'text-primary-500' : 'text-gray-400 hover:text-gray-600' %> transition-colors">
             <div class="relative">
@@ -30,8 +39,7 @@
             </div>
             <span class="text-[10px] font-medium"><%= __('nav.companies') %></span>
         </a>
-
-        <!-- CVs -->
+        <% } %>
         <a href="/cv-ler"
            class="flex flex-col items-center justify-center gap-0.5 w-14 py-1 <%= currentPage === 'cv-list' ? 'text-primary-500' : 'text-gray-400 hover:text-gray-600' %> transition-colors">
             <div class="relative">
