@@ -9,22 +9,18 @@
                 <h1 class="text-2xl sm:text-3xl font-bold text-gray-900">Şirkət Paneli</h1>
                 <p class="text-gray-500 mt-1"><%= user.companyName %> — elanlarınızı idarə edin</p>
             </div>
-            <a href="/add-job"
-               class="inline-flex items-center gap-2 bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white font-medium px-5 py-2.5 rounded-xl transition-all duration-200 shadow-sm hover:shadow-md active:scale-[0.97]">
-                <i class="fas fa-plus-circle"></i>
-                Yeni Elan
-            </a>
-            <a href="/hr/dashboard"
-               class="inline-flex items-center gap-2 bg-white hover:bg-gray-50 text-gray-700 font-medium px-5 py-2.5 rounded-xl border border-gray-200 transition-all duration-200 shadow-sm hover:shadow-md active:scale-[0.97]">
-                <i class="fas fa-users"></i>
-                HR Panel
-            </a>
-            <a href="/company/settings"
-               class="inline-flex items-center gap-2 bg-white hover:bg-gray-50 text-gray-700 font-medium px-5 py-2.5 rounded-xl border border-gray-200 transition-all duration-200 shadow-sm hover:shadow-md active:scale-[0.97]">
-                <i class="fas fa-cog"></i>
-                Profil
-            </a>
-        </div>
+            <div class="flex gap-2">
+                <a href="/hr/dashboard"
+                   class="inline-flex items-center gap-2 bg-white hover:bg-gray-50 text-gray-700 font-medium px-5 py-2.5 rounded-xl border border-gray-200 transition-all duration-200 shadow-sm hover:shadow-md active:scale-[0.97]">
+                    <i class="fas fa-users"></i>
+                    HR Panel
+                </a>
+                <a href="/company/settings"
+                   class="inline-flex items-center gap-2 bg-white hover:bg-gray-50 text-gray-700 font-medium px-5 py-2.5 rounded-xl border border-gray-200 transition-all duration-200 shadow-sm hover:shadow-md active:scale-[0.97]">
+                    <i class="fas fa-cog"></i>
+                    Profil
+                </a>
+            </div>
 
         <!-- Quick Stats -->
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8 animate-fade-in-up" style="animation-delay: 100ms;">
@@ -75,10 +71,7 @@
                         <i class="fas fa-briefcase text-2xl text-gray-400"></i>
                     </div>
                     <h3 class="text-lg font-semibold text-gray-900 mb-1">Hələ elan yoxdur</h3>
-                    <p class="text-gray-500 text-sm mb-6">İlk vakansiyanızı paylaşın</p>
-                    <a href="/add-job" class="inline-flex items-center gap-2 bg-primary-500 hover:bg-primary-600 text-white font-medium px-5 py-2.5 rounded-xl transition-all">
-                        <i class="fas fa-plus-circle"></i> Elan Yerləşdir
-                    </a>
+                    <p class="text-gray-500 text-sm mb-6">İlk vakansiyanızı <a href="/add-job" class="text-primary-500 hover:text-primary-600 font-semibold underline">buradan</a> yerləşdirin</p>
                 </div>
             } else { %>
                 <div class="overflow-x-auto">
