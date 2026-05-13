@@ -59,7 +59,7 @@ function renderTable() {
             : '';
 
         var routeDisplay = saved && saved.customRoute
-            ? '<span class="text-indigo-600 font-medium">' + escapeHtml(saved.customRoute) + '</span><br><span class="text-gray-400 text-[10px]">original: ' + escapeHtml(route) + '</span>'
+            ? '<span class="text-indigo-600 font-medium">' + escapeHtml(saved.customRoute) + '</span><br><span class="text-gray-400 text-[10px]">' + escapeHtml(route) + ' → redirects here</span>'
             : '<span class="text-gray-700">' + escapeHtml(route) + '</span>';
 
         return '<tr class="border-b hover:bg-gray-50 cursor-pointer" onclick="openEdit(\'' + escapeHtml(route) + '\')">' +
