@@ -3,16 +3,28 @@
       <div class="flex items-center justify-between">
         <div class="flex items-center justify-start rtl:justify-end">
           <button onclick="toggleSidebar()" type="button" class="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200">
-              <span class="sr-only">Open sidebar</span>
+              <span class="sr-only"><%= __('hr.openSidebar') %></span>
               <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                  <path clip-rule="evenodd" fill-rule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"></path>
               </svg>
            </button>
           <a href="/hr/dashboard" class="flex ms-2 md:me-24">
-            <span class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap">Jobing.az HR</span>
+            <span class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap"><%= __('hr.brand') %></span>
           </a>
         </div>
         <div class="flex items-center gap-2 relative">
+          <div class="relative" id="lang-switcher-hr">
+            <button onclick="toggleLangDropdown()" class="flex items-center gap-1.5 px-2.5 py-2 rounded-lg text-gray-500 hover:text-primary-500 hover:bg-gray-50 transition-all text-sm font-medium">
+              <i class="fas fa-globe text-xs"></i>
+              <span class="uppercase font-semibold"><%= (typeof locale !== 'undefined' ? locale : 'az') %></span>
+              <i class="fas fa-chevron-down text-[8px] ml-0.5"></i>
+            </button>
+            <div id="lang-dropdown-hr" class="absolute right-0 top-full mt-1 bg-white rounded-xl shadow-lg border border-gray-100 py-1 min-w-[110px] hidden z-50 overflow-hidden">
+              <button onclick="changeLang('az')" class="block w-full text-left px-4 py-2.5 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-500 transition-colors">AZ</button>
+              <button onclick="changeLang('en')" class="block w-full text-left px-4 py-2.5 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-500 transition-colors">EN</button>
+              <button onclick="changeLang('ru')" class="block w-full text-left px-4 py-2.5 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-500 transition-colors">RU</button>
+            </div>
+          </div>
           <button onclick="toggleDarkMode()" class="flex items-center justify-center w-11 h-11 rounded-xl text-gray-500 hover:text-yellow-500 hover:bg-gray-100 transition-all" aria-label="Toggle dark mode">
             <i class="fas fa-moon text-base admin-dark-icon"></i>
           </button>
@@ -32,15 +44,15 @@
                 <p class="text-xs text-gray-500 truncate"><%= user ? user.email : '' %></p>
               </div>
               <div class="py-1">
-                <a href="/hr/dashboard" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Dashboard</a>
+                <a href="/hr/dashboard" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"><%= __('hr.navDashboard') %></a>
                 <% if (user && (user.role === 'company' || user.role === 'admin')) { %>
-                <a href="/company/dashboard" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Company Panel</a>
+                <a href="/company/dashboard" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"><%= __('hr.companyPanel') %></a>
                 <% } %>
                 <% if (user && user.role === 'admin') { %>
-                <a href="/admin/dashboard" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Admin Panel</a>
+                <a href="/admin/dashboard" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"><%= __('hr.adminPanel') %></a>
                 <% } %>
-                <a href="/" target="_blank" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">View Site</a>
-                <a href="/api/auth/logout" class="block px-4 py-2 text-sm text-red-600 hover:bg-red-50">Sign out</a>
+                <a href="/" target="_blank" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"><%= __('hr.viewSite') %></a>
+                <a href="/api/auth/logout" class="block px-4 py-2 text-sm text-red-600 hover:bg-red-50"><%= __('hr.signOut') %></a>
               </div>
             </div>
           </div>
@@ -68,6 +80,30 @@ function closeUserMenuOutside(e) {
         menu.classList.add('hidden');
         document.removeEventListener('click', closeUserMenuOutside);
     }
+}
+function toggleLangDropdown() {
+    var d = document.getElementById('lang-dropdown-hr');
+    if (d) {
+        d.classList.toggle('hidden');
+        if (!d.classList.contains('hidden')) {
+            setTimeout(function() { document.addEventListener('click', closeLangDropdown); }, 10);
+        }
+    }
+}
+function closeLangDropdown(e) {
+    var d = document.getElementById('lang-dropdown-hr');
+    var btn = d && d.previousElementSibling;
+    if (d && !d.contains(e.target) && btn && !btn.contains(e.target)) {
+        d.classList.add('hidden');
+        document.removeEventListener('click', closeLangDropdown);
+    }
+}
+function changeLang(lang) {
+    fetch('/set-lang', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ language: lang })
+    }).then(function() { location.reload(); }).catch(function() { location.reload(); });
 }
 function toggleSidebar() {
     var sidebar = document.getElementById('hr-sidebar');

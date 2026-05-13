@@ -12,6 +12,14 @@
             <p class="text-gray-500"><%= __('auth.welcomeSub') %></p>
         </div>
 
+        <!-- Message Banner -->
+        <% if (typeof authMessage !== 'undefined' && authMessage === 'post_job') { %>
+        <div class="mb-6 p-4 bg-amber-50 border border-amber-200 rounded-xl text-sm text-amber-800 flex items-start gap-3 animate-fade-in-up">
+            <i class="fas fa-info-circle mt-0.5"></i>
+            <span><%= __('auth.postJobRequired') %></span>
+        </div>
+        <% } %>
+
         <!-- Main Card -->
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8 animate-fade-in-up">
             <!-- Tabs -->

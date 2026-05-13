@@ -65,12 +65,12 @@ const HrController = {
     // ============================================================
 
     hrDashboard: async (req, res) => {
-        const view = { title: 'HR Dashboard', body: 'Dashboard/Index.ejs', js: 'Dashboard.js' };
+        const view = { title: req.__('hr.dashboard'), body: 'Dashboard/Index.ejs', js: 'Dashboard.js' };
         res.render('Hr/Main', view);
     },
 
     hrJobsView: async (req, res) => {
-        const view = { title: 'Jobs - HR Panel', body: 'Job/Index.ejs', js: 'Job.js' };
+        const view = { title: req.__('hr.hrJobs') + ' - HR Panel', body: 'Job/Index.ejs', js: 'Job.js' };
         res.render('Hr/Main', view);
     },
 
@@ -80,7 +80,7 @@ const HrController = {
             if (!job) return res.redirect('/hr/jobs');
             _resolveJobEnums(job);
             const view = {
-                title: 'Job Detail - HR Panel',
+                title: req.__('hr.backToJobs') + ' - HR Panel',
                 body: 'Job/Detail.ejs',
                 js: 'JobDetail.js',
                 job
@@ -92,7 +92,7 @@ const HrController = {
     },
 
     hrApplicationsView: async (req, res) => {
-        const view = { title: 'Applications - HR Panel', body: 'Application/Index.ejs', js: 'Application.js' };
+        const view = { title: req.__('hr.applicationsPage') + ' - HR Panel', body: 'Application/Index.ejs', js: 'Application.js' };
         res.render('Hr/Main', view);
     },
 
@@ -101,7 +101,7 @@ const HrController = {
             const application = await ApplicationService.findById(req.params.id);
             if (!application) return res.redirect('/hr/applications');
             const view = {
-                title: 'Application Detail - HR Panel',
+                title: req.__('hr.applicationDetail') + ' - HR Panel',
                 body: 'Application/Detail.ejs',
                 js: 'ApplicationDetail.js',
                 application
@@ -113,7 +113,7 @@ const HrController = {
     },
 
     hrInterviewsView: async (req, res) => {
-        const view = { title: 'Interviews - HR Panel', body: 'Interview/Index.ejs', js: 'Interview.js' };
+        const view = { title: req.__('hr.interviews') + ' - HR Panel', body: 'Interview/Index.ejs', js: 'Interview.js' };
         res.render('Hr/Main', view);
     },
 

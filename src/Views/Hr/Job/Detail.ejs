@@ -3,7 +3,7 @@
   <div class="flex items-center justify-between">
     <a href="/hr/jobs" class="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-gray-700 transition-colors">
       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
-      Back to Jobs
+      <%= __('hr.backToJobs') %>
     </a>
     <div class="flex gap-2">
       <button onclick="toggleJob()" class="px-4 py-2 text-sm font-medium rounded-lg transition-colors <%= job.isActive ? 'bg-red-50 text-red-600 hover:bg-red-100' : 'bg-green-50 text-green-600 hover:bg-green-100' %>">
@@ -31,15 +31,15 @@
     <div class="grid grid-cols-3 divide-x divide-gray-100 bg-gray-50/50">
       <div class="p-4 text-center">
         <p class="text-2xl font-bold text-gray-900" id="appCount">-</p>
-        <p class="text-xs text-gray-500 mt-1">Applications</p>
+        <p class="text-xs text-gray-500 mt-1"><%= __('hr.applications') %></p>
       </div>
       <div class="p-4 text-center">
         <p class="text-2xl font-bold text-gray-900"><%= job.viewCount || 0 %></p>
-        <p class="text-xs text-gray-500 mt-1">Views</p>
+        <p class="text-xs text-gray-500 mt-1"><%= __('hr.views') %></p>
       </div>
       <div class="p-4 text-center">
         <p class="text-2xl font-bold text-gray-900"><%= job.postedAt ? new Date(job.postedAt).toLocaleDateString() : '-' %></p>
-        <p class="text-xs text-gray-500 mt-1">Posted</p>
+        <p class="text-xs text-gray-500 mt-1"><%= __('hr.posted') %></p>
       </div>
     </div>
 
@@ -48,49 +48,49 @@
       <!-- Info Grid -->
       <div class="grid grid-cols-2 gap-6">
         <div>
-          <label class="text-xs font-medium text-gray-400 uppercase tracking-wider">Location</label>
+          <label class="text-xs font-medium text-gray-400 uppercase tracking-wider"><%= __('hr.location') %></label>
           <p class="text-sm text-gray-900 mt-1"><%= job.location || '-' %></p>
         </div>
         <div>
-          <label class="text-xs font-medium text-gray-400 uppercase tracking-wider">Job Type</label>
+          <label class="text-xs font-medium text-gray-400 uppercase tracking-wider"><%= __('hr.jobType') %></label>
           <p class="text-sm text-gray-900 mt-1"><%= job._jobTypeName || '-' %></p>
         </div>
         <div>
-          <label class="text-xs font-medium text-gray-400 uppercase tracking-wider">Salary</label>
+          <label class="text-xs font-medium text-gray-400 uppercase tracking-wider"><%= __('hr.salary') %></label>
           <p class="text-sm text-gray-900 mt-1"><%= job.minSalary ? job.minSalary : '' %><%= job.minSalary && job.maxSalary ? ' - ' : '' %><%= job.maxSalary ? job.maxSalary + ' ' + job.currencySign : (job.minSalary ? job.currencySign : '-') %></p>
         </div>
         <div>
-          <label class="text-xs font-medium text-gray-400 uppercase tracking-wider">Category</label>
+          <label class="text-xs font-medium text-gray-400 uppercase tracking-wider"><%= __('hr.category') %></label>
           <p class="text-sm text-gray-900 mt-1"><%= job.categoryId || '-' %></p>
         </div>
         <div>
-          <label class="text-xs font-medium text-gray-400 uppercase tracking-wider">Education</label>
+          <label class="text-xs font-medium text-gray-400 uppercase tracking-wider"><%= __('hr.education') %></label>
           <p class="text-sm text-gray-900 mt-1"><%= job._educationName || '-' %></p>
         </div>
         <div>
-          <label class="text-xs font-medium text-gray-400 uppercase tracking-wider">Experience</label>
+          <label class="text-xs font-medium text-gray-400 uppercase tracking-wider"><%= __('hr.experience') %></label>
           <p class="text-sm text-gray-900 mt-1"><%= job._experienceName || '-' %></p>
         </div>
         <div>
-          <label class="text-xs font-medium text-gray-400 uppercase tracking-wider">Email</label>
+          <label class="text-xs font-medium text-gray-400 uppercase tracking-wider"><%= __('hr.email') %></label>
           <p class="text-sm text-gray-900 mt-1"><%= job.email || '-' %></p>
         </div>
         <div>
-          <label class="text-xs font-medium text-gray-400 uppercase tracking-wider">Phone</label>
+          <label class="text-xs font-medium text-gray-400 uppercase tracking-wider"><%= __('hr.phone') %></label>
           <p class="text-sm text-gray-900 mt-1"><%= job.phone || '-' %></p>
         </div>
       </div>
 
       <!-- Description -->
       <div>
-        <label class="text-xs font-medium text-gray-400 uppercase tracking-wider mb-2 block">Description</label>
-        <div class="text-sm text-gray-700 leading-relaxed bg-gray-50 rounded-lg p-4"><%= job.description || 'No description' %></div>
+        <label class="text-xs font-medium text-gray-400 uppercase tracking-wider mb-2 block"><%= __('hr.description') %></label>
+        <div class="text-sm text-gray-700 leading-relaxed bg-gray-50 rounded-lg p-4"><%= job.description || '<%= __('hr.noDescription') %>' %></div>
       </div>
 
       <!-- Timestamps -->
       <div class="flex gap-6 text-xs text-gray-400 border-t border-gray-100 pt-4">
-        <span>Created: <%= job.createdAt ? new Date(job.createdAt).toLocaleString() : '-' %></span>
-        <span>Updated: <%= job.updatedAt ? new Date(job.updatedAt).toLocaleString() : '-' %></span>
+        <span><%= __('hr.created') %> <%= job.createdAt ? new Date(job.createdAt).toLocaleString() : '-' %></span>
+        <span><%= __('hr.updated') %> <%= job.updatedAt ? new Date(job.updatedAt).toLocaleString() : '-' %></span>
       </div>
     </div>
   </div>
@@ -100,7 +100,7 @@
 async function toggleJob() {
     try {
         var res = await axios.patch('/api/hr/jobs/<%= job._id %>/toggle');
-        alertify.success(res.data.isActive ? 'Job activated' : 'Job deactivated');
+        alertify.success(res.data.isActive ? '<%= __('hr.jobActivated') %>' : '<%= __('hr.jobDeactivated') %>');
         location.reload();
     } catch (err) {
         alertify.error(err.message);

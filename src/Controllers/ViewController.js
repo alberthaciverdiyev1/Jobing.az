@@ -41,7 +41,9 @@ const ViewController = {
             description: 'Jobing.az-a daxil olun və ya yeni hesab yaradın. İş axtarışı və elan yerləşdirmə üçün qeydiyyatdan keçin.',
             body: "Auth/Index.ejs",
             js: "Auth.js",
-            currentPage: 'auth'
+            currentPage: 'auth',
+            authMessage: req.query.message || null,
+            authRedirect: req.query.redirect || null
         };
         res.render('Main', view);
     },

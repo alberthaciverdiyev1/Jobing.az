@@ -22,14 +22,12 @@
                class="nav-link <%= currentPage === 'contact' ? '!text-primary-500 !bg-primary-50/50 !font-semibold' : 'text-gray-600 hover:text-primary-500' %>"><%= __('nav.contact') %></a>
 
             <div class="ml-4 pl-4 border-l border-gray-200 flex items-center gap-3">
-                <!-- Post Job Button (visible only for company/hr) -->
-                <% if (user && user.role !== 'user') { %>
-                <a href="/add-job"
+                <!-- Post Job Button (always visible) -->
+                <a href="<%= (typeof user !== 'undefined' && user && (user.role === 'company' || user.role === 'hr')) ? '/add-job' : '/auth?redirect=%2Fadd-job&message=post_job' %>"
                    class="inline-flex items-center gap-2 bg-primary-500 hover:bg-primary-600 text-white font-medium px-5 py-2.5 rounded-xl transition-all duration-200 shadow-sm hover:shadow-md hover:shadow-primary-500/20 hover:scale-[1.02] active:scale-[0.97]">
                     <i class="fas fa-plus-circle text-sm"></i>
                     <%= __('nav.postJob') %>
                 </a>
-                <% } %>
                 
 
                 <!-- Language Switcher Dropdown (shown on both desktop and mobile) -->
