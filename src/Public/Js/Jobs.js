@@ -142,14 +142,6 @@ function updateActiveFilterCount() {
 }
 
 // ========== DESKTOP FILTER EVENTS ==========
-document.getElementById('toggleAdvanced')?.addEventListener('click', function () {
-    const advanced = document.getElementById('advancedFilters');
-    advanced?.classList.toggle('hidden');
-    this.innerHTML = advanced?.classList.contains('hidden')
-        ? '<i class="fas fa-plus-circle"></i> Ətraflı filtrlər'
-        : '<i class="fas fa-minus-circle"></i> Daralt';
-});
-
 document.getElementById('applyFiltersBtn')?.addEventListener('click', () => {
     offset = 0;
     fetchJobs();
