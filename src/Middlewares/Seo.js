@@ -4,6 +4,14 @@ const seoMiddleware = async (req, res, next) => {
     try {
         let path = req.path.replace(/\/+$/, '') || '/';
 
+        // If this route has a customRoute set, redirect to it (original no longer works)
+        const routeWithCustom = await Seo.findOne({ route: path, isActive: true, customRoute: { $ne: '' } }).lean();
+        if (routeWithCustom) {
+            let redirectUrl = routeWithCustom.customRoute;
+            const qs = req.url.includes('?') ? req.url.slice(req.url.indexOf('?')) : '';
+            return res.redirect(301, redirectUrl + qs);
+        }
+
         // Check if this path matches a custom route alias
         const customEntry = await Seo.findOne({ customRoute: path, isActive: true }).lean();
         if (customEntry && customEntry.route) {
