@@ -1,116 +1,116 @@
 <!-- ============================================ -->
 <!-- COMPANY DASHBOARD -->
 <!-- ============================================ -->
-<section class="min-h-screen bg-gray-50 pt-24 md:pt-28 pb-20">
+<section class="min-h-screen bg-gray-50 pt-20 sm:pt-24 md:pt-28 pb-16 sm:pb-20">
     <div class="max-w-5xl mx-auto px-3 sm:px-4 lg:px-6">
         <!-- Dashboard Header -->
-        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8 animate-fade-in-up">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6 animate-fade-in-up">
             <div>
-                <h1 class="text-2xl sm:text-3xl font-bold text-gray-900">Şirkət Paneli</h1>
-                <p class="text-gray-500 mt-1"><%= user.companyName %> — elanlarınızı idarə edin</p>
+                <h1 class="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900">Şirkət Paneli</h1>
+                <p class="text-gray-500 mt-1 text-sm sm:text-base"><%= user.companyName %> — elanlarınızı idarə edin</p>
             </div>
             <div class="flex gap-2">
                 <a href="/hr/dashboard"
-                   class="inline-flex items-center gap-2 bg-white hover:bg-gray-50 text-gray-700 font-medium px-5 py-2.5 rounded-xl border border-gray-200 transition-all duration-200 shadow-sm hover:shadow-md active:scale-[0.97]">
+                   class="inline-flex items-center gap-1.5 bg-white hover:bg-gray-50 text-gray-700 text-sm font-medium px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-xl border border-gray-200 transition-all duration-200 shadow-sm hover:shadow-md active:scale-[0.97]">
                     <i class="fas fa-users"></i>
-                    HR Panel
+                    <span class="hidden sm:inline">HR Panel</span>
                 </a>
                 <a href="/company/settings"
-                   class="inline-flex items-center gap-2 bg-white hover:bg-gray-50 text-gray-700 font-medium px-5 py-2.5 rounded-xl border border-gray-200 transition-all duration-200 shadow-sm hover:shadow-md active:scale-[0.97]">
+                   class="inline-flex items-center gap-1.5 bg-white hover:bg-gray-50 text-gray-700 text-sm font-medium px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-xl border border-gray-200 transition-all duration-200 shadow-sm hover:shadow-md active:scale-[0.97]">
                     <i class="fas fa-cog"></i>
-                    Profil
+                    <span class="hidden sm:inline">Profil</span>
                 </a>
             </div>
         </div>
 
         <!-- Quick Stats -->
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8 animate-fade-in-up" style="animation-delay: 100ms;">
-            <div class="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
-                <div class="flex items-center gap-4">
-                    <div class="w-12 h-12 rounded-xl bg-primary-50 flex items-center justify-center text-primary-500">
-                        <i class="fas fa-briefcase text-xl"></i>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 mb-6 animate-fade-in-up" style="animation-delay: 100ms;">
+            <div class="bg-white rounded-xl sm:rounded-2xl border border-gray-100 p-4 sm:p-5 shadow-sm">
+                <div class="flex items-center gap-3 sm:gap-4">
+                    <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-primary-50 flex items-center justify-center text-primary-500 flex-shrink-0">
+                        <i class="fas fa-briefcase text-base sm:text-xl"></i>
                     </div>
-                    <div>
-                        <p class="text-2xl font-bold text-gray-900"><%= jobs ? jobs.length : 0 %></p>
-                        <p class="text-sm text-gray-500">Aktiv Elanlar</p>
-                    </div>
-                </div>
-            </div>
-            <div class="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
-                <div class="flex items-center gap-4">
-                    <div class="w-12 h-12 rounded-xl bg-green-50 flex items-center justify-center text-green-500">
-                        <i class="fas fa-check-circle text-xl"></i>
-                    </div>
-                    <div>
-                        <p class="text-2xl font-bold text-gray-900"><%= jobs ? jobs.filter(j => j.isActive).length : 0 %></p>
-                        <p class="text-sm text-gray-500">Təsdiqlənmiş</p>
+                    <div class="min-w-0">
+                        <p class="text-xl sm:text-2xl font-bold text-gray-900"><%= jobs ? jobs.length : 0 %></p>
+                        <p class="text-xs sm:text-sm text-gray-500 truncate">Aktiv Elanlar</p>
                     </div>
                 </div>
             </div>
-            <div class="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
-                <div class="flex items-center gap-4">
-                    <div class="w-12 h-12 rounded-xl bg-amber-50 flex items-center justify-center text-amber-500">
-                        <i class="fas fa-clock text-xl"></i>
+            <div class="bg-white rounded-xl sm:rounded-2xl border border-gray-100 p-4 sm:p-5 shadow-sm">
+                <div class="flex items-center gap-3 sm:gap-4">
+                    <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-green-50 flex items-center justify-center text-green-500 flex-shrink-0">
+                        <i class="fas fa-check-circle text-base sm:text-xl"></i>
                     </div>
-                    <div>
-                        <p class="text-2xl font-bold text-gray-900"><%= jobs ? jobs.filter(j => !j.isActive).length : 0 %></p>
-                        <p class="text-sm text-gray-500">Gözləmədə</p>
+                    <div class="min-w-0">
+                        <p class="text-xl sm:text-2xl font-bold text-gray-900"><%= jobs ? jobs.filter(j => j.isActive).length : 0 %></p>
+                        <p class="text-xs sm:text-sm text-gray-500 truncate">Təsdiqlənmiş</p>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white rounded-xl sm:rounded-2xl border border-gray-100 p-4 sm:p-5 shadow-sm">
+                <div class="flex items-center gap-3 sm:gap-4">
+                    <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-amber-50 flex items-center justify-center text-amber-500 flex-shrink-0">
+                        <i class="fas fa-clock text-base sm:text-xl"></i>
+                    </div>
+                    <div class="min-w-0">
+                        <p class="text-xl sm:text-2xl font-bold text-gray-900"><%= jobs ? jobs.filter(j => !j.isActive).length : 0 %></p>
+                        <p class="text-xs sm:text-sm text-gray-500 truncate">Gözləmədə</p>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Jobs Table -->
-        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden animate-fade-in-up" style="animation-delay: 200ms;">
-            <div class="px-6 py-5 border-b border-gray-100 flex items-center justify-between">
-                <h2 class="text-lg font-semibold text-gray-900">Elanlarım</h2>
+        <div class="bg-white rounded-xl sm:rounded-2xl border border-gray-100 shadow-sm overflow-hidden animate-fade-in-up" style="animation-delay: 200ms;">
+            <div class="px-4 sm:px-6 py-4 sm:py-5 border-b border-gray-100 flex items-center justify-between">
+                <h2 class="text-base sm:text-lg font-semibold text-gray-900">Elanlarım</h2>
             </div>
 
             <% if (!jobs || jobs.length === 0) { %>
-                <div class="text-center py-16">
-                    <div class="w-16 h-16 mx-auto bg-gray-100 rounded-full flex items-center justify-center mb-4">
-                        <i class="fas fa-briefcase text-2xl text-gray-400"></i>
+                <div class="text-center py-10 sm:py-16">
+                    <div class="w-12 h-12 sm:w-16 sm:h-16 mx-auto bg-gray-100 rounded-full flex items-center justify-center mb-3 sm:mb-4">
+                        <i class="fas fa-briefcase text-xl sm:text-2xl text-gray-400"></i>
                     </div>
-                    <h3 class="text-lg font-semibold text-gray-900 mb-1">Hələ elan yoxdur</h3>
-                    <p class="text-gray-500 text-sm mb-6">İlk vakansiyanızı <a href="/add-job" class="text-primary-500 hover:text-primary-600 font-semibold underline">buradan</a> yerləşdirin</p>
+                    <h3 class="text-base sm:text-lg font-semibold text-gray-900 mb-1">Hələ elan yoxdur</h3>
+                    <p class="text-gray-500 text-xs sm:text-sm mb-6">İlk vakansiyanızı <a href="/add-job" class="text-primary-500 hover:text-primary-600 font-semibold underline">buradan</a> yerləşdirin</p>
                 </div>
             } else { %>
                 <div class="overflow-x-auto">
                     <table class="w-full">
                         <thead>
-                            <tr class="text-left text-xs text-gray-400 uppercase tracking-wider">
-                                <th class="px-6 py-4 font-medium">Vakansiya</th>
-                                <th class="px-6 py-4 font-medium hidden sm:table-cell">Tarix</th>
-                                <th class="px-6 py-4 font-medium hidden md:table-cell">Maaş</th>
-                                <th class="px-6 py-4 font-medium">Status</th>
+                            <tr class="text-left text-[10px] sm:text-xs text-gray-400 uppercase tracking-wider">
+                                <th class="px-3 sm:px-6 py-3 sm:py-4 font-medium">Vakansiya</th>
+                                <th class="px-3 sm:px-6 py-3 sm:py-4 font-medium hidden sm:table-cell">Tarix</th>
+                                <th class="px-3 sm:px-6 py-3 sm:py-4 font-medium hidden lg:table-cell">Maaş</th>
+                                <th class="px-3 sm:px-6 py-3 sm:py-4 font-medium">Status</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-50">
                             <% jobs.forEach(job => { %>
                                 <tr class="hover:bg-gray-50/50 transition-colors">
-                                    <td class="px-6 py-4">
-                                        <p class="font-semibold text-gray-900 text-sm"><%= job.title %></p>
-                                        <p class="text-xs text-gray-400"><%= job.location || 'Azərbaycan' %></p>
+                                    <td class="px-3 sm:px-6 py-3 sm:py-4">
+                                        <p class="font-semibold text-gray-900 text-xs sm:text-sm"><%= job.title %></p>
+                                        <p class="text-[10px] sm:text-xs text-gray-400 truncate max-w-[160px] sm:max-w-none"><%= job.location || 'Azərbaycan' %></p>
                                     </td>
-                                    <td class="px-6 py-4 text-sm text-gray-500 hidden sm:table-cell">
+                                    <td class="px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-gray-500 hidden sm:table-cell whitespace-nowrap">
                                         <%= job.postedAt ? job.postedAt.slice(0, 10) : new Date(job.createdAt).toLocaleDateString('az-AZ') %>
                                     </td>
-                                    <td class="px-6 py-4 text-sm text-gray-500 hidden md:table-cell">
+                                    <td class="px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-gray-500 hidden lg:table-cell whitespace-nowrap">
                                         <% if (job.minSalary || job.maxSalary) { %>
                                             <span class="font-medium text-primary-500"><%= job.minSalary || '' %> <%= job.minSalary && job.maxSalary ? '-' : '' %> <%= job.maxSalary || '' %> <%= job.currencySign || 'AZN' %></span>
                                         <% } else { %>
                                             <span class="text-gray-300">—</span>
                                         <% } %>
                                     </td>
-                                    <td class="px-6 py-4">
+                                    <td class="px-3 sm:px-6 py-3 sm:py-4">
                                         <% if (job.isActive) { %>
-                                            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-green-50 text-green-700 border border-green-200">
-                                                <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span>
+                                            <span class="inline-flex items-center gap-1 px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-medium bg-green-50 text-green-700 border border-green-200 whitespace-nowrap">
+                                                <span class="w-1 sm:w-1.5 h-1 sm:h-1.5 rounded-full bg-green-500"></span>
                                                 Aktiv
                                             </span>
                                         <% } else { %>
-                                            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-amber-50 text-amber-700 border border-amber-200">
-                                                <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+                                            <span class="inline-flex items-center gap-1 px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-medium bg-amber-50 text-amber-700 border border-amber-200 whitespace-nowrap">
+                                                <span class="w-1 sm:w-1.5 h-1 sm:h-1.5 rounded-full bg-amber-500"></span>
                                                 Gözləmədə
                                             </span>
                                         <% } %>
@@ -124,25 +124,25 @@
         </div>
 
         <!-- Account Info -->
-        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mt-6 animate-fade-in-up" style="animation-delay: 300ms;">
-            <h2 class="text-lg font-semibold text-gray-900 mb-4">Şirkət Məlumatları</h2>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div class="bg-white rounded-xl sm:rounded-2xl border border-gray-100 shadow-sm p-4 sm:p-6 mt-4 sm:mt-6 animate-fade-in-up" style="animation-delay: 300ms;">
+            <h2 class="text-base sm:text-lg font-semibold text-gray-900 mb-3 sm:mb-4">Şirkət Məlumatları</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 <div>
-                    <p class="text-xs text-gray-400 uppercase tracking-wider">Şirkət</p>
-                    <p class="text-gray-900 font-medium"><%= user.companyName %></p>
+                    <p class="text-[10px] sm:text-xs text-gray-400 uppercase tracking-wider">Şirkət</p>
+                    <p class="text-gray-900 text-sm sm:text-base font-medium break-words"><%= user.companyName %></p>
                 </div>
                 <div>
-                    <p class="text-xs text-gray-400 uppercase tracking-wider">Email</p>
-                    <p class="text-gray-900 font-medium"><%= user.email %></p>
+                    <p class="text-[10px] sm:text-xs text-gray-400 uppercase tracking-wider">Email</p>
+                    <p class="text-gray-900 text-sm sm:text-base font-medium break-words"><%= user.email %></p>
                 </div>
                 <div>
-                    <p class="text-xs text-gray-400 uppercase tracking-wider">Əlaqə</p>
-                    <p class="text-gray-900 font-medium"><%= user.name %> <%= user.surname %></p>
+                    <p class="text-[10px] sm:text-xs text-gray-400 uppercase tracking-wider">Əlaqə</p>
+                    <p class="text-gray-900 text-sm sm:text-base font-medium"><%= user.name %> <%= user.surname %></p>
                 </div>
                 <% if (user.phone) { %>
                 <div>
-                    <p class="text-xs text-gray-400 uppercase tracking-wider">Telefon</p>
-                    <p class="text-gray-900 font-medium"><%= user.phone %></p>
+                    <p class="text-[10px] sm:text-xs text-gray-400 uppercase tracking-wider">Telefon</p>
+                    <p class="text-gray-900 text-sm sm:text-base font-medium"><%= user.phone %></p>
                 </div>
                 <% } %>
             </div>

@@ -5,86 +5,128 @@
       <a href="/admin/news" class="text-sm text-indigo-600 hover:text-indigo-800 font-medium">&larr; Back to News</a>
     </div>
 
-    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-      <form id="editNewsForm" class="space-y-6">
-        <div>
-          <label for="editTitle" class="block text-sm font-medium text-gray-700 mb-1">Title *</label>
-          <input type="text" id="editTitle" value="<%= news.title %>" required
-                 class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-indigo-500 focus:border-indigo-500">
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+      <!-- Language Tabs -->
+      <div class="border-b border-gray-200">
+        <div class="flex" id="editLangTabs">
+          <button type="button" onclick="switchEditLang('az')" class="edit-lang-tab px-6 py-3 text-sm font-medium border-b-2 border-indigo-600 text-indigo-600" data-lang="az">AZ</button>
+          <button type="button" onclick="switchEditLang('en')" class="edit-lang-tab px-6 py-3 text-sm font-medium border-b-2 border-transparent text-gray-500 hover:text-gray-700" data-lang="en">EN</button>
+          <button type="button" onclick="switchEditLang('ru')" class="edit-lang-tab px-6 py-3 text-sm font-medium border-b-2 border-transparent text-gray-500 hover:text-gray-700" data-lang="ru">RU</button>
         </div>
-        <div>
-          <label for="editSlug" class="block text-sm font-medium text-gray-700 mb-1">Slug</label>
-          <input type="text" id="editSlug" value="<%= news.slug || '' %>"
-                 class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-indigo-500 focus:border-indigo-500">
-        </div>
-        <div>
-          <label for="editCategory" class="block text-sm font-medium text-gray-700 mb-1">Category</label>
-          <input type="text" id="editCategory" value="<%= news.category || '' %>"
-                 class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-indigo-500 focus:border-indigo-500">
+      </div>
+
+      <form id="editNewsForm" class="p-6 space-y-6">
+        <!-- AZ Tab -->
+        <div class="edit-lang-content" data-lang="az">
+          <div>
+            <label for="editTitle" class="block text-sm font-medium text-gray-700 mb-1">Title *</label>
+            <input type="text" id="editTitle" value="<%= news.title %>" required
+                   class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-indigo-500 focus:border-indigo-500">
+          </div>
+          <div class="mt-4">
+            <label for="editDescription" class="block text-sm font-medium text-gray-700 mb-1">Description (short summary)</label>
+            <textarea id="editDescription" rows="3"
+                      class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-indigo-500 focus:border-indigo-500"><%= news.description || '' %></textarea>
+          </div>
+          <div class="mt-4">
+            <label for="editContent" class="block text-sm font-medium text-gray-700 mb-1">Content</label>
+            <textarea id="editContent" rows="12"
+                      class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-indigo-500 focus:border-indigo-500"><%= news.content || '' %></textarea>
+          </div>
         </div>
 
-        <!-- Translations -->
-        <div class="border-t border-gray-200 pt-4">
-          <h3 class="text-sm font-semibold text-gray-700 mb-3">Tərcümələr</h3>
-          <div class="grid grid-cols-2 gap-4">
-            <div>
-              <label for="editTitleEn" class="block text-sm font-medium text-gray-700 mb-1">Title (EN)</label>
-              <input type="text" id="editTitleEn" value="<%= news.title_en || '' %>"
-                     class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-indigo-500 focus:border-indigo-500">
-            </div>
-            <div>
-              <label for="editTitleRu" class="block text-sm font-medium text-gray-700 mb-1">Title (RU)</label>
-              <input type="text" id="editTitleRu" value="<%= news.title_ru || '' %>"
-                     class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-indigo-500 focus:border-indigo-500">
-            </div>
+        <!-- EN Tab -->
+        <div class="edit-lang-content hidden" data-lang="en">
+          <div>
+            <label for="editTitleEn" class="block text-sm font-medium text-gray-700 mb-1">Title (EN)</label>
+            <input type="text" id="editTitleEn" value="<%= news.title_en || '' %>"
+                   class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-indigo-500 focus:border-indigo-500">
           </div>
-          <div class="mt-3">
+          <div class="mt-4">
             <label for="editDescriptionEn" class="block text-sm font-medium text-gray-700 mb-1">Description (EN)</label>
-            <textarea id="editDescriptionEn" rows="2"
+            <textarea id="editDescriptionEn" rows="3"
                       class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-indigo-500 focus:border-indigo-500"><%= news.description_en || '' %></textarea>
           </div>
-          <div class="mt-3">
+          <div class="mt-4">
+            <label for="editContentEn" class="block text-sm font-medium text-gray-700 mb-1">Content (EN)</label>
+            <textarea id="editContentEn" rows="12"
+                      class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-indigo-500 focus:border-indigo-500"><%= news.content_en || '' %></textarea>
+          </div>
+        </div>
+
+        <!-- RU Tab -->
+        <div class="edit-lang-content hidden" data-lang="ru">
+          <div>
+            <label for="editTitleRu" class="block text-sm font-medium text-gray-700 mb-1">Title (RU)</label>
+            <input type="text" id="editTitleRu" value="<%= news.title_ru || '' %>"
+                   class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-indigo-500 focus:border-indigo-500">
+          </div>
+          <div class="mt-4">
             <label for="editDescriptionRu" class="block text-sm font-medium text-gray-700 mb-1">Description (RU)</label>
-            <textarea id="editDescriptionRu" rows="2"
+            <textarea id="editDescriptionRu" rows="3"
                       class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-indigo-500 focus:border-indigo-500"><%= news.description_ru || '' %></textarea>
           </div>
-        </div>
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Image</label>
-          <div class="flex items-start gap-4">
-            <div class="flex-1">
-              <input type="url" id="editImageUrl" value="<%= news.imageUrl || '' %>" placeholder="Image URL..."
-                     class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-indigo-500 focus:border-indigo-500 mb-2">
-              <div class="flex items-center gap-3">
-                <input type="file" id="editImageFile" accept="image/*"
-                       class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
-                <span class="px-3 py-2 bg-gray-100 text-gray-400 rounded-lg text-sm">Saxlandıqda yüklənəcək</span>
-              </div>
-            </div>
-            <div id="editImagePreview" class="<%= news.imageUrl ? '' : 'hidden' %> w-32 h-24 rounded-lg overflow-hidden border border-gray-200 flex-shrink-0">
-              <img id="editImagePreviewImg" class="w-full h-full object-cover" alt="Preview" src="<%= news.imageUrl || '' %>">
-            </div>
+          <div class="mt-4">
+            <label for="editContentRu" class="block text-sm font-medium text-gray-700 mb-1">Content (RU)</label>
+            <textarea id="editContentRu" rows="12"
+                      class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-indigo-500 focus:border-indigo-500"><%= news.content_ru || '' %></textarea>
           </div>
         </div>
-        <div class="flex items-center gap-3">
-          <input type="checkbox" id="editIsActive" <%= news.isActive ? 'checked' : '' %> class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
-          <label for="editIsActive" class="text-sm text-gray-700">Active</label>
-        </div>
-        <div>
-          <label for="editDescription" class="block text-sm font-medium text-gray-700 mb-1">Description (short summary)</label>
-          <textarea id="editDescription" rows="3"
-                    class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-indigo-500 focus:border-indigo-500"><%= news.description || '' %></textarea>
-        </div>
-        <div>
-          <label for="editContent" class="block text-sm font-medium text-gray-700 mb-1">Content</label>
-          <textarea id="editContent" rows="12"
-                    class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-indigo-500 focus:border-indigo-500"><%= news.content || '' %></textarea>
-        </div>
-        <div class="flex justify-end gap-3">
-          <a href="/admin/news" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 text-sm">Cancel</a>
-          <button type="submit" class="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 text-sm font-medium">Update</button>
+
+        <!-- Common fields -->
+        <div class="border-t border-gray-200 pt-6 space-y-6">
+          <div>
+            <label for="editSlug" class="block text-sm font-medium text-gray-700 mb-1">Slug</label>
+            <input type="text" id="editSlug" value="<%= news.slug || '' %>"
+                   class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-indigo-500 focus:border-indigo-500">
+          </div>
+          <div>
+            <label for="editCategory" class="block text-sm font-medium text-gray-700 mb-1">Category</label>
+            <input type="text" id="editCategory" value="<%= news.category || '' %>"
+                   class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-indigo-500 focus:border-indigo-500">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Image</label>
+            <div class="flex items-start gap-4">
+              <div class="flex-1">
+                <input type="url" id="editImageUrl" value="<%= news.imageUrl || '' %>" placeholder="Image URL..."
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-indigo-500 focus:border-indigo-500 mb-2">
+                <div class="flex items-center gap-3">
+                  <input type="file" id="editImageFile" accept="image/*"
+                         class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
+                  <span class="px-3 py-2 bg-gray-100 text-gray-400 rounded-lg text-sm">Saxlandıqda yüklənəcək</span>
+                </div>
+              </div>
+              <div id="editImagePreview" class="<%= news.imageUrl ? '' : 'hidden' %> w-32 h-24 rounded-lg overflow-hidden border border-gray-200 flex-shrink-0">
+                <img id="editImagePreviewImg" class="w-full h-full object-cover" alt="Preview" src="<%= news.imageUrl || '' %>">
+              </div>
+            </div>
+          </div>
+          <div class="flex items-center gap-3">
+            <input type="checkbox" id="editIsActive" <%= news.isActive ? 'checked' : '' %> class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+            <label for="editIsActive" class="text-sm text-gray-700">Active</label>
+          </div>
+          <div class="flex justify-end gap-3 pt-2">
+            <a href="/admin/news" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 text-sm">Cancel</a>
+            <button type="submit" class="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 text-sm font-medium">Update</button>
+          </div>
         </div>
       </form>
     </div>
   </div>
 </div>
+
+<script>
+function switchEditLang(lang) {
+  document.querySelectorAll('.edit-lang-tab').forEach(function(t) {
+    t.classList.remove('border-indigo-600', 'text-indigo-600');
+    t.classList.add('border-transparent', 'text-gray-500');
+  });
+  var tab = document.querySelector('.edit-lang-tab[data-lang="' + lang + '"]');
+  if (tab) tab.classList.add('border-indigo-600', 'text-indigo-600');
+
+  document.querySelectorAll('.edit-lang-content').forEach(function(el) {
+    el.classList.toggle('hidden', el.dataset.lang !== lang);
+  });
+}
+</script>

@@ -265,6 +265,17 @@ const AdminController = {
         }
     },
 
+    adminNewsViewPage: async (req, res) => {
+        try {
+            const news = await NewsService.findById(req.params.id);
+            if (!news) return res.redirect('/admin/news');
+            const view = { title: 'View News - Admin Panel', body: "News/View.ejs", js: "News.js", news };
+            res.render('Admin/Main', view);
+        } catch {
+            res.redirect('/admin/news');
+        }
+    },
+
     adminRssSourcesView: async (req, res) => {
         const view = { title: 'RSS Sources - Admin Panel', body: "RssSource/Index.ejs", js: "RssSource.js" };
         res.render('Admin/Main', view);
