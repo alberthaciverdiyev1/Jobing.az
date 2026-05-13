@@ -1,16 +1,25 @@
+var rssPage = 1;
+var rssTotalPages = 1;
+
 document.addEventListener('DOMContentLoaded', function() {
-    loadSources();
+    loadSources(1);
 });
 
-async function loadSources() {
+async function loadSources(page) {
+    if (page) rssPage = page;
     try {
-        var res = await axios.get('/api/admin/rss-sources');
-        var sources = res.data || [];
+        var res = await axios.get('/api/admin/rss-sources?page=' + rssPage + '&limit=15');
+        var data = res.data;
+        var sources = data.sources || [];
         var tbody = document.getElementById('rssSourceTableBody');
         if (!tbody) return;
 
+        rssTotalPages = data.totalPages || 1;
+
         if (sources.length === 0) {
             tbody.innerHTML = '<tr><td colspan="6" class="px-5 py-8 text-center text-gray-400">Heç bir RSS mənbəsi yoxdur</td></tr>';
+            var pagination = document.getElementById('rssPagination');
+            if (pagination) pagination.innerHTML = '';
             return;
         }
 
@@ -32,10 +41,26 @@ async function loadSources() {
                 '</td>' +
                 '</tr>';
         }).join('');
+
+        // Pagination
+        var pagination = document.getElementById('rssPagination');
+        if (pagination) renderRssPagination(pagination, rssPage, rssTotalPages);
     } catch (err) {
         var tbody = document.getElementById('rssSourceTableBody');
         if (tbody) tbody.innerHTML = '<tr><td colspan="6" class="px-5 py-8 text-center text-red-400">Xəta: ' + err.message + '</td></tr>';
     }
+}
+
+function renderRssPagination(container, current, total) {
+    if (total <= 1) { container.innerHTML = ''; return; }
+    var html = '<div class="flex items-center justify-center gap-1 py-4">';
+    html += '<button onclick="loadSources(' + (current - 1) + ')" class="px-3 py-1.5 text-sm rounded border ' + (current === 1 ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-white text-gray-700 hover:bg-gray-50') + '" ' + (current === 1 ? 'disabled' : '') + '>&laquo;</button>';
+    for (var i = Math.max(1, current - 2); i <= Math.min(total, current + 2); i++) {
+        html += '<button onclick="loadSources(' + i + ')" class="px-3 py-1.5 text-sm rounded border ' + (i === current ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white text-gray-700 hover:bg-gray-50') + '">' + i + '</button>';
+    }
+    html += '<button onclick="loadSources(' + (current + 1) + ')" class="px-3 py-1.5 text-sm rounded border ' + (current === total ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-white text-gray-700 hover:bg-gray-50') + '" ' + (current === total ? 'disabled' : '') + '>&raquo;</button>';
+    html += '</div>';
+    container.innerHTML = html;
 }
 
 function showAddModal() {
@@ -61,7 +86,7 @@ async function addSource() {
         });
         alertify.success('Mənbə əlavə edildi');
         closeAddModal();
-        loadSources();
+        loadSources(1);
     } catch (err) {
         alertify.error(err.response?.data?.error || 'Xəta baş verdi');
     }
@@ -72,7 +97,7 @@ async function deleteSource(id) {
     try {
         await axios.delete('/api/admin/rss-sources/' + id);
         alertify.success('Mənbə silindi');
-        loadSources();
+        loadSources(rssPage);
     } catch (err) {
         alertify.error(err.response?.data?.error || 'Xəta baş verdi');
     }
@@ -83,7 +108,7 @@ async function importSource(id) {
         var res = await axios.post('/api/admin/rss-sources/' + id + '/import');
         var r = res.data;
         alertify.success(r.imported + ' yeni xəbər idxal edildi, ' + r.skipped + ' keçildi');
-        loadSources();
+        loadSources(rssPage);
     } catch (err) {
         alertify.error(err.response?.data?.error || 'İdxal xətası');
     }
@@ -98,7 +123,7 @@ async function importAllSources() {
             if (r.success) total += r.imported || 0;
         });
         alertify.success('Cəmi ' + total + ' xəbər idxal edildi');
-        loadSources();
+        loadSources(1);
     } catch (err) {
         alertify.error(err.response?.data?.error || 'İdxal xətası');
     }

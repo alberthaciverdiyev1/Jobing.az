@@ -22,6 +22,33 @@
           <input type="text" id="editCategory" value="<%= news.category || '' %>"
                  class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-indigo-500 focus:border-indigo-500">
         </div>
+
+        <!-- Translations -->
+        <div class="border-t border-gray-200 pt-4">
+          <h3 class="text-sm font-semibold text-gray-700 mb-3">Tərcümələr</h3>
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label for="editTitleEn" class="block text-sm font-medium text-gray-700 mb-1">Title (EN)</label>
+              <input type="text" id="editTitleEn" value="<%= news.title_en || '' %>"
+                     class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-indigo-500 focus:border-indigo-500">
+            </div>
+            <div>
+              <label for="editTitleRu" class="block text-sm font-medium text-gray-700 mb-1">Title (RU)</label>
+              <input type="text" id="editTitleRu" value="<%= news.title_ru || '' %>"
+                     class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-indigo-500 focus:border-indigo-500">
+            </div>
+          </div>
+          <div class="mt-3">
+            <label for="editDescriptionEn" class="block text-sm font-medium text-gray-700 mb-1">Description (EN)</label>
+            <textarea id="editDescriptionEn" rows="2"
+                      class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-indigo-500 focus:border-indigo-500"><%= news.description_en || '' %></textarea>
+          </div>
+          <div class="mt-3">
+            <label for="editDescriptionRu" class="block text-sm font-medium text-gray-700 mb-1">Description (RU)</label>
+            <textarea id="editDescriptionRu" rows="2"
+                      class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-indigo-500 focus:border-indigo-500"><%= news.description_ru || '' %></textarea>
+          </div>
+        </div>
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-1">Image</label>
           <div class="flex items-start gap-4">

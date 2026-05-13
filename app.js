@@ -58,6 +58,13 @@ app.use((req, res, next) => {
 app.use((req, res, next) => {
     res.locals.Production = Production;
     res.locals.req = req;
+    // Locale-aware field helper: picks title_en / title_ru based on current locale
+    res.locals.__l = (obj, field) => {
+        if (!obj) return '';
+        const locale = res.locals.locale || req.locale || 'az';
+        if (locale !== 'az' && obj[field + '_' + locale]) return obj[field + '_' + locale];
+        return obj[field] || '';
+    };
     next();
 });
 app.use('/', routes);

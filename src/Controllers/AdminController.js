@@ -272,8 +272,14 @@ const AdminController = {
 
     getRssSources: async (req, res) => {
         try {
-            const sources = await RssSource.find().sort({ createdAt: -1 }).lean();
-            res.json(sources);
+            const { page = 1, limit = 20 } = req.query;
+            const total = await RssSource.countDocuments();
+            const sources = await RssSource.find()
+                .sort({ createdAt: -1 })
+                .skip((Number(page) - 1) * Number(limit))
+                .limit(Number(limit))
+                .lean();
+            res.json({ sources, total, page: Number(page), totalPages: Math.ceil(total / Number(limit)) });
         } catch (error) {
             res.status(500).json({ error: error.message });
         }
@@ -879,6 +885,9 @@ const AdminController = {
 
     createNews: async (req, res) => {
         try {
+            if (req.body.description) {
+                req.body.description = req.body.description.replace(/<[^>]*>/g, '');
+            }
             const news = await NewsService.create(req.body);
             res.status(201).json(news);
         } catch (error) {
@@ -888,6 +897,9 @@ const AdminController = {
 
     updateNews: async (req, res) => {
         try {
+            if (req.body.description) {
+                req.body.description = req.body.description.replace(/<[^>]*>/g, '');
+            }
             const news = await NewsService.update(req.params.id, req.body);
             res.json(news);
         } catch (error) {
