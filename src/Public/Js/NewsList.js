@@ -3,6 +3,12 @@ let currentCategory = '';
 const limit = 12;
 let isLoading = false;
 
+function stripHtml(html) {
+    const d = document.createElement('div');
+    d.innerHTML = html || '';
+    return d.textContent || d.innerText || '';
+}
+
 function createNewsCard(item) {
     const img = item.imageUrl
         ? `<div class="h-48 overflow-hidden bg-gray-100">
@@ -13,12 +19,13 @@ function createNewsCard(item) {
         ? `<span class="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium bg-primary-50 text-primary-600 border border-primary-100 mb-2">${item.category}</span>`
         : '';
     const date = new Date(item.createdAt).toLocaleDateString('az-AZ');
+    const desc = stripHtml(item.description || '');
     return `<a href="/xeberler/${item.slug}" class="group bg-white rounded-lg border border-gray-200 overflow-hidden hover:border-gray-300 transition-all hover:shadow-sm flex flex-col">
         ${img}
         <div class="p-4 flex flex-col flex-1">
             ${cat}
             <h3 class="font-semibold text-gray-900 leading-snug line-clamp-2 group-hover:text-primary-500 transition-colors">${item.title}</h3>
-            <p class="text-sm text-gray-500 mt-1 line-clamp-2 flex-1">${item.description || ''}</p>
+            <p class="text-sm text-gray-500 mt-1 line-clamp-2 flex-1">${desc}</p>
             <p class="text-xs text-gray-400 mt-2"><i class="far fa-calendar mr-1"></i>${date} · <i class="far fa-eye mr-1"></i>${item.views || 0} oxunma</p>
         </div>
     </a>`;

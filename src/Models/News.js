@@ -8,6 +8,8 @@ const newsSchema = new Schema({
         required: true,
         trim: true
     },
+    title_en: { type: String, default: '' },
+    title_ru: { type: String, default: '' },
     slug: {
         type: String,
         unique: true,
@@ -21,10 +23,14 @@ const newsSchema = new Schema({
         type: String,
         default: ''
     },
+    description_en: { type: String, default: '' },
+    description_ru: { type: String, default: '' },
     content: {
         type: String,
         default: ''
     },
+    content_en: { type: String, default: '' },
+    content_ru: { type: String, default: '' },
     category: {
         type: String,
         default: ''
