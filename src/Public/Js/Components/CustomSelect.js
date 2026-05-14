@@ -66,13 +66,15 @@ export function createCustomSelect(selectEl) {
     dropdown.appendChild(searchInput);
     dropdown.appendChild(optionsList);
     wrapper.appendChild(trigger);
-    wrapper.appendChild(dropdown);
 
     // Insert wrapper before select, move select into wrapper, hide native
     selectEl.parentNode.insertBefore(wrapper, selectEl);
     wrapper.appendChild(selectEl);
     selectEl.classList.add('hidden');
     selectEl.dataset.customSelect = '1';
+
+    // Append dropdown to body to avoid transform/positioned ancestor issues
+    document.body.appendChild(dropdown);
 
     // --- Event handlers ---
 
@@ -128,9 +130,9 @@ export function createCustomSelect(selectEl) {
         selectValue(opt.dataset.value, opt.textContent);
     });
 
-    // Outside click close
+    // Outside click close (dropdown is in document.body, check both)
     document.addEventListener('click', (e) => {
-        if (!wrapper.contains(e.target)) closeDropdown();
+        if (!wrapper.contains(e.target) && !dropdown.contains(e.target)) closeDropdown();
     });
 
     // Keyboard: Enter on trigger opens, Escape closes
@@ -165,6 +167,7 @@ export function createCustomSelect(selectEl) {
         delete selectEl.dataset.customSelect;
         wrapper.parentNode.insertBefore(selectEl, wrapper);
         wrapper.remove();
+        if (dropdown.parentNode) dropdown.parentNode.removeChild(dropdown);
     }
 
     // Store instance

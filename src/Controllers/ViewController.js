@@ -206,7 +206,8 @@ const ViewController = {
             body: "Dashboard/Index.ejs",
             js: "Dashboard.js",
             currentPage: 'dashboard',
-            cvs
+            cvs,
+            msg: req.query.msg || null
         };
         res.render('Main', view);
     },

@@ -189,7 +189,8 @@
 		"interview": "Müsahibə təyin edildi",
 		"accountInfo": "Hesab Məlumatları",
 		"accountType": "Hesab növü",
-		"user": "İstifadəçi"
+		"user": "İstifadəçi",
+		"postJobCompanyOnly": "Vakansiya yerləşdirmək üçün şirkət hesabı lazımdır. Zəhmət olmasa şirkət olaraq qeydiyyatdan keçin."
 	},
 	"auth": {
 		"welcome": "Xoş Gəlmisiniz",

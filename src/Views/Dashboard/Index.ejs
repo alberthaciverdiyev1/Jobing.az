@@ -3,6 +3,14 @@
 <!-- ============================================ -->
 <section class="min-h-screen bg-gray-50 pt-24 md:pt-28 pb-20">
     <div class="max-w-5xl mx-auto px-3 sm:px-4 lg:px-6">
+        <!-- Message Banner -->
+        <% if (typeof msg !== 'undefined' && msg === 'post_job_company') { %>
+        <div class="mb-6 p-4 bg-amber-50 border border-amber-200 rounded-xl text-sm text-amber-800 flex items-start gap-3 animate-fade-in-up">
+            <i class="fas fa-info-circle mt-0.5"></i>
+            <span><%= __('dashboard.postJobCompanyOnly') %></span>
+        </div>
+        <% } %>
+
         <!-- Dashboard Header -->
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8 animate-fade-in-up">
             <div>
