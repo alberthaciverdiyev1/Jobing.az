@@ -189,7 +189,8 @@
 		"interview": "Interview scheduled",
 		"accountInfo": "Account Information",
 		"accountType": "Account type",
-		"user": "User"
+		"user": "User",
+		"postJobCompanyOnly": "You need a company account to post a job. Please register as a company."
 	},
 	"auth": {
 		"welcome": "Welcome",

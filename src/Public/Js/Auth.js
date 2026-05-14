@@ -73,6 +73,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     // Check for redirect param from URL
                     var redirect = new URLSearchParams(window.location.search).get('redirect');
                     if (redirect) {
+                        // User role can't access /add-job — redirect to dashboard with message
+                        if (redirect === '/add-job' && res.data.user.role === 'user') {
+                            window.location.href = '/dashboard?msg=post_job_company';
+                            return;
+                        }
                         window.location.href = redirect;
                         return;
                     }
