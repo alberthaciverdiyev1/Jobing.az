@@ -143,3 +143,7 @@
     }, { passive: true });
 })();
 </script>
+
+<% if (typeof seo !== 'undefined' && seo && seo.footerHtml) { %>
+  <%- seo.footerHtml %>
+<% } %>
