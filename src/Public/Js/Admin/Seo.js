@@ -90,6 +90,7 @@ function openEdit(route) {
     document.getElementById('editHeaderHtml').value = saved.headerHtml || '';
     document.getElementById('editBodyTopHtml').value = saved.bodyTopHtml || '';
     document.getElementById('editBodyBottomHtml').value = saved.bodyBottomHtml || '';
+    document.getElementById('editFooterHtml').value = saved.footerHtml || '';
 
     var deleteBtn = document.getElementById('deleteBtn');
     if (deleteBtn) {
@@ -119,6 +120,7 @@ async function saveEntry() {
             headerHtml: document.getElementById('editHeaderHtml').value,
             bodyTopHtml: document.getElementById('editBodyTopHtml').value,
             bodyBottomHtml: document.getElementById('editBodyBottomHtml').value,
+            footerHtml: document.getElementById('editFooterHtml').value,
             customRoute: document.getElementById('editCustomRoute').value.trim(),
             canonical: document.getElementById('editCanonical').value.trim(),
             noindex: document.getElementById('editNoindex').checked,
