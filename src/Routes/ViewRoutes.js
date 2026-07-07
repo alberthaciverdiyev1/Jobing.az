@@ -15,7 +15,7 @@ router.get('/vakansiyalar', visitorLogger, viewController.jobs);
 router.get('/resumes', visitorLogger, viewController.resumes);
 router.get('/about-us', visitorLogger, viewController.aboutUs);
 router.get('/contact', visitorLogger, viewController.contactUs);
-router.get('/add-job', visitorLogger, authMiddleware.authenticate, authMiddleware.authorize('company', 'hr'), viewController.addJob);
+router.get('/add-job', visitorLogger, viewController.addJob);
 router.get('/faq', visitorLogger, viewController.faq);
 router.get('/blogs', visitorLogger, viewController.blogs);
 router.get('/blogs/:slug', visitorLogger, viewController.blog);
