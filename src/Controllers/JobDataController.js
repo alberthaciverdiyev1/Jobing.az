@@ -183,10 +183,6 @@ const jobDataController = {
 
     addJobRequest: async (req, res) => {
         try {
-            // Only company, hr, and admin roles can post jobs
-            if (req.user && req.user.role === 'user') {
-                return res.status(403).json({ error: 'Users cannot post jobs' });
-            }
             let description = `${req.body.data.aboutJob + '<h4 class="text-lg font-bold text-gray-800">Tələblər:</h4>' + req.body.data.requirements}`;
             const uniqueKey = req.body.data.position + '-' + req.body.data.companyName + '-' + req.body.data.city + '-' + Date.now();
             const slugBase = req.body.data.position || 'vakansiya';
