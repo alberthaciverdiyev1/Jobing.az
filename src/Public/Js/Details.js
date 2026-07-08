@@ -210,6 +210,14 @@ async function openPricingModal(type) {
     document.getElementById('pricingModal').classList.remove('hidden');
     document.body.classList.add('modal-open');
 
+    // Click overlay to close
+    setTimeout(() => {
+        const overlay = document.getElementById('pricingModalOverlay');
+        if (overlay) {
+            overlay.onclick = closePricingModal;
+        }
+    }, 0);
+
     // Fetch plans
     await loadPricingPlans(type);
 }
@@ -305,6 +313,8 @@ function selectPlan(planId, el) {
 function closePricingModal() {
     document.getElementById('pricingModal').classList.add('hidden');
     document.body.classList.remove('modal-open');
+    const overlay = document.getElementById('pricingModalOverlay');
+    if (overlay) overlay.onclick = null;
     selectedPlanId = null;
 }
 
