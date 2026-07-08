@@ -328,8 +328,9 @@ document.getElementById('addJob').addEventListener("click", async () => {
     try {
         const companyImageElement = document.getElementById("companyImage");
         let companyImageBase64 = null;
+        const isCompanyUser = window.currentUser?.role === 'company';
 
-        if (companyImageElement?.files?.[0]) {
+        if (!isCompanyUser && companyImageElement?.files?.[0]) {
             const maxSize = 5 * 1024 * 1024; // 5MB
             if (companyImageElement.files[0].size > maxSize) {
                 alertify.error(validationMessages.file_too_large);

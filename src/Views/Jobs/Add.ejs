@@ -144,6 +144,11 @@
             <!-- ============================================================ -->
             <!-- COMPANY INFO SECTION -->
             <!-- ============================================================ -->
+            <% if (user && user.role === 'company') { %>
+                <!-- Hidden fields for company users: auto-filled from account -->
+                <input type="hidden" id="companyName" value="<%= user.companyName %>">
+                <input type="hidden" id="companyImage" value="">
+            <% } else { %>
             <div class="mb-10">
                 <div class="flex items-center gap-3 mb-6 pb-4 border-b border-gray-100">
                     <div class="w-10 h-10 rounded-xl bg-primary-50 flex items-center justify-center text-primary-500">
@@ -166,9 +171,7 @@
                                 <i class="fas fa-building"></i>
                             </span>
                             <input id="companyName" type="text" placeholder="Şirkət adı"
-                                   value="<%= companyInfo ? companyInfo.companyName : '' %>"
-                                   <%= companyInfo ? 'disabled' : '' %>
-                                   class="w-full pl-11 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all duration-200 text-gray-900 placeholder:text-gray-400 <%= companyInfo ? 'opacity-75 cursor-not-allowed' : '' %>">
+                                   class="w-full pl-11 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all duration-200 text-gray-900 placeholder:text-gray-400">
                         </div>
                         <span id="companyName-error" class="error-message text-red-500 text-xs mt-1.5 hidden flex items-center gap-1">
                             <i class="fas fa-exclamation-circle"></i>
@@ -195,6 +198,7 @@
                     </div>
                 </div>
             </div>
+            <% } %>
 
             <!-- ============================================================ -->
             <!-- JOB DETAILS SECTION -->
