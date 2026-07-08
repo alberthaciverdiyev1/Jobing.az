@@ -37,17 +37,129 @@
             <span class="text-[10px] font-medium"><%= __('nav.cvs') %></span>
         </a>
 
-        <!-- Profile / Login (always show profile icon, redirect to login if not authenticated) -->
-        <% const profileLink = (typeof user !== 'undefined' && user)
-            ? (user.role === 'company' ? '/company/dashboard' : user.role === 'hr' ? '/hr/dashboard' : '/dashboard')
-            : '/auth'; %>
-        <a href="<%= profileLink %>"
+        <!-- Profile / Login -->
+        <% if (typeof user !== 'undefined' && user) { %>
+        <button onclick="toggleMobileMenu()"
            class="flex flex-col items-center justify-center gap-0.5 w-14 py-1 <%= currentPage === 'dashboard' || currentPage === 'company-dashboard' ? 'text-primary-500' : 'text-gray-400 hover:text-gray-600' %> transition-colors">
             <div class="relative">
                 <i class="fas fa-user text-xl"></i>
                 <% if (currentPage === 'dashboard' || currentPage === 'company-dashboard') { %><span class="absolute -bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-primary-500"></span><% } %>
             </div>
             <span class="text-[10px] font-medium"><%= __('nav.profile') %></span>
+        </button>
+        <% } else { %>
+        <a href="/auth"
+           class="flex flex-col items-center justify-center gap-0.5 w-14 py-1 text-gray-400 hover:text-gray-600 transition-colors">
+            <div class="relative">
+                <i class="fas fa-user text-xl"></i>
+            </div>
+            <span class="text-[10px] font-medium"><%= __('nav.profile') %></span>
         </a>
+        <% } %>
     </div>
 </nav>
+
+<!-- Mobile Menu Overlay (role-based, like UserMenu dropdown) -->
+<% if (typeof user !== 'undefined' && user) { %>
+<div id="mobile-menu-overlay" class="fixed inset-0 z-50 hidden">
+    <div class="fixed inset-0 bg-black/50" onclick="toggleMobileMenu()"></div>
+    <div class="fixed bottom-0 left-0 right-0 bg-white rounded-t-2xl shadow-xl animate-slide-up pb-8 safe-area-bottom max-h-[80vh] overflow-y-auto">
+        <!-- Handle bar -->
+        <div class="flex justify-center pt-3 pb-1">
+            <div class="w-10 h-1 rounded-full bg-gray-300"></div>
+        </div>
+
+        <!-- User Info -->
+        <div class="px-5 py-4 border-b border-gray-50">
+            <p class="font-semibold text-gray-900"><%= user.name %> <%= user.surname %></p>
+            <p class="text-xs text-gray-400"><%= user.email %></p>
+            <span class="inline-flex items-center gap-1 mt-1.5 px-2 py-0.5 rounded-md text-[10px] font-medium <%= user.role === 'company' ? 'bg-purple-50 text-purple-700' : user.role === 'hr' ? 'bg-emerald-50 text-emerald-700' : 'bg-primary-50 text-primary-700' %>">
+                <i class="fas <%= user.role === 'company' ? 'fa-building' : user.role === 'hr' ? 'fa-users' : 'fa-user' %>"></i>
+                <%= user.role === 'company' ? 'Şirkət' : user.role === 'hr' ? 'HR' : 'İstifadəçi' %>
+            </span>
+        </div>
+
+        <!-- Role-based Menu Items -->
+        <div class="py-2">
+            <% if (user.role === 'admin') { %>
+                <a href="/admin/dashboard" onclick="toggleMobileMenu()" class="flex items-center gap-3 px-5 py-3 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-600 transition-colors">
+                    <i class="fas fa-shield-alt w-5 text-center text-gray-400"></i> Admin Panel
+                </a>
+                <hr class="mx-4 my-1 border-gray-50">
+                <a href="/admin/jobs" onclick="toggleMobileMenu()" class="flex items-center gap-3 px-5 py-3 text-sm text-gray-600 hover:bg-primary-50 transition-colors">
+                    <i class="fas fa-briefcase w-5 text-center text-gray-400"></i> Vakansiyalar
+                </a>
+                <a href="/admin/categories" onclick="toggleMobileMenu()" class="flex items-center gap-3 px-5 py-3 text-sm text-gray-600 hover:bg-primary-50 transition-colors">
+                    <i class="fas fa-tags w-5 text-center text-gray-400"></i> Kateqoriyalar
+                </a>
+                <a href="/admin/users" onclick="toggleMobileMenu()" class="flex items-center gap-3 px-5 py-3 text-sm text-gray-600 hover:bg-primary-50 transition-colors">
+                    <i class="fas fa-users w-5 text-center text-gray-400"></i> İstifadəçilər
+                </a>
+                <a href="/admin/logs" onclick="toggleMobileMenu()" class="flex items-center gap-3 px-5 py-3 text-sm text-gray-600 hover:bg-primary-50 transition-colors">
+                    <i class="fas fa-list w-5 text-center text-gray-400"></i> Loglar
+                </a>
+                <a href="/admin/settings" onclick="toggleMobileMenu()" class="flex items-center gap-3 px-5 py-3 text-sm text-gray-600 hover:bg-primary-50 transition-colors">
+                    <i class="fas fa-cog w-5 text-center text-gray-400"></i> Ayarlar
+                </a>
+            <% } else if (user.role === 'company') { %>
+                <a href="/company/dashboard" onclick="toggleMobileMenu()" class="flex items-center gap-3 px-5 py-3 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-600 transition-colors">
+                    <i class="fas fa-chart-pie w-5 text-center text-gray-400"></i> Şirkət Paneli
+                </a>
+                <a href="/hr/dashboard" onclick="toggleMobileMenu()" class="flex items-center gap-3 px-5 py-3 text-sm text-emerald-600 hover:bg-emerald-50 transition-colors">
+                    <i class="fas fa-users w-5 text-center"></i> HR Panel
+                </a>
+                <a href="/add-job" onclick="toggleMobileMenu()" class="flex items-center gap-3 px-5 py-3 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-600 transition-colors">
+                    <i class="fas fa-plus-circle w-5 text-center text-gray-400"></i> Yeni Elan
+                </a>
+            <% } else if (user.role === 'hr') { %>
+                <a href="/hr/dashboard" onclick="toggleMobileMenu()" class="flex items-center gap-3 px-5 py-3 text-sm text-emerald-600 hover:bg-emerald-50 transition-colors">
+                    <i class="fas fa-users w-5 text-center"></i> HR Panel
+                </a>
+                <a href="/dashboard" onclick="toggleMobileMenu()" class="flex items-center gap-3 px-5 py-3 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-600 transition-colors">
+                    <i class="fas fa-chart-pie w-5 text-center text-gray-400"></i> Mənim Panelim
+                </a>
+                <a href="/add-job" onclick="toggleMobileMenu()" class="flex items-center gap-3 px-5 py-3 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-600 transition-colors">
+                    <i class="fas fa-plus-circle w-5 text-center text-gray-400"></i> Yeni Elan
+                </a>
+            <% } else { %>
+                <a href="/dashboard" onclick="toggleMobileMenu()" class="flex items-center gap-3 px-5 py-3 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-600 transition-colors">
+                    <i class="fas fa-chart-pie w-5 text-center text-gray-400"></i> Mənim Panelim
+                </a>
+                <a href="/add-job" onclick="toggleMobileMenu()" class="flex items-center gap-3 px-5 py-3 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-600 transition-colors">
+                    <i class="fas fa-plus-circle w-5 text-center text-gray-400"></i> Yeni Elan
+                </a>
+                <a href="/cv/create" onclick="toggleMobileMenu()" class="flex items-center gap-3 px-5 py-3 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-600 transition-colors">
+                    <i class="fas fa-file-alt w-5 text-center text-gray-400"></i> CV Yarat
+                </a>
+                <a href="/cv/upload" onclick="toggleMobileMenu()" class="flex items-center gap-3 px-5 py-3 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-600 transition-colors">
+                    <i class="fas fa-upload w-5 text-center text-gray-400"></i> CV Yüklə
+                </a>
+            <% } %>
+        </div>
+
+        <!-- Logout -->
+        <div class="border-t border-gray-50 pt-2 px-5">
+            <button onclick="mobileLogout()" class="flex items-center gap-3 w-full px-4 py-3 text-sm text-red-600 hover:bg-red-50 rounded-xl transition-colors">
+                <i class="fas fa-sign-out-alt w-5 text-center"></i> Çıxış
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+function toggleMobileMenu() {
+    const overlay = document.getElementById('mobile-menu-overlay');
+    overlay.classList.toggle('hidden');
+    document.body.classList.toggle('overflow-hidden');
+}
+
+async function mobileLogout() {
+    try {
+        const res = await axios.post('/api/auth/logout');
+        if (res.status === 200) window.location.href = '/';
+    } catch {
+        window.location.href = '/';
+    }
+}
+</script>
+<% } %>
