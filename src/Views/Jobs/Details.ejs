@@ -238,11 +238,9 @@
                 <!-- ===== MOBILE APPLY (visible only below lg) ===== -->
                 <div class="lg:hidden flex flex-wrap gap-3 animate-fade-in-up" style="animation-delay: 200ms">
                     <% if (typeof user !== 'undefined' && user && user.role === 'user') { %>
-                        <button onclick="openApplyModal()"
-                           class="flex-1 inline-flex items-center justify-center gap-2 bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white font-medium px-7 py-3.5 rounded-xl transition-all duration-200 shadow-sm hover:shadow-md active:scale-[0.98]">
-                            <i class="fas fa-paper-plane"></i>
-                            <%= __('jobDetail.apply') %>
-                        </button>
+                        <div class="w-full p-3 bg-amber-50 border border-amber-200 rounded-xl text-sm text-amber-700">
+                            <p class="font-medium"><i class="fas fa-building mr-1"></i><%= __('jobDetail.needCompanyAccount') %></p>
+                        </div>
                     <% } else if (typeof user === 'undefined' || !user) { %>
                         <a href="/auth"
                            class="flex-1 inline-flex items-center justify-center gap-2 bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white font-medium px-7 py-3.5 rounded-xl transition-all duration-200 shadow-sm hover:shadow-md active:scale-[0.98]">
@@ -338,21 +336,19 @@
                     <!-- Apply Card -->
                     <div class="bg-gradient-to-br from-primary-500 to-primary-600 rounded-2xl shadow-md p-5 hidden lg:block">
                         <% if (typeof user !== 'undefined' && user && user.role === 'user') { %>
-                            <button onclick="openApplyModal()"
-                               class="block w-full bg-white text-primary-600 hover:bg-primary-50 font-semibold py-3.5 px-6 rounded-xl text-center transition-all duration-200 shadow-sm hover:shadow-md active:scale-[0.98]">
-                                <i class="fas fa-paper-plane mr-2"></i>
-                                <%= __('jobDetail.apply') %>
-                            </button>
+                            <div class="w-full p-3 bg-white/15 rounded-xl text-sm text-white/90 text-center">
+                                <p class="font-medium"><i class="fas fa-building mr-1"></i><%= __('jobDetail.needCompanyAccount') %></p>
+                            </div>
                         <% } else if (typeof user === 'undefined' || !user) { %>
                             <a href="/auth"
                                class="block w-full bg-white text-primary-600 hover:bg-primary-50 font-semibold py-3.5 px-6 rounded-xl text-center transition-all duration-200 shadow-sm hover:shadow-md">
                                 <i class="fas fa-paper-plane mr-2"></i>
                                 <%= __('jobDetail.apply') %>
                             </a>
+                            <p class="text-xs text-white/60 text-center mt-2"><%= __('jobDetail.applySub') %></p>
                         <% } else { %>
                             <p class="text-sm text-white/80 text-center py-2"><%= __('jobDetail.youCannotApply') %></p>
                         <% } %>
-                        <p class="text-xs text-white/60 text-center mt-2"><%= __('jobDetail.applySub') %></p>
                     </div>
 
                     <!-- Contact Info -->

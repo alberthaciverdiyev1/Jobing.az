@@ -129,7 +129,7 @@ const CVController = {
     // List user's CVs
     list: async (req, res) => {
         try {
-            const cvs = await CVService.findByUser(req.user._id);
+            const cvs = await CVService.findByUser(req.user._id, false);
             res.json({ cvs });
         } catch (err) {
             res.status(500).json({ error: err.message });
