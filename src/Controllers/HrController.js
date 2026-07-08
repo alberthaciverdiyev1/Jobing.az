@@ -128,10 +128,13 @@ const HrController = {
             let companyNames = [];
 
             if (user.role === 'company') {
-                totalJobs = await Job.countDocuments({ companyName: user.companyName });
-                activeJobs = await Job.countDocuments({ companyName: user.companyName, isActive: true });
                 const company = await Company.findOne({ companyName: user.companyName }).lean();
                 const companyId = company?._id;
+                const jobFilter = companyId
+                    ? { $or: [{ companyName: user.companyName }, { companyId: companyId.toString() }] }
+                    : { companyName: user.companyName };
+                totalJobs = await Job.countDocuments(jobFilter);
+                activeJobs = await Job.countDocuments({ ...jobFilter, isActive: true });
                 const appStats = companyId ? await ApplicationService.countByCompany([companyId]) : { total: 0, pending: 0, accepted: 0, rejected: 0, interview: 0 };
                 totalApplications = appStats.total;
                 interviewCount = appStats.interview;
@@ -183,7 +186,16 @@ const HrController = {
             let query = {};
 
             if (user.role === 'company') {
-                query.companyName = user.companyName;
+                // Find company by user's companyName, then query by both companyName and companyId
+                const company = await Company.findOne({ companyName: user.companyName }).lean();
+                if (company) {
+                    query.$or = [
+                        { companyName: user.companyName },
+                        { companyId: company._id.toString() }
+                    ];
+                } else {
+                    query.companyName = user.companyName;
+                }
             } else if (user.role === 'hr' && user.companyIds && user.companyIds.length > 0) {
                 query.companyId = { $in: user.companyIds.map(id => id.toString()) };
             } else {
@@ -232,6 +244,10 @@ const HrController = {
 
             if (req.user.role === 'company') {
                 data.companyName = req.user.companyName;
+                if (!data.companyId) {
+                    const company = await Company.findOne({ companyName: req.user.companyName }).select('_id').lean();
+                    if (company) data.companyId = company._id.toString();
+                }
             }
 
             const job = await Job.create(data);
@@ -243,6 +259,10 @@ const HrController = {
 
     updateJob: async (req, res) => {
         try {
+            if (req.user.role === 'company') {
+                delete req.body.companyName;
+                delete req.body.companyId;
+            }
             const job = await Job.findByIdAndUpdate(req.params.id, req.body, { new: true });
             if (!job) return res.status(404).json({ error: 'Job not found' });
             res.json(job);
