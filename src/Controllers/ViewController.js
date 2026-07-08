@@ -10,6 +10,7 @@ import CVService from "../Services/CVService.js";
 import NewsService from "../Services/NewsService.js";
 import JobData from "../Models/JobData.js";
 import Company from "../Models/Company.js";
+import PricingPlan from "../Models/PricingPlan.js";
 
 const ViewController = {
     home: async (req, res) => {
@@ -350,6 +351,32 @@ const ViewController = {
     },
 
     // ============================================
+    // PRICING PAGE
+    // ============================================
+    pricing: async (req, res) => {
+        try {
+            const plans = await PricingPlan.find({ isActive: true }).sort({ type: 1, price: 1 }).lean();
+            const promotePlans = plans.filter(p => p.type === 'promote');
+            const premiumPlans = plans.filter(p => p.type === 'premium');
+
+            const view = {
+                title: 'Qiymətlər',
+                description: 'Jobing.az premium və irəli çəkmə planları. Vakansiyanızı önə çıxarın və daha çox namizədə çatdırın.',
+                body: "Pricing/Index.ejs",
+                js: null,
+                currentPage: 'pricing',
+                promotePlans,
+                premiumPlans,
+                plans
+            };
+            res.render('Main', view);
+        } catch (error) {
+            console.error('pricing page error:', error.message);
+            res.status(500).render('Partials/Error.ejs');
+        }
+    },
+
+    // ============================================
     // SEO: Sitemap
     // ============================================
     sitemap: async (req, res) => {
@@ -363,6 +390,7 @@ const ViewController = {
                 { loc: '/vakansiyalar', priority: '0.90', changefreq: 'hourly' },
                 { loc: '/sirketler', priority: '0.80', changefreq: 'daily' },
                 { loc: '/cv-ler', priority: '0.70', changefreq: 'daily' },
+                { loc: '/qiymetler', priority: '0.70', changefreq: 'weekly' },
                 { loc: '/blogs', priority: '0.70', changefreq: 'weekly' },
                 { loc: '/xeberler', priority: '0.70', changefreq: 'daily' },
                 { loc: '/about-us', priority: '0.50', changefreq: 'monthly' },

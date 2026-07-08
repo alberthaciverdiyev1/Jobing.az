@@ -52,6 +52,8 @@ function openPlanModal() {
     editingPlanId = null;
     document.getElementById('pricingForm').reset();
     document.getElementById('planId').value = '';
+    document.getElementById('planDescription').value = '';
+    document.getElementById('planFeatures').value = '';
     document.getElementById('planActive').checked = true;
     document.getElementById('pricingModalTitle').textContent = 'Plan Əlavə Et';
     document.getElementById('pricingModal').classList.remove('hidden');
@@ -73,6 +75,8 @@ async function editPlan(id) {
         document.getElementById('planPrice').value = data.price || '';
         document.getElementById('planType').value = data.type || '';
         document.getElementById('planDuration').value = data.duration || '';
+        document.getElementById('planDescription').value = data.description || '';
+        document.getElementById('planFeatures').value = (data.features || []).join('\n');
         document.getElementById('planActive').checked = data.isActive !== false;
         document.getElementById('pricingModal').classList.remove('hidden');
         document.body.classList.add('modal-open');
@@ -93,11 +97,14 @@ async function deletePlan(id) {
 
 async function handlePlanSubmit(e) {
     e.preventDefault();
+    const featuresRaw = document.getElementById('planFeatures').value;
     const payload = {
         name: document.getElementById('planName').value,
         price: Number(document.getElementById('planPrice').value),
         type: document.getElementById('planType').value,
         duration: document.getElementById('planDuration').value,
+        description: document.getElementById('planDescription').value,
+        features: featuresRaw ? featuresRaw.split('\n').map(f => f.trim()).filter(Boolean) : [],
         isActive: document.getElementById('planActive').checked
     };
 
