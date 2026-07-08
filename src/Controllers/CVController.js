@@ -3,6 +3,7 @@ import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
 import { v4 as uuidv4 } from 'uuid';
+import { sendNewCVRequest } from '../Helpers/TelegramBot.js';
 
 // Ensure upload directory exists
 const cvDir = 'uploads/cv/';
@@ -45,6 +46,7 @@ const CVController = {
                 userId: req.user._id,
                 title: req.body.title,
                 type: 'created',
+                isActive: false,
                 fullName: req.body.fullName || '',
                 email: req.body.email || '',
                 phone: req.body.phone || '',
@@ -59,6 +61,21 @@ const CVController = {
             };
 
             const cv = await CVService.create(data);
+
+            try {
+                await sendNewCVRequest({
+                    id: cv._id,
+                    title: cv.title,
+                    fullName: cv.fullName,
+                    email: cv.email,
+                    phone: cv.phone,
+                    type: cv.type,
+                    isActive: cv.isActive
+                });
+            } catch (tgErr) {
+                console.error('Telegram CV notification failed:', tgErr.message);
+            }
+
             res.status(201).json({ message: 'CV uğurla yaradıldı', cv });
         } catch (err) {
             res.status(500).json({ error: err.message });
@@ -81,11 +98,26 @@ const CVController = {
                     userId: req.user._id,
                     title: req.body.title || req.file.originalname,
                     type: 'uploaded',
+                    isActive: false,
                     fileUrl: `/uploads/cv/${req.file.filename}`,
                     fileName: req.file.originalname,
                     fileSize: req.file.size,
                     mimeType: req.file.mimetype
                 });
+
+                try {
+                    await sendNewCVRequest({
+                        id: cv._id,
+                        title: cv.title,
+                        fullName: cv.fullName,
+                        email: cv.email,
+                        phone: cv.phone,
+                        type: cv.type,
+                        isActive: cv.isActive
+                    });
+                } catch (tgErr) {
+                    console.error('Telegram CV upload notification failed:', tgErr.message);
+                }
 
                 res.status(201).json({ message: 'CV uğurla yükləndi', cv });
             });

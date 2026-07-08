@@ -69,6 +69,14 @@ const CVService = {
         } catch {
             // file may not exist
         }
+    },
+
+    toggleActive: async (id, status) => {
+        return CV.findOneAndUpdate(
+            { _id: id, deletedAt: null },
+            { $set: { isActive: status } },
+            { new: true }
+        );
     }
 };
 

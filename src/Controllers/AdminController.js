@@ -1142,6 +1142,18 @@ const AdminController = {
         }
     },
 
+    toggleCvActive: async (req, res) => {
+        try {
+            const cv = await CV.findById(req.params.id);
+            if (!cv) return res.status(404).json({ error: 'CV not found' });
+            cv.isActive = !cv.isActive;
+            await cv.save();
+            res.json({ isActive: cv.isActive });
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    },
+
     // ============================================================
     // API - VISITORS
     // ============================================================

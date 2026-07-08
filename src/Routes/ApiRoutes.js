@@ -13,14 +13,15 @@ import viewController from '../Controllers/ViewController.js';
 import newsController from '../Controllers/NewsController.js';
 import validator from '../Validators/Main.js';
 import authMiddleware from '../Middlewares/Auth.js';
+import { authLimiter, jobLimiter } from '../Middlewares/RateLimit.js';
 
 const router = express.Router();
 
 // ============================================================
 // AUTH
 // ============================================================
-router.post('/api/auth/register', validator.registerValidator, authController.register);
-router.post('/api/auth/login', validator.loginValidator, authController.login);
+router.post('/api/auth/register', authLimiter, validator.registerValidator, authController.register);
+router.post('/api/auth/login', authLimiter, validator.loginValidator, authController.login);
 router.post('/api/auth/logout', authController.logout);
 router.get('/api/auth/logout', authController.logout);
 router.get('/api/auth/me', authController.getMe);
@@ -75,7 +76,7 @@ router.put('/api/jobs/:id', jobDataController.updateSite);
 router.delete('/api/jobs/:id', jobDataController.deleteSite);
 router.post('/api/jobs/remove-duplicates', jobDataController.removeDuplicates);
 router.post('/api/jobs/request-all-sites', jobDataController.requestAllSites);
-router.post('/api/jobs/add-request', validator.addJobValidator, jobDataController.addJobRequest);
+router.post('/api/jobs/add-request', jobLimiter, validator.addJobValidator, jobDataController.addJobRequest);
 
 // ============================================================
 // SITE API
