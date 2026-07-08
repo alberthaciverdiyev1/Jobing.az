@@ -22,6 +22,15 @@ const pricingPlanSchema = new Schema({
         enum: ['daily', 'monthly'],
         required: true
     },
+    description: {
+        type: String,
+        default: '',
+        trim: true
+    },
+    features: [{
+        type: String,
+        trim: true
+    }],
     isActive: {
         type: Boolean,
         default: true

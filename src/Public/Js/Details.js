@@ -152,16 +152,52 @@ async function openPricingModal(type) {
     const jobId = document.getElementById('jobId')?.value;
     if (!jobId) return alertify.error('Vakansiya ID tapılmadı');
 
-    document.getElementById('pricingModalTitle').textContent = type === 'premium' ? 'Premium Et' : 'İrəli Çək';
-    document.getElementById('pricingModalDesc').textContent = type === 'premium'
+    const isPremium = type === 'premium';
+
+    // Update accent bar
+    const accent = document.getElementById('pricingModalAccent');
+    accent.className = 'h-2 bg-gradient-to-r ' + (isPremium ? 'from-purple-400 to-indigo-500' : 'from-amber-400 to-orange-500');
+
+    // Update icon
+    const iconBox = document.getElementById('pricingModalIcon');
+    iconBox.className = 'w-11 h-11 rounded-xl flex items-center justify-center text-lg flex-shrink-0 ' + (isPremium ? 'bg-purple-100 text-purple-600' : 'bg-amber-100 text-amber-600');
+    iconBox.innerHTML = '<i class="fas ' + (isPremium ? 'fa-crown' : 'fa-rocket') + '"></i>';
+
+    // Update badge
+    const badge = document.getElementById('pricingModalBadge');
+    if (isPremium) {
+        badge.textContent = 'Premium';
+        badge.className = 'text-[10px] font-semibold uppercase tracking-wider text-purple-600';
+    } else {
+        badge.className = 'hidden';
+    }
+
+    // Update title
+    document.getElementById('pricingModalTitle').textContent = isPremium ? 'Premium Et' : 'İrəli Çək';
+
+    // Update info box
+    document.getElementById('pricingInfoTitle').textContent = isPremium ? 'Premium Nədir?' : 'İrəli Çəkmə Nədir?';
+    document.getElementById('pricingInfoText').innerHTML = isPremium
+        ? 'Premium planı ilə vakansiyanız <span class="font-medium text-purple-900">premium elanlar kateqoriyasında</span> xüsusi olaraq göstərilir və adi vakansiyalar arasında <span class="font-medium text-purple-900">"Premium" nişanı</span> ilə qeyd olunur.'
+        : 'İrəli çəkmə planı ilə vakansiyanız müntəzəm olaraq vakansiyalar siyahısında yuxarı qaldırılır. <span class="font-medium text-amber-900">Aylıq planlarda hər 4 gündən bir (ayda 8 dəfə)</span> irəli çəkilir.';
+
+    const infoBox = document.getElementById('pricingInfoBox');
+    infoBox.className = 'rounded-xl bg-gradient-to-r border p-4 mb-5 ' + (isPremium ? 'from-purple-50 to-indigo-50 border-purple-200/60' : 'from-amber-50 to-orange-50 border-amber-200/60');
+
+    // Update desc
+    document.getElementById('pricingModalDesc').textContent = isPremium
         ? 'Premium planlardan birini seçərək vakansiyanızı ön plana çıxarın'
         : 'İrəli çəkmə planları ilə vakansiyanızı daha çox insana çatdırın';
 
     // Pre-fill phone from currentUser if available
+    const phoneInput = document.getElementById('pricingPhone');
+    const phoneNote = document.getElementById('pricingPhoneNote');
     if (window.currentUser?.phone) {
-        document.getElementById('pricingPhone').value = window.currentUser.phone;
+        phoneInput.value = window.currentUser.phone;
+        phoneNote.innerHTML = '<i class="fas fa-info-circle mr-0.5"></i> Profilinizdə qeyd edilmiş nömrə avtomatik əlavə olunub. İstəsəniz dəyişə bilərsiniz.';
     } else {
-        document.getElementById('pricingPhone').value = '';
+        phoneInput.value = '';
+        phoneNote.innerHTML = '<i class="fas fa-info-circle mr-0.5"></i> Profilinizdə nömrə qeyd edilməyib. Zəhmət olmasa əlaqə nömrənizi daxil edin.';
     }
 
     // Show loading
@@ -185,6 +221,7 @@ async function loadPricingPlans(type) {
         });
 
         const container = document.getElementById('pricingPlansContainer');
+        const isPremium = type === 'premium';
 
         if (!data || data.length === 0) {
             container.innerHTML = `<p class="text-sm text-gray-400 text-center py-4">Bu tip üçün plan mövcud deyil</p>`;
@@ -193,17 +230,46 @@ async function loadPricingPlans(type) {
 
         container.innerHTML = data.map((plan, index) => `
             <div onclick="selectPlan('${plan._id}', this)"
-                 class="flex items-center gap-4 p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 ${index === 0 ? 'border-primary-500 bg-primary-50/30' : 'border-gray-200 hover:border-primary-300 hover:bg-primary-50/20'}">
-                <div class="w-10 h-10 rounded-xl ${plan.type === 'premium' ? 'bg-purple-100 text-purple-600' : 'bg-amber-100 text-amber-600'} flex items-center justify-center text-lg flex-shrink-0">
-                    <i class="fas ${plan.type === 'premium' ? 'fa-crown' : 'fa-rocket'}"></i>
+                 class="relative p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 ${index === 0 ? 'border-primary-500 bg-primary-50/30 ring-1 ring-primary-200' : 'border-gray-200 hover:border-primary-300 hover:bg-primary-50/20'}">
+                ${plan.duration === 'monthly' ? '<div class="absolute -top-2.5 right-3 px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 text-[10px] font-semibold">Ən çox seçilən</div>' : ''}
+                <div class="flex items-center gap-4">
+                    <div class="w-11 h-11 rounded-xl ${isPremium ? 'bg-purple-100 text-purple-600' : 'bg-amber-100 text-amber-600'} flex items-center justify-center text-lg flex-shrink-0">
+                        <i class="fas ${isPremium ? 'fa-crown' : 'fa-rocket'}"></i>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <div class="flex items-center gap-2">
+                            <p class="font-semibold text-gray-900 text-sm">${escapeHtml(plan.name)}</p>
+                            <span class="text-[10px] font-medium px-1.5 py-0.5 rounded ${plan.duration === 'daily' ? 'bg-blue-50 text-blue-600' : 'bg-emerald-50 text-emerald-600'}">${plan.duration === 'daily' ? '1 gün' : '30 gün'}</span>
+                        </div>
+                        <div class="flex items-baseline gap-1 mt-1">
+                            <span class="text-xl font-bold text-gray-900">${plan.price}</span>
+                            <span class="text-xs text-gray-400">AZN</span>
+                        </div>
+                    </div>
                 </div>
-                <div class="flex-1 min-w-0">
-                    <p class="font-semibold text-gray-900 text-sm">${escapeHtml(plan.name)}</p>
-                    <p class="text-xs text-gray-400">${plan.duration === 'daily' ? '1 gün' : '30 gün'} müddət</p>
-                </div>
-                <div class="text-right flex-shrink-0">
-                    <p class="text-lg font-bold text-primary-600">${plan.price} <span class="text-xs font-normal">AZN</span></p>
-                </div>
+                ${plan.features && plan.features.length > 0 ? `
+                <div class="mt-3 pt-3 border-t border-gray-100">
+                    <ul class="space-y-1">
+                        ${plan.features.slice(0, 3).map(f => `
+                            <li class="flex items-start gap-1.5 text-xs text-gray-500">
+                                <i class="fas fa-check text-emerald-500 mt-0.5 flex-shrink-0"></i>
+                                <span>${escapeHtml(f)}</span>
+                            </li>
+                        `).join('')}
+                    </ul>
+                </div>` : `
+                <div class="mt-3 pt-3 border-t border-gray-100">
+                    <ul class="space-y-1">
+                        <li class="flex items-start gap-1.5 text-xs text-gray-500">
+                            <i class="fas fa-check text-emerald-500 mt-0.5 flex-shrink-0"></i>
+                            <span>${isPremium ? 'Premium elanlar kateqoriyasında göstərilir' : 'Vakansiyalar siyahısında yuxarı qaldırılır'}</span>
+                        </li>
+                        <li class="flex items-start gap-1.5 text-xs text-gray-500">
+                            <i class="fas fa-check text-emerald-500 mt-0.5 flex-shrink-0"></i>
+                            <span>${plan.duration === 'monthly' ? (isPremium ? 'əsas səhifədə xüsusi bölmədə nümayiş' : 'Hər 4 gündən bir, ayda 8 dəfə irəli çəkilir') : (isPremium ? '"Premium" nişanı ilə qeyd olunur' : '1 gün müddətində irəli çəkilir')}</span>
+                        </li>
+                    </ul>
+                </div>`}
             </div>
         `).join('');
 
