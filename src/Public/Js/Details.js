@@ -49,6 +49,15 @@ document.addEventListener('DOMContentLoaded', async () => {
             alertify.success('Link kopyalana bilmədi');
         });
     });
+
+    // Pricing buttons — event delegation via data attributes
+    document.querySelectorAll('[data-pricing-type]').forEach(btn => {
+        btn.addEventListener('click', function () {
+            openPricingModal(this.dataset.pricingType);
+        });
+    });
+
+    document.getElementById('submitPricingBtn')?.addEventListener('click', submitPricingRequest);
 });
 
 // ============================================
