@@ -130,9 +130,15 @@ const HrController = {
             if (user.role === 'company') {
                 const company = await Company.findOne({ companyName: user.companyName }).lean();
                 const companyId = company?._id;
-                const jobFilter = companyId
-                    ? { $or: [{ companyName: user.companyName }, { companyId: companyId.toString() }] }
-                    : { companyName: user.companyName };
+                const name = user.companyName.trim();
+                const escaped = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                const orConditions = [
+                    { companyName: { $regex: `^${escaped}$`, $options: 'i' } }
+                ];
+                if (companyId) {
+                    orConditions.push({ companyId: companyId.toString() });
+                }
+                const jobFilter = { $or: orConditions };
                 totalJobs = await Job.countDocuments(jobFilter);
                 activeJobs = await Job.countDocuments({ ...jobFilter, isActive: true });
                 const appStats = companyId ? await ApplicationService.countByCompany([companyId]) : { total: 0, pending: 0, accepted: 0, rejected: 0, interview: 0 };
@@ -188,14 +194,15 @@ const HrController = {
             if (user.role === 'company') {
                 // Find company by user's companyName, then query by both companyName and companyId
                 const company = await Company.findOne({ companyName: user.companyName }).lean();
+                const name = user.companyName.trim();
+                const escaped = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                const orConditions = [
+                    { companyName: { $regex: `^${escaped}$`, $options: 'i' } }
+                ];
                 if (company) {
-                    query.$or = [
-                        { companyName: user.companyName },
-                        { companyId: company._id.toString() }
-                    ];
-                } else {
-                    query.companyName = user.companyName;
+                    orConditions.push({ companyId: company._id.toString() });
                 }
+                query.$or = orConditions;
             } else if (user.role === 'hr' && user.companyIds && user.companyIds.length > 0) {
                 query.companyId = { $in: user.companyIds.map(id => id.toString()) };
             } else {
