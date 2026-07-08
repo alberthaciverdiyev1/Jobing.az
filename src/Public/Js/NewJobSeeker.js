@@ -1,7 +1,7 @@
+let editorAboutJob = null;
+
 document.addEventListener('DOMContentLoaded', () => {
     alertify.set('notifier', 'position', 'top-right');
-
-    let editorAboutJob = null;
 
     // Init CKEditor
     ClassicEditor.create(document.getElementById('aboutJob'), {
