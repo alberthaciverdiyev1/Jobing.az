@@ -32,6 +32,18 @@ document.addEventListener('DOMContentLoaded', () => {
         cvFile.value = '';
         cvFile.click();
     });
+
+    // When a CV is selected from dropdown, clear file upload
+    const selectedCV = document.getElementById('selectedCV');
+    if (selectedCV) {
+        selectedCV.addEventListener('change', () => {
+            if (selectedCV.value) {
+                cvFile.value = '';
+                document.getElementById('cv-placeholder')?.classList.remove('hidden');
+                document.getElementById('cv-preview')?.classList.add('hidden');
+            }
+        });
+    }
 });
 
 function handleCVFileSelect(e) {
@@ -68,12 +80,15 @@ async function getCities() {
         const { data } = await axios.get('/api/cities?site=BossAz');
         const select = document.getElementById('city');
         if (!select) return;
-        Object.entries(data).forEach(([id, name]) => {
+        data.forEach(city => {
             const opt = document.createElement('option');
-            opt.value = id;
-            opt.textContent = name;
+            opt.value = city.cityId || city._id;
+            opt.textContent = city.name;
             select.appendChild(opt);
         });
+        // Pre-select city from user profile
+        const userCity = document.getElementById('city')?.dataset?.userCity;
+        if (userCity && select) select.value = userCity;
     } catch (e) { console.error('getCities error:', e); }
 }
 
@@ -217,8 +232,15 @@ async function handleSubmit() {
         formData.append('experience', data.experience);
         formData.append('aboutJob', data.aboutJob);
 
+        // Existing CV selection
+        const selectedCV = document.getElementById('selectedCV');
+        if (selectedCV && selectedCV.value) {
+            formData.append('selectedCV', selectedCV.value);
+        }
+
+        // File upload (only if no existing CV selected)
         const cvFile = document.getElementById('cvFile');
-        if (cvFile && cvFile.files[0]) {
+        if (cvFile && cvFile.files[0] && (!selectedCV || !selectedCV.value)) {
             formData.append('cvFile', cvFile.files[0]);
         }
 

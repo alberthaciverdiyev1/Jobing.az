@@ -26,6 +26,7 @@ router.post('/api/auth/login', authLimiter, validator.loginValidator, authContro
 router.post('/api/auth/logout', authController.logout);
 router.get('/api/auth/logout', authController.logout);
 router.get('/api/auth/me', authController.getMe);
+router.put('/api/user/profile', authMiddleware.authenticate, authController.updateProfile);
 
 // ============================================================
 // NEWS API (public)
