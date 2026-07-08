@@ -9,7 +9,9 @@ import CityService from '../Services/CityService.js';
 
 import { formatDate } from "../Helpers/FormatDate.js";
 import { requestAllSites } from '../Helpers/Automation.js';
-import { sendNewJobRequest, sendTgMessage } from "../Helpers/TelegramBot.js";
+import { sendNewJobRequest, sendTgMessage, sendPromotionRequest } from "../Helpers/TelegramBot.js";
+import PricingPlan from '../Models/PricingPlan.js';
+import PromotionRequest from '../Models/PromotionRequest.js';
 import fs from "fs";
 import CompanyService from "../Services/CompanyService.js";
 import BossAz from "../Helpers/SiteBasedScrapes/BossAz.js";
@@ -291,6 +293,83 @@ const jobDataController = {
             res.status(500).json({ message: 'Error job details: ' + error.message });
         }
     },
+
+    // ============================================================
+    // PRICING PLANS (public)
+    // ============================================================
+
+    getPricingPlans: async (req, res) => {
+        try {
+            const filter = { isActive: true };
+            if (req.query.type) filter.type = req.query.type;
+            const plans = await PricingPlan.find(filter).sort({ price: 1 }).lean();
+            res.json(plans);
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    },
+
+    // ============================================================
+    // PROMOTION REQUEST
+    // ============================================================
+
+    promotionRequest: async (req, res) => {
+        try {
+            const { planId, jobId, phone } = req.body;
+
+            // Validate job exists
+            const job = await JobData.findById(jobId).lean();
+            if (!job) {
+                return res.status(404).json({ error: 'Vakansiya tapılmadı' });
+            }
+
+            // Validate plan exists and is active
+            const plan = await PricingPlan.findById(planId).lean();
+            if (!plan || !plan.isActive) {
+                return res.status(400).json({ error: 'Seçilmiş plan mövcud deyil' });
+            }
+
+            // Build request data
+            const requestData = {
+                jobId,
+                planId,
+                phone: phone.trim(),
+                userId: req.user?._id || null,
+                status: 'pending'
+            };
+
+            const promoRequest = await PromotionRequest.create(requestData);
+
+            // Send confirmation email
+            const emailTarget = job.email || (req.user?.email);
+            if (emailTarget) {
+                sendEmail({
+                    title: "Jobing.az - Promosyon / Premium Sorğusu",
+                    text: `"${job.title}" vakansiyası üçün ${plan.name} planına müraciətiniz qeydə alındı.\n\nPlan: ${plan.name}\nQiymət: ${plan.price} AZN\nMüddət: ${plan.duration === 'daily' ? 'Günlük' : 'Aylıq'}\nTelefon: ${phone}\n\nQısa zamanda sizinlə əlaqə saxlanılacaq.`
+                }, emailTarget, "support - Jobing.az");
+            }
+
+            // Send Telegram notification
+            const baseUrl = process.env.API_URL || 'https://jobing.az';
+            sendPromotionRequest({
+                jobTitle: job.title,
+                companyName: job.companyName,
+                planName: plan.name,
+                price: plan.price,
+                duration: plan.duration === 'daily' ? 'Günlük' : 'Aylıq',
+                phone: phone.trim(),
+                userName: req.user ? `${req.user.name || ''} ${req.user.surname || ''}`.trim() || 'Qeydiyyatsız' : 'Qeydiyyatsız',
+                jobUrl: `${baseUrl}/vakansiyalar/${job.slug || job._id}/details`
+            }).catch(() => {});
+
+            res.status(200).json({
+                status: 200,
+                message: 'Müraciətiniz qeydə alındı. Qısa zamanda sizinlə əlaqə saxlanılacaq.'
+            });
+        } catch (error) {
+            res.status(500).json({ error: 'Xəta baş verdi: ' + error.message });
+        }
+    }
 };
 
 export default jobDataController;
