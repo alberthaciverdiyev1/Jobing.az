@@ -108,10 +108,17 @@
                                 </div>
                             </div>
                             <div class="flex items-center gap-2 flex-shrink-0">
-                                <a href="/cv/edit/<%= cv._id %>"
-                                   class="p-2 rounded-lg text-gray-400 hover:text-primary-500 hover:bg-primary-50 transition-all" title="<%= __('dashboard.edit') %>">
-                                    <i class="fas fa-edit"></i>
-                                </a>
+                                <% if (cv.type === 'uploaded') { %>
+                                    <a href="<%= cv.fileUrl || '#' %>" target="_blank"
+                                       class="p-2 rounded-lg text-gray-400 hover:text-primary-500 hover:bg-primary-50 transition-all" title="<%= __('dashboard.view') %>">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                <% } else { %>
+                                    <a href="/cv/edit/<%= cv._id %>"
+                                       class="p-2 rounded-lg text-gray-400 hover:text-primary-500 hover:bg-primary-50 transition-all" title="<%= __('dashboard.edit') %>">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                <% } %>
                                 <button type="button" data-cv-id="<%= cv._id %>"
                                         class="delete-cv-btn p-2 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 transition-all" title="<%= __('dashboard.delete') %>">
                                     <i class="fas fa-trash"></i>
