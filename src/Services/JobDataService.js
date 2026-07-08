@@ -133,11 +133,13 @@ const JobDataService = {
             if (data.minSalary && !isNaN(Number(data.minSalary)) && data.minSalary !== 0) query.minSalary = { $gte: +data.minSalary };
             if (data.maxSalary && !isNaN(Number(data.maxSalary))) query.maxSalary = { $lte: +data.maxSalary };
 
-            if (data.keyword) {
+            if (data.keyword && data.keyword.trim()) {
+                const escaped = data.keyword.trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
                 query.$or = [
-                    { title: { $regex: data.keyword, $options: 'i' } },
-                    { companyName: { $regex: data.keyword, $options: 'i' } },
-                    { location: { $regex: data.keyword, $options: 'i' } }
+                    { title: { $regex: escaped, $options: 'i' } },
+                    { companyName: { $regex: escaped, $options: 'i' } },
+                    { location: { $regex: escaped, $options: 'i' } },
+                    { description: { $regex: escaped, $options: 'i' } }
                 ];
             }
 
