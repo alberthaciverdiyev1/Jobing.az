@@ -14,7 +14,7 @@
     <% } %>
 
     <!-- ===== DAILY SECTION ===== -->
-    <div id="pricingDailySection" class="<%= !hasDaily ? 'hidden' : '' %>">
+    <div id="pricingDailySection" style="<%= !hasDaily ? 'display:none' : '' %>">
       <% if (promoteDaily && promoteDaily.length > 0) { %>
       <div class="text-center mb-8">
         <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber-100 text-amber-700 text-xs font-semibold mb-4">
@@ -55,7 +55,7 @@
     </div>
 
     <!-- ===== MONTHLY SECTION ===== -->
-    <div id="pricingMonthlySection" class="hidden">
+    <div id="pricingMonthlySection" style="display:none">
       <% if (promoteMonthly && promoteMonthly.length > 0) { %>
       <div class="text-center mb-8">
         <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber-100 text-amber-700 text-xs font-semibold mb-4">
@@ -149,22 +149,32 @@
 
 
 <script>
-function switchPricingTab(tab) {
-  var dailySection = document.getElementById('pricingDailySection');
-  var monthlySection = document.getElementById('pricingMonthlySection');
-  var tabDaily = document.getElementById('pricingTabDaily');
-  var tabMonthly = document.getElementById('pricingTabMonthly');
+(function() {
+  var activeTab = 'daily';
 
-  if (tab === 'daily') {
-    dailySection.classList.remove('hidden');
-    monthlySection.classList.add('hidden');
-    tabDaily.className = 'px-6 py-2 rounded-full text-sm font-medium bg-primary-500 text-white shadow-sm transition-all duration-200';
-    tabMonthly.className = 'px-6 py-2 rounded-full text-sm font-medium bg-gray-100 text-gray-600 hover:bg-gray-200 transition-all duration-200';
-  } else {
-    dailySection.classList.add('hidden');
-    monthlySection.classList.remove('hidden');
-    tabDaily.className = 'px-6 py-2 rounded-full text-sm font-medium bg-gray-100 text-gray-600 hover:bg-gray-200 transition-all duration-200';
-    tabMonthly.className = 'px-6 py-2 rounded-full text-sm font-medium bg-primary-500 text-white shadow-sm transition-all duration-200';
+  function switchPricingTab(tab) {
+    var dailySection = document.getElementById('pricingDailySection');
+    var monthlySection = document.getElementById('pricingMonthlySection');
+    var tabDaily = document.getElementById('pricingTabDaily');
+    var tabMonthly = document.getElementById('pricingTabMonthly');
+
+    if (!dailySection || !monthlySection) return;
+
+    activeTab = tab;
+
+    if (tab === 'daily') {
+      dailySection.style.display = '';
+      monthlySection.style.display = 'none';
+      tabDaily.className = 'px-6 py-2 rounded-full text-sm font-medium bg-primary-500 text-white shadow-sm transition-all duration-200';
+      tabMonthly.className = 'px-6 py-2 rounded-full text-sm font-medium bg-gray-100 text-gray-600 hover:bg-gray-200 transition-all duration-200';
+    } else {
+      dailySection.style.display = 'none';
+      monthlySection.style.display = '';
+      tabDaily.className = 'px-6 py-2 rounded-full text-sm font-medium bg-gray-100 text-gray-600 hover:bg-gray-200 transition-all duration-200';
+      tabMonthly.className = 'px-6 py-2 rounded-full text-sm font-medium bg-primary-500 text-white shadow-sm transition-all duration-200';
+    }
   }
-}
+
+  window.switchPricingTab = switchPricingTab;
+})();
 </script>

@@ -498,8 +498,8 @@
 </div>
 
 <!-- ========== PRICING MODAL ========== -->
-<div id="pricingModal" class="fixed inset-0 z-[100] hidden">
-  <div class="fixed inset-0 bg-black/60 backdrop-blur-sm"></div>
+<div id="pricingModal" class="fixed inset-0 z-[9999] hidden">
+  <div id="pricingModalOverlay" class="fixed inset-0 bg-black/60 backdrop-blur-sm"></div>
   <div class="fixed inset-0 overflow-y-auto">
     <div class="flex min-h-full items-center justify-center p-3 sm:p-4">
       <div class="relative w-full max-w-lg bg-white rounded-2xl shadow-2xl animate-scale-in">
@@ -518,7 +518,9 @@
                 <p id="pricingModalBadge" class="hidden text-[10px] font-semibold uppercase tracking-wider text-purple-600">Premium</p>
               </div>
             </div>
-            <button onclick="closePricingModal()" class="w-8 h-8 rounded-lg hover:bg-gray-100 flex items-center justify-center text-gray-400 hover:text-gray-600 transition-colors flex-shrink-0">&times;</button>
+            <button onclick="closePricingModal()" class="w-8 h-8 rounded-lg hover:bg-gray-100 flex items-center justify-center text-gray-400 hover:text-gray-600 transition-colors flex-shrink-0" title="Bağla">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
           </div>
 
           <!-- Info box -->
@@ -553,7 +555,7 @@
               <i class="fas fa-phone text-gray-400 mr-1"></i> Əlaqə nömrəsi *
             </label>
             <input type="tel" id="pricingPhone" placeholder="+994 XX XXX XX XX"
-                   class="w-full px-4 py-3 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition-shadow bg-white">
+                   class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition-shadow bg-white hover:border-gray-400">
             <p id="pricingPhoneNote" class="text-[11px] text-gray-500 mt-1.5">
               <i class="fas fa-info-circle mr-0.5"></i> Profilinizdə qeyd edilmiş nömrə avtomatik əlavə olunub.
             </p>
