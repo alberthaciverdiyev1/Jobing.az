@@ -69,6 +69,18 @@ export async function sendNewCVRequest(cvData) {
     });
 }
 
+export async function sendNewJobSeekerRequest(data) {
+    const textMessage = `
+👤 Yeni İş Axtarıram Elanı
+📋 Vəzifə: ${data.title}
+👤 Ad: ${data.userName}
+📞 Telefon: ${data.phone || 'Qeyd edilməyib'}
+📧 Email: ${data.email || 'Qeyd edilməyib'}
+🔗 Link: jobing.az/is-axtaran/${data.slug}`;
+
+    await bot.sendMessage('@jobingaz', textMessage);
+}
+
 export async function sendPromotionRequest(data) {
     const textMessage = `
 📌 Yeni Promosyon / Premium Sorğusu

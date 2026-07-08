@@ -1,6 +1,7 @@
 import express from 'express';
 import viewController from '../Controllers/ViewController.js';
 import jobDataController from '../Controllers/JobDataController.js';
+import jobSeekerController from '../Controllers/JobSeekerController.js';
 import authMiddleware from '../Middlewares/Auth.js';
 import visitorLogger from '../Middlewares/Visitors.js';
 
@@ -21,6 +22,11 @@ router.get('/qiymetler', visitorLogger, viewController.pricing);
 router.get('/blogs', visitorLogger, viewController.blogs);
 router.get('/blogs/:slug', visitorLogger, viewController.blog);
 router.get('/vakansiyalar/:id/details', jobDataController.details);
+
+// Job Seeker pages
+router.get('/is-axtaran', visitorLogger, viewController.jobSeekers);
+router.get('/is-axtaran/elave-et', authMiddleware.authenticate, authMiddleware.authorize('user'), visitorLogger, viewController.addJobSeeker);
+router.get('/is-axtaran/:id', jobSeekerController.details);
 
 // SEO: Sitemap & Robots
 router.get('/sitemap.xml', viewController.sitemap);

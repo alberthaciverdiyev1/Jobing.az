@@ -38,6 +38,33 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // ============================================
+    // DELETE JOB SEEKER ADS
+    // ============================================
+    document.querySelectorAll('.delete-js-btn').forEach(btn => {
+        btn.addEventListener('click', async function() {
+            const adId = this.dataset.jsId;
+            if (!adId) return;
+
+            alertify.confirm(
+                'Elan silinsin?',
+                'Bu əməliyyat geri alına bilməz.',
+                async () => {
+                    try {
+                        const res = await axios.delete(`/api/job-seeker/${adId}`);
+                        if (res.status === 200) {
+                            alertify.success('Elan silindi');
+                            setTimeout(() => window.location.reload(), 500);
+                        }
+                    } catch (err) {
+                        alertify.error(err.response?.data?.error || 'Xəta baş verdi');
+                    }
+                },
+                () => {}
+            ).set('labels', { ok: 'Sil', cancel: 'İmtina' });
+        });
+    });
+
+    // ============================================
     // LOAD USER APPLICATIONS
     // ============================================
     loadUserApplications();
