@@ -20,6 +20,7 @@ import NewsService from '../Services/NewsService.js';
 import RssSource from '../Models/RssSource.js';
 import RssImportService from '../Services/RssImportService.js';
 import Seo from '../Models/Seo.js';
+import Log from '../Models/Log.js';
 import Enums from '../Config/Enums.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -984,90 +985,24 @@ const AdminController = {
     // API - ERROR LOGS
     // ============================================================
 
-    // Read entries from a log file (supports both JSON-lines and plain text)
-    readLogFile: (filePath, maxLines = 500) => {
-        if (!fs.existsSync(filePath)) return [];
-        const content = fs.readFileSync(filePath, 'utf-8').trim();
-        if (!content) return [];
-        const lines = content.split('\n').filter(Boolean).slice(-maxLines);
-        return lines.map(line => {
-            try { return JSON.parse(line); } catch { return { message: line, timestamp: new Date().toISOString() }; }
-        });
-    },
-
-    // Read PM2 log files if they exist
-    readPm2Logs: (days = 1) => {
-        const entries = [];
-        const pm2Paths = [
-            path.join(os.homedir(), '.pm2', 'logs'),
-            path.join(os.homedir(), '.pm2', 'log'),
-            '/root/.pm2/logs',
-        ];
-
-        const cutoff = new Date();
-        cutoff.setDate(cutoff.getDate() - days);
-
-        for (const dir of pm2Paths) {
-            if (!fs.existsSync(dir)) continue;
-            try {
-                const files = fs.readdirSync(dir).filter(f => f.endsWith('-error.log') || f.endsWith('-out.log'));
-                for (const file of files) {
-                    const filePath = path.join(dir, file);
-                    const stats = fs.statSync(filePath);
-                    if (stats.mtime < cutoff) continue;
-
-                    const fileEntries = AdminController.readLogFile(filePath, 200);
-                    for (const entry of fileEntries) {
-                        entries.push({
-                            message: entry.message || entry,
-                            timestamp: entry.timestamp || stats.mtime.toISOString(),
-                            level: 'error',
-                            source: 'pm2',
-                            file: file,
-                        });
-                    }
-                }
-            } catch {}
-        }
-        return entries;
-    },
 
     getLogs: async (req, res) => {
         try {
-            const { days = 1 } = req.query;
-            const logsDir = path.join(process.cwd(), 'src', 'Logs');
-            const allEntries = [];
-
-            // 1. Read Winston log files (JSON format)
-            const logFiles = [];
-            for (let i = 0; i < Number(days); i++) {
-                const d = new Date();
-                d.setDate(d.getDate() - i);
-                const dateStr = d.toISOString().slice(0, 10);
-                const filePath = path.join(logsDir, `combined-${dateStr}.log`);
-                const fileEntries = AdminController.readLogFile(filePath);
-                if (fileEntries.length > 0) {
-                    logFiles.push({ date: dateStr, entries: fileEntries.reverse() });
-                }
+            const { days = 1, level, source } = req.query;
+            const cutoff = new Date();
+            cutoff.setDate(cutoff.getDate() - Number(days));
+            const query = { createdAt: { $gte: cutoff } };
+            if (level && ["info", "warn", "error"].includes(level)) {
+                query.level = level;
             }
-
-            for (const f of logFiles) {
-                for (const entry of f.entries) {
-                    if (entry.level === 'error' || (entry.message && entry.stack)) {
-                        allEntries.push(entry);
-                    }
-                }
+            if (source) {
+                query.source = source;
             }
-
-            // 2. Read PM2 log files
-            const pm2Entries = AdminController.readPm2Logs(Number(days));
-            allEntries.push(...pm2Entries);
-
-            // Sort by timestamp descending
-            allEntries.sort((a, b) => new Date(b.timestamp || 0) - new Date(a.timestamp || 0));
-            const limited = allEntries.slice(0, 200);
-
-            res.json({ logs: limited, total: limited.length });
+            const logs = await Log.find(query)
+                .sort({ createdAt: -1 })
+                .limit(200)
+                .lean();
+            res.json({ logs, total: logs.length });
         } catch (error) {
             res.status(500).json({ error: error.message });
         }

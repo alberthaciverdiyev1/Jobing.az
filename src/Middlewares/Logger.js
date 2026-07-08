@@ -1,53 +1,71 @@
-import { createLogger, format, transports } from 'winston';
-import 'winston-daily-rotate-file';
-import path from 'path';
-import fs from 'fs';
-
-let logger = null;
-
-const configureLogger = () => {
-    const { combine, timestamp, json } = format;
-
-    logger = createLogger({
-        level: 'error',
-        format: combine(timestamp(), json()),
-        transports: [
-            new transports.DailyRotateFile({
-                filename: 'src/Logs/combined-%DATE%.log',
-                datePattern: 'YYYY-MM-DD',
-                maxFiles: '14d',
-            }),
-        ],
-    });
-
-    console.log('Logger configured successfully.');
-};
-
-configureLogger();
+import Log from '../Models/Log.js';
+import { sendTgMessage } from '../Helpers/TelegramBot.js';
 
 /**
- * Write an error to the log file.
- * Can be called from anywhere — Express middleware, error handlers, process hooks.
+ * Log an info/warn message → MongoDB + Telegram group.
+ * Errors should use logError() instead — only goes to DB, not Telegram.
  */
-export function logError(err, metadata = {}) {
-    if (!logger) return;
+export async function logInfo(source, message, metadata = {}) {
     try {
-        logger.error({
-            message: err?.message || String(err),
-            stack: err?.stack,
-            ...metadata,
+        const level = metadata.level === 'warn' ? 'warn' : 'info';
+
+        await Log.create({
+            level,
+            source,
+            message,
+            metadata,
+            url: metadata.url,
+            method: metadata.method,
+            ip: metadata.ip,
         });
+
+        // Only info level goes to Telegram — errors are handled by logError()
+        if (level === 'info') {
+            const tgMsg = `📋 [${source}] ${message}`;
+            await sendTgMessage(tgMsg).catch(() => {});
+        }
     } catch {
-        // silent
+        // logger must never throw
     }
 }
 
 /**
- * Express error-logging middleware — place AFTER routes.
- * Logs the error and passes it to the next error handler.
+ * Log an error → MongoDB + console.error.
+ * Does NOT send to Telegram.
+ */
+export async function logError(err, metadata = {}) {
+    try {
+        const message = err?.message || String(err);
+
+        await Log.create({
+            level: 'error',
+            source: metadata.source || 'app',
+            message,
+            metadata: {
+                ...metadata,
+                stack: err?.stack,
+            },
+            url: metadata.url,
+            method: metadata.method,
+            ip: metadata.ip,
+        });
+
+        console.error(`[ERROR] [${metadata.source || 'app'}] ${message}`);
+        if (err?.stack) {
+            console.error(err.stack);
+        }
+    } catch {
+        console.error('Logger failed:', err);
+    }
+}
+
+/**
+ * Express error-logging middleware — placed AFTER routes.
+ * Logs the error to DB and passes it to the next error handler.
  */
 export function errorLogger(err, req, res, next) {
     logError(err, {
+        source: 'express-error',
         method: req?.method,
         url: req?.originalUrl || req?.url,
         ip: req?.ip,
@@ -55,22 +73,5 @@ export function errorLogger(err, req, res, next) {
     next(err);
 }
 
-/**
- * Patch console.error globally so all console.error calls
- * also write to the Winston log file.
- * Internal Node.js deprecation warnings are filtered out.
- */
-export function patchConsoleError() {
-    const original = console.error;
-    console.error = (...args) => {
-        const msg = args.map(a => (typeof a === 'object' ? (a?.stack || a?.message || JSON.stringify(a)) : String(a))).join(' ');
-        // Skip Node.js internal deprecation/MongoDB warnings — they're noise
-        if (msg.includes('DeprecationWarning') || msg.includes('MONGODB DRIVER') || msg.includes('DEP0')) {
-            return original.apply(console, args);
-        }
-        logError(new Error(msg), { source: 'console.error' });
-        original.apply(console, args);
-    };
-}
-
+const logger = { logInfo, logError, errorLogger };
 export default logger;

@@ -5,9 +5,7 @@ import { fileURLToPath } from 'url';
 import cron from 'node-cron';
 import routes from './src/Routes/Main.js';
 import sequelize, { connectPromise } from './src/Config/Database.js';
-import logger, { errorLogger, patchConsoleError, logError } from './src/Middlewares/Logger.js';
-// Patch console.error globally so PM2/console errors also get logged to files
-patchConsoleError();
+import { errorLogger, logError, logInfo } from './src/Middlewares/Logger.js';
 import Production from './src/Helpers/Production.js';
 import sendEmail from './src/Helpers/NodeMailer.js';
 import { createRequire } from 'module';
