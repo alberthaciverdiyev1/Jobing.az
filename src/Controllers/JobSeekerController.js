@@ -3,24 +3,62 @@ import CityService from '../Services/CityService.js';
 import Enums from '../Config/Enums.js';
 import { sendNewJobSeekerRequest } from '../Helpers/TelegramBot.js';
 import sendEmail from '../Helpers/NodeMailer.js';
+import multer from 'multer';
+import path from 'path';
+import fs from 'fs';
+import { v4 as uuidv4 } from 'uuid';
+
+const jsCvDir = 'uploads/cv/';
+if (!fs.existsSync(jsCvDir)) {
+    fs.mkdirSync(jsCvDir, { recursive: true });
+}
+
+const jsCvStorage = multer.diskStorage({
+    destination: (req, file, cb) => cb(null, 'uploads/cv/'),
+    filename: (req, file, cb) => {
+        const ext = path.extname(file.originalname);
+        cb(null, `js-cv-${uuidv4()}${ext}`);
+    }
+});
+
+const jsCvFileFilter = (req, file, cb) => {
+    const allowed = ['.pdf', '.doc', '.docx', '.txt', '.rtf', '.png', '.jpg', '.jpeg'];
+    const ext = path.extname(file.originalname).toLowerCase();
+    if (allowed.includes(ext)) {
+        cb(null, true);
+    } else {
+        cb(new Error('Yalnız PDF, DOC, DOCX, TXT, RTF, JPG, PNG faylları yüklənə bilər'), false);
+    }
+};
+
+export const uploadJobSeekerCV = multer({
+    storage: jsCvStorage,
+    fileFilter: jsCvFileFilter,
+    limits: { fileSize: 10 * 1024 * 1024 }
+}).single('cvFile');
 
 const JobSeekerController = {
     create: async (req, res) => {
         try {
-            const description = req.body.data.aboutJob || '';
+            const description = req.body.aboutJob || '';
             const data = {
-                title: req.body.data.position,
-                userName: req.body.data.username,
-                email: req.body.data.email,
-                phone: req.body.data.phone,
-                categoryId: req.body.data.category,
-                cityId: req.body.data.city,
-                educationId: req.body.data.education,
-                experienceId: req.body.data.experience,
+                title: req.body.position,
+                userName: req.body.username,
+                email: req.body.email,
+                phone: req.body.phone,
+                categoryId: req.body.category,
+                cityId: req.body.city,
+                educationId: req.body.education,
+                experienceId: req.body.experience,
                 description,
                 postedBy: req.user._id,
                 isActive: false
             };
+
+            if (req.file) {
+                data.cvUrl = `/uploads/cv/${req.file.filename}`;
+                data.cvFileName = req.file.originalname;
+            }
 
             const doc = await JobSeekerService.create(data);
             data.id = doc._id;
@@ -30,7 +68,7 @@ const JobSeekerController = {
             sendEmail({
                 title: "Jobing.az",
                 text: "İş axtarışı elanınız yoxlaniş üçün Jobing.az komandasına göndərildi. Qısa zaman içində sizə geri dönüş ediləcək."
-            }, req.body.data.email, "support - Jobing.az").catch(() => {});
+            }, data.email, "support - Jobing.az").catch(() => {});
 
             res.status(200).json({ status: 200, message: 'Məlumat uğurla əlavə edildi!', id: doc._id, slug: doc.slug });
         } catch (error) {

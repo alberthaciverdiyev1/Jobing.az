@@ -19,7 +19,35 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Submit
     document.getElementById('addJobSeeker')?.addEventListener('click', handleSubmit);
+
+    // CV file upload
+    const dropZone = document.getElementById('drop-zone');
+    const cvFile = document.getElementById('cvFile');
+    if (dropZone && cvFile) {
+        dropZone.addEventListener('click', () => cvFile.click());
+        cvFile.addEventListener('change', handleCVFileSelect);
+    }
+    document.getElementById('cv-change-btn')?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        cvFile.value = '';
+        cvFile.click();
+    });
 });
+
+function handleCVFileSelect(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const placeholder = document.getElementById('cv-placeholder');
+    const preview = document.getElementById('cv-preview');
+    const fileName = document.getElementById('cv-file-name');
+    const fileSize = document.getElementById('cv-file-size');
+
+    if (fileName) fileName.textContent = file.name;
+    if (fileSize) fileSize.textContent = (file.size / 1024).toFixed(1) + ' KB';
+    if (placeholder) placeholder.classList.add('hidden');
+    if (preview) preview.classList.remove('hidden');
+}
 
 async function getCategories() {
     try {
@@ -178,7 +206,23 @@ async function handleSubmit() {
     btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Göndərilir...';
 
     try {
-        const res = await axios.post('/api/job-seeker', { data });
+        const formData = new FormData();
+        formData.append('position', data.position);
+        formData.append('username', data.username);
+        formData.append('email', data.email);
+        formData.append('phone', data.phone);
+        formData.append('category', data.category);
+        formData.append('city', data.city);
+        formData.append('education', data.education);
+        formData.append('experience', data.experience);
+        formData.append('aboutJob', data.aboutJob);
+
+        const cvFile = document.getElementById('cvFile');
+        if (cvFile && cvFile.files[0]) {
+            formData.append('cvFile', cvFile.files[0]);
+        }
+
+        const res = await axios.post('/api/job-seeker', formData);
         if (res.data.status === 200 || res.status === 200) {
             alertify.success('Məlumat uğurla əlavə edildi!');
             document.getElementById('position').value = '';
@@ -198,6 +242,29 @@ async function handleSubmit() {
             alertify.error('Çox sayda sorğu. Bir az sonra yenidən cəhd edin.');
         } else if (err.response?.status === 401) {
             alertify.error('Daxil olmaq tələb olunur');
+        } else if (err.response?.status === 400 && err.response?.data?.error) {
+            // Map server validation errors to fields
+            const errorMap = {
+                'Vəzifə': 'position',
+                'Ad tələb': 'username',
+                'Email və ya telefon': 'email',
+                'Düzgün email': 'email',
+                'Kateqoriya': 'category',
+                'Şəhər': 'city',
+                'haqqında': 'aboutJob'
+            };
+            const serverMsg = err.response.data.error;
+            let mapped = false;
+            for (const [key, fieldId] of Object.entries(errorMap)) {
+                if (serverMsg.includes(key)) {
+                    showFieldError(fieldId, serverMsg);
+                    mapped = true;
+                    break;
+                }
+            }
+            if (!mapped) {
+                showFormError(serverMsg);
+            }
         } else {
             alertify.error(err.response?.data?.error || 'Xəta baş verdi');
         }
