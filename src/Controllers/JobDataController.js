@@ -226,7 +226,9 @@ const jobDataController = {
                 title: "Jobing.az",
                 text: "Sizin vakansiyanız yoxlaniş üçün Jobing.az komandasına göndərildi. Qısa zaman içində sizə geri dönüş ediləcək."
             }, req.body.data.email, "support - Jobing.az")
-            data.id = jobs.id
+            data.id = jobs.id;
+            data.slug = jobs.slug;
+            data.redirectUrl = jobs.redirectUrl;
             sendNewJobRequest(data).catch(() => {});
             res.status(200).json(jobs);
         } catch (error) {

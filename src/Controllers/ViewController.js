@@ -199,7 +199,7 @@ const ViewController = {
 
     // Dashboard - User
     userDashboard: async (req, res) => {
-        const cvs = await CVService.findByUser(req.user._id);
+        const cvs = await CVService.findByUser(req.user._id, false);
         const view = {
             title: 'Mənim Panelim',
             description: 'CV-lərinizi idarə edin, müraciətlərinizi izləyin.',

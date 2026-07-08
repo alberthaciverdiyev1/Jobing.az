@@ -22,7 +22,37 @@
 
         <!-- Menu Items -->
         <div class="py-1">
-            <% if (user.role === 'company') { %>
+            <% if (user.role === 'admin') { %>
+                <a href="/admin/dashboard" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-600 transition-colors">
+                    <i class="fas fa-shield-alt w-4 text-center text-gray-400"></i>
+                    Admin Panel
+                </a>
+                <hr class="mx-3 my-1 border-gray-50">
+                <a href="/admin/jobs" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-600 hover:bg-primary-50 hover:text-primary-600 transition-colors">
+                    <i class="fas fa-briefcase w-4 text-center text-gray-400"></i>
+                    Vakansiyalar
+                </a>
+                <a href="/admin/categories" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-600 hover:bg-primary-50 hover:text-primary-600 transition-colors">
+                    <i class="fas fa-tags w-4 text-center text-gray-400"></i>
+                    Kateqoriyalar
+                </a>
+                <a href="/admin/cities" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-600 hover:bg-primary-50 hover:text-primary-600 transition-colors">
+                    <i class="fas fa-city w-4 text-center text-gray-400"></i>
+                    Şəhərlər
+                </a>
+                <a href="/admin/users" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-600 hover:bg-primary-50 hover:text-primary-600 transition-colors">
+                    <i class="fas fa-users w-4 text-center text-gray-400"></i>
+                    İstifadəçilər
+                </a>
+                <a href="/admin/logs" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-600 hover:bg-primary-50 hover:text-primary-600 transition-colors">
+                    <i class="fas fa-list w-4 text-center text-gray-400"></i>
+                    Loglar
+                </a>
+                <a href="/admin/settings" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-600 hover:bg-primary-50 hover:text-primary-600 transition-colors">
+                    <i class="fas fa-cog w-4 text-center text-gray-400"></i>
+                    Ayarlar
+                </a>
+            <% } else if (user.role === 'company') { %>
                 <a href="/company/dashboard" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-600 transition-colors">
                     <i class="fas fa-chart-pie w-4 text-center text-gray-400"></i>
                     Şirkət Paneli
@@ -49,13 +79,13 @@
                     Yeni Elan
                 </a>
             <% } else { %>
-                <a href="/add-job" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-600 transition-colors">
-                    <i class="fas fa-plus-circle w-4 text-center text-gray-400"></i>
-                    Yeni Elan
-                </a>
                 <a href="/dashboard" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-600 transition-colors">
                     <i class="fas fa-chart-pie w-4 text-center text-gray-400"></i>
                     Mənim Panelim
+                </a>
+                <a href="/add-job" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-600 transition-colors">
+                    <i class="fas fa-plus-circle w-4 text-center text-gray-400"></i>
+                    Yeni Elan
                 </a>
                 <a href="/cv/create" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-600 transition-colors">
                     <i class="fas fa-file-alt w-4 text-center text-gray-400"></i>

@@ -251,8 +251,9 @@ const JobDataService = {
             const savedJob = await job.save();
             savedJob.uniqueKey = savedJob._id.toString();
             savedJob.slug = generateSlug(data.title || 'job', savedJob._id.toString());
+            savedJob.redirectUrl = '/vakansiyalar/' + encodeURIComponent(savedJob.slug) + '/details';
             await savedJob.save();
-            return { status: 200, message: 'Məlumat uğurla əlavə edildi!', "id": savedJob._id };
+            return { status: 200, message: 'Məlumat uğurla əlavə edildi!', "id": savedJob._id, slug: savedJob.slug, redirectUrl: savedJob.redirectUrl };
         } catch (error) {
             throw new Error('Error adding job request: ' + error.message);
         }
