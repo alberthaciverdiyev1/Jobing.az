@@ -11,6 +11,7 @@ import NewsService from "../Services/NewsService.js";
 import JobData from "../Models/JobData.js";
 import Company from "../Models/Company.js";
 import PricingPlan from "../Models/PricingPlan.js";
+import JobSeekerService from "../Services/JobSeekerService.js";
 
 const ViewController = {
     home: async (req, res) => {
@@ -198,9 +199,33 @@ const ViewController = {
         res.render('Main', view);
     },
 
+    // Job Seeker pages
+    jobSeekers: async (req, res) => {
+        const view = {
+            title: 'İş Axtaranlar',
+            description: 'İş axtaran namizədlər. Kimlər iş axtarır? Profillərə baxın, əlaqə qurun.',
+            body: "JobSeeker/Index.ejs",
+            js: "JobSeekers.js",
+            currentPage: 'job-seekers'
+        };
+        res.render('Main', view);
+    },
+
+    addJobSeeker: async (req, res) => {
+        const view = {
+            title: 'Mən İş Axtarıram',
+            description: 'Özünüz haqqında məlumatları paylaşın, işəgötürənlər sizi tapsın.',
+            body: "JobSeeker/Add.ejs",
+            js: "NewJobSeeker.js",
+            currentPage: 'add-job-seeker'
+        };
+        res.render('Main', view);
+    },
+
     // Dashboard - User
     userDashboard: async (req, res) => {
         const cvs = await CVService.findByUser(req.user._id, false);
+        const jobSeekerAds = await JobSeekerService.findByUser(req.user._id);
         const view = {
             title: 'Mənim Panelim',
             description: 'CV-lərinizi idarə edin, müraciətlərinizi izləyin.',
@@ -208,6 +233,7 @@ const ViewController = {
             js: "Dashboard.js",
             currentPage: 'dashboard',
             cvs,
+            jobSeekerAds,
             msg: req.query.msg || null
         };
         res.render('Main', view);

@@ -32,7 +32,7 @@
         </div>
 
         <!-- Quick Stats -->
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8 animate-fade-in-up" style="animation-delay: 100ms;">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8 animate-fade-in-up" style="animation-delay: 100ms;">
             <div class="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
                 <div class="flex items-center gap-4">
                     <div class="w-12 h-12 rounded-xl bg-primary-50 flex items-center justify-center text-primary-500">
@@ -63,6 +63,17 @@
                     <div>
                         <p class="text-2xl font-bold text-gray-900"><%= cvs.filter(c => c.type === 'uploaded').length %></p>
                         <p class="text-sm text-gray-500"><%= __('dashboard.uploadedCV') %></p>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-xl bg-indigo-50 flex items-center justify-center text-indigo-500">
+                        <i class="fas fa-user-tie text-xl"></i>
+                    </div>
+                    <div>
+                        <p class="text-2xl font-bold text-gray-900"><%= jobSeekerAds ? jobSeekerAds.length : 0 %></p>
+                        <p class="text-sm text-gray-500">İş Axtarıram</p>
                     </div>
                 </div>
             </div>
@@ -121,6 +132,62 @@
                                 <% } %>
                                 <button type="button" data-cv-id="<%= cv._id %>"
                                         class="delete-cv-btn p-2 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 transition-all" title="<%= __('dashboard.delete') %>">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    <% }); %>
+                </div>
+            <% } %>
+        </div>
+
+        <!-- Job Seeker Ads -->
+        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden animate-fade-in-up mt-6" style="animation-delay: 230ms;">
+            <div class="px-6 py-5 border-b border-gray-100 flex items-center justify-between">
+                <h2 class="text-lg font-semibold text-gray-900">İş Axtarıram Elanlarım</h2>
+                <a href="/is-axtaran/elave-et" class="inline-flex items-center gap-1.5 text-sm font-medium text-primary-500 hover:text-primary-600 transition-colors">
+                    <i class="fas fa-plus-circle"></i> Yeni Elan
+                </a>
+            </div>
+
+            <% if (!jobSeekerAds || jobSeekerAds.length === 0) { %>
+                <div class="text-center py-12">
+                    <div class="w-14 h-14 mx-auto bg-gray-100 rounded-full flex items-center justify-center mb-3">
+                        <i class="fas fa-user-tie text-xl text-gray-400"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-1">Hələ heç bir elan yaratmamısınız</h3>
+                    <p class="text-gray-500 text-sm mb-4">İş axtardığınızı bildirin, işəgötürənlər sizi tapsın</p>
+                    <a href="/is-axtaran/elave-et" class="inline-flex items-center gap-2 bg-primary-500 hover:bg-primary-600 text-white font-medium px-5 py-2.5 rounded-xl transition-all">
+                        <i class="fas fa-plus-circle"></i> Yeni Elan
+                    </a>
+                </div>
+            <% } else { %>
+                <div class="divide-y divide-gray-50" id="job-seeker-ads-list">
+                    <% jobSeekerAds.forEach(ad => { %>
+                        <div class="flex items-center justify-between p-5 sm:px-6 hover:bg-gray-50/50 transition-colors">
+                            <div class="flex items-center gap-4 min-w-0">
+                                <div class="w-11 h-11 rounded-xl bg-blue-50 flex items-center justify-center text-blue-500 flex-shrink-0">
+                                    <i class="fas fa-user-tie"></i>
+                                </div>
+                                <div class="min-w-0">
+                                    <div class="flex items-center gap-2">
+                                        <p class="font-semibold text-gray-900 truncate"><%= ad.title %></p>
+                                        <% if (ad.isActive) { %>
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium bg-green-100 text-green-700">Aktiv</span>
+                                        <% } else { %>
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium bg-amber-100 text-amber-700">Gözləmədə</span>
+                                        <% } %>
+                                    </div>
+                                    <p class="text-xs text-gray-400"><%= new Date(ad.createdAt || ad.postedAt).toLocaleDateString('az-AZ') %></p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-2 flex-shrink-0">
+                                <a href="/is-axtaran/<%= ad.slug || ad._id %>" target="_blank"
+                                   class="p-2 rounded-lg text-gray-400 hover:text-primary-500 hover:bg-primary-50 transition-all" title="Bax">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                <button type="button" data-js-id="<%= ad._id %>"
+                                        class="delete-js-btn p-2 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 transition-all" title="Sil">
                                     <i class="fas fa-trash"></i>
                                 </button>
                             </div>
