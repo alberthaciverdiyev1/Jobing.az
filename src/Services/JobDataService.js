@@ -134,13 +134,27 @@ const JobDataService = {
             if (data.maxSalary && !isNaN(Number(data.maxSalary))) query.maxSalary = { $lte: +data.maxSalary };
 
             if (data.keyword && data.keyword.trim()) {
-                const escaped = data.keyword.trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-                query.$or = [
-                    { title: { $regex: escaped, $options: 'i' } },
-                    { companyName: { $regex: escaped, $options: 'i' } },
-                    { location: { $regex: escaped, $options: 'i' } },
-                    { description: { $regex: escaped, $options: 'i' } }
-                ];
+                const terms = data.keyword.trim().split(/\s+/).filter(Boolean);
+                const termQueries = terms.map(term => {
+                    const escaped = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                    return {
+                        $or: [
+                            { title: { $regex: escaped, $options: 'i' } },
+                            { companyName: { $regex: escaped, $options: 'i' } },
+                            { location: { $regex: escaped, $options: 'i' } },
+                            { description: { $regex: escaped, $options: 'i' } },
+                            { userName: { $regex: escaped, $options: 'i' } }
+                        ]
+                    };
+                });
+
+                if (termQueries.length === 1) {
+                    query.$or = termQueries[0].$or;
+                } else {
+                    // Multiple words: ALL words must match somewhere (across any field)
+                    // Each word can match in a different field (e.g., title has "developer", location has "baki")
+                    query.$and = termQueries;
+                }
             }
 
             const limit = 100;
