@@ -44,7 +44,7 @@ const JobSeekerService = {
         if (experienceId) query.experienceId = Number(experienceId);
 
         const [docs, total] = await Promise.all([
-            JobSeeker.find(query)
+            JobSeeker.find(query, { viewers: 0 })
                 .sort({ postedAt: -1 })
                 .skip(Number(offset))
                 .limit(Number(limit))
@@ -72,8 +72,31 @@ const JobSeekerService = {
         return await JobSeeker.findOneAndDelete({ _id: id, postedBy: userId });
     },
 
-    async incrementViewCount(id) {
-        return await JobSeeker.findByIdAndUpdate(id, { $inc: { viewCount: 1 } });
+    async incrementViewCount(id, viewer = null) {
+        const doc = await JobSeeker.findById(id);
+        if (!doc) return null;
+
+        // Increment view count on every view
+        doc.viewCount = (doc.viewCount || 0) + 1;
+
+        // Track unique viewers (only add if not already in list by userId)
+        if (viewer && viewer.userId) {
+            const viewerIdStr = viewer.userId.toString();
+            const alreadyViewed = (doc.viewers || []).some(v =>
+                v.userId && v.userId.toString() === viewerIdStr
+            );
+            if (!alreadyViewed) {
+                if (!doc.viewers) doc.viewers = [];
+                doc.viewers.push({
+                    userId: viewer.userId,
+                    userName: viewer.userName || '',
+                    companyName: viewer.companyName || '',
+                    viewedAt: new Date()
+                });
+            }
+        }
+
+        return await doc.save();
     }
 };
 

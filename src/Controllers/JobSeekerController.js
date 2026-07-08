@@ -52,6 +52,8 @@ const JobSeekerController = {
                 cityId: req.body.city,
                 educationId: req.body.education,
                 experienceId: req.body.experience,
+                salary: req.body.salary ? Number(req.body.salary) : null,
+                salaryNegotiable: req.body.salaryNegotiable === 'true' || req.body.salaryNegotiable === true,
                 description,
                 postedBy: req.user._id,
                 isActive: false
@@ -210,7 +212,12 @@ const JobSeekerController = {
             res.render('Main', view);
 
             if (data._id) {
-                JobSeekerService.incrementViewCount(data._id).catch(() => {});
+                const viewer = req.user ? {
+                    userId: req.user._id,
+                    userName: req.user.name + ' ' + (req.user.surname || ''),
+                    companyName: req.user.companyName || ''
+                } : null;
+                JobSeekerService.incrementViewCount(data._id, viewer).catch(() => {});
             }
         } catch (error) {
             res.status(500).json({ message: 'Error: ' + error.message });

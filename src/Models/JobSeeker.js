@@ -61,7 +61,21 @@ const jobSeekerSchema = new mongoose.Schema({
     },
     cvFileName: {
         type: String
-    }
+    },
+    salary: {
+        type: Number,
+        default: null
+    },
+    salaryNegotiable: {
+        type: Boolean,
+        default: false
+    },
+    viewers: [{
+        userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+        userName: { type: String },
+        companyName: { type: String },
+        viewedAt: { type: Date, default: Date.now }
+    }]
 }, { timestamps: true, versionKey: false });
 
 jobSeekerSchema.index({ title: 'text', description: 'text', userName: 'text' });

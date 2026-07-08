@@ -40,12 +40,20 @@
         <!-- Overview Strip -->
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
           <div class="grid grid-cols-2 sm:grid-cols-3 gap-5">
-            <% if (data.cityName) { %>
-            <div>
-              <p class="text-xs text-gray-400 uppercase tracking-wider mb-1">Şəhər</p>
-              <p class="text-sm font-semibold text-gray-900"><%= data.cityName %></p>
-            </div>
-            <% } %>
+            <% if (data.salary || data.salaryNegotiable) { %>
+                <div>
+                  <p class="text-xs text-gray-400 uppercase tracking-wider mb-1">Gözlənilən Maaş</p>
+                  <p class="text-sm font-semibold text-gray-900">
+                    <% if (data.salaryNegotiable) { %>Razılaşma ilə<% } else if (data.salary) { %><%= Number(data.salary).toLocaleString('az-AZ') %> ₼<% } %>
+                  </p>
+                </div>
+                <% } %>
+                <% if (data.cityName) { %>
+                <div>
+                  <p class="text-xs text-gray-400 uppercase tracking-wider mb-1">Şəhər</p>
+                  <p class="text-sm font-semibold text-gray-900"><%= data.cityName %></p>
+                </div>
+                <% } %>
             <% if (data.education) { %>
             <div>
               <p class="text-xs text-gray-400 uppercase tracking-wider mb-1">Təhsil</p>
@@ -138,8 +146,34 @@
               <span class="text-gray-400">Yerləşdirilib</span>
               <span class="font-medium text-gray-700"><%= new Date(data.postedAt || data.createdAt).toLocaleDateString('az-AZ') %></span>
             </div>
+            <div class="flex justify-between">
+              <span class="text-gray-400">Baxış sayı</span>
+              <span class="font-medium text-gray-700"><%= data.viewCount || 0 %> dəfə</span>
+            </div>
           </div>
         </div>
+
+        <% if (data.viewers && data.viewers.length > 0) { %>
+        <!-- Viewers -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
+          <h3 class="font-semibold text-gray-900 mb-4 flex items-center gap-2 text-sm">
+            <i class="fas fa-eye text-primary-500"></i> Profilə Baxanlar
+          </h3>
+          <div class="space-y-2">
+            <% data.viewers.forEach(v => { %>
+            <div class="flex items-center gap-2 text-sm">
+              <div class="w-7 h-7 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 text-xs font-medium flex-shrink-0">
+                <%= (v.userName || '?').charAt(0).toUpperCase() %>
+              </div>
+              <div class="min-w-0">
+                <p class="text-gray-700 truncate font-medium"><%= v.userName || 'Naməlum' %></p>
+                <p class="text-[10px] text-gray-400"><%= v.companyName ? v.companyName : 'Fərdi' %></p>
+              </div>
+            </div>
+            <% }); %>
+          </div>
+        </div>
+        <% } %>
 
         <!-- Share -->
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
