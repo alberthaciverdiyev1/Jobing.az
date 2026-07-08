@@ -76,14 +76,12 @@ app.use((req, res, next) => {
 // Error-logging middleware — placed after routes to catch all route errors
 app.use(errorLogger);
 
-// Global Express error handler — logs + emails + responds
+// Global Express error handler — logs + responds (email only in production, non-recursive)
 app.use(async (err, req, res, next) => {
     logError(err, { source: 'global-error-handler', method: req?.method, url: req?.originalUrl || req?.url });
-    const errorData = {
-        title: 'Global Error',
-        text: `${err.stack}`
-    };
-    try { await sendEmail(errorData, to); } catch {}
+    if (process.env.NODE_ENV === "production") {
+        try { await sendEmail({ title: 'Global Error', text: `${err.stack}` }, to); } catch {}
+    }
     if (!res.headersSent) {
         res.status(500).send('Something went wrong!');
     }
@@ -122,10 +120,18 @@ process.on('uncaughtException', async (err) => {
 
 process.on('unhandledRejection', async (reason, promise) => {
     const err = reason instanceof Error ? reason : new Error(String(reason));
+    const msg = err.message || String(err);
+
+    // Skip Telegram polling errors — they're noise from bot reconnects
+    if (msg.includes('polling_error') || msg.includes('ETELEGRAM') || msg.includes('getUpdates')) {
+        return;
+    }
+
     logError(err, { source: 'unhandledRejection' });
-    const errorData = {
-        title: 'Unhandled Promise Rejection',
-        text: `Promise: ${promise}, Reason: ${reason}`
-    };
-    process.env.NODE_ENV === "production" ? await sendEmail(errorData, to) : console.log(errorData);
+
+    // Only send email in production, and only for non-email errors (prevent cascades)
+    if (process.env.NODE_ENV === "production" && !msg.includes('Invalid login') && !msg.includes('Mailer')) {
+        const errorData = { title: 'Unhandled Promise Rejection', text: `Reason: ${reason}` };
+        await sendEmail(errorData, to).catch(() => {});
+    }
 });

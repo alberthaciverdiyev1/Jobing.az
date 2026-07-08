@@ -76,7 +76,7 @@ router.put('/api/jobs/:id', jobDataController.updateSite);
 router.delete('/api/jobs/:id', jobDataController.deleteSite);
 router.post('/api/jobs/remove-duplicates', jobDataController.removeDuplicates);
 router.post('/api/jobs/request-all-sites', jobDataController.requestAllSites);
-router.post('/api/jobs/add-request', jobLimiter, validator.addJobValidator, jobDataController.addJobRequest);
+router.post('/api/jobs/add-request', authMiddleware.authenticate, jobLimiter, validator.addJobValidator, jobDataController.addJobRequest);
 
 // ============================================================
 // SITE API

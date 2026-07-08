@@ -430,6 +430,7 @@
 		"success_message": "Your vacancy has been submitted successfully!",
 		"error_occurred": "An error occurred, please try again",
 		"error_generic": "An error occurred, please try again.",
-		"submitting": "Submitting..."
+		"submitting": "Submitting...",
+		"email_or_phone_required": "Email or Phone number is required"
 	}
 }

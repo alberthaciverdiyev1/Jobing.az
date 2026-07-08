@@ -186,9 +186,10 @@ const jobDataController = {
             let description = `${req.body.data.aboutJob + '<h4 class="text-lg font-bold text-gray-800">Tələblər:</h4>' + req.body.data.requirements}`;
             const uniqueKey = req.body.data.position + '-' + req.body.data.companyName + '-' + req.body.data.city + '-' + Date.now();
             const slugBase = req.body.data.position || 'vakansiya';
+            const slug = slugBase.toLowerCase().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '').slice(0, 80) + '-' + Date.now().toString().slice(-6);
             let data = {
                 title: req.body.data.position,
-                slug: slugBase.toLowerCase().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '').slice(0, 80) + '-' + Date.now().toString().slice(-6),
+                slug: slug,
                 description: description,
                 location: (await CityService.findById(req.body.data.city))?.name,
                 minSalary: req.body.data.minSalary,
@@ -207,7 +208,7 @@ const jobDataController = {
                 email: req.body.data.email,
                 phone: req.body.data.phone,
                 applicationMethod: req.body.data.applicationMethod || 'both',
-                redirectUrl: '/vakansiyalar/' + encodeURIComponent(data.slug) + '/details',
+                redirectUrl: '/vakansiyalar/' + encodeURIComponent(slug) + '/details',
                 uniqueKey,
             }
             // companyImage: null,
@@ -226,7 +227,7 @@ const jobDataController = {
                 text: "Sizin vakansiyanız yoxlaniş üçün Jobing.az komandasına göndərildi. Qısa zaman içində sizə geri dönüş ediləcək."
             }, req.body.data.email, "support - Jobing.az")
             data.id = jobs.id
-            await sendNewJobRequest(data)
+            sendNewJobRequest(data).catch(() => {});
             res.status(200).json(jobs);
         } catch (error) {
             res.status(500).json({ message: 'Error retrieving jobs: ' + error.message });
