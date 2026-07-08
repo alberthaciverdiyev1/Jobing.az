@@ -128,6 +128,9 @@ const jobSchema = new Schema({
     versionKey: false
 });
 
+// Text index for full-text search across multiple fields
+jobSchema.index({ title: 'text', companyName: 'text', description: 'text', location: 'text', userName: 'text' });
+
 jobSchema.virtual('companyDetails', {
     ref: 'Company',
     localField: 'companyName',
