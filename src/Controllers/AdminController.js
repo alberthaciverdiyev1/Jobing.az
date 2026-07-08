@@ -21,6 +21,8 @@ import RssSource from '../Models/RssSource.js';
 import RssImportService from '../Services/RssImportService.js';
 import Seo from '../Models/Seo.js';
 import Log from '../Models/Log.js';
+import PricingPlan from '../Models/PricingPlan.js';
+import PromotionRequest from '../Models/PromotionRequest.js';
 import Enums from '../Config/Enums.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -1244,6 +1246,107 @@ const AdminController = {
             res.json({ success: true });
         } catch (error) {
             res.status(500).json({ success: false, error: error.message });
+        }
+    },
+
+    // ============================================================
+    // PRICING PLANS
+    // ============================================================
+
+    adminPricingView: async (req, res) => {
+        const view = {
+            title: 'Qiymət Planları - Admin Panel',
+            body: "Pricing/Index.ejs",
+            js: "Pricing.js"
+        };
+        res.render('Admin/Main', view);
+    },
+
+    getPricingPlans: async (req, res) => {
+        try {
+            const plans = await PricingPlan.find().sort({ createdAt: -1 }).lean();
+            res.json(plans);
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    },
+
+    getPricingPlan: async (req, res) => {
+        try {
+            const plan = await PricingPlan.findById(req.params.id).lean();
+            if (!plan) return res.status(404).json({ error: 'Plan not found' });
+            res.json(plan);
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    },
+
+    createPricingPlan: async (req, res) => {
+        try {
+            const plan = await PricingPlan.create(req.body);
+            res.status(201).json(plan);
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    },
+
+    updatePricingPlan: async (req, res) => {
+        try {
+            const plan = await PricingPlan.findByIdAndUpdate(req.params.id, req.body, { new: true });
+            if (!plan) return res.status(404).json({ error: 'Plan not found' });
+            res.json(plan);
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    },
+
+    deletePricingPlan: async (req, res) => {
+        try {
+            const plan = await PricingPlan.findByIdAndDelete(req.params.id);
+            if (!plan) return res.status(404).json({ error: 'Plan not found' });
+            res.json({ success: true });
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    },
+
+    // ============================================================
+    // PROMOTION REQUESTS
+    // ============================================================
+
+    getPromotionRequests: async (req, res) => {
+        try {
+            const { page = 1, limit = 20 } = req.query;
+            const total = await PromotionRequest.countDocuments();
+            const requests = await PromotionRequest.find()
+                .populate('jobId', 'title companyName')
+                .populate('planId', 'name price type duration')
+                .populate('userId', 'name surname email phone')
+                .sort({ createdAt: -1 })
+                .skip((page - 1) * limit)
+                .limit(Number(limit))
+                .lean();
+            res.json({ requests, total, page: Number(page), totalPages: Math.ceil(total / limit) });
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    },
+
+    updatePromotionStatus: async (req, res) => {
+        try {
+            const { status } = req.body;
+            if (!['pending', 'approved', 'rejected'].includes(status)) {
+                return res.status(400).json({ error: 'Status must be pending, approved, or rejected' });
+            }
+            const request = await PromotionRequest.findByIdAndUpdate(
+                req.params.id,
+                { status },
+                { new: true }
+            );
+            if (!request) return res.status(404).json({ error: 'Request not found' });
+            res.json(request);
+        } catch (error) {
+            res.status(500).json({ error: error.message });
         }
     }
 };

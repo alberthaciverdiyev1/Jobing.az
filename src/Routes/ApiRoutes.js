@@ -79,6 +79,12 @@ router.post('/api/jobs/request-all-sites', jobDataController.requestAllSites);
 router.post('/api/jobs/add-request', authMiddleware.authenticate, jobLimiter, validator.addJobValidator, jobDataController.addJobRequest);
 
 // ============================================================
+// PRICING & PROMOTION
+// ============================================================
+router.get('/api/pricing/plans', jobDataController.getPricingPlans);
+router.post('/api/pricing/request', jobLimiter, validator.promotionValidator, jobDataController.promotionRequest);
+
+// ============================================================
 // SITE API
 // ============================================================
 router.post('/api/site', validator.siteValidator, siteController.create);

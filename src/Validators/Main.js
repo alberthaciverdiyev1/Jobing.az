@@ -165,6 +165,26 @@ const Validators = {
         next();
     },
 
+    promotionValidator: (req, res, next) => {
+        const { planId, jobId, phone } = req.body;
+
+        if (!planId) {
+            return res.status(400).json({ error: 'Plan ID tələb olunur' });
+        }
+        if (!jobId) {
+            return res.status(400).json({ error: 'Vakansiya ID tələb olunur' });
+        }
+        if (!phone || !phone.trim()) {
+            return res.status(400).json({ error: 'Telefon nömrəsi tələb olunur' });
+        }
+
+        const cleanedPhone = phone.trim().replace(/[\s\-\(\)]/g, '');
+        if (cleanedPhone.length < 7) {
+            return res.status(400).json({ error: 'Düzgün telefon nömrəsi daxil edin' });
+        }
+
+        next();
+    },
 
 }
 export default Validators;

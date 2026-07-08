@@ -69,6 +69,21 @@ export async function sendNewCVRequest(cvData) {
     });
 }
 
+export async function sendPromotionRequest(data) {
+    const textMessage = `
+📌 Yeni Promosyon / Premium Sorğusu
+🏢 Vakansiya: ${data.jobTitle}
+🏭 Şirkət: ${data.companyName}
+💎 Plan: ${data.planName}
+💰 Qiymət: ${data.price} AZN
+📆 Müddət: ${data.duration}
+📞 Telefon: ${data.phone}
+👤 İstifadəçi: ${data.userName || 'Qeydiyyatsız'}
+🔗 Link: ${data.jobUrl}`;
+
+    await bot.sendMessage('@jobingaz', textMessage);
+}
+
 bot.on('callback_query', async (callbackQuery) => {
     const userId = callbackQuery.from.id;
     const callbackData = callbackQuery.data;

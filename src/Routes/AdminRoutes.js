@@ -26,6 +26,7 @@ router.get('/admin/news/edit/:id', ...admin, adminController.adminNewsEditView);
 router.get('/admin/cvs', ...admin, adminController.adminCvsView);
 router.get('/admin/visitors', ...admin, adminController.adminVisitorsView);
 router.get('/admin/logs', ...admin, adminController.adminLogsView);
+router.get('/admin/pricing', ...admin, adminController.adminPricingView);
 router.get('/admin/settings', ...admin, adminController.adminSettingsView);
 router.get('/admin/rss-sources', ...admin, adminController.adminRssSourcesView);
 router.get('/admin/seo', ...admin, adminController.adminSeoView);
@@ -118,6 +119,17 @@ router.get('/api/admin/seo', ...admin, adminController.getSeoList);
 router.get('/api/admin/seo/defaults', ...admin, adminController.getSeoDefaults);
 router.post('/api/admin/seo', ...admin, adminController.saveSeo);
 router.delete('/api/admin/seo/:id', ...admin, adminController.deleteSeo);
+
+// Pricing Plans
+router.get('/api/admin/pricing', ...admin, adminController.getPricingPlans);
+router.get('/api/admin/pricing/:id', ...admin, adminController.getPricingPlan);
+router.post('/api/admin/pricing', ...admin, adminController.createPricingPlan);
+router.put('/api/admin/pricing/:id', ...admin, adminController.updatePricingPlan);
+router.delete('/api/admin/pricing/:id', ...admin, adminController.deletePricingPlan);
+
+// Promotion Requests
+router.get('/api/admin/promotion-requests', ...admin, adminController.getPromotionRequests);
+router.patch('/api/admin/promotion-requests/:id', ...admin, adminController.updatePromotionStatus);
 
 // Scraping
 router.post('/api/admin/scrape/all', ...admin, adminController.triggerScrapeAll);
