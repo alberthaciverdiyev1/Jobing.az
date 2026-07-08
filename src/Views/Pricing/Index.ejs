@@ -1,294 +1,148 @@
-<!-- ===== HERO ===== -->
-<section class="bg-gradient-to-br from-primary-500 via-primary-600 to-indigo-700 pt-28 pb-16 sm:pt-32 sm:pb-20">
-  <div class="max-w-[1440px] mx-auto px-3 sm:px-4 lg:px-6 text-center">
-    <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-white leading-tight mb-4">
-      Vakansiyanızı <span class="text-amber-300">Önə Çıxarın</span>
-    </h1>
-    <p class="text-primary-100 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
-      İrəli çəkmə və premium planlarla vakansiyanızı daha çox namizədə çatdırın.
-      İşəgötürənlər üçün xüsusi hazırlanmış qiymət paketləri.
-    </p>
-  </div>
-  <!-- Wave divider -->
-  <div class="mt-8">
-    <svg viewBox="0 0 1440 60" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-auto">
-      <path d="M0 60V30C240 0 480 0 720 30C960 60 1200 60 1440 30V60H0Z" fill="white"/>
-    </svg>
-  </div>
-</section>
-
-<!-- ===== HOW IT WORKS ===== -->
-<section class="py-12 sm:py-16 bg-white">
-  <div class="max-w-[1440px] mx-auto px-3 sm:px-4 lg:px-6">
-    <div class="text-center mb-12">
-      <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">Necə İşləyir?</h2>
-      <p class="text-gray-500 max-w-xl mx-auto">Vakansiyanızı 3 sadə addımda önə çıxarın</p>
+<!-- ===== TAB FILTER ===== -->
+<section class="pt-12 pb-2 bg-white">
+  <div class="max-w-[1000px] mx-auto px-3 sm:px-4 lg:px-6">
+    <% if (hasDaily || hasMonthly) { %>
+    <div class="flex justify-center gap-2 mb-8">
+      <button onclick="switchPricingTab('daily')" id="pricingTabDaily" class="px-6 py-2 rounded-full text-sm font-medium bg-primary-500 text-white shadow-sm transition-all duration-200">Günlük</button>
+      <button onclick="switchPricingTab('monthly')" id="pricingTabMonthly" class="px-6 py-2 rounded-full text-sm font-medium bg-gray-100 text-gray-600 hover:bg-gray-200 transition-all duration-200">Aylıq</button>
     </div>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-      <div class="text-center">
-        <div class="w-14 h-14 rounded-2xl bg-primary-100 text-primary-600 flex items-center justify-center text-xl font-bold mx-auto mb-4">1</div>
-        <h3 class="font-semibold text-gray-900 mb-2">Plan seçin</h3>
-        <p class="text-sm text-gray-500">İrəli çək və ya premium planlarından ehtiyacınıza uygun olanı seçin</p>
-      </div>
-      <div class="text-center">
-        <div class="w-14 h-14 rounded-2xl bg-primary-100 text-primary-600 flex items-center justify-center text-xl font-bold mx-auto mb-4">2</div>
-        <h3 class="font-semibold text-gray-900 mb-2">Əlaqə məlumatlarınızı daxil edin</h3>
-        <p class="text-sm text-gray-500">Telefon nömrənizi yazın və müraciətinizi təsdiqləyin</p>
-      </div>
-      <div class="text-center">
-        <div class="w-14 h-14 rounded-2xl bg-primary-100 text-primary-600 flex items-center justify-center text-xl font-bold mx-auto mb-4">3</div>
-        <h3 class="font-semibold text-gray-900 mb-2">Biz sizinlə əlaqə saxlayacağıq</h3>
-        <p class="text-sm text-gray-500">Admin tərəfindən təsdiqləndikdən sonra plan aktivləşəcək</p>
-      </div>
-    </div>
-  </div>
-</section>
 
-<!-- ===== PROMOTE PLANS ===== -->
-<section class="py-12 sm:py-16 bg-gray-50/60">
-  <div class="max-w-[1440px] mx-auto px-3 sm:px-4 lg:px-6">
-    <div class="flex flex-col lg:flex-row items-start lg:items-center gap-8 mb-12">
-      <div class="flex-1">
+    <!-- ===== DAILY SECTION ===== -->
+    <div id="pricingDailySection">
+      <% if (promoteDaily && promoteDaily.length > 0) { %>
+      <div class="text-center mb-8">
         <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber-100 text-amber-700 text-xs font-semibold mb-4">
           <i class="fas fa-rocket"></i> İrəli Çək
         </div>
         <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">Vakansiyanızı İrəli Çəkin</h2>
-        <p class="text-gray-600 leading-relaxed max-w-xl">
+        <p class="text-gray-500 max-w-xl mx-auto">
           İrəli çəkmə planı ilə vakansiyanız müntəzəm olaraq vakansiyalar siyahısında yuxarı qaldırılır.
-          Aylıq planlarda vakansiyanız <strong>hər 4 gündən bir (ayda 8 dəfə)</strong> ən yuxarıya çıxarılır
-          və daha çox namizəd tərəfindən görünməsi təmin edilir.
+          Günlük plan 1 gün müddətində keçərlidir.
         </p>
       </div>
-      <div class="flex-shrink-0 w-full lg:w-64 h-40 rounded-2xl bg-gradient-to-br from-amber-50 to-orange-50 border border-amber-200/60 flex items-center justify-center">
-        <div class="text-center">
-          <div class="text-4xl text-amber-500 mb-2"><i class="fas fa-rocket"></i></div>
-          <p class="text-sm text-amber-700 font-medium">Müntəzəm irəli çəkmə</p>
-          <p class="text-xs text-amber-500">Hər 4 gündən bir 8 dəfə</p>
-        </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 max-w-2xl mx-auto mb-16">
+        <% promoteDaily.forEach(function(plan) { %>
+          <%- include('_Card', { plan, accent: 'from-amber-400 to-orange-500', icon: 'fa-rocket', iconBg: 'bg-amber-100 text-amber-600', btnGrad: 'from-amber-500 to-orange-500', badge: null }) %>
+        <% }); %>
       </div>
-    </div>
+      <% } %>
 
-    <% if (promotePlans && promotePlans.length > 0) { %>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <% promotePlans.forEach(function(plan) { %>
-        <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-lg hover:border-amber-200 transition-all duration-300 group">
-          <div class="h-2 bg-gradient-to-r from-amber-400 to-orange-500"></div>
-          <div class="p-6">
-            <div class="flex items-center gap-3 mb-4">
-              <div class="w-10 h-10 rounded-xl bg-amber-100 flex items-center justify-center text-amber-600">
-                <i class="fas fa-rocket"></i>
-              </div>
-              <div>
-                <h3 class="font-semibold text-gray-900"><%= plan.name %></h3>
-                <span class="text-xs text-gray-400"><%= plan.duration === 'monthly' ? 'Aylıq' : 'Günlük' %> plan</span>
-              </div>
-            </div>
+      <hr class="border-gray-200 mb-16">
 
-            <div class="mb-4">
-              <span class="text-3xl font-bold text-gray-900"><%= plan.price %></span>
-              <span class="text-sm text-gray-400 ml-1">AZN</span>
-            </div>
-
-            <% if (plan.description) { %>
-              <p class="text-sm text-gray-600 mb-4"><%= plan.description %></p>
-            <% } %>
-
-            <% if (plan.features && plan.features.length > 0) { %>
-            <ul class="space-y-2 mb-6">
-              <% plan.features.forEach(function(feature) { %>
-                <li class="flex items-start gap-2 text-sm text-gray-600">
-                  <i class="fas fa-check-circle text-emerald-500 mt-0.5 flex-shrink-0"></i>
-                  <span><%= feature %></span>
-                </li>
-              <% }); %>
-            </ul>
-            <% } else { %>
-            <ul class="space-y-2 mb-6">
-              <li class="flex items-start gap-2 text-sm text-gray-600">
-                <i class="fas fa-check-circle text-emerald-500 mt-0.5 flex-shrink-0"></i>
-                <span>Vakansiyanız vakansiyalar siyahısında yuxarı qaldırılır</span>
-              </li>
-              <% if (plan.duration === 'monthly') { %>
-              <li class="flex items-start gap-2 text-sm text-gray-600">
-                <i class="fas fa-check-circle text-emerald-500 mt-0.5 flex-shrink-0"></i>
-                <span>Ayda 8 dəfə (hər 4 gündən bir) irəli çəkilir</span>
-              </li>
-              <% } else { %>
-              <li class="flex items-start gap-2 text-sm text-gray-600">
-                <i class="fas fa-check-circle text-emerald-500 mt-0.5 flex-shrink-0"></i>
-                <span>1 gün müddətində irəli çəkilir</span>
-              </li>
-              <% } %>
-              <li class="flex items-start gap-2 text-sm text-gray-600">
-                <i class="fas fa-check-circle text-emerald-500 mt-0.5 flex-shrink-0"></i>
-                <span>Daha çox namizəd tərəfindən görünür</span>
-              </li>
-            </ul>
-            <% } %>
-
-            <a href="/vakansiyalar"
-               class="block w-full text-center py-3 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 text-white font-semibold hover:from-amber-600 hover:to-orange-600 transition-all shadow-sm group-hover:shadow-md">
-              Vakansiyaları Göstər
-            </a>
-          </div>
-        </div>
-      <% }); %>
-    </div>
-    <% } else { %>
-    <div class="text-center py-16 bg-white rounded-2xl border border-dashed border-gray-200">
-      <div class="text-5xl text-gray-300 mb-4"><i class="fas fa-rocket"></i></div>
-      <p class="text-gray-400 text-lg">Hələ ki, irəli çəkmə planı mövcud deyil</p>
-      <p class="text-gray-400 text-sm mt-1">Admin tərəfindən planlar əlavə edildikdən sonra burada görünəcək</p>
-    </div>
-    <% } %>
-  </div>
-</section>
-
-<!-- ===== PREMIUM PLANS ===== -->
-<section class="py-12 sm:py-16 bg-white">
-  <div class="max-w-[1440px] mx-auto px-3 sm:px-4 lg:px-6">
-    <div class="flex flex-col lg:flex-row items-start lg:items-center gap-8 mb-12">
-      <div class="flex-1">
+      <% if (premiumDaily && premiumDaily.length > 0) { %>
+      <div class="text-center mb-8">
         <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-purple-100 text-purple-700 text-xs font-semibold mb-4">
           <i class="fas fa-crown"></i> Premium
         </div>
         <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">Vakansiyanızı Premium Edin</h2>
-        <p class="text-gray-600 leading-relaxed max-w-xl">
-          Premium planı ilə vakansiyanız premium elanlar kateqoriyasında xüsusi olaraq göstərilir.
-          Premium vakansiyalar ayrıca kateqoriyada və əsas səhifədə xüsusi bölmədə nümayiş olunur.
-          Həmçinin vakansiyanız adi vakansiyalar arasında da <strong>"Premium" nişanı</strong> ilə qeyd olunur.
+        <p class="text-gray-500 max-w-xl mx-auto">
+          Premium planı ilə vakansiyanız premium elanlar kateqoriyasında xüsusi olaraq göstərilir
+          və <strong>"Premium" nişanı</strong> ilə qeyd olunur.
         </p>
       </div>
-      <div class="flex-shrink-0 w-full lg:w-64 h-40 rounded-2xl bg-gradient-to-br from-purple-50 to-indigo-50 border border-purple-200/60 flex items-center justify-center">
-        <div class="text-center">
-          <div class="text-4xl text-purple-500 mb-2"><i class="fas fa-crown"></i></div>
-          <p class="text-sm text-purple-700 font-medium">Premium kateqoriya</p>
-          <p class="text-xs text-purple-500">Xüsusi bölmədə nümayiş</p>
-        </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 max-w-2xl mx-auto">
+        <% premiumDaily.forEach(function(plan) { %>
+          <%- include('_Card', { plan, accent: 'from-purple-400 to-indigo-500', icon: 'fa-crown', iconBg: 'bg-purple-100 text-purple-600', btnGrad: 'from-purple-500 to-indigo-500', badge: 'Premium' }) %>
+        <% }); %>
       </div>
+      <% } %>
     </div>
 
-    <% if (premiumPlans && premiumPlans.length > 0) { %>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <% premiumPlans.forEach(function(plan) { %>
-        <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-lg hover:border-purple-200 transition-all duration-300 group relative">
-          <div class="h-2 bg-gradient-to-r from-purple-400 to-indigo-500"></div>
-          <div class="absolute top-3 right-3">
-            <span class="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-purple-100 text-purple-700 text-xs font-medium">
-              <i class="fas fa-crown text-[10px]"></i> Premium
-            </span>
-          </div>
-          <div class="p-6">
-            <div class="flex items-center gap-3 mb-4">
-              <div class="w-10 h-10 rounded-xl bg-purple-100 flex items-center justify-center text-purple-600">
-                <i class="fas fa-crown"></i>
-              </div>
-              <div>
-                <h3 class="font-semibold text-gray-900"><%= plan.name %></h3>
-                <span class="text-xs text-gray-400"><%= plan.duration === 'monthly' ? 'Aylıq' : 'Günlük' %> plan</span>
-              </div>
-            </div>
-
-            <div class="mb-4">
-              <span class="text-3xl font-bold text-gray-900"><%= plan.price %></span>
-              <span class="text-sm text-gray-400 ml-1">AZN</span>
-            </div>
-
-            <% if (plan.description) { %>
-              <p class="text-sm text-gray-600 mb-4"><%= plan.description %></p>
-            <% } %>
-
-            <% if (plan.features && plan.features.length > 0) { %>
-            <ul class="space-y-2 mb-6">
-              <% plan.features.forEach(function(feature) { %>
-                <li class="flex items-start gap-2 text-sm text-gray-600">
-                  <i class="fas fa-check-circle text-emerald-500 mt-0.5 flex-shrink-0"></i>
-                  <span><%= feature %></span>
-                </li>
-              <% }); %>
-            </ul>
-            <% } else { %>
-            <ul class="space-y-2 mb-6">
-              <li class="flex items-start gap-2 text-sm text-gray-600">
-                <i class="fas fa-check-circle text-emerald-500 mt-0.5 flex-shrink-0"></i>
-                <span>Premium elanlar kateqoriyasında göstərilir</span>
-              </li>
-              <li class="flex items-start gap-2 text-sm text-gray-600">
-                <i class="fas fa-check-circle text-emerald-500 mt-0.5 flex-shrink-0"></i>
-                <span>əsas səhifədə xüsusi bölmədə nümayiş olunur</span>
-              </li>
-              <li class="flex items-start gap-2 text-sm text-gray-600">
-                <i class="fas fa-check-circle text-emerald-500 mt-0.5 flex-shrink-0"></i>
-                <span>"Premium" nişanı ilə qeyd olunur</span>
-              </li>
-            </ul>
-            <% } %>
-
-            <a href="/vakansiyalar"
-               class="block w-full text-center py-3 rounded-xl bg-gradient-to-r from-purple-500 to-indigo-500 text-white font-semibold hover:from-purple-600 hover:to-indigo-600 transition-all shadow-sm group-hover:shadow-md">
-              Vakansiyaları Göstər
-            </a>
-          </div>
+    <!-- ===== MONTHLY SECTION ===== -->
+    <div id="pricingMonthlySection" class="hidden">
+      <% if (promoteMonthly && promoteMonthly.length > 0) { %>
+      <div class="text-center mb-8">
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber-100 text-amber-700 text-xs font-semibold mb-4">
+          <i class="fas fa-rocket"></i> İrəli Çək
         </div>
-      <% }); %>
+        <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">Vakansiyanızı İrəli Çəkin</h2>
+        <p class="text-gray-500 max-w-xl mx-auto">
+          İrəli çəkmə planı ilə vakansiyanız müntəzəm olaraq vakansiyalar siyahısında yuxarı qaldırılır.
+          Aylıq planlarda <strong>hər 4 gündən bir (ayda 8 dəfə)</strong> irəli çəkilir.
+        </p>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 max-w-2xl mx-auto mb-16">
+        <% promoteMonthly.forEach(function(plan) { %>
+          <%- include('_Card', { plan, accent: 'from-amber-400 to-orange-500', icon: 'fa-rocket', iconBg: 'bg-amber-100 text-amber-600', btnGrad: 'from-amber-500 to-orange-500', badge: null }) %>
+        <% }); %>
+      </div>
+      <% } %>
+
+      <hr class="border-gray-200 mb-16">
+
+      <% if (premiumMonthly && premiumMonthly.length > 0) { %>
+      <div class="text-center mb-8">
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-purple-100 text-purple-700 text-xs font-semibold mb-4">
+          <i class="fas fa-crown"></i> Premium
+        </div>
+        <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">Vakansiyanızı Premium Edin</h2>
+        <p class="text-gray-500 max-w-xl mx-auto">
+          Premium planı ilə vakansiyanız premium elanlar kateqoriyasında xüsusi olaraq göstərilir
+          və <strong>"Premium" nişanı</strong> ilə qeyd olunur.
+        </p>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 max-w-2xl mx-auto">
+        <% premiumMonthly.forEach(function(plan) { %>
+          <%- include('_Card', { plan, accent: 'from-purple-400 to-indigo-500', icon: 'fa-crown', iconBg: 'bg-purple-100 text-purple-600', btnGrad: 'from-purple-500 to-indigo-500', badge: 'Premium' }) %>
+        <% }); %>
+      </div>
+      <% } %>
     </div>
+
     <% } else { %>
-    <div class="text-center py-16 bg-gray-50 rounded-2xl border border-dashed border-gray-200">
-      <div class="text-5xl text-gray-300 mb-4"><i class="fas fa-crown"></i></div>
-      <p class="text-gray-400 text-lg">Hələ ki, premium plan mövcud deyil</p>
-      <p class="text-gray-400 text-sm mt-1">Admin tərəfindən planlar əlavə edildikdən sonra burada görünəcək</p>
+    <!-- Empty state -->
+    <div class="text-center py-16">
+      <div class="text-5xl text-gray-200 mb-4"><i class="fas fa-tag"></i></div>
+      <p class="text-gray-400">Hələ ki, heç bir plan mövcud deyil</p>
     </div>
     <% } %>
   </div>
 </section>
 
 <!-- ===== FAQ SECTION ===== -->
-<section class="py-12 sm:py-16 bg-gray-50/60">
-  <div class="max-w-[1440px] mx-auto px-3 sm:px-4 lg:px-6">
-    <div class="text-center mb-10">
-      <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">Tez-tez Verilən Suallar</h2>
+<section class="py-12 sm:py-14 bg-gray-50/60">
+  <div class="max-w-[1000px] mx-auto px-3 sm:px-4 lg:px-6">
+    <div class="text-center mb-8">
+      <h2 class="text-xl sm:text-2xl font-bold text-gray-900">Tez-tez Verilən Suallar</h2>
     </div>
-    <div class="max-w-3xl mx-auto space-y-4">
-      <details class="bg-white rounded-2xl border border-gray-200 p-5 group open:border-primary-200 open:ring-1 open:ring-primary-100">
-        <summary class="flex items-center justify-between cursor-pointer font-medium text-gray-900 list-none">
+    <div class="max-w-2xl mx-auto space-y-3">
+      <details class="bg-white rounded-xl border border-gray-200 p-4 group open:border-primary-200 open:ring-1 open:ring-primary-100">
+        <summary class="flex items-center justify-between cursor-pointer font-medium text-gray-900 list-none text-sm">
           <span>İrəli çəkmək nə deməkdir?</span>
-          <i class="fas fa-chevron-down text-gray-400 text-xs transition-transform group-open:rotate-180"></i>
+          <i class="fas fa-chevron-down text-gray-400 text-xs transition-transform group-open:rotate-180 ml-2 flex-shrink-0"></i>
         </summary>
-        <p class="mt-3 text-sm text-gray-600 leading-relaxed">
+        <p class="mt-2 text-sm text-gray-500 leading-relaxed">
           İrəli çəkmə planı vakansiyanızın vakansiyalar siyahısında yuxarı qaldırılmasını təmin edir.
-          Aylıq planlarda vakansiyanız hər 4 gündən bir olmaqla ayda 8 dəfə irəli çəkilir.
-          Bu sayede daha çox namizəd vakansiyanızı görür və müraciet sayınız artır.
+          Aylıq planlarda hər 4 gündən bir olmaqla ayda 8 dəfə irəli çəkilir.
         </p>
       </details>
-      <details class="bg-white rounded-2xl border border-gray-200 p-5 group open:border-primary-200 open:ring-1 open:ring-primary-100">
-        <summary class="flex items-center justify-between cursor-pointer font-medium text-gray-900 list-none">
+      <details class="bg-white rounded-xl border border-gray-200 p-4 group open:border-primary-200 open:ring-1 open:ring-primary-100">
+        <summary class="flex items-center justify-between cursor-pointer font-medium text-gray-900 list-none text-sm">
           <span>Premium etmək nə deməkdir?</span>
-          <i class="fas fa-chevron-down text-gray-400 text-xs transition-transform group-open:rotate-180"></i>
+          <i class="fas fa-chevron-down text-gray-400 text-xs transition-transform group-open:rotate-180 ml-2 flex-shrink-0"></i>
         </summary>
-        <p class="mt-3 text-sm text-gray-600 leading-relaxed">
-          Premium planı vakansiyanızı premium elanlar kateqoriyasında xüsusi olaraq göstərir.
-          Premium vakansiyalar əsas səhifədə xüsusi bölmədə nümayiş olunur və adi vakansiyalar
-          arasında "Premium" nişanı ilə qeyd olunur. Bu vakansiyanızın daha çox diqqət çəkməsini təmin edir.
+        <p class="mt-2 text-sm text-gray-500 leading-relaxed">
+          Premium planı vakansiyanızı premium elanlar kateqoriyasında göstərir,
+          əsas səhifədə xüsusi bölmədə nümayiş etdirir və "Premium" nişanı əlavə edir.
         </p>
       </details>
-      <details class="bg-white rounded-2xl border border-gray-200 p-5 group open:border-primary-200 open:ring-1 open:ring-primary-100">
-        <summary class="flex items-center justify-between cursor-pointer font-medium text-gray-900 list-none">
+      <details class="bg-white rounded-xl border border-gray-200 p-4 group open:border-primary-200 open:ring-1 open:ring-primary-100">
+        <summary class="flex items-center justify-between cursor-pointer font-medium text-gray-900 list-none text-sm">
           <span>Ödəniş necə həyata keçirilir?</span>
-          <i class="fas fa-chevron-down text-gray-400 text-xs transition-transform group-open:rotate-180"></i>
+          <i class="fas fa-chevron-down text-gray-400 text-xs transition-transform group-open:rotate-180 ml-2 flex-shrink-0"></i>
         </summary>
-        <p class="mt-3 text-sm text-gray-600 leading-relaxed">
-          Plan seçib müraciət etdikdən sonra admin tərəfindən sizinlə əlaqə saxlanılır.
-          Ödəniş və aktivləşdirmə prosesi admin tərəfindən idarə olunur.
+        <p class="mt-2 text-sm text-gray-500 leading-relaxed">
+          Plan seçib müraciət etdikdən sonra admin sizinlə əlaqə saxlayır.
+          Ödəniş və aktivləşdirmə admin tərəfindən idarə olunur.
         </p>
       </details>
-      <details class="bg-white rounded-2xl border border-gray-200 p-5 group open:border-primary-200 open:ring-1 open:ring-primary-100">
-        <summary class="flex items-center justify-between cursor-pointer font-medium text-gray-900 list-none">
-          <span>Eyni anda həm irəli çək, həm premium edə bilərəmmi?</span>
-          <i class="fas fa-chevron-down text-gray-400 text-xs transition-transform group-open:rotate-180"></i>
+      <details class="bg-white rounded-xl border border-gray-200 p-4 group open:border-primary-200 open:ring-1 open:ring-primary-100">
+        <summary class="flex items-center justify-between cursor-pointer font-medium text-gray-900 list-none text-sm">
+          <span>Eyni anda həm irəli çək, həm premium?</span>
+          <i class="fas fa-chevron-down text-gray-400 text-xs transition-transform group-open:rotate-180 ml-2 flex-shrink-0"></i>
         </summary>
-        <p class="mt-3 text-sm text-gray-600 leading-relaxed">
+        <p class="mt-2 text-sm text-gray-500 leading-relaxed">
           Bəli, eyni vakansiya üçün həm irəli çəkmə, həm də premium planından eyni anda istifadə edə bilərsiniz.
-          Hər iki xidmət birlikdə vakansiyanızın maksimum görünürlüyünü təmin edir.
         </p>
       </details>
     </div>
@@ -296,21 +150,42 @@
 </section>
 
 <!-- ===== CTA ===== -->
-<section class="py-16 sm:py-20 bg-gradient-to-br from-primary-500 via-primary-600 to-indigo-700">
-  <div class="max-w-[1440px] mx-auto px-3 sm:px-4 lg:px-6 text-center">
-    <h2 class="text-2xl sm:text-3xl font-bold text-white mb-4">Vakansiyanızı Önə Çıxarmağa Hazırsınız?</h2>
-    <p class="text-primary-100 text-base sm:text-lg max-w-xl mx-auto mb-8">
+<section class="py-12 sm:py-14 bg-gradient-to-br from-primary-500 via-primary-600 to-indigo-700">
+  <div class="max-w-[1000px] mx-auto px-3 sm:px-4 lg:px-6 text-center">
+    <h2 class="text-xl sm:text-2xl font-bold text-white mb-3">Vakansiyanızı Önə Çıxarmağa Hazırsınız?</h2>
+    <p class="text-primary-100 text-sm sm:text-base max-w-lg mx-auto mb-6">
       Planlardan birini seçin və vakansiyanızı daha çox namizədə çatdırın
     </p>
-    <div class="flex flex-wrap justify-center gap-4">
+    <div class="flex flex-wrap justify-center gap-3">
       <a href="/vakansiyalar"
-         class="inline-flex items-center gap-2 bg-white text-primary-600 hover:bg-primary-50 font-semibold px-8 py-3.5 rounded-xl transition-all shadow-sm hover:shadow-md">
+         class="inline-flex items-center gap-2 bg-white text-primary-600 hover:bg-primary-50 font-semibold px-6 py-3 rounded-xl transition-all shadow-sm hover:shadow-md text-sm">
         <i class="fas fa-search"></i> Vakansiyaları Göstər
       </a>
       <a href="/contact"
-         class="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white border-2 border-white/30 font-semibold px-8 py-3.5 rounded-xl transition-all">
+         class="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white border-2 border-white/30 font-semibold px-6 py-3 rounded-xl transition-all text-sm">
         <i class="fas fa-envelope"></i> Bizimlə Əlaqə
       </a>
     </div>
   </div>
 </section>
+
+<script>
+function switchPricingTab(tab) {
+  var dailySection = document.getElementById('pricingDailySection');
+  var monthlySection = document.getElementById('pricingMonthlySection');
+  var tabDaily = document.getElementById('pricingTabDaily');
+  var tabMonthly = document.getElementById('pricingTabMonthly');
+
+  if (tab === 'daily') {
+    dailySection.classList.remove('hidden');
+    monthlySection.classList.add('hidden');
+    tabDaily.className = 'px-6 py-2 rounded-full text-sm font-medium bg-primary-500 text-white shadow-sm transition-all duration-200';
+    tabMonthly.className = 'px-6 py-2 rounded-full text-sm font-medium bg-gray-100 text-gray-600 hover:bg-gray-200 transition-all duration-200';
+  } else {
+    dailySection.classList.add('hidden');
+    monthlySection.classList.remove('hidden');
+    tabDaily.className = 'px-6 py-2 rounded-full text-sm font-medium bg-gray-100 text-gray-600 hover:bg-gray-200 transition-all duration-200';
+    tabMonthly.className = 'px-6 py-2 rounded-full text-sm font-medium bg-primary-500 text-white shadow-sm transition-all duration-200';
+  }
+}
+</script>

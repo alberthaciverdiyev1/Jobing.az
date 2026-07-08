@@ -498,76 +498,75 @@
 </div>
 
 <!-- ========== PRICING MODAL ========== -->
-<div id="pricingModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
-  <div class="flex items-center justify-center min-h-screen px-4 py-8">
-    <div class="fixed inset-0 bg-black/50 backdrop-blur-sm"></div>
-    <div class="relative bg-white rounded-2xl shadow-2xl max-w-lg w-full animate-scale-in overflow-hidden">
-      <!-- Gradient header strip -->
-      <div id="pricingModalAccent" class="h-2 bg-gradient-to-r from-amber-400 to-orange-500"></div>
+<div id="pricingModal" class="fixed inset-0 z-[100] hidden">
+  <div class="fixed inset-0 bg-black/60 backdrop-blur-sm"></div>
+  <div class="fixed inset-0 overflow-y-auto">
+    <div class="flex min-h-full items-center justify-center p-3 sm:p-4">
+      <div class="relative w-full max-w-lg bg-white rounded-2xl shadow-2xl animate-scale-in">
+        <!-- Gradient header strip -->
+        <div id="pricingModalAccent" class="h-1.5 rounded-t-2xl bg-gradient-to-r from-amber-400 to-orange-500"></div>
 
-      <div class="p-6">
-        <!-- Header -->
-        <div class="flex items-start justify-between mb-4">
-          <div class="flex items-center gap-3">
-            <div id="pricingModalIcon" class="w-11 h-11 rounded-xl bg-amber-100 flex items-center justify-center text-amber-600 text-lg">
-              <i class="fas fa-rocket"></i>
+        <div class="p-5 sm:p-6">
+          <!-- Header -->
+          <div class="flex items-start justify-between mb-4">
+            <div class="flex items-center gap-3">
+              <div id="pricingModalIcon" class="w-10 h-10 rounded-xl bg-amber-100 flex items-center justify-center text-amber-600 flex-shrink-0">
+                <i class="fas fa-rocket"></i>
+              </div>
+              <div>
+                <h3 id="pricingModalTitle" class="text-base sm:text-lg font-bold text-gray-900">İrəli Çək</h3>
+                <p id="pricingModalBadge" class="hidden text-[10px] font-semibold uppercase tracking-wider text-purple-600">Premium</p>
+              </div>
             </div>
-            <div>
-              <h3 id="pricingModalTitle" class="text-lg font-bold text-gray-900">İrəli Çək</h3>
-              <p id="pricingModalBadge" class="hidden text-[10px] font-semibold uppercase tracking-wider text-purple-600">Premium</p>
+            <button onclick="closePricingModal()" class="w-8 h-8 rounded-lg hover:bg-gray-100 flex items-center justify-center text-gray-400 hover:text-gray-600 transition-colors flex-shrink-0">&times;</button>
+          </div>
+
+          <!-- Info box -->
+          <div id="pricingInfoBox" class="rounded-xl bg-amber-50 border border-amber-200 p-3 sm:p-4 mb-4">
+            <div class="flex gap-2.5">
+              <div class="w-6 h-6 rounded-lg bg-amber-100 flex items-center justify-center text-amber-600 flex-shrink-0 mt-0.5">
+                <i class="fas fa-lightbulb text-[10px]"></i>
+              </div>
+              <div>
+                <p id="pricingInfoTitle" class="text-xs font-semibold text-amber-900 mb-0.5">İrəli Çəkmə Nədir?</p>
+                <p id="pricingInfoText" class="text-xs text-amber-800 leading-relaxed">
+                  İrəli çəkmə planı ilə vakansiyanız müntəzəm olaraq vakansiyalar siyahısında yuxarı qaldırılır.
+                  <span class="font-semibold text-amber-900">Aylıq planlarda hər 4 gündən bir (ayda 8 dəfə)</span> irəli çəkilir.
+                </p>
+              </div>
             </div>
           </div>
-          <button onclick="closePricingModal()" class="w-8 h-8 rounded-lg hover:bg-gray-100 flex items-center justify-center text-gray-400 hover:text-gray-600 transition-colors flex-shrink-0">&times;</button>
-        </div>
 
-        <!-- Info box -->
-        <div id="pricingInfoBox" class="rounded-xl bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200/60 p-4 mb-5">
-          <div class="flex gap-3">
-            <div class="w-7 h-7 rounded-lg bg-amber-100 flex items-center justify-center text-amber-600 text-xs flex-shrink-0 mt-0.5">
-              <i class="fas fa-lightbulb"></i>
-            </div>
-            <div>
-              <p id="pricingInfoTitle" class="text-sm font-semibold text-amber-900 mb-1">İrəli Çəkmə Nədir?</p>
-              <p id="pricingInfoText" class="text-xs text-amber-800/70 leading-relaxed">
-                İrəli çəkmə planı ilə vakansiyanız müntəzəm olaraq vakansiyalar siyahısında yuxarı qaldırılır.
-                <span class="font-medium text-amber-900">Aylıq planlarda hər 4 gündən bir (ayda 8 dəfə)</span> irəli çəkilir.
-              </p>
+          <!-- Description -->
+          <p id="pricingModalDesc" class="text-sm text-gray-500 mb-4">Mövcud planlardan birini seçin</p>
+
+          <!-- Plans container -->
+          <div id="pricingPlansContainer" class="space-y-3 mb-4">
+            <div class="text-center py-8">
+              <div class="w-6 h-6 border-2 border-primary-500/30 border-t-primary-500 rounded-full animate-spin mx-auto"></div>
             </div>
           </div>
-        </div>
 
-        <!-- Description -->
-        <p id="pricingModalDesc" class="text-sm text-gray-500 mb-4">Mövcud planlardan birini seçin</p>
-
-        <!-- Plans container -->
-        <div id="pricingPlansContainer" class="space-y-3 mb-5">
-          <div class="text-center py-8">
-            <div class="w-6 h-6 border-2 border-primary-500/30 border-t-primary-500 rounded-full animate-spin mx-auto"></div>
+          <!-- Phone -->
+          <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700 mb-1.5">
+              <i class="fas fa-phone text-gray-400 mr-1"></i> Əlaqə nömrəsi *
+            </label>
+            <input type="tel" id="pricingPhone" placeholder="+994 XX XXX XX XX"
+                   class="w-full px-4 py-3 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition-shadow bg-white">
+            <p id="pricingPhoneNote" class="text-[11px] text-gray-500 mt-1.5">
+              <i class="fas fa-info-circle mr-0.5"></i> Profilinizdə qeyd edilmiş nömrə avtomatik əlavə olunub.
+            </p>
           </div>
+
+          <!-- Submit -->
+          <button id="submitPricingBtn"
+                  class="w-full py-3 bg-gradient-to-r from-primary-500 to-primary-600 text-white rounded-xl font-semibold text-sm hover:from-primary-600 hover:to-primary-700 transition-all shadow-sm hover:shadow-md active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed">
+            Göndər
+          </button>
+
+          <p class="text-[10px] text-gray-400 text-center mt-3">Müraciətiniz admin tərəfindən dəyərləndiriləcək.</p>
         </div>
-
-        <!-- Phone -->
-        <div class="mb-5">
-          <label class="block text-sm font-medium text-gray-700 mb-1.5">
-            <i class="fas fa-phone text-gray-400 mr-1"></i> Əlaqə nömrəsi *
-          </label>
-          <input type="tel" id="pricingPhone" placeholder="+994 XX XXX XX XX"
-                 class="w-full px-4 py-3 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-shadow">
-          <p id="pricingPhoneNote" class="text-[11px] text-gray-400 mt-1.5">
-            <i class="fas fa-info-circle mr-0.5"></i> Profilinizdə qeyd edilmiş nömrə avtomatik əlavə olunub. İstəsəniz dəyişə bilərsiniz.
-          </p>
-        </div>
-
-        <!-- Submit -->
-        <button id="submitPricingBtn"
-                class="w-full py-3.5 bg-gradient-to-r from-primary-500 to-primary-600 text-white rounded-xl font-semibold hover:from-primary-600 hover:to-primary-700 transition-all shadow-sm hover:shadow-md active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed">
-          <i class="fas fa-paper-plane mr-2"></i> Göndər
-        </button>
-
-        <!-- Footer note -->
-        <p class="text-[10px] text-gray-400 text-center mt-3">
-          Müraciətiniz admin tərəfindən dəyərləndiriləcək və sizinlə əlaqə saxlanılacaq.
-        </p>
       </div>
     </div>
   </div>

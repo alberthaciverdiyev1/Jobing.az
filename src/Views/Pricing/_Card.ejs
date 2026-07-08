@@ -1,0 +1,76 @@
+<div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-lg hover:border-<%= accent.includes('amber') ? 'amber' : 'purple' %>-200 transition-all duration-300 group relative">
+  <div class="h-1.5 bg-gradient-to-r <%= accent %>"></div>
+  <% if (badge) { %>
+  <div class="absolute top-3 right-3">
+    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-purple-100 text-purple-700 text-[10px] font-medium">
+      <i class="fas fa-crown text-[9px]"></i> <%= badge %>
+    </span>
+  </div>
+  <% } %>
+  <div class="p-5">
+    <div class="flex items-center gap-3 mb-3">
+      <div class="w-10 h-10 rounded-xl <%= iconBg %> flex items-center justify-center text-lg">
+        <i class="fas <%= icon %>"></i>
+      </div>
+      <div>
+        <h3 class="font-semibold text-gray-900"><%= plan.name %></h3>
+        <span class="text-xs text-gray-400"><%= plan.duration === 'monthly' ? 'Aylıq' : 'Günlük' %></span>
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <span class="text-2xl font-bold text-gray-900"><%= plan.price %></span>
+      <span class="text-sm text-gray-400 ml-1">AZN</span>
+    </div>
+
+    <% if (plan.description) { %>
+      <p class="text-sm text-gray-500 mb-3"><%= plan.description %></p>
+    <% } %>
+
+    <% if (plan.features && plan.features.length > 0) { %>
+    <ul class="space-y-1.5 mb-4">
+      <% plan.features.forEach(function(feature) { %>
+        <li class="flex items-start gap-2 text-sm text-gray-600">
+          <i class="fas fa-check-circle text-emerald-500 mt-0.5 flex-shrink-0"></i>
+          <span><%= feature %></span>
+        </li>
+      <% }); %>
+    </ul>
+    <% } else { %>
+    <ul class="space-y-1.5 mb-4">
+      <% if (icon === 'fa-rocket') { %>
+      <li class="flex items-start gap-2 text-sm text-gray-600">
+        <i class="fas fa-check-circle text-emerald-500 mt-0.5 flex-shrink-0"></i>
+        <span>Siyahıda yuxarı qaldırılır</span>
+      </li>
+      <li class="flex items-start gap-2 text-sm text-gray-600">
+        <i class="fas fa-check-circle text-emerald-500 mt-0.5 flex-shrink-0"></i>
+        <span><%= plan.duration === 'monthly' ? 'Hər 4 gündən bir, ayda 8 dəfə' : '1 gün müddətində' %></span>
+      </li>
+      <li class="flex items-start gap-2 text-sm text-gray-600">
+        <i class="fas fa-check-circle text-emerald-500 mt-0.5 flex-shrink-0"></i>
+        <span>Daha çox namizədə çatma imkanı</span>
+      </li>
+      <% } else { %>
+      <li class="flex items-start gap-2 text-sm text-gray-600">
+        <i class="fas fa-check-circle text-emerald-500 mt-0.5 flex-shrink-0"></i>
+        <span>Premium kateqoriyasında göstərilir</span>
+      </li>
+      <li class="flex items-start gap-2 text-sm text-gray-600">
+        <i class="fas fa-check-circle text-emerald-500 mt-0.5 flex-shrink-0"></i>
+        <span>əsas səhifədə xüsusi bölmə</span>
+      </li>
+      <li class="flex items-start gap-2 text-sm text-gray-600">
+        <i class="fas fa-check-circle text-emerald-500 mt-0.5 flex-shrink-0"></i>
+        <span>"Premium" nişanı</span>
+      </li>
+      <% } %>
+    </ul>
+    <% } %>
+
+    <a href="/vakansiyalar"
+       class="block w-full text-center py-2.5 rounded-xl bg-gradient-to-r <%= btnGrad %> text-white font-semibold text-sm hover:from-<%= accent.includes('amber') ? 'amber' : 'purple' %>-600 hover:to-<%= accent.includes('amber') ? 'orange' : 'indigo' %>-600 transition-all shadow-sm group-hover:shadow-md">
+      Vakansiyaları Göstər
+    </a>
+  </div>
+</div>
