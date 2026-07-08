@@ -77,13 +77,16 @@ async function getCategories() {
 
 async function getCities() {
     try {
-        const { data } = await axios.get('/api/cities?site=BossAz');
+        const res = await axios.get('/api/cities?site=BossAz');
+        let cities = res.data;
+        if (!Array.isArray(cities) && typeof cities === 'object') cities = Object.values(cities);
         const select = document.getElementById('city');
         if (!select) return;
-        data.forEach(city => {
+        (Array.isArray(cities) ? cities : []).forEach(city => {
+            if (!city || typeof city !== 'object') return;
             const opt = document.createElement('option');
-            opt.value = city.cityId || city._id;
-            opt.textContent = city.name;
+            opt.value = String(city.cityId ?? city._id ?? '');
+            opt.textContent = String(city.name || '');
             select.appendChild(opt);
         });
         // Pre-select city from user profile
@@ -207,7 +210,9 @@ async function handleSubmit() {
         city: document.getElementById('city').value,
         education: document.getElementById('education').value,
         experience: document.getElementById('experience').value,
-        aboutJob
+        aboutJob,
+        salary: document.getElementById('salary').value.trim(),
+        salaryNegotiable: document.getElementById('salaryNegotiable').checked
     };
 
     if (!validateForm(data)) {
@@ -231,6 +236,8 @@ async function handleSubmit() {
         formData.append('education', data.education);
         formData.append('experience', data.experience);
         formData.append('aboutJob', data.aboutJob);
+        if (data.salary) formData.append('salary', data.salary);
+        formData.append('salaryNegotiable', data.salaryNegotiable);
 
         // Existing CV selection
         const selectedCV = document.getElementById('selectedCV');

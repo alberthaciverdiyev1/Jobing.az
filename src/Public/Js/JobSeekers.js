@@ -23,12 +23,19 @@ function createJobSeekerCard(el) {
     const experience = el.experience || '';
     const detailLink = '/is-axtaran/' + (el.slug || el._id);
 
+    const salary = el.salary || null;
+    const salaryNegotiable = el.salaryNegotiable || false;
     let badgesHtml = '';
     if (education) {
         badgesHtml += `<span class="inline-flex items-center gap-1 px-2.5 py-1 bg-primary-50 text-primary-600 rounded-full text-[11px] font-medium"><i class="fas fa-graduation-cap text-[10px]"></i> ${escapeHtml(education)}</span> `;
     }
     if (experience) {
         badgesHtml += `<span class="inline-flex items-center gap-1 px-2.5 py-1 bg-amber-50 text-amber-600 rounded-full text-[11px] font-medium"><i class="fas fa-briefcase text-[10px]"></i> ${escapeHtml(experience)}</span>`;
+    }
+    if (salaryNegotiable) {
+        badgesHtml += `<span class="inline-flex items-center gap-1 px-2.5 py-1 bg-green-50 text-green-600 rounded-full text-[11px] font-medium"><i class="fas fa-money-bill-wave text-[10px]"></i> Razılaşma ilə</span>`;
+    } else if (salary) {
+        badgesHtml += `<span class="inline-flex items-center gap-1 px-2.5 py-1 bg-green-50 text-green-600 rounded-full text-[11px] font-medium"><i class="fas fa-money-bill-wave text-[10px]"></i> ${Number(salary).toLocaleString('az-AZ')} ₼</span>`;
     }
 
     return `<div class="job-card group bg-white rounded-xl p-5 cursor-pointer transition-all duration-200 hover:shadow-lg hover:-translate-y-1" style="border: 1px solid #d1d5db;" data-original-link="${detailLink}">
@@ -84,18 +91,22 @@ async function getCategories() {
 
 async function getCities() {
     try {
-        const { data } = await axios.get('/api/cities?site=BossAz');
+        const res = await axios.get('/api/cities?site=BossAz');
+        let cities = res.data;
+        if (!Array.isArray(cities) && typeof cities === 'object') cities = Object.values(cities);
         ['', 'mobile-'].forEach(prefix => {
             const select = document.getElementById(prefix + 'city-select-filter');
             if (!select) return;
-            data.forEach(city => {
+            select.innerHTML = '<option value="">-- Seçin --</option>';
+            (Array.isArray(cities) ? cities : []).forEach(city => {
+                if (!city || typeof city !== 'object') return;
                 const opt = document.createElement('option');
-                opt.value = city.cityId || city._id;
-                opt.textContent = city.name;
+                opt.value = String(city.cityId ?? city._id ?? '');
+                opt.textContent = String(city.name || '');
                 select.appendChild(opt);
             });
         });
-    } catch (e) { console.error(e); }
+    } catch (e) { console.error('getCities error:', e); }
 }
 
 async function getEducation() {
