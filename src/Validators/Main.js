@@ -146,15 +146,15 @@ const Validators = {
             "userName",
             "categoryId",
             "cityId",
-            "email",
             "educationId",
             "experienceId",
-            "phone",
         ];
 
         const hasValidationError = requiredFields.some((field) => !data[field]);
+        // Require either email or phone
+        const hasContactInfo = data.email || data.phone;
 
-        if (hasValidationError) {
+        if (hasValidationError || !hasContactInfo) {
             return res.status(200).json({
                 status: 400,
                 message: "Validation failed. Please correct the fields.",

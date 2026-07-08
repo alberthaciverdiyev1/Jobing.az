@@ -430,6 +430,7 @@
 		"success_message": "Vakansiyanız uğurla göndərildi!",
 		"error_occurred": "Xəta baş verdi, yenidən cəhd edin",
 		"error_generic": "Xəta baş verdi, zəhmət olmasa yenidən cəhd edin.",
-		"submitting": "Göndərilir..."
+		"submitting": "Göndərilir...",
+		"email_or_phone_required": "Email və ya Telefon nömrəsi daxil edilməlidir"
 	}
 }

@@ -41,7 +41,23 @@ function setupSalaryNegotiation() {
     const checkbox = document.getElementById('salaryNegotiable');
     const minInput = document.getElementById('minSalary');
     const maxInput = document.getElementById('maxSalary');
+    const container = document.getElementById('salary-toggle-container');
+    const label = document.getElementById('salary-toggle-label');
     if (!checkbox) return;
+
+    function updateToggleVisual(checked) {
+        if (checked) {
+            container?.classList.add('bg-primary-50', 'border-primary-200', 'ring-1', 'ring-primary-200');
+            container?.classList.remove('bg-gray-50', 'border-gray-200');
+            label?.classList.add('text-primary-700');
+            label?.classList.remove('text-gray-700');
+        } else {
+            container?.classList.remove('bg-primary-50', 'border-primary-200', 'ring-1', 'ring-primary-200');
+            container?.classList.add('bg-gray-50', 'border-gray-200');
+            label?.classList.remove('text-primary-700');
+            label?.classList.add('text-gray-700');
+        }
+    }
 
     checkbox.addEventListener('change', function () {
         const disabled = this.checked;
@@ -59,7 +75,11 @@ function setupSalaryNegotiation() {
             minInput.classList.remove('opacity-50', 'cursor-not-allowed', 'bg-gray-100');
             maxInput.classList.remove('opacity-50', 'cursor-not-allowed', 'bg-gray-100');
         }
+        updateToggleVisual(disabled);
     });
+
+    // Set initial visual state
+    updateToggleVisual(checkbox.checked);
 }
 
 function showFieldError(inputId, message) {
@@ -168,13 +188,22 @@ async function validateForm(data) {
     allValid = true;
     clearAllErrors();
 
-    // --- EMAIL ---
-    if (!data.email) {
-        showFieldError('email', validationMessages.email_required);
+    // --- EMAIL OR PHONE (at least one required) ---
+    const hasEmail = !!data.email;
+    const hasPhone = !!data.phone;
+    if (!hasEmail && !hasPhone) {
+        showFieldError('email', validationMessages.email_or_phone_required);
+        showFieldError('phone', validationMessages.email_or_phone_required);
         allValid = false;
-    } else if (!/^\S+@\S+\.\S+$/.test(data.email)) {
-        showFieldError('email', validationMessages.email_invalid);
-        allValid = false;
+    } else {
+        if (hasEmail && !/^\S+@\S+\.\S+$/.test(data.email)) {
+            showFieldError('email', validationMessages.email_invalid);
+            allValid = false;
+        }
+        if (hasPhone && data.phone.length < 7) {
+            showFieldError('phone', validationMessages.phone_minlength);
+            allValid = false;
+        }
     }
 
     // --- COMPANY NAME ---
@@ -222,15 +251,6 @@ async function validateForm(data) {
     // --- USERNAME ---
     if (!data.username) {
         showFieldError('username', validationMessages.username_required);
-        allValid = false;
-    }
-
-    // --- PHONE ---
-    if (!data.phone) {
-        showFieldError('phone', validationMessages.phone_required);
-        allValid = false;
-    } else if (data.phone.length < 7) {
-        showFieldError('phone', validationMessages.phone_minlength);
         allValid = false;
     }
 

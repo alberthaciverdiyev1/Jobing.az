@@ -12,10 +12,13 @@ const transporter = nodemailer.createTransport({
     },
 });
 
-
 export { transporter, sendEmail };
 
-async function sendEmail(data, send_to = null,title = "Contact Us") {
+let lastEmailError = 0;
+const EMAIL_COOLDOWN = 60000; // 1 minute between error emails
+
+async function sendEmail(data, send_to = null, title = "Contact Us") {
+    try {
         const info = await transporter.sendMail({
             from: `${title} <${process.env.MAIL_FROM}>`,
             to: send_to ?? process.env.MAIL_TO,
@@ -23,12 +26,16 @@ async function sendEmail(data, send_to = null,title = "Contact Us") {
             text: data?.text?.toString() || "",
             html: data?.html ?? null,
         });
-
-    return {
-        status: 200,
-        message: "Mail Sent Successfully",
-    };
+        return { status: 200, message: "Mail Sent Successfully" };
+    } catch (err) {
+        // Rate-limit email error logging to prevent cascade loops
+        const now = Date.now();
+        if (now - lastEmailError > EMAIL_COOLDOWN) {
+            lastEmailError = now;
+            console.error('[Mailer Error]', err.message);
+        }
+        return { status: 500, message: "Mail sending failed" };
+    }
 }
-
 
 export default sendEmail;
