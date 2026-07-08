@@ -26,6 +26,7 @@ router.get('/admin/news/edit/:id', ...admin, adminController.adminNewsEditView);
 router.get('/admin/cvs', ...admin, adminController.adminCvsView);
 router.get('/admin/visitors', ...admin, adminController.adminVisitorsView);
 router.get('/admin/logs', ...admin, adminController.adminLogsView);
+router.get('/admin/job-seekers', ...admin, adminController.adminJobSeekersView);
 router.get('/admin/pricing', ...admin, adminController.adminPricingView);
 router.get('/admin/settings', ...admin, adminController.adminSettingsView);
 router.get('/admin/rss-sources', ...admin, adminController.adminRssSourcesView);
@@ -106,6 +107,11 @@ router.get('/api/admin/cvs/:id', ...admin, adminController.getCv);
 router.patch('/api/admin/cvs/:id/toggle', ...admin, adminController.toggleCvActive);
 router.delete('/api/admin/cvs/:id', ...admin, adminController.deleteCv);
 router.get('/api/admin/visitors', ...admin, adminController.getVisitors);
+
+// Job Seekers
+router.get('/api/admin/job-seekers', ...admin, adminController.getJobSeekers);
+router.patch('/api/admin/job-seekers/:id/toggle', ...admin, adminController.toggleJobSeekerActive);
+router.delete('/api/admin/job-seekers/:id', ...admin, adminController.deleteJobSeeker);
 
 // RSS Sources
 router.get('/api/admin/rss-sources', ...admin, adminController.getRssSources);

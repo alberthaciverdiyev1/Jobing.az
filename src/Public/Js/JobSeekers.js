@@ -38,21 +38,21 @@ function createJobSeekerCard(el) {
         badgesHtml += `<span class="inline-flex items-center gap-1 px-2.5 py-1 bg-green-50 text-green-600 rounded-full text-[11px] font-medium"><i class="fas fa-money-bill-wave text-[10px]"></i> ${Number(salary).toLocaleString('az-AZ')} ₼</span>`;
     }
 
-    return `<div class="job-card group bg-white rounded-xl p-5 cursor-pointer transition-all duration-200 hover:shadow-lg hover:-translate-y-1" style="border: 1px solid #d1d5db;" data-original-link="${detailLink}">
-        <div class="flex items-start gap-4">
-            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-primary-100 to-primary-50 flex items-center justify-center text-primary-600 font-bold text-lg flex-shrink-0 shadow-sm">
+    return `<div class="job-card group bg-white rounded-xl p-4 cursor-pointer transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5 border border-gray-200 hover:border-primary-200" data-original-link="${detailLink}">
+        <div class="flex items-start gap-3 mb-3">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-100 to-primary-50 flex items-center justify-center text-primary-600 font-bold text-sm flex-shrink-0 shadow-sm">
                 ${(name || '?').charAt(0).toUpperCase()}
             </div>
             <div class="flex-1 min-w-0">
-                <h3 class="font-semibold text-gray-900 text-base leading-snug line-clamp-2">${title}</h3>
-                <p class="text-sm text-gray-500 mt-0.5 font-medium">${escapeHtml(name)}</p>
-                <div class="flex items-center gap-4 mt-2 text-sm text-gray-400">
-                    <span><i class="far fa-calendar mr-1.5"></i>${postedDate}</span>
-                    ${city ? '<span><i class="fas fa-map-marker-alt mr-1.5"></i>' + escapeHtml(city) + '</span>' : ''}
-                </div>
-                ${badgesHtml ? '<div class="flex flex-wrap items-center gap-2 mt-3">' + badgesHtml + '</div>' : ''}
+                <h3 class="font-semibold text-gray-900 text-sm leading-snug line-clamp-2">${title}</h3>
+                <p class="text-xs text-gray-500 mt-0.5 truncate">${escapeHtml(name)}</p>
             </div>
         </div>
+        <div class="flex items-center gap-3 text-xs text-gray-400 mb-2">
+            <span><i class="far fa-calendar mr-1"></i>${postedDate}</span>
+            ${city ? '<span class="truncate"><i class="fas fa-map-marker-alt mr-1"></i>' + escapeHtml(city) + '</span>' : ''}
+        </div>
+        ${badgesHtml ? '<div class="flex flex-wrap items-center gap-1.5">' + badgesHtml + '</div>' : ''}
     </div>`;
 }
 
