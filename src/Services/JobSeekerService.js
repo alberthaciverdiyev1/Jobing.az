@@ -97,6 +97,10 @@ const JobSeekerService = {
         }
 
         return await doc.save();
+    },
+
+    async toggleActive(id, isActive) {
+        return await JobSeeker.findByIdAndUpdate(id, { isActive }, { new: true });
     }
 };
 

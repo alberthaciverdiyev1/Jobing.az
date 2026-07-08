@@ -14,6 +14,7 @@ import Site from '../Models/Site.js';
 import Blog from '../Models/Blog.js';
 import CV from '../Models/CV.js';
 import Visitor from '../Models/Visitor.js';
+import JobSeeker from '../Models/JobSeeker.js';
 import VisitorService from '../Services/VisitorService.js';
 import JobService from '../Services/JobDataService.js';
 import NewsService from '../Services/NewsService.js';
@@ -348,6 +349,11 @@ const AdminController = {
 
     adminSettingsView: async (req, res) => {
         const view = { title: 'Settings - Admin Panel', body: "Settings/Index.ejs", js: "Settings.js" };
+        res.render('Admin/Main', view);
+    },
+
+    adminJobSeekersView: async (req, res) => {
+        const view = { title: 'İş Axtaranlar - Admin Panel', body: "JobSeeker/Index.ejs", js: "JobSeeker.js" };
         res.render('Admin/Main', view);
     },
 
@@ -1086,6 +1092,64 @@ const AdminController = {
             cv.isActive = !cv.isActive;
             await cv.save();
             res.json({ isActive: cv.isActive });
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    },
+
+    // ============================================================
+    // API - JOB SEEKERS
+    // ============================================================
+
+    getJobSeekers: async (req, res) => {
+        try {
+            const { page = 1, limit = 20, search, status } = req.query;
+            const query = {};
+            if (search) {
+                query.$or = [
+                    { title: { $regex: search, $options: 'i' } },
+                    { userName: { $regex: search, $options: 'i' } },
+                    { email: { $regex: search, $options: 'i' } }
+                ];
+            }
+            if (status === 'active') query.isActive = true;
+            else if (status === 'pending') query.isActive = false;
+
+            const total = await JobSeeker.countDocuments(query);
+            const docs = await JobSeeker.find(query)
+                .sort({ createdAt: -1 })
+                .skip((page - 1) * limit)
+                .limit(Number(limit))
+                .lean();
+
+            res.json({
+                jobs: docs,
+                total,
+                page: Number(page),
+                totalPages: Math.ceil(total / limit)
+            });
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    },
+
+    toggleJobSeekerActive: async (req, res) => {
+        try {
+            const doc = await JobSeeker.findById(req.params.id);
+            if (!doc) return res.status(404).json({ error: 'Job seeker not found' });
+            doc.isActive = !doc.isActive;
+            await doc.save();
+            res.json({ isActive: doc.isActive });
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    },
+
+    deleteJobSeeker: async (req, res) => {
+        try {
+            const doc = await JobSeeker.findByIdAndDelete(req.params.id);
+            if (!doc) return res.status(404).json({ error: 'Job seeker not found' });
+            res.json({ success: true });
         } catch (error) {
             res.status(500).json({ error: error.message });
         }

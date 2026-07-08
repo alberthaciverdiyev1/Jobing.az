@@ -4,6 +4,8 @@ import sendEmail from "./NodeMailer.js";
 import JobService from '../Services/JobDataService.js';
 import jobDataService from "../Services/JobDataService.js";
 import CVService from '../Services/CVService.js';
+import JobSeekerService from '../Services/JobSeekerService.js';
+import User from '../Models/User.js';
 import VisitorService from "../Services/VisitorService.js";
 
 let sendTo = null;
@@ -78,7 +80,16 @@ export async function sendNewJobSeekerRequest(data) {
 📧 Email: ${data.email || 'Qeyd edilməyib'}
 🔗 Link: jobing.az/is-axtaran/${data.slug}`;
 
-    await bot.sendMessage('@jobingaz', textMessage);
+    await bot.sendMessage('@jobingaz', textMessage, {
+        reply_markup: {
+            inline_keyboard: [
+                [
+                    { text: '✅ Qəbul et', callback_data: `accept_js_${data.id}` },
+                    { text: '❌ Rədd et', callback_data: `reject_js_${data.id}` }
+                ]
+            ]
+        }
+    });
 }
 
 export async function sendPromotionRequest(data) {
@@ -105,7 +116,38 @@ bot.on('callback_query', async (callbackQuery) => {
     const parts = callbackData.split('_');
     const action = parts[0];
     const isCv = parts[1] === 'cv';
-    const targetId = isCv ? parts.slice(2).join('_') : parts.slice(1).join('_');
+    const isJs = parts[1] === 'js';
+    const targetId = isCv || isJs ? parts.slice(2).join('_') : parts.slice(1).join('_');
+
+    if (isJs) {
+        if (action === 'accept') {
+            await bot.sendMessage(chatId, `✅ İş Axtarıram elanı qəbul edildi: ${callbackQuery.from.username}`);
+            const doc = await JobSeekerService.toggleActive(targetId, true);
+            if (doc) {
+                const user = doc.postedBy ? await User.findById(doc.postedBy).lean() : null;
+                sendEmail(
+                    { title: "Jobing.az", text: "Sizin \"İş Axtarıram\" elanınız saytda dərc edildi." },
+                    doc.email || user?.email || sendTo,
+                    "support - Jobing.az"
+                ).catch(() => {});
+                await bot.sendMessage(chatId, '✅ Elan aktiv edildi ✅');
+            }
+        }
+        if (action === 'reject') {
+            await bot.sendMessage(chatId, `❌ İş Axtarıram elanı rədd edildi: ${callbackQuery.from.username}`);
+            const doc = await JobSeekerService.toggleActive(targetId, false);
+            if (doc) {
+                const user = doc.postedBy ? await User.findById(doc.postedBy).lean() : null;
+                sendEmail(
+                    { title: "Jobing.az", text: "Sizin \"İş Axtarıram\" elanınız saytda dərc edilmədi. Zəhmət olmasa məlumatları yoxlayıb yenidən cəhd edin." },
+                    doc.email || user?.email || sendTo,
+                    "support - Jobing.az"
+                ).catch(() => {});
+                await bot.sendMessage(chatId, '❌ Elan deaktiv edildi ❌');
+            }
+        }
+        return;
+    }
 
     if (isCv) {
         if (action === 'accept') {
