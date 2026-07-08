@@ -3,6 +3,7 @@ import { requestAllSites, cancelRequest } from "./Automation.js";
 import sendEmail from "./NodeMailer.js";
 import JobService from '../Services/JobDataService.js';
 import jobDataService from "../Services/JobDataService.js";
+import CVService from '../Services/CVService.js';
 import VisitorService from "../Services/VisitorService.js";
 
 let sendTo = null;
@@ -46,13 +47,67 @@ export async function sendNewJobRequest(jobData) {
     });
 }
 
+export async function sendNewCVRequest(cvData) {
+    const textMessage = `
+        📄 CV Title: ${cvData.title}
+        👤 Full Name: ${cvData.fullName || 'N/A'}
+        📧 Email: ${cvData.email}
+        📞 Phone: ${cvData.phone || 'N/A'}
+        🔑 Id: ${cvData.id}
+        📝 Type: ${cvData.type || 'created'}
+        🟢 Active: ${cvData.isActive ? 'Yes' : 'No'}`;
+
+    await bot.sendMessage('@jobingaz', textMessage, {
+        reply_markup: {
+            inline_keyboard: [
+                [
+                    { text: 'Accept', callback_data: `accept_cv_${cvData.id}` },
+                    { text: 'Reject', callback_data: `reject_cv_${cvData.id}` }
+                ]
+            ]
+        }
+    });
+}
+
 bot.on('callback_query', async (callbackQuery) => {
     const userId = callbackQuery.from.id;
     const callbackData = callbackQuery.data;
     const messageId = callbackQuery.message.message_id;
     const chatId = callbackQuery.message.chat.id;
 
-    const [action, jobId] = callbackData.split('_');
+    const parts = callbackData.split('_');
+    const action = parts[0];
+    const isCv = parts[1] === 'cv';
+    const targetId = isCv ? parts.slice(2).join('_') : parts.slice(1).join('_');
+
+    if (isCv) {
+        if (action === 'accept') {
+            await bot.sendMessage(chatId, `✅ CV Accepted by: ${callbackQuery.from.username}`);
+            const cv = await CVService.toggleActive(targetId, true);
+            if (cv) {
+                sendEmail(
+                    { title: "Jobing.az", text: "Sizin CV-niz saytda dərc edildi." },
+                    cv.email || sendTo,
+                    "support - Jobing.az"
+                );
+                await bot.sendMessage(chatId, '✅ CV activated successfully ✅');
+            }
+        }
+
+        if (action === 'reject') {
+            await bot.sendMessage(chatId, `❌ CV Rejected by: ${callbackQuery.from.username}`);
+            const cv = await CVService.toggleActive(targetId, false);
+            if (cv) {
+                sendEmail(
+                    { title: "Jobing.az", text: "Sizin CV-niz saytda dərc edilmədi. Xahiş edirik məlumatları düzgün qeyd edib yenidən cəhd edəsiniz." },
+                    cv.email || sendTo,
+                    "support - Jobing.az"
+                );
+                await bot.sendMessage(chatId, '❌ CV deactivated ❌');
+            }
+        }
+        return;
+    }
 
     if (action === 'accept') {
         await bot.sendMessage(
@@ -65,7 +120,7 @@ bot.on('callback_query', async (callbackQuery) => {
             sendTo,
             "support - Jobing.az"
         );
-        let message = await jobDataService.updateJob(jobId, true);
+        let message = await jobDataService.updateJob(targetId, true);
         await bot.sendMessage(
             chatId,
             `✅ ${message} ✅`
@@ -78,7 +133,7 @@ bot.on('callback_query', async (callbackQuery) => {
             chatId,
             `❌ Rejected by: ${callbackQuery.from.username}`
         );
-        let message = await jobDataService.updateJob(jobId, false);
+        let message = await jobDataService.updateJob(targetId, false);
 
         await bot.sendMessage(
             chatId,

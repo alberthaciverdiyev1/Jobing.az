@@ -102,6 +102,7 @@ router.delete('/api/admin/news/:id', ...admin, adminController.deleteNews);
 router.get('/api/admin/logs', ...admin, adminController.getLogs);
 router.get('/api/admin/cvs', ...admin, adminController.getCvs);
 router.get('/api/admin/cvs/:id', ...admin, adminController.getCv);
+router.patch('/api/admin/cvs/:id/toggle', ...admin, adminController.toggleCvActive);
 router.delete('/api/admin/cvs/:id', ...admin, adminController.deleteCv);
 router.get('/api/admin/visitors', ...admin, adminController.getVisitors);
 
