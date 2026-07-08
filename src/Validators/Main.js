@@ -179,15 +179,15 @@ const Validators = {
         };
 
         const data = {
-            title: req.body.data?.position || defaultValues.title,
-            userName: req.body.data?.username || defaultValues.userName,
-            email: req.body.data?.email || defaultValues.email,
-            phone: req.body.data?.phone || defaultValues.phone,
-            categoryId: req.body.data?.category || defaultValues.categoryId,
-            cityId: req.body.data?.city || defaultValues.cityId,
-            educationId: req.body.data?.education || defaultValues.educationId,
-            experienceId: req.body.data?.experience || defaultValues.experienceId,
-            aboutJob: req.body.data?.aboutJob || defaultValues.aboutJob,
+            title: req.body.position || defaultValues.title,
+            userName: req.body.username || defaultValues.userName,
+            email: req.body.email || defaultValues.email,
+            phone: req.body.phone || defaultValues.phone,
+            categoryId: req.body.category || defaultValues.categoryId,
+            cityId: req.body.city || defaultValues.cityId,
+            educationId: req.body.education || defaultValues.educationId,
+            experienceId: req.body.experience || defaultValues.experienceId,
+            aboutJob: req.body.aboutJob || defaultValues.aboutJob,
         };
 
         if (!data.title || data.title.length < 3) {

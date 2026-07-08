@@ -92,6 +92,25 @@
           </div>
         </div>
 
+        <% if (data.cvUrl) { %>
+        <!-- CV Download -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
+          <h3 class="font-semibold text-gray-900 mb-4 flex items-center gap-2 text-sm">
+            <i class="fas fa-file-pdf text-primary-500"></i> CV
+          </h3>
+          <a href="<%= data.cvUrl %>" target="_blank" class="flex items-center gap-3 p-4 rounded-xl bg-primary-50 hover:bg-primary-100 transition-all group">
+            <div class="w-10 h-10 rounded-lg bg-primary-100 flex items-center justify-center text-primary-500 group-hover:bg-primary-200 transition-all">
+              <i class="fas fa-file-download"></i>
+            </div>
+            <div class="flex-1 min-w-0">
+              <p class="text-sm font-medium text-primary-700 truncate"><%= data.cvFileName || 'CV' %></p>
+              <p class="text-xs text-primary-400">CV-ə bax</p>
+            </div>
+            <i class="fas fa-external-link-alt text-xs text-primary-400 group-hover:text-primary-500"></i>
+          </a>
+        </div>
+        <% } %>
+
         <!-- Details -->
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
           <h3 class="font-semibold text-gray-900 mb-4 flex items-center gap-2 text-sm">

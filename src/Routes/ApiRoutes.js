@@ -11,7 +11,7 @@ import cvController from '../Controllers/CVController.js';
 import applicationController from '../Controllers/ApplicationController.js';
 import viewController from '../Controllers/ViewController.js';
 import newsController from '../Controllers/NewsController.js';
-import jobSeekerController from '../Controllers/JobSeekerController.js';
+import jobSeekerController, { uploadJobSeekerCV } from '../Controllers/JobSeekerController.js';
 import validator from '../Validators/Main.js';
 import authMiddleware from '../Middlewares/Auth.js';
 import { authLimiter, jobLimiter } from '../Middlewares/RateLimit.js';
@@ -88,7 +88,12 @@ router.post('/api/pricing/request', jobLimiter, validator.promotionValidator, jo
 // ============================================================
 // JOB SEEKER API
 // ============================================================
-router.post('/api/job-seeker', authMiddleware.authenticate, authMiddleware.authorize('user'), jobLimiter, validator.addJobSeekerValidator, jobSeekerController.create);
+router.post('/api/job-seeker', authMiddleware.authenticate, authMiddleware.authorize('user'), jobLimiter, (req, res, next) => {
+    uploadJobSeekerCV(req, res, (err) => {
+        if (err) return res.status(400).json({ error: err.message });
+        next();
+    });
+}, validator.addJobSeekerValidator, jobSeekerController.create);
 router.get('/api/job-seekers', jobSeekerController.getAll);
 router.get('/api/job-seeker/:id', jobSeekerController.getById);
 router.get('/api/job-seeker/my-ads', authMiddleware.authenticate, authMiddleware.authorize('user'), jobSeekerController.getMyAds);

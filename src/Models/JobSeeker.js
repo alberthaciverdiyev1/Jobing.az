@@ -55,6 +55,12 @@ const jobSeekerSchema = new mongoose.Schema({
     viewCount: {
         type: Number,
         default: 0
+    },
+    cvUrl: {
+        type: String
+    },
+    cvFileName: {
+        type: String
     }
 }, { timestamps: true, versionKey: false });
 
