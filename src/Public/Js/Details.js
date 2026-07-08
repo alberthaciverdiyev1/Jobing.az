@@ -229,7 +229,7 @@ async function loadPricingPlans(type) {
         }
 
         container.innerHTML = data.map((plan, index) => `
-            <div onclick="selectPlan('${plan._id}', this)"
+            <div data-plan-id="${plan._id}"
                  class="relative p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 ${index === 0 ? 'border-primary-500 bg-primary-50/30 ring-1 ring-primary-200' : 'border-gray-200 hover:border-primary-300 hover:bg-primary-50/20'}">
                 ${plan.duration === 'monthly' ? '<div class="absolute -top-2.5 right-3 px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 text-[10px] font-semibold">Ən çox seçilən</div>' : ''}
                 <div class="flex items-center gap-4">
@@ -273,8 +273,15 @@ async function loadPricingPlans(type) {
             </div>
         `).join('');
 
+        // Add click listeners to plan cards
+        container.querySelectorAll('[data-plan-id]').forEach(card => {
+            card.addEventListener('click', function () {
+                selectPlan(this.dataset.planId, this);
+            });
+        });
+
         // Auto-select first plan
-        if (data.length > 0) {
+        if (data.length > 0 && container.firstElementChild) {
             selectPlan(data[0]._id, container.firstElementChild);
         }
     } catch (err) {
@@ -285,15 +292,13 @@ async function loadPricingPlans(type) {
 
 function selectPlan(planId, el) {
     selectedPlanId = planId;
-    // Remove active state from all plan cards
-    document.querySelectorAll('#pricingPlansContainer > div').forEach(card => {
-        card.classList.remove('border-primary-500', 'bg-primary-50/30');
+    document.querySelectorAll('#pricingPlansContainer [data-plan-id]').forEach(card => {
+        card.classList.remove('border-primary-500', 'bg-primary-50/30', 'ring-1', 'ring-primary-200');
         card.classList.add('border-gray-200');
     });
-    // Set active state on selected
     if (el) {
         el.classList.remove('border-gray-200');
-        el.classList.add('border-primary-500', 'bg-primary-50/30');
+        el.classList.add('border-primary-500', 'bg-primary-50/30', 'ring-1', 'ring-primary-200');
     }
 }
 

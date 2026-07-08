@@ -356,8 +356,12 @@ const ViewController = {
     pricing: async (req, res) => {
         try {
             const plans = await PricingPlan.find({ isActive: true }).sort({ type: 1, price: 1 }).lean();
-            const promotePlans = plans.filter(p => p.type === 'promote');
-            const premiumPlans = plans.filter(p => p.type === 'premium');
+            const allPromote = plans.filter(p => p.type === 'promote');
+            const allPremium = plans.filter(p => p.type === 'premium');
+            const promoteDaily = allPromote.filter(p => p.duration === 'daily');
+            const promoteMonthly = allPromote.filter(p => p.duration === 'monthly');
+            const premiumDaily = allPremium.filter(p => p.duration === 'daily');
+            const premiumMonthly = allPremium.filter(p => p.duration === 'monthly');
 
             const view = {
                 title: 'Qiymətlər',
@@ -365,8 +369,12 @@ const ViewController = {
                 body: "Pricing/Index.ejs",
                 js: null,
                 currentPage: 'pricing',
-                promotePlans,
-                premiumPlans,
+                promoteDaily,
+                promoteMonthly,
+                premiumDaily,
+                premiumMonthly,
+                hasDaily: promoteDaily.length > 0 || premiumDaily.length > 0,
+                hasMonthly: promoteMonthly.length > 0 || premiumMonthly.length > 0,
                 plans
             };
             res.render('Main', view);
