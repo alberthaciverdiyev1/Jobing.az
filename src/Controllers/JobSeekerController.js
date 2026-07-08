@@ -1,5 +1,7 @@
 import JobSeekerService from '../Services/JobSeekerService.js';
 import CityService from '../Services/CityService.js';
+import CVService from '../Services/CVService.js';
+import User from '../Models/User.js';
 import Enums from '../Config/Enums.js';
 import { sendNewJobSeekerRequest } from '../Helpers/TelegramBot.js';
 import sendEmail from '../Helpers/NodeMailer.js';
@@ -55,7 +57,16 @@ const JobSeekerController = {
                 isActive: false
             };
 
-            if (req.file) {
+            // Handle CV from existing CV or file upload
+            if (req.body.selectedCV) {
+                const existingCv = await CVService.findById(req.body.selectedCV);
+                if (existingCv && existingCv.userId.toString() === req.user._id.toString()) {
+                    if (existingCv.fileUrl) {
+                        data.cvUrl = existingCv.fileUrl;
+                        data.cvFileName = existingCv.fileName || existingCv.title;
+                    }
+                }
+            } else if (req.file) {
                 data.cvUrl = `/uploads/cv/${req.file.filename}`;
                 data.cvFileName = req.file.originalname;
             }
@@ -88,7 +99,25 @@ const JobSeekerController = {
                 limit: req.query.limit || 20
             };
             const result = await JobSeekerService.getAll(filters);
-            res.json({ jobs: result.docs, totalCount: result.total });
+            const docs = result.docs || [];
+            // Resolve city names and education/experience labels for listing cards
+            for (const doc of docs) {
+                if (doc.cityId) {
+                    try {
+                        const city = await CityService.findById(doc.cityId);
+                        doc.cityName = city?.name || null;
+                    } catch {}
+                }
+                if (doc.educationId != null) {
+                    const entry = Object.entries(Enums.Education).find(([, v]) => Number(v) === doc.educationId);
+                    if (entry) doc.education = entry[0];
+                }
+                if (doc.experienceId != null) {
+                    const entry = Object.entries(Enums.Experience).find(([, v]) => Number(v) === doc.experienceId);
+                    if (entry) doc.experience = entry[0];
+                }
+            }
+            res.json({ jobs: docs, totalCount: result.total });
         } catch (error) {
             res.status(500).json({ message: 'Xəta baş verdi: ' + error.message });
         }
@@ -107,6 +136,13 @@ const JobSeekerController = {
             let cityName = null;
             try { cityName = (await CityService.findById(doc.cityId))?.name; } catch {}
             doc.cityName = cityName;
+            // Populate age from user
+            if (doc.postedBy) {
+                try {
+                    const userData = await User.findById(doc.postedBy).select('age').lean();
+                    if (userData && userData.age) doc.age = userData.age;
+                } catch {}
+            }
             res.json(doc);
         } catch (error) {
             res.status(500).json({ message: 'Xəta baş verdi: ' + error.message });
@@ -136,6 +172,14 @@ const JobSeekerController = {
         try {
             const data = await JobSeekerService.getById(req.params.id);
             if (!data) return res.status(404).render('Partials/Error.ejs');
+
+            // Populate age from user
+            if (data.postedBy) {
+                try {
+                    const userData = await User.findById(data.postedBy).select('age').lean();
+                    if (userData && userData.age) data.age = userData.age;
+                } catch {}
+            }
 
             data.education = Object.entries(Enums.Education)
                 .filter(([key, value]) => Number(value) === data.educationId);

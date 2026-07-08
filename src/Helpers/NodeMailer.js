@@ -2,24 +2,38 @@ import nodemailer from "nodemailer";
 import dotenv from 'dotenv';
 dotenv.config();
 
-const transporter = nodemailer.createTransport({
-    host: process.env.MAIL_HOST,
-    port: process.env.MAIL_PORT,
-    secure: true,
-    auth: {
-        user: process.env.MAIL_USER,
-        pass: process.env.MAIL_USER_PASSWD,
-    },
-});
+let transporter = null;
+
+function getTransporter() {
+    if (transporter) return transporter;
+    try {
+        transporter = nodemailer.createTransport({
+            host: process.env.MAIL_HOST,
+            port: process.env.MAIL_PORT,
+            secure: true,
+            auth: {
+                user: process.env.MAIL_USER,
+                pass: process.env.MAIL_USER_PASSWD,
+            },
+        });
+        transporter.on('error', () => {});
+    } catch (e) {
+        console.error('[Mailer] Transport creation failed:', e.message);
+        transporter = null;
+    }
+    return transporter;
+}
 
 export { transporter, sendEmail };
 
 let lastEmailError = 0;
-const EMAIL_COOLDOWN = 60000; // 1 minute between error emails
+const EMAIL_COOLDOWN = 60000;
 
 async function sendEmail(data, send_to = null, title = "Contact Us") {
+    const t = getTransporter();
+    if (!t) return { status: 500, message: "Mailer not configured" };
     try {
-        const info = await transporter.sendMail({
+        await t.sendMail({
             from: `${title} <${process.env.MAIL_FROM}>`,
             to: send_to ?? process.env.MAIL_TO,
             subject: data?.title?.toString() || "",
@@ -28,7 +42,6 @@ async function sendEmail(data, send_to = null, title = "Contact Us") {
         });
         return { status: 200, message: "Mail Sent Successfully" };
     } catch (err) {
-        // Rate-limit email error logging to prevent cascade loops
         const now = Date.now();
         if (now - lastEmailError > EMAIL_COOLDOWN) {
             lastEmailError = now;

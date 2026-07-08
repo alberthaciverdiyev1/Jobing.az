@@ -43,6 +43,12 @@ const userSchema = new Schema({
         type: String,
         default: ''
     },
+    age: {
+        type: Number
+    },
+    cityId: {
+        type: Number
+    },
     isActive: {
         type: Boolean,
         default: true

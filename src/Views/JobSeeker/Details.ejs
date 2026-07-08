@@ -28,6 +28,11 @@
                 <% } %>
                 <span><i class="far fa-eye mr-1.5"></i><%= data.viewCount || 0 %> baxış</span>
               </div>
+              <% if (data.age) { %>
+              <div class="mt-3 inline-flex items-center gap-1 px-3 py-1 bg-primary-50 text-primary-600 rounded-full text-xs font-medium">
+                <i class="fas fa-calendar-alt"></i> <%= data.age %> yaş
+              </div>
+              <% } %>
             </div>
           </div>
         </div>

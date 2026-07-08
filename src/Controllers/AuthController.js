@@ -109,6 +109,23 @@ const AuthController = {
             return res.status(401).json({ error: 'Daxil olmaq tələb olunur' });
         }
         res.json({ user: req.user });
+    },
+
+    updateProfile: async (req, res) => {
+        try {
+            const { phone, age, cityId } = req.body;
+            const update = {};
+            if (phone !== undefined) update.phone = phone;
+            if (age !== undefined) update.age = age ? Number(age) : undefined;
+            if (cityId !== undefined) update.cityId = cityId ? Number(cityId) : undefined;
+
+            const user = await User.findByIdAndUpdate(req.user._id, update, { new: true });
+            if (!user) return res.status(404).json({ error: 'İstifadəçi tapılmadı' });
+
+            res.json({ status: 200, message: 'Profil yeniləndi', user });
+        } catch (error) {
+            res.status(500).json({ error: 'Xəta baş verdi: ' + error.message });
+        }
     }
 };
 

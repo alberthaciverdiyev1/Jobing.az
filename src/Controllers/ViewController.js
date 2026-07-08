@@ -12,6 +12,7 @@ import JobData from "../Models/JobData.js";
 import Company from "../Models/Company.js";
 import PricingPlan from "../Models/PricingPlan.js";
 import JobSeekerService from "../Services/JobSeekerService.js";
+import CityService from "../Services/CityService.js";
 
 const ViewController = {
     home: async (req, res) => {
@@ -212,12 +213,14 @@ const ViewController = {
     },
 
     addJobSeeker: async (req, res) => {
+        const cvs = await CVService.findByUser(req.user._id, false);
         const view = {
             title: 'Mən İş Axtarıram',
             description: 'Özünüz haqqında məlumatları paylaşın, işəgötürənlər sizi tapsın.',
             body: "JobSeeker/Add.ejs",
             js: "NewJobSeeker.js",
-            currentPage: 'add-job-seeker'
+            currentPage: 'add-job-seeker',
+            cvs
         };
         res.render('Main', view);
     },
@@ -508,7 +511,24 @@ Sitemap: https://jobing.az/sitemap.xml
         const dailyVisitor = await VisitorService.dailyCount();
         const totalVisitor = await VisitorService.count(365);
         res.status(200).json({status: 200, message: "", data: {company, vacancy, visitor, dailyVisitor, totalVisitor}});
-    }
+    },
+
+    // ============================================================
+    // USER PROFILE SETTINGS
+    // ============================================================
+    userSettings: async (req, res) => {
+        let cities = [];
+        try { cities = await CityService.getAll({ site: 'BossAz' }); } catch (e) { console.error('userSettings cities error:', e.message); }
+        const view = {
+            title: 'Profil Ayarları',
+            description: 'Şəxsi məlumatlarınızı yeniləyin.',
+            body: "Profile/Settings.ejs",
+            js: null,
+            currentPage: 'settings',
+            cities
+        };
+        res.render('Main', view);
+    },
 };
 
 export default ViewController;

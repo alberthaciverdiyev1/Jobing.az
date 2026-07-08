@@ -19,7 +19,17 @@ function createJobSeekerCard(el) {
     const name = el.userName || '';
     const city = el.cityName || '';
     const postedDate = el.postedAt ? el.postedAt.slice(0, 10) : '';
+    const education = el.education || '';
+    const experience = el.experience || '';
     const detailLink = '/is-axtaran/' + (el.slug || el._id);
+
+    let badgesHtml = '';
+    if (education) {
+        badgesHtml += `<span class="inline-flex items-center gap-1 px-2.5 py-1 bg-primary-50 text-primary-600 rounded-full text-[11px] font-medium"><i class="fas fa-graduation-cap text-[10px]"></i> ${escapeHtml(education)}</span> `;
+    }
+    if (experience) {
+        badgesHtml += `<span class="inline-flex items-center gap-1 px-2.5 py-1 bg-amber-50 text-amber-600 rounded-full text-[11px] font-medium"><i class="fas fa-briefcase text-[10px]"></i> ${escapeHtml(experience)}</span>`;
+    }
 
     return `<div class="job-card group bg-white rounded-xl p-5 cursor-pointer transition-all duration-200 hover:shadow-lg hover:-translate-y-1" style="border: 1px solid #d1d5db;" data-original-link="${detailLink}">
         <div class="flex items-start gap-4">
@@ -33,6 +43,7 @@ function createJobSeekerCard(el) {
                     <span><i class="far fa-calendar mr-1.5"></i>${postedDate}</span>
                     ${city ? '<span><i class="fas fa-map-marker-alt mr-1.5"></i>' + escapeHtml(city) + '</span>' : ''}
                 </div>
+                ${badgesHtml ? '<div class="flex flex-wrap items-center gap-2 mt-3">' + badgesHtml + '</div>' : ''}
             </div>
         </div>
     </div>`;
@@ -77,10 +88,10 @@ async function getCities() {
         ['', 'mobile-'].forEach(prefix => {
             const select = document.getElementById(prefix + 'city-select-filter');
             if (!select) return;
-            Object.entries(data).forEach(([id, name]) => {
+            data.forEach(city => {
                 const opt = document.createElement('option');
-                opt.value = id;
-                opt.textContent = name;
+                opt.value = city.cityId || city._id;
+                opt.textContent = city.name;
                 select.appendChild(opt);
             });
         });

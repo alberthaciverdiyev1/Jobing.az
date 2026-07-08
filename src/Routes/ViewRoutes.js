@@ -51,5 +51,6 @@ router.get('/company/settings', authMiddleware.authenticate, authMiddleware.auth
 router.get('/cv/create', authMiddleware.authenticate, authMiddleware.authorize('user'), viewController.cvCreate);
 router.get('/cv/upload', authMiddleware.authenticate, authMiddleware.authorize('user'), viewController.cvUpload);
 router.get('/cv/edit/:id', authMiddleware.authenticate, authMiddleware.authorize('user'), viewController.cvEdit);
+router.get('/settings', authMiddleware.authenticate, authMiddleware.authorize('user'), viewController.userSettings);
 
 export default router;
