@@ -63,7 +63,8 @@ const jobSchema = new Schema({
     },
     companyName: {
         type: String,
-        required: false
+        required: false,
+        trim: true
     },
     companyId: {
         type: String,

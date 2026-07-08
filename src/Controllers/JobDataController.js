@@ -1,3 +1,5 @@
+import Company from '../Models/Company.js';
+import JobData from '../Models/JobData.js';
 import JobService from '../Services/JobDataService.js';
 import CategoryService from '../Services/CategoryService.js';
 import pLimit from 'p-limit';
@@ -219,8 +221,22 @@ const jobDataController = {
                 uniqueKey:` ${req.body.data.companyName} + ${enums.Sites.JobingAz}`,
             }
 
+            // Look up or set companyId on the job so company users can find their vacancies
+            const existingCompany = await Company.findOne({ companyName: req.body.data.companyName }).lean();
+            if (existingCompany) {
+                data.companyId = existingCompany._id.toString();
+            }
+
             const jobs = await JobService.addJobRequest(data);
             const response = await CompanyService.addSingleCompany(companyData);
+
+            // If companyId wasn't set before, try again after addSingleCompany
+            if (!data.companyId && jobs?.id) {
+                const companyAfter = await Company.findOne({ companyName: req.body.data.companyName }).lean();
+                if (companyAfter) {
+                    await JobData.findByIdAndUpdate(jobs.id, { companyId: companyAfter._id.toString() });
+                }
+            }
 
             sendEmail({
                 title: "Jobing.az",

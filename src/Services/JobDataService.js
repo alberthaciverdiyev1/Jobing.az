@@ -360,10 +360,21 @@ const JobDataService = {
     },
     
 
-    findByCompany: async (companyName) => {
+    findByCompany: async (companyName, companyId) => {
         try {
-            if (!companyName) return [];
-            return JobData.find({ companyName, isActive: true })
+            if (!companyName && !companyId) return [];
+            const query = { isActive: true };
+            if (companyName && companyId) {
+                query.$or = [
+                    { companyName },
+                    { companyId: companyId.toString() }
+                ];
+            } else if (companyId) {
+                query.companyId = companyId.toString();
+            } else {
+                query.companyName = companyName;
+            }
+            return JobData.find(query)
                 .sort({ createdAt: -1 })
                 .limit(50);
         } catch (error) {

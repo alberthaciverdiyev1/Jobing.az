@@ -214,7 +214,8 @@ const ViewController = {
 
     // Dashboard - Company
     companyDashboard: async (req, res) => {
-        const jobs = await JobDataService.findByCompany(req.user.companyName);
+        const company = await Company.findOne({ companyName: req.user.companyName }).lean();
+        const jobs = await JobDataService.findByCompany(req.user.companyName, company?._id);
         const view = {
             title: 'Şirkət Paneli',
             description: 'Vakansiyalarınızı idarə edin, müraciətlərə baxın.',
