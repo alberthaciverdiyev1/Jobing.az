@@ -89,16 +89,16 @@ document.addEventListener('DOMContentLoaded', async () => {
             document.getElementById('cv-file-section').classList.remove('hidden');
             const isPdf = cv.fileUrl.endsWith('.pdf');
             document.getElementById('cv-file').innerHTML = `
-                <div class="flex items-center gap-4 p-4 rounded-xl bg-gray-50 border border-gray-100 flex-1">
-                    <div class="w-12 h-12 rounded-xl bg-primary-50 flex items-center justify-center text-primary-500">
-                        <i class="fas fa-${isPdf ? 'file-pdf' : 'file-word'} text-xl"></i>
+                <div class="flex items-center gap-2 sm:gap-4 p-3 sm:p-4 rounded-xl bg-gray-50 border border-gray-100 flex-1 min-w-0">
+                    <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-primary-50 flex items-center justify-center text-primary-500 flex-shrink-0">
+                        <i class="fas fa-${isPdf ? 'file-pdf' : 'file-word'} text-base sm:text-xl"></i>
                     </div>
                     <div class="min-w-0 flex-1">
                         <p class="font-medium text-gray-900 text-sm truncate">${escapeHtml(cv.fileName || 'CV')}</p>
                         <p class="text-xs text-gray-400">${isPdf ? 'PDF' : 'Word'} faylı</p>
                     </div>
                     <a href="${escapeHtml(cv.fileUrl)}" target="_blank" rel="noopener"
-                       class="inline-flex items-center gap-2 px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 text-sm font-medium transition-colors">
+                       class="inline-flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 text-xs sm:text-sm font-medium transition-colors flex-shrink-0">
                         <i class="fas fa-download"></i>
                         Aç
                     </a>
