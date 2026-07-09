@@ -108,6 +108,7 @@ function renderJobsTable(data) {
                     '<button onclick="editJob(\'' + job._id + '\')" class="text-indigo-600 hover:text-indigo-800 text-sm font-medium">Edit</button>' +
                     '<button onclick="toggleJobActive(\'' + job._id + '\')" class="text-amber-600 hover:text-amber-800 text-sm font-medium">' + toggleLabel + '</button>' +
                     '<button onclick="deleteJob(\'' + job._id + '\')" class="text-red-600 hover:text-red-800 text-sm font-medium">Delete</button>' +
+                    '<button onclick="shareJob(\'' + job._id + '\')" class="text-green-600 hover:text-green-800 text-sm font-medium">Paylaş</button>' +
                 '</div>' +
             '</td>' +
         '</tr>';
@@ -287,6 +288,71 @@ async function handleJobSubmit(e) {
         loadJobs(currentPage);
     } catch (err) {
         alert('Error saving job: ' + (err.response && err.response.data && err.response.data.error ? err.response.data.error : err.message));
+    }
+}
+
+// ========== Share Job ==========
+
+let shareModalVisible = false;
+
+function showShareModal() {
+    var modal = document.getElementById('shareModal');
+    if (modal) {
+        modal.classList.remove('hidden');
+        document.body.classList.add('modal-open');
+        shareModalVisible = true;
+    }
+}
+
+function closeShareModal() {
+    var modal = document.getElementById('shareModal');
+    if (modal) {
+        modal.classList.add('hidden');
+        document.body.classList.remove('modal-open');
+        shareModalVisible = false;
+    }
+}
+
+async function shareJob(id) {
+    var resultBody = document.getElementById('shareResultBody');
+    var summaryEl = document.getElementById('shareSummary');
+    if (resultBody) resultBody.innerHTML = '<tr><td colspan="3" class="px-5 py-8 text-center text-gray-400">Paylaşılır...</td></tr>';
+    if (summaryEl) summaryEl.textContent = '⏳ Vakansiya paylaşılır...';
+
+    showShareModal();
+
+    try {
+        var { data } = await axios.post('/api/admin/jobs/' + id + '/share');
+
+        if (summaryEl) {
+            summaryEl.textContent = data.summary.message;
+            summaryEl.className = data.summary.failed === 0
+                ? 'text-sm font-medium text-green-600'
+                : data.summary.succeeded > 0
+                    ? 'text-sm font-medium text-amber-600'
+                    : 'text-sm font-medium text-red-600';
+        }
+
+        if (resultBody) {
+            resultBody.innerHTML = data.results.map(function (r) {
+                var icon = r.success ? '✅' : '❌';
+                var color = r.success ? 'text-green-600' : 'text-red-600';
+                var errorText = r.error ? '<span class="text-xs text-gray-400 ml-2">' + escapeHtml(r.error) + '</span>' : '';
+                return '<tr class="border-b">' +
+                    '<td class="px-5 py-3 capitalize">' + escapeHtml(r.platform) + '</td>' +
+                    '<td class="px-5 py-3 ' + color + '">' + icon + ' ' + (r.success ? 'Uğurlu' : 'Uğursuz') + '</td>' +
+                    '<td class="px-5 py-3 text-sm text-gray-500">' + errorText + '</td>' +
+                    '</tr>';
+            }).join('');
+        }
+    } catch (err) {
+        if (summaryEl) {
+            summaryEl.textContent = 'Xəta: ' + (err.response?.data?.error || err.message);
+            summaryEl.className = 'text-sm font-medium text-red-600';
+        }
+        if (resultBody) {
+            resultBody.innerHTML = '<tr><td colspan="3" class="px-5 py-8 text-center text-red-400">Paylaşım xətası: ' + escapeHtml(err.message) + '</td></tr>';
+        }
     }
 }
 
