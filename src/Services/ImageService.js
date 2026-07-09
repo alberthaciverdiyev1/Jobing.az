@@ -40,122 +40,117 @@ function formatSalary(minSalary, maxSalary) {
     if (minSalary && maxSalary) {
         return `${Number(minSalary).toLocaleString()} ₼ - ${Number(maxSalary).toLocaleString()} ₼`;
     }
-    if (minSalary) return `From ${Number(minSalary).toLocaleString()} ₼`;
-    if (maxSalary) return `Up to ${Number(maxSalary).toLocaleString()} ₼`;
+    if (minSalary) return `${Number(minSalary).toLocaleString()} ₼'dən`;
+    if (maxSalary) return `${Number(maxSalary).toLocaleString()} ₼'dək`;
     return null;
 }
 
 function buildSvg(job) {
     const { title, companyName, minSalary, maxSalary, location } = job;
-    const titleLines = wrapText(title || 'Vakansiya', 22);
+    const titleLines = wrapText(title || 'Vakansiya', 18);
     const salaryText = formatSalary(minSalary, maxSalary);
-    const hasSalary = salaryText !== null;
 
-    const LX = 80;
-    let cursorY = 160;
+    // ======= Resimdeki Renk Paleti =======
+    const BG_CREAM = '#F8F4EE';
+    const CARD_BG = '#FFFFFF';
+    const ORANGE = '#F99236';
+    const DARK = '#111111';
+    const TEXT_GRAY = '#6B7280';
+    const BORDER_COLOR = '#E5E7EB';
 
-    // ======= Brand header =======
-    const brandSvg = `
-  <text x="${LX}" y="82" font-family="Arial, sans-serif" font-size="22" font-weight="bold" fill="#FF8C00" letter-spacing="3">JOBING.AZ</text>
-  <rect x="${LX}" y="90" width="28" height="3" rx="1.5" fill="#FF8C00" opacity="0.4"/>`;
+    // ======= Kart Boyutları ve Merkezleme =======
+    const cx = CARD_WIDTH / 2;
+    const cy = CARD_HEIGHT / 2;
+    const cardW = 760;
+    const cardH = 460;
+    const cardX = cx - cardW / 2;
+    const cardY = cy - cardH / 2;
 
-    // ======= Company name =======
-    let companySvg = '';
-    if (companyName) {
-        companySvg = `
-  <text x="${LX}" y="${cursorY}" font-family="Arial, sans-serif" font-size="28" fill="#FF8C00" font-weight="600">${escapeXml(companyName)}</text>`;
-        cursorY += 52;
-    }
-
-    // ======= Title (dynamic vertical centering) =======
-    const titleLineH = 72;
-    const titleBlockH = titleLines.length * titleLineH;
-    const salaryBlockH = hasSalary ? 90 : 0;
-    const locBlockH = location ? 45 : 0;
-    const bottomH = 80;
-    const usedSpace = (companyName ? 40 : 0) + titleBlockH + salaryBlockH + locBlockH + bottomH;
-    const extraTop = Math.max(0, (CARD_HEIGHT - usedSpace - 140) / 2);
-    if (!companyName) cursorY += extraTop;
-
-    const titleStartY = cursorY;
+    // ======= "İş Var!" ve Başlık =======
+    let cursorY = cardY + 160;
+    const titleLineH = 55;
     const titleElements = titleLines.map((line, i) =>
-        `<text x="${LX}" y="${titleStartY + i * titleLineH}" font-family="Arial, sans-serif" font-size="58" font-weight="bold" fill="#1E293B">${escapeXml(line)}</text>`
+        `<text x="${cardX + 50}" y="${cursorY + i * titleLineH}" font-family="'Helvetica Neue', Arial, sans-serif" font-size="52" font-weight="bold" fill="${DARK}" letter-spacing="-1">${escapeXml(line)}</text>`
     ).join('\n      ');
 
-    cursorY = titleStartY + titleBlockH;
+    cursorY += titleLines.length * titleLineH;
 
-    // ======= Salary badge =======
-    let salarySvg = '';
-    if (hasSalary) {
-        salarySvg = `
-  <rect x="${LX}" y="${cursorY + 18}" width="5" height="38" rx="2.5" fill="#FF8C00"/>
-  <text x="${LX + 20}" y="${cursorY + 48}" font-family="Arial, sans-serif" font-size="34" font-weight="bold" fill="#FF8C00">${escapeXml(salaryText)}</text>`;
-        cursorY += 90;
-    } else {
-        cursorY += 40;
-    }
-
-    // ======= Location =======
-    let infoSvg = '';
+    // ======= Lokasyon ve Maaş (Eğer gönderilirse başlığın altına eklenir) =======
+    let metaSvg = '';
     if (location) {
-        infoSvg = `
-  <text x="${LX}" y="${cursorY}" font-family="Arial, sans-serif" font-size="24" fill="#64748B">📍 ${escapeXml(location)}</text>`;
+        metaSvg += `
+        <rect x="${cardX + 50}" y="${cursorY - 15}" width="${location.length * 10 + 30}" height="32" rx="8" fill="#F3F4F6"/>
+        <text x="${cardX + 65}" y="${cursorY + 6}" font-family="'Helvetica Neue', Arial, sans-serif" font-size="16" fill="${TEXT_GRAY}">${escapeXml(location)}</text>
+        `;
+        cursorY += 45;
     }
+    if (salaryText) {
+        metaSvg += `
+        <rect x="${cardX + 50}" y="${cursorY - 15}" width="${salaryText.length * 10 + 30}" height="32" rx="8" fill="${ORANGE}" opacity="0.12"/>
+        <text x="${cardX + 65}" y="${cursorY + 6}" font-family="'Helvetica Neue', Arial, sans-serif" font-size="16" font-weight="bold" fill="${ORANGE}">${escapeXml(salaryText)}</text>
+        `;
+    }
+
+    // ======= Alt Bölüm (Şirket & Buton) =======
+    const lineY = cardY + cardH - 100;
+    const buttonW = 160;
+    const buttonH = 48;
+    const buttonX = cardX + cardW - 50 - buttonW;
+    const buttonY = lineY + 25;
 
     return `<svg width="${CARD_WIDTH}" height="${CARD_HEIGHT}" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#FAFAF5"/>
-      <stop offset="50%" stop-color="#F5F0EB"/>
-      <stop offset="100%" stop-color="#FAFAF5"/>
-    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="15" stdDeviation="20" flood-color="#000000" flood-opacity="0.08"/>
+    </filter>
+    <filter id="bellShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="5" stdDeviation="8" flood-color="#000000" flood-opacity="0.2"/>
+    </filter>
   </defs>
 
-  <!-- Background -->
-  <rect width="${CARD_WIDTH}" height="${CARD_HEIGHT}" fill="url(#bgGrad)"/>
+  <rect width="${CARD_WIDTH}" height="${CARD_HEIGHT}" fill="${BG_CREAM}"/>
 
-  <!-- Top orange accent bar -->
-  <rect x="0" y="0" width="${CARD_WIDTH}" height="5" fill="#FF8C00"/>
+  <rect x="${cardX}" y="${cardY}" width="${cardW}" height="${cardH}" rx="30" fill="${DARK}" transform="rotate(-6, ${cx}, ${cy})"/>
+  <rect x="${cardX}" y="${cardY}" width="${cardW}" height="${cardH}" rx="30" fill="${ORANGE}" transform="rotate(5, ${cx}, ${cy})"/>
 
-  <!-- Subtle decorative circle (bottom-right) -->
-  <circle cx="1100" cy="650" r="350" fill="#FF8C00" opacity="0.04"/>
-  <circle cx="1050" cy="580" r="220" fill="#CC7000" opacity="0.05"/>
+  <rect x="${cardX}" y="${cardY}" width="${cardW}" height="${cardH}" rx="30" fill="${CARD_BG}" filter="url(#shadow)"/>
 
-  <!-- Side decorative line -->
-  <line x1="0" y1="180" x2="30" y2="180" stroke="#FF8C00" stroke-width="2" opacity="0.08"/>
-  <line x1="0" y1="195" x2="18" y2="195" stroke="#FF8C00" stroke-width="2" opacity="0.06"/>
+  <rect x="${cardX + cardW - 155}" y="${cardY + 40}" width="115" height="36" rx="18" fill="none" stroke="${BORDER_COLOR}" stroke-width="1.5"/>
+  <text x="${cardX + cardW - 110}" y="${cardY + 63}" font-family="'Helvetica Neue', Arial, sans-serif" font-size="15" fill="${TEXT_GRAY}" text-anchor="middle">elə indi!</text>
+  <circle cx="${cardX + cardW - 65}" cy="${cardY + 58}" r="8" fill="none" stroke="${TEXT_GRAY}" stroke-width="1.5"/>
+  <path d="M${cardX + cardW - 65} ${cardY + 54} v4 h3" fill="none" stroke="${TEXT_GRAY}" stroke-width="1.5"/>
 
-  ${brandSvg}
-  ${companySvg}
+  <text x="${cardX + 50}" y="${cardY + 110}" font-family="'Helvetica Neue', Arial, sans-serif" font-size="34" font-weight="bold" fill="${ORANGE}">İş var!</text>
 
-  <!-- Title -->
   ${titleElements}
-  ${salarySvg}
+  ${metaSvg}
 
-  <!-- Info -->
-  ${infoSvg}
+  <line x1="${cardX + 50}" y1="${lineY}" x2="${cardX + cardW - 50}" y2="${lineY}" stroke="${BORDER_COLOR}" stroke-width="1.5"/>
 
-  <!-- Footer -->
-  <line x1="${LX}" x2="${CARD_WIDTH - LX}" y1="${CARD_HEIGHT - 60}" y2="${CARD_HEIGHT - 60}" stroke="#E2E8F0" stroke-width="1"/>
-  <text x="${LX}" y="${CARD_HEIGHT - 30}" font-family="Arial, sans-serif" font-size="14" fill="#94A3B8">jobing.az</text>
-  <text x="${CARD_WIDTH - LX}" y="${CARD_HEIGHT - 30}" font-family="Arial, sans-serif" font-size="14" fill="#94A3B8" text-anchor="end">Vakansiyalar</text>
+  <text x="${cardX + 50}" y="${lineY + 55}" font-family="'Helvetica Neue', Arial, sans-serif" font-size="22" font-weight="bold" fill="${DARK}">${escapeXml(companyName || 'Şirkət')}</text>
+
+  <rect x="${buttonX}" y="${buttonY}" width="${buttonW}" height="${buttonH}" rx="14" fill="${DARK}"/>
+  <text x="${buttonX + buttonW / 2}" y="${buttonY + 30}" font-family="'Helvetica Neue', Arial, sans-serif" font-size="17" font-weight="bold" fill="#FFFFFF" text-anchor="middle">Müraciət et</text>
+
+  <path d="M${cx - 10} ${cardY + cardH + 25} L${cx} ${cardY + cardH + 35} L${cx + 10} ${cardY + cardH + 25}" fill="none" stroke="#E5D9CC" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="${cx}" y="${cardY + cardH + 65}" font-family="'Helvetica Neue', Arial, sans-serif" font-size="20" fill="#E5D9CC" font-weight="bold" text-anchor="middle" letter-spacing="1">jobing.az</text>
+
+  <g transform="translate(${cardX + cardW - 50}, ${cardY - 50}) rotate(15) scale(0.9)" filter="url(#bellShadow)">
+    <path d="M40 20 C40 20 20 40 20 75 L10 100 L110 100 L100 75 C100 40 80 20 80 20 C75 10 65 5 60 5 C55 5 45 10 40 20 Z" fill="#FCD34D"/>
+    <path d="M60 5 C55 5 45 10 40 20 C40 20 20 40 20 75 L10 100 L60 100 Z" fill="#FBBF24"/>
+    <circle cx="60" cy="110" r="14" fill="#D97706"/>
+    <path d="M75 35 C65 30 55 30 45 35" stroke="#FFFBEB" stroke-width="5" stroke-linecap="round" fill="none" opacity="0.7"/>
+  </g>
 </svg>`;
 }
 
 const ImageService = {
-    /**
-     * Generate a 1200x630 PNG vacancy card image.
-     * @param {Object} job - { title, companyName, minSalary, maxSalary, location }
-     * @returns {Promise<Buffer>} PNG image buffer
-     */
     async generateVacancyCard(job) {
         const svg = buildSvg(job);
-        return await sharp(Buffer.from(svg)).png().toBuffer();
+        // Keskinliği artırmak ve parse hatalarını önlemek için yoğunluk ayarlayabiliriz
+        return await sharp(Buffer.from(svg), { density: 150 }).png().toBuffer();
     },
 
-    /**
-     * Ensure the share upload directory exists.
-     */
     getShareDir() {
         const dir = path.join(process.cwd(), 'uploads', 'share');
         if (!fs.existsSync(dir)) {
@@ -164,12 +159,6 @@ const ImageService = {
         return dir;
     },
 
-    /**
-     * Save the image buffer to disk and return path + public filename.
-     * @param {Buffer} buffer - PNG buffer
-     * @param {string} jobId - job _id for filename association
-     * @returns {{ filepath: string, filename: string }}
-     */
     saveShareImage(buffer, jobId) {
         const dir = this.getShareDir();
         const filename = `job-${String(jobId).slice(-8)}-${uuidv4().slice(0, 8)}.png`;
