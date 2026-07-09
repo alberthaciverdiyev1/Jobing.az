@@ -4,9 +4,6 @@ import ImageService from './ImageService.js';
 
 const API_URL = process.env.API_URL || 'http://localhost:3000';
 
-/**
- * Strip HTML tags and truncate text to a max length.
- */
 function cleanText(text, maxLen) {
     if (!text) return '';
     const plain = text.replace(/<[^>]*>/g, '').trim();
@@ -14,29 +11,26 @@ function cleanText(text, maxLen) {
 }
 
 /**
- * Build a uniform caption string from job data.
+ * Build a detailed vacancy caption.
+ * Salary is omitted from text (already visible in the shared image).
+ * Description is included when available.
  */
-function buildCaption(job, { withDescription = false, descMax = 200 } = {}) {
+function buildCaption(job, descMax) {
     const parts = [
         `📌 ${job.title}`,
         job.companyName ? `🏢 ${job.companyName}` : null,
     ];
 
-    if (job.minSalary || job.maxSalary) {
-        const s = job.minSalary && job.maxSalary
-            ? `${Number(job.minSalary).toLocaleString()} ₼ - ${Number(job.maxSalary).toLocaleString()} ₼`
-            : job.minSalary
-                ? `${Number(job.minSalary).toLocaleString()} ₼`
-                : `${Number(job.maxSalary).toLocaleString()} ₼`;
-        parts.push(`💰 ${s}`);
+    if (job.description) {
+        parts.push('', cleanText(job.description, descMax || 200));
     }
 
-    if (withDescription && job.description) {
-        parts.push('', cleanText(job.description, descMax));
-    }
+    if (job.location) parts.push(`📍 ${job.location}`);
 
-    const link = `🔗 jobing.az/vakansiyalar/${job.slug || job._id}/details`;
-    parts.push('', link);
+    const link = (job.sourceUrl && job.sourceUrl !== 'jobing.az' && job.redirectUrl)
+        ? `🔗 ${job.redirectUrl}`
+        : `🔗 jobing.az/vakansiyalar/${job.slug || job._id}/details`;
+    parts.push('', link, 'Jobing.az');
 
     return parts.filter(Boolean).join('\n');
 }
@@ -49,7 +43,7 @@ const SocialMediaService = {
     async shareToTelegram(job, imageBuffer, { chatId } = {}) {
         const targetChat = chatId || '@jobingaz';
         try {
-            const caption = buildCaption(job);
+            const caption = buildCaption(job, 300);
             await TelegramBot.sendPhoto(targetChat, imageBuffer, {
                 caption,
                 parse_mode: 'Markdown'
@@ -73,7 +67,7 @@ const SocialMediaService = {
         }
 
         try {
-            const caption = buildCaption(job);
+            const caption = buildCaption(job, 300);
             await axios.post(
                 `https://graph.facebook.com/v22.0/${phoneNumberId}/messages`,
                 {
@@ -108,7 +102,7 @@ const SocialMediaService = {
         }
 
         try {
-            const text = buildCaption(job, { withDescription: true, descMax: 300 });
+            const text = buildCaption(job, 600);
             const jobUrl = `https://jobing.az/vakansiyalar/${job.slug || job._id}/details`;
 
             await axios.post(
@@ -155,7 +149,7 @@ const SocialMediaService = {
         }
 
         try {
-            const caption = buildCaption(job, { withDescription: true, descMax: 2200 });
+            const caption = buildCaption(job, 1500);
 
             // Step 1: Create media container
             const createRes = await axios.post(

@@ -34,6 +34,9 @@ function escapeXml(str) {
 }
 
 function formatSalary(minSalary, maxSalary) {
+    if (minSalary && maxSalary && Number(minSalary) === Number(maxSalary)) {
+        return `${Number(minSalary).toLocaleString()} ₼`;
+    }
     if (minSalary && maxSalary) {
         return `${Number(minSalary).toLocaleString()} ₼ - ${Number(maxSalary).toLocaleString()} ₼`;
     }
@@ -44,81 +47,98 @@ function formatSalary(minSalary, maxSalary) {
 
 function buildSvg(job) {
     const { title, companyName, minSalary, maxSalary, location } = job;
-    const titleLines = wrapText(title || 'Vakansiya', 30);
+    const titleLines = wrapText(title || 'Vakansiya', 22);
     const salaryText = formatSalary(minSalary, maxSalary);
     const hasSalary = salaryText !== null;
 
-    // Dynamic layout: baseY tracks the current vertical position
-    let baseY = 160;
+    const LX = 80;
+    let cursorY = 160;
 
-    // Company name
-    const companyHtml = companyName
-        ? `<text x="60" y="${baseY}" font-family="Arial, sans-serif" font-size="28" fill="#A5B4FC">${escapeXml(companyName)}</text>`
-        : '';
+    // ======= Brand header =======
+    const brandSvg = `
+  <text x="${LX}" y="82" font-family="Arial, sans-serif" font-size="22" font-weight="bold" fill="#FF8C00" letter-spacing="3">JOBING.AZ</text>
+  <rect x="${LX}" y="90" width="28" height="3" rx="1.5" fill="#FF8C00" opacity="0.4"/>`;
 
-    // If company exists, push title down; if no company, title sits higher (centered feel)
-    if (companyName) baseY += 55;
-
-    // Title section — when no salary, add extra offset to center vertically
-    const titleExtraOffset = hasSalary ? 0 : 50;
-    const titleStartY = baseY + 20 + titleExtraOffset;
-
-    const titleElements = titleLines.map((line, i) =>
-        `<text x="60" y="${titleStartY + i * 62}" font-family="Arial, sans-serif" font-size="46" font-weight="bold" fill="#FFFFFF">${escapeXml(line)}</text>`
-    ).join('\n      ');
-
-    const afterTitle = titleStartY + titleLines.length * 62;
-
-    // Salary section — golden accent bar + text, only when salary data exists
-    let salarySection = '';
-    if (hasSalary) {
-        salarySection = `
-      <rect x="60" y="${afterTitle + 20}" width="4" height="50" rx="2" fill="#F59E0B"/>
-      <text x="80" y="${afterTitle + 55}" font-family="Arial, sans-serif" font-size="36" font-weight="bold" fill="#F59E0B">${escapeXml(salaryText)}</text>`;
+    // ======= Company name =======
+    let companySvg = '';
+    if (companyName) {
+        companySvg = `
+  <text x="${LX}" y="${cursorY}" font-family="Arial, sans-serif" font-size="28" fill="#FF8C00" font-weight="600">${escapeXml(companyName)}</text>`;
+        cursorY += 52;
     }
 
-    // Footer — location + brand
-    const footerTop = Math.max(afterTitle + 110, CARD_HEIGHT - 150);
+    // ======= Title (dynamic vertical centering) =======
+    const titleLineH = 72;
+    const titleBlockH = titleLines.length * titleLineH;
+    const salaryBlockH = hasSalary ? 90 : 0;
+    const locBlockH = location ? 45 : 0;
+    const bottomH = 80;
+    const usedSpace = (companyName ? 40 : 0) + titleBlockH + salaryBlockH + locBlockH + bottomH;
+    const extraTop = Math.max(0, (CARD_HEIGHT - usedSpace - 140) / 2);
+    if (!companyName) cursorY += extraTop;
 
-    const locationHtml = location
-        ? `<text x="60" y="${footerTop}" font-family="Arial, sans-serif" font-size="22" fill="#94A3B8">📍 ${escapeXml(location)}</text>`
-        : '';
+    const titleStartY = cursorY;
+    const titleElements = titleLines.map((line, i) =>
+        `<text x="${LX}" y="${titleStartY + i * titleLineH}" font-family="Arial, sans-serif" font-size="58" font-weight="bold" fill="#1E293B">${escapeXml(line)}</text>`
+    ).join('\n      ');
+
+    cursorY = titleStartY + titleBlockH;
+
+    // ======= Salary badge =======
+    let salarySvg = '';
+    if (hasSalary) {
+        salarySvg = `
+  <rect x="${LX}" y="${cursorY + 18}" width="5" height="38" rx="2.5" fill="#FF8C00"/>
+  <text x="${LX + 20}" y="${cursorY + 48}" font-family="Arial, sans-serif" font-size="34" font-weight="bold" fill="#FF8C00">${escapeXml(salaryText)}</text>`;
+        cursorY += 90;
+    } else {
+        cursorY += 40;
+    }
+
+    // ======= Location =======
+    let infoSvg = '';
+    if (location) {
+        infoSvg = `
+  <text x="${LX}" y="${cursorY}" font-family="Arial, sans-serif" font-size="24" fill="#64748B">📍 ${escapeXml(location)}</text>`;
+    }
 
     return `<svg width="${CARD_WIDTH}" height="${CARD_HEIGHT}" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#1E3A5F"/>
-      <stop offset="100%" stop-color="#0F1B2D"/>
-    </linearGradient>
-    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#3B82F6"/>
-      <stop offset="100%" stop-color="#8B5CF6"/>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FAFAF5"/>
+      <stop offset="50%" stop-color="#F5F0EB"/>
+      <stop offset="100%" stop-color="#FAFAF5"/>
     </linearGradient>
   </defs>
 
   <!-- Background -->
-  <rect width="${CARD_WIDTH}" height="${CARD_HEIGHT}" fill="url(#bg)"/>
+  <rect width="${CARD_WIDTH}" height="${CARD_HEIGHT}" fill="url(#bgGrad)"/>
 
-  <!-- Decorative elements -->
-  <circle cx="1050" cy="0" r="350" fill="#1E40AF" opacity="0.15"/>
-  <circle cx="950" cy="530" r="280" fill="#3B82F6" opacity="0.08"/>
-  <circle cx="100" cy="580" r="200" fill="#4F46E5" opacity="0.1"/>
+  <!-- Top orange accent bar -->
+  <rect x="0" y="0" width="${CARD_WIDTH}" height="5" fill="#FF8C00"/>
 
-  <!-- Brand header -->
-  <line x1="60" y1="95" x2="180" y2="95" stroke="url(#accent)" stroke-width="4" stroke-linecap="round"/>
-  <text x="60" y="82" font-family="Arial, sans-serif" font-size="20" font-weight="bold" fill="#6366F1" letter-spacing="2">JOBING.AZ</text>
+  <!-- Subtle decorative circle (bottom-right) -->
+  <circle cx="1100" cy="650" r="350" fill="#FF8C00" opacity="0.04"/>
+  <circle cx="1050" cy="580" r="220" fill="#CC7000" opacity="0.05"/>
 
-  ${companyHtml}
+  <!-- Side decorative line -->
+  <line x1="0" y1="180" x2="30" y2="180" stroke="#FF8C00" stroke-width="2" opacity="0.08"/>
+  <line x1="0" y1="195" x2="18" y2="195" stroke="#FF8C00" stroke-width="2" opacity="0.06"/>
 
-  <!-- Job title -->
+  ${brandSvg}
+  ${companySvg}
+
+  <!-- Title -->
   ${titleElements}
-  ${salarySection}
+  ${salarySvg}
 
-  <!-- Location -->
-  ${locationHtml}
+  <!-- Info -->
+  ${infoSvg}
 
   <!-- Footer -->
-  <text x="60" y="${CARD_HEIGHT - 30}" font-family="Arial, sans-serif" font-size="14" fill="#475569">jobing.az &#8226; Vakansiyalar</text>
+  <line x1="${LX}" x2="${CARD_WIDTH - LX}" y1="${CARD_HEIGHT - 60}" y2="${CARD_HEIGHT - 60}" stroke="#E2E8F0" stroke-width="1"/>
+  <text x="${LX}" y="${CARD_HEIGHT - 30}" font-family="Arial, sans-serif" font-size="14" fill="#94A3B8">jobing.az</text>
+  <text x="${CARD_WIDTH - LX}" y="${CARD_HEIGHT - 30}" font-family="Arial, sans-serif" font-size="14" fill="#94A3B8" text-anchor="end">Vakansiyalar</text>
 </svg>`;
 }
 
