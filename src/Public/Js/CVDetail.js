@@ -84,6 +84,27 @@ document.addEventListener('DOMContentLoaded', async () => {
             ).join('');
         }
 
+        // Uploaded File
+        if (cv.type === 'uploaded' && cv.fileUrl) {
+            document.getElementById('cv-file-section').classList.remove('hidden');
+            const isPdf = cv.fileUrl.endsWith('.pdf');
+            document.getElementById('cv-file').innerHTML = `
+                <div class="flex items-center gap-4 p-4 rounded-xl bg-gray-50 border border-gray-100 flex-1">
+                    <div class="w-12 h-12 rounded-xl bg-primary-50 flex items-center justify-center text-primary-500">
+                        <i class="fas fa-${isPdf ? 'file-pdf' : 'file-word'} text-xl"></i>
+                    </div>
+                    <div class="min-w-0 flex-1">
+                        <p class="font-medium text-gray-900 text-sm truncate">${escapeHtml(cv.fileName || 'CV')}</p>
+                        <p class="text-xs text-gray-400">${isPdf ? 'PDF' : 'Word'} faylı</p>
+                    </div>
+                    <a href="${escapeHtml(cv.fileUrl)}" target="_blank" rel="noopener"
+                       class="inline-flex items-center gap-2 px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 text-sm font-medium transition-colors">
+                        <i class="fas fa-download"></i>
+                        Aç
+                    </a>
+                </div>`;
+        }
+
         // Links
         const links = [];
         if (cv.linkedin) links.push({ icon: 'fab fa-linkedin', label: 'LinkedIn', url: cv.linkedin });

@@ -41,11 +41,11 @@ const CVService = {
     // Public list of active CVs (limited fields for privacy)
     findPublicList: async (page = 1, limit = 20) => {
         const skip = (page - 1) * limit;
-        const filter = { deletedAt: null, isActive: true, type: 'created' };
+        const filter = { deletedAt: null, isActive: true };
         const total = await CV.countDocuments(filter);
         const cvs = await CV.find(filter)
             .populate('userId', 'name surname')
-            .select('title fullName skills education summary createdAt')
+            .select('title fullName skills education summary fileUrl fileName type createdAt')
             .sort({ createdAt: -1 })
             .skip(skip)
             .limit(limit)
@@ -55,9 +55,9 @@ const CVService = {
 
     // Public detail - single CV with limited fields
     findPublicById: async (id) => {
-        return CV.findOne({ _id: id, deletedAt: null, isActive: true, type: 'created' })
+        return CV.findOne({ _id: id, deletedAt: null, isActive: true })
             .populate('userId', 'name surname')
-            .select('title fullName summary skills education experience languages linkedin website createdAt')
+            .select('title fullName type fileUrl fileName mimeType summary skills education experience languages linkedin website createdAt')
             .lean();
     },
 
