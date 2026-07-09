@@ -24,6 +24,7 @@ import Seo from '../Models/Seo.js';
 import Log from '../Models/Log.js';
 import PricingPlan from '../Models/PricingPlan.js';
 import PromotionRequest from '../Models/PromotionRequest.js';
+import SocialMediaService from '../Services/SocialMediaService.js';
 import Enums from '../Config/Enums.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -508,6 +509,36 @@ const AdminController = {
         try {
             const result = await JobService.removeDuplicates();
             res.json(result);
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    },
+
+    // ----------------------------------------------------------------
+    // API - SHARE JOB ON SOCIAL MEDIA
+    // ----------------------------------------------------------------
+    shareJob: async (req, res) => {
+        try {
+            const job = await Job.findById(req.params.id).lean();
+            if (!job) return res.status(404).json({ error: 'Vakansiya tapılmadı' });
+
+            const results = await SocialMediaService.shareToAll(job);
+            const succeeded = results.filter(r => r.success).length;
+            const failed = results.filter(r => !r.success).length;
+
+            res.json({
+                results,
+                summary: {
+                    total: results.length,
+                    succeeded,
+                    failed,
+                    message: failed === 0
+                        ? '✅ Vakansiya bütün platformlarda paylaşıldı'
+                        : succeeded > 0
+                            ? `⚠️ Qismən paylaşıldı: ${succeeded} uğurlu, ${failed} uğursuz`
+                            : '❌ Heç bir platformada paylaşıla bilmədi'
+                }
+            });
         } catch (error) {
             res.status(500).json({ error: error.message });
         }

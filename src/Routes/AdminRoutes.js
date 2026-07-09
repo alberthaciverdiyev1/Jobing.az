@@ -48,6 +48,7 @@ router.put('/api/admin/jobs/:id', ...admin, adminController.updateJob);
 router.delete('/api/admin/jobs/:id', ...admin, adminController.deleteJob);
 router.patch('/api/admin/jobs/:id/toggle', ...admin, adminController.toggleJobActive);
 router.post('/api/admin/jobs/remove-duplicates', ...admin, adminController.removeDuplicateJobs);
+router.post('/api/admin/jobs/:id/share', ...admin, adminController.shareJob);
 
 // Companies
 router.get('/api/admin/companies', ...admin, adminController.getCompanies);

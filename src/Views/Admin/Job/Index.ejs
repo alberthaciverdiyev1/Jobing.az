@@ -132,3 +132,36 @@
     </div>
   </div>
 </div>
+
+<!-- Share Results Modal -->
+<div id="shareModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
+  <div class="flex items-center justify-center min-h-screen px-4">
+    <div class="fixed inset-0 bg-black opacity-50"></div>
+    <div class="relative bg-white rounded-lg shadow-xl max-w-lg w-full p-6">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-lg font-semibold text-gray-900">Vakansiyanı Paylaş</h3>
+        <button onclick="closeShareModal()" class="text-gray-400 hover:text-gray-600">&times;</button>
+      </div>
+      <p id="shareSummary" class="text-sm font-medium text-gray-600 mb-4">⏳ Paylaşılır...</p>
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm text-left text-gray-500">
+          <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+            <tr>
+              <th class="px-5 py-3">Platforma</th>
+              <th class="px-5 py-3">Status</th>
+              <th class="px-5 py-3">Detal</th>
+            </tr>
+          </thead>
+          <tbody id="shareResultBody">
+            <tr>
+              <td colspan="3" class="px-5 py-8 text-center text-gray-400">Paylaşılır...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="flex justify-end mt-4">
+        <button onclick="closeShareModal()" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 text-sm font-medium">Bağla</button>
+      </div>
+    </div>
+  </div>
+</div>
