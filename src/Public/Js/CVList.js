@@ -46,27 +46,27 @@ document.addEventListener('DOMContentLoaded', () => {
             const edu = cv.education && cv.education.length > 0 ? cv.education[0] : null;
             const date = cv.createdAt ? new Date(cv.createdAt).toLocaleDateString('az-AZ') : '';
 
-            return `<a href="/cv-ler/${cv._id}" class="block bg-white rounded-2xl border border-gray-100 p-5 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 group">
-                <div class="flex items-start gap-3 mb-3">
-                    <div class="w-10 h-10 rounded-xl bg-primary-50 flex items-center justify-center text-primary-500 flex-shrink-0">
-                        <i class="fas fa-user text-sm"></i>
+            return `<a href="/cv-ler/${cv._id}" class="block bg-white rounded-2xl border border-gray-100 p-4 sm:p-5 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 group min-w-0">
+                <div class="flex items-start gap-2 sm:gap-3 mb-3">
+                    <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-primary-50 flex items-center justify-center text-primary-500 flex-shrink-0">
+                        <i class="fas fa-user text-xs sm:text-sm"></i>
                     </div>
                     <div class="min-w-0 flex-1">
-                        <h3 class="font-semibold text-gray-900 text-sm truncate group-hover:text-primary-500 transition-colors">${escapeHtml(name)}</h3>
+                        <h3 class="font-semibold text-gray-900 text-sm truncate group-hover:text-primary-500 transition-colors" title="${escapeHtml(name)}">${escapeHtml(name)}</h3>
                         <p class="text-xs text-gray-400">${date}</p>
                     </div>
                 </div>
 
-                <p class="text-xs text-gray-600 line-clamp-2 mb-3">${escapeHtml((cv.summary || '').slice(0, 120))}</p>
+                ${cv.summary ? `<p class="text-xs sm:text-sm text-gray-600 line-clamp-2 mb-3 leading-relaxed">${escapeHtml(cv.summary.slice(0, 120))}</p>` : ''}
 
                 ${skills.length > 0 ? `<div class="flex flex-wrap gap-1.5 mb-3">
-                    ${skills.map(s => `<span class="inline-flex px-2 py-0.5 rounded-md text-xs font-medium bg-gray-100 text-gray-600">${escapeHtml(s)}</span>`).join('')}
-                    ${cv.skills.length > 4 ? `<span class="inline-flex px-2 py-0.5 rounded-md text-xs font-medium bg-primary-50 text-primary-600">+${cv.skills.length - 4}</span>` : ''}
-                </div>` : ''}
+                    ${skills.map(s => `<span class="inline-flex px-2 py-0.5 rounded-md text-xs font-medium bg-gray-100 text-gray-600 truncate max-w-[120px]">${escapeHtml(s)}</span>`).join('')}
+                    ${cv.skills.length > 4 ? `<span class="inline-flex px-2 py-0.5 rounded-md text-xs font-medium bg-primary-50 text-primary-600 flex-shrink-0">+${cv.skills.length - 4}</span>` : ''}
+                </div>` : '<div class="mb-3"></div>'}
 
                 ${edu ? `<div class="flex items-center gap-1.5 text-xs text-gray-400 pt-2 border-t border-gray-50">
                     <i class="fas fa-graduation-cap"></i>
-                    <span>${escapeHtml(edu.school || '')}</span>
+                    <span class="truncate">${escapeHtml(edu.school || '')}</span>
                 </div>` : ''}
             </a>`;
         }).join('');
