@@ -75,28 +75,28 @@
                     <!-- Gradient accent bar -->
                     <div class="h-1.5 bg-gradient-to-r from-primary-400 via-primary-500 to-primary-600"></div>
 
-                    <div class="p-6 sm:p-8">
-                        <div class="flex flex-col sm:flex-row gap-5 sm:gap-6">
+                    <div class="p-4 sm:p-8">
+                        <div class="flex items-start gap-3 sm:gap-6">
                             <!-- Company Logo -->
-                            <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-gradient-to-br from-gray-50 to-gray-100 border border-gray-100 flex-shrink-0 overflow-hidden flex items-center justify-center mx-auto sm:mx-0 shadow-sm ring-1 ring-black/5">
+                            <div class="w-12 h-12 sm:w-24 sm:h-24 rounded-xl sm:rounded-2xl bg-gradient-to-br from-gray-50 to-gray-100 border border-gray-100 flex-shrink-0 overflow-hidden flex items-center justify-center shadow-sm ring-1 ring-black/5">
                                 <img src="<%= data.companyImage ? data.companyImage : '/Images/DefaultCompany.png' %>"
                                      alt="<%= data.companyName %>" class="w-full h-full object-cover" onerror="this.onerror=null;this.src='/Images/DefaultCompany.png'">
                             </div>
 
-                            <div class="flex-1 text-center sm:text-left">
+                            <div class="flex-1 min-w-0 sm:text-left">
                                 <!-- Title -->
                                 <h1 class="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 leading-tight break-words">
                                     <%= data.title %>
                                 </h1>
 
                                 <!-- Company name -->
-                                <p class="text-base text-gray-500 font-medium mt-2 flex items-center justify-center sm:justify-start gap-1.5">
-                                    <i class="fas fa-building text-gray-300 text-xs"></i>
+                                <p class="text-sm sm:text-base text-gray-500 font-medium mt-1.5 flex items-center gap-1.5 truncate">
+                                    <i class="fas fa-building text-gray-300 text-xs flex-shrink-0"></i>
                                     <%= data.companyName %>
                                 </p>
 
                                 <!-- Meta row -->
-                                <div class="flex flex-wrap items-center justify-center sm:justify-start gap-x-3 gap-y-1.5 mt-3">
+                                <div class="flex flex-wrap items-center gap-x-3 gap-y-1.5 mt-3">
                                     <span class="inline-flex items-center gap-1.5 text-xs sm:text-sm text-gray-400 bg-gray-50 px-2.5 py-1 rounded-lg">
                                         <i class="fas fa-map-marker-alt"></i>
                                         <%= data.location %>
@@ -112,7 +112,7 @@
                                 </div>
 
                                 <!-- Tags -->
-                                <div class="flex flex-wrap items-center justify-center sm:justify-start gap-2 mt-4">
+                                <div class="flex flex-wrap items-center gap-2 mt-3">
                                     <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-100">
                                         <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse-subtle"></span>
                                         <%= __('jobDetail.active') %>
@@ -237,6 +237,128 @@
                     </div>
                 </div>
 
+                <!-- ===== MOBILE SIDEBAR CONTENT (visible only below lg) ===== -->
+                <div class="lg:hidden space-y-5 animate-fade-in-up" style="animation-delay: 125ms">
+
+                    <!-- Company Info -->
+                    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                        <div class="h-1.5 bg-gradient-to-r from-primary-300 via-primary-400 to-primary-500"></div>
+                        <div class="p-5">
+                            <div class="flex items-center gap-4 pb-4 border-b border-gray-50">
+                                <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-gray-50 to-gray-100 border border-gray-100 overflow-hidden flex items-center justify-center flex-shrink-0 shadow-sm">
+                                    <img src="<%= data.companyImage ? data.companyImage : '/Images/DefaultCompany.png' %>"
+                                         alt="<%= data.companyName %>" class="w-full h-full object-cover" onerror="this.onerror=null;this.src='/Images/DefaultCompany.png'">
+                                </div>
+                                <div class="min-w-0">
+                                    <h3 class="font-semibold text-gray-900 truncate"><%= data.companyName %></h3>
+                                    <a href="/vakansiyalar?keyword=<%= data.companyName %>"
+                                       class="text-sm text-primary-500 hover:text-primary-600 transition-colors">
+                                        <%= __('jobDetail.companyJobs') %> →
+                                    </a>
+                                </div>
+                            </div>
+                            <ul class="space-y-3 mt-4">
+                                <li class="flex items-center justify-between">
+                                    <span class="text-sm text-gray-400"><%= __('jobDetail.sidebarCategory') %></span>
+                                    <span class="text-sm font-medium text-gray-900"><%= data.category %></span>
+                                </li>
+                                <li class="flex items-center justify-between">
+                                    <span class="text-sm text-gray-400"><%= __('jobDetail.salary') %></span>
+                                    <% if (data.minSalary || data.maxSalary) { %>
+                                        <span class="text-sm font-semibold text-primary-500"><%= data.minSalary || '' %><% if (data.minSalary && data.maxSalary) { %> - <% } %><%= data.maxSalary || '' %> ₼</span>
+                                    <% } else { %>
+                                        <span class="text-sm text-gray-500"><%= __('jobDetail.salaryNegotiable') %></span>
+                                    <% } %>
+                                </li>
+                                <li class="flex items-center justify-between pt-2 border-t border-gray-50">
+                                    <span class="text-sm text-gray-400"><%= __('jobDetail.sidebarDeadline') %></span>
+                                    <span class="text-sm font-medium text-gray-900">
+                                        <%= new Date(new Date(data.postedAt).setDate(new Date(data.postedAt).getDate() + 30)).toLocaleString('az-AZ', { day: '2-digit', month: 'short', year: 'numeric' }) %>
+                                    </span>
+                                </li>
+                                <% if (data.userName) { %>
+                                <li class="flex items-center justify-between">
+                                    <span class="text-sm text-gray-400"><i class="fas fa-user-tie text-gray-300 w-3.5 mr-1"></i><%= __('jobDetail.sidebarContact') %></span>
+                                    <span class="text-sm font-medium text-gray-900"><%= data.userName %></span>
+                                </li>
+                                <% } %>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Contact Info -->
+                    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
+                        <h3 class="font-semibold text-gray-900 mb-3 flex items-center gap-2 text-sm">
+                            <i class="fas fa-address-card text-gray-400"></i>
+                            <%= __('jobDetail.contactInfo') %>
+                        </h3>
+                        <div class="space-y-2.5">
+                            <% if (data.phone) { %>
+                                <a href="tel:<%= data.phone %>" class="flex items-center gap-3 p-2.5 rounded-xl bg-gray-50 hover:bg-primary-50 transition-colors group">
+                                    <div class="w-8 h-8 rounded-lg bg-green-100 flex items-center justify-center text-green-600 group-hover:bg-green-200 transition-colors">
+                                        <i class="fas fa-phone text-xs"></i>
+                                    </div>
+                                    <span class="text-sm font-medium text-gray-700 group-hover:text-primary-600"><%= data.phone %></span>
+                                </a>
+                            <% } %>
+                            <% if (data.email) { %>
+                                <a href="mailto:<%= data.email %>" class="flex items-center gap-3 p-2.5 rounded-xl bg-gray-50 hover:bg-primary-50 transition-colors group">
+                                    <div class="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center text-blue-600 group-hover:bg-blue-200 transition-colors">
+                                        <i class="fas fa-envelope text-xs"></i>
+                                    </div>
+                                    <span class="text-sm font-medium text-gray-700 truncate group-hover:text-primary-600"><%= data.email %></span>
+                                </a>
+                            <% } %>
+                        </div>
+                    </div>
+
+                    <!-- Pricing Actions -->
+                    <div class="bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl shadow-sm border border-amber-200/60 p-5">
+                        <h3 class="font-semibold text-gray-900 mb-3 flex items-center gap-2 text-sm">
+                            <i class="fas fa-star text-amber-500"></i> Vakansiyanı önə çək
+                        </h3>
+                        <div class="space-y-2.5">
+                            <button data-pricing-type="promote"
+                                    class="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-xl hover:from-amber-600 hover:to-orange-600 transition-all text-sm font-semibold shadow-sm active:scale-[0.98]">
+                                <i class="fas fa-rocket"></i> İrəli Çək
+                            </button>
+                            <button data-pricing-type="premium"
+                                    class="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-purple-500 to-indigo-500 text-white rounded-xl hover:from-purple-600 hover:to-indigo-600 transition-all text-sm font-semibold shadow-sm active:scale-[0.98]">
+                                <i class="fas fa-crown"></i> Premium Et
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Share -->
+                    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
+                        <h3 class="font-semibold text-gray-900 mb-4 flex items-center gap-2 text-sm">
+                            <i class="fas fa-share-alt text-gray-400"></i>
+                            <%= __('jobDetail.share') %>
+                        </h3>
+                        <div class="flex items-center gap-2.5">
+                            <a href="https://www.facebook.com/sharer/sharer.php?u=<%=data.redirectUrl%>"
+                               target="_blank"
+                               class="flex-1 flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl bg-blue-50 text-blue-600 hover:bg-blue-100 transition-all text-sm font-medium">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                            <a href="https://www.linkedin.com/sharing/share-offsite/?url=<%=data.redirectUrl%>"
+                               target="_blank"
+                               class="flex-1 flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl bg-blue-50 text-blue-700 hover:bg-blue-100 transition-all text-sm font-medium">
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
+                            <a href="https://wa.me/?text=<%=data.redirectUrl%>"
+                               target="_blank"
+                               class="flex-1 flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl bg-green-50 text-green-600 hover:bg-green-100 transition-all text-sm font-medium">
+                                <i class="fab fa-whatsapp"></i>
+                            </a>
+                            <button id="copyLinkButtonMobile"
+                                    class="flex items-center justify-center px-3 py-2.5 rounded-xl bg-gray-100 text-gray-600 hover:bg-gray-200 transition-all text-sm">
+                                <i class="fa-regular fa-copy"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- ===== SIMILAR JOBS ===== -->
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8 animate-fade-in-up" style="animation-delay: 150ms">
                     <div class="flex items-center gap-3 mb-6">
@@ -266,8 +388,8 @@
                 </div>
             </div>
 
-            <!-- ========== SIDEBAR ========== -->
-            <aside class="space-y-5 animate-fade-in-up" style="animation-delay: 100ms">
+            <!-- ========== SIDEBAR (hidden on mobile) ========== -->
+            <aside class="space-y-5 animate-fade-in-up hidden lg:block" style="animation-delay: 100ms">
 
                 <!-- ===== STICKY SIDEBAR WRAPPER ===== -->
                 <div class="lg:sticky lg:top-28 space-y-5">

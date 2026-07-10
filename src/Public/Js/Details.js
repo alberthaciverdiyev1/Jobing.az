@@ -50,6 +50,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     });
 
+    document.getElementById('copyLinkButtonMobile')?.addEventListener('click', function () {
+        const copyText = window.location.href;
+        navigator.clipboard.writeText(copyText).then(function () {
+            alertify.success('Link kopyalandı');
+        }).catch(function () {
+            alertify.success('Link kopyalana bilmədi');
+        });
+    });
+
     // Pricing buttons — event delegation via data attributes
     document.querySelectorAll('[data-pricing-type]').forEach(btn => {
         btn.addEventListener('click', function () {
