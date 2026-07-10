@@ -114,8 +114,12 @@ process.on('uncaughtException', async (err) => {
         title: 'Uncaught Exception',
         text: `${err.stack}`
     };
-    process.env.NODE_ENV === "production" ? await sendEmail(errorData, to) : console.log(errorData);
-    process.exit(1);
+    if (process.env.NODE_ENV === 'production') {
+        await sendEmail(errorData, to).catch(() => {});
+        process.exit(1);
+    } else {
+        console.error('Uncaught Exception (non-fatal in dev):', errorData);
+    }
 });
 
 process.on('unhandledRejection', async (reason, promise) => {
