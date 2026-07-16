@@ -148,3 +148,12 @@ dist
 .codegpt
 
 .claude
+/docs
+
+.claudeignore
+CLAUDE.md
+.agents
+skills-lock.json
+test-cv.pdf
+
+html
