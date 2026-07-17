@@ -15,6 +15,8 @@ public class AppDbContext : DbContext
     public DbSet<Job> Jobs => Set<Job>();
     public DbSet<Filter> Filters => Set<Filter>();
     public DbSet<FilterOption> FilterOptions => Set<FilterOption>();
+    public DbSet<BlogPost> BlogPosts => Set<BlogPost>();
+    public DbSet<BlogCategory> BlogCategories => Set<BlogCategory>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
