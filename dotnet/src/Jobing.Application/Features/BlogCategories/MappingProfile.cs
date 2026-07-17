@@ -4,7 +4,7 @@ using Jobing.Domain.Entities;
 
 namespace Jobing.Application.Features.BlogCategories;
 
-public class MappingProfile : Profile
+public class MappingProfile : AutoMapper.Profile
 {
     public MappingProfile()
     {
