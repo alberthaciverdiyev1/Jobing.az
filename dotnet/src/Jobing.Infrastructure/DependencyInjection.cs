@@ -1,6 +1,7 @@
 using Jobing.Application.Common.Interfaces;
 using Jobing.Infrastructure.Data;
 using Jobing.Infrastructure.Repositories;
+using Jobing.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,6 +15,10 @@ public static class DependencyInjection
         services.AddDbContext<AppDbContext>(options =>
             options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
 
+        services.AddScoped<IJwtService, JwtService>();
+        services.AddScoped<IEmailService, EmailService>();
+        services.AddScoped<IAuthService, AuthService>();
+        services.AddScoped<IProfileService, ProfileService>();
         services.AddScoped<ICityRepository, CityRepository>();
         services.AddScoped<IFilterRepository, FilterRepository>();
         services.AddScoped<IBlogRepository, BlogRepository>();
