@@ -13,7 +13,11 @@ public class FilterOptionConfiguration : IEntityTypeConfiguration<FilterOption>
         builder.Property(x => x.Id).HasColumnName("id").ValueGeneratedNever();
         builder.Property(x => x.FilterId).HasColumnName("filter_id").IsRequired();
         builder.Property(x => x.Value).HasColumnName("value").HasMaxLength(100).IsRequired();
-        builder.Property(x => x.Name).HasColumnName("name").HasColumnType("jsonb").IsRequired();
+        builder.Property(x => x.Name).HasColumnName("name")
+            .HasConversion(
+                v => System.Text.Json.JsonSerializer.Serialize(v, (System.Text.Json.JsonSerializerOptions?)null),
+                v => System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, string>>(v, (System.Text.Json.JsonSerializerOptions?)null) ?? new())
+            .IsRequired();
         builder.Property(x => x.SortOrder).HasColumnName("sort_order").HasDefaultValue(0);
         builder.Property(x => x.IsActive).HasColumnName("is_active").HasDefaultValue(true);
         builder.Property(x => x.CreatedAt).HasColumnName("created_at");

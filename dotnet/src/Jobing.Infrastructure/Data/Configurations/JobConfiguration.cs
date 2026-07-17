@@ -17,7 +17,10 @@ public class JobConfiguration : IEntityTypeConfiguration<Job>
         builder.Property(x => x.MinSalary).HasColumnName("min_salary").HasColumnType("decimal(18,2)");
         builder.Property(x => x.MaxSalary).HasColumnName("max_salary").HasColumnType("decimal(18,2)");
         builder.Property(x => x.SalaryText).HasColumnName("salary_text").HasMaxLength(200);
-        builder.Property(x => x.FilterValues).HasColumnName("filter_values").HasColumnType("jsonb");
+        builder.Property(x => x.FilterValues).HasColumnName("filter_values")
+            .HasConversion(
+                v => System.Text.Json.JsonSerializer.Serialize(v, (System.Text.Json.JsonSerializerOptions?)null),
+                v => System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, string>>(v, (System.Text.Json.JsonSerializerOptions?)null) ?? new());
         builder.Property(x => x.CompanyId).HasColumnName("company_id");
         builder.Property(x => x.CityId).HasColumnName("city_id");
         builder.Property(x => x.CreatedById).HasColumnName("created_by_id");

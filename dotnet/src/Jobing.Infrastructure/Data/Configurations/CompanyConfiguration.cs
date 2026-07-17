@@ -15,7 +15,10 @@ public class CompanyConfiguration : IEntityTypeConfiguration<Company>
         builder.Property(x => x.Id).HasColumnName("id").ValueGeneratedNever();
         builder.Property(x => x.CreatedByUserId).HasColumnName("created_by_user_id");
         builder.Property(x => x.Name).HasColumnName("name").HasMaxLength(255).IsRequired();
-        builder.Property(x => x.Description).HasColumnName("description").HasColumnType("jsonb");
+        builder.Property(x => x.Description).HasColumnName("description")
+            .HasConversion(
+                v => System.Text.Json.JsonSerializer.Serialize(v, (System.Text.Json.JsonSerializerOptions?)null),
+                v => System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, string>>(v, (System.Text.Json.JsonSerializerOptions?)null));
         builder.Property(x => x.Logo).HasColumnName("logo");
         builder.Property(x => x.Website).HasColumnName("website").HasMaxLength(500);
         builder.Property(x => x.Email).HasColumnName("email").HasMaxLength(255);
