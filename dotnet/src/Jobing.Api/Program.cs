@@ -69,16 +69,14 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-// Seed roles
+// Seed database
 using (var scope = app.Services.CreateScope())
 {
-    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole<Guid>>>();
-    var roles = new[] { "User", "Company", "Hr", "Admin" };
-    foreach (var role in roles)
-    {
-        if (!await roleManager.RoleExistsAsync(role))
-            await roleManager.CreateAsync(new IdentityRole<Guid>(role));
-    }
+    var sp = scope.ServiceProvider;
+    var context = sp.GetRequiredService<AppDbContext>();
+    var userManager = sp.GetRequiredService<UserManager<User>>();
+    var roleManager = sp.GetRequiredService<RoleManager<IdentityRole<Guid>>>();
+    await DataSeeder.SeedAsync(context, userManager, roleManager);
 }
 
 if (app.Environment.IsDevelopment())

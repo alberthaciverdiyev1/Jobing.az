@@ -50,8 +50,10 @@ public class BlogPostConfiguration : IEntityTypeConfiguration<BlogPost>
 
         builder.Property(x => x.RelatedPostIds)
             .HasColumnName("related_post_ids")
-            .HasColumnType("jsonb")
-            .HasDefaultValueSql("'[]'::jsonb");
+            .HasConversion(
+                v => System.Text.Json.JsonSerializer.Serialize(v, (System.Text.Json.JsonSerializerOptions?)null),
+                v => System.Text.Json.JsonSerializer.Deserialize<List<Guid>>(v, (System.Text.Json.JsonSerializerOptions?)null) ?? new())
+            .HasDefaultValueSql("'[]'");
 
         builder.Property(x => x.IsPublished)
             .HasColumnName("is_published")
