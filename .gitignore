@@ -157,3 +157,22 @@ skills-lock.json
 test-cv.pdf
 
 html
+express.js
+
+# .NET build artifacts
+dotnet/**/bin/
+dotnet/**/obj/
+dotnet/**/.vs/
+dotnet/**/*.user
+dotnet/**/*.suo
+dotnet/**/*.sln.docstates
+dotnet/**/*.DotSettings.user
+
+# .NET local configuration overrides (secrets, connection strings)
+dotnet/**/appsettings.*.local.json
+dotnet/**/Properties/launchSettings.json
+
+# NuGet packages
+dotnet/**/[Pp]ackages/*
+!dotnet/**/[Pp]ackages/build/
+*.nupkg
