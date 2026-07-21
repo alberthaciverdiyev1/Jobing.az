@@ -44,6 +44,8 @@ const categorySchema = new Schema({
     versionKey: false
 });
 
+categorySchema.index({ localCategoryId: 1 });
+
 categorySchema.virtual('Parent', {
     ref: 'Category',
     localField: 'localCategoryId',

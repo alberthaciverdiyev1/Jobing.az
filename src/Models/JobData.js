@@ -132,6 +132,14 @@ const jobSchema = new Schema({
 // Text index for full-text search across multiple fields
 jobSchema.index({ title: 'text', companyName: 'text', description: 'text', location: 'text', userName: 'text' });
 
+// Performance indexes for frequent queries
+jobSchema.index({ isActive: 1, createdAt: -1 });
+jobSchema.index({ categoryId: 1 });
+jobSchema.index({ cityId: 1 });
+jobSchema.index({ companyName: 1 });
+jobSchema.index({ uniqueKey: 1 });
+jobSchema.index({ slug: 1 });
+
 jobSchema.virtual('companyDetails', {
     ref: 'Company',
     localField: 'companyName',

@@ -20,6 +20,8 @@ const citySchema = new Schema({
     versionKey: false
 });
 
+citySchema.index({ website: 1 });
+
 const City = mongoose.model('City', citySchema);
 
 export default City;

@@ -1,4 +1,7 @@
 import Seo from '../Models/Seo.js';
+import Cache from '../Helpers/Cache.js';
+
+const SEO_CACHE_TTL = 600; // 10 minutes
 
 const seoMiddleware = async (req, res, next) => {
     try {
@@ -19,13 +22,23 @@ const seoMiddleware = async (req, res, next) => {
             path = customEntry.route;
         }
 
-        // Look up SEO data for the (possibly rewritten) path
-        let seo = await Seo.findOne({ route: path, isActive: true }).lean();
+        // Look up SEO data for the (possibly rewritten) path — cached
+        const cacheKey = `seo:${path}`;
+        let seo = Cache.get(cacheKey);
+        if (!seo) {
+            seo = await Seo.findOne({ route: path, isActive: true }).lean();
+            if (seo) Cache.set(cacheKey, seo, SEO_CACHE_TTL);
+        }
 
         if (!seo) {
             const parentPath = '/' + path.split('/').filter(Boolean).slice(0, 1).join('/');
             if (parentPath !== path) {
-                seo = await Seo.findOne({ route: parentPath, isActive: true }).lean();
+                const parentCacheKey = `seo:${parentPath}`;
+                seo = Cache.get(parentCacheKey);
+                if (!seo) {
+                    seo = await Seo.findOne({ route: parentPath, isActive: true }).lean();
+                    if (seo) Cache.set(parentCacheKey, seo, SEO_CACHE_TTL);
+                }
             }
         }
 

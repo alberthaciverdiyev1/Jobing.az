@@ -1,6 +1,9 @@
 import ForeignCategory from '../Models/ForeignCategory.js';
 import Category from '../Models/Category.js';
 import Enums from '../Config/Enums.js';
+import Cache from '../Helpers/Cache.js';
+
+const CATEGORY_CACHE_TTL = 600; // 10 minutes
 
 const CategoryService = {
     // Foreign Categories add
@@ -61,12 +64,14 @@ const CategoryService = {
 
     getLocalCategories: async (data) => {
         try {
-            let query = {};
+            const cacheKey = `categories:local`;
+            const cached = Cache.get(cacheKey);
+            if (cached) return cached;
 
-            // if (data?.website) {
-            //     query.website = Enums.SitesWithId[data.website];
-            // }
-            return await Category.find(query).select('-_id');
+            let query = {};
+            const categories = await Category.find(query).select('-_id').lean();
+            Cache.set(cacheKey, categories, CATEGORY_CACHE_TTL);
+            return categories;
         } catch (error) {
             throw new Error('Error retrieving categories: ' + error.message);
         }

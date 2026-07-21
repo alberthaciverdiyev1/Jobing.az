@@ -1,5 +1,8 @@
 import Enums from '../Config/Enums.js';
 import City from '../Models/City.js';
+import Cache from '../Helpers/Cache.js';
+
+const CITY_CACHE_TTL = 600; // 10 minutes
 
 const CityService = {
     create: async (data) => {
@@ -50,9 +53,15 @@ const CityService = {
 
     getAll: async (data) => {
         try {
+            const cacheKey = `cities:${data?.site || 'all'}`;
+            const cached = Cache.get(cacheKey);
+            if (cached) return cached;
+
             let query = {};
             if (data.site) query.website = Enums.SitesWithId[data.site]
-            return await City.find(query);
+            const cities = await City.find(query).lean();
+            Cache.set(cacheKey, cities, CITY_CACHE_TTL);
+            return cities;
         } catch (error) {
             throw new Error('Error retrieving cities: ' + error.message);
         }

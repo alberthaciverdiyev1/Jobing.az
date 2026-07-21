@@ -28,6 +28,10 @@ const visitorSchema = new Schema({
     versionKey: false
 });
 
+visitorSchema.index({ ip: 1 });
+visitorSchema.index({ lastVisit: 1 });
+visitorSchema.index({ createdAt: 1 }, { expireAfterSeconds: 7776000 }); // Auto-delete after 90 days
+
 const Visitor = mongoose.model('Visitor', visitorSchema);
 
 export default Visitor;

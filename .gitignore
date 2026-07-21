@@ -3,6 +3,10 @@ app_output.txt
 app_run.txt
 dev_output.txt
 
+# Branch-specific directories
+dotnet/
+express.js/
+
 # Uploads (CV files, etc.)
 uploads/
 

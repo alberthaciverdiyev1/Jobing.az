@@ -79,6 +79,8 @@ const companySchema = new Schema({
     versionKey: false
 });
 
+companySchema.index({ companyName: 1 });
+
 const Company = mongoose.model('Company', companySchema);
 
 export default Company;
