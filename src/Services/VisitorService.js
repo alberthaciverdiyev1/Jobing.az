@@ -3,7 +3,7 @@ import Visitor from '../Models/Visitor.js';
 const VisitorService = {
     findByIp: async (ip) => {
         try {
-            return await Visitor.findOne({ ip });
+            return await Visitor.findOne({ ip }).lean();
         } catch (error) {
             throw new Error('Error finding visitor by IP: ' + error.message);
         }

@@ -11,7 +11,7 @@ const authMiddleware = {
             const token = req.cookies?.token;
             if (token) {
                 const decoded = jwt.verify(token, JWT_SECRET);
-                const user = await User.findById(decoded.id).select('-password');
+                const user = await User.findById(decoded.id).select('-password').lean();
                 if (user && user.isActive) {
                     req.user = user;
                     res.locals.user = user;

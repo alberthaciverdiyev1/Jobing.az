@@ -1,6 +1,6 @@
 import JobData from '../Models/JobData.js';
 import mongoose from 'mongoose';
-import Company from "../Models/Company.js";
+import Company from '../Models/Company.js';
 
 function generateSlug(title, suffix) {
     const slug = title
@@ -106,9 +106,6 @@ const JobDataService = {
 
     getAllJobs: async (data) => {
         try {
-            const filteredJobs = [];
-            const seenUrls = new Set();
-
             const currentDate = new Date();
             const thirtyDaysAgo = new Date(currentDate.setDate(currentDate.getDate() - 30));
 
@@ -116,13 +113,6 @@ const JobDataService = {
                 createdAt: { $gte: thirtyDaysAgo },
                 isActive: true
             };
-
-            // if (data.categoryId && !isNaN(Number(data.categoryId))) {
-            //     query.$or = [
-            //         { categoryId: +data.categoryId },
-            //         { subCategoryId: +data.categoryId }
-            //     ];
-            // }
 
             if (data.categoryId && !isNaN(Number(data.categoryId))) query.categoryId = +data.categoryId;
             if (data.cityId && !isNaN(Number(data.cityId))) query.cityId = +data.cityId;
@@ -133,54 +123,49 @@ const JobDataService = {
             if (data.minSalary && !isNaN(Number(data.minSalary)) && data.minSalary !== 0) query.minSalary = { $gte: +data.minSalary };
             if (data.maxSalary && !isNaN(Number(data.maxSalary))) query.maxSalary = { $lte: +data.maxSalary };
 
+            // Use $text index for keyword search (indexed, much faster than $regex)
+            // Prefix each word with + to require ALL words (matching original $and behavior)
             if (data.keyword && data.keyword.trim()) {
                 const terms = data.keyword.trim().split(/\s+/).filter(Boolean);
-                const termQueries = terms.map(term => {
-                    const escaped = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-                    return {
-                        $or: [
-                            { title: { $regex: escaped, $options: 'i' } },
-                            { companyName: { $regex: escaped, $options: 'i' } },
-                            { location: { $regex: escaped, $options: 'i' } },
-                            { description: { $regex: escaped, $options: 'i' } },
-                            { userName: { $regex: escaped, $options: 'i' } }
-                        ]
-                    };
-                });
-
-                if (termQueries.length === 1) {
-                    query.$or = termQueries[0].$or;
-                } else {
-                    // Multiple words: ALL words must match somewhere (across any field)
-                    // Each word can match in a different field (e.g., title has "developer", location has "baki")
-                    query.$and = termQueries;
-                }
+                query.$text = { $search: terms.map(w => `+${w}`).join(' ') };
             }
 
             const limit = 100;
-            const offset = Number(data.offset) || 0;
-            // console.log({data,query});
+            const offset = Math.min(Number(data.offset) || 0, 10000); // cap offset to prevent deep scans
 
-            const jobs = await JobData.find(query)
-                .sort({ createdAt: -1 })
-                .populate('companyDetails', 'imageUrl companyName')
-                .skip(offset)
-                .limit(limit);
+            // Run find and count in parallel
+            const [jobs, totalCount] = await Promise.all([
+                JobData.find(query)
+                    .sort({ createdAt: -1 })
+                    .select('-__v')
+                    .skip(offset)
+                    .limit(limit)
+                    .lean(),
+                JobData.countDocuments(query)
+            ]);
 
-            const totalCount = await JobData.countDocuments(query);
-
-            const jobsWithImageUrl = jobs.map(job => {
-                const companyImageUrl = job.companyDetails?.imageUrl || null;
-                return {
-                    ...job.toObject(),
-                    companyImageUrl: companyImageUrl ? companyImageUrl.replace(/\\/g, '/') : null,
-                };
+            // Batch load company images to avoid N+1 populate queries
+            const companyNames = [...new Set(jobs.map(j => j.companyName).filter(Boolean))];
+            const companies = companyNames.length > 0
+                ? await Company.find({ companyName: { $in: companyNames } })
+                    .select('companyName imageUrl')
+                    .lean()
+                : [];
+            const companyImageMap = {};
+            companies.forEach(c => {
+                companyImageMap[c.companyName] = c.imageUrl ? c.imageUrl.replace(/\\/g, '/') : null;
             });
 
-            jobsWithImageUrl.forEach(job => {
+            // Deduplicate by redirectUrl and attach company image
+            const seenUrls = new Set();
+            const filteredJobs = [];
+            jobs.forEach(job => {
                 if (!seenUrls.has(job.redirectUrl)) {
                     seenUrls.add(job.redirectUrl);
-                    filteredJobs.push(job);
+                    filteredJobs.push({
+                        ...job,
+                        companyImageUrl: companyImageMap[job.companyName] || null
+                    });
                 }
             });
 
@@ -278,84 +263,53 @@ const JobDataService = {
     // Job details
     details: async (id) => {
         try {
-            const job = await JobData.aggregate([
-                {
-                    $match: {
-                        $or: [
-                            { slug: id },
-                            { uniqueKey: id },
-                            { _id: mongoose.Types.ObjectId.isValid(id) ? new mongoose.Types.ObjectId(id) : undefined }
-                        ].filter(Boolean)
-                    }
-                },
-                {
-                    $lookup: {
-                        from: 'categories',
-                        localField: 'categoryId',
-                        foreignField: 'localCategoryId',
-                        as: 'category'
-                    }
-                },
-                {
-                    $addFields: {
-                        category: { $arrayElemAt: ['$category.categoryName', 0] },
-                    }
-                },
-                {
-                    $project: {
-                        uniqueKey: 1,
-                        slug: 1,
-                        title: 1,
-                        email: 1,
-                        phone: 1,
-                        description: 1,
-                        location: 1,
-                        minSalary: 1,
-                        maxSalary: 1,
-                        minAge: 1,
-                        maxAge: 1,
-                        companyName: 1,
-                        cityId: 1,
-                        educationId: 1,
-                        experienceId: 1,
-                        userName: 1,
-                        isPremium: 1,
-                        isActive: 1,
-                        sourceUrl: 1,
-                        redirectUrl: 1,
-                        postedAt: 1,
-                        createdAt: 1,
-                        updatedAt: 1,
-                        viewCount: 1,
-                        jobType: 1,
-                        category: 1,
-                    }
-                }
-            ]);
-    
-            if (!job || job.length === 0) {
+            // Try to find by slug, uniqueKey, or _id — use findOne which is simpler than aggregate for single docs
+            const query = {
+                $or: [
+                    { slug: id },
+                    { uniqueKey: id },
+                    ...(mongoose.Types.ObjectId.isValid(id) ? [{ _id: new mongoose.Types.ObjectId(id) }] : [])
+                ]
+            };
+
+            const job = await JobData.findOne(query).lean();
+
+            if (!job) {
                 throw new Error('Job not found');
             }
-    
-            const company = await Company.findOne({ companyName: String(job[0].companyName) });
-    
-            if (company && company.imageUrl) {
-                let imageUrl = company.imageUrl;
-                let index = imageUrl.indexOf('src/Public'); 
-    
-                if (index !== -1) {
-                    job[0].companyImage = imageUrl.slice(index + 10);
+
+            // Single batch lookup for company
+            if (job.companyName) {
+                const company = await Company.findOne({ companyName: job.companyName })
+                    .select('imageUrl')
+                    .lean();
+                if (company?.imageUrl) {
+                    const idx = company.imageUrl.indexOf('src/Public');
+                    job.companyImage = idx !== -1
+                        ? company.imageUrl.slice(idx + 10)
+                        : company.imageUrl;
                 } else {
-                    job[0].companyImage = imageUrl;
+                    job.companyImage = null;
                 }
             } else {
-                job[0].companyImage = null; 
+                job.companyImage = null;
             }
-    
-            return job[0];
+
+            // Also fetch category name
+            if (job.categoryId != null) {
+                const Category = mongoose.model('Category');
+                const cat = await Category.findOne({ localCategoryId: String(job.categoryId) })
+                    .select('categoryName')
+                    .lean();
+                job.category = cat?.categoryName || null;
+            } else {
+                job.category = null;
+            }
+
+            return job;
         } catch (error) {
-            console.error('Error fetching job:', error); // Hata detaylarını konsola yaz
-            throw error; // Orijinal hatayı fırlat
+            console.error('Error fetching job:', error);
+            throw error;
         }
     },
     
@@ -376,7 +330,9 @@ const JobDataService = {
             }
             return JobData.find(query)
                 .sort({ createdAt: -1 })
-                .limit(50);
+                .select('-description')
+                .limit(50)
+                .lean();
         } catch (error) {
             throw new Error('Error fetching company jobs: ' + error.message);
         }

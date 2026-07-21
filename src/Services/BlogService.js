@@ -20,7 +20,7 @@ const BlogService = {
     },
     delete: async (id) => {
         try {
-            const blog = await Blog.findById(id);
+            const blog = await Blog.findById(id).lean();
             if (!blog) {
                 throw new Error('Blog not found');
             }
@@ -33,7 +33,7 @@ const BlogService = {
 
     details: async (slug) => {
         try {
-            const blog = await Blog.findOne({slug: slug});
+            const blog = await Blog.findOne({slug: slug}).lean();
             if (!blog) {
                 throw new Error('Blog not found');
             }
@@ -45,7 +45,7 @@ const BlogService = {
 
     getAll: async (data) => {
         try {
-            const blogs = await Blog.find(data).sort({ createdAt: -1 });
+            const blogs = await Blog.find(data).sort({ createdAt: -1 }).lean();
             return {
                 status: 200,
                 message: 'Blogs retrieved successfully',
@@ -57,7 +57,7 @@ const BlogService = {
     },
     getOne: async (id) => {
         try {
-            const blog = await Blog.findById(id);
+            const blog = await Blog.findById(id).lean();
             return blog;
         } catch (error) {
             throw new Error('Error retrieving blog: ' + error.message);

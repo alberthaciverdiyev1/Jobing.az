@@ -13,6 +13,7 @@ import Company from "../Models/Company.js";
 import PricingPlan from "../Models/PricingPlan.js";
 import JobSeekerService from "../Services/JobSeekerService.js";
 import CityService from "../Services/CityService.js";
+import Cache from "../Helpers/Cache.js";
 
 const ViewController = {
     home: async (req, res) => {
@@ -418,6 +419,12 @@ const ViewController = {
     // ============================================
     sitemap: async (req, res) => {
         try {
+            const cached = Cache.get('sitemap.xml');
+            if (cached) {
+                res.header('Content-Type', 'application/xml');
+                return res.send(cached);
+            }
+
             const baseUrl = 'https://jobing.az';
             const today = new Date().toISOString().split('T')[0];
 
@@ -475,6 +482,8 @@ const ViewController = {
                 xml += '  </url>\n';
             });
             xml += '</urlset>';
+
+            Cache.set('sitemap.xml', xml, 3600); // 1 hour cache
 
             res.header('Content-Type', 'application/xml');
             res.send(xml);
