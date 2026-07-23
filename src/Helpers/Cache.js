@@ -7,10 +7,10 @@ const store = new Map();
 const Cache = {
     get(key) {
         const entry = store.get(key);
-        if (!entry) return null;
+        if (!entry) return undefined;
         if (entry.expiry && Date.now() > entry.expiry) {
             store.delete(key);
-            return null;
+            return undefined;
         }
         return entry.value;
     },

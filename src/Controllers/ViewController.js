@@ -420,7 +420,7 @@ const ViewController = {
     sitemap: async (req, res) => {
         try {
             const cached = Cache.get('sitemap.xml');
-            if (cached) {
+            if (cached !== undefined) {
                 res.header('Content-Type', 'application/xml');
                 return res.send(cached);
             }

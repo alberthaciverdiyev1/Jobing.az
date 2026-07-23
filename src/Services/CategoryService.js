@@ -66,7 +66,7 @@ const CategoryService = {
         try {
             const cacheKey = `categories:local`;
             const cached = Cache.get(cacheKey);
-            if (cached) return cached;
+            if (cached !== undefined) return cached;
 
             let query = {};
             const categories = await Category.find(query).select('-_id').lean();

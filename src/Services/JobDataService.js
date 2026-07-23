@@ -352,7 +352,7 @@ const JobDataService = {
     getTopCategories: async () => {
         try {
             const cached = Cache.get('top-categories');
-            if (cached) return cached;
+            if (cached !== undefined) return cached;
 
             const thirtyDaysAgo = new Date();
             thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);

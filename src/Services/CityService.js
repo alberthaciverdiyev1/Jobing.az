@@ -55,7 +55,7 @@ const CityService = {
         try {
             const cacheKey = `cities:${data?.site || 'all'}`;
             const cached = Cache.get(cacheKey);
-            if (cached) return cached;
+            if (cached !== undefined) return cached;
 
             let query = {};
             if (data.site) query.website = Enums.SitesWithId[data.site]
