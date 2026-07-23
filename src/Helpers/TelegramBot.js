@@ -10,8 +10,9 @@ import VisitorService from "../Services/VisitorService.js";
 
 let sendTo = null;
 
-const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN, { polling: true });
-// const bot = new TelegramBot(process.env.TELEGRAM_CHECK_JOB_BOT_TOKEN, { polling: true });
+// Only start polling in the primary cluster worker to avoid 409 conflicts
+const isPrimary = process.env.NODE_APP_INSTANCE === '0' || process.env.NODE_APP_INSTANCE === undefined;
+const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN, { polling: isPrimary });
 
 export async function sendTgMessage(data = 'Test') {
     await bot.sendMessage('@jobingaz1', data);
