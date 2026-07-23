@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<%= (typeof req !== 'undefined' && req.locale ? req.locale : 'az') %>">
     <!-- Head -->
     <%- include('Partials/Head') %>
   <body class="bg-gray-50 font-sans text-gray-900 antialiased flex flex-col min-h-screen pb-16 md:pb-0">
