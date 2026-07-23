@@ -40,6 +40,10 @@ bot.on('message', listenTgCommands);
 app.set('view engine', 'ejs');
 app.set('views', './src/Views');
 app.set('trust proxy', true);
+// View cache in production — compiles each template once, not per-request
+if (process.env.NODE_ENV === 'production') {
+    app.set('view cache', true);
+}
 
 // Compression: gzip all responses (reduces bandwidth by ~70%)
 app.use(compression({ threshold: 512, level: 6 }));

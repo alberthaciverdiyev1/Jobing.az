@@ -7,43 +7,48 @@ const seoMiddleware = async (req, res, next) => {
     try {
         let path = req.path.replace(/\/+$/, '') || '/';
 
-        // If this route has a customRoute set, redirect to it (original no longer works)
-        const routeWithCustom = await Seo.findOne({ route: path, isActive: true, customRoute: { $ne: '' } }).lean();
+        // Custom route redirect check — cached (rarely changes)
+        let routeWithCustom = Cache.get(`seo:redirect:${path}`);
+        if (routeWithCustom === undefined) {
+            routeWithCustom = await Seo.findOne({ route: path, isActive: true, customRoute: { $ne: '' } }).lean() || null;
+            Cache.set(`seo:redirect:${path}`, routeWithCustom, SEO_CACHE_TTL);
+        }
         if (routeWithCustom) {
-            let redirectUrl = routeWithCustom.customRoute;
             const qs = req.url.includes('?') ? req.url.slice(req.url.indexOf('?')) : '';
-            return res.redirect(301, redirectUrl + qs);
+            return res.redirect(301, routeWithCustom.customRoute + qs);
         }
 
-        // Check if this path matches a custom route alias
-        const customEntry = await Seo.findOne({ customRoute: path, isActive: true }).lean();
+        // Custom route alias check — cached
+        let customEntry = Cache.get(`seo:alias:${path}`);
+        if (customEntry === undefined) {
+            customEntry = await Seo.findOne({ customRoute: path, isActive: true }).lean() || null;
+            Cache.set(`seo:alias:${path}`, customEntry, SEO_CACHE_TTL);
+        }
         if (customEntry && customEntry.route) {
             req.url = req.originalUrl.replace(req.path, customEntry.route);
             path = customEntry.route;
         }
 
-        // Look up SEO data for the (possibly rewritten) path — cached
-        const cacheKey = `seo:${path}`;
-        let seo = Cache.get(cacheKey);
-        if (!seo) {
-            seo = await Seo.findOne({ route: path, isActive: true }).lean();
-            if (seo) Cache.set(cacheKey, seo, SEO_CACHE_TTL);
+        // Look up SEO data — cached
+        let seoData = Cache.get(`seo:data:${path}`);
+        if (seoData === undefined) {
+            seoData = await Seo.findOne({ route: path, isActive: true }).lean() || null;
+            Cache.set(`seo:data:${path}`, seoData, SEO_CACHE_TTL);
         }
 
-        if (!seo) {
+        if (!seoData) {
             const parentPath = '/' + path.split('/').filter(Boolean).slice(0, 1).join('/');
             if (parentPath !== path) {
-                const parentCacheKey = `seo:${parentPath}`;
-                seo = Cache.get(parentCacheKey);
-                if (!seo) {
-                    seo = await Seo.findOne({ route: parentPath, isActive: true }).lean();
-                    if (seo) Cache.set(parentCacheKey, seo, SEO_CACHE_TTL);
+                seoData = Cache.get(`seo:data:${parentPath}`);
+                if (seoData === undefined) {
+                    seoData = await Seo.findOne({ route: parentPath, isActive: true }).lean() || null;
+                    Cache.set(`seo:data:${parentPath}`, seoData, SEO_CACHE_TTL);
                 }
             }
         }
 
-        if (seo) {
-            res.locals.seo = seo;
+        if (seoData) {
+            res.locals.seo = seoData;
         }
 
         next();
