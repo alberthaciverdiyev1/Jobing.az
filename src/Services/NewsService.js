@@ -34,12 +34,13 @@ const NewsService = {
     /** Get a single news article by slug + increment views */
     details: async (slug) => {
         try {
-            const news = await News.findOne({ slug, isActive: true });
+            // Atomic increment — no need to fetch full doc, modify, then save
+            const news = await News.findOneAndUpdate(
+                { slug, isActive: true },
+                { $inc: { views: 1 } },
+                { new: true }
+            ).lean();
             if (!news) throw new Error('News not found');
-
-            // Increment view count
-            news.views = (news.views || 0) + 1;
-            await news.save();
 
             return news;
         } catch (error) {

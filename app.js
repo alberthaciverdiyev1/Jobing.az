@@ -3,6 +3,8 @@ import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import cron from 'node-cron';
+import compression from 'compression';
+import responseTime from 'response-time';
 import routes from './src/Routes/Main.js';
 import sequelize, { connectPromise } from './src/Config/Database.js';
 import { errorLogger, logError, logInfo } from './src/Middlewares/Logger.js';
@@ -39,12 +41,33 @@ app.set('view engine', 'ejs');
 app.set('views', './src/Views');
 app.set('trust proxy', true);
 
-app.use(express.static(path.resolve('./src/Public')));
-app.use('/uploads', express.static(path.resolve('./uploads')));
-app.use(express.json({limit: '100mb'}));
-app.use(express.urlencoded({extended: true, limit: '100mb'}));
+// Compression: gzip all responses (reduces bandwidth by ~70%)
+app.use(compression({ threshold: 512, level: 6 }));
+
+// X-Response-Time header for monitoring
+app.use(responseTime((req, res, time) => {
+    res.setHeader('X-Response-Time', `${Math.round(time)}ms`);
+    if (time > 500) {
+        console.warn(`Slow request: ${req.method} ${req.originalUrl} - ${Math.round(time)}ms`);
+    }
+}));
+
+// Static files with aggressive caching (1 year for versioned assets, 1 day for others)
+app.use(express.static(path.resolve('./src/Public'), {
+    maxAge: '1y',
+    immutable: true,
+    etag: true
+}));
+app.use('/uploads', express.static(path.resolve('./uploads'), {
+    maxAge: '1d',
+    etag: true
+}));
+app.use(express.json({limit: '10mb'}));
+app.use(express.urlencoded({extended: true, limit: '10mb'}));
 
 app.use(cookieParser());
+
+// Custom middleware order: fast operations first
 app.use(authMiddleware.setUser);
 app.use(seoMiddleware);
 app.use(i18n.init);

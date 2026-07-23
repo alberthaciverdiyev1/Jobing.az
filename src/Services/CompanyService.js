@@ -65,7 +65,7 @@ const CompanyService = {
     // Get all companies
     getAll: async () => {
         try {
-            return await Company.find({});
+            return await Company.find({}).lean();
         } catch (error) {
             throw new Error('Error retrieving companies: ' + error.message);
         }
@@ -155,7 +155,7 @@ const CompanyService = {
 
             const companiesList = await Company.find({
                 createdAt: { $gte: thirtyDaysAgo },
-            }).sort({ createdAt: -1 });
+            }).sort({ createdAt: -1 }).lean();
 
             if (!companiesList || companiesList.length === 0) {
                 return {
@@ -204,7 +204,7 @@ const CompanyService = {
     // Find a company by ID
     findById: async (id) => {
         try {
-            const company = await Company.findById(id);
+            const company = await Company.findById(id).lean();
             if (!company) {
                 throw new Error('Company not found');
             }
