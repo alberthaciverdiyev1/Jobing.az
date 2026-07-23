@@ -15,10 +15,11 @@ const require = createRequire(import.meta.url);
 const i18n = require('i18n');
 import cookieParser from 'cookie-parser';
 import {requestAllSites} from "./src/Helpers/Automation.js";
-import bot, {listenTgCommands, sendTgMessage} from "./src/Helpers/TelegramBot.js";
-import TelegramBot from 'node-telegram-bot-api';
 import authMiddleware from './src/Middlewares/Auth.js';
 import seoMiddleware from './src/Middlewares/Seo.js';
+import Cache from './src/Helpers/Cache.js';
+import CityService from './src/Services/CityService.js';
+import CategoryService from './src/Services/CategoryService.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -34,8 +35,6 @@ i18n.configure({
 
 const app = express();
 const port = process.env.PR_PORT || 3000;
-
-bot.on('message', listenTgCommands);
 
 app.set('view engine', 'ejs');
 app.set('views', './src/Views');
@@ -125,7 +124,13 @@ cron.schedule('0 9,16,20 * * *', async () => {
 });
 
 // Wait for DB connection before accepting requests to prevent 500 errors from buffering timeouts
-connectPromise.then(() => {
+connectPromise.then(async () => {
+    // Sync MongoDB indexes (non-blocking — runs in background)
+    syncMongoIndexes().catch(err => console.error('Index sync error:', err.message));
+
+    // Warm up caches so first user request is fast
+    warmupCache().catch(() => {});
+
     app.listen(port, '0.0.0.0', () => {
         console.log(`Server is running at http://localhost:${port}`);
     });
@@ -135,6 +140,34 @@ connectPromise.then(() => {
         console.log(`Server is running at http://localhost:${port} (NO DATABASE)`);
     });
 });
+
+/** Sync all Mongoose indexes in background */
+async function syncMongoIndexes() {
+    const models = ['Job', 'Visitor', 'Company', 'Category', 'City', 'Seo', 'User', 'Blog', 'News', 'CV'];
+    const mongoose = (await import('mongoose')).default;
+    for (const name of models) {
+        try {
+            const model = mongoose.models[name];
+            if (model) await model.syncIndexes();
+        } catch (e) {
+            // model may not be registered yet
+        }
+    }
+    console.log('MongoDB indexes synced');
+}
+
+/** Pre-fetch slow-changing data into cache */
+async function warmupCache() {
+    try {
+        await Promise.all([
+            CategoryService.getLocalCategories({}),
+            CityService.getAll({ site: 'BossAz' }),
+        ]);
+        console.log('Cache warmed up: categories, cities');
+    } catch (e) {
+        console.error('Cache warmup error:', e.message);
+    }
+}
 
 process.on('uncaughtException', async (err) => {
     logError(err, { source: 'uncaughtException' });
