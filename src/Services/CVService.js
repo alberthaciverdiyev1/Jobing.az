@@ -39,13 +39,31 @@ const CVService = {
     },
 
     // Public list of active CVs (limited fields for privacy)
-    findPublicList: async (page = 1, limit = 20) => {
+    findPublicList: async (page = 1, limit = 20, search = '', filters = {}) => {
         const skip = (page - 1) * limit;
         const filter = { deletedAt: null, isActive: true };
+
+        if (search && search.trim()) {
+            const escaped = search.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            filter.$or = [
+                { title: { $regex: escaped, $options: 'i' } },
+                { fullName: { $regex: escaped, $options: 'i' } },
+                { summary: { $regex: escaped, $options: 'i' } },
+                { skills: { $elemMatch: { $regex: escaped, $options: 'i' } } },
+            ];
+        }
+
+        if (filters.skill) {
+            filter.skills = { $in: [filters.skill] };
+        }
+        if (filters.education) {
+            filter['education.field'] = { $regex: filters.education, $options: 'i' };
+        }
+
         const total = await CV.countDocuments(filter);
         const cvs = await CV.find(filter)
-            .populate('userId', 'name surname')
-            .select('title fullName skills education summary fileUrl fileName type createdAt')
+            .populate('userId', 'name surname email')
+            .select('title fullName skills education summary experience languages phone email linkedin website fileUrl fileName type createdAt')
             .sort({ createdAt: -1 })
             .skip(skip)
             .limit(limit)

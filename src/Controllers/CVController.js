@@ -186,7 +186,10 @@ const CVController = {
         try {
             const page = parseInt(req.query.page) || 1;
             const limit = parseInt(req.query.limit) || 20;
-            const result = await CVService.findPublicList(page, limit);
+            const search = req.query.search || '';
+            const skill = req.query.skill || '';
+            const education = req.query.education || '';
+            const result = await CVService.findPublicList(page, limit, search, { skill, education });
             res.json(result);
         } catch (err) {
             res.status(500).json({ error: err.message });
