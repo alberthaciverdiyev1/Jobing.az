@@ -79,6 +79,7 @@ app.use((req, res, next) => {
     if (!req.cookies.lang) {
         req.setLocale('az');
     }
+    res.locals.locale = req.locale || 'az';
     next();
 });
 app.use((req, res, next) => {
