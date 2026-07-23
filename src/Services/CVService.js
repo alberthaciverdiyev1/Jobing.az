@@ -11,7 +11,7 @@ const CVService = {
     findByUser: async (userId, activeOnly = true) => {
         const filter = { userId, deletedAt: null };
         if (activeOnly) filter.isActive = true;
-        return CV.find(filter).sort({ createdAt: -1 });
+        return CV.find(filter).sort({ createdAt: -1 }).lean();
     },
 
     findById: async (id) => {
@@ -19,7 +19,7 @@ const CVService = {
     },
 
     findByIdAndUser: async (id, userId) => {
-        return CV.findOne({ _id: id, userId, deletedAt: null });
+        return CV.findOne({ _id: id, userId, deletedAt: null }).lean();
     },
 
     update: async (id, userId, data) => {

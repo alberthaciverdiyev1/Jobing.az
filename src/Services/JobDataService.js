@@ -1,6 +1,7 @@
 import JobData from '../Models/JobData.js';
 import mongoose from 'mongoose';
 import Company from '../Models/Company.js';
+import Cache from '../Helpers/Cache.js';
 
 function generateSlug(title, suffix) {
     const slug = title
@@ -350,9 +351,12 @@ const JobDataService = {
     /** Get top 8 categories with most active job listings from the last 30 days */
     getTopCategories: async () => {
         try {
+            const cached = Cache.get('top-categories');
+            if (cached) return cached;
+
             const thirtyDaysAgo = new Date();
             thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-            return await JobData.aggregate([
+            const result = await JobData.aggregate([
                 { $match: { isActive: true, createdAt: { $gte: thirtyDaysAgo } } },
                 { $group: { _id: '$categoryId', count: { $sum: 1 } } },
                 { $sort: { count: -1 } },
@@ -360,8 +364,10 @@ const JobDataService = {
                 {
                     $lookup: {
                         from: 'categories',
-                        localField: '_id',
-                        foreignField: 'localCategoryId',
+                        let: { catId: { $toString: '$_id' } },
+                        pipeline: [
+                            { $match: { $expr: { $eq: ['$localCategoryId', '$$catId'] } } }
+                        ],
                         as: 'category'
                     }
                 },
@@ -377,6 +383,9 @@ const JobDataService = {
                     }
                 }
             ]);
+
+            Cache.set('top-categories', result, 600); // 10 min cache
+            return result;
         } catch (error) {
             throw new Error('Error fetching top categories: ' + error.message);
         }

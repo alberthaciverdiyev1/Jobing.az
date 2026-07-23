@@ -11,7 +11,13 @@ const dbURI = process.env.NODE_ENV !== "production" ? `mongodb://${process.env.D
 
 const connectPromise = mongoose.connect(dbURI, {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    maxPoolSize: 50,
+    minPoolSize: 5,
+    keepAlive: true,
+    keepAliveInitialDelay: 300000,
+    serverSelectionTimeoutMS: 5000,
+    socketTimeoutMS: 45000,
 });
 
 connectPromise
