@@ -70,7 +70,7 @@ function buildSvg(job) {
     let cursorY = cardY + 280;
     const titleLineH = 96;
     const titleElements = titleLines.map((line, i) =>
-        `<text x="${cardX + 50}" y="${cursorY + i * titleLineH}" font-family="'Helvetica Neue', Arial, sans-serif" font-size="78" font-weight="bold" fill="${DARK}" letter-spacing="-1">${escapeXml(line)}</text>`
+        `<text x="${cx}" y="${cursorY + i * titleLineH}" font-family="'Helvetica Neue', Arial, sans-serif" font-size="78" font-weight="bold" fill="${DARK}" text-anchor="middle" letter-spacing="-1">${escapeXml(line)}</text>`
     ).join('\n      ');
 
     cursorY += titleLines.length * titleLineH;
@@ -120,7 +120,7 @@ function buildSvg(job) {
   <circle cx="${cardX + cardW - 65}" cy="${cardY + 88}" r="8" fill="none" stroke="${TEXT_GRAY}" stroke-width="1.5"/>
   <path d="M${cardX + cardW - 65} ${cardY + 84} v4 h3" fill="none" stroke="${TEXT_GRAY}" stroke-width="1.5"/>
 
-  <text x="${cardX + 50}" y="${cardY + 180}" font-family="'Helvetica Neue', Arial, sans-serif" font-size="57" font-weight="bold" fill="${ORANGE}">İş var!</text>
+  <text x="${cx}" y="${cardY + 180}" font-family="'Helvetica Neue', Arial, sans-serif" font-size="57" font-weight="bold" fill="${ORANGE}" text-anchor="middle">İş var!</text>
 
   ${titleElements}
   ${metaSvg}
