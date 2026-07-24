@@ -35,13 +35,13 @@ function escapeXml(str) {
 
 function formatSalary(minSalary, maxSalary) {
     if (minSalary && maxSalary && Number(minSalary) === Number(maxSalary)) {
-        return `${Number(minSalary).toLocaleString()} ₼`;
+        return `${Number(minSalary)} ₼`;
     }
     if (minSalary && maxSalary) {
-        return `${Number(minSalary).toLocaleString()} ₼ - ${Number(maxSalary).toLocaleString()} ₼`;
+        return `${Number(minSalary)} ₼ - ${Number(maxSalary)} ₼`;
     }
-    if (minSalary) return `${Number(minSalary).toLocaleString()} ₼'dən`;
-    if (maxSalary) return `${Number(maxSalary).toLocaleString()} ₼'dək`;
+    if (minSalary) return `${Number(minSalary)} ₼'dən`;
+    if (maxSalary) return `${Number(maxSalary)} ₼'dək`;
     return null;
 }
 
