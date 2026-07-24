@@ -79,15 +79,15 @@ function buildSvg(job) {
     let metaSvg = '';
     if (location) {
         metaSvg += `
-        <rect x="${cardX + 50}" y="${cursorY - 15}" width="${location.length * 10 + 30}" height="48" rx="10" fill="#F3F4F6"/>
-        <text x="${cardX + 65}" y="${cursorY + 18}" font-family="'Helvetica Neue', Arial, sans-serif" font-size="24" fill="${TEXT_GRAY}">${escapeXml(location)}</text>
+        <rect x="${cx - (location.length * 10 + 30) / 2}" y="${cursorY - 15}" width="${location.length * 10 + 30}" height="48" rx="10" fill="#F3F4F6"/>
+        <text x="${cx}" y="${cursorY + 18}" font-family="'Helvetica Neue', Arial, sans-serif" font-size="24" fill="${TEXT_GRAY}" text-anchor="middle">${escapeXml(location)}</text>
         `;
         cursorY += 75;
     }
     if (salaryText) {
         metaSvg += `
-        <rect x="${cardX + 50}" y="${cursorY - 15}" width="${salaryText.length * 10 + 30}" height="48" rx="10" fill="${ORANGE}" opacity="0.12"/>
-        <text x="${cardX + 65}" y="${cursorY + 18}" font-family="'Helvetica Neue', Arial, sans-serif" font-size="24" font-weight="bold" fill="${ORANGE}">${escapeXml(salaryText)}</text>
+        <rect x="${cx - (salaryText.length * 10 + 30) / 2}" y="${cursorY - 15}" width="${salaryText.length * 10 + 30}" height="48" rx="10" fill="${ORANGE}" opacity="0.12"/>
+        <text x="${cx}" y="${cursorY + 18}" font-family="'Helvetica Neue', Arial, sans-serif" font-size="24" font-weight="bold" fill="${ORANGE}" text-anchor="middle">${escapeXml(salaryText)}</text>
         `;
     }
 
@@ -115,10 +115,6 @@ function buildSvg(job) {
 
   <rect x="${cardX}" y="${cardY}" width="${cardW}" height="${cardH}" rx="30" fill="${CARD_BG}" filter="url(#shadow)"/>
 
-  <rect x="${cardX + cardW - 165}" y="${cardY + 60}" width="125" height="57" rx="28" fill="none" stroke="${BORDER_COLOR}" stroke-width="1.5"/>
-  <text x="${cardX + cardW - 115}" y="${cardY + 94}" font-family="'Helvetica Neue', Arial, sans-serif" font-size="24" fill="${TEXT_GRAY}" text-anchor="middle">elə indi!</text>
-  <circle cx="${cardX + cardW - 65}" cy="${cardY + 88}" r="8" fill="none" stroke="${TEXT_GRAY}" stroke-width="1.5"/>
-  <path d="M${cardX + cardW - 65} ${cardY + 84} v4 h3" fill="none" stroke="${TEXT_GRAY}" stroke-width="1.5"/>
 
   <text x="${cx}" y="${cardY + 270}" font-family="'Helvetica Neue', Arial, sans-serif" font-size="57" font-weight="bold" fill="${ORANGE}" text-anchor="middle">İş var!</text>
 
