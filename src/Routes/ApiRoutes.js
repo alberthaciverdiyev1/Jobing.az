@@ -12,6 +12,7 @@ import applicationController from '../Controllers/ApplicationController.js';
 import viewController from '../Controllers/ViewController.js';
 import newsController from '../Controllers/NewsController.js';
 import jobSeekerController, { uploadJobSeekerCV } from '../Controllers/JobSeekerController.js';
+import linkedinController from '../Controllers/LinkedInController.js';
 import validator from '../Validators/Main.js';
 import authMiddleware from '../Middlewares/Auth.js';
 import { authLimiter, jobLimiter } from '../Middlewares/RateLimit.js';
@@ -157,5 +158,11 @@ router.get('/statistics', viewController.statistics);
 // MAIL
 // ============================================================
 router.post('/send-mail', viewController.sendMail);
+
+// ============================================================
+// LINKEDIN OAUTH
+// ============================================================
+router.get('/api/auth/linkedin', linkedinController.auth);
+router.get('/api/auth/linkedin/callback', linkedinController.callback);
 
 export default router;
