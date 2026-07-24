@@ -88,12 +88,11 @@ function buildSvg(job) {
     const lineY = cardY + cardH - 120;
     const buttonW = 300;
     const buttonH = 78;
-    const buttonX = cardX + cardW - 50 - dynamicButtonW;
-    const buttonY = lineY + 30;
-
     const buttonText = salaryText || 'Razılaşma yolu ilə';
     const buttonFontSize = salaryText ? 40 : 27;
     const dynamicButtonW = salaryText ? Math.max(buttonText.length * 22 + 40, buttonW) : buttonW;
+    const buttonX = cardX + cardW - 50 - dynamicButtonW;
+    const buttonY = lineY + 30;
 
     return `<svg width="${CARD_WIDTH}" height="${CARD_HEIGHT}" xmlns="http://www.w3.org/2000/svg">
   <defs>
