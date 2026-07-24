@@ -84,14 +84,7 @@ function buildSvg(job) {
         `;
         cursorY += 95;
     }
-    if (salaryText) {
-        metaSvg += `
-        <rect x="${cx - (salaryText.length * 10 + 30) / 2}" y="${cursorY - 15}" width="${salaryText.length * 10 + 30}" height="48" rx="10" fill="${ORANGE}" opacity="0.12"/>
-        <text x="${cx}" y="${cursorY + 18}" font-family="'Helvetica Neue', Arial, sans-serif" font-size="24" font-weight="bold" fill="${ORANGE}" text-anchor="middle">${escapeXml(salaryText)}</text>
-        `;
-    }
-
-    // ======= Alt Bölüm (Şirket & Buton) =======
+// ======= Alt Bölüm (Şirket & Buton) =======
     const lineY = cardY + cardH - 120;
     const buttonW = 300;
     const buttonH = 78;
@@ -99,6 +92,7 @@ function buildSvg(job) {
     const buttonY = lineY + 30;
 
     const buttonText = salaryText || 'Razılaşma yolu ilə';
+    const buttonFontSize = salaryText ? 40 : 27;
 
     return `<svg width="${CARD_WIDTH}" height="${CARD_HEIGHT}" xmlns="http://www.w3.org/2000/svg">
   <defs>
@@ -128,7 +122,7 @@ function buildSvg(job) {
   <text x="${cardX + 50}" y="${lineY + 70}" font-family="'Helvetica Neue', Arial, sans-serif" font-size="36" font-weight="bold" fill="${DARK}">${escapeXml(companyName || 'Şirkət')}</text>
 
   <rect x="${buttonX}" y="${buttonY}" width="${buttonW}" height="${buttonH}" rx="14" fill="${DARK}"/>
-  <text x="${buttonX + buttonW / 2}" y="${buttonY + 48}" font-family="'Helvetica Neue', Arial, sans-serif" font-size="27" font-weight="bold" fill="#FFFFFF" text-anchor="middle">${escapeXml(buttonText)}</text>
+  <text x="${buttonX + buttonW / 2}" y="${buttonY + (salaryText ? 52 : 48)}" font-family="'Helvetica Neue', Arial, sans-serif" font-size="${buttonFontSize}" font-weight="bold" fill="#FFFFFF" text-anchor="middle">${escapeXml(buttonText)}</text>
 
   <path d="M${cx - 15} ${cardY + cardH + 25} L${cx} ${cardY + cardH + 40} L${cx + 15} ${cardY + cardH + 25}" fill="none" stroke="#E5D9CC" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
   <text x="${cx}" y="${cardY + cardH + 75}" font-family="'Helvetica Neue', Arial, sans-serif" font-size="30" fill="#E5D9CC" font-weight="bold" text-anchor="middle" letter-spacing="1">jobing.az</text>
