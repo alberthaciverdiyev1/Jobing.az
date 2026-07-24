@@ -40,8 +40,8 @@ function formatSalary(minSalary, maxSalary) {
     if (minSalary && maxSalary) {
         return `${Number(minSalary)} ₼ - ${Number(maxSalary)} ₼`;
     }
-    if (minSalary) return `${Number(minSalary)} ₼'dən`;
-    if (maxSalary) return `${Number(maxSalary)} ₼'dək`;
+    if (minSalary) return `${Number(minSalary)} ₼`;
+    if (maxSalary) return `${Number(maxSalary)} ₼`;
     return null;
 }
 
