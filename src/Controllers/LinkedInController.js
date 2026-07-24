@@ -1,14 +1,14 @@
+import fs from 'fs';
+import path from 'path';
 import axios from 'axios';
 
 const CLIENT_ID = '78b9afwvpxvaw8';
 const CLIENT_SECRET = process.env.LINKEDIN_CLIENT_SECRET;
 const REDIRECT_URI = 'https://jobing.az/api/auth/linkedin/callback';
+const ENV_PATH = path.resolve(process.cwd(), '.env');
 
 const LinkedInController = {
 
-    /**
-     * Step 1: Redirect user to LinkedIn authorization page
-     */
     auth: (req, res) => {
         const url =
             'https://www.linkedin.com/oauth/v2/authorization' +
@@ -19,10 +19,6 @@ const LinkedInController = {
         res.redirect(url);
     },
 
-    /**
-     * Step 2: LinkedIn redirects here with ?code=...
-     * Exchange code for access token and save to .env
-     */
     callback: async (req, res) => {
         const { code } = req.query;
         if (!code) {
@@ -47,10 +43,7 @@ const LinkedInController = {
 
             const { access_token, expires_in } = tokenRes.data;
 
-            // Update .env with new token
-            const envPath = process.env.ENV_PATH || '.env';
-            const fs = await import('fs');
-            let envContent = fs.readFileSync(envPath, 'utf8');
+            let envContent = fs.readFileSync(ENV_PATH, 'utf8');
 
             if (envContent.includes('LINKEDIN_ACCESS_TOKEN=')) {
                 envContent = envContent.replace(
@@ -61,11 +54,7 @@ const LinkedInController = {
                 envContent += `\nLINKEDIN_ACCESS_TOKEN=${access_token}\n`;
             }
 
-            if (!envContent.includes('LINKEDIN_PERSON_ID=')) {
-                envContent += 'LINKEDIN_PERSON_ID=850595767\n';
-            }
-
-            fs.writeFileSync(envPath, envContent, 'utf8');
+            fs.writeFileSync(ENV_PATH, envContent, 'utf8');
 
             res.send(
                 `<html><body style="font-family:sans-serif;padding:40px;text-align:center">` +
