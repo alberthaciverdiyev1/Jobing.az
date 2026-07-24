@@ -7,6 +7,18 @@ document.addEventListener("DOMContentLoaded", async () => {
     const citySelect = document.getElementById('city-select');
     const csCity = citySelect ? createCustomSelect(citySelect) : null;
 
+    // ========== JOB CARD NAVIGATION ==========
+    function navigateToJob(card) {
+        const originalLink = card.getAttribute('data-original-link');
+        if (originalLink) {
+            if (originalLink.startsWith('/')) {
+                window.location.href = originalLink;
+            } else {
+                window.open(originalLink, '_blank');
+            }
+        }
+    }
+
     // ========== LOAD JOBS ==========
     async function getJobs() {
         try {
@@ -21,13 +33,12 @@ document.addEventListener("DOMContentLoaded", async () => {
 
                 document.querySelectorAll('.job-card').forEach(card => {
                     card.addEventListener('click', function () {
-                        const originalLink = this.getAttribute('data-original-link');
-                        if (originalLink) {
-                            if (originalLink.startsWith('/')) {
-                                window.location.href = originalLink;
-                            } else {
-                                window.open(originalLink, '_blank');
-                            }
+                        navigateToJob(this);
+                    });
+                    card.addEventListener('keydown', function (e) {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            navigateToJob(this);
                         }
                     });
                 });
@@ -82,6 +93,25 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     }
 
+    // ========== ANIMATE STATS COUNTER ==========
+    function animateCounter(el, target, duration = 600) {
+        const start = 0;
+        const startTime = performance.now();
+        function update(currentTime) {
+            const elapsed = currentTime - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            // Ease out cubic
+            const eased = 1 - Math.pow(1 - progress, 3);
+            el.innerText = Math.floor(start + (target - start) * eased);
+            if (progress < 1) {
+                requestAnimationFrame(update);
+            } else {
+                el.innerText = target;
+            }
+        }
+        requestAnimationFrame(update);
+    }
+
     // ========== LOAD STATISTICS ==========
     async function getStatistics() {
         try {
@@ -92,13 +122,25 @@ document.addEventListener("DOMContentLoaded", async () => {
                     const el = document.getElementById(id);
                     if (el) {
                         const val = res.data.data[id] || 0;
-                        el.innerText = val;
+                        animateCounter(el, val);
                     }
                 });
             }
         } catch (error) {
             console.error("Error fetching statistics:", error);
         }
+    }
+
+    // ========== SEARCH LOADING STATE ==========
+    const searchForm = document.getElementById('home-search-form');
+    if (searchForm) {
+        searchForm.addEventListener('submit', function () {
+            const btn = document.getElementById('home-search-btn');
+            if (btn) {
+                btn.disabled = true;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-1.5"></i> ' + btn.textContent.trim();
+            }
+        });
     }
 
     // ========== INIT ==========

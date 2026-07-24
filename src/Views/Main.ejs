@@ -11,12 +11,16 @@
     <% if (typeof seo !== 'undefined' && seo && seo.bodyTopHtml) { %>
       <%- seo.bodyTopHtml %>
     <% } %>
+    <!-- Skip to content (keyboard accessibility) -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
     <!-- Navbar -->
     <%- include('Partials/Navbar') %>
     <!-- Mobile Bottom Nav -->
     <%- include('Partials/MobileBottomNav') %>
-    <!-- body -->
-    <%- include(body) %>
+    <!-- Main Content -->
+    <main id="main-content">
+      <%- include(body) %>
+    </main>
     <!-- Footer -->
     <%- include('Partials/Footer') %>
     <% if (typeof seo !== 'undefined' && seo && seo.bodyBottomHtml) { %>

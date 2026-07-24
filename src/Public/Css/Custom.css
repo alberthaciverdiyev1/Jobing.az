@@ -530,3 +530,43 @@ html {
 .custom-select-search::placeholder {
   color: #d1d5db;
 }
+
+/* ========== SKIP TO CONTENT (a11y) ========== */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 0;
+  z-index: 9999;
+  background-color: #FF8C00;
+  color: white;
+  padding: 12px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 0 0 8px 8px;
+  transition: top 0.2s ease;
+  text-decoration: none;
+}
+.skip-link:focus {
+  top: 0;
+}
+
+/* ========== HERO ILLUSTRATION DARK MODE ========== */
+.dark .hero-illustration {
+  opacity: 0.8;
+  filter: brightness(0.75) saturate(0.85);
+  transition: opacity 0.3s ease, filter 0.3s ease;
+}
+
+/* ========== STATS MIN-WIDTH FOR CLS PREVENTION ========== */
+#vacancy, #company, #visitor, #totalVisitor {
+  min-width: 2ch;
+  display: inline-block;
+}
+
+/* ========== REDUCED MOTION FOR STAGGER ========== */
+@media (prefers-reduced-motion: reduce) {
+  .animate-stagger > * {
+    opacity: 1;
+    animation: none;
+  }
+}
