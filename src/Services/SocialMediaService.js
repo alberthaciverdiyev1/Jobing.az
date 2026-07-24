@@ -91,48 +91,58 @@ const SocialMediaService = {
     },
 
     // ----------------------------------------------------------------
-    // LinkedIn REST API
+    // LinkedIn REST API - Posts API (2025+)
     // ----------------------------------------------------------------
     async shareToLinkedIn(job) {
         const token = process.env.LINKEDIN_ACCESS_TOKEN;
-        const organizationUrn = process.env.LINKEDIN_ORGANIZATION_URN;
+        const personId = process.env.LINKEDIN_PERSON_ID;
 
-        if (!token || !organizationUrn) {
-            return { platform: 'linkedin', success: false, error: 'LinkedIn API not configured (LINKEDIN_ACCESS_TOKEN, LINKEDIN_ORGANIZATION_URN)' };
+        if (!token || !personId) {
+            return { platform: 'linkedin', success: false, error: 'LinkedIn API not configured (LINKEDIN_ACCESS_TOKEN / LINKEDIN_PERSON_ID)' };
         }
 
         try {
             const text = buildCaption(job, 600);
             const jobUrl = `https://jobing.az/vakansiyalar/${job.slug || job._id}/details`;
+            const articleTitle = job.title || 'Vakansiya';
+            const articleDescription = job.companyName
+                ? `${job.companyName} şirkətinə vakansiya`
+                : 'Vakansiya';
 
             await axios.post(
-                'https://api.linkedin.com/v2/ugcPosts',
+                'https://api.linkedin.com/rest/posts',
                 {
-                    author: `urn:li:organization:${organizationUrn}`,
-                    lifecycleState: 'PUBLISHED',
-                    specificContent: {
-                        'com.linkedin.ugc.ShareContent': {
-                            shareCommentary: { text },
-                            shareMediaCategory: 'ARTICLE',
-                            media: [{
-                                status: 'READY',
-                                originalUrl: jobUrl
-                            }]
-                        }
+                    author: `urn:li:person:${personId}`,
+                    commentary: text,
+                    visibility: 'PUBLIC',
+                    distribution: {
+                        feedDistribution: 'MAIN_FEED',
+                        targetEntities: [],
+                        thirdPartyDistributionChannels: []
                     },
-                    visibility: { 'com.linkedin.ugc.MemberNetworkVisibility': 'PUBLIC' }
+                    lifecycleState: 'PUBLISHED',
+                    isReshareDisabledByAuthor: false,
+                    content: {
+                        article: {
+                            source: jobUrl,
+                            thumbnail: job.shareImageUrl || undefined,
+                            title: articleTitle,
+                            description: articleDescription
+                        }
+                    }
                 },
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         'Content-Type': 'application/json',
+                        'LinkedIn-Version': '202412',
                         'X-Restli-Protocol-Version': '2.0.0'
                     }
                 }
             );
             return { platform: 'linkedin', success: true };
         } catch (error) {
-            const detail = error.response?.data?.message || error.message;
+            const detail = error.response?.data?.message || error.response?.data?.error?.message || error.message;
             return { platform: 'linkedin', success: false, error: detail };
         }
     },
