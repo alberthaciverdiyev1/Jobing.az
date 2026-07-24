@@ -104,10 +104,6 @@ const SocialMediaService = {
         try {
             const text = buildCaption(job, 600);
             const jobUrl = `https://jobing.az/vakansiyalar/${job.slug || job._id}/details`;
-            const articleTitle = job.title || 'Vakansiya';
-            const articleDescription = job.companyName
-                ? `${job.companyName} şirkətinə vakansiya`
-                : 'Vakansiya';
 
             await axios.post(
                 'https://api.linkedin.com/rest/posts',
@@ -122,21 +118,12 @@ const SocialMediaService = {
                     },
                     lifecycleState: 'PUBLISHED',
                     isReshareDisabledByAuthor: false,
-                    content: {
-                        article: {
-                            source: jobUrl,
-                            thumbnail: job.shareImageUrl || undefined,
-                            title: articleTitle,
-                            description: articleDescription
-                        }
-                    }
                 },
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         'Content-Type': 'application/json',
-                        'LinkedIn-Version': '202412',
-                        'X-Restli-Protocol-Version': '2.0.0'
+                        'LinkedIn-Version': '202607',
                     }
                 }
             );
