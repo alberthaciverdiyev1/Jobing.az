@@ -79,10 +79,10 @@ function buildSvg(job) {
     let metaSvg = '';
     if (location) {
         metaSvg += `
-        <rect x="${cx - (location.length * 10 + 30) / 2}" y="${cursorY - 15}" width="${location.length * 10 + 30}" height="48" rx="10" fill="#F3F4F6"/>
-        <text x="${cx}" y="${cursorY + 18}" font-family="'Helvetica Neue', Arial, sans-serif" font-size="24" fill="${TEXT_GRAY}" text-anchor="middle">${escapeXml(location)}</text>
+        <rect x="${cx - (location.length * 16 + 40) / 2}" y="${cursorY - 20}" width="${location.length * 16 + 40}" height="72" rx="14" fill="#F3F4F6"/>
+        <text x="${cx}" y="${cursorY + 30}" font-family="'Helvetica Neue', Arial, sans-serif" font-size="48" fill="${TEXT_GRAY}" text-anchor="middle">${escapeXml(location)}</text>
         `;
-        cursorY += 75;
+        cursorY += 95;
     }
     if (salaryText) {
         metaSvg += `
