@@ -132,7 +132,7 @@ document.addEventListener('DOMContentLoaded', () => {
       var yrs = exp && exp.years ? exp.years + ' ' + (window._CVT && window._CVT.expYear || 'il') : (cv.experience && cv.experience.length > 0 ? cv.experience.length + ' ' + (window._CVT && window._CVT.expCount || 'təcrübə') : '');
       var city = exp && exp.city ? exp.city : (cv.address || '');
 
-      html += '<div class="candidate-card-enter bg-white dark:bg-gray-900 rounded-2xl border border-gray-100/80 dark:border-gray-800/80 shadow-sm dark:shadow-gray-900/50 hover:-translate-y-2 hover:shadow-xl dark:hover:shadow-gray-900 hover:border-gray-200/60 dark:hover:border-gray-700/60 transition-all duration-300 overflow-hidden" style="animation-delay:' + (i * 60) + 'ms">';
+      html += '<div class="candidate-card-enter bg-white dark:bg-gray-900 rounded-2xl border border-gray-100/80 dark:border-gray-800/80 shadow-sm dark:shadow-gray-900/50 hover:-translate-y-2 hover:shadow-xl dark:hover:shadow-gray-900 hover:border-gray-200/60 dark:hover:border-gray-700/60 transition-all duration-300 overflow-hidden cursor-pointer" onclick="window.location.href=\'/cv-ler/' + cv._id + '\'" style="animation-delay:' + (i * 60) + 'ms">';
 
       html += '<div class="flex flex-col min-h-full p-5 sm:p-[22px]"><div class="flex-1">';
 
