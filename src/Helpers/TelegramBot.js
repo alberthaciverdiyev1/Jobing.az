@@ -10,9 +10,11 @@ import VisitorService from "../Services/VisitorService.js";
 
 let sendTo = null;
 
-// Only start polling in the primary cluster worker to avoid 409 conflicts
-const isPrimary = process.env.NODE_APP_INSTANCE === '0' || process.env.NODE_APP_INSTANCE === undefined;
-const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN, { polling: isPrimary });
+// Only the standalone Telegram worker (fork process) polls.
+// Cluster workers never poll to prevent 409 conflicts.
+// In dev mode (no cluster), inline bot polls normally.
+const isCluster = process.env.NODE_APP_INSTANCE !== undefined;
+const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN, { polling: !isCluster });
 
 export async function sendTgMessage(data = 'Test') {
     await bot.sendMessage('@jobingaz1', data);
