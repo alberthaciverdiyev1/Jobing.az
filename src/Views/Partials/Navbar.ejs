@@ -36,7 +36,7 @@
 
                 <!-- Language Switcher Dropdown (shown on both desktop and mobile) -->
                 <div class="relative" id="lang-switcher">
-                    <button onclick="toggleLangDropdown()" class="flex items-center gap-1.5 px-2.5 py-2 rounded-lg text-gray-500 hover:text-primary-500 hover:bg-gray-50 transition-all text-sm font-medium">
+                    <button onclick="toggleLangDropdown()" class="flex items-center gap-1.5 px-2.5 py-2 rounded-lg text-gray-500 hover:text-primary-500 hover:bg-gray-50 transition-all text-sm font-medium" aria-label="<%= __('nav.switchLanguage') || 'Switch language' %>">
                         <i class="fas fa-globe text-xs"></i>
                         <span class="uppercase font-semibold"><%= (typeof locale !== 'undefined' ? locale : 'az') %></span>
                         <i class="fas fa-chevron-down text-[8px] ml-0.5"></i>
@@ -74,7 +74,7 @@
             </button>
             <!-- Mobile Language Dropdown -->
             <div class="relative">
-                <button onclick="toggleLangDropdownMobile()" class="flex items-center gap-1 px-2 py-2 rounded-lg text-gray-500 hover:text-primary-500 hover:bg-gray-100 transition-all text-sm">
+                <button onclick="toggleLangDropdownMobile()" class="flex items-center gap-1 px-2 py-2 rounded-lg text-gray-500 hover:text-primary-500 hover:bg-gray-100 transition-all text-sm" aria-label="<%= __('nav.switchLanguage') || 'Switch language' %>">
                     <i class="fas fa-globe text-xs"></i>
                     <span class="uppercase font-semibold text-[11px]"><%= (typeof locale !== 'undefined' ? locale : 'az') %></span>
                     <i class="fas fa-chevron-down text-[8px]"></i>
