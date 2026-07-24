@@ -3,8 +3,8 @@ import path from 'path';
 import fs from 'fs';
 import { v4 as uuidv4 } from 'uuid';
 
-const CARD_WIDTH = 1200;
-const CARD_HEIGHT = 630;
+const CARD_WIDTH = 1080;
+const CARD_HEIGHT = 1080;
 
 function wrapText(text, maxChars) {
     const words = String(text).split(' ');
@@ -61,14 +61,14 @@ function buildSvg(job) {
     // ======= Kart Boyutları ve Merkezleme =======
     const cx = CARD_WIDTH / 2;
     const cy = CARD_HEIGHT / 2;
-    const cardW = 760;
-    const cardH = 460;
+    const cardW = 880;
+    const cardH = 860;
     const cardX = cx - cardW / 2;
     const cardY = cy - cardH / 2;
 
     // ======= "İş Var!" ve Başlık =======
-    let cursorY = cardY + 160;
-    const titleLineH = 55;
+    let cursorY = cardY + 240;
+    const titleLineH = 64;
     const titleElements = titleLines.map((line, i) =>
         `<text x="${cardX + 50}" y="${cursorY + i * titleLineH}" font-family="'Helvetica Neue', Arial, sans-serif" font-size="52" font-weight="bold" fill="${DARK}" letter-spacing="-1">${escapeXml(line)}</text>`
     ).join('\n      ');
@@ -82,7 +82,7 @@ function buildSvg(job) {
         <rect x="${cardX + 50}" y="${cursorY - 15}" width="${location.length * 10 + 30}" height="32" rx="8" fill="#F3F4F6"/>
         <text x="${cardX + 65}" y="${cursorY + 6}" font-family="'Helvetica Neue', Arial, sans-serif" font-size="16" fill="${TEXT_GRAY}">${escapeXml(location)}</text>
         `;
-        cursorY += 45;
+        cursorY += 50;
     }
     if (salaryText) {
         metaSvg += `
@@ -92,9 +92,9 @@ function buildSvg(job) {
     }
 
     // ======= Alt Bölüm (Şirket & Buton) =======
-    const lineY = cardY + cardH - 100;
-    const buttonW = 160;
-    const buttonH = 48;
+    const lineY = cardY + cardH - 150;
+    const buttonW = 200;
+    const buttonH = 52;
     const buttonX = cardX + cardW - 50 - buttonW;
     const buttonY = lineY + 25;
 
@@ -115,27 +115,27 @@ function buildSvg(job) {
 
   <rect x="${cardX}" y="${cardY}" width="${cardW}" height="${cardH}" rx="30" fill="${CARD_BG}" filter="url(#shadow)"/>
 
-  <rect x="${cardX + cardW - 155}" y="${cardY + 40}" width="115" height="36" rx="18" fill="none" stroke="${BORDER_COLOR}" stroke-width="1.5"/>
-  <text x="${cardX + cardW - 110}" y="${cardY + 63}" font-family="'Helvetica Neue', Arial, sans-serif" font-size="15" fill="${TEXT_GRAY}" text-anchor="middle">elə indi!</text>
-  <circle cx="${cardX + cardW - 65}" cy="${cardY + 58}" r="8" fill="none" stroke="${TEXT_GRAY}" stroke-width="1.5"/>
-  <path d="M${cardX + cardW - 65} ${cardY + 54} v4 h3" fill="none" stroke="${TEXT_GRAY}" stroke-width="1.5"/>
+  <rect x="${cardX + cardW - 165}" y="${cardY + 50}" width="125" height="38" rx="19" fill="none" stroke="${BORDER_COLOR}" stroke-width="1.5"/>
+  <text x="${cardX + cardW - 115}" y="${cardY + 75}" font-family="'Helvetica Neue', Arial, sans-serif" font-size="16" fill="${TEXT_GRAY}" text-anchor="middle">elə indi!</text>
+  <circle cx="${cardX + cardW - 65}" cy="${cardY + 69}" r="8" fill="none" stroke="${TEXT_GRAY}" stroke-width="1.5"/>
+  <path d="M${cardX + cardW - 65} ${cardY + 65} v4 h3" fill="none" stroke="${TEXT_GRAY}" stroke-width="1.5"/>
 
-  <text x="${cardX + 50}" y="${cardY + 110}" font-family="'Helvetica Neue', Arial, sans-serif" font-size="34" font-weight="bold" fill="${ORANGE}">İş var!</text>
+  <text x="${cardX + 50}" y="${cardY + 150}" font-family="'Helvetica Neue', Arial, sans-serif" font-size="38" font-weight="bold" fill="${ORANGE}">İş var!</text>
 
   ${titleElements}
   ${metaSvg}
 
   <line x1="${cardX + 50}" y1="${lineY}" x2="${cardX + cardW - 50}" y2="${lineY}" stroke="${BORDER_COLOR}" stroke-width="1.5"/>
 
-  <text x="${cardX + 50}" y="${lineY + 55}" font-family="'Helvetica Neue', Arial, sans-serif" font-size="22" font-weight="bold" fill="${DARK}">${escapeXml(companyName || 'Şirkət')}</text>
+  <text x="${cardX + 50}" y="${lineY + 65}" font-family="'Helvetica Neue', Arial, sans-serif" font-size="24" font-weight="bold" fill="${DARK}">${escapeXml(companyName || 'Şirkət')}</text>
 
   <rect x="${buttonX}" y="${buttonY}" width="${buttonW}" height="${buttonH}" rx="14" fill="${DARK}"/>
-  <text x="${buttonX + buttonW / 2}" y="${buttonY + 30}" font-family="'Helvetica Neue', Arial, sans-serif" font-size="17" font-weight="bold" fill="#FFFFFF" text-anchor="middle">Müraciət et</text>
+  <text x="${buttonX + buttonW / 2}" y="${buttonY + 32}" font-family="'Helvetica Neue', Arial, sans-serif" font-size="18" font-weight="bold" fill="#FFFFFF" text-anchor="middle">Müraciət et</text>
 
   <path d="M${cx - 10} ${cardY + cardH + 25} L${cx} ${cardY + cardH + 35} L${cx + 10} ${cardY + cardH + 25}" fill="none" stroke="#E5D9CC" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
   <text x="${cx}" y="${cardY + cardH + 65}" font-family="'Helvetica Neue', Arial, sans-serif" font-size="20" fill="#E5D9CC" font-weight="bold" text-anchor="middle" letter-spacing="1">jobing.az</text>
 
-  <g transform="translate(${cardX + cardW - 50}, ${cardY - 50}) rotate(15) scale(0.9)" filter="url(#bellShadow)">
+  <g transform="translate(${cardX + cardW - 50}, ${cardY - 50}) rotate(15) scale(1)" filter="url(#bellShadow)">
     <path d="M40 20 C40 20 20 40 20 75 L10 100 L110 100 L100 75 C100 40 80 20 80 20 C75 10 65 5 60 5 C55 5 45 10 40 20 Z" fill="#FCD34D"/>
     <path d="M60 5 C55 5 45 10 40 20 C40 20 20 40 20 75 L10 100 L60 100 Z" fill="#FBBF24"/>
     <circle cx="60" cy="110" r="14" fill="#D97706"/>
