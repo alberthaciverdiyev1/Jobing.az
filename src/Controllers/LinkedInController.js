@@ -15,12 +15,15 @@ const LinkedInController = {
             '?response_type=code' +
             `&client_id=${CLIENT_ID}` +
             `&redirect_uri=${encodeURIComponent(REDIRECT_URI)}` +
-            '&scope=w_member_social%20openid%20profile%20email';
+            '&scope=w_member_social';
         res.redirect(url);
     },
 
     callback: async (req, res) => {
-        const { code } = req.query;
+        const { code, error, error_description } = req.query;
+        if (error) {
+            return res.status(400).send(`Linkedin authorization failed: ${error_description || error}`);
+        }
         if (!code) {
             return res.status(400).send('Authorization failed — no code received.');
         }
