@@ -125,7 +125,9 @@ const HrController = {
         try {
             const user = req.user;
             let totalJobs, activeJobs, totalApplications, interviewCount;
+            let appStats = { total: 0, pending: 0, accepted: 0, rejected: 0, interview: 0 };
             let companyNames = [];
+            let recentApplications = [];
 
             if (user.role === 'company') {
                 const company = await Company.findOne({ companyName: user.companyName }).lean();
@@ -141,23 +143,23 @@ const HrController = {
                 const jobFilter = { $or: orConditions };
                 totalJobs = await Job.countDocuments(jobFilter);
                 activeJobs = await Job.countDocuments({ ...jobFilter, isActive: true });
-                const appStats = companyId ? await ApplicationService.countByCompany([companyId]) : { total: 0, pending: 0, accepted: 0, rejected: 0, interview: 0 };
+                appStats = companyId ? await ApplicationService.countByCompany([companyId]) : { total: 0, pending: 0, accepted: 0, rejected: 0, interview: 0 };
                 totalApplications = appStats.total;
                 interviewCount = appStats.interview;
                 companyNames = company ? [company.companyName] : [];
                 const recentRes = companyId ? await ApplicationService.findByCompany([companyId], { page: 1, limit: 5 }) : { applications: [] };
-                var recentApplications = recentRes.applications;
+                recentApplications = recentRes.applications;
             } else {
                 const companyIds = user.companyIds || [];
                 totalJobs = await Job.countDocuments({ companyId: { $in: companyIds } });
                 activeJobs = await Job.countDocuments({ companyId: { $in: companyIds }, isActive: true });
-                const appStats = await ApplicationService.countByCompany(companyIds);
+                appStats = await ApplicationService.countByCompany(companyIds);
                 totalApplications = appStats.total;
                 interviewCount = appStats.interview;
                 const companies = await Company.find({ _id: { $in: companyIds } }).select('companyName').lean();
                 companyNames = companies.map(c => c.companyName);
                 const recentRes = await ApplicationService.findByCompany(companyIds, { page: 1, limit: 5 });
-                var recentApplications = recentRes.applications;
+                recentApplications = recentRes.applications;
             }
 
             const upcomingInterviews = await ApplicationService.getUpcomingInterviews(
