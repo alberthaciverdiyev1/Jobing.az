@@ -111,7 +111,7 @@
     <div class="border-t border-gray-100 bg-gray-50/50">
         <div class="max-w-[1440px] mx-auto px-3 sm:px-4 lg:px-6 py-5 flex flex-col sm:flex-row justify-between items-center gap-3">
             <p class="text-gray-400 text-sm">
-                <%= __('footer.copyright') %>
+                <%= __('footer.copyright').replace('2025', new Date().getFullYear().toString()) %>
             </p>
             <div class="flex gap-6">
                 <a href="#" class="text-gray-400 hover:text-gray-600 text-xs transition-colors"><%= __('footer.privacy') %></a>
