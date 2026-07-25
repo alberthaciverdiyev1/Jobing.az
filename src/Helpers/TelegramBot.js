@@ -231,9 +231,50 @@ export const listenTgCommands = async (msg) => {
         await bot.sendMessage(msg.chat.id, 'All Request Was Cancelled');
     }
     if (msg.text === '/views') {
-        let count = await VisitorService.dailyCount();
-        console.log({ count })
-        await bot.sendMessage(msg.chat.id, `Daily visitor count: ${count}`);
+        const report = await VisitorService.dailyReport();
+
+        // Hourly bar chart
+        const hourBars = report.hourlyStats.map(h => {
+            const bar = '▰'.repeat(Math.min(h.visits, 20));
+            const label = String(h._id).padStart(2, '0') + ':00';
+            return `${label} ${bar} ${h.visits}`;
+        }).join('\n');
+
+        // Top IPs
+        const ipList = report.topIps.length > 0
+            ? report.topIps.map((v, i) =>
+                `${i + 1}. \`${v.ip}\` — ${v.visitCount} dəfə | ${(v.userAgent || '-').substring(0, 40)}`
+              ).join('\n')
+            : 'Məlumat yoxdur';
+
+        const diff = report.today.totalVisits - report.yesterday.totalVisits;
+        const diffSign = diff >= 0 ? `📈 +${diff}` : `📉 ${diff}`;
+
+        const msgText = `
+📊 *Günlük Visitor Hesabatı*
+━━━━━━━━━━━━━━━━━━━
+
+👤 *Bugün* (${new Date().toLocaleDateString('az-AZ', { day: 'numeric', month: 'long' })})
+• Ziyarət: ${report.today.totalVisits}
+• Unikal IP: ${report.today.uniqueVisitors}
+• Dünənlə fərq: ${diffSign}
+
+📅 *Dünən*
+• Ziyarət: ${report.yesterday.totalVisits}
+• Unikal IP: ${report.yesterday.uniqueVisitors}
+
+📆 *Son 7 gün*: ${report.weekly.totalVisits} ziyarət
+🏛️ *Ümumi*: ${report.allTime.totalVisits} ziyarət, ${report.allTime.totalUnique} unikal IP
+
+🕐 *Saatlıq bölgü:*
+${hourBars || 'Məlumat yoxdur'}
+
+🔝 *Ən aktiv IP-lər (bugün):*
+${ipList}
+
+⏰ Yenilənmə: ${new Date().toLocaleTimeString('az-AZ', { hour: '2-digit', minute: '2-digit' })}`;
+
+        await bot.sendMessage(msg.chat.id, msgText, { parse_mode: 'Markdown' });
     }
 };
 
