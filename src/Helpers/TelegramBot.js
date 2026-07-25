@@ -238,3 +238,6 @@ export const listenTgCommands = async (msg) => {
 };
 
 export default bot;
+
+// Register command listeners
+bot.on('message', listenTgCommands);
