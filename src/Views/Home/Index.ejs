@@ -328,20 +328,13 @@
                 <% recentJobs.forEach(function(el) { %>
                     <% var logoUrl = defaultLogo; %>
                     <% if (el.companyImageUrl && el.companyImageUrl !== "/nologo.png") { %>
-                        <% if (el.companyImageUrl.startsWith('http')) { logoUrl = el.companyImageUrl; } %>
-                        <% else if (el.companyImageUrl.startsWith('/uploads/')) { logoUrl = el.companyImageUrl; } %>
-                        <% else if (el.companyImageUrl.includes('src/Public/')) { logoUrl = '../' + el.companyImageUrl.slice(el.companyImageUrl.indexOf('src/Public/') + 11); } %>
-                        <% else { logoUrl = el.companyImageUrl.replace(/\\/g, '/'); } %>
+                        <% if (el.companyImageUrl.startsWith('http')) { logoUrl = el.companyImageUrl; } else if (el.companyImageUrl.startsWith('/uploads/')) { logoUrl = el.companyImageUrl; } else if (el.companyImageUrl.includes('src/Public/')) { logoUrl = '../' + el.companyImageUrl.slice(el.companyImageUrl.indexOf('src/Public/') + 11); } else { logoUrl = el.companyImageUrl.replace(/\\/g, '/'); } %>
                     <% } %>
                     <% var hasMin = el.minSalary != null && !isNaN(+el.minSalary) && +el.minSalary > 0; %>
                     <% var hasMax = el.maxSalary != null && !isNaN(+el.maxSalary) && +el.maxSalary > 0; %>
                     <% var salaryText = ''; %>
                     <% if (hasMin || hasMax) { %>
-                        <% if (hasMin && hasMax && +el.minSalary === +el.maxSalary) { %>
-                            <% salaryText = (+el.minSalary) + ' ' + el.currencySign; %>
-                        <% } else { %>
-                            <% salaryText = (hasMin ? +el.minSalary : '') + (hasMin && hasMax ? ' - ' : '') + (hasMax ? +el.maxSalary + ' ' + el.currencySign : ''); %>
-                        <% } %>
+                        <% if (hasMin && hasMax && +el.minSalary === +el.maxSalary) { salaryText = (+el.minSalary) + ' ' + el.currencySign; } else { salaryText = (hasMin ? +el.minSalary : '') + (hasMin && hasMax ? ' - ' : '') + (hasMax ? +el.maxSalary + ' ' + el.currencySign : ''); } %>
                     <% } else { %>
                         <% salaryText = 'Razılaşma Yolu ilə'; %>
                     <% } %>
