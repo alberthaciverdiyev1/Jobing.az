@@ -4,7 +4,7 @@
         <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-primary-500 to-primary-600 flex items-center justify-center text-white text-sm font-bold shadow-sm">
             <%= user.name.charAt(0).toUpperCase() %><%= user.surname.charAt(0).toUpperCase() %>
         </div>
-        <span class="hidden lg:block text-sm font-medium text-gray-700 group-hover:text-gray-900"><%= user.name %></span>
+        <span class="hidden lg:block text-sm font-medium text-gray-700 group-hover:text-gray-900 max-w-[120px] truncate"><%= user.name %></span>
         <i class="fas fa-chevron-down text-[10px] text-gray-400 group-hover:text-gray-600 transition-transform duration-200" id="user-menu-chevron"></i>
     </button>
 
