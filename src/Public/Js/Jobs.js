@@ -39,7 +39,20 @@ document.addEventListener('DOMContentLoaded', async () => {
     await Promise.all([getCategories(), getCities(), getEducation(), getExperience()]);
     allCustomSelects.forEach(cs => cs.refresh());
 
-    restoreFilters();
+    // Check if SSR cards exist and no filters are active
+    const { categoryId, cityId, educationId, experienceLevel, keyword } = getURLParams();
+    const hasFilters = categoryId || cityId || educationId || experienceLevel || keyword;
+    const hasSsrCards = document.querySelectorAll('#card-section .job-card').length > 0;
+
+    if (hasSsrCards && !hasFilters) {
+        // SSR content already rendered, no AJAX needed
+        attachCardListeners();
+        updateActiveFilterCount();
+    } else {
+        // Either filters active or SSR had no data — fetch via AJAX
+        restoreFilters();
+    }
+
     // Refresh custom selects again so their trigger text matches restored values
     allCustomSelects.forEach(cs => cs.refresh());
     setupMobileFilterSheet();
@@ -295,6 +308,21 @@ function getFilterValues() {
 }
 
 // ========== FETCH JOBS ==========
+function attachCardListeners() {
+    document.querySelectorAll('.job-card').forEach(card => {
+        card.addEventListener('click', function () {
+            const link = this.getAttribute('data-original-link');
+            if (link) {
+                if (link.startsWith('/')) {
+                    window.location.href = link;
+                } else {
+                    window.open(link, '_blank');
+                }
+            }
+        });
+    });
+}
+
 async function fetchJobs() {
     const filters = getFilterValues();
     const params = {
@@ -333,18 +361,7 @@ async function fetchJobs() {
             if (countEl) countEl.textContent = '0';
         }
 
-        document.querySelectorAll('.job-card').forEach(card => {
-            card.addEventListener('click', function () {
-                const link = this.getAttribute('data-original-link');
-                if (link) {
-                    if (link.startsWith('/')) {
-                        window.location.href = link;
-                    } else {
-                        window.open(link, '_blank');
-                    }
-                }
-            });
-        });
+        attachCardListeners();
     } catch (err) {
         console.error(err);
         document.getElementById('card-section').innerHTML = noDataCard();

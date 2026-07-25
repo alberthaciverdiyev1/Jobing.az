@@ -18,10 +18,27 @@ import Cache from "../Helpers/Cache.js";
 const ViewController = {
     home: async (req, res) => {
         let topCategories = [];
+        let statistics = { vacancy: 0, company: 0, visitor: 0, totalVisitor: 0 };
+        let recentJobs = [];
+        let recentJobsCount = 0;
         try {
             topCategories = await JobDataService.getTopCategories();
         } catch (error) {
             console.error('home topCategories error:', error.message);
+        }
+        try {
+            const [company, vacancy, visitor, totalVisitor, jobsResult] = await Promise.all([
+                CompanyService.count(),
+                JobDataService.count(),
+                VisitorService.count(30),
+                VisitorService.count(365),
+                JobDataService.getAllJobs({ allJobs: true })
+            ]);
+            statistics = { company, vacancy, visitor, totalVisitor };
+            recentJobs = (jobsResult.jobs || []).slice(0, 12);
+            recentJobsCount = jobsResult.totalCount || 0;
+        } catch (error) {
+            console.error('home SSR stats/jobs error:', error.message);
         }
         const view = {
             title: 'Ana Səhifə',
@@ -29,7 +46,10 @@ const ViewController = {
             body: "Home/Index.ejs",
             js: "Home.js",
             currentPage: 'home',
-            topCategories
+            topCategories,
+            statistics,
+            recentJobs,
+            recentJobsCount
         };
         res.render('Main', view);
     },
@@ -52,12 +72,23 @@ const ViewController = {
         res.render('Main', view);
     },
     jobs: async (req, res) => {
+        let jobs = [];
+        let totalCount = 0;
+        try {
+            const result = await JobDataService.getAllJobs({ allJobs: true });
+            jobs = result.jobs || [];
+            totalCount = result.totalCount || 0;
+        } catch (error) {
+            console.error('jobs SSR error:', error.message);
+        }
         const view = {
             title: 'Vakansiyalar',
             description: 'Azərbaycandakı ən son vakansiya elanları. Minlərlə iş imkanı arasından sizə uyğun olanı tapın.',
             body: "Jobs/Index.ejs",
             js: "Jobs.js",
-            currentPage: 'jobs'
+            currentPage: 'jobs',
+            jobs,
+            totalCount
         };
         res.render('Main', view);
     },
