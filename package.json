@@ -9,7 +9,6 @@
     "production": "node app.js",
     "cluster": "pm2 start ecosystem.config.cjs --env production",
     "cluster:stop": "pm2 stop ecosystem.config.cjs",
-    "start:bot": "node telegram-worker.js",
     "build:css": "postcss src/Public/Css/Base.css -o src/Public/Css/Output.css"
   },
   "author": "Albert",

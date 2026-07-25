@@ -471,6 +471,28 @@
     color: #cbd5e1;
 }
 
+/* ========== CATEGORIES SECTION GRID ========== */
+.dark .from-gray-50\/50 {
+  --tw-gradient-from: rgba(15, 23, 42, 0.7) !important;
+}
+
+.dark section.bg-gradient-to-b.from-gray-50\/50 .grid > a {
+  background-color: #1e293b !important;
+  border-color: #334155 !important;
+}
+
+.dark section.bg-gradient-to-b.from-gray-50\/50 .grid > a:hover {
+  border-color: #475569 !important;
+}
+
+.dark section.bg-gradient-to-b.from-gray-50\/50 .grid > a .bg-gray-100 {
+  background-color: #334155;
+}
+
+.dark section.bg-gradient-to-b.from-gray-50\/50 .grid > a .text-gray-500 {
+  color: #94a3b8;
+}
+
 /* ========== TRANSITION ON HTML ========== */
 html.dark,
 html.dark *,
