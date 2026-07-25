@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 import ApplicationService from '../Services/ApplicationService.js';
 import Application from '../Models/Application.js';
 import JobData from '../Models/JobData.js';
@@ -31,14 +32,21 @@ const ApplicationController = {
                 return res.status(404).json({ error: 'Vakansiya tapılmadı' });
             }
 
-            // Look up company by name to get ObjectId for HR panel filtering
-            const company = await Company.findOne({ companyName: job.companyName }).lean();
+            // Resolve companyId: prefer job's stored companyId, fall back to name lookup
+            let companyId = null;
+            if (job.companyId) {
+                try { companyId = new mongoose.Types.ObjectId(job.companyId); } catch { /* ignore invalid id */ }
+            }
+            if (!companyId && job.companyName) {
+                const company = await Company.findOne({ companyName: job.companyName }).lean();
+                companyId = company?._id || null;
+            }
             const application = await ApplicationService.create({
                 jobId,
                 cvId,
                 userId: req.user._id,
                 companyName: job.companyName || '',
-                companyId: company?._id || null
+                companyId
             });
 
             res.status(201).json({ message: 'Müraciətiniz qeydə alındı', application });
