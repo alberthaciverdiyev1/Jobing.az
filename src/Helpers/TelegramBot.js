@@ -10,11 +10,7 @@ import VisitorService from "../Services/VisitorService.js";
 
 let sendTo = null;
 
-// Only the standalone Telegram worker (fork process) polls.
-// Cluster workers never poll to prevent 409 conflicts.
-// In dev mode (no cluster), inline bot polls normally.
-const isCluster = process.env.NODE_APP_INSTANCE !== undefined;
-const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN, { polling: !isCluster });
+const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN, { polling: true });
 
 export async function sendTgMessage(data = 'Test') {
     await bot.sendMessage('@jobingaz1', data);

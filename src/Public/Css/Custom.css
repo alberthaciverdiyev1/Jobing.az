@@ -563,10 +563,15 @@ html {
   display: inline-block;
 }
 
-/* ========== REDUCED MOTION FOR STAGGER ========== */
+/* ========== REDUCED MOTION ========== */
 @media (prefers-reduced-motion: reduce) {
   .animate-stagger > * {
     opacity: 1;
     animation: none;
   }
+}
+
+/* ========== ALL TRANSITION HELPER ========== */
+.all {
+  transition-property: all;
 }
