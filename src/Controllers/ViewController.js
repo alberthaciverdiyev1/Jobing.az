@@ -442,11 +442,12 @@ const ViewController = {
                 { loc: '/faq', priority: '0.50', changefreq: 'monthly' },
             ];
 
-            // Fetch active jobs for dynamic URLs
+            // Fetch active jobs (max 10000 to avoid timeout)
             const jobs = await JobData.find({ isActive: true })
                 .select('slug updatedAt')
                 .sort({ updatedAt: -1 })
-                .limit(50000)
+                .limit(10000)
+                .maxTimeMS(15000)
                 .lean();
 
             const jobUrls = jobs.filter(j => j.slug).map(j => ({
@@ -460,6 +461,7 @@ const ViewController = {
             const blogs = await Blog.find({ isActive: true })
                 .select('slug updatedAt')
                 .sort({ updatedAt: -1 })
+                .maxTimeMS(5000)
                 .lean();
 
             const blogUrls = blogs.filter(b => b.slug).map(b => ({
@@ -488,8 +490,8 @@ const ViewController = {
             res.header('Content-Type', 'application/xml');
             res.send(xml);
         } catch (error) {
-            console.error('Sitemap error:', error.message);
-            res.status(500).send('Sitemap generation failed');
+            console.error('Sitemap error:', error);
+            res.status(500).send('Sitemap generation failed: ' + error.message);
         }
     },
 
