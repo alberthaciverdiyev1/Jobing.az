@@ -21,8 +21,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // ========== LOAD JOBS ==========
     async function getJobs() {
-        // Skip if SSR already rendered job cards
-        if (document.querySelectorAll('#home-card-section .job-card').length > 0) return;
         try {
             const res = await axios.get('/api/jobs', {
                 params: { allJobs: true }
@@ -97,7 +95,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // ========== ANIMATE STATS COUNTER ==========
     function animateCounter(el, target, duration = 600) {
-        const start = parseInt(el.innerText.replace(/[,\s]/g, '')) || 0;
+        const start = 0;
         const startTime = performance.now();
         function update(currentTime) {
             const elapsed = currentTime - startTime;
@@ -147,15 +145,4 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // ========== INIT ==========
     await Promise.all([getJobs(), getCategories(), getCities(), getStatistics()]);
-
-    // Attach click/keyboard listeners to SSR-rendered job cards
-    document.querySelectorAll('#home-card-section .job-card').forEach(card => {
-        card.addEventListener('click', function () { navigateToJob(this); });
-        card.addEventListener('keydown', function (e) {
-            if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                navigateToJob(this);
-            }
-        });
-    });
 });
