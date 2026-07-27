@@ -146,6 +146,61 @@ export interface User {
   createdAt: string
 }
 
+export interface NewsCategory {
+  id: string
+  name: string
+  slug: string
+  isActive: boolean
+  sortOrder: number
+  newsCount: number
+  createdAt: string
+}
+
+export interface CreateNewsCategoryRequest {
+  name: string
+  sortOrder: number
+}
+
+export interface UpdateNewsCategoryRequest {
+  name: string
+  isActive: boolean
+  sortOrder: number
+}
+
+export interface NewsItem {
+  id: string
+  title: string
+  slug: string
+  content?: string
+  excerpt?: string
+  coverImage?: string
+  categoryId?: string
+  categoryName?: string
+  viewCount: number
+  isPublished: boolean
+  publishedAt?: string
+  createdAt: string
+  updatedAt?: string
+}
+
+export interface CreateNewsRequest {
+  title: string
+  content?: string
+  excerpt?: string
+  coverImage?: string
+  categoryId?: string
+  isPublished: boolean
+}
+
+export interface UpdateNewsRequest {
+  title: string
+  content?: string
+  excerpt?: string
+  coverImage?: string
+  categoryId?: string
+  isPublished: boolean
+}
+
 export interface PagedResult<T> {
   items: T[]
   totalCount: number
