@@ -18,6 +18,8 @@ public class AppDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
     public DbSet<FilterOption> FilterOptions => Set<FilterOption>();
     public DbSet<BlogPost> BlogPosts => Set<BlogPost>();
     public DbSet<BlogCategory> BlogCategories => Set<BlogCategory>();
+    public DbSet<News> News => Set<News>();
+    public DbSet<NewsCategory> NewsCategories => Set<NewsCategory>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

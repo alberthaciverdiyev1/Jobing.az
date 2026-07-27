@@ -23,6 +23,8 @@ public static class DependencyInjection
         services.AddScoped<IFilterRepository, FilterRepository>();
         services.AddScoped<IBlogRepository, BlogRepository>();
         services.AddScoped<IBlogCategoryRepository, BlogCategoryRepository>();
+        services.AddScoped<INewsRepository, NewsRepository>();
+        services.AddScoped<INewsCategoryRepository, NewsCategoryRepository>();
 
         return services;
     }

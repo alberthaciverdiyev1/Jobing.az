@@ -12,6 +12,10 @@ import CategoryList from './pages/CategoryList'
 import CategoryForm from './pages/CategoryForm'
 import PostList from './pages/PostList'
 import PostForm from './pages/PostForm'
+import NewsCategoryList from './pages/NewsCategoryList'
+import NewsCategoryForm from './pages/NewsCategoryForm'
+import NewsList from './pages/NewsList'
+import NewsForm from './pages/NewsForm'
 import UserList from './pages/UserList'
 import UserEdit from './pages/UserEdit'
 
@@ -36,6 +40,12 @@ function App() {
               <Route path="blog-posts" element={<PostList />} />
               <Route path="blog-posts/create" element={<PostForm />} />
               <Route path="blog-posts/edit/:id" element={<PostForm />} />
+              <Route path="news-categories" element={<NewsCategoryList />} />
+              <Route path="news-categories/create" element={<NewsCategoryForm />} />
+              <Route path="news-categories/edit/:id" element={<NewsCategoryForm />} />
+              <Route path="news" element={<NewsList />} />
+              <Route path="news/create" element={<NewsForm />} />
+              <Route path="news/edit/:id" element={<NewsForm />} />
               <Route path="users" element={<UserList />} />
               <Route path="users/edit/:id" element={<UserEdit />} />
             </Route>
