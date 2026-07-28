@@ -4,14 +4,20 @@ import api from '../lib/api'
 import type { NewsItem, NewsCategory } from '../types'
 import { ArrowLeft, Save } from 'lucide-react'
 
+const LANGUAGES = [
+  { key: 'az', label: 'Azərbaycanca' },
+  { key: 'en', label: 'English' },
+  { key: 'ru', label: 'Русский' },
+]
+
 export default function NewsForm() {
   const { id } = useParams()
   const navigate = useNavigate()
   const isEdit = !!id
 
-  const [title, setTitle] = useState('')
-  const [content, setContent] = useState('')
-  const [excerpt, setExcerpt] = useState('')
+  const [title, setTitle] = useState<Record<string, string>>({ az: '', en: '', ru: '' })
+  const [content, setContent] = useState<Record<string, string>>({ az: '', en: '', ru: '' })
+  const [excerpt, setExcerpt] = useState<Record<string, string>>({ az: '', en: '', ru: '' })
   const [coverImage, setCoverImage] = useState('')
   const [categoryId, setCategoryId] = useState('')
   const [isPublished, setIsPublished] = useState(false)
@@ -19,6 +25,7 @@ export default function NewsForm() {
   const [loading, setLoading] = useState(false)
   const [fetching, setFetching] = useState(true)
   const [error, setError] = useState('')
+  const [activeLang, setActiveLang] = useState('az')
 
   useEffect(() => {
     const fetchData = async () => {
@@ -31,9 +38,9 @@ export default function NewsForm() {
         if (id) {
           const postRes = await api.get<NewsItem>(`/news/${id}`)
           const p = postRes.data
-          setTitle(p.title)
-          setContent(p.content || '')
-          setExcerpt(p.excerpt || '')
+          setTitle(p.title || { az: '', en: '', ru: '' })
+          setContent(p.content || { az: '', en: '', ru: '' })
+          setExcerpt(p.excerpt || { az: '', en: '', ru: '' })
           setCoverImage(p.coverImage || '')
           setCategoryId(p.categoryId || '')
           setIsPublished(p.isPublished)
@@ -54,8 +61,8 @@ export default function NewsForm() {
     try {
       const body = {
         title,
-        content: content || null,
-        excerpt: excerpt || null,
+        content: content.az ? content : null,
+        excerpt: excerpt.az ? excerpt : null,
         coverImage: coverImage || null,
         categoryId: categoryId || null,
         isPublished,
@@ -94,10 +101,22 @@ export default function NewsForm() {
 
       {error && <div className="p-3 rounded-lg bg-red-50 border border-red-100 text-sm text-red-700">{error}</div>}
 
+      {/* Language tabs */}
+      <div className="flex gap-1 bg-gray-100 p-1 rounded-lg w-fit">
+        {LANGUAGES.map(({ key, label }) => (
+          <button key={key} type="button" onClick={() => setActiveLang(key)}
+            className={`px-4 py-1.5 rounded-md text-sm font-medium transition-colors ${
+              activeLang === key ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'
+            }`}>{label}</button>
+        ))}
+      </div>
+
       <form onSubmit={handleSubmit} className="bg-white rounded-xl border border-gray-200 p-6 space-y-5">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1.5">Başlıq</label>
-          <input value={title} onChange={e => setTitle(e.target.value)}
+          <label className="block text-sm font-medium text-gray-700 mb-1.5">
+            Başlıq <span className="text-gray-400">({LANGUAGES.find(l => l.key === activeLang)?.label})</span>
+          </label>
+          <input value={title[activeLang] || ''} onChange={e => setTitle(p => ({ ...p, [activeLang]: e.target.value }))}
             className="w-full px-3 py-2.5 rounded-lg border border-gray-300 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-shadow" required />
         </div>
 
@@ -108,7 +127,7 @@ export default function NewsForm() {
               className="w-full px-3 py-2.5 rounded-lg border border-gray-300 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none bg-white">
               <option value="">Seçilməyib</option>
               {categories.map(cat => (
-                <option key={cat.id} value={cat.id}>{cat.name}</option>
+                <option key={cat.id} value={cat.id}>{cat.name?.az || cat.slug}</option>
               ))}
             </select>
           </div>
@@ -122,14 +141,18 @@ export default function NewsForm() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1.5">Qısa məzmun</label>
-          <textarea value={excerpt} onChange={e => setExcerpt(e.target.value)} rows={3}
+          <label className="block text-sm font-medium text-gray-700 mb-1.5">
+            Qısa məzmun <span className="text-gray-400">({LANGUAGES.find(l => l.key === activeLang)?.label})</span>
+          </label>
+          <textarea value={excerpt[activeLang] || ''} onChange={e => setExcerpt(p => ({ ...p, [activeLang]: e.target.value }))} rows={3}
             className="w-full px-3 py-2.5 rounded-lg border border-gray-300 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-shadow resize-y" />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1.5">Məzmun</label>
-          <textarea value={content} onChange={e => setContent(e.target.value)} rows={12}
+          <label className="block text-sm font-medium text-gray-700 mb-1.5">
+            Məzmun <span className="text-gray-400">({LANGUAGES.find(l => l.key === activeLang)?.label})</span>
+          </label>
+          <textarea value={content[activeLang] || ''} onChange={e => setContent(p => ({ ...p, [activeLang]: e.target.value }))} rows={12}
             className="w-full px-3 py-2.5 rounded-lg border border-gray-300 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-shadow resize-y font-mono" />
           <p className="text-xs text-gray-400 mt-1">HTML məzmun daxil edə bilərsiniz</p>
         </div>

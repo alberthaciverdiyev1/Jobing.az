@@ -84,7 +84,7 @@ export default function CategoryList() {
               <tbody className="divide-y divide-gray-50">
                 {categories.map((cat) => (
                   <tr key={cat.id} className="hover:bg-gray-50/50 transition-colors">
-                    <td className="px-6 py-4 text-sm font-medium text-gray-900">{cat.name}</td>
+                    <td className="px-6 py-4 text-sm font-medium text-gray-900">{cat.name?.az || cat.slug}</td>
                     <td className="px-6 py-4 text-sm text-gray-500 font-mono">{cat.slug}</td>
                     <td className="px-4 py-4 text-center text-sm text-gray-500">{cat.postCount}</td>
                     <td className="px-4 py-4 text-center">

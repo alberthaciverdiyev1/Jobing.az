@@ -64,7 +64,7 @@ public class NewsCategoryService : INewsCategoryService
 
         var entity = _mapper.Map<Domain.Entities.NewsCategory>(request);
         entity.Id = Guid.NewGuid();
-        entity.Slug = SlugHelper.Generate(request.Name);
+        entity.Slug = SlugHelper.Generate(request.Name.GetValueOrDefault("az", request.Name.Values.FirstOrDefault() ?? ""));
 
         var created = await _repo.AddAsync(entity, cancellationToken);
         return _mapper.Map<NewsCategoryDto>(created);

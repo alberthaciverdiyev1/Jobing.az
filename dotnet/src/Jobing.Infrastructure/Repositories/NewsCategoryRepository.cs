@@ -24,7 +24,7 @@ public class NewsCategoryRepository : INewsCategoryRepository
         => await _db.Set<NewsCategory>()
             .Where(x => x.IsActive)
             .OrderBy(x => x.SortOrder)
-            .ThenBy(x => x.Name)
+            .ThenBy(x => x.Slug)
             .ToListAsync(cancellationToken);
 
     public async Task<(IReadOnlyList<NewsCategory> Items, int TotalCount)> GetPagedAsync(
@@ -37,7 +37,7 @@ public class NewsCategoryRepository : INewsCategoryRepository
             query = query.Where(x => x.DeletedAt == null);
 
         if (!string.IsNullOrWhiteSpace(search))
-            query = query.Where(x => EF.Functions.ILike(x.Name, $"%{search}%"));
+            query = query.Where(x => EF.Functions.ILike(x.Slug, $"%{search}%"));
 
         if (isActive.HasValue)
             query = query.Where(x => x.IsActive == isActive.Value);
@@ -46,7 +46,7 @@ public class NewsCategoryRepository : INewsCategoryRepository
 
         var items = await query
             .OrderBy(x => x.SortOrder)
-            .ThenBy(x => x.Name)
+            .ThenBy(x => x.Slug)
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
             .Include(x => x.News.Where(n => n.DeletedAt == null))

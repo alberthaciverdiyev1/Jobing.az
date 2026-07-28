@@ -18,7 +18,10 @@ public class BlogCategoryConfiguration : IEntityTypeConfiguration<BlogCategory>
 
         builder.Property(x => x.Name)
             .HasColumnName("name")
-            .HasMaxLength(200)
+            .HasConversion(
+                v => System.Text.Json.JsonSerializer.Serialize(v, (System.Text.Json.JsonSerializerOptions?)null),
+                v => System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, string>>(v, (System.Text.Json.JsonSerializerOptions?)null) ?? new())
+            .HasColumnType("jsonb")
             .IsRequired();
 
         builder.Property(x => x.Slug)

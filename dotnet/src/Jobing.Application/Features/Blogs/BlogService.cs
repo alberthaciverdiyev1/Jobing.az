@@ -67,7 +67,7 @@ public class BlogService : IBlogService
 
         var post = _mapper.Map<BlogPost>(request);
         post.Id = Guid.NewGuid();
-        post.Slug = SlugHelper.Generate(request.Title);
+        post.Slug = SlugHelper.Generate(request.Title.GetValueOrDefault("az", request.Title.Values.FirstOrDefault() ?? ""));
 
         var created = await _repository.AddAsync(post, cancellationToken);
         return _mapper.Map<BlogPostDto>(created);

@@ -32,7 +32,7 @@ public class BlogCategoryRepository : IBlogCategoryRepository
     {
         return await _context.BlogCategories
             .Where(x => x.IsActive)
-            .OrderBy(x => x.SortOrder).ThenBy(x => x.Name)
+            .OrderBy(x => x.SortOrder).ThenBy(x => x.Slug)
             .ToListAsync(cancellationToken);
     }
 
@@ -46,14 +46,14 @@ public class BlogCategoryRepository : IBlogCategoryRepository
 
         if (!string.IsNullOrWhiteSpace(search))
             query = query.Where(x =>
-                EF.Functions.ILike(x.Name, $"%{search}%"));
+                EF.Functions.ILike(x.Slug, $"%{search}%"));
 
         if (isActive.HasValue)
             query = query.Where(x => x.IsActive == isActive.Value);
 
         var totalCount = await query.CountAsync(cancellationToken);
         var items = await query
-            .OrderBy(x => x.SortOrder).ThenBy(x => x.Name)
+            .OrderBy(x => x.SortOrder).ThenBy(x => x.Slug)
             .Skip((page - 1) * pageSize).Take(pageSize)
             .ToListAsync(cancellationToken);
 

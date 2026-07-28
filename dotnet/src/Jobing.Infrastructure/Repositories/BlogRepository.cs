@@ -66,8 +66,7 @@ public class BlogRepository : IBlogRepository
 
         if (!string.IsNullOrWhiteSpace(search))
             query = query.Where(x =>
-                EF.Functions.ILike(x.Title, $"%{search}%") ||
-                EF.Functions.ILike(x.Excerpt!, $"%{search}%"));
+                EF.Functions.ILike(x.Slug, $"%{search}%"));
 
         if (isPublished.HasValue)
             query = query.Where(x => x.IsPublished == isPublished.Value);

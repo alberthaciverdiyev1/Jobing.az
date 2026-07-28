@@ -18,7 +18,10 @@ public class BlogPostConfiguration : IEntityTypeConfiguration<BlogPost>
 
         builder.Property(x => x.Title)
             .HasColumnName("title")
-            .HasMaxLength(500)
+            .HasConversion(
+                v => System.Text.Json.JsonSerializer.Serialize(v, (System.Text.Json.JsonSerializerOptions?)null),
+                v => System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, string>>(v, (System.Text.Json.JsonSerializerOptions?)null) ?? new())
+            .HasColumnType("jsonb")
             .IsRequired();
 
         builder.Property(x => x.Slug)
@@ -28,11 +31,17 @@ public class BlogPostConfiguration : IEntityTypeConfiguration<BlogPost>
 
         builder.Property(x => x.Content)
             .HasColumnName("content")
-            .HasColumnType("text");
+            .HasConversion(
+                v => System.Text.Json.JsonSerializer.Serialize(v, (System.Text.Json.JsonSerializerOptions?)null),
+                v => System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, string>>(v, (System.Text.Json.JsonSerializerOptions?)null))
+            .HasColumnType("jsonb");
 
         builder.Property(x => x.Excerpt)
             .HasColumnName("excerpt")
-            .HasMaxLength(1000);
+            .HasConversion(
+                v => System.Text.Json.JsonSerializer.Serialize(v, (System.Text.Json.JsonSerializerOptions?)null),
+                v => System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, string>>(v, (System.Text.Json.JsonSerializerOptions?)null))
+            .HasColumnType("jsonb");
 
         builder.Property(x => x.CoverImage)
             .HasColumnName("cover_image")

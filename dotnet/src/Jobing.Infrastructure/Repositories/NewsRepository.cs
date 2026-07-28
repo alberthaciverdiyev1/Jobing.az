@@ -38,7 +38,7 @@ public class NewsRepository : INewsRepository
             query = query.Where(x => x.DeletedAt == null);
 
         if (!string.IsNullOrWhiteSpace(search))
-            query = query.Where(x => EF.Functions.ILike(x.Title, $"%{search}%"));
+            query = query.Where(x => EF.Functions.ILike(x.Slug, $"%{search}%"));
 
         if (isPublished.HasValue)
             query = query.Where(x => x.IsPublished == isPublished.Value);

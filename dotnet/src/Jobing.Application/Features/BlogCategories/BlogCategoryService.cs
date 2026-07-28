@@ -67,7 +67,7 @@ public class BlogCategoryService : IBlogCategoryService
 
         var category = _mapper.Map<BlogCategory>(request);
         category.Id = Guid.NewGuid();
-        category.Slug = SlugHelper.Generate(request.Name);
+        category.Slug = SlugHelper.Generate(request.Name.GetValueOrDefault("az", request.Name.Values.FirstOrDefault() ?? ""));
 
         var created = await _repository.AddAsync(category, cancellationToken);
         return _mapper.Map<BlogCategoryDto>(created);

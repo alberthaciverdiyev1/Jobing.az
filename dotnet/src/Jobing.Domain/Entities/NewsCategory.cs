@@ -3,7 +3,7 @@ namespace Jobing.Domain.Entities;
 public class NewsCategory
 {
     public Guid Id { get; set; } = Guid.NewGuid();
-    public string Name { get; set; } = string.Empty;
+    public Dictionary<string, string> Name { get; set; } = new();
     public string Slug { get; set; } = string.Empty;
     public bool IsActive { get; set; } = true;
     public int SortOrder { get; set; }
