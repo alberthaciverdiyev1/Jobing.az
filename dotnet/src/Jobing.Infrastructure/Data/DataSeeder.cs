@@ -109,15 +109,29 @@ public static class DataSeeder
             await context.SaveChangesAsync();
         }
 
+        // News Categories
+        if (!await context.NewsCategories.AnyAsync())
+        {
+            var newsCategories = new List<NewsCategory>
+            {
+                new() { Name = new() { ["az"] = "Şirkət", ["en"] = "Company", ["ru"] = "Компания" }, Slug = "sirket", SortOrder = 1 },
+                new() { Name = new() { ["az"] = "Texnologiya", ["en"] = "Technology", ["ru"] = "Технологии" }, Slug = "texnologiya", SortOrder = 2 },
+                new() { Name = new() { ["az"] = "Karyera", ["en"] = "Career", ["ru"] = "Карьера" }, Slug = "karyera", SortOrder = 3 },
+                new() { Name = new() { ["az"] = "İqtisadiyyat", ["en"] = "Economy", ["ru"] = "Экономика" }, Slug = "iqtisadiyyat", SortOrder = 4 },
+            };
+            context.NewsCategories.AddRange(newsCategories);
+            await context.SaveChangesAsync();
+        }
+
         // Blog Categories
         if (!await context.BlogCategories.AnyAsync())
         {
             var blogCategories = new List<BlogCategory>
             {
-                new() { Name = "Karyera məsləhətləri", Slug = "karyera-meslehetleri", SortOrder = 1 },
-                new() { Name = "Şirkət xəbərləri", Slug = "sirket-xeberleri", SortOrder = 2 },
-                new() { Name = "Sektor tendensiyaları", Slug = "sektor-tendensiyalari", SortOrder = 3 },
-                new() { Name = "Müsahibə məsləhətləri", Slug = "musahibe-meslehetleri", SortOrder = 4 },
+                new() { Name = new() { ["az"] = "Karyera məsləhətləri", ["en"] = "Career advice", ["ru"] = "Карьерные советы" }, Slug = "karyera-meslehetleri", SortOrder = 1 },
+                new() { Name = new() { ["az"] = "Şirkət xəbərləri", ["en"] = "Company news", ["ru"] = "Новости компании" }, Slug = "sirket-xeberleri", SortOrder = 2 },
+                new() { Name = new() { ["az"] = "Sektor tendensiyaları", ["en"] = "Industry trends", ["ru"] = "Тенденции отрасли" }, Slug = "sektor-tendensiyalari", SortOrder = 3 },
+                new() { Name = new() { ["az"] = "Müsahibə məsləhətləri", ["en"] = "Interview tips", ["ru"] = "Советы по собеседованию" }, Slug = "musahibe-meslehetleri", SortOrder = 4 },
             };
             context.BlogCategories.AddRange(blogCategories);
             await context.SaveChangesAsync();

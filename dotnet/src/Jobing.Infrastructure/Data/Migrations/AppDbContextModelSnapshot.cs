@@ -45,8 +45,7 @@ namespace Jobing.Infrastructure.Data.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)")
+                        .HasColumnType("jsonb")
                         .HasColumnName("name");
 
                     b.Property<string>("Slug")
@@ -92,7 +91,7 @@ namespace Jobing.Infrastructure.Data.Migrations
                         .HasColumnName("category_id");
 
                     b.Property<string>("Content")
-                        .HasColumnType("text")
+                        .HasColumnType("jsonb")
                         .HasColumnName("content");
 
                     b.Property<string>("CoverImage")
@@ -109,8 +108,7 @@ namespace Jobing.Infrastructure.Data.Migrations
                         .HasColumnName("deleted_at");
 
                     b.Property<string>("Excerpt")
-                        .HasMaxLength(1000)
-                        .HasColumnType("character varying(1000)")
+                        .HasColumnType("jsonb")
                         .HasColumnName("excerpt");
 
                     b.Property<bool>("IsPublished")
@@ -138,8 +136,7 @@ namespace Jobing.Infrastructure.Data.Migrations
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)")
+                        .HasColumnType("jsonb")
                         .HasColumnName("title");
 
                     b.Property<DateTime?>("UpdatedAt")
@@ -552,7 +549,7 @@ namespace Jobing.Infrastructure.Data.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<string>("Content")
-                        .HasColumnType("text");
+                        .HasColumnType("jsonb");
 
                     b.Property<string>("CoverImage")
                         .HasMaxLength(500)
@@ -565,8 +562,7 @@ namespace Jobing.Infrastructure.Data.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Excerpt")
-                        .HasMaxLength(1000)
-                        .HasColumnType("character varying(1000)");
+                        .HasColumnType("jsonb");
 
                     b.Property<bool>("IsPublished")
                         .ValueGeneratedOnAdd()
@@ -583,8 +579,7 @@ namespace Jobing.Infrastructure.Data.Migrations
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)");
+                        .HasColumnType("jsonb");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -628,8 +623,7 @@ namespace Jobing.Infrastructure.Data.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
+                        .HasColumnType("jsonb");
 
                     b.Property<string>("Slug")
                         .IsRequired()

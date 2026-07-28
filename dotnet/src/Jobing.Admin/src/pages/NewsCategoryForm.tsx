@@ -4,12 +4,18 @@ import api from '../lib/api'
 import type { NewsCategory } from '../types'
 import { ArrowLeft, Save } from 'lucide-react'
 
+const LANGUAGES = [
+  { key: 'az', label: 'Azərbaycanca' },
+  { key: 'en', label: 'English' },
+  { key: 'ru', label: 'Русский' },
+]
+
 export default function NewsCategoryForm() {
   const { id } = useParams()
   const navigate = useNavigate()
   const isEdit = !!id
 
-  const [name, setName] = useState('')
+  const [name, setName] = useState<Record<string, string>>({ az: '', en: '', ru: '' })
   const [sortOrder, setSortOrder] = useState(0)
   const [isActive, setIsActive] = useState(true)
   const [loading, setLoading] = useState(false)
@@ -20,7 +26,7 @@ export default function NewsCategoryForm() {
     if (id) {
       api.get<NewsCategory>(`/news-categories/${id}`)
         .then(res => {
-          setName(res.data.name)
+          setName(res.data.name || { az: '', en: '', ru: '' })
           setSortOrder(res.data.sortOrder)
           setIsActive(res.data.isActive)
         })
@@ -69,11 +75,15 @@ export default function NewsCategoryForm() {
       {error && <div className="p-3 rounded-lg bg-red-50 border border-red-100 text-sm text-red-700">{error}</div>}
 
       <form onSubmit={handleSubmit} className="bg-white rounded-xl border border-gray-200 p-6 space-y-5">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1.5">Ad</label>
-          <input value={name} onChange={e => setName(e.target.value)}
-            className="w-full px-3 py-2.5 rounded-lg border border-gray-300 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-shadow" required />
-        </div>
+        {LANGUAGES.map(({ key, label }) => (
+          <div key={key}>
+            <label className="block text-sm font-medium text-gray-700 mb-1.5">
+              Ad <span className="text-gray-400">({label})</span>
+            </label>
+            <input value={name[key] || ''} onChange={e => setName(p => ({ ...p, [key]: e.target.value }))}
+              className="w-full px-3 py-2.5 rounded-lg border border-gray-300 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-shadow" required />
+          </div>
+        ))}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1.5">Sıra nömrəsi</label>
           <input type="number" value={sortOrder} onChange={e => setSortOrder(Number(e.target.value))}

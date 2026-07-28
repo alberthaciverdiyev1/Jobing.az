@@ -13,10 +13,23 @@ public class NewsConfiguration : IEntityTypeConfiguration<News>
         builder.HasKey(x => x.Id);
 
         builder.Property(x => x.Id).ValueGeneratedNever();
-        builder.Property(x => x.Title).HasMaxLength(500).IsRequired();
+        builder.Property(x => x.Title)
+            .HasConversion(
+                v => System.Text.Json.JsonSerializer.Serialize(v, (System.Text.Json.JsonSerializerOptions?)null),
+                v => System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, string>>(v, (System.Text.Json.JsonSerializerOptions?)null) ?? new())
+            .HasColumnType("jsonb")
+            .IsRequired();
         builder.Property(x => x.Slug).HasMaxLength(500).IsRequired();
-        builder.Property(x => x.Content).HasColumnType("text");
-        builder.Property(x => x.Excerpt).HasMaxLength(1000);
+        builder.Property(x => x.Content)
+            .HasConversion(
+                v => System.Text.Json.JsonSerializer.Serialize(v, (System.Text.Json.JsonSerializerOptions?)null),
+                v => System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, string>>(v, (System.Text.Json.JsonSerializerOptions?)null))
+            .HasColumnType("jsonb");
+        builder.Property(x => x.Excerpt)
+            .HasConversion(
+                v => System.Text.Json.JsonSerializer.Serialize(v, (System.Text.Json.JsonSerializerOptions?)null),
+                v => System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, string>>(v, (System.Text.Json.JsonSerializerOptions?)null))
+            .HasColumnType("jsonb");
         builder.Property(x => x.CoverImage).HasMaxLength(500);
         builder.Property(x => x.CategoryId);
         builder.Property(x => x.ViewCount).HasDefaultValue(0);

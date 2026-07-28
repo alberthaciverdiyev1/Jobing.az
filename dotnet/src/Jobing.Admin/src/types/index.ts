@@ -80,7 +80,7 @@ export interface UpdateFilterOptionRequest {
 
 export interface BlogCategory {
   id: string
-  name: string
+  name: Record<string, string>
   slug: string
   isActive: boolean
   sortOrder: number
@@ -89,26 +89,26 @@ export interface BlogCategory {
 }
 
 export interface CreateBlogCategoryRequest {
-  name: string
+  name: Record<string, string>
   sortOrder: number
 }
 
 export interface UpdateBlogCategoryRequest {
-  name: string
+  name: Record<string, string>
   isActive: boolean
   sortOrder: number
 }
 
 export interface BlogPost {
   id: string
-  title: string
+  title: Record<string, string>
   slug: string
-  content?: string
-  excerpt?: string
+  content?: Record<string, string>
+  excerpt?: Record<string, string>
   coverImage?: string
   authorName?: string
   categoryId?: string
-  categoryName?: string
+  categoryName?: Record<string, string>
   viewCount: number
   relatedPostIds: string[]
   isPublished: boolean
@@ -118,9 +118,9 @@ export interface BlogPost {
 }
 
 export interface CreateBlogPostRequest {
-  title: string
-  content?: string
-  excerpt?: string
+  title: Record<string, string>
+  content?: Record<string, string>
+  excerpt?: Record<string, string>
   coverImage?: string
   authorId?: string
   categoryId?: string
@@ -129,9 +129,9 @@ export interface CreateBlogPostRequest {
 }
 
 export interface UpdateBlogPostRequest {
-  title: string
-  content?: string
-  excerpt?: string
+  title: Record<string, string>
+  content?: Record<string, string>
+  excerpt?: Record<string, string>
   coverImage?: string
   categoryId?: string
   relatedPostIds: string[]
@@ -148,7 +148,7 @@ export interface User {
 
 export interface NewsCategory {
   id: string
-  name: string
+  name: Record<string, string>
   slug: string
   isActive: boolean
   sortOrder: number
@@ -157,25 +157,25 @@ export interface NewsCategory {
 }
 
 export interface CreateNewsCategoryRequest {
-  name: string
+  name: Record<string, string>
   sortOrder: number
 }
 
 export interface UpdateNewsCategoryRequest {
-  name: string
+  name: Record<string, string>
   isActive: boolean
   sortOrder: number
 }
 
 export interface NewsItem {
   id: string
-  title: string
+  title: Record<string, string>
   slug: string
-  content?: string
-  excerpt?: string
+  content?: Record<string, string>
+  excerpt?: Record<string, string>
   coverImage?: string
   categoryId?: string
-  categoryName?: string
+  categoryName?: Record<string, string>
   viewCount: number
   isPublished: boolean
   publishedAt?: string
@@ -184,18 +184,18 @@ export interface NewsItem {
 }
 
 export interface CreateNewsRequest {
-  title: string
-  content?: string
-  excerpt?: string
+  title: Record<string, string>
+  content?: Record<string, string>
+  excerpt?: Record<string, string>
   coverImage?: string
   categoryId?: string
   isPublished: boolean
 }
 
 export interface UpdateNewsRequest {
-  title: string
-  content?: string
-  excerpt?: string
+  title: Record<string, string>
+  content?: Record<string, string>
+  excerpt?: Record<string, string>
   coverImage?: string
   categoryId?: string
   isPublished: boolean

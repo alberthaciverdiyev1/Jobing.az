@@ -9,6 +9,11 @@ public class CreateBlogCategoryValidator : AbstractValidator<CreateBlogCategoryR
     {
         RuleFor(x => x.Name)
             .NotEmpty().WithMessage("Name is required")
-            .MaximumLength(200).WithMessage("Name must not exceed 200 characters");
+            .Must(d => d.ContainsKey("az") && !string.IsNullOrWhiteSpace(d["az"]))
+                .WithMessage("Name (AZ) is required");
+
+        RuleFor(x => x.Name)
+            .Must(d => d.Values.All(v => v.Length <= 200))
+                .WithMessage("Each name translation must not exceed 200 characters");
     }
 }

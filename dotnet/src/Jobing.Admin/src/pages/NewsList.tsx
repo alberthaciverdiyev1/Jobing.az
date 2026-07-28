@@ -40,6 +40,12 @@ export default function NewsList() {
     } catch { setError('Silinə bilmədi') }
   }
 
+  const displayText = (val: Record<string, string> | string | undefined | null): string => {
+    if (!val) return ''
+    if (typeof val === 'string') return val
+    return val.az || Object.values(val)[0] || ''
+  }
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -85,15 +91,15 @@ export default function NewsList() {
                 {items.map((item) => (
                   <tr key={item.id} className="hover:bg-gray-50/50 transition-colors">
                     <td className="px-6 py-4">
-                      <div className="text-sm font-medium text-gray-900 truncate max-w-xs">{item.title}</div>
+                      <div className="text-sm font-medium text-gray-900 truncate max-w-xs">{displayText(item.title)}</div>
                       {item.excerpt && (
-                        <div className="text-xs text-gray-400 truncate max-w-xs mt-0.5">{item.excerpt}</div>
+                        <div className="text-xs text-gray-400 truncate max-w-xs mt-0.5">{displayText(item.excerpt)}</div>
                       )}
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-500">
                       {item.categoryName ? (
                         <span className="inline-flex items-center px-2 py-0.5 rounded-full bg-gray-100 text-xs font-medium text-gray-600">
-                          {item.categoryName}
+                          {displayText(item.categoryName)}
                         </span>
                       ) : '—'}
                     </td>
