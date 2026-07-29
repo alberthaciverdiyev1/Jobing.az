@@ -23,20 +23,18 @@ document.addEventListener("DOMContentLoaded", (event) => {
             if (res.status === 200) {
                 if (res.data.data) {
                     res.data.data.forEach(element => {
-                        const words = element.description.split(' ');
-                        let shortDesc = words.length > 40
-                            ? words.slice(0, 40).join(' ') + '...'
-                            : element.description;
-                        shortDesc = shortDesc.replace(/<[^>]*>/g, '').slice(0, 150) + '...';
-
-                        const readMinutes = Math.ceil(words.length / 200);
+                        const plainDesc = element.description ? element.description.replace(/<[^>]*>/g, '') : '';
+                        const shortDesc = plainDesc.slice(0, 150) + (plainDesc.length > 150 ? '...' : '');
+                        const readMinutes = Math.max(1, Math.ceil((element.description || '').split(' ').length / 200));
 
                         const createdAtDate = new Date(element.createdAt);
                         const formattedDate = `${String(createdAtDate.getMonth() + 1).padStart(2, '0')}.${String(createdAtDate.getDate()).padStart(2, '0')}.${createdAtDate.getFullYear()}`;
 
+                        const imgSrc = element.imageUrl || '/Images/DefaultCompany.png';
+
                         htmlContent += `
                      <div class="bg-white rounded-xl border border-gray-100 overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-0.5 flex flex-col">
-    <img src="${element.imageUrl}" alt="Blog Image" class="w-full h-48 object-cover" onerror="this.onerror=null;this.src='/Images/DefaultCompany.png'">
+    <img src="${imgSrc}" alt="${element.name}" class="w-full h-48 object-cover" onerror="this.onerror=null;this.src='/Images/DefaultCompany.png'">
     <div class="p-5 flex flex-col flex-1">
         <div class="flex items-center justify-between text-sm text-gray-500 mb-2">
             <span class="flex items-center gap-1">

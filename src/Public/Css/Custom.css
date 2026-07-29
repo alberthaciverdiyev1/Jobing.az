@@ -575,3 +575,39 @@ html {
 .all {
   transition-property: all;
 }
+
+/* ========== CKEditor Table Styles (prose context) ========== */
+.prose figure.table {
+  margin: 1.5em 0;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.prose figure.table table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid #e5e7eb;
+}
+
+.prose figure.table table td,
+.prose figure.table table th {
+  border: 1px solid #e5e7eb;
+  padding: 0.625em 0.75em;
+  vertical-align: top;
+  min-width: 2em;
+}
+
+.prose figure.table table th {
+  background-color: #f9fafb;
+  font-weight: 600;
+}
+
+.prose figure.table table tr:nth-child(even) td {
+  background-color: #f9fafb;
+}
+
+.prose img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+}

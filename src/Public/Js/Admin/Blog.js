@@ -31,7 +31,10 @@ function initBlogEditor(textareaId) {
             blogEditorInstance = null;
         }
         ClassicEditor.create(el, {
-            toolbar: ['heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote', '|', 'undo', 'redo']
+            toolbar: ['heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote', 'insertTable', '|', 'undo', 'redo'],
+            table: {
+                contentToolbar: ['tableColumn', 'tableRow', 'mergeTableCells']
+            }
         }).then(function(editor) {
             blogEditorInstance = editor;
         }).catch(function(err) {
