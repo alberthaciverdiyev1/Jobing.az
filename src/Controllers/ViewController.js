@@ -86,11 +86,12 @@ const ViewController = {
         try {
             const {slug} = req.params;
             const blog = await BlogService.details(slug);
+            const plainDesc = (blog.description || blog.name).replace(/<[^>]*>/g, '').slice(0, 200);
             const view = {
                 title: blog.name,
-                description: blog.description || blog.name,
+                description: plainDesc,
                 ogTitle: blog.name,
-                ogDescription: blog.description || blog.name,
+                ogDescription: plainDesc,
                 ogImage: blog.imageUrl || undefined,
                 ogType: 'article',
                 body: 'Blog/Details.ejs',

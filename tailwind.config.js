@@ -1,3 +1,5 @@
+import typography from '@tailwindcss/typography';
+
 /** @type {import('tailwindcss').Config} */
 export const content = ["./src/**/*.{html,js,ejs}"];
 export const darkMode = 'class';
@@ -62,4 +64,6 @@ export const theme = {
     },
   },
 };
-export const plugins = [];
+export const plugins = [
+  typography,
+];
