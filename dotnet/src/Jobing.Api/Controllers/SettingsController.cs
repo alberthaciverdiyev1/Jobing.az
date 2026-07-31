@@ -15,18 +15,13 @@ public class SettingsController : ControllerBase
 
     [AllowAnonymous]
     [HttpGet("all")]
-    public async Task<ActionResult<IReadOnlyDictionary<string, string>>> GetAllActive()
+    public async Task<ActionResult<IReadOnlyDictionary<string, Dictionary<string, string>>>> GetAllActive()
         => Ok(await _service.GetDictionaryAsync());
-
-    [AllowAnonymous]
-    [HttpGet("group/{group}")]
-    public async Task<ActionResult<IReadOnlyList<SettingDto>>> GetGroup(string group)
-        => Ok(await _service.GetGroupAsync(group));
 
     [Authorize(Roles = "Admin")]
     [HttpGet]
-    public async Task<ActionResult<PagedResult<SettingDto>>> GetAll([FromQuery] PaginationParams pagination, [FromQuery] string? group)
-        => Ok(await _service.GetPagedAsync(pagination, group));
+    public async Task<ActionResult<PagedResult<SettingDto>>> GetAll([FromQuery] PaginationParams pagination)
+        => Ok(await _service.GetPagedAsync(pagination));
 
     [Authorize(Roles = "Admin")]
     [HttpGet("{id:guid}")]

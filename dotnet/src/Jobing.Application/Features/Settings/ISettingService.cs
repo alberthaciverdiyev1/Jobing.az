@@ -5,10 +5,9 @@ namespace Jobing.Application.Features.Settings;
 
 public interface ISettingService
 {
-    Task<PagedResult<SettingDto>> GetPagedAsync(PaginationParams pagination, string? group = null, CancellationToken cancellationToken = default);
+    Task<PagedResult<SettingDto>> GetPagedAsync(PaginationParams pagination, CancellationToken cancellationToken = default);
     Task<IReadOnlyList<SettingDto>> GetAllAsync(CancellationToken cancellationToken = default);
-    Task<IReadOnlyDictionary<string, string>> GetDictionaryAsync(CancellationToken cancellationToken = default);
-    Task<IReadOnlyList<SettingDto>> GetGroupAsync(string group, CancellationToken cancellationToken = default);
+    Task<IReadOnlyDictionary<string, Dictionary<string, string>>> GetDictionaryAsync(CancellationToken cancellationToken = default);
     Task<SettingDto?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
     Task<SettingDto?> GetByKeyAsync(string key, CancellationToken cancellationToken = default);
     Task<SettingDto> CreateAsync(CreateSettingRequest request, CancellationToken cancellationToken = default);

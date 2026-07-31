@@ -2,24 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import api from '../lib/api'
 import type { Setting } from '../types'
-import { Plus, Pencil, Trash2, ChevronLeft, ChevronRight, Settings as SettingsIcon } from 'lucide-react'
-
-const GROUPS = [
-  { value: '', label: 'Bütün qruplar' },
-  { value: 'general', label: 'Ümumi' },
-  { value: 'contact', label: 'Əlaqə' },
-  { value: 'social', label: 'Sosial şəbəkələr' },
-  { value: 'seo', label: 'SEO' },
-  { value: 'analytics', label: 'Analitika' },
-]
-
-const GROUP_LABELS: Record<string, string> = {
-  general: 'Ümumi',
-  contact: 'Əlaqə',
-  social: 'Sosial',
-  seo: 'SEO',
-  analytics: 'Analitika',
-}
+import { Plus, Pencil, Trash2, ChevronLeft, ChevronRight } from 'lucide-react'
 
 export default function SettingsList() {
   const navigate = useNavigate()
@@ -28,18 +11,16 @@ export default function SettingsList() {
   const [error, setError] = useState('')
   const [page, setPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
-  const [group, setGroup] = useState('')
   const [message, setMessage] = useState('')
   const pageSize = 15
 
-  useEffect(() => { fetchSettings() }, [page, group])
+  useEffect(() => { fetchSettings() }, [page])
 
   const fetchSettings = async () => {
     setLoading(true)
     setError('')
     try {
-      const groupParam = group ? `&group=${group}` : ''
-      const res = await api.get(`/settings?page=${page}&pageSize=${pageSize}${groupParam}`)
+      const res = await api.get(`/settings?page=${page}&pageSize=${pageSize}`)
       setItems(res.data.items)
       setTotalPages(res.data.totalPages)
     } catch {
@@ -79,18 +60,6 @@ export default function SettingsList() {
       )}
       {error && <div className="p-3 rounded-lg bg-red-50 border border-red-100 text-sm text-red-700">{error}</div>}
 
-      <div className="flex items-center gap-3">
-        <div className="flex items-center gap-2 text-sm text-gray-500">
-          <SettingsIcon className="w-4 h-4" />
-          <select value={group} onChange={e => { setPage(1); setGroup(e.target.value) }}
-            className="px-3 py-2 rounded-lg border border-gray-300 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none bg-white">
-            {GROUPS.map(g => (
-              <option key={g.value} value={g.value}>{g.label}</option>
-            ))}
-          </select>
-        </div>
-      </div>
-
       <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
         {loading ? (
           <div className="p-12 text-center">
@@ -105,7 +74,6 @@ export default function SettingsList() {
               <thead>
                 <tr className="border-b border-gray-100">
                   <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-6 py-3">Açar (Key)</th>
-                  <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Qrup</th>
                   <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Dəyər</th>
                   <th className="text-center text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Status</th>
                   <th className="text-right text-xs font-medium text-gray-500 uppercase tracking-wider px-6 py-3">Əməliyyat</th>
@@ -120,12 +88,7 @@ export default function SettingsList() {
                         <div className="text-xs text-gray-400 truncate max-w-xs mt-0.5">{item.description}</div>
                       )}
                     </td>
-                    <td className="px-4 py-4">
-                      <span className="inline-flex items-center px-2 py-0.5 rounded-full bg-indigo-50 text-xs font-medium text-indigo-700">
-                        {GROUP_LABELS[item.group] || item.group}
-                      </span>
-                    </td>
-                    <td className="px-4 py-4 text-sm text-gray-500 truncate max-w-md">{item.value || '—'}</td>
+                    <td className="px-4 py-4 text-sm text-gray-500 truncate max-w-md">{item.value?.az || '—'}</td>
                     <td className="px-4 py-4 text-center">
                       <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
                         item.isActive

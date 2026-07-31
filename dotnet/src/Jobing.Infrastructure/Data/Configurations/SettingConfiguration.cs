@@ -14,11 +14,13 @@ public class SettingConfiguration : IEntityTypeConfiguration<Setting>
 
         builder.Property(x => x.Id).ValueGeneratedNever();
         builder.Property(x => x.Key).HasMaxLength(200).IsRequired();
-        builder.Property(x => x.Group).HasMaxLength(100).IsRequired();
-        builder.Property(x => x.Value).HasColumnType("text");
+        builder.Property(x => x.Value)
+            .HasConversion(
+                v => System.Text.Json.JsonSerializer.Serialize(v, (System.Text.Json.JsonSerializerOptions?)null),
+                v => System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, string>>(v, (System.Text.Json.JsonSerializerOptions?)null))
+            .HasColumnType("jsonb");
         builder.Property(x => x.Description).HasMaxLength(500);
         builder.Property(x => x.IsActive).HasDefaultValue(true);
-        builder.Property(x => x.SortOrder).HasDefaultValue(0);
         builder.Property(x => x.CreatedAt).IsRequired();
         builder.Property(x => x.UpdatedAt);
         builder.Property(x => x.DeletedAt);
@@ -26,7 +28,6 @@ public class SettingConfiguration : IEntityTypeConfiguration<Setting>
         builder.HasQueryFilter(x => x.DeletedAt == null);
 
         builder.HasIndex(x => x.Key).IsUnique();
-        builder.HasIndex(x => x.Group);
         builder.HasIndex(x => x.IsActive);
         builder.HasIndex(x => x.DeletedAt);
     }

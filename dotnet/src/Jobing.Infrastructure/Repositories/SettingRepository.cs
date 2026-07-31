@@ -25,21 +25,12 @@ public class SettingRepository : ISettingRepository
 
         return await query
             .Where(x => x.IsActive)
-            .OrderBy(x => x.Group)
-            .ThenBy(x => x.SortOrder)
-            .ThenBy(x => x.Key)
+            .OrderBy(x => x.Key)
             .ToListAsync(cancellationToken);
     }
 
-    public async Task<IReadOnlyList<Setting>> GetGroupAsync(string group, CancellationToken cancellationToken = default)
-        => await _db.Set<Setting>()
-            .Where(x => x.Group == group && x.IsActive)
-            .OrderBy(x => x.SortOrder)
-            .ThenBy(x => x.Key)
-            .ToListAsync(cancellationToken);
-
     public async Task<(IReadOnlyList<Setting> Items, int TotalCount)> GetPagedAsync(
-        int page, int pageSize, string? search = null, string? group = null, bool? isActive = null,
+        int page, int pageSize, string? search = null, bool? isActive = null,
         bool includeDeleted = false, CancellationToken cancellationToken = default)
     {
         var query = includeDeleted
@@ -47,11 +38,7 @@ public class SettingRepository : ISettingRepository
             : _db.Set<Setting>().AsQueryable();
 
         if (!string.IsNullOrWhiteSpace(search))
-            query = query.Where(x => EF.Functions.ILike(x.Key, $"%{search}%")
-                || EF.Functions.ILike(x.Value ?? "", $"%{search}%"));
-
-        if (!string.IsNullOrWhiteSpace(group))
-            query = query.Where(x => x.Group == group);
+            query = query.Where(x => EF.Functions.ILike(x.Key, $"%{search}%"));
 
         if (isActive.HasValue)
             query = query.Where(x => x.IsActive == isActive.Value);
@@ -59,9 +46,7 @@ public class SettingRepository : ISettingRepository
         var totalCount = await query.CountAsync(cancellationToken);
 
         var items = await query
-            .OrderBy(x => x.Group)
-            .ThenBy(x => x.SortOrder)
-            .ThenBy(x => x.Key)
+            .OrderBy(x => x.Key)
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync(cancellationToken);

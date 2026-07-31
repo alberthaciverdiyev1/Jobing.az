@@ -24,10 +24,10 @@ public class SettingService : ISettingService
         _updateValidator = updateValidator;
     }
 
-    public async Task<PagedResult<SettingDto>> GetPagedAsync(PaginationParams pagination, string? group = null, CancellationToken cancellationToken = default)
+    public async Task<PagedResult<SettingDto>> GetPagedAsync(PaginationParams pagination, CancellationToken cancellationToken = default)
     {
         var (items, totalCount) = await _repo.GetPagedAsync(
-            pagination.Page, pagination.PageSize, pagination.Search, group, pagination.IsActive,
+            pagination.Page, pagination.PageSize, pagination.Search, pagination.IsActive,
             cancellationToken: cancellationToken);
 
         var dtos = _mapper.Map<IReadOnlyList<SettingDto>>(items);
@@ -46,16 +46,10 @@ public class SettingService : ISettingService
         return _mapper.Map<IReadOnlyList<SettingDto>>(items);
     }
 
-    public async Task<IReadOnlyDictionary<string, string>> GetDictionaryAsync(CancellationToken cancellationToken = default)
+    public async Task<IReadOnlyDictionary<string, Dictionary<string, string>>> GetDictionaryAsync(CancellationToken cancellationToken = default)
     {
         var items = await _repo.GetAllAsync(cancellationToken: cancellationToken);
-        return items.ToDictionary(x => x.Key, x => x.Value ?? string.Empty);
-    }
-
-    public async Task<IReadOnlyList<SettingDto>> GetGroupAsync(string group, CancellationToken cancellationToken = default)
-    {
-        var items = await _repo.GetGroupAsync(group, cancellationToken);
-        return _mapper.Map<IReadOnlyList<SettingDto>>(items);
+        return items.ToDictionary(x => x.Key, x => x.Value ?? new Dictionary<string, string>());
     }
 
     public async Task<SettingDto?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)

@@ -204,31 +204,25 @@ export interface UpdateNewsRequest {
 export interface Setting {
   id: string
   key: string
-  group: string
-  value?: string
+  value?: Record<string, string>
   description?: string
   isActive: boolean
-  sortOrder: number
   createdAt: string
   updatedAt?: string
 }
 
 export interface CreateSettingRequest {
   key: string
-  group: string
-  value?: string
+  value?: Record<string, string>
   description?: string
   isActive: boolean
-  sortOrder: number
 }
 
 export interface UpdateSettingRequest {
   key: string
-  group: string
-  value?: string
+  value?: Record<string, string>
   description?: string
   isActive: boolean
-  sortOrder: number
 }
 
 export interface PagedResult<T> {
