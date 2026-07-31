@@ -3,6 +3,7 @@ using System;
 using Jobing.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Jobing.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260731102343_AddSeoSettings")]
+    partial class AddSeoSettings
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -453,16 +456,6 @@ namespace Jobing.Infrastructure.Data.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
-                    b.Property<string>("ApplicationMethod")
-                        .HasMaxLength(20)
-                        .HasColumnType("character varying(20)")
-                        .HasColumnName("application_method");
-
-                    b.Property<string>("ApplicationUrl")
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)")
-                        .HasColumnName("application_url");
-
                     b.Property<Guid?>("CityId")
                         .HasColumnType("uuid")
                         .HasColumnName("city_id");
@@ -479,16 +472,12 @@ namespace Jobing.Infrastructure.Data.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("created_by_id");
 
-                    b.Property<string>("Currency")
-                        .HasColumnType("text")
-                        .HasColumnName("currency");
-
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("deleted_at");
 
                     b.Property<string>("Description")
-                        .HasColumnType("jsonb")
+                        .HasColumnType("text")
                         .HasColumnName("description");
 
                     b.Property<DateTime?>("ExpiresAt")
@@ -521,27 +510,23 @@ namespace Jobing.Infrastructure.Data.Migrations
                         .HasColumnName("min_salary");
 
                     b.Property<string>("Requirements")
-                        .HasColumnType("jsonb")
+                        .HasColumnType("text")
                         .HasColumnName("requirements");
 
                     b.Property<string>("SalaryText")
-                        .HasColumnType("jsonb")
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)")
                         .HasColumnName("salary_text");
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("jsonb")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)")
                         .HasColumnName("title");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("updated_at");
-
-                    b.Property<int>("ViewCount")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasDefaultValue(0)
-                        .HasColumnName("view_count");
 
                     b.HasKey("Id");
 
