@@ -1,4 +1,5 @@
 using AutoMapper;
+using Jobing.Application.Features.News.Commands;
 using Jobing.Application.Features.News.DTOs;
 
 namespace Jobing.Application.Features.News;
@@ -9,8 +10,8 @@ public class MappingProfile : AutoMapper.Profile
     {
         CreateMap<Domain.Entities.News, NewsDto>()
             .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category != null ? src.Category.Name : null));
-        CreateMap<CreateNewsRequest, Domain.Entities.News>();
-        CreateMap<UpdateNewsRequest, Domain.Entities.News>()
+        CreateMap<CreateNewsCommand, Domain.Entities.News>();
+        CreateMap<UpdateNewsCommand, Domain.Entities.News>()
             .ForMember(dest => dest.Id, opt => opt.Ignore())
             .ForMember(dest => dest.CreatedAt, opt => opt.Ignore());
     }

@@ -1,4 +1,4 @@
-using Jobing.Application.Common.Interfaces;
+using Jobing.Domain.Repositories;
 using Jobing.Domain.Entities;
 using Jobing.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;

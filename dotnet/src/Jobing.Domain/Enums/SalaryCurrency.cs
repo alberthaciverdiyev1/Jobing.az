@@ -1,4 +1,4 @@
-namespace Jobing.Domain.Entities;
+namespace Jobing.Domain.Enums;
 
 public enum SalaryCurrency
 {

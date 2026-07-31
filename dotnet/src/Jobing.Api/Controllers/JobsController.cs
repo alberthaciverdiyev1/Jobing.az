@@ -1,6 +1,8 @@
 using Jobing.Application.Common.DTOs;
-using Jobing.Application.Features.Jobs;
+using Jobing.Application.Features.Jobs.Commands;
 using Jobing.Application.Features.Jobs.DTOs;
+using Jobing.Application.Features.Jobs.Queries;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,52 +12,53 @@ namespace Jobing.Api.Controllers;
 [Route("api/jobs")]
 public class JobsController : ControllerBase
 {
-    private readonly IJobService _service;
-    public JobsController(IJobService service) => _service = service;
+    private readonly ISender _sender;
+
+    public JobsController(ISender sender) => _sender = sender;
 
     [AllowAnonymous]
     [HttpGet]
-    public async Task<ActionResult<PagedResult<JobDto>>> GetAll([FromQuery] JobPaginationParams pagination)
-        => Ok(await _service.GetPagedAsync(pagination));
+    public async Task<ActionResult<PagedResult<JobDto>>> GetAll([FromQuery] GetJobsQuery query)
+        => Ok(await _sender.Send(query));
 
     [AllowAnonymous]
     [HttpGet("{id:guid}")]
     public async Task<ActionResult<JobDto>> GetById(Guid id)
     {
-        var r = await _service.GetByIdAsync(id);
-        return r is null ? NotFound() : Ok(r);
+        var job = await _sender.Send(new GetJobByIdQuery { Id = id });
+        return job is null ? NotFound() : Ok(job);
     }
 
     [AllowAnonymous]
     [HttpPut("{id:guid}/view")]
     public async Task<IActionResult> IncrementViewCount(Guid id)
     {
-        try { await _service.IncrementViewCountAsync(id); return NoContent(); }
-        catch (KeyNotFoundException) { return NotFound(); }
+        await _sender.Send(new IncrementJobViewCountCommand { Id = id });
+        return NoContent();
     }
 
-    [Authorize(Roles = "Admin")]
+    [Authorize(Policy = "AdminOnly")]
     [HttpPost]
-    public async Task<ActionResult<JobDto>> Create(CreateJobRequest request)
+    public async Task<ActionResult<JobDto>> Create(CreateJobCommand command)
     {
-        try { var r = await _service.CreateAsync(request); return CreatedAtAction(nameof(GetById), new { id = r.Id }, r); }
-        catch (FluentValidation.ValidationException ex) { return BadRequest(ex.Errors); }
+        var job = await _sender.Send(command);
+        return CreatedAtAction(nameof(GetById), new { id = job.Id }, job);
     }
 
-    [Authorize(Roles = "Admin")]
+    [Authorize(Policy = "AdminOnly")]
     [HttpPut("{id:guid}")]
-    public async Task<IActionResult> Update(Guid id, UpdateJobRequest request)
+    public async Task<IActionResult> Update(Guid id, UpdateJobCommand command)
     {
-        try { await _service.UpdateAsync(id, request); return NoContent(); }
-        catch (KeyNotFoundException) { return NotFound(); }
-        catch (FluentValidation.ValidationException ex) { return BadRequest(ex.Errors); }
+        command.Id = id;
+        await _sender.Send(command);
+        return NoContent();
     }
 
-    [Authorize(Roles = "Admin")]
+    [Authorize(Policy = "AdminOnly")]
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> Delete(Guid id)
     {
-        try { await _service.DeleteAsync(id); return NoContent(); }
-        catch (KeyNotFoundException) { return NotFound(); }
+        await _sender.Send(new DeleteJobCommand { Id = id });
+        return NoContent();
     }
 }

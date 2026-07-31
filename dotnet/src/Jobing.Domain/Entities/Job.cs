@@ -1,3 +1,5 @@
+using Jobing.Domain.Enums;
+
 namespace Jobing.Domain.Entities;
 
 public class Job

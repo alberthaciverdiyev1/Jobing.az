@@ -1,4 +1,5 @@
 using AutoMapper;
+using Jobing.Application.Features.BlogCategories.Commands;
 using Jobing.Application.Features.BlogCategories.DTOs;
 using Jobing.Domain.Entities;
 
@@ -9,8 +10,8 @@ public class MappingProfile : AutoMapper.Profile
     public MappingProfile()
     {
         CreateMap<BlogCategory, BlogCategoryDto>();
-        CreateMap<CreateBlogCategoryRequest, BlogCategory>();
-        CreateMap<UpdateBlogCategoryRequest, BlogCategory>()
+        CreateMap<CreateBlogCategoryCommand, BlogCategory>();
+        CreateMap<UpdateBlogCategoryCommand, BlogCategory>()
             .ForMember(dest => dest.Id, opt => opt.Ignore())
             .ForMember(dest => dest.CreatedAt, opt => opt.Ignore());
     }
