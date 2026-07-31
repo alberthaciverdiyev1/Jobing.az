@@ -10,173 +10,59 @@ namespace Jobing.Infrastructure.Data.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AlterColumn<string>(
-                name: "Name",
-                schema: "public",
-                table: "news_categories",
-                type: "jsonb",
-                nullable: false,
-                oldClrType: typeof(string),
-                oldType: "character varying(200)",
-                oldMaxLength: 200);
+            // text/varchar -> jsonb casts require an explicit USING clause in PostgreSQL.
+            migrationBuilder.Sql(
+                "ALTER TABLE public.news_categories ALTER COLUMN \"Name\" TYPE jsonb USING \"Name\"::jsonb;");
 
-            migrationBuilder.AlterColumn<string>(
-                name: "Title",
-                schema: "public",
-                table: "news",
-                type: "jsonb",
-                nullable: false,
-                oldClrType: typeof(string),
-                oldType: "character varying(500)",
-                oldMaxLength: 500);
+            migrationBuilder.Sql(
+                "ALTER TABLE public.news ALTER COLUMN \"Title\" TYPE jsonb USING \"Title\"::jsonb;");
 
-            migrationBuilder.AlterColumn<string>(
-                name: "Excerpt",
-                schema: "public",
-                table: "news",
-                type: "jsonb",
-                nullable: true,
-                oldClrType: typeof(string),
-                oldType: "character varying(1000)",
-                oldMaxLength: 1000,
-                oldNullable: true);
+            migrationBuilder.Sql(
+                "ALTER TABLE public.news ALTER COLUMN \"Excerpt\" TYPE jsonb USING \"Excerpt\"::jsonb;");
 
-            migrationBuilder.AlterColumn<string>(
-                name: "Content",
-                schema: "public",
-                table: "news",
-                type: "jsonb",
-                nullable: true,
-                oldClrType: typeof(string),
-                oldType: "text",
-                oldNullable: true);
+            migrationBuilder.Sql(
+                "ALTER TABLE public.news ALTER COLUMN \"Content\" TYPE jsonb USING \"Content\"::jsonb;");
 
-            migrationBuilder.AlterColumn<string>(
-                name: "title",
-                schema: "public",
-                table: "blog_posts",
-                type: "jsonb",
-                nullable: false,
-                oldClrType: typeof(string),
-                oldType: "character varying(500)",
-                oldMaxLength: 500);
+            migrationBuilder.Sql(
+                "ALTER TABLE public.blog_posts ALTER COLUMN title TYPE jsonb USING title::jsonb;");
 
-            migrationBuilder.AlterColumn<string>(
-                name: "excerpt",
-                schema: "public",
-                table: "blog_posts",
-                type: "jsonb",
-                nullable: true,
-                oldClrType: typeof(string),
-                oldType: "character varying(1000)",
-                oldMaxLength: 1000,
-                oldNullable: true);
+            migrationBuilder.Sql(
+                "ALTER TABLE public.blog_posts ALTER COLUMN excerpt TYPE jsonb USING excerpt::jsonb;");
 
-            migrationBuilder.AlterColumn<string>(
-                name: "content",
-                schema: "public",
-                table: "blog_posts",
-                type: "jsonb",
-                nullable: true,
-                oldClrType: typeof(string),
-                oldType: "text",
-                oldNullable: true);
+            migrationBuilder.Sql(
+                "ALTER TABLE public.blog_posts ALTER COLUMN content TYPE jsonb USING content::jsonb;");
 
-            migrationBuilder.AlterColumn<string>(
-                name: "name",
-                schema: "public",
-                table: "blog_categories",
-                type: "jsonb",
-                nullable: false,
-                oldClrType: typeof(string),
-                oldType: "character varying(200)",
-                oldMaxLength: 200);
+            migrationBuilder.Sql(
+                "ALTER TABLE public.blog_categories ALTER COLUMN name TYPE jsonb USING name::jsonb;");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AlterColumn<string>(
-                name: "Name",
-                schema: "public",
-                table: "news_categories",
-                type: "character varying(200)",
-                maxLength: 200,
-                nullable: false,
-                oldClrType: typeof(string),
-                oldType: "jsonb");
+            // jsonb -> text/varchar casts require an explicit USING clause in PostgreSQL.
+            migrationBuilder.Sql(
+                "ALTER TABLE public.news_categories ALTER COLUMN \"Name\" TYPE character varying(200) USING \"Name\"::text;");
 
-            migrationBuilder.AlterColumn<string>(
-                name: "Title",
-                schema: "public",
-                table: "news",
-                type: "character varying(500)",
-                maxLength: 500,
-                nullable: false,
-                oldClrType: typeof(string),
-                oldType: "jsonb");
+            migrationBuilder.Sql(
+                "ALTER TABLE public.news ALTER COLUMN \"Title\" TYPE character varying(500) USING \"Title\"::text;");
 
-            migrationBuilder.AlterColumn<string>(
-                name: "Excerpt",
-                schema: "public",
-                table: "news",
-                type: "character varying(1000)",
-                maxLength: 1000,
-                nullable: true,
-                oldClrType: typeof(string),
-                oldType: "jsonb",
-                oldNullable: true);
+            migrationBuilder.Sql(
+                "ALTER TABLE public.news ALTER COLUMN \"Excerpt\" TYPE character varying(1000) USING \"Excerpt\"::text;");
 
-            migrationBuilder.AlterColumn<string>(
-                name: "Content",
-                schema: "public",
-                table: "news",
-                type: "text",
-                nullable: true,
-                oldClrType: typeof(string),
-                oldType: "jsonb",
-                oldNullable: true);
+            migrationBuilder.Sql(
+                "ALTER TABLE public.news ALTER COLUMN \"Content\" TYPE text USING \"Content\"::text;");
 
-            migrationBuilder.AlterColumn<string>(
-                name: "title",
-                schema: "public",
-                table: "blog_posts",
-                type: "character varying(500)",
-                maxLength: 500,
-                nullable: false,
-                oldClrType: typeof(string),
-                oldType: "jsonb");
+            migrationBuilder.Sql(
+                "ALTER TABLE public.blog_posts ALTER COLUMN title TYPE character varying(500) USING title::text;");
 
-            migrationBuilder.AlterColumn<string>(
-                name: "excerpt",
-                schema: "public",
-                table: "blog_posts",
-                type: "character varying(1000)",
-                maxLength: 1000,
-                nullable: true,
-                oldClrType: typeof(string),
-                oldType: "jsonb",
-                oldNullable: true);
+            migrationBuilder.Sql(
+                "ALTER TABLE public.blog_posts ALTER COLUMN excerpt TYPE character varying(1000) USING excerpt::text;");
 
-            migrationBuilder.AlterColumn<string>(
-                name: "content",
-                schema: "public",
-                table: "blog_posts",
-                type: "text",
-                nullable: true,
-                oldClrType: typeof(string),
-                oldType: "jsonb",
-                oldNullable: true);
+            migrationBuilder.Sql(
+                "ALTER TABLE public.blog_posts ALTER COLUMN content TYPE text USING content::text;");
 
-            migrationBuilder.AlterColumn<string>(
-                name: "name",
-                schema: "public",
-                table: "blog_categories",
-                type: "character varying(200)",
-                maxLength: 200,
-                nullable: false,
-                oldClrType: typeof(string),
-                oldType: "jsonb");
+            migrationBuilder.Sql(
+                "ALTER TABLE public.blog_categories ALTER COLUMN name TYPE character varying(200) USING name::text;");
         }
     }
 }

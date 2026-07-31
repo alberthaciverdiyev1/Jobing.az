@@ -33,29 +33,15 @@ namespace Jobing.Infrastructure.Data.Migrations
                 WHERE "Value" IS NOT NULL;
                 """);
 
-            migrationBuilder.AlterColumn<string>(
-                name: "Value",
-                schema: "public",
-                table: "settings",
-                type: "jsonb",
-                nullable: true,
-                oldClrType: typeof(string),
-                oldType: "text",
-                oldNullable: true);
+            migrationBuilder.Sql(
+                "ALTER TABLE public.settings ALTER COLUMN \"Value\" TYPE jsonb USING \"Value\"::jsonb;");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AlterColumn<string>(
-                name: "Value",
-                schema: "public",
-                table: "settings",
-                type: "text",
-                nullable: true,
-                oldClrType: typeof(string),
-                oldType: "jsonb",
-                oldNullable: true);
+            migrationBuilder.Sql(
+                "ALTER TABLE public.settings ALTER COLUMN \"Value\" TYPE text USING \"Value\"::text;");
 
             migrationBuilder.AddColumn<string>(
                 name: "Group",

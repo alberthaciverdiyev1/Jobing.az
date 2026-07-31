@@ -32,46 +32,17 @@ namespace Jobing.Infrastructure.Data.Migrations
                 WHERE "description" IS NOT NULL;
                 """);
 
-            migrationBuilder.AlterColumn<string>(
-                name: "title",
-                schema: "public",
-                table: "jobs",
-                type: "jsonb",
-                nullable: false,
-                oldClrType: typeof(string),
-                oldType: "character varying(255)",
-                oldMaxLength: 255);
+            migrationBuilder.Sql(
+                "ALTER TABLE public.jobs ALTER COLUMN title TYPE jsonb USING title::jsonb;");
 
-            migrationBuilder.AlterColumn<string>(
-                name: "salary_text",
-                schema: "public",
-                table: "jobs",
-                type: "jsonb",
-                nullable: true,
-                oldClrType: typeof(string),
-                oldType: "character varying(200)",
-                oldMaxLength: 200,
-                oldNullable: true);
+            migrationBuilder.Sql(
+                "ALTER TABLE public.jobs ALTER COLUMN salary_text TYPE jsonb USING salary_text::jsonb;");
 
-            migrationBuilder.AlterColumn<string>(
-                name: "requirements",
-                schema: "public",
-                table: "jobs",
-                type: "jsonb",
-                nullable: true,
-                oldClrType: typeof(string),
-                oldType: "text",
-                oldNullable: true);
+            migrationBuilder.Sql(
+                "ALTER TABLE public.jobs ALTER COLUMN requirements TYPE jsonb USING requirements::jsonb;");
 
-            migrationBuilder.AlterColumn<string>(
-                name: "description",
-                schema: "public",
-                table: "jobs",
-                type: "jsonb",
-                nullable: true,
-                oldClrType: typeof(string),
-                oldType: "text",
-                oldNullable: true);
+            migrationBuilder.Sql(
+                "ALTER TABLE public.jobs ALTER COLUMN description TYPE jsonb USING description::jsonb;");
 
             migrationBuilder.AddColumn<string>(
                 name: "application_method",
@@ -128,46 +99,17 @@ namespace Jobing.Infrastructure.Data.Migrations
                 schema: "public",
                 table: "jobs");
 
-            migrationBuilder.AlterColumn<string>(
-                name: "title",
-                schema: "public",
-                table: "jobs",
-                type: "character varying(255)",
-                maxLength: 255,
-                nullable: false,
-                oldClrType: typeof(string),
-                oldType: "jsonb");
+            migrationBuilder.Sql(
+                "ALTER TABLE public.jobs ALTER COLUMN title TYPE character varying(255) USING title::text;");
 
-            migrationBuilder.AlterColumn<string>(
-                name: "salary_text",
-                schema: "public",
-                table: "jobs",
-                type: "character varying(200)",
-                maxLength: 200,
-                nullable: true,
-                oldClrType: typeof(string),
-                oldType: "jsonb",
-                oldNullable: true);
+            migrationBuilder.Sql(
+                "ALTER TABLE public.jobs ALTER COLUMN salary_text TYPE character varying(200) USING salary_text::text;");
 
-            migrationBuilder.AlterColumn<string>(
-                name: "requirements",
-                schema: "public",
-                table: "jobs",
-                type: "text",
-                nullable: true,
-                oldClrType: typeof(string),
-                oldType: "jsonb",
-                oldNullable: true);
+            migrationBuilder.Sql(
+                "ALTER TABLE public.jobs ALTER COLUMN requirements TYPE text USING requirements::text;");
 
-            migrationBuilder.AlterColumn<string>(
-                name: "description",
-                schema: "public",
-                table: "jobs",
-                type: "text",
-                nullable: true,
-                oldClrType: typeof(string),
-                oldType: "jsonb",
-                oldNullable: true);
+            migrationBuilder.Sql(
+                "ALTER TABLE public.jobs ALTER COLUMN description TYPE text USING description::text;");
         }
     }
 }
