@@ -16,6 +16,8 @@ import NewsCategoryList from './pages/NewsCategoryList'
 import NewsCategoryForm from './pages/NewsCategoryForm'
 import NewsList from './pages/NewsList'
 import NewsForm from './pages/NewsForm'
+import SettingsList from './pages/SettingsList'
+import SettingsForm from './pages/SettingsForm'
 import UserList from './pages/UserList'
 import UserEdit from './pages/UserEdit'
 
@@ -46,6 +48,9 @@ function App() {
               <Route path="news" element={<NewsList />} />
               <Route path="news/create" element={<NewsForm />} />
               <Route path="news/edit/:id" element={<NewsForm />} />
+              <Route path="settings" element={<SettingsList />} />
+              <Route path="settings/create" element={<SettingsForm />} />
+              <Route path="settings/edit/:id" element={<SettingsForm />} />
               <Route path="users" element={<UserList />} />
               <Route path="users/edit/:id" element={<UserEdit />} />
             </Route>

@@ -20,6 +20,7 @@ public class AppDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
     public DbSet<BlogCategory> BlogCategories => Set<BlogCategory>();
     public DbSet<News> News => Set<News>();
     public DbSet<NewsCategory> NewsCategories => Set<NewsCategory>();
+    public DbSet<Setting> Settings => Set<Setting>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

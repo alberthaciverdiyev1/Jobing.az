@@ -137,6 +137,39 @@ public static class DataSeeder
             await context.SaveChangesAsync();
         }
 
+        // Settings (moved from express-js project; scraping is not part of .NET)
+        if (!await context.Settings.AnyAsync())
+        {
+            var settings = new List<Setting>
+            {
+                // General
+                new() { Key = "site.name", Group = "general", Value = "Jobing.az", Description = "Site name", SortOrder = 1 },
+                new() { Key = "site.url", Group = "general", Value = "https://jobing.az", Description = "Site base URL", SortOrder = 2 },
+                new() { Key = "site.logo", Group = "general", Value = "/Images/Static/Logo.png", Description = "Site logo path", SortOrder = 3 },
+                new() { Key = "site.description", Group = "general", Value = "Azərbaycanın ən böyük iş axtarış platforması", Description = "Short site description", SortOrder = 4 },
+                // Contact
+                new() { Key = "contact.phone", Group = "contact", Value = "+994 470 999 05 69", Description = "Contact phone", SortOrder = 1 },
+                new() { Key = "contact.email", Group = "contact", Value = "contact@jobing.az", Description = "Contact email", SortOrder = 2 },
+                // Social
+                new() { Key = "social.facebook", Group = "social", Value = "https://www.facebook.com/profile.php?id=61569206672024", Description = "Facebook page URL", SortOrder = 1 },
+                new() { Key = "social.twitter", Group = "social", Value = "", Description = "Twitter/X profile URL", SortOrder = 2 },
+                new() { Key = "social.linkedin", Group = "social", Value = "https://www.linkedin.com/company/jobing-az/", Description = "LinkedIn company URL", SortOrder = 3 },
+                new() { Key = "social.instagram", Group = "social", Value = "https://www.instagram.com/jobing.az/", Description = "Instagram profile URL", SortOrder = 4 },
+                // SEO
+                new() { Key = "seo.default.title", Group = "seo", Value = "Vakansiyalar və İş Elanları | Jobing.az", Description = "Default meta title", SortOrder = 1 },
+                new() { Key = "seo.default.description", Group = "seo", Value = "Azərbaycanda ən son vakansiyalar, iş elanları və karyera imkanları. Jobing.az ilə iş axtarışınızı başlayın.", Description = "Default meta description", SortOrder = 2 },
+                new() { Key = "seo.keywords", Group = "seo", Value = "vakansiya, iş elanları, iş axtarışı, Azərbaycan vakansiyalar, jobing.az", Description = "Meta keywords", SortOrder = 3 },
+                new() { Key = "seo.og.image", Group = "seo", Value = "https://jobing.az/Images/Static/Logo.png", Description = "Default Open Graph image", SortOrder = 4 },
+                // Analytics
+                new() { Key = "analytics.gtm_id", Group = "analytics", Value = "GTM-PV8D5X3V", Description = "Google Tag Manager ID", SortOrder = 1 },
+                new() { Key = "analytics.meta_pixel_id", Group = "analytics", Value = "2033268548067657", Description = "Meta Pixel ID", SortOrder = 2 },
+                new() { Key = "analytics.ga_id", Group = "analytics", Value = "G-2932L7DPW8", Description = "Google Analytics ID", SortOrder = 3 },
+                new() { Key = "analytics.adsense_account", Group = "analytics", Value = "ca-pub-6130649958615254", Description = "Google AdSense account", SortOrder = 4 },
+            };
+            context.Settings.AddRange(settings);
+            await context.SaveChangesAsync();
+        }
+
         // Admin user
         const string adminEmail = "admin@jobing.az";
         if (await userManager.FindByEmailAsync(adminEmail) == null)
