@@ -1,6 +1,8 @@
 using Jobing.Application.Common.Interfaces;
+using Jobing.Application.Features.Auth.Commands;
 using Jobing.Application.Features.Auth.DTOs;
 using Jobing.Domain.Entities;
+using Jobing.Domain.Exceptions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,11 +24,11 @@ public class AuthService : IAuthService
         _emailService = emailService;
     }
 
-    public async Task<AuthResponse> RegisterAsync(RegisterRequest request)
+    public async Task<AuthResponse> RegisterAsync(RegisterCommand request)
     {
         var existing = await _userManager.FindByEmailAsync(request.Email);
         if (existing != null)
-            throw new InvalidOperationException("Email is already registered");
+            throw new DomainException("Email is already registered");
 
         var user = new User
         {
@@ -47,7 +49,7 @@ public class AuthService : IAuthService
         if (!result.Succeeded)
         {
             var errors = string.Join(", ", result.Errors.Select(e => e.Description));
-            throw new InvalidOperationException($"Registration failed: {errors}");
+            throw new DomainException($"Registration failed: {errors}");
         }
 
         await _userManager.AddToRoleAsync(user, "User");
@@ -70,7 +72,7 @@ public class AuthService : IAuthService
         };
     }
 
-    public async Task<AuthResponse> LoginAsync(LoginRequest request)
+    public async Task<AuthResponse> LoginAsync(LoginCommand request)
     {
         var user = await _userManager.FindByEmailAsync(request.Email);
         if (user == null || !user.IsActive)
@@ -101,7 +103,7 @@ public class AuthService : IAuthService
         };
     }
 
-    public async Task ForgotPasswordAsync(ForgotPasswordRequest request)
+    public async Task ForgotPasswordAsync(ForgotPasswordCommand request)
     {
         var user = await _userManager.FindByEmailAsync(request.Email);
         if (user == null)
@@ -116,16 +118,16 @@ public class AuthService : IAuthService
         await _emailService.SendPasswordResetEmailAsync(request.Email, resetLink);
     }
 
-    public async Task ResetPasswordAsync(ResetPasswordRequest request)
+    public async Task ResetPasswordAsync(ResetPasswordCommand request)
     {
         var user = await _userManager.FindByEmailAsync(request.Email)
-            ?? throw new InvalidOperationException("Invalid request");
+            ?? throw new DomainException("Invalid request");
 
         var result = await _userManager.ResetPasswordAsync(user, request.Token, request.NewPassword);
         if (!result.Succeeded)
         {
             var errors = string.Join(", ", result.Errors.Select(e => e.Description));
-            throw new InvalidOperationException($"Password reset failed: {errors}");
+            throw new DomainException($"Password reset failed: {errors}");
         }
     }
 }

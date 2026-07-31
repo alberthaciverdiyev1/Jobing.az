@@ -1,6 +1,8 @@
 using System.Security.Claims;
-using Jobing.Application.Common.Interfaces;
+using Jobing.Application.Features.Profile.Commands;
 using Jobing.Application.Features.Profile.DTOs;
+using Jobing.Application.Features.Profile.Queries;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,9 +13,9 @@ namespace Jobing.Api.Controllers;
 [Route("api/profile")]
 public class ProfileController : ControllerBase
 {
-    private readonly IProfileService _profileService;
+    private readonly ISender _sender;
 
-    public ProfileController(IProfileService profileService) => _profileService = profileService;
+    public ProfileController(ISender sender) => _sender = sender;
 
     private Guid GetUserId()
     {
@@ -25,32 +27,21 @@ public class ProfileController : ControllerBase
 
     [HttpGet]
     public async Task<ActionResult<ProfileDto>> GetProfile()
-    {
-        try { return Ok(await _profileService.GetProfileAsync(GetUserId())); }
-        catch (KeyNotFoundException) { return NotFound(new { message = "User not found" }); }
-    }
+        => Ok(await _sender.Send(new GetProfileQuery { UserId = GetUserId() }));
 
     [HttpPut]
-    public async Task<IActionResult> UpdateProfile(UpdateProfileRequest request)
+    public async Task<IActionResult> UpdateProfile(UpdateProfileCommand command)
     {
-        try
-        {
-            await _profileService.UpdateProfileAsync(GetUserId(), request);
-            return NoContent();
-        }
-        catch (KeyNotFoundException) { return NotFound(new { message = "User not found" }); }
-        catch (InvalidOperationException ex) { return BadRequest(new { message = ex.Message }); }
+        command.UserId = GetUserId();
+        await _sender.Send(command);
+        return NoContent();
     }
 
     [HttpPut("change-password")]
-    public async Task<IActionResult> ChangePassword(ChangePasswordRequest request)
+    public async Task<IActionResult> ChangePassword(ChangePasswordCommand command)
     {
-        try
-        {
-            await _profileService.ChangePasswordAsync(GetUserId(), request);
-            return NoContent();
-        }
-        catch (KeyNotFoundException) { return NotFound(new { message = "User not found" }); }
-        catch (InvalidOperationException ex) { return BadRequest(new { message = ex.Message }); }
+        command.UserId = GetUserId();
+        await _sender.Send(command);
+        return NoContent();
     }
 }

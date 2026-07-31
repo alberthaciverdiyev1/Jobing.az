@@ -1,5 +1,6 @@
-using Jobing.Application.Common.Interfaces;
+using Jobing.Application.Features.Auth.Commands;
 using Jobing.Application.Features.Auth.DTOs;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Jobing.Api.Controllers;
@@ -8,56 +9,32 @@ namespace Jobing.Api.Controllers;
 [Route("api/auth")]
 public class AuthController : ControllerBase
 {
-    private readonly IAuthService _authService;
+    private readonly ISender _sender;
 
-    public AuthController(IAuthService authService) => _authService = authService;
+    public AuthController(ISender sender) => _sender = sender;
 
     [HttpPost("register")]
-    public async Task<ActionResult<AuthResponse>> Register(RegisterRequest request)
+    public async Task<ActionResult<AuthResponse>> Register(RegisterCommand command)
     {
-        try
-        {
-            var response = await _authService.RegisterAsync(request);
-            return CreatedAtAction(nameof(Register), new { id = response.User.Id }, response);
-        }
-        catch (InvalidOperationException ex)
-        {
-            return BadRequest(new { message = ex.Message });
-        }
+        var response = await _sender.Send(command);
+        return CreatedAtAction(nameof(Register), new { id = response.User.Id }, response);
     }
 
     [HttpPost("login")]
-    public async Task<ActionResult<AuthResponse>> Login(LoginRequest request)
-    {
-        try
-        {
-            var response = await _authService.LoginAsync(request);
-            return Ok(response);
-        }
-        catch (UnauthorizedAccessException ex)
-        {
-            return Unauthorized(new { message = ex.Message });
-        }
-    }
+    public async Task<ActionResult<AuthResponse>> Login(LoginCommand command)
+        => Ok(await _sender.Send(command));
 
     [HttpPost("forgot-password")]
-    public async Task<IActionResult> ForgotPassword(ForgotPasswordRequest request)
+    public async Task<IActionResult> ForgotPassword(ForgotPasswordCommand command)
     {
-        await _authService.ForgotPasswordAsync(request);
+        await _sender.Send(command);
         return Ok(new { message = "If the email exists, a reset link has been sent." });
     }
 
     [HttpPost("reset-password")]
-    public async Task<IActionResult> ResetPassword(ResetPasswordRequest request)
+    public async Task<IActionResult> ResetPassword(ResetPasswordCommand command)
     {
-        try
-        {
-            await _authService.ResetPasswordAsync(request);
-            return Ok(new { message = "Password has been reset successfully." });
-        }
-        catch (InvalidOperationException ex)
-        {
-            return BadRequest(new { message = ex.Message });
-        }
+        await _sender.Send(command);
+        return Ok(new { message = "Password has been reset successfully." });
     }
 }

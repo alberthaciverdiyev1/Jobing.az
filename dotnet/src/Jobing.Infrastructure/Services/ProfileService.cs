@@ -1,6 +1,8 @@
 using Jobing.Application.Common.Interfaces;
+using Jobing.Application.Features.Profile.Commands;
 using Jobing.Application.Features.Profile.DTOs;
 using Jobing.Domain.Entities;
+using Jobing.Domain.Exceptions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,7 +22,7 @@ public class ProfileService : IProfileService
         var user = await _userManager.Users
             .Include(u => u.Profile)
             .FirstOrDefaultAsync(u => u.Id == userId)
-            ?? throw new KeyNotFoundException("User not found");
+            ?? throw new NotFoundException(nameof(User), userId);
 
         var roles = await _userManager.GetRolesAsync(user);
 
@@ -39,12 +41,12 @@ public class ProfileService : IProfileService
         };
     }
 
-    public async Task UpdateProfileAsync(Guid userId, UpdateProfileRequest request)
+    public async Task UpdateProfileAsync(Guid userId, UpdateProfileCommand request)
     {
         var user = await _userManager.Users
             .Include(u => u.Profile)
             .FirstOrDefaultAsync(u => u.Id == userId)
-            ?? throw new KeyNotFoundException("User not found");
+            ?? throw new NotFoundException(nameof(User), userId);
 
         user.PhoneNumber = request.Phone;
         user.UpdatedAt = DateTime.UtcNow;
@@ -69,14 +71,14 @@ public class ProfileService : IProfileService
         if (!result.Succeeded)
         {
             var errors = string.Join(", ", result.Errors.Select(e => e.Description));
-            throw new InvalidOperationException($"Profile update failed: {errors}");
+            throw new DomainException($"Profile update failed: {errors}");
         }
     }
 
-    public async Task ChangePasswordAsync(Guid userId, ChangePasswordRequest request)
+    public async Task ChangePasswordAsync(Guid userId, ChangePasswordCommand request)
     {
         var user = await _userManager.FindByIdAsync(userId.ToString())
-            ?? throw new KeyNotFoundException("User not found");
+            ?? throw new NotFoundException(nameof(User), userId);
 
         var result = await _userManager.ChangePasswordAsync(
             user, request.CurrentPassword, request.NewPassword);
@@ -84,7 +86,7 @@ public class ProfileService : IProfileService
         if (!result.Succeeded)
         {
             var errors = string.Join(", ", result.Errors.Select(e => e.Description));
-            throw new InvalidOperationException($"Password change failed: {errors}");
+            throw new DomainException($"Password change failed: {errors}");
         }
     }
 }
