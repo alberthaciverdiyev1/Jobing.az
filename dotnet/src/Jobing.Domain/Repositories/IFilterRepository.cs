@@ -1,6 +1,6 @@
 using Jobing.Domain.Entities;
 
-namespace Jobing.Application.Common.Interfaces;
+namespace Jobing.Domain.Repositories;
 
 public interface IFilterRepository
 {

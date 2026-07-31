@@ -1,4 +1,5 @@
 using Jobing.Application.Common.Interfaces;
+using Jobing.Domain.Repositories;
 using Jobing.Infrastructure.Data;
 using Jobing.Infrastructure.Repositories;
 using Jobing.Infrastructure.Services;
@@ -19,6 +20,7 @@ public static class DependencyInjection
         services.AddScoped<IEmailService, EmailService>();
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IProfileService, ProfileService>();
+        services.AddScoped<IAdminUserService, AdminUserService>();
         services.AddScoped<ICityRepository, CityRepository>();
         services.AddScoped<IFilterRepository, FilterRepository>();
         services.AddScoped<IBlogRepository, BlogRepository>();

@@ -1,6 +1,8 @@
 using Jobing.Application.Common.DTOs;
-using Jobing.Application.Features.Filters;
+using Jobing.Application.Features.Filters.Commands;
 using Jobing.Application.Features.Filters.DTOs;
+using Jobing.Application.Features.Filters.Queries;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Jobing.Api.Controllers;
@@ -9,44 +11,45 @@ namespace Jobing.Api.Controllers;
 [Route("api/filters")]
 public class FiltersController : ControllerBase
 {
-    private readonly IFilterService _service;
-    public FiltersController(IFilterService service) => _service = service;
+    private readonly ISender _sender;
+
+    public FiltersController(ISender sender) => _sender = sender;
 
     [HttpGet]
-    public async Task<ActionResult<PagedResult<FilterDto>>> GetAll([FromQuery] PaginationParams p)
-        => Ok(await _service.GetPagedAsync(p));
+    public async Task<ActionResult<PagedResult<FilterDto>>> GetAll([FromQuery] GetFiltersQuery query)
+        => Ok(await _sender.Send(query));
 
     [HttpGet("active")]
     public async Task<ActionResult<IReadOnlyList<FilterDto>>> GetAllActive()
-        => Ok(await _service.GetAllActiveAsync());
+        => Ok(await _sender.Send(new GetActiveFiltersQuery()));
 
     [HttpGet("{id:guid}")]
     public async Task<ActionResult<FilterDto>> GetById(Guid id)
     {
-        var r = await _service.GetByIdAsync(id);
+        var r = await _sender.Send(new GetFilterByIdQuery { Id = id });
         return r is null ? NotFound() : Ok(r);
     }
 
     [HttpPost]
-    public async Task<ActionResult<FilterDto>> Create(CreateFilterRequest request)
+    public async Task<ActionResult<FilterDto>> Create(CreateFilterCommand command)
     {
-        try { var r = await _service.CreateAsync(request); return CreatedAtAction(nameof(GetById), new { id = r.Id }, r); }
-        catch (FluentValidation.ValidationException ex) { return BadRequest(ex.Errors); }
+        var r = await _sender.Send(command);
+        return CreatedAtAction(nameof(GetById), new { id = r.Id }, r);
     }
 
     [HttpPut("{id:guid}")]
-    public async Task<IActionResult> Update(Guid id, UpdateFilterRequest request)
+    public async Task<IActionResult> Update(Guid id, UpdateFilterCommand command)
     {
-        try { await _service.UpdateAsync(id, request); return NoContent(); }
-        catch (KeyNotFoundException) { return NotFound(); }
-        catch (FluentValidation.ValidationException ex) { return BadRequest(ex.Errors); }
+        command.Id = id;
+        await _sender.Send(command);
+        return NoContent();
     }
 
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> Delete(Guid id)
     {
-        try { await _service.DeleteAsync(id); return NoContent(); }
-        catch (KeyNotFoundException) { return NotFound(); }
+        await _sender.Send(new DeleteFilterCommand { Id = id });
+        return NoContent();
     }
 
     // --- FilterOption endpoints ---
@@ -54,30 +57,30 @@ public class FiltersController : ControllerBase
     [HttpGet("options/{id:guid}")]
     public async Task<ActionResult<FilterOptionDto>> GetOptionById(Guid id)
     {
-        var r = await _service.GetOptionByIdAsync(id);
+        var r = await _sender.Send(new GetFilterOptionByIdQuery { Id = id });
         return r is null ? NotFound() : Ok(r);
     }
 
     [HttpPost("{filterId:guid}/options")]
-    public async Task<ActionResult<FilterOptionDto>> AddOption(Guid filterId, CreateFilterOptionRequest request)
+    public async Task<ActionResult<FilterOptionDto>> AddOption(Guid filterId, AddFilterOptionCommand command)
     {
-        try { var r = await _service.AddOptionAsync(filterId, request); return CreatedAtAction(nameof(GetOptionById), new { id = r.Id }, r); }
-        catch (KeyNotFoundException) { return NotFound(); }
-        catch (FluentValidation.ValidationException ex) { return BadRequest(ex.Errors); }
+        command.FilterId = filterId;
+        var r = await _sender.Send(command);
+        return CreatedAtAction(nameof(GetOptionById), new { id = r.Id }, r);
     }
 
     [HttpPut("options/{id:guid}")]
-    public async Task<IActionResult> UpdateOption(Guid id, UpdateFilterOptionRequest request)
+    public async Task<IActionResult> UpdateOption(Guid id, UpdateFilterOptionCommand command)
     {
-        try { await _service.UpdateOptionAsync(id, request); return NoContent(); }
-        catch (KeyNotFoundException) { return NotFound(); }
-        catch (FluentValidation.ValidationException ex) { return BadRequest(ex.Errors); }
+        command.Id = id;
+        await _sender.Send(command);
+        return NoContent();
     }
 
     [HttpDelete("options/{id:guid}")]
     public async Task<IActionResult> DeleteOption(Guid id)
     {
-        try { await _service.DeleteOptionAsync(id); return NoContent(); }
-        catch (KeyNotFoundException) { return NotFound(); }
+        await _sender.Send(new DeleteFilterOptionCommand { Id = id });
+        return NoContent();
     }
 }

@@ -1,6 +1,8 @@
 using Jobing.Application.Common.DTOs;
-using Jobing.Application.Features.Cities;
+using Jobing.Application.Features.Cities.Commands;
 using Jobing.Application.Features.Cities.DTOs;
+using Jobing.Application.Features.Cities.Queries;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Jobing.Api.Controllers;
@@ -9,57 +11,40 @@ namespace Jobing.Api.Controllers;
 [Route("api/[controller]")]
 public class CitiesController : ControllerBase
 {
-    private readonly ICityService _cityService;
+    private readonly ISender _sender;
 
-    public CitiesController(ICityService cityService) => _cityService = cityService;
+    public CitiesController(ISender sender) => _sender = sender;
 
     [HttpGet]
-    public async Task<ActionResult<PagedResult<CityDto>>> GetAll([FromQuery] PaginationParams pagination)
-    {
-        return Ok(await _cityService.GetPagedAsync(pagination));
-    }
+    public async Task<ActionResult<PagedResult<CityDto>>> GetAll([FromQuery] GetCitiesQuery query)
+        => Ok(await _sender.Send(query));
 
     [HttpGet("{id:guid}")]
     public async Task<ActionResult<CityDto>> GetById(Guid id)
     {
-        var result = await _cityService.GetByIdAsync(id);
+        var result = await _sender.Send(new GetCityByIdQuery { Id = id });
         return result is null ? NotFound() : Ok(result);
     }
 
     [HttpPost]
-    public async Task<ActionResult<CityDto>> Create(CreateCityRequest request)
+    public async Task<ActionResult<CityDto>> Create(CreateCityCommand command)
     {
-        try
-        {
-            var city = await _cityService.CreateAsync(request);
-            return CreatedAtAction(nameof(GetById), new { id = city.Id }, city);
-        }
-        catch (FluentValidation.ValidationException ex)
-        {
-            return BadRequest(ex.Errors);
-        }
+        var city = await _sender.Send(command);
+        return CreatedAtAction(nameof(GetById), new { id = city.Id }, city);
     }
 
     [HttpPut("{id:guid}")]
-    public async Task<IActionResult> Update(Guid id, UpdateCityRequest request)
+    public async Task<IActionResult> Update(Guid id, UpdateCityCommand command)
     {
-        try
-        {
-            await _cityService.UpdateAsync(id, request);
-            return NoContent();
-        }
-        catch (KeyNotFoundException) { return NotFound(); }
-        catch (FluentValidation.ValidationException ex) { return BadRequest(ex.Errors); }
+        command.Id = id;
+        await _sender.Send(command);
+        return NoContent();
     }
 
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> Delete(Guid id)
     {
-        try
-        {
-            await _cityService.DeleteAsync(id);
-            return NoContent();
-        }
-        catch (KeyNotFoundException) { return NotFound(); }
+        await _sender.Send(new DeleteCityCommand { Id = id });
+        return NoContent();
     }
 }

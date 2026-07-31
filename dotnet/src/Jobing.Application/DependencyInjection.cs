@@ -1,5 +1,6 @@
 using System.Reflection;
 using FluentValidation;
+using Jobing.Application.Common.Behaviors;
 using Jobing.Application.Features.Auth;
 using Jobing.Application.Features.BlogCategories;
 using Jobing.Application.Features.Blogs;
@@ -21,16 +22,11 @@ public static class DependencyInjection
     {
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
         services.AddAutoMapper(cfg => cfg.AddMaps(Assembly.GetExecutingAssembly()), Array.Empty<Assembly>());
-
-        services.AddScoped<ICityService, CityService>();
-        services.AddScoped<IFilterService, FilterService>();
-        services.AddScoped<IBlogService, BlogService>();
-        services.AddScoped<IBlogCategoryService, BlogCategoryService>();
-        services.AddScoped<INewsService, NewsService>();
-        services.AddScoped<INewsCategoryService, NewsCategoryService>();
-        services.AddScoped<ISettingService, SettingService>();
-        services.AddScoped<ISeoSettingService, SeoSettingService>();
-        services.AddScoped<IJobService, JobService>();
+        services.AddMediatR(cfg =>
+        {
+            cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
+            cfg.AddOpenBehavior(typeof(ValidationBehavior<,>));
+        });
 
         return services;
     }

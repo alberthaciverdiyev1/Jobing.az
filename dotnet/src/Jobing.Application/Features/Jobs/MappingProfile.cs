@@ -1,4 +1,5 @@
 using AutoMapper;
+using Jobing.Application.Features.Jobs.Commands;
 using Jobing.Application.Features.Jobs.DTOs;
 using Jobing.Domain.Entities;
 
@@ -12,7 +13,7 @@ public class MappingProfile : AutoMapper.Profile
             .ForMember(dest => dest.CompanyName, opt => opt.MapFrom(src => src.Company != null ? src.Company.Name : null))
             .ForMember(dest => dest.CityName, opt => opt.MapFrom(src => src.City != null ? src.City.Name : null));
 
-        CreateMap<CreateJobRequest, Job>()
+        CreateMap<CreateJobCommand, Job>()
             .ForMember(dest => dest.Id, opt => opt.Ignore())
             .ForMember(dest => dest.ViewCount, opt => opt.Ignore())
             .ForMember(dest => dest.CreatedById, opt => opt.Ignore())
@@ -23,7 +24,7 @@ public class MappingProfile : AutoMapper.Profile
             .ForMember(dest => dest.City, opt => opt.Ignore())
             .ForMember(dest => dest.CreatedBy, opt => opt.Ignore());
 
-        CreateMap<UpdateJobRequest, Job>()
+        CreateMap<UpdateJobCommand, Job>()
             .ForMember(dest => dest.Id, opt => opt.Ignore())
             .ForMember(dest => dest.ViewCount, opt => opt.Ignore())
             .ForMember(dest => dest.CreatedById, opt => opt.Ignore())

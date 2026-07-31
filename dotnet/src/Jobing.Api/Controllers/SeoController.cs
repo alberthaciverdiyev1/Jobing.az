@@ -1,6 +1,8 @@
 using Jobing.Application.Common.DTOs;
-using Jobing.Application.Features.Seo;
+using Jobing.Application.Features.Seo.Commands;
 using Jobing.Application.Features.Seo.DTOs;
+using Jobing.Application.Features.Seo.Queries;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,59 +12,58 @@ namespace Jobing.Api.Controllers;
 [Route("api/seo")]
 public class SeoController : ControllerBase
 {
-    private readonly ISeoSettingService _service;
-    public SeoController(ISeoSettingService service) => _service = service;
+    private readonly ISender _sender;
+
+    public SeoController(ISender sender) => _sender = sender;
 
     [AllowAnonymous]
     [HttpGet("all")]
     public async Task<ActionResult<IReadOnlyDictionary<string, SeoSettingDto>>> GetAllActive()
-        => Ok(await _service.GetAllActiveAsync());
+        => Ok(await _sender.Send(new GetActiveSeoSettingsQuery()));
 
     [AllowAnonymous]
     [HttpGet("{pageKey}")]
     public async Task<ActionResult<SeoSettingDto>> GetByPageKey(string pageKey)
     {
-        var r = await _service.GetByPageKeyAsync(pageKey);
+        var r = await _sender.Send(new GetSeoSettingByPageKeyQuery { PageKey = pageKey });
         return r is null ? NotFound() : Ok(r);
     }
 
-    [Authorize(Roles = "Admin")]
+    [Authorize(Policy = "AdminOnly")]
     [HttpGet]
-    public async Task<ActionResult<PagedResult<SeoSettingDto>>> GetAll([FromQuery] PaginationParams pagination)
-        => Ok(await _service.GetPagedAsync(pagination));
+    public async Task<ActionResult<PagedResult<SeoSettingDto>>> GetAll([FromQuery] GetSeoSettingsQuery query)
+        => Ok(await _sender.Send(query));
 
-    [Authorize(Roles = "Admin")]
+    [Authorize(Policy = "AdminOnly")]
     [HttpGet("id/{id:guid}")]
     public async Task<ActionResult<SeoSettingDto>> GetById(Guid id)
     {
-        var r = await _service.GetByIdAsync(id);
+        var r = await _sender.Send(new GetSeoSettingByIdQuery { Id = id });
         return r is null ? NotFound() : Ok(r);
     }
 
-    [Authorize(Roles = "Admin")]
+    [Authorize(Policy = "AdminOnly")]
     [HttpPost]
-    public async Task<ActionResult<SeoSettingDto>> Create(CreateSeoSettingRequest request)
+    public async Task<ActionResult<SeoSettingDto>> Create(CreateSeoSettingCommand command)
     {
-        try { var r = await _service.CreateAsync(request); return CreatedAtAction(nameof(GetById), new { id = r.Id }, r); }
-        catch (FluentValidation.ValidationException ex) { return BadRequest(ex.Errors); }
-        catch (InvalidOperationException ex) { return Conflict(new { message = ex.Message }); }
+        var r = await _sender.Send(command);
+        return CreatedAtAction(nameof(GetById), new { id = r.Id }, r);
     }
 
-    [Authorize(Roles = "Admin")]
+    [Authorize(Policy = "AdminOnly")]
     [HttpPut("{id:guid}")]
-    public async Task<IActionResult> Update(Guid id, UpdateSeoSettingRequest request)
+    public async Task<IActionResult> Update(Guid id, UpdateSeoSettingCommand command)
     {
-        try { await _service.UpdateAsync(id, request); return NoContent(); }
-        catch (KeyNotFoundException) { return NotFound(); }
-        catch (FluentValidation.ValidationException ex) { return BadRequest(ex.Errors); }
-        catch (InvalidOperationException ex) { return Conflict(new { message = ex.Message }); }
+        command.Id = id;
+        await _sender.Send(command);
+        return NoContent();
     }
 
-    [Authorize(Roles = "Admin")]
+    [Authorize(Policy = "AdminOnly")]
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> Delete(Guid id)
     {
-        try { await _service.DeleteAsync(id); return NoContent(); }
-        catch (KeyNotFoundException) { return NotFound(); }
+        await _sender.Send(new DeleteSeoSettingCommand { Id = id });
+        return NoContent();
     }
 }

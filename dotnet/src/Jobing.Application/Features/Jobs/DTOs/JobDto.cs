@@ -1,4 +1,5 @@
 using Jobing.Domain.Entities;
+using Jobing.Domain.Enums;
 
 namespace Jobing.Application.Features.Jobs.DTOs;
 
