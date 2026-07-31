@@ -4,9 +4,9 @@ namespace Jobing.Domain.Repositories;
 
 public interface IJobRepository
 {
-    Task<Job?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
+    Task<Job?> GetByIdAsync(int id, CancellationToken cancellationToken = default);
     Task<(IReadOnlyList<Job> Items, int TotalCount)> GetPagedAsync(
-        int page, int pageSize, string? search = null, bool? isActive = null, Guid? cityId = null,
+        int page, int pageSize, string? search = null, bool? isActive = null, int? cityId = null,
         bool includeDeleted = false, CancellationToken cancellationToken = default);
     Task<Job> AddAsync(Job job, CancellationToken cancellationToken = default);
     Task UpdateAsync(Job job, CancellationToken cancellationToken = default);

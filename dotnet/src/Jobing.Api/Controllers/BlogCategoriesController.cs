@@ -23,8 +23,8 @@ public class BlogCategoriesController : ControllerBase
     public async Task<ActionResult<IReadOnlyList<BlogCategoryDto>>> GetAllActive()
         => Ok(await _sender.Send(new GetAllBlogCategoriesQuery()));
 
-    [HttpGet("{id:guid}")]
-    public async Task<ActionResult<BlogCategoryDto>> GetById(Guid id)
+    [HttpGet("{id:int}")]
+    public async Task<ActionResult<BlogCategoryDto>> GetById(int id)
     {
         var r = await _sender.Send(new GetBlogCategoryByIdQuery { Id = id });
         return r is null ? NotFound() : Ok(r);
@@ -44,16 +44,16 @@ public class BlogCategoriesController : ControllerBase
         return CreatedAtAction(nameof(GetById), new { id = r.Id }, r);
     }
 
-    [HttpPut("{id:guid}")]
-    public async Task<IActionResult> Update(Guid id, UpdateBlogCategoryCommand command)
+    [HttpPut("{id:int}")]
+    public async Task<IActionResult> Update(int id, UpdateBlogCategoryCommand command)
     {
         command.Id = id;
         await _sender.Send(command);
         return NoContent();
     }
 
-    [HttpDelete("{id:guid}")]
-    public async Task<IActionResult> Delete(Guid id)
+    [HttpDelete("{id:int}")]
+    public async Task<IActionResult> Delete(int id)
     {
         await _sender.Send(new DeleteBlogCategoryCommand { Id = id });
         return NoContent();

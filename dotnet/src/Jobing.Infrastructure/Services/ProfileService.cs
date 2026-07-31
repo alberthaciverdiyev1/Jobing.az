@@ -17,7 +17,7 @@ public class ProfileService : IProfileService
         _userManager = userManager;
     }
 
-    public async Task<ProfileDto> GetProfileAsync(Guid userId)
+    public async Task<ProfileDto> GetProfileAsync(int userId)
     {
         var user = await _userManager.Users
             .Include(u => u.Profile)
@@ -41,7 +41,7 @@ public class ProfileService : IProfileService
         };
     }
 
-    public async Task UpdateProfileAsync(Guid userId, UpdateProfileCommand request)
+    public async Task UpdateProfileAsync(int userId, UpdateProfileCommand request)
     {
         var user = await _userManager.Users
             .Include(u => u.Profile)
@@ -55,7 +55,6 @@ public class ProfileService : IProfileService
         {
             user.Profile = new UserProfile
             {
-                Id = Guid.NewGuid(),
                 UserId = user.Id
             };
         }
@@ -75,7 +74,7 @@ public class ProfileService : IProfileService
         }
     }
 
-    public async Task ChangePasswordAsync(Guid userId, ChangePasswordCommand request)
+    public async Task ChangePasswordAsync(int userId, ChangePasswordCommand request)
     {
         var user = await _userManager.FindByIdAsync(userId.ToString())
             ?? throw new NotFoundException(nameof(User), userId);

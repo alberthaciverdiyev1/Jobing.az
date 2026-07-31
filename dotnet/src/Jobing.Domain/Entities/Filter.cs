@@ -2,7 +2,7 @@ namespace Jobing.Domain.Entities;
 
 public class Filter
 {
-    public Guid Id { get; set; } = Guid.NewGuid();
+    public int Id { get; set; }
     public Dictionary<string, string> Name { get; set; } = new();
     public string Key { get; set; } = string.Empty;
     public int SortOrder { get; set; }

@@ -12,7 +12,7 @@ public class CompanyConfiguration : IEntityTypeConfiguration<Company>
 
         builder.HasKey(x => x.Id);
 
-        builder.Property(x => x.Id).HasColumnName("id").ValueGeneratedNever();
+        builder.Property(x => x.Id).HasColumnName("id").ValueGeneratedOnAdd();
         builder.Property(x => x.CreatedByUserId).HasColumnName("created_by_user_id");
         builder.Property(x => x.Name).HasColumnName("name").HasMaxLength(255).IsRequired();
         builder.Property(x => x.Description).HasColumnName("description")

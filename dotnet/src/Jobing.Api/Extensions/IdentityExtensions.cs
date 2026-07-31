@@ -17,7 +17,7 @@ public static class IdentityExtensions
                 options.Password.RequireUppercase = false;
                 options.Password.RequireNonAlphanumeric = false;
             })
-            .AddRoles<IdentityRole<Guid>>()
+            .AddRoles<IdentityRole<int>>()
             .AddEntityFrameworkStores<AppDbContext>()
             .AddDefaultTokenProviders();
 

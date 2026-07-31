@@ -35,8 +35,8 @@ public class SeoController : ControllerBase
         => Ok(await _sender.Send(query));
 
     [Authorize(Policy = "AdminOnly")]
-    [HttpGet("id/{id:guid}")]
-    public async Task<ActionResult<SeoSettingDto>> GetById(Guid id)
+    [HttpGet("id/{id:int}")]
+    public async Task<ActionResult<SeoSettingDto>> GetById(int id)
     {
         var r = await _sender.Send(new GetSeoSettingByIdQuery { Id = id });
         return r is null ? NotFound() : Ok(r);
@@ -51,8 +51,8 @@ public class SeoController : ControllerBase
     }
 
     [Authorize(Policy = "AdminOnly")]
-    [HttpPut("{id:guid}")]
-    public async Task<IActionResult> Update(Guid id, UpdateSeoSettingCommand command)
+    [HttpPut("{id:int}")]
+    public async Task<IActionResult> Update(int id, UpdateSeoSettingCommand command)
     {
         command.Id = id;
         await _sender.Send(command);
@@ -60,8 +60,8 @@ public class SeoController : ControllerBase
     }
 
     [Authorize(Policy = "AdminOnly")]
-    [HttpDelete("{id:guid}")]
-    public async Task<IActionResult> Delete(Guid id)
+    [HttpDelete("{id:int}")]
+    public async Task<IActionResult> Delete(int id)
     {
         await _sender.Send(new DeleteSeoSettingCommand { Id = id });
         return NoContent();

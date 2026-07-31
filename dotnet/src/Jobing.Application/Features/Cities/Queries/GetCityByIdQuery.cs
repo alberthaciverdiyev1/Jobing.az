@@ -5,5 +5,5 @@ namespace Jobing.Application.Features.Cities.Queries;
 
 public class GetCityByIdQuery : IRequest<CityDto?>
 {
-    public Guid Id { get; set; }
+    public int Id { get; set; }
 }

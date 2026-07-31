@@ -30,7 +30,7 @@ export default function CategoryList() {
     }
   }
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = async (id: number) => {
     if (!window.confirm('Bu kateqoriyanı silmək istədiyinizə əminsiniz?')) return
     try {
       await api.delete(`/blog-categories/${id}`)

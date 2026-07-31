@@ -22,16 +22,16 @@ public class JobsController : ControllerBase
         => Ok(await _sender.Send(query));
 
     [AllowAnonymous]
-    [HttpGet("{id:guid}")]
-    public async Task<ActionResult<JobDto>> GetById(Guid id)
+    [HttpGet("{id:int}")]
+    public async Task<ActionResult<JobDto>> GetById(int id)
     {
         var job = await _sender.Send(new GetJobByIdQuery { Id = id });
         return job is null ? NotFound() : Ok(job);
     }
 
     [AllowAnonymous]
-    [HttpPut("{id:guid}/view")]
-    public async Task<IActionResult> IncrementViewCount(Guid id)
+    [HttpPut("{id:int}/view")]
+    public async Task<IActionResult> IncrementViewCount(int id)
     {
         await _sender.Send(new IncrementJobViewCountCommand { Id = id });
         return NoContent();
@@ -46,8 +46,8 @@ public class JobsController : ControllerBase
     }
 
     [Authorize(Policy = "AdminOnly")]
-    [HttpPut("{id:guid}")]
-    public async Task<IActionResult> Update(Guid id, UpdateJobCommand command)
+    [HttpPut("{id:int}")]
+    public async Task<IActionResult> Update(int id, UpdateJobCommand command)
     {
         command.Id = id;
         await _sender.Send(command);
@@ -55,8 +55,8 @@ public class JobsController : ControllerBase
     }
 
     [Authorize(Policy = "AdminOnly")]
-    [HttpDelete("{id:guid}")]
-    public async Task<IActionResult> Delete(Guid id)
+    [HttpDelete("{id:int}")]
+    public async Task<IActionResult> Delete(int id)
     {
         await _sender.Send(new DeleteJobCommand { Id = id });
         return NoContent();

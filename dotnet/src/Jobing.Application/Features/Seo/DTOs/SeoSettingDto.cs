@@ -2,7 +2,7 @@ namespace Jobing.Application.Features.Seo.DTOs;
 
 public class SeoSettingDto
 {
-    public Guid Id { get; set; }
+    public int Id { get; set; }
     public string PageKey { get; set; } = string.Empty;
     public Dictionary<string, string>? Title { get; set; }
     public Dictionary<string, string>? Description { get; set; }

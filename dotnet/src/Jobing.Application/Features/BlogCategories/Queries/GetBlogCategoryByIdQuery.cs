@@ -5,5 +5,5 @@ namespace Jobing.Application.Features.BlogCategories.Queries;
 
 public class GetBlogCategoryByIdQuery : IRequest<BlogCategoryDto?>
 {
-    public Guid Id { get; set; }
+    public int Id { get; set; }
 }

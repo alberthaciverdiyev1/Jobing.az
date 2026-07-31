@@ -65,8 +65,8 @@ export default function FilterForm() {
     if (!id) {
       // In create mode, just add to local state
       setOptions(prev => [...prev, {
-        id: `new_${Date.now()}`,
-        filterId: '',
+        id: -Date.now(),
+        filterId: 0,
         value: newOptName.az.trim().toLowerCase().replace(/\s+/g, '_'),
         name: { ...newOptName },
         sortOrder: newOptSort,
@@ -85,9 +85,9 @@ export default function FilterForm() {
     } catch { setError('Seçim əlavə edilə bilmədi') }
   }
 
-  const deleteOption = async (optId: string) => {
+  const deleteOption = async (optId: number) => {
     if (!window.confirm('Bu seçimi silmək istədiyinizə əminsiniz?')) return
-    if (optId.startsWith('new_')) {
+    if (optId < 0) {
       setOptions(prev => prev.filter(o => o.id !== optId))
       return
     }

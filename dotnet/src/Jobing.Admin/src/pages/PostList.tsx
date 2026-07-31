@@ -30,7 +30,7 @@ export default function PostList() {
     }
   }
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = async (id: number) => {
     if (!window.confirm('Bu yazını silmək istədiyinizə əminsiniz?')) return
     try {
       await api.delete(`/blog-posts/${id}`)

@@ -14,7 +14,7 @@ public class BlogPostConfiguration : IEntityTypeConfiguration<BlogPost>
 
         builder.Property(x => x.Id)
             .HasColumnName("id")
-            .ValueGeneratedNever();
+            .ValueGeneratedOnAdd();
 
         builder.Property(x => x.Title)
             .HasColumnName("title")
@@ -61,7 +61,7 @@ public class BlogPostConfiguration : IEntityTypeConfiguration<BlogPost>
             .HasColumnName("related_post_ids")
             .HasConversion(
                 v => System.Text.Json.JsonSerializer.Serialize(v, (System.Text.Json.JsonSerializerOptions?)null),
-                v => System.Text.Json.JsonSerializer.Deserialize<List<Guid>>(v, (System.Text.Json.JsonSerializerOptions?)null) ?? new())
+                v => System.Text.Json.JsonSerializer.Deserialize<List<int>>(v, (System.Text.Json.JsonSerializerOptions?)null) ?? new())
             .HasDefaultValueSql("'[]'");
 
         builder.Property(x => x.IsPublished)

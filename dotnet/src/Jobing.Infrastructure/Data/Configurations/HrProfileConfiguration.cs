@@ -12,7 +12,7 @@ public class HrProfileConfiguration : IEntityTypeConfiguration<HrProfile>
 
         builder.HasKey(x => x.Id);
 
-        builder.Property(x => x.Id).HasColumnName("id").ValueGeneratedNever();
+        builder.Property(x => x.Id).HasColumnName("id").ValueGeneratedOnAdd();
         builder.Property(x => x.UserId).HasColumnName("user_id").IsRequired();
         builder.Property(x => x.CompanyId).HasColumnName("company_id");
         builder.Property(x => x.Position).HasColumnName("position").HasMaxLength(200);

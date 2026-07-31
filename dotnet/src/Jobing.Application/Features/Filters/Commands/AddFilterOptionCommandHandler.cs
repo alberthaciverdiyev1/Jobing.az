@@ -25,7 +25,6 @@ public class AddFilterOptionCommandHandler : IRequestHandler<AddFilterOptionComm
         if (filter is null) throw new NotFoundException(nameof(Filter), command.FilterId);
 
         var option = _mapper.Map<FilterOption>(command);
-        option.Id = Guid.NewGuid();
         option.FilterId = command.FilterId;
         option.Value = SlugHelper.Generate(command.Name.Values.FirstOrDefault() ?? "option");
 

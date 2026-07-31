@@ -11,9 +11,9 @@ namespace Jobing.Infrastructure.Services;
 public class AdminUserService : IAdminUserService
 {
     private readonly UserManager<User> _userManager;
-    private readonly RoleManager<IdentityRole<Guid>> _roleManager;
+    private readonly RoleManager<IdentityRole<int>> _roleManager;
 
-    public AdminUserService(UserManager<User> userManager, RoleManager<IdentityRole<Guid>> roleManager)
+    public AdminUserService(UserManager<User> userManager, RoleManager<IdentityRole<int>> roleManager)
     {
         _userManager = userManager;
         _roleManager = roleManager;
@@ -63,7 +63,7 @@ public class AdminUserService : IAdminUserService
             .Select(r => new RoleDto { Id = r.Id, Name = r.Name })
             .ToListAsync();
 
-    public async Task<AdminUserDto> GetByIdAsync(Guid id)
+    public async Task<AdminUserDto> GetByIdAsync(int id)
     {
         var user = await _userManager.Users
             .Include(u => u.Profile)
@@ -86,7 +86,7 @@ public class AdminUserService : IAdminUserService
         };
     }
 
-    public async Task UpdateRolesAsync(Guid id, List<string> roles)
+    public async Task UpdateRolesAsync(int id, List<string> roles)
     {
         var user = await _userManager.FindByIdAsync(id.ToString())
             ?? throw new NotFoundException(nameof(User), id);
@@ -102,7 +102,7 @@ public class AdminUserService : IAdminUserService
         }
     }
 
-    public async Task ToggleActiveAsync(Guid id)
+    public async Task ToggleActiveAsync(int id)
     {
         var user = await _userManager.FindByIdAsync(id.ToString())
             ?? throw new NotFoundException(nameof(User), id);

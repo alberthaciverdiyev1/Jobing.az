@@ -14,7 +14,7 @@ public class CityRepository : ICityRepository
         _context = context;
     }
 
-    public async Task<City?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task<City?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
     {
         return await _context.Cities.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
     }

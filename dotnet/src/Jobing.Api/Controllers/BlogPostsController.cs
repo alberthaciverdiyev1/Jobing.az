@@ -19,8 +19,8 @@ public class BlogPostsController : ControllerBase
     public async Task<ActionResult<PagedResult<BlogPostDto>>> GetAll([FromQuery] GetBlogPostsQuery query)
         => Ok(await _sender.Send(query));
 
-    [HttpGet("{id:guid}")]
-    public async Task<ActionResult<BlogPostDto>> GetById(Guid id)
+    [HttpGet("{id:int}")]
+    public async Task<ActionResult<BlogPostDto>> GetById(int id)
     {
         var r = await _sender.Send(new GetBlogPostByIdQuery { Id = id });
         return r is null ? NotFound() : Ok(r);
@@ -33,12 +33,12 @@ public class BlogPostsController : ControllerBase
         return r is null ? NotFound() : Ok(r);
     }
 
-    [HttpGet("{id:guid}/related")]
-    public async Task<ActionResult<IReadOnlyList<BlogPostDto>>> GetRelated(Guid id)
+    [HttpGet("{id:int}/related")]
+    public async Task<ActionResult<IReadOnlyList<BlogPostDto>>> GetRelated(int id)
         => Ok(await _sender.Send(new GetRelatedBlogPostsQuery { Id = id }));
 
-    [HttpPut("{id:guid}/view")]
-    public async Task<IActionResult> IncrementViewCount(Guid id)
+    [HttpPut("{id:int}/view")]
+    public async Task<IActionResult> IncrementViewCount(int id)
     {
         await _sender.Send(new IncrementBlogPostViewCountCommand { Id = id });
         return NoContent();
@@ -51,16 +51,16 @@ public class BlogPostsController : ControllerBase
         return CreatedAtAction(nameof(GetById), new { id = r.Id }, r);
     }
 
-    [HttpPut("{id:guid}")]
-    public async Task<IActionResult> Update(Guid id, UpdateBlogPostCommand command)
+    [HttpPut("{id:int}")]
+    public async Task<IActionResult> Update(int id, UpdateBlogPostCommand command)
     {
         command.Id = id;
         await _sender.Send(command);
         return NoContent();
     }
 
-    [HttpDelete("{id:guid}")]
-    public async Task<IActionResult> Delete(Guid id)
+    [HttpDelete("{id:int}")]
+    public async Task<IActionResult> Delete(int id)
     {
         await _sender.Send(new DeleteBlogPostCommand { Id = id });
         return NoContent();

@@ -24,7 +24,6 @@ public class CreateSettingCommandHandler : IRequestHandler<CreateSettingCommand,
             throw new ConflictException($"Setting key '{command.Key}' already exists.");
 
         var entity = _mapper.Map<Setting>(command);
-        entity.Id = Guid.NewGuid();
         entity.CreatedAt = DateTime.UtcNow;
 
         var created = await _repo.AddAsync(entity, cancellationToken);

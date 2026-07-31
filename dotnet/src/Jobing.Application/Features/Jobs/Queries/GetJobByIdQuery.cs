@@ -5,5 +5,5 @@ namespace Jobing.Application.Features.Jobs.Queries;
 
 public class GetJobByIdQuery : IRequest<JobDto?>
 {
-    public Guid Id { get; set; }
+    public int Id { get; set; }
 }

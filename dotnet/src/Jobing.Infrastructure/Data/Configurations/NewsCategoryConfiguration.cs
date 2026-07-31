@@ -12,7 +12,7 @@ public class NewsCategoryConfiguration : IEntityTypeConfiguration<NewsCategory>
 
         builder.HasKey(x => x.Id);
 
-        builder.Property(x => x.Id).ValueGeneratedNever();
+        builder.Property(x => x.Id).ValueGeneratedOnAdd();
         builder.Property(x => x.Name)
             .HasConversion(
                 v => System.Text.Json.JsonSerializer.Serialize(v, (System.Text.Json.JsonSerializerOptions?)null),

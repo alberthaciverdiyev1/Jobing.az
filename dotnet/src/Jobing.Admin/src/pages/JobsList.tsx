@@ -30,7 +30,7 @@ export default function JobsList() {
     }
   }
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = async (id: number) => {
     if (!window.confirm('Bu vakansiyanı silmək istədiyinizə əminsiniz?')) return
     try {
       await api.delete(`/jobs/${id}`)

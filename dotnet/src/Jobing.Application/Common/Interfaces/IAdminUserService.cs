@@ -7,7 +7,7 @@ public interface IAdminUserService
 {
     Task<PagedResult<AdminUserDto>> GetUsersPagedAsync(int page, int pageSize);
     Task<List<RoleDto>> GetRolesAsync();
-    Task<AdminUserDto> GetByIdAsync(Guid id);
-    Task UpdateRolesAsync(Guid id, List<string> roles);
-    Task ToggleActiveAsync(Guid id);
+    Task<AdminUserDto> GetByIdAsync(int id);
+    Task UpdateRolesAsync(int id, List<string> roles);
+    Task ToggleActiveAsync(int id);
 }

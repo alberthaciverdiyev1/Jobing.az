@@ -23,8 +23,8 @@ public class NewsCategoriesController : ControllerBase
     public async Task<ActionResult<IReadOnlyList<NewsCategoryDto>>> GetAllActive()
         => Ok(await _sender.Send(new GetAllNewsCategoriesQuery()));
 
-    [HttpGet("{id:guid}")]
-    public async Task<ActionResult<NewsCategoryDto>> GetById(Guid id)
+    [HttpGet("{id:int}")]
+    public async Task<ActionResult<NewsCategoryDto>> GetById(int id)
     {
         var r = await _sender.Send(new GetNewsCategoryByIdQuery { Id = id });
         return r is null ? NotFound() : Ok(r);
@@ -44,16 +44,16 @@ public class NewsCategoriesController : ControllerBase
         return CreatedAtAction(nameof(GetById), new { id = r.Id }, r);
     }
 
-    [HttpPut("{id:guid}")]
-    public async Task<IActionResult> Update(Guid id, UpdateNewsCategoryCommand command)
+    [HttpPut("{id:int}")]
+    public async Task<IActionResult> Update(int id, UpdateNewsCategoryCommand command)
     {
         command.Id = id;
         await _sender.Send(command);
         return NoContent();
     }
 
-    [HttpDelete("{id:guid}")]
-    public async Task<IActionResult> Delete(Guid id)
+    [HttpDelete("{id:int}")]
+    public async Task<IActionResult> Delete(int id)
     {
         await _sender.Send(new DeleteNewsCategoryCommand { Id = id });
         return NoContent();

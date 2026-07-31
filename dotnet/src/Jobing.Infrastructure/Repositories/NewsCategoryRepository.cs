@@ -11,7 +11,7 @@ public class NewsCategoryRepository : INewsCategoryRepository
 
     public NewsCategoryRepository(AppDbContext db) => _db = db;
 
-    public async Task<NewsCategory?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task<NewsCategory?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
         => await _db.Set<NewsCategory>()
             .Include(x => x.News.Where(n => n.DeletedAt == null))
             .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);

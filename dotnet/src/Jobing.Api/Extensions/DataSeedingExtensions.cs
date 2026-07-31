@@ -12,7 +12,7 @@ public static class DataSeedingExtensions
         var sp = scope.ServiceProvider;
         var context = sp.GetRequiredService<AppDbContext>();
         var userManager = sp.GetRequiredService<UserManager<User>>();
-        var roleManager = sp.GetRequiredService<RoleManager<IdentityRole<Guid>>>();
+        var roleManager = sp.GetRequiredService<RoleManager<IdentityRole<int>>>();
         await DataSeeder.SeedAsync(context, userManager, roleManager);
 
         return app;

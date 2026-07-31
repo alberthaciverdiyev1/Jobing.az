@@ -34,7 +34,7 @@ export default function UserList() {
     }
   }
 
-  const toggleActive = async (id: string, current: boolean) => {
+  const toggleActive = async (id: number, current: boolean) => {
     if (!window.confirm(`İstifadəçini ${current ? 'deaktiv' : 'aktiv'} etmək istədiyinizə əminsiniz?`)) return
     try {
       await api.post(`/admin/users/${id}/toggle-active`)

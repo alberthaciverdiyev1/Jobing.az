@@ -4,7 +4,7 @@ export interface LoginRequest {
 }
 
 export interface UserInfo {
-  id: string
+  id: number
   email: string
   name: string
   surname?: string
@@ -18,7 +18,7 @@ export interface AuthResponse {
 }
 
 export interface City {
-  id: string
+  id: number
   name: Record<string, string>
   isActive: boolean
   sortOrder: number
@@ -38,8 +38,8 @@ export interface UpdateCityRequest {
 }
 
 export interface FilterOption {
-  id: string
-  filterId: string
+  id: number
+  filterId: number
   value: string
   name: Record<string, string>
   sortOrder: number
@@ -47,7 +47,7 @@ export interface FilterOption {
 }
 
 export interface Filter {
-  id: string
+  id: number
   name: Record<string, string>
   key: string
   options: FilterOption[]
@@ -79,7 +79,7 @@ export interface UpdateFilterOptionRequest {
 }
 
 export interface BlogCategory {
-  id: string
+  id: number
   name: Record<string, string>
   slug: string
   isActive: boolean
@@ -100,17 +100,17 @@ export interface UpdateBlogCategoryRequest {
 }
 
 export interface BlogPost {
-  id: string
+  id: number
   title: Record<string, string>
   slug: string
   content?: Record<string, string>
   excerpt?: Record<string, string>
   coverImage?: string
   authorName?: string
-  categoryId?: string
+  categoryId?: number | null
   categoryName?: Record<string, string>
   viewCount: number
-  relatedPostIds: string[]
+  relatedPostIds: number[]
   isPublished: boolean
   publishedAt?: string
   createdAt: string
@@ -122,9 +122,9 @@ export interface CreateBlogPostRequest {
   content?: Record<string, string>
   excerpt?: Record<string, string>
   coverImage?: string
-  authorId?: string
-  categoryId?: string
-  relatedPostIds: string[]
+  authorId?: number
+  categoryId?: number | null
+  relatedPostIds: number[]
   isPublished: boolean
 }
 
@@ -133,13 +133,13 @@ export interface UpdateBlogPostRequest {
   content?: Record<string, string>
   excerpt?: Record<string, string>
   coverImage?: string
-  categoryId?: string
-  relatedPostIds: string[]
+  categoryId?: number | null
+  relatedPostIds: number[]
   isPublished: boolean
 }
 
 export interface User {
-  id: string
+  id: number
   email: string
   profile?: { name?: string; surname?: string }
   isActive: boolean
@@ -147,7 +147,7 @@ export interface User {
 }
 
 export interface NewsCategory {
-  id: string
+  id: number
   name: Record<string, string>
   slug: string
   isActive: boolean
@@ -168,13 +168,13 @@ export interface UpdateNewsCategoryRequest {
 }
 
 export interface NewsItem {
-  id: string
+  id: number
   title: Record<string, string>
   slug: string
   content?: Record<string, string>
   excerpt?: Record<string, string>
   coverImage?: string
-  categoryId?: string
+  categoryId?: number | null
   categoryName?: Record<string, string>
   viewCount: number
   isPublished: boolean
@@ -188,7 +188,7 @@ export interface CreateNewsRequest {
   content?: Record<string, string>
   excerpt?: Record<string, string>
   coverImage?: string
-  categoryId?: string
+  categoryId?: number | null
   isPublished: boolean
 }
 
@@ -197,12 +197,12 @@ export interface UpdateNewsRequest {
   content?: Record<string, string>
   excerpt?: Record<string, string>
   coverImage?: string
-  categoryId?: string
+  categoryId?: number | null
   isPublished: boolean
 }
 
 export interface Setting {
-  id: string
+  id: number
   key: string
   value?: Record<string, string>
   description?: string
@@ -226,7 +226,7 @@ export interface UpdateSettingRequest {
 }
 
 export interface SeoSetting {
-  id: string
+  id: number
   pageKey: string
   title?: Record<string, string>
   description?: Record<string, string>
@@ -258,7 +258,7 @@ export interface UpdateSeoSettingRequest {
 export type SalaryCurrency = 'AZN' | 'USD' | 'EUR'
 
 export interface Job {
-  id: string
+  id: number
   title: Record<string, string>
   description?: Record<string, string>
   requirements?: Record<string, string>
@@ -270,9 +270,9 @@ export interface Job {
   applicationMethod?: string
   applicationUrl?: string
   filterValues: Record<string, string>
-  companyId?: string
+  companyId?: number
   companyName?: string
-  cityId?: string
+  cityId?: number
   cityName?: Record<string, string>
   isRemote: boolean
   isActive: boolean
@@ -292,7 +292,7 @@ export interface CreateJobRequest {
   applicationMethod?: string | null
   applicationUrl?: string | null
   filterValues: Record<string, string>
-  cityId?: string | null
+  cityId?: number | null
   isRemote: boolean
   isActive: boolean
   expiresAt?: string | null

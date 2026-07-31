@@ -21,7 +21,6 @@ public class CreateBlogCategoryCommandHandler : IRequestHandler<CreateBlogCatego
     public async Task<BlogCategoryDto> Handle(CreateBlogCategoryCommand command, CancellationToken cancellationToken)
     {
         var category = _mapper.Map<BlogCategory>(command);
-        category.Id = Guid.NewGuid();
         category.Slug = SlugHelper.Generate(command.Name.GetValueOrDefault("az", command.Name.Values.FirstOrDefault() ?? ""));
 
         var created = await _repo.AddAsync(category, cancellationToken);

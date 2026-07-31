@@ -4,12 +4,12 @@ import api from '../lib/api'
 import { ArrowLeft, Save } from 'lucide-react'
 
 interface RoleInfo {
-  id: string
+  id: number
   name: string
 }
 
 interface UserDetail {
-  id: string
+  id: number
   email: string
   profile?: { name?: string; surname?: string }
   isActive: boolean

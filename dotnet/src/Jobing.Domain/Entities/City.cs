@@ -2,7 +2,7 @@ namespace Jobing.Domain.Entities;
 
 public class City
 {
-    public Guid Id { get; set; } = Guid.NewGuid();
+    public int Id { get; set; }
     public Dictionary<string, string> Name { get; set; } = new();
     public bool IsActive { get; set; } = true;
     public int SortOrder { get; set; }
