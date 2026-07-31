@@ -4,12 +4,10 @@ import api from '../lib/api'
 import type { Setting } from '../types'
 import { ArrowLeft, Save } from 'lucide-react'
 
-const GROUPS = [
-  { value: 'general', label: 'Ümumi' },
-  { value: 'contact', label: 'Əlaqə' },
-  { value: 'social', label: 'Sosial şəbəkələr' },
-  { value: 'seo', label: 'SEO' },
-  { value: 'analytics', label: 'Analitika' },
+const LANGUAGES = [
+  { key: 'az', label: 'Azərbaycanca' },
+  { key: 'en', label: 'English' },
+  { key: 'ru', label: 'Русский' },
 ]
 
 export default function SettingsForm() {
@@ -18,11 +16,9 @@ export default function SettingsForm() {
   const isEdit = !!id
 
   const [key, setKey] = useState('')
-  const [group, setGroup] = useState('general')
-  const [value, setValue] = useState('')
+  const [value, setValue] = useState<Record<string, string>>({ az: '', en: '', ru: '' })
   const [description, setDescription] = useState('')
   const [isActive, setIsActive] = useState(true)
-  const [sortOrder, setSortOrder] = useState(0)
   const [loading, setLoading] = useState(false)
   const [fetching, setFetching] = useState(true)
   const [error, setError] = useState('')
@@ -34,11 +30,9 @@ export default function SettingsForm() {
         const res = await api.get<Setting>(`/settings/${id}`)
         const s = res.data
         setKey(s.key)
-        setGroup(s.group)
-        setValue(s.value || '')
+        setValue(s.value || { az: '', en: '', ru: '' })
         setDescription(s.description || '')
         setIsActive(s.isActive)
-        setSortOrder(s.sortOrder)
       } catch {
         setError('Məlumat yüklənə bilmədi')
       } finally {
@@ -54,11 +48,9 @@ export default function SettingsForm() {
     setError('')
     const body = {
       key,
-      group,
-      value: value || null,
+      value: value.az || value.en || value.ru ? value : null,
       description: description || null,
       isActive,
-      sortOrder: Number(sortOrder) || 0,
     }
     try {
       if (isEdit) {
@@ -96,29 +88,25 @@ export default function SettingsForm() {
       {error && <div className="p-3 rounded-lg bg-red-50 border border-red-100 text-sm text-red-700">{error}</div>}
 
       <form onSubmit={handleSubmit} className="bg-white rounded-xl border border-gray-200 p-6 space-y-5">
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">Açar (Key) <span className="text-red-500">*</span></label>
-            <input value={key} onChange={e => setKey(e.target.value)} disabled={isEdit}
-              placeholder="məs. contact.phone"
-              className="w-full px-3 py-2.5 rounded-lg border border-gray-300 text-sm font-mono focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-shadow disabled:bg-gray-50 disabled:text-gray-500" required />
-            <p className="text-xs text-gray-400 mt-1">Aşağı hərflər, nöqtə ilə ayrılmış format: qrup.açar</p>
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">Qrup <span className="text-red-500">*</span></label>
-            <select value={group} onChange={e => setGroup(e.target.value)}
-              className="w-full px-3 py-2.5 rounded-lg border border-gray-300 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none bg-white">
-              {GROUPS.map(g => (
-                <option key={g.value} value={g.value}>{g.label}</option>
-              ))}
-            </select>
-          </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1.5">Açar (Key) <span className="text-red-500">*</span></label>
+          <input value={key} onChange={e => setKey(e.target.value)} disabled={isEdit}
+            placeholder="məs. page.privacy"
+            className="w-full px-3 py-2.5 rounded-lg border border-gray-300 text-sm font-mono focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-shadow disabled:bg-gray-50 disabled:text-gray-500" required />
+          <p className="text-xs text-gray-400 mt-1">Aşağı hərflər, nöqtə ilə ayrılmış format: qrup.açar</p>
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1.5">Dəyər</label>
-          <textarea value={value} onChange={e => setValue(e.target.value)} rows={3}
-            className="w-full px-3 py-2.5 rounded-lg border border-gray-300 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-shadow resize-y font-mono" />
+          <label className="block text-sm font-medium text-gray-700 mb-1.5">Dəyər <span className="text-gray-400">(3 dildə)</span></label>
+          <div className="space-y-3">
+            {LANGUAGES.map(({ key: lang, label }) => (
+              <div key={lang}>
+                <label className="block text-xs font-medium text-gray-500 mb-1">{label}</label>
+                <textarea value={value[lang] || ''} onChange={e => setValue(p => ({ ...p, [lang]: e.target.value }))} rows={4}
+                  className="w-full px-3 py-2.5 rounded-lg border border-gray-300 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-shadow resize-y font-mono" />
+              </div>
+            ))}
+          </div>
         </div>
 
         <div>
@@ -127,19 +115,12 @@ export default function SettingsForm() {
             className="w-full px-3 py-2.5 rounded-lg border border-gray-300 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-shadow" />
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">Sıra</label>
-            <input type="number" value={sortOrder} onChange={e => setSortOrder(Number(e.target.value))}
-              className="w-full px-3 py-2.5 rounded-lg border border-gray-300 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-shadow" />
-          </div>
-          <div className="flex items-end pb-2.5">
-            <label className="flex items-center gap-3 cursor-pointer">
-              <input type="checkbox" checked={isActive} onChange={e => setIsActive(e.target.checked)}
-                className="w-4 h-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" />
-              <span className="text-sm text-gray-700">Aktiv</span>
-            </label>
-          </div>
+        <div className="flex items-center pb-2.5">
+          <label className="flex items-center gap-3 cursor-pointer">
+            <input type="checkbox" checked={isActive} onChange={e => setIsActive(e.target.checked)}
+              className="w-4 h-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" />
+            <span className="text-sm text-gray-700">Aktiv</span>
+          </label>
         </div>
 
         <div className="flex items-center gap-3 pt-3 border-t border-gray-100">
