@@ -3,7 +3,7 @@ import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import {
   LayoutDashboard, MapPin, SlidersHorizontal, BookOpen, FileText, Users, LogOut, Menu,
-  Newspaper, Tag, Settings,
+  Newspaper, Tag, Settings, Globe, Briefcase,
 } from 'lucide-react'
 
 const navItems = [
@@ -14,7 +14,9 @@ const navItems = [
   { to: '/blog-posts', label: 'Blog yazıları', icon: FileText },
   { to: '/news-categories', label: 'Xəbər kateqoriyaları', icon: Tag },
   { to: '/news', label: 'Xəbərlər', icon: Newspaper },
+  { to: '/jobs', label: 'Vakansiyalar', icon: Briefcase },
   { to: '/settings', label: 'Tənzimləmələr', icon: Settings },
+  { to: '/seo', label: 'SEO', icon: Globe },
   { to: '/users', label: 'İstifadəçilər', icon: Users },
 ]
 

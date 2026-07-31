@@ -105,7 +105,20 @@ public static class DataSeeder
                 }
             };
 
-            context.Filters.AddRange(employmentType, experienceLevel, education, category);
+            var workMode = new Filter
+            {
+                Name = new() { ["az"] = "İş rejimi", ["en"] = "Work mode", ["ru"] = "Режим работы" },
+                Key = "work_mode",
+                SortOrder = 5,
+                Options = new List<FilterOption>
+                {
+                    new() { Value = "office", Name = new() { ["az"] = "Ofisdə", ["en"] = "On-site", ["ru"] = "В офисе" }, SortOrder = 1 },
+                    new() { Value = "hybrid", Name = new() { ["az"] = "Hibrid", ["en"] = "Hybrid", ["ru"] = "Гибридный" }, SortOrder = 2 },
+                    new() { Value = "remote", Name = new() { ["az"] = "Remote", ["en"] = "Remote", ["ru"] = "Удаленно" }, SortOrder = 3 },
+                }
+            };
+
+            context.Filters.AddRange(employmentType, experienceLevel, education, category, workMode);
             await context.SaveChangesAsync();
         }
 
@@ -154,11 +167,6 @@ public static class DataSeeder
                 new() { Key = "social.twitter", Value = V("", "", ""), Description = "Twitter/X profile URL" },
                 new() { Key = "social.linkedin", Value = V("https://www.linkedin.com/company/jobing-az/", "https://www.linkedin.com/company/jobing-az/", "https://www.linkedin.com/company/jobing-az/"), Description = "LinkedIn company URL" },
                 new() { Key = "social.instagram", Value = V("https://www.instagram.com/jobing.az/", "https://www.instagram.com/jobing.az/", "https://www.instagram.com/jobing.az/"), Description = "Instagram profile URL" },
-                // SEO
-                new() { Key = "seo.default.title", Value = V("Vakansiyalar və İş Elanları | Jobing.az", "Vacancies and Job Listings | Jobing.az", "Вакансии и Объявления о работе | Jobing.az"), Description = "Default meta title" },
-                new() { Key = "seo.default.description", Value = V("Azərbaycanda ən son vakansiyalar, iş elanları və karyera imkanları. Jobing.az ilə iş axtarışınızı başlayın.", "Latest vacancies, job listings, and career opportunities in Azerbaijan. Start your job search with Jobing.az.", "Последние вакансии, объявления о работе и возможности карьеры в Азербайджане. Начните поиск работы с Jobing.az."), Description = "Default meta description" },
-                new() { Key = "seo.keywords", Value = V("vakansiya, iş elanları, iş axtarışı, Azərbaycan vakansiyalar, jobing.az", "vacancy, job listings, job search, Azerbaijan vacancies, jobing.az", "вакансия, объявления о работе, поиск работы, вакансии в Азербайджане, jobing.az"), Description = "Meta keywords" },
-                new() { Key = "seo.og.image", Value = V("https://jobing.az/Images/Static/Logo.png", "https://jobing.az/Images/Static/Logo.png", "https://jobing.az/Images/Static/Logo.png"), Description = "Default Open Graph image" },
                 // Analytics
                 new() { Key = "analytics.gtm_id", Value = V("GTM-PV8D5X3V", "GTM-PV8D5X3V", "GTM-PV8D5X3V"), Description = "Google Tag Manager ID" },
                 new() { Key = "analytics.meta_pixel_id", Value = V("2033268548067657", "2033268548067657", "2033268548067657"), Description = "Meta Pixel ID" },
@@ -192,6 +200,26 @@ public static class DataSeeder
         if (missingSettings.Count > 0)
         {
             context.Settings.AddRange(missingSettings);
+            await context.SaveChangesAsync();
+        }
+
+        // SEO pages
+        var existingSeoPageKeys = await context.SeoSettings.Select(x => x.PageKey).ToListAsync();
+        var seoPages = new List<SeoSetting>
+        {
+            new()
+            {
+                PageKey = "home",
+                Title = V("Vakansiyalar və İş Elanları | Jobing.az", "Vacancies and Job Listings | Jobing.az", "Вакансии и Объявления о работе | Jobing.az"),
+                Description = V("Azərbaycanda ən son vakansiyalar, iş elanları və karyera imkanları. Jobing.az ilə iş axtarışınızı başlayın.", "Latest vacancies, job listings, and career opportunities in Azerbaijan. Start your job search with Jobing.az.", "Последние вакансии, объявления о работе и возможности карьеры в Азербайджане. Начните поиск работы с Jobing.az."),
+                Keywords = V("vakansiya, iş elanları, iş axtarışı, Azərbaycan vakansiyalar, jobing.az", "vacancy, job listings, job search, Azerbaijan vacancies, jobing.az", "вакансия, объявления о работе, поиск работы, вакансии в Азербайджане, jobing.az"),
+                OgImage = "https://jobing.az/Images/Static/Logo.png",
+            },
+        };
+        var missingSeoPages = seoPages.Where(s => !existingSeoPageKeys.Contains(s.PageKey)).ToList();
+        if (missingSeoPages.Count > 0)
+        {
+            context.SeoSettings.AddRange(missingSeoPages);
             await context.SaveChangesAsync();
         }
 

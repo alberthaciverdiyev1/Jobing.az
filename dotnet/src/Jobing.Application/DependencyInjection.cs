@@ -5,9 +5,11 @@ using Jobing.Application.Features.BlogCategories;
 using Jobing.Application.Features.Blogs;
 using Jobing.Application.Features.Cities;
 using Jobing.Application.Features.Filters;
+using Jobing.Application.Features.Jobs;
 using Jobing.Application.Features.Profile;
 using Jobing.Application.Features.News;
 using Jobing.Application.Features.NewsCategories;
+using Jobing.Application.Features.Seo;
 using Jobing.Application.Features.Settings;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -27,6 +29,8 @@ public static class DependencyInjection
         services.AddScoped<INewsService, NewsService>();
         services.AddScoped<INewsCategoryService, NewsCategoryService>();
         services.AddScoped<ISettingService, SettingService>();
+        services.AddScoped<ISeoSettingService, SeoSettingService>();
+        services.AddScoped<IJobService, JobService>();
 
         return services;
     }

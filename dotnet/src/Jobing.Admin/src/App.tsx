@@ -18,6 +18,10 @@ import NewsList from './pages/NewsList'
 import NewsForm from './pages/NewsForm'
 import SettingsList from './pages/SettingsList'
 import SettingsForm from './pages/SettingsForm'
+import SeoList from './pages/SeoList'
+import SeoForm from './pages/SeoForm'
+import JobsList from './pages/JobsList'
+import JobForm from './pages/JobForm'
 import UserList from './pages/UserList'
 import UserEdit from './pages/UserEdit'
 
@@ -51,6 +55,12 @@ function App() {
               <Route path="settings" element={<SettingsList />} />
               <Route path="settings/create" element={<SettingsForm />} />
               <Route path="settings/edit/:id" element={<SettingsForm />} />
+              <Route path="seo" element={<SeoList />} />
+              <Route path="seo/create" element={<SeoForm />} />
+              <Route path="seo/edit/:id" element={<SeoForm />} />
+              <Route path="jobs" element={<JobsList />} />
+              <Route path="jobs/create" element={<JobForm />} />
+              <Route path="jobs/edit/:id" element={<JobForm />} />
               <Route path="users" element={<UserList />} />
               <Route path="users/edit/:id" element={<UserEdit />} />
             </Route>

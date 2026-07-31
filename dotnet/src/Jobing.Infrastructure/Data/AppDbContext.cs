@@ -21,6 +21,7 @@ public class AppDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
     public DbSet<News> News => Set<News>();
     public DbSet<NewsCategory> NewsCategories => Set<NewsCategory>();
     public DbSet<Setting> Settings => Set<Setting>();
+    public DbSet<SeoSetting> SeoSettings => Set<SeoSetting>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

@@ -225,6 +225,81 @@ export interface UpdateSettingRequest {
   isActive: boolean
 }
 
+export interface SeoSetting {
+  id: string
+  pageKey: string
+  title?: Record<string, string>
+  description?: Record<string, string>
+  keywords?: Record<string, string>
+  ogImage?: string
+  isActive: boolean
+  createdAt: string
+  updatedAt?: string
+}
+
+export interface CreateSeoSettingRequest {
+  pageKey: string
+  title?: Record<string, string>
+  description?: Record<string, string>
+  keywords?: Record<string, string>
+  ogImage?: string
+  isActive: boolean
+}
+
+export interface UpdateSeoSettingRequest {
+  pageKey: string
+  title?: Record<string, string>
+  description?: Record<string, string>
+  keywords?: Record<string, string>
+  ogImage?: string
+  isActive: boolean
+}
+
+export type SalaryCurrency = 'AZN' | 'USD' | 'EUR'
+
+export interface Job {
+  id: string
+  title: Record<string, string>
+  description?: Record<string, string>
+  requirements?: Record<string, string>
+  minSalary?: number
+  maxSalary?: number
+  salaryText?: Record<string, string>
+  currency?: SalaryCurrency
+  viewCount: number
+  applicationMethod?: string
+  applicationUrl?: string
+  filterValues: Record<string, string>
+  companyId?: string
+  companyName?: string
+  cityId?: string
+  cityName?: Record<string, string>
+  isRemote: boolean
+  isActive: boolean
+  expiresAt?: string
+  createdAt: string
+  updatedAt?: string
+}
+
+export interface CreateJobRequest {
+  title: Record<string, string>
+  description?: Record<string, string> | null
+  requirements?: Record<string, string> | null
+  minSalary?: number | null
+  maxSalary?: number | null
+  salaryText?: Record<string, string> | null
+  currency?: SalaryCurrency | null
+  applicationMethod?: string | null
+  applicationUrl?: string | null
+  filterValues: Record<string, string>
+  cityId?: string | null
+  isRemote: boolean
+  isActive: boolean
+  expiresAt?: string | null
+}
+
+export interface UpdateJobRequest extends CreateJobRequest {}
+
 export interface PagedResult<T> {
   items: T[]
   totalCount: number
