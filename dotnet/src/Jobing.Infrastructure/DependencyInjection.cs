@@ -25,6 +25,7 @@ public static class DependencyInjection
         services.AddScoped<IBlogCategoryRepository, BlogCategoryRepository>();
         services.AddScoped<INewsRepository, NewsRepository>();
         services.AddScoped<INewsCategoryRepository, NewsCategoryRepository>();
+        services.AddScoped<ISettingRepository, SettingRepository>();
 
         return services;
     }

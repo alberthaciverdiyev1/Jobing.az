@@ -201,6 +201,36 @@ export interface UpdateNewsRequest {
   isPublished: boolean
 }
 
+export interface Setting {
+  id: string
+  key: string
+  group: string
+  value?: string
+  description?: string
+  isActive: boolean
+  sortOrder: number
+  createdAt: string
+  updatedAt?: string
+}
+
+export interface CreateSettingRequest {
+  key: string
+  group: string
+  value?: string
+  description?: string
+  isActive: boolean
+  sortOrder: number
+}
+
+export interface UpdateSettingRequest {
+  key: string
+  group: string
+  value?: string
+  description?: string
+  isActive: boolean
+  sortOrder: number
+}
+
 export interface PagedResult<T> {
   items: T[]
   totalCount: number

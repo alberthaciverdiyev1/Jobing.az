@@ -1,0 +1,14 @@
+namespace Jobing.Application.Features.Settings.DTOs;
+
+public class SettingDto
+{
+    public Guid Id { get; set; }
+    public string Key { get; set; } = string.Empty;
+    public string Group { get; set; } = "general";
+    public string? Value { get; set; }
+    public string? Description { get; set; }
+    public bool IsActive { get; set; }
+    public int SortOrder { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public DateTime? UpdatedAt { get; set; }
+}
