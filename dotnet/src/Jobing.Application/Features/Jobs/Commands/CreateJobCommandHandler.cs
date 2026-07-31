@@ -20,7 +20,6 @@ public class CreateJobCommandHandler : IRequestHandler<CreateJobCommand, JobDto>
     public async Task<JobDto> Handle(CreateJobCommand command, CancellationToken cancellationToken)
     {
         var entity = _mapper.Map<Job>(command);
-        entity.Id = Guid.NewGuid();
         entity.CreatedAt = DateTime.UtcNow;
 
         var created = await _repo.AddAsync(entity, cancellationToken);

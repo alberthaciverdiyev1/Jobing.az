@@ -10,7 +10,7 @@ public class FilterConfiguration : IEntityTypeConfiguration<Filter>
     {
         builder.ToTable("filters");
         builder.HasKey(x => x.Id);
-        builder.Property(x => x.Id).HasColumnName("id").ValueGeneratedNever();
+        builder.Property(x => x.Id).HasColumnName("id").ValueGeneratedOnAdd();
         builder.Property(x => x.Name).HasColumnName("name")
             .HasConversion(
                 v => System.Text.Json.JsonSerializer.Serialize(v, (System.Text.Json.JsonSerializerOptions?)null),

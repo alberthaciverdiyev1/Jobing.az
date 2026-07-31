@@ -17,12 +17,12 @@ public class ProfileController : ControllerBase
 
     public ProfileController(ISender sender) => _sender = sender;
 
-    private Guid GetUserId()
+    private int GetUserId()
     {
         var sub = User.FindFirstValue(ClaimTypes.NameIdentifier)
             ?? User.FindFirstValue("sub")
             ?? throw new UnauthorizedAccessException("User not found in token");
-        return Guid.Parse(sub);
+        return int.Parse(sub);
     }
 
     [HttpGet]

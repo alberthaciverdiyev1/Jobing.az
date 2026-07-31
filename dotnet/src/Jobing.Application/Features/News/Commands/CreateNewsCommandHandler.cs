@@ -20,7 +20,6 @@ public class CreateNewsCommandHandler : IRequestHandler<CreateNewsCommand, NewsD
     public async Task<NewsDto> Handle(CreateNewsCommand command, CancellationToken cancellationToken)
     {
         var entity = _mapper.Map<Jobing.Domain.Entities.News>(command);
-        entity.Id = Guid.NewGuid();
         entity.Slug = SlugHelper.Generate(command.Title.GetValueOrDefault("az", command.Title.Values.FirstOrDefault() ?? ""));
 
         var created = await _repo.AddAsync(entity, cancellationToken);

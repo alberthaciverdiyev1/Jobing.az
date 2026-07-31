@@ -10,7 +10,7 @@ public class FilterRepository : IFilterRepository
     private readonly AppDbContext _context;
     public FilterRepository(AppDbContext context) => _context = context;
 
-    public async Task<Filter?> GetByIdAsync(Guid id, CancellationToken ct = default)
+    public async Task<Filter?> GetByIdAsync(int id, CancellationToken ct = default)
         => await _context.Filters.Include(x => x.Options).FirstOrDefaultAsync(x => x.Id == id, ct);
 
     public async Task<Filter?> GetByKeyWithOptionsAsync(string key, CancellationToken ct = default)
@@ -55,7 +55,7 @@ public class FilterRepository : IFilterRepository
         => await _context.Filters.AnyAsync(x => x.Key == key, ct);
 
     // Options
-    public async Task<FilterOption?> GetOptionByIdAsync(Guid id, CancellationToken ct = default)
+    public async Task<FilterOption?> GetOptionByIdAsync(int id, CancellationToken ct = default)
         => await _context.FilterOptions.FirstOrDefaultAsync(x => x.Id == id, ct);
 
     public async Task AddOptionAsync(FilterOption option, CancellationToken ct = default)

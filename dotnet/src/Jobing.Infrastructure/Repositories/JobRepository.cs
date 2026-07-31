@@ -11,14 +11,14 @@ public class JobRepository : IJobRepository
 
     public JobRepository(AppDbContext db) => _db = db;
 
-    public async Task<Job?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task<Job?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
         => await _db.Set<Job>()
             .Include(x => x.Company)
             .Include(x => x.City)
             .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
 
     public async Task<(IReadOnlyList<Job> Items, int TotalCount)> GetPagedAsync(
-        int page, int pageSize, string? search = null, bool? isActive = null, Guid? cityId = null,
+        int page, int pageSize, string? search = null, bool? isActive = null, int? cityId = null,
         bool includeDeleted = false, CancellationToken cancellationToken = default)
     {
         var query = includeDeleted

@@ -4,10 +4,10 @@ namespace Jobing.Domain.Repositories;
 
 public interface IBlogRepository
 {
-    Task<BlogPost?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
+    Task<BlogPost?> GetByIdAsync(int id, CancellationToken cancellationToken = default);
     Task<BlogPost?> GetBySlugAsync(string slug, CancellationToken cancellationToken = default);
     Task<IReadOnlyList<BlogPost>> GetAllPublishedAsync(CancellationToken cancellationToken = default);
-    Task<IReadOnlyList<BlogPost>> GetRelatedPostsAsync(Guid id, CancellationToken cancellationToken = default);
+    Task<IReadOnlyList<BlogPost>> GetRelatedPostsAsync(int id, CancellationToken cancellationToken = default);
     Task<(IReadOnlyList<BlogPost> Items, int TotalCount)> GetPagedAsync(
         int page, int pageSize, string? search = null, bool? isPublished = null, bool includeDeleted = false,
         CancellationToken cancellationToken = default);

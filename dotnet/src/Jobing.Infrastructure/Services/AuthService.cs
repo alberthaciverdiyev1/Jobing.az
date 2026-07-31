@@ -39,7 +39,6 @@ public class AuthService : IAuthService
 
         user.Profile = new UserProfile
         {
-            Id = Guid.NewGuid(),
             UserId = user.Id,
             Name = request.Name,
             Surname = request.Surname

@@ -6,5 +6,5 @@ namespace Jobing.Application.Features.Jobs.Queries;
 
 public class GetJobsQuery : PaginationParams, IRequest<PagedResult<JobDto>>
 {
-    public Guid? CityId { get; set; }
+    public int? CityId { get; set; }
 }

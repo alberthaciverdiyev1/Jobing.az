@@ -30,7 +30,7 @@ export default function SeoList() {
     }
   }
 
-  const handleDelete = async (id: string, pageKey: string) => {
+  const handleDelete = async (id: number, pageKey: string) => {
     if (!window.confirm(`"${pageKey}" səhifəsinin SEO məlumatını silmək istədiyinizə əminsiniz?`)) return
     try {
       await api.delete(`/seo/${id}`)

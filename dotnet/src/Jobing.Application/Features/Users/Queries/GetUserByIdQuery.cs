@@ -5,5 +5,5 @@ namespace Jobing.Application.Features.Users.Queries;
 
 public class GetUserByIdQuery : IRequest<AdminUserDto>
 {
-    public Guid Id { get; set; }
+    public int Id { get; set; }
 }

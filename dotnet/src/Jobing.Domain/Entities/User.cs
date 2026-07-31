@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Jobing.Domain.Entities;
 
-public class User : IdentityUser<Guid>
+public class User : IdentityUser<int>
 {
     public bool IsActive { get; set; } = true;
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;

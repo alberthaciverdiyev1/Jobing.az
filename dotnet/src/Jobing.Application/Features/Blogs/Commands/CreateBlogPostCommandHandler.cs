@@ -21,7 +21,6 @@ public class CreateBlogPostCommandHandler : IRequestHandler<CreateBlogPostComman
     public async Task<BlogPostDto> Handle(CreateBlogPostCommand command, CancellationToken cancellationToken)
     {
         var post = _mapper.Map<BlogPost>(command);
-        post.Id = Guid.NewGuid();
         post.Slug = SlugHelper.Generate(command.Title.GetValueOrDefault("az", command.Title.Values.FirstOrDefault() ?? ""));
 
         var created = await _repo.AddAsync(post, cancellationToken);

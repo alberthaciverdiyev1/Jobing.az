@@ -19,8 +19,8 @@ public class CitiesController : ControllerBase
     public async Task<ActionResult<PagedResult<CityDto>>> GetAll([FromQuery] GetCitiesQuery query)
         => Ok(await _sender.Send(query));
 
-    [HttpGet("{id:guid}")]
-    public async Task<ActionResult<CityDto>> GetById(Guid id)
+    [HttpGet("{id:int}")]
+    public async Task<ActionResult<CityDto>> GetById(int id)
     {
         var result = await _sender.Send(new GetCityByIdQuery { Id = id });
         return result is null ? NotFound() : Ok(result);
@@ -33,16 +33,16 @@ public class CitiesController : ControllerBase
         return CreatedAtAction(nameof(GetById), new { id = city.Id }, city);
     }
 
-    [HttpPut("{id:guid}")]
-    public async Task<IActionResult> Update(Guid id, UpdateCityCommand command)
+    [HttpPut("{id:int}")]
+    public async Task<IActionResult> Update(int id, UpdateCityCommand command)
     {
         command.Id = id;
         await _sender.Send(command);
         return NoContent();
     }
 
-    [HttpDelete("{id:guid}")]
-    public async Task<IActionResult> Delete(Guid id)
+    [HttpDelete("{id:int}")]
+    public async Task<IActionResult> Delete(int id)
     {
         await _sender.Send(new DeleteCityCommand { Id = id });
         return NoContent();

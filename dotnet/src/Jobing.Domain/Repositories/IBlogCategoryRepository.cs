@@ -4,7 +4,7 @@ namespace Jobing.Domain.Repositories;
 
 public interface IBlogCategoryRepository
 {
-    Task<BlogCategory?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
+    Task<BlogCategory?> GetByIdAsync(int id, CancellationToken cancellationToken = default);
     Task<BlogCategory?> GetBySlugAsync(string slug, CancellationToken cancellationToken = default);
     Task<IReadOnlyList<BlogCategory>> GetAllAsync(CancellationToken cancellationToken = default);
     Task<(IReadOnlyList<BlogCategory> Items, int TotalCount)> GetPagedAsync(

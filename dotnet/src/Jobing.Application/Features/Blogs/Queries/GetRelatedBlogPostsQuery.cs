@@ -5,5 +5,5 @@ namespace Jobing.Application.Features.Blogs.Queries;
 
 public class GetRelatedBlogPostsQuery : IRequest<IReadOnlyList<BlogPostDto>>
 {
-    public Guid Id { get; set; }
+    public int Id { get; set; }
 }

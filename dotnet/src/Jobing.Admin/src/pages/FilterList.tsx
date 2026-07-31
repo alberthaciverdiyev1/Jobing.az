@@ -30,7 +30,7 @@ export default function FilterList() {
     }
   }
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = async (id: number) => {
     if (!window.confirm('Bu filteri silmək istədiyinizə əminsiniz?')) return
     try {
       await api.delete(`/filters/${id}`)

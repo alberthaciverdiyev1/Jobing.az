@@ -6,7 +6,7 @@ namespace Jobing.Infrastructure.Data;
 
 public static class DataSeeder
 {
-    public static async Task SeedAsync(AppDbContext context, UserManager<User> userManager, RoleManager<IdentityRole<Guid>> roleManager)
+    public static async Task SeedAsync(AppDbContext context, UserManager<User> userManager, RoleManager<IdentityRole<int>> roleManager)
     {
         await context.Database.MigrateAsync();
 
@@ -15,7 +15,7 @@ public static class DataSeeder
         foreach (var role in roles)
         {
             if (!await roleManager.RoleExistsAsync(role))
-                await roleManager.CreateAsync(new IdentityRole<Guid>(role));
+                await roleManager.CreateAsync(new IdentityRole<int>(role));
         }
 
         // Cities

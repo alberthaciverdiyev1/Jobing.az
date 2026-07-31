@@ -21,7 +21,6 @@ public class CreateFilterCommandHandler : IRequestHandler<CreateFilterCommand, F
     public async Task<FilterDto> Handle(CreateFilterCommand command, CancellationToken cancellationToken)
     {
         var filter = _mapper.Map<Filter>(command);
-        filter.Id = Guid.NewGuid();
         filter.Key = SlugHelper.Generate(command.Name.Values.FirstOrDefault() ?? "filter");
 
         var created = await _repo.AddAsync(filter, cancellationToken);

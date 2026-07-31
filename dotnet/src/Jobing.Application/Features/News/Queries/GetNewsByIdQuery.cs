@@ -5,5 +5,5 @@ namespace Jobing.Application.Features.News.Queries;
 
 public class GetNewsByIdQuery : IRequest<NewsDto?>
 {
-    public Guid Id { get; set; }
+    public int Id { get; set; }
 }

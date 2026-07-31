@@ -14,7 +14,7 @@ public class BlogCategoryRepository : IBlogCategoryRepository
         _context = context;
     }
 
-    public async Task<BlogCategory?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task<BlogCategory?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
     {
         return await _context.BlogCategories
             .Include(x => x.BlogPosts.Where(p => p.IsPublished))

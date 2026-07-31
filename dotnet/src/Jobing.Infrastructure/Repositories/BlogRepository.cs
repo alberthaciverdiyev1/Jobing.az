@@ -14,7 +14,7 @@ public class BlogRepository : IBlogRepository
         _context = context;
     }
 
-    public async Task<BlogPost?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task<BlogPost?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
     {
         return await _context.BlogPosts
             .Include(x => x.Author).ThenInclude(x => x!.Profile)
@@ -38,7 +38,7 @@ public class BlogRepository : IBlogRepository
             .ToListAsync(cancellationToken);
     }
 
-    public async Task<IReadOnlyList<BlogPost>> GetRelatedPostsAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task<IReadOnlyList<BlogPost>> GetRelatedPostsAsync(int id, CancellationToken cancellationToken = default)
     {
         var post = await _context.BlogPosts
             .AsNoTracking()

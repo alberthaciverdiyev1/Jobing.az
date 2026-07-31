@@ -4,5 +4,5 @@ namespace Jobing.Application.Features.Blogs.Commands;
 
 public class DeleteBlogPostCommand : IRequest<Unit>
 {
-    public Guid Id { get; set; }
+    public int Id { get; set; }
 }

@@ -34,7 +34,7 @@ export default function JobForm() {
   const [minSalary, setMinSalary] = useState('')
   const [maxSalary, setMaxSalary] = useState('')
   const [currency, setCurrency] = useState<SalaryCurrency | ''>('')
-  const [cityId, setCityId] = useState('')
+  const [cityId, setCityId] = useState<number | ''>('')
   const [filterValues, setFilterValues] = useState<Record<string, string>>({})
   const [applicationMethod, setApplicationMethod] = useState('')
   const [applicationUrl, setApplicationUrl] = useState('')
@@ -69,7 +69,7 @@ export default function JobForm() {
           setMinSalary(j.minSalary != null ? String(j.minSalary) : '')
           setMaxSalary(j.maxSalary != null ? String(j.maxSalary) : '')
           setCurrency(j.currency || '')
-          setCityId(j.cityId || '')
+          setCityId(j.cityId ?? '')
           setFilterValues(j.filterValues || {})
           setApplicationMethod(j.applicationMethod || '')
           setApplicationUrl(j.applicationUrl || '')
@@ -102,7 +102,7 @@ export default function JobForm() {
         applicationMethod: applicationMethod || null,
         applicationUrl: applicationUrl || null,
         filterValues,
-        cityId: cityId || null,
+        cityId: cityId === '' ? null : cityId,
         isRemote,
         isActive,
         expiresAt: expiresAt ? new Date(expiresAt).toISOString() : null,
@@ -214,7 +214,7 @@ export default function JobForm() {
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1.5">Şəhər</label>
-            <select value={cityId} onChange={e => setCityId(e.target.value)}
+            <select value={cityId} onChange={e => setCityId(e.target.value === '' ? '' : Number(e.target.value))}
               className="w-full px-3 py-2.5 rounded-lg border border-gray-300 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none bg-white">
               <option value="">Seçilməyib</option>
               {cities.map(c => (

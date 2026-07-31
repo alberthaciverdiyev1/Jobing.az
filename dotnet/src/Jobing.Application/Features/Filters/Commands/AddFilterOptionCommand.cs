@@ -5,7 +5,7 @@ namespace Jobing.Application.Features.Filters.Commands;
 
 public class AddFilterOptionCommand : IRequest<FilterOptionDto>
 {
-    public Guid FilterId { get; set; }
+    public int FilterId { get; set; }
     public Dictionary<string, string> Name { get; set; } = new();
     public int SortOrder { get; set; }
 }

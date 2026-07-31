@@ -12,7 +12,7 @@ public class UserProfileConfiguration : IEntityTypeConfiguration<UserProfile>
 
         builder.HasKey(x => x.Id);
 
-        builder.Property(x => x.Id).HasColumnName("id").ValueGeneratedNever();
+        builder.Property(x => x.Id).HasColumnName("id").ValueGeneratedOnAdd();
         builder.Property(x => x.UserId).HasColumnName("user_id").IsRequired();
         builder.Property(x => x.Name).HasColumnName("name").HasMaxLength(100).IsRequired();
         builder.Property(x => x.Surname).HasColumnName("surname").HasMaxLength(100);

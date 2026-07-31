@@ -27,8 +27,8 @@ public class SettingsController : ControllerBase
         => Ok(await _sender.Send(query));
 
     [Authorize(Policy = "AdminOnly")]
-    [HttpGet("{id:guid}")]
-    public async Task<ActionResult<SettingDto>> GetById(Guid id)
+    [HttpGet("{id:int}")]
+    public async Task<ActionResult<SettingDto>> GetById(int id)
     {
         var r = await _sender.Send(new GetSettingByIdQuery { Id = id });
         return r is null ? NotFound() : Ok(r);
@@ -51,8 +51,8 @@ public class SettingsController : ControllerBase
     }
 
     [Authorize(Policy = "AdminOnly")]
-    [HttpPut("{id:guid}")]
-    public async Task<IActionResult> Update(Guid id, UpdateSettingCommand command)
+    [HttpPut("{id:int}")]
+    public async Task<IActionResult> Update(int id, UpdateSettingCommand command)
     {
         command.Id = id;
         await _sender.Send(command);
@@ -60,8 +60,8 @@ public class SettingsController : ControllerBase
     }
 
     [Authorize(Policy = "AdminOnly")]
-    [HttpDelete("{id:guid}")]
-    public async Task<IActionResult> Delete(Guid id)
+    [HttpDelete("{id:int}")]
+    public async Task<IActionResult> Delete(int id)
     {
         await _sender.Send(new DeleteSettingCommand { Id = id });
         return NoContent();

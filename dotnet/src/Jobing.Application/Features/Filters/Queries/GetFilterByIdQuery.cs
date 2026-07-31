@@ -5,5 +5,5 @@ namespace Jobing.Application.Features.Filters.Queries;
 
 public class GetFilterByIdQuery : IRequest<FilterDto?>
 {
-    public Guid Id { get; set; }
+    public int Id { get; set; }
 }

@@ -11,7 +11,7 @@ public class SettingRepository : ISettingRepository
 
     public SettingRepository(AppDbContext db) => _db = db;
 
-    public async Task<Setting?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task<Setting?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
         => await _db.Set<Setting>().FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
 
     public async Task<Setting?> GetByKeyAsync(string key, CancellationToken cancellationToken = default)
@@ -74,7 +74,7 @@ public class SettingRepository : ISettingRepository
         await _db.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<bool> KeyExistsAsync(string key, Guid? excludeId = null, CancellationToken cancellationToken = default)
+    public async Task<bool> KeyExistsAsync(string key, int? excludeId = null, CancellationToken cancellationToken = default)
     {
         var query = _db.Set<Setting>().IgnoreQueryFilters().AsQueryable();
 

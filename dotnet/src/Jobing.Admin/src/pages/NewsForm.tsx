@@ -19,7 +19,7 @@ export default function NewsForm() {
   const [content, setContent] = useState<Record<string, string>>({ az: '', en: '', ru: '' })
   const [excerpt, setExcerpt] = useState<Record<string, string>>({ az: '', en: '', ru: '' })
   const [coverImage, setCoverImage] = useState('')
-  const [categoryId, setCategoryId] = useState('')
+  const [categoryId, setCategoryId] = useState<number | ''>('')
   const [isPublished, setIsPublished] = useState(false)
   const [categories, setCategories] = useState<NewsCategory[]>([])
   const [loading, setLoading] = useState(false)
@@ -42,7 +42,7 @@ export default function NewsForm() {
           setContent(p.content || { az: '', en: '', ru: '' })
           setExcerpt(p.excerpt || { az: '', en: '', ru: '' })
           setCoverImage(p.coverImage || '')
-          setCategoryId(p.categoryId || '')
+          setCategoryId(p.categoryId ?? '')
           setIsPublished(p.isPublished)
         }
       } catch {
@@ -64,7 +64,7 @@ export default function NewsForm() {
         content: content.az ? content : null,
         excerpt: excerpt.az ? excerpt : null,
         coverImage: coverImage || null,
-        categoryId: categoryId || null,
+        categoryId: categoryId === '' ? null : categoryId,
         isPublished,
       }
       if (isEdit) {
@@ -123,7 +123,7 @@ export default function NewsForm() {
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1.5">Kateqoriya</label>
-            <select value={categoryId} onChange={e => setCategoryId(e.target.value)}
+            <select value={categoryId} onChange={e => setCategoryId(e.target.value === '' ? '' : Number(e.target.value))}
               className="w-full px-3 py-2.5 rounded-lg border border-gray-300 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none bg-white">
               <option value="">Seçilməyib</option>
               {categories.map(cat => (

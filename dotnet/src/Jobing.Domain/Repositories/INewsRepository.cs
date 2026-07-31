@@ -4,7 +4,7 @@ namespace Jobing.Domain.Repositories;
 
 public interface INewsRepository
 {
-    Task<News?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
+    Task<News?> GetByIdAsync(int id, CancellationToken cancellationToken = default);
     Task<News?> GetBySlugAsync(string slug, CancellationToken cancellationToken = default);
     Task<IReadOnlyList<News>> GetAllPublishedAsync(CancellationToken cancellationToken = default);
     Task<(IReadOnlyList<News> Items, int TotalCount)> GetPagedAsync(

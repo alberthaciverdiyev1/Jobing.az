@@ -24,7 +24,6 @@ public class CreateSeoSettingCommandHandler : IRequestHandler<CreateSeoSettingCo
             throw new ConflictException($"SEO page key '{command.PageKey}' already exists.");
 
         var entity = _mapper.Map<SeoSetting>(command);
-        entity.Id = Guid.NewGuid();
         entity.CreatedAt = DateTime.UtcNow;
 
         var created = await _repo.AddAsync(entity, cancellationToken);

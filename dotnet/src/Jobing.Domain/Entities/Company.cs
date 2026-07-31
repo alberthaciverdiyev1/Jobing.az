@@ -2,15 +2,15 @@ namespace Jobing.Domain.Entities;
 
 public class Company
 {
-    public Guid Id { get; set; } = Guid.NewGuid();
-    public Guid? CreatedByUserId { get; set; }
+    public int Id { get; set; }
+    public int? CreatedByUserId { get; set; }
     public string Name { get; set; } = string.Empty;
     public Dictionary<string, string>? Description { get; set; }
     public string? Logo { get; set; }
     public string? Website { get; set; }
     public string? Email { get; set; }
     public string? Phone { get; set; }
-    public Guid? CityId { get; set; }
+    public int? CityId { get; set; }
     public bool IsVerified { get; set; }
     public bool IsActive { get; set; } = true;
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;

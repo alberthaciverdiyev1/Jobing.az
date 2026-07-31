@@ -2,7 +2,7 @@ namespace Jobing.Application.Features.Users.DTOs;
 
 public class AdminUserDto
 {
-    public Guid Id { get; set; }
+    public int Id { get; set; }
     public string? Email { get; set; }
     public AdminUserProfileDto? Profile { get; set; }
     public bool IsActive { get; set; }

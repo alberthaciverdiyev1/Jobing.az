@@ -5,7 +5,7 @@ namespace Jobing.Application.Features.Jobs.Commands;
 
 public class UpdateJobCommand : IRequest<Unit>
 {
-    public Guid Id { get; set; }
+    public int Id { get; set; }
     public Dictionary<string, string> Title { get; set; } = new();
     public Dictionary<string, string>? Description { get; set; }
     public Dictionary<string, string>? Requirements { get; set; }
@@ -16,8 +16,8 @@ public class UpdateJobCommand : IRequest<Unit>
     public string? ApplicationMethod { get; set; }
     public string? ApplicationUrl { get; set; }
     public Dictionary<string, string> FilterValues { get; set; } = new();
-    public Guid? CompanyId { get; set; }
-    public Guid? CityId { get; set; }
+    public int? CompanyId { get; set; }
+    public int? CityId { get; set; }
     public bool IsRemote { get; set; }
     public bool IsActive { get; set; } = true;
     public DateTime? ExpiresAt { get; set; }

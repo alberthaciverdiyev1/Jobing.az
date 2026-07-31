@@ -4,7 +4,7 @@ namespace Jobing.Domain.Repositories;
 
 public interface ICityRepository
 {
-    Task<City?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
+    Task<City?> GetByIdAsync(int id, CancellationToken cancellationToken = default);
     Task<IReadOnlyList<City>> GetAllAsync(CancellationToken cancellationToken = default);
     Task<(IReadOnlyList<City> Items, int TotalCount)> GetPagedAsync(
         int page, int pageSize, string? search = null, bool? isActive = null, bool includeDeleted = false,

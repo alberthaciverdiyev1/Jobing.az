@@ -5,5 +5,5 @@ namespace Jobing.Application.Features.Seo.Queries;
 
 public class GetSeoSettingByIdQuery : IRequest<SeoSettingDto?>
 {
-    public Guid Id { get; set; }
+    public int Id { get; set; }
 }

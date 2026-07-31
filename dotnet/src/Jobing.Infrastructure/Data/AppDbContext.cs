@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Jobing.Infrastructure.Data;
 
-public class AppDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
+public class AppDbContext : IdentityDbContext<User, IdentityRole<int>, int>
 {
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
@@ -30,12 +30,12 @@ public class AppDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
 
         // Rename ASP.NET Identity tables
         builder.Entity<User>(e => e.ToTable("users"));
-        builder.Entity<IdentityRole<Guid>>(e => e.ToTable("roles"));
-        builder.Entity<IdentityUserRole<Guid>>(e => e.ToTable("user_roles"));
-        builder.Entity<IdentityUserClaim<Guid>>(e => e.ToTable("user_claims"));
-        builder.Entity<IdentityUserLogin<Guid>>(e => e.ToTable("user_logins"));
-        builder.Entity<IdentityUserToken<Guid>>(e => e.ToTable("user_tokens"));
-        builder.Entity<IdentityRoleClaim<Guid>>(e => e.ToTable("role_claims"));
+        builder.Entity<IdentityRole<int>>(e => e.ToTable("roles"));
+        builder.Entity<IdentityUserRole<int>>(e => e.ToTable("user_roles"));
+        builder.Entity<IdentityUserClaim<int>>(e => e.ToTable("user_claims"));
+        builder.Entity<IdentityUserLogin<int>>(e => e.ToTable("user_logins"));
+        builder.Entity<IdentityUserToken<int>>(e => e.ToTable("user_tokens"));
+        builder.Entity<IdentityRoleClaim<int>>(e => e.ToTable("role_claims"));
 
         builder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
     }

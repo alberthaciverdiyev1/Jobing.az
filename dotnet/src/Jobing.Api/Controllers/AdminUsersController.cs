@@ -24,19 +24,19 @@ public class AdminUsersController : ControllerBase
     public async Task<ActionResult> GetAllRoles()
         => Ok(await _sender.Send(new GetRolesQuery()));
 
-    [HttpGet("{id:guid}")]
-    public async Task<ActionResult> GetById(Guid id)
+    [HttpGet("{id:int}")]
+    public async Task<ActionResult> GetById(int id)
         => Ok(await _sender.Send(new GetUserByIdQuery { Id = id }));
 
-    [HttpPut("{id:guid}/roles")]
-    public async Task<IActionResult> UpdateRoles(Guid id, [FromBody] UpdateRolesRequest request)
+    [HttpPut("{id:int}/roles")]
+    public async Task<IActionResult> UpdateRoles(int id, [FromBody] UpdateRolesRequest request)
     {
         await _sender.Send(new UpdateUserRolesCommand { Id = id, Roles = request.Roles });
         return NoContent();
     }
 
-    [HttpPost("{id:guid}/toggle-active")]
-    public async Task<IActionResult> ToggleActive(Guid id)
+    [HttpPost("{id:int}/toggle-active")]
+    public async Task<IActionResult> ToggleActive(int id)
     {
         await _sender.Send(new ToggleUserActiveCommand { Id = id });
         return NoContent();

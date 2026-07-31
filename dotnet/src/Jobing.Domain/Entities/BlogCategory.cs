@@ -2,7 +2,7 @@ namespace Jobing.Domain.Entities;
 
 public class BlogCategory
 {
-    public Guid Id { get; set; } = Guid.NewGuid();
+    public int Id { get; set; }
     public Dictionary<string, string> Name { get; set; } = new();
     public string Slug { get; set; } = string.Empty;
     public bool IsActive { get; set; } = true;

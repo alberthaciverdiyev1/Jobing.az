@@ -30,7 +30,7 @@ export default function CityList() {
     }
   }
 
-  const toggleActive = async (id: string, current: boolean) => {
+  const toggleActive = async (id: number, current: boolean) => {
     try {
       const city = cities.find(c => c.id === id)
       if (!city) return
@@ -40,7 +40,7 @@ export default function CityList() {
     } catch { setError('Xəta baş verdi') }
   }
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = async (id: number) => {
     if (!window.confirm('Silinməsini təsdiqləyin?')) return
     try {
       await api.delete(`/cities/${id}`)

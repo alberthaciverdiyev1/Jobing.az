@@ -4,7 +4,7 @@ namespace Jobing.Application.Features.Profile.Commands;
 
 public class UpdateProfileCommand : IRequest<Unit>
 {
-    public Guid UserId { get; set; }
+    public int UserId { get; set; }
     public string Name { get; set; } = string.Empty;
     public string? Surname { get; set; }
     public string? Phone { get; set; }

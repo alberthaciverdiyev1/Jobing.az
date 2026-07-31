@@ -2,7 +2,7 @@ namespace Jobing.Application.Features.Settings.DTOs;
 
 public class SettingDto
 {
-    public Guid Id { get; set; }
+    public int Id { get; set; }
     public string Key { get; set; } = string.Empty;
     public Dictionary<string, string>? Value { get; set; }
     public string? Description { get; set; }

@@ -21,7 +21,6 @@ public class CreateNewsCategoryCommandHandler : IRequestHandler<CreateNewsCatego
     public async Task<NewsCategoryDto> Handle(CreateNewsCategoryCommand command, CancellationToken cancellationToken)
     {
         var entity = _mapper.Map<NewsCategory>(command);
-        entity.Id = Guid.NewGuid();
         entity.Slug = SlugHelper.Generate(command.Name.GetValueOrDefault("az", command.Name.Values.FirstOrDefault() ?? ""));
 
         var created = await _repo.AddAsync(entity, cancellationToken);

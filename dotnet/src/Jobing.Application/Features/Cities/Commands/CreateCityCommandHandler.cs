@@ -20,7 +20,6 @@ public class CreateCityCommandHandler : IRequestHandler<CreateCityCommand, CityD
     public async Task<CityDto> Handle(CreateCityCommand command, CancellationToken cancellationToken)
     {
         var city = _mapper.Map<City>(command);
-        city.Id = Guid.NewGuid();
 
         var created = await _repo.AddAsync(city, cancellationToken);
         return _mapper.Map<CityDto>(created);

@@ -9,6 +9,6 @@ public class CreateNewsCommand : IRequest<NewsDto>
     public Dictionary<string, string>? Content { get; set; }
     public Dictionary<string, string>? Excerpt { get; set; }
     public string? CoverImage { get; set; }
-    public Guid? CategoryId { get; set; }
+    public int? CategoryId { get; set; }
     public bool IsPublished { get; set; }
 }

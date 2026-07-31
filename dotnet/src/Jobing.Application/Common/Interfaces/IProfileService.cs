@@ -5,7 +5,7 @@ namespace Jobing.Application.Common.Interfaces;
 
 public interface IProfileService
 {
-    Task<ProfileDto> GetProfileAsync(Guid userId);
-    Task UpdateProfileAsync(Guid userId, UpdateProfileCommand request);
-    Task ChangePasswordAsync(Guid userId, ChangePasswordCommand request);
+    Task<ProfileDto> GetProfileAsync(int userId);
+    Task UpdateProfileAsync(int userId, UpdateProfileCommand request);
+    Task ChangePasswordAsync(int userId, ChangePasswordCommand request);
 }

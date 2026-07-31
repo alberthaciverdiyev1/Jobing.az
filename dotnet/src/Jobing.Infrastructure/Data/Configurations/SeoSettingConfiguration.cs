@@ -12,7 +12,7 @@ public class SeoSettingConfiguration : IEntityTypeConfiguration<SeoSetting>
 
         builder.HasKey(x => x.Id);
 
-        builder.Property(x => x.Id).ValueGeneratedNever();
+        builder.Property(x => x.Id).ValueGeneratedOnAdd();
         builder.Property(x => x.PageKey).HasMaxLength(100).IsRequired();
 
         builder.Property(x => x.Title)

@@ -19,8 +19,8 @@ public class NewsController : ControllerBase
     public async Task<ActionResult<PagedResult<NewsDto>>> GetAll([FromQuery] GetNewsQuery query)
         => Ok(await _sender.Send(query));
 
-    [HttpGet("{id:guid}")]
-    public async Task<ActionResult<NewsDto>> GetById(Guid id)
+    [HttpGet("{id:int}")]
+    public async Task<ActionResult<NewsDto>> GetById(int id)
     {
         var news = await _sender.Send(new GetNewsByIdQuery { Id = id });
         return news is null ? NotFound() : Ok(news);
@@ -33,8 +33,8 @@ public class NewsController : ControllerBase
         return news is null ? NotFound() : Ok(news);
     }
 
-    [HttpPut("{id:guid}/view")]
-    public async Task<IActionResult> IncrementViewCount(Guid id)
+    [HttpPut("{id:int}/view")]
+    public async Task<IActionResult> IncrementViewCount(int id)
     {
         await _sender.Send(new IncrementNewsViewCountCommand { Id = id });
         return NoContent();
@@ -47,16 +47,16 @@ public class NewsController : ControllerBase
         return CreatedAtAction(nameof(GetById), new { id = news.Id }, news);
     }
 
-    [HttpPut("{id:guid}")]
-    public async Task<IActionResult> Update(Guid id, UpdateNewsCommand command)
+    [HttpPut("{id:int}")]
+    public async Task<IActionResult> Update(int id, UpdateNewsCommand command)
     {
         command.Id = id;
         await _sender.Send(command);
         return NoContent();
     }
 
-    [HttpDelete("{id:guid}")]
-    public async Task<IActionResult> Delete(Guid id)
+    [HttpDelete("{id:int}")]
+    public async Task<IActionResult> Delete(int id)
     {
         await _sender.Send(new DeleteNewsCommand { Id = id });
         return NoContent();

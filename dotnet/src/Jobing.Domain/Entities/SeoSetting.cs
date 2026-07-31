@@ -2,7 +2,7 @@ namespace Jobing.Domain.Entities;
 
 public class SeoSetting
 {
-    public Guid Id { get; set; } = Guid.NewGuid();
+    public int Id { get; set; }
     public string PageKey { get; set; } = string.Empty;
     public Dictionary<string, string>? Title { get; set; }
     public Dictionary<string, string>? Description { get; set; }

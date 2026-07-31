@@ -2,7 +2,7 @@ namespace Jobing.Domain.Entities;
 
 public class Setting
 {
-    public Guid Id { get; set; } = Guid.NewGuid();
+    public int Id { get; set; }
     public string Key { get; set; } = string.Empty;
     public Dictionary<string, string>? Value { get; set; }
     public string? Description { get; set; }

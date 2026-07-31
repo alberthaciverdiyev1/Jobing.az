@@ -10,7 +10,7 @@ public class JobConfiguration : IEntityTypeConfiguration<Job>
     {
         builder.ToTable("jobs");
         builder.HasKey(x => x.Id);
-        builder.Property(x => x.Id).HasColumnName("id").ValueGeneratedNever();
+        builder.Property(x => x.Id).HasColumnName("id").ValueGeneratedOnAdd();
         builder.Property(x => x.Title).HasColumnName("title").IsRequired()
             .HasConversion(
                 v => System.Text.Json.JsonSerializer.Serialize(v, (System.Text.Json.JsonSerializerOptions?)null),

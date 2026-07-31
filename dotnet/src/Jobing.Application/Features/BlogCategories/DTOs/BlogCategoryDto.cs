@@ -2,7 +2,7 @@ namespace Jobing.Application.Features.BlogCategories.DTOs;
 
 public class BlogCategoryDto
 {
-    public Guid Id { get; set; }
+    public int Id { get; set; }
     public Dictionary<string, string> Name { get; set; } = new();
     public string Slug { get; set; } = string.Empty;
     public bool IsActive { get; set; }

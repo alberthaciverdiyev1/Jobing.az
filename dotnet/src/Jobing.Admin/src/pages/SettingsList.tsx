@@ -30,7 +30,7 @@ export default function SettingsList() {
     }
   }
 
-  const handleDelete = async (id: string, key: string) => {
+  const handleDelete = async (id: number, key: string) => {
     if (!window.confirm(`"${key}" tənzimləməsini silmək istədiyinizə əminsiniz?`)) return
     try {
       await api.delete(`/settings/${id}`)

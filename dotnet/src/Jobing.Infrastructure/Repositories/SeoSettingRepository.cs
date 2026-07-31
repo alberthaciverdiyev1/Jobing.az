@@ -11,7 +11,7 @@ public class SeoSettingRepository : ISeoSettingRepository
 
     public SeoSettingRepository(AppDbContext db) => _db = db;
 
-    public async Task<SeoSetting?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task<SeoSetting?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
         => await _db.Set<SeoSetting>().FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
 
     public async Task<SeoSetting?> GetByPageKeyAsync(string pageKey, CancellationToken cancellationToken = default)
@@ -74,7 +74,7 @@ public class SeoSettingRepository : ISeoSettingRepository
         await _db.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<bool> PageKeyExistsAsync(string pageKey, Guid? excludeId = null, CancellationToken cancellationToken = default)
+    public async Task<bool> PageKeyExistsAsync(string pageKey, int? excludeId = null, CancellationToken cancellationToken = default)
     {
         var query = _db.Set<SeoSetting>().IgnoreQueryFilters().AsQueryable();
 
