@@ -8,6 +8,7 @@
 
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8 animate-fade-in-up">
             <form id="profileForm" onsubmit="return false;">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                 <!-- Personal Info -->
                 <div class="mb-8">
                     <div class="flex items-center gap-3 mb-6 pb-4 border-b border-gray-100">

@@ -61,6 +61,7 @@
         <button onclick="closeUserModal()" class="text-gray-400 hover:text-gray-600">&times;</button>
       </div>
       <form id="userForm" class="space-y-4">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
         <input type="hidden" id="userId">
         <div class="grid grid-cols-2 gap-4">
           <div>

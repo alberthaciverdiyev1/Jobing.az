@@ -1,77 +1,58 @@
-import Log from '../Models/Log.js';
-import { sendTgMessage } from '../Helpers/TelegramBot.js';
+import winston from 'winston';
+import morgan from 'morgan';
+import fs from 'fs';
+import path from 'path';
 
-/**
- * Log an info/warn message → MongoDB + Telegram group.
- * Errors should use logError() instead — only goes to DB, not Telegram.
- */
-export async function logInfo(source, message, metadata = {}) {
-    try {
-        const level = metadata.level === 'warn' ? 'warn' : 'info';
-
-        await Log.create({
-            level,
-            source,
-            message,
-            metadata,
-            url: metadata.url,
-            method: metadata.method,
-            ip: metadata.ip,
-        });
-
-        // Only info level goes to Telegram — errors are handled by logError()
-        if (level === 'info') {
-            const tgMsg = `📋 [${source}] ${message}`;
-            await sendTgMessage(tgMsg).catch(() => {});
-        }
-    } catch {
-        // logger must never throw
-    }
+const logDir = 'logs';
+if (!fs.existsSync(logDir)) {
+    fs.mkdirSync(logDir);
 }
 
-/**
- * Log an error → MongoDB + console.error.
- * Does NOT send to Telegram.
- */
-export async function logError(err, metadata = {}) {
-    try {
-        const message = err?.message || String(err);
+// Custom format
+const customFormat = winston.format.combine(
+    winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
+    winston.format.printf(info => `${info.timestamp} [${info.level.toUpperCase()}]: ${info.message}`)
+);
 
-        await Log.create({
-            level: 'error',
-            source: metadata.source || 'app',
-            message,
-            metadata: {
-                ...metadata,
-                stack: err?.stack,
-            },
-            url: metadata.url,
-            method: metadata.method,
-            ip: metadata.ip,
-        });
+const logger = winston.createLogger({
+    level: 'info',
+    format: customFormat,
+    transports: [
+        new winston.transports.File({ filename: path.join(logDir, 'error.log'), level: 'error' }),
+        new winston.transports.File({ filename: path.join(logDir, 'combined.log') })
+    ]
+});
 
-        console.error(`[ERROR] [${metadata.source || 'app'}] ${message}`);
-        if (err?.stack) {
-            console.error(err.stack);
-        }
-    } catch {
-        console.error('Logger failed:', err);
-    }
+// If not in production, log to console
+if (process.env.NODE_ENV !== 'production') {
+    logger.add(new winston.transports.Console({
+        format: winston.format.combine(
+            winston.format.colorize(),
+            customFormat
+        )
+    }));
 }
 
-/**
- * Express error-logging middleware — placed AFTER routes.
- * Logs the error to DB and passes it to the next error handler.
- */
-export function errorLogger(err, req, res, next) {
-    logError(err, {
-        source: 'express-error',
-        method: req?.method,
-        url: req?.originalUrl || req?.url,
-        ip: req?.ip,
+// Morgan stream for express
+export const morganMiddleware = morgan(
+    ':method :url :status :res[content-length] - :response-time ms',
+    { stream: { write: message => logger.info(message.trim()) } }
+);
+
+// Global Error Handler Middleware
+export const globalErrorHandler = (err, req, res, next) => {
+    logger.error(`${err.status || 500} - ${err.message} - ${req.originalUrl} - ${req.method} - ${req.ip}`);
+    
+    // In pure MVC, we render an error page
+    res.status(err.status || 500);
+    res.render('Partials/Error.ejs', { 
+        title: 'Xəta Baş Verdi',
+        message: process.env.NODE_ENV === 'development' ? err.message : 'Sistemdə gözlənilməz bir xəta baş verdi.'
     });
-    next(err);
-}
+};
 
-const logger = { logInfo, logError, errorLogger };
+export const logError = (err, context = {}) => {
+    logger.error(`${err.message} - Context: ${JSON.stringify(context)}`);
+};
+
 export default logger;

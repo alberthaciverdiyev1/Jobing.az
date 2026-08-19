@@ -1,4 +1,4 @@
-import Seo from '../Models/Seo.js';
+import Seo from '../Modules/System/Entities/Seo.js';
 import Cache from '../Helpers/Cache.js';
 
 const SEO_CACHE_TTL = 600; // 10 minutes

@@ -15,6 +15,7 @@
         <!-- Upload Card -->
         <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 sm:p-8 animate-fade-in-up">
             <form id="cv-upload-form">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                 <div class="mb-6">
                     <label class="block text-sm font-medium text-gray-700 mb-1.5">CV Başlığı <span class="text-red-500">*</span></label>
                     <input type="text" id="upload-title" placeholder="Məs: Frontend Developer CV" required

@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import User from '../Models/User.js';
+import User from '../Modules/Auth/Entities/User.js';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'jobing-az-jwt-secret-2024-develop';
 

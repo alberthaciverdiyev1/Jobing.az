@@ -1,4 +1,4 @@
-import VisitorService from "../Services/VisitorService.js";
+import VisitorService from "../Modules/System/Services/VisitorService.js";
 
 const visitorLogger = async (req, res, next) => {
     // Fire-and-forget: don't block page rendering on visitor tracking

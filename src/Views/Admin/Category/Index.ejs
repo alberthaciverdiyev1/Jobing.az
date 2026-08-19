@@ -39,6 +39,7 @@
         <button onclick="closeCategoryModal()" class="text-gray-400 hover:text-gray-600">&times;</button>
       </div>
       <form id="categoryForm" class="space-y-4">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
         <input type="hidden" id="categoryId">
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-1">Category Name *</label>

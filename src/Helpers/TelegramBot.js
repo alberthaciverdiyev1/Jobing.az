@@ -1,20 +1,20 @@
 import TelegramBot from 'node-telegram-bot-api';
-import { requestAllSites, cancelRequest } from "./Automation.js";
 import sendEmail from "./NodeMailer.js";
-import JobService from '../Services/JobDataService.js';
-import jobDataService from "../Services/JobDataService.js";
-import CVService from '../Services/CVService.js';
-import JobSeekerService from '../Services/JobSeekerService.js';
-import User from '../Models/User.js';
-import VisitorService from "../Services/VisitorService.js";
+import JobService from '../Modules/Vacancy/Services/VacancyService.js';
+import jobDataService from "../Modules/Vacancy/Services/VacancyService.js";
+import CVService from '../Modules/CV/Services/CVService.js';
+import JobSeekerService from '../Modules/CV/Services/JobSeekerService.js';
+import User from '../Modules/Auth/Entities/User.js';
+import VisitorService from "../Modules/System/Services/VisitorService.js";
 
 let sendTo = null;
 
-const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN, { polling: true });
+const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN, {polling: true});
 
 export async function sendTgMessage(data = 'Test') {
     await bot.sendMessage('@jobingaz1', data);
 }
+
 export async function sendNewJobRequest(jobData) {
     const textMessage = `
         📌 Job Title: ${jobData.title}
@@ -38,12 +38,10 @@ export async function sendNewJobRequest(jobData) {
 
     await bot.sendMessage('@jobingaz', textMessage, {
         reply_markup: {
-            inline_keyboard: [
-                [
-                    { text: 'Accept', callback_data: `accept_${jobData.id}` },
-                    { text: 'Reject', callback_data: `reject_${jobData.id}` }
-                ]
-            ]
+            inline_keyboard: [[{text: 'Accept', callback_data: `accept_${jobData.id}`}, {
+                text: 'Reject',
+                callback_data: `reject_${jobData.id}`
+            }]]
         }
     });
 }
@@ -60,12 +58,10 @@ export async function sendNewCVRequest(cvData) {
 
     await bot.sendMessage('@jobingaz', textMessage, {
         reply_markup: {
-            inline_keyboard: [
-                [
-                    { text: 'Accept', callback_data: `accept_cv_${cvData.id}` },
-                    { text: 'Reject', callback_data: `reject_cv_${cvData.id}` }
-                ]
-            ]
+            inline_keyboard: [[{text: 'Accept', callback_data: `accept_cv_${cvData.id}`}, {
+                text: 'Reject',
+                callback_data: `reject_cv_${cvData.id}`
+            }]]
         }
     });
 }
@@ -81,12 +77,10 @@ export async function sendNewJobSeekerRequest(data) {
 
     await bot.sendMessage('@jobingaz', textMessage, {
         reply_markup: {
-            inline_keyboard: [
-                [
-                    { text: '✅ Qəbul et', callback_data: `accept_js_${data.id}` },
-                    { text: '❌ Rədd et', callback_data: `reject_js_${data.id}` }
-                ]
-            ]
+            inline_keyboard: [[{text: '✅ Qəbul et', callback_data: `accept_js_${data.id}`}, {
+                text: '❌ Rədd et',
+                callback_data: `reject_js_${data.id}`
+            }]]
         }
     });
 }
@@ -124,11 +118,11 @@ bot.on('callback_query', async (callbackQuery) => {
             const doc = await JobSeekerService.toggleActive(targetId, true);
             if (doc) {
                 const user = doc.postedBy ? await User.findById(doc.postedBy).lean() : null;
-                sendEmail(
-                    { title: "Jobing.az", text: "Sizin \"İş Axtarıram\" elanınız saytda dərc edildi." },
-                    doc.email || user?.email || sendTo,
-                    "support - Jobing.az"
-                ).catch(() => {});
+                sendEmail({
+                    title: "Jobing.az",
+                    text: "Sizin \"İş Axtarıram\" elanınız saytda dərc edildi."
+                }, doc.email || user?.email || sendTo, "support - Jobing.az").catch(() => {
+                });
                 await bot.sendMessage(chatId, '✅ Elan aktiv edildi ✅');
             }
         }
@@ -137,11 +131,11 @@ bot.on('callback_query', async (callbackQuery) => {
             const doc = await JobSeekerService.toggleActive(targetId, false);
             if (doc) {
                 const user = doc.postedBy ? await User.findById(doc.postedBy).lean() : null;
-                sendEmail(
-                    { title: "Jobing.az", text: "Sizin \"İş Axtarıram\" elanınız saytda dərc edilmədi. Zəhmət olmasa məlumatları yoxlayıb yenidən cəhd edin." },
-                    doc.email || user?.email || sendTo,
-                    "support - Jobing.az"
-                ).catch(() => {});
+                sendEmail({
+                    title: "Jobing.az",
+                    text: "Sizin \"İş Axtarıram\" elanınız saytda dərc edilmədi. Zəhmət olmasa məlumatları yoxlayıb yenidən cəhd edin."
+                }, doc.email || user?.email || sendTo, "support - Jobing.az").catch(() => {
+                });
                 await bot.sendMessage(chatId, '❌ Elan deaktiv edildi ❌');
             }
         }
@@ -153,11 +147,10 @@ bot.on('callback_query', async (callbackQuery) => {
             await bot.sendMessage(chatId, `✅ CV Accepted by: ${callbackQuery.from.username}`);
             const cv = await CVService.toggleActive(targetId, true);
             if (cv) {
-                sendEmail(
-                    { title: "Jobing.az", text: "Sizin CV-niz saytda dərc edildi." },
-                    cv.email || sendTo,
-                    "support - Jobing.az"
-                );
+                sendEmail({
+                    title: "Jobing.az",
+                    text: "Sizin CV-niz saytda dərc edildi."
+                }, cv.email || sendTo, "support - Jobing.az");
                 await bot.sendMessage(chatId, '✅ CV activated successfully ✅');
             }
         }
@@ -166,11 +159,10 @@ bot.on('callback_query', async (callbackQuery) => {
             await bot.sendMessage(chatId, `❌ CV Rejected by: ${callbackQuery.from.username}`);
             const cv = await CVService.toggleActive(targetId, false);
             if (cv) {
-                sendEmail(
-                    { title: "Jobing.az", text: "Sizin CV-niz saytda dərc edilmədi. Xahiş edirik məlumatları düzgün qeyd edib yenidən cəhd edəsiniz." },
-                    cv.email || sendTo,
-                    "support - Jobing.az"
-                );
+                sendEmail({
+                    title: "Jobing.az",
+                    text: "Sizin CV-niz saytda dərc edilmədi. Xahiş edirik məlumatları düzgün qeyd edib yenidən cəhd edəsiniz."
+                }, cv.email || sendTo, "support - Jobing.az");
                 await bot.sendMessage(chatId, '❌ CV deactivated ❌');
             }
         }
@@ -178,58 +170,29 @@ bot.on('callback_query', async (callbackQuery) => {
     }
 
     if (action === 'accept') {
-        await bot.sendMessage(
-            chatId,
-            `✅ Accepted by: ${callbackQuery.from.username}`
-        );
+        await bot.sendMessage(chatId, `✅ Accepted by: ${callbackQuery.from.username}`);
 
-        sendEmail(
-            { title: "Jobing.az", text: "Sizin vakansiyanız saytda dərc edildi." },
-            sendTo,
-            "support - Jobing.az"
-        );
+        sendEmail({title: "Jobing.az", text: "Sizin vakansiyanız saytda dərc edildi."}, sendTo, "support - Jobing.az");
         let message = await jobDataService.updateJob(targetId, true);
-        await bot.sendMessage(
-            chatId,
-            `✅ ${message} ✅`
-        );
+        await bot.sendMessage(chatId, `✅ ${message} ✅`);
     }
 
     if (action === 'reject') {
 
-        await bot.sendMessage(
-            chatId,
-            `❌ Rejected by: ${callbackQuery.from.username}`
-        );
+        await bot.sendMessage(chatId, `❌ Rejected by: ${callbackQuery.from.username}`);
         let message = await jobDataService.updateJob(targetId, false);
 
-        await bot.sendMessage(
-            chatId,
-            `❌ ${message} ❌`
-        );
+        await bot.sendMessage(chatId, `❌ ${message} ❌`);
 
-        sendEmail(
-            { title: "Jobing.az", text: "Sizin vakansiyanız saytda dərc edilmədi. Xahiş edirik məlumatları düzgün qeyd edib yenidən cəhd edəsiniz. Əgər hər hansı yanlışlıq olduğunu düşünürsünüzsə support@jobing.az ilə əlaqə qurun" },
-            sendTo,
-            "support - Jobing.az"
-        );
+        sendEmail({
+            title: "Jobing.az",
+            text: "Sizin vakansiyanız saytda dərc edilmədi. Xahiş edirik məlumatları düzgün qeyd edib yenidən cəhd edəsiniz. Əgər hər hansı yanlışlıq olduğunu düşünürsünüzsə support@jobing.az ilə əlaqə qurun"
+        }, sendTo, "support - Jobing.az");
     }
 });
 
 
 export const listenTgCommands = async (msg) => {
-    if (msg.text === '/all') {
-        await requestAllSites();
-        await bot.sendMessage(msg.chat.id, 'Bot Started Crone For All Cities');
-    }
-    if (msg.text === '/main') {
-        await requestAllSites(true);
-        await bot.sendMessage(msg.chat.id, 'Bot Started Crone For Main Cities');
-    }
-    if (msg.text === '/cancel') {
-        await cancelRequest();
-        await bot.sendMessage(msg.chat.id, 'All Request Was Cancelled');
-    }
     if (msg.text === '/views') {
         const report = await VisitorService.dailyReport();
 
@@ -241,11 +204,7 @@ export const listenTgCommands = async (msg) => {
         }).join('\n');
 
         // Top IPs
-        const ipList = report.topIps.length > 0
-            ? report.topIps.map((v, i) =>
-                `${i + 1}. \`${v.ip}\` — ${v.visitCount} dəfə | ${(v.userAgent || '-').substring(0, 40)}`
-              ).join('\n')
-            : 'Məlumat yoxdur';
+        const ipList = report.topIps.length > 0 ? report.topIps.map((v, i) => `${i + 1}. \`${v.ip}\` — ${v.visitCount} dəfə | ${(v.userAgent || '-').substring(0, 40)}`).join('\n') : 'Məlumat yoxdur';
 
         const diff = report.today.totalVisits - report.yesterday.totalVisits;
         const diffSign = diff >= 0 ? `📈 +${diff}` : `📉 ${diff}`;
@@ -254,7 +213,7 @@ export const listenTgCommands = async (msg) => {
 📊 *Günlük Visitor Hesabatı*
 ━━━━━━━━━━━━━━━━━━━
 
-👤 *Bugün* (${new Date().toLocaleDateString('az-AZ', { day: 'numeric', month: 'long' })})
+👤 *Bugün* (${new Date().toLocaleDateString('az-AZ', {day: 'numeric', month: 'long'})})
 • Ziyarət: ${report.today.totalVisits}
 • Unikal IP: ${report.today.uniqueVisitors}
 • Dünənlə fərq: ${diffSign}
@@ -272,9 +231,9 @@ ${hourBars || 'Məlumat yoxdur'}
 🔝 *Ən aktiv IP-lər (bugün):*
 ${ipList}
 
-⏰ Yenilənmə: ${new Date().toLocaleTimeString('az-AZ', { hour: '2-digit', minute: '2-digit' })}`;
+⏰ Yenilənmə: ${new Date().toLocaleTimeString('az-AZ', {hour: '2-digit', minute: '2-digit'})}`;
 
-        await bot.sendMessage(msg.chat.id, msgText, { parse_mode: 'Markdown' });
+        await bot.sendMessage(msg.chat.id, msgText, {parse_mode: 'Markdown'});
     }
 };
 
