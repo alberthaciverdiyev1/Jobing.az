@@ -30,6 +30,7 @@
 
             <!-- ==================== LOGIN FORM ==================== -->
             <form id="login-form" class="space-y-5">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1.5"><%= __('auth.email') %></label>
                     <div class="relative">
@@ -61,6 +62,7 @@
 
             <!-- ==================== REGISTER FORM ==================== -->
             <form id="register-form" class="space-y-5 hidden">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                 <!-- Name -->
                 <div class="grid grid-cols-2 gap-4">
                     <div>

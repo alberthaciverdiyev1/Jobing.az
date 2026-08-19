@@ -25,6 +25,7 @@
                     <!-- Search Card -->
                     <div class="bg-white rounded-2xl border border-gray-200/60 shadow-lg shadow-gray-200/30 p-1.5 mb-5">
                         <form action="/vakansiyalar" method="GET" class="flex flex-col sm:flex-row gap-1.5" id="home-search-form">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                             <div class="flex-1 relative">
                                 <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-300 text-sm"></i>
                                 <label for="keyword" class="sr-only"><%= __('hero.searchPlaceholder') %></label>

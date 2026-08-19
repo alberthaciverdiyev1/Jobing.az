@@ -1,5 +1,5 @@
 const Production = (env = null) => {
-    return env ? true : false;
+    return !!env;
 };
 
 export default Production;

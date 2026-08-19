@@ -29,6 +29,7 @@
             <!-- Contact Form -->
             <div class="w-full lg:w-1/2 bg-gray-50 p-6 lg:p-10 rounded-lg mr-6">
                 <form class="space-y-6">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                     <input type="email" id="title" placeholder="Emailinizi daxil edin" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 hover:bg-orange-50 transition duration-200">
                     <textarea placeholder="Mesaj mətni" id="text" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 hover:bg-orange-50 h-32 resize-none"></textarea>
                     <button type="button" id="send-mail" class="w-full filled-button-color text-white font-semibold py-3 rounded-lg hover:bg-orange-700 transition duration-200 shadow-md">
