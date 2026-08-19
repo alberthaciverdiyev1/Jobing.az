@@ -1,0 +1,16 @@
+{
+  "development": {
+    "username": "admin",
+    "password": "secret",
+    "database": "jobing",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  },
+  "production": {
+    "username": "admin",
+    "password": "secret",
+    "database": "jobing",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  }
+}

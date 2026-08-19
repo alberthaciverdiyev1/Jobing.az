@@ -1,0 +1,72 @@
+# Dependencies
+node_modules/
+
+# Build / output
+dist/
+build/
+coverage/
+
+# Env & secrets
+.env
+.env.*
+!.env.example
+
+# Logs
+logs/
+src/Logs/
+*.log
+
+# Uploads & user content
+uploads/
+src/Public/Images/CompanyLogos/
+src/Public/Images/BlogImages/
+
+# Large / binary assets (keep indexing light)
+*.mp4
+*.webm
+*.zip
+*.pdf
+*.woff
+*.woff2
+*.ttf
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.webp
+*.ico
+*.svg
+!src/Public/Svg/
+
+# Minified / vendor libraries
+**/Libraries/**
+**/*.min.js
+**/*.min.css
+src/Public/Js/Libraries/
+src/Public/Css/Libraries/
+src/Public/Admin/fonts/
+src/Public/Admin/images/
+
+# Caches & tooling
+.cache/
+.temp/
+
+# IDE / OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+.directory
+
+# Claude files
+.claude/
+.claudeignore
+CLAUDE.md
+
+# Lockfiles
+package-lock.json
+
+# Misc generated
+app_output.txt
+app_run.txt
+dev_output.txt
