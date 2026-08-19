@@ -23,7 +23,11 @@ class ContentService extends IContentService {
 
     async getBlogDetailsViewModel(idOrSlug) {
         const blog = await BlogRepository.findBySlugOrId(idOrSlug);
-        if (!blog) throw new Error('Bloq tapılmadı');
+        if (!blog) {
+            const error = new Error('Bloq tapılmadı');
+            error.status = 404;
+            throw error;
+        }
 
         blog.viewCount += 1;
         blog.save().catch(() => {});
@@ -61,7 +65,11 @@ class ContentService extends IContentService {
 
     async getNewsDetailsViewModel(idOrSlug) {
         const newsItem = await NewsRepository.findBySlugOrId(idOrSlug);
-        if (!newsItem) throw new Error('Xəbər tapılmadı');
+        if (!newsItem) {
+            const error = new Error('Xəbər tapılmadı');
+            error.status = 404;
+            throw error;
+        }
 
         newsItem.viewCount += 1;
         newsItem.save().catch(() => {});

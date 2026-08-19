@@ -33,5 +33,4 @@ class CompanyRepository extends BaseRepository {
         });
     }
 }
-Object.setPrototypeOf(CompanyRepository.prototype, ICompanyRepository.prototype);
 export default new CompanyRepository();

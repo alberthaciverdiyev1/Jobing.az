@@ -11,5 +11,4 @@ class CVRepository extends BaseRepository {
         return await this.model.findAll({ where: { userId, isActive: true } });
     }
 }
-Object.setPrototypeOf(CVRepository.prototype, ICVRepository.prototype);
 export default new CVRepository();

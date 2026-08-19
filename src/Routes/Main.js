@@ -61,12 +61,14 @@ router.use((req, res) => {
 router.use((err, req, res, next) => {
     logError(err, { source: 'main-router-error', url: req?.originalUrl || req?.url });
     console.error('Route error:', err.message);
+    const status = err.status || 500;
+    const isNotFound = status === 404;
     if (req.path.startsWith('/api/') || req.xhr || req.headers.accept?.includes('json')) {
-        return res.status(500).json({ error: 'Daxili xəta baş verdi' });
+        return res.status(status).json({ error: isNotFound ? 'Tapılmadı' : 'Daxili xəta baş verdi' });
     }
-    res.status(500).render('Partials/Error.ejs', {
-        title: '500 - Daxili Xəta',
-        message: err.message || 'Daxili xəta baş verdi.'
+    res.status(status).render('Partials/Error.ejs', {
+        title: isNotFound ? '404 - Tapılmadı' : '500 - Daxili Xəta',
+        message: err.message || (isNotFound ? 'Səhifə tapılmadı.' : 'Daxili xəta baş verdi.')
     });
 });
 

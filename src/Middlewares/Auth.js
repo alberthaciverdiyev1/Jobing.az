@@ -50,12 +50,12 @@ const authMiddleware = {
         if (!roles.includes(req.user.role)) {
             if (isApi) return res.status(403).json({ error: 'Bu əməliyyat üçün icazəniz yoxdur' });
             if (req.user.role === 'company') {
-                return res.redirect('/company/dashboard');
+                return res.redirect('/sirket-profili');
             }
             if (req.user.role === 'hr') {
-                return res.redirect('/hr/dashboard');
+                return res.redirect('/sirket-profili');
             }
-            return res.redirect('/dashboard');
+            return res.redirect('/profile');
         }
         next();
     }

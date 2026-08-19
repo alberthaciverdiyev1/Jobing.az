@@ -16,6 +16,4 @@ class UserRepository extends BaseRepository {
     }
 }
 
-Object.setPrototypeOf(UserRepository.prototype, IUserRepository.prototype);
-
 export default new UserRepository();
