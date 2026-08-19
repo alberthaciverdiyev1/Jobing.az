@@ -1,0 +1,205 @@
+<div class="p-6">
+  <div class="flex items-center justify-between mb-6">
+    <div>
+      <h1 class="text-2xl font-bold text-gray-800">Filters Management</h1>
+      <p class="text-sm text-gray-500 mt-1">Kategoriyalar, şəhərlər, təhsil, təcrübə və digər filtrləri buradan idarə edin.</p>
+    </div>
+    <button onclick="openFilterModal()" class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 text-sm font-medium flex items-center gap-2">
+      <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M10 5a1 1 0 0 1 1 1v3h3a1 1 0 1 1 0 2h-3v3a1 1 0 1 1-2 0v-3H6a1 1 0 1 1 0-2h3V6a1 1 0 0 1 1-1Z"/></svg>
+      + Yeni Filtre
+    </button>
+  </div>
+
+  <% if (!filters || filters.length === 0) { %>
+  <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-12 text-center">
+    <div class="text-5xl text-gray-200 mb-4"><i class="fas fa-filter"></i></div>
+    <p class="text-gray-500 mb-2">Hələ heç bir filtr yoxdur.</p>
+    <p class="text-gray-400 text-sm">İlk filtri yaratmaq üçün yuxarıdakı "+ Yeni Filtre" düyməsini istifadə edin.</p>
+  </div>
+  <% } else { %>
+  <div class="space-y-4" id="filtersContainer">
+    <% filters.forEach(function(filter) { %>
+      <% var fName = (filter.name && (filter.name.az || filter.name.en || filter.name.ru)) || filter.key; %>
+      <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden" id="filter-card-<%= filter.id %>">
+        <!-- Filter header -->
+        <div class="flex items-center justify-between px-5 py-4 border-b border-gray-100">
+          <div class="flex items-center gap-3 flex-1 min-w-0">
+            <button onclick="toggleOptions('<%= filter.id %>')" class="text-gray-400 hover:text-gray-600 transition-transform" id="chevron-<%= filter.id %>">
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 0 1 1.414 0L10 10.586l3.293-3.293a1 1 0 1 1 1.414 1.414l-4 4a1 1 0 0 1-1.414 0l-4-4a1 1 0 0 1 0-1.414Z" clip-rule="evenodd"/></svg>
+            </button>
+            <div class="min-w-0">
+              <div class="flex items-center gap-2">
+                <span class="font-semibold text-gray-800 truncate"><%= fName %></span>
+                <span class="px-2 py-0.5 bg-gray-100 text-gray-500 text-xs rounded-md font-mono"><%= filter.key %></span>
+              </div>
+              <p class="text-xs text-gray-400 mt-0.5">
+                <%= filter.options ? filter.options.length : 0 %> seçim
+                <% if (filter.sortOrder) { %> · sıra: <%= filter.sortOrder %><% } %>
+              </p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <% if (filter.isActive) { %>
+              <span class="px-2 py-1 text-xs font-medium text-green-700 bg-green-100 rounded-full">Aktiv</span>
+            <% } else { %>
+              <span class="px-2 py-1 text-xs font-medium text-red-700 bg-red-100 rounded-full">Passiv</span>
+            <% } %>
+            <button onclick="openOptionModal(null, <%= filter.id %>)" class="px-3 py-1.5 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 rounded-lg text-xs font-medium">+ Seçim</button>
+            <button onclick="editFilter(<%= filter.id %>)" class="px-3 py-1.5 bg-gray-50 text-gray-600 hover:bg-gray-100 rounded-lg text-xs font-medium">Düzəliş</button>
+            <button onclick="deleteFilter(<%= filter.id %>)" class="px-3 py-1.5 bg-red-50 text-red-600 hover:bg-red-100 rounded-lg text-xs font-medium">Sil</button>
+          </div>
+        </div>
+
+        <!-- Options body (hidden by default) -->
+        <div id="options-<%= filter.id %>" class="hidden">
+          <% if (!filter.options || filter.options.length === 0) { %>
+          <div class="px-5 py-6 text-center text-gray-400 text-sm">Bu filtr üçün hələ seçim yoxdur. "+ Seçim" ilə əlavə edin.</div>
+          <% } else { %>
+          <table class="w-full text-sm text-left text-gray-500">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+              <tr>
+                <th class="px-5 py-2.5">Ad</th>
+                <th class="px-5 py-2.5">Value (key)</th>
+                <th class="px-5 py-2.5">Sıra</th>
+                <th class="px-5 py-2.5">Status</th>
+                <th class="px-5 py-2.5 text-right">Əməliyyatlar</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% filter.options.forEach(function(opt) { %>
+                <% var oName = (opt.name && (opt.name.az || opt.name.en || opt.name.ru)) || opt.value; %>
+                <tr class="border-b border-gray-50 hover:bg-gray-50/50">
+                  <td class="px-5 py-2.5 font-medium text-gray-800"><%= oName %></td>
+                  <td class="px-5 py-2.5 font-mono text-xs text-gray-500"><%= opt.value %></td>
+                  <td class="px-5 py-2.5"><%= opt.sortOrder || 0 %></td>
+                  <td class="px-5 py-2.5">
+                    <% if (opt.isActive) { %>
+                      <span class="px-2 py-0.5 text-xs font-medium text-green-700 bg-green-100 rounded-full">Aktiv</span>
+                    <% } else { %>
+                      <span class="px-2 py-0.5 text-xs font-medium text-red-700 bg-red-100 rounded-full">Passiv</span>
+                    <% } %>
+                  </td>
+                  <td class="px-5 py-2.5">
+                    <div class="flex items-center justify-end gap-3">
+                      <button onclick="editOption(<%= opt.id %>)" class="text-indigo-600 hover:text-indigo-800 text-xs font-medium">Düzəliş</button>
+                      <button onclick="deleteOption(<%= opt.id %>)" class="text-red-600 hover:text-red-800 text-xs font-medium">Sil</button>
+                    </div>
+                  </td>
+                </tr>
+              <% }); %>
+            </tbody>
+          </table>
+          <% } %>
+        </div>
+      </div>
+    <% }); %>
+  </div>
+  <% } %>
+</div>
+
+<!-- ===== FILTER MODAL ===== -->
+<div id="filterModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
+  <div class="flex items-center justify-center min-h-screen px-4 py-8">
+    <div class="fixed inset-0 bg-black opacity-50" onclick="closeFilterModal()"></div>
+    <div class="relative bg-white rounded-lg shadow-xl max-w-lg w-full p-6">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-lg font-semibold text-gray-900" id="filterModalTitle">Yeni Filtre</h3>
+        <button onclick="closeFilterModal()" class="text-gray-400 hover:text-gray-600">&times;</button>
+      </div>
+      <form id="filterForm" class="space-y-4">
+        <input type="hidden" id="filterId">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Key (sistem identifikatoru) *</label>
+          <input type="text" id="filterKey" required placeholder="category, city, education, experience" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 font-mono">
+          <p class="text-xs text-gray-400 mt-1">Kiçik hərflər, boşluqsuz. Sistem bu key ilə filtri tanıyır.</p>
+        </div>
+        <div class="grid grid-cols-3 gap-3">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Ad (AZ) *</label>
+            <input type="text" id="filterNameAz" required class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Ad (EN)</label>
+            <input type="text" id="filterNameEn" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Ad (RU)</label>
+            <input type="text" id="filterNameRu" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500">
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Sıra</label>
+            <input type="number" id="filterSortOrder" value="0" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500">
+          </div>
+          <div class="flex items-end pb-1">
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" id="filterIsActive" checked class="w-4 h-4 text-indigo-600 rounded border-gray-300 focus:ring-indigo-500">
+              <span class="text-sm text-gray-700">Aktiv</span>
+            </label>
+          </div>
+        </div>
+        <div class="flex justify-end gap-3 pt-2">
+          <button type="button" onclick="closeFilterModal()" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 text-sm">Ləğv et</button>
+          <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 text-sm">Saxla</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- ===== OPTION MODAL ===== -->
+<div id="optionModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
+  <div class="flex items-center justify-center min-h-screen px-4 py-8">
+    <div class="fixed inset-0 bg-black opacity-50" onclick="closeOptionModal()"></div>
+    <div class="relative bg-white rounded-lg shadow-xl max-w-lg w-full p-6">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-lg font-semibold text-gray-900" id="optionModalTitle">Yeni Seçim</h3>
+        <button onclick="closeOptionModal()" class="text-gray-400 hover:text-gray-600">&times;</button>
+      </div>
+      <form id="optionForm" class="space-y-4">
+        <input type="hidden" id="optionId">
+        <input type="hidden" id="optionFilterId">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Value (sistem dəyəri) *</label>
+          <input type="text" id="optionValue" required placeholder="it, marketing, baki, gence" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 font-mono">
+          <p class="text-xs text-gray-400 mt-1">Kiçik hərflər, boşluqsuz, unikal olmalıdır.</p>
+        </div>
+        <div class="grid grid-cols-3 gap-3">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Ad (AZ) *</label>
+            <input type="text" id="optionNameAz" required class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Ad (EN)</label>
+            <input type="text" id="optionNameEn" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Ad (RU)</label>
+            <input type="text" id="optionNameRu" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500">
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Sıra</label>
+            <input type="number" id="optionSortOrder" value="0" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500">
+          </div>
+          <div class="flex items-end pb-1">
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" id="optionIsActive" checked class="w-4 h-4 text-indigo-600 rounded border-gray-300 focus:ring-indigo-500">
+              <span class="text-sm text-gray-700">Aktiv</span>
+            </label>
+          </div>
+        </div>
+        <div class="flex justify-end gap-3 pt-2">
+          <button type="button" onclick="closeOptionModal()" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 text-sm">Ləğv et</button>
+          <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 text-sm">Saxla</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+window.__FILTERS__ = <%- JSON.stringify(filters || []).replace(/</g, '\\u003c') %>;
+</script>

@@ -1,5 +1,6 @@
 import FilterRepository from '../Repositories/FilterRepository.js';
 import FilterOptionRepository from '../Repositories/FilterOptionRepository.js';
+import FilterOption from '../Entities/FilterOption.js';
 
 const filterController = {
     getAll: async (req, res, next) => {
@@ -16,6 +17,22 @@ const filterController = {
             const filters = await FilterRepository.findAll({
                 where: { isActive: true },
                 include: ['options'] // using association alias
+            });
+            res.json(filters);
+        } catch (err) {
+            next(err);
+        }
+    },
+
+    // Admin: returns all filters with ALL options (active + inactive)
+    getAllWithAllOptions: async (req, res, next) => {
+        try {
+            const filters = await FilterRepository.findAll({
+                include: [{ model: FilterOption, as: 'options', required: false }],
+                order: [
+                    ['sortOrder', 'ASC'],
+                    [{ model: FilterOption, as: 'options' }, 'sortOrder', 'ASC']
+                ]
             });
             res.json(filters);
         } catch (err) {
