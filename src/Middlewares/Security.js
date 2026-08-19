@@ -12,8 +12,10 @@ const csrf = csurf({ cookie: true });
 // CSRF Protection (expects cookie-parser to be initialized before it)
 // JSON API auth endpoints are exempt — they are protected by rate limiting,
 // and the SPA frontend does not send CSRF tokens with axios calls.
+// /api/filters is admin-only (protected in FilterRoutes) and uses SPA-style axios calls.
 export const csrfProtection = (req, res, next) => {
     if (req.path.startsWith('/api/auth/')) return next();
+    if (req.path.startsWith('/api/filters')) return next();
     return csrf(req, res, next);
 };
 

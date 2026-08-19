@@ -3,7 +3,7 @@
     <script src="/Js/Libraries/ckeditor.js"></script>
     <link rel="stylesheet" href="/Css/Libraries/Ckeditor5.min.css">
     <% } %>
-    <script type="module" src="/Js/<%= js %>?v=20260723"></script>
+    <script type="module" src="/Js/<%= js %>?v=20260819"></script>
 <% } %>
 <!-- Google AdSense (deferred) -->
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8722833871752467"
@@ -19,11 +19,11 @@
 </script>
 
 <script>
-    window.currentUser = <%- JSON.stringify(typeof user !== 'undefined' && user ? { _id: user._id, role: user.role, name: user.name, surname: user.surname, email: user.email, phone: user.phone || '', companyName: user.companyName || null } : null) %>;
+    window.currentUser = <%- JSON.stringify(typeof user !== 'undefined' && user ? { id: user.id, _id: user.id, role: user.role, name: user.name, surname: user.surname, email: user.email, phone: user.phone || '', companyName: user.companyName || null } : null) %>;
 </script>
-<script type="module" src="/Js/Global.js?v=20260723"></script>
-<script type="module" src="/Js/Libraries/Alertify/alertify.min.js?v=20260723"></script>
-<script src="/Js/Libraries/Axios.min.js?v=20260723"></script>
+<script type="module" src="/Js/Global.js?v=20260819"></script>
+<script type="module" src="/Js/Libraries/Alertify/alertify.min.js?v=20260819"></script>
+<script src="/Js/Libraries/Axios.min.js?v=20260819"></script>
 
 
 

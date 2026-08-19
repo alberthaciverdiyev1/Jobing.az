@@ -11,8 +11,11 @@ router.get('/admin', adminController.dashboard);
 router.get('/admin/users', adminController.usersList);
 router.get('/admin/companies', adminController.companiesList);
 router.get('/admin/jobs', adminController.vacanciesList);
-router.get('/admin/categories', adminController.categoriesList);
-router.get('/admin/cities', adminController.citiesList);
+router.get('/admin/filters', adminController.filtersList);
+
+// Categories & Cities are now managed through the unified Filters page
+router.get('/admin/categories', (req, res) => res.redirect('/admin/filters'));
+router.get('/admin/cities', (req, res) => res.redirect('/admin/filters'));
 router.get('/admin/blogs', adminController.blogsList);
 router.get('/admin/news', adminController.newsList);
 router.get('/admin/rss-sources', adminController.rssList);
