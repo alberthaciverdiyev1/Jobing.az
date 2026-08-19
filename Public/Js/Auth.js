@@ -73,9 +73,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     // Check for redirect param from URL
                     var redirect = new URLSearchParams(window.location.search).get('redirect');
                     if (redirect) {
-                        // User role can't access /add-job — redirect to dashboard with message
-                        if (redirect === '/add-job' && res.data.user.role === 'user') {
-                            window.location.href = '/dashboard?msg=post_job_company';
+                        // User role can't post a job — redirect to profile with message
+                        if ((redirect === '/add-job' || redirect === '/vakansiyalar/elave-et') && res.data.user.role === 'user') {
+                            window.location.href = '/profile?msg=post_job_company';
                             return;
                         }
                         window.location.href = redirect;
@@ -84,11 +84,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     // Redirect based on role
                     const role = res.data.user.role;
                     if (role === 'admin') {
-                        window.location.href = '/admin/dashboard';
+                        window.location.href = '/admin';
                     } else if (role === 'company' || role === 'hr') {
-                        window.location.href = '/hr/dashboard';
+                        window.location.href = '/sirket-profili';
                     } else {
-                        window.location.href = '/dashboard';
+                        window.location.href = '/profile';
                     }
                 }
             } catch (err) {
@@ -110,21 +110,16 @@ document.addEventListener('DOMContentLoaded', () => {
             const email = document.getElementById('reg-email').value.trim();
             const phone = document.getElementById('reg-phone').value.trim();
             const password = document.getElementById('reg-password').value;
-            const confirmPassword = document.getElementById('reg-confirm-password').value;
             const role = document.getElementById('reg-role').value;
             const companyName = document.getElementById('reg-company-name')?.value.trim();
 
             // Validation
-            if (!name || !surname || !email || !password || !confirmPassword) {
+            if (!name || !surname || !email || !password) {
                 alertify.error('Bütün məcburi xanaları doldurun');
                 return;
             }
             if (password.length < 6) {
                 alertify.error('Şifrə ən az 6 simvol olmalıdır');
-                return;
-            }
-            if (password !== confirmPassword) {
-                alertify.error('Şifrələr uyğun gəlmir');
                 return;
             }
             if (role === 'company' && !companyName) {
@@ -135,18 +130,18 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 const res = await axios.post('/api/auth/register', {
                     name, surname, email, phone, password,
-                    confirmPassword, role, companyName
+                    role, companyName
                 });
 
                 if (res.status === 201) {
                     alertify.success(res.data.message);
                     const userRole = res.data.user.role;
                     if (userRole === 'admin') {
-                        window.location.href = '/admin/dashboard';
+                        window.location.href = '/admin';
                     } else if (userRole === 'company' || userRole === 'hr') {
-                        window.location.href = '/hr/dashboard';
+                        window.location.href = '/sirket-profili';
                     } else {
-                        window.location.href = '/dashboard';
+                        window.location.href = '/profile';
                     }
                 }
             } catch (err) {

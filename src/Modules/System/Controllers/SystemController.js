@@ -16,7 +16,7 @@ const SystemController = {
         res.render('Main', {
             title: 'Haqqımızda',
             description: 'Jobing.az haqqında',
-            body: "Static/About.ejs",
+            body: "AboutUs/Index.ejs",
             js: null,
             currentPage: 'about'
         });
@@ -26,7 +26,7 @@ const SystemController = {
         res.render('Main', {
             title: 'Əlaqə',
             description: 'Bizimlə əlaqə saxlayın',
-            body: "Static/Contact.ejs",
+            body: "ContactUs/Index.ejs",
             js: null,
             currentPage: 'contact'
         });
@@ -36,7 +36,7 @@ const SystemController = {
         res.render('Main', {
             title: 'Tez-Tez Verilən Suallar',
             description: 'FAQ',
-            body: "Static/Faq.ejs",
+            body: "AboutUs/Faq.ejs",
             js: null,
             currentPage: 'faq'
         });

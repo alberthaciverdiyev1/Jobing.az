@@ -22,7 +22,7 @@ class VacancyService extends IVacancyService {
             jobs: rows,
             totalCount: count,
             hideLoadMore: (limit + offset >= count),
-            body: "Jobs/List.ejs",
+            body: "Jobs/Index.ejs",
             js: "List.js"
         };
     }
