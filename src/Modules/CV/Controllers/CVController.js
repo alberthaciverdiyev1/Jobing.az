@@ -30,7 +30,7 @@ const CVController = {
             const cvs = await CVService.getMyCVs(req.user.id);
             res.render('Main', {
                 title: 'Mənim CV-lərim',
-                body: 'Profile/MyCVs.ejs',
+                body: 'CV/List.ejs',
                 js: 'Profile.js',
                 currentPage: 'profile-cvs',
                 cvs

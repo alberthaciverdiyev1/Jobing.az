@@ -72,7 +72,7 @@ class ContentService extends IContentService {
             ogTitle: newsItem.title,
             ogImage: newsItem.coverImage,
             ogType: 'article',
-            body: "News/Details.ejs",
+            body: "News/Detail.ejs",
             data: newsItem,
             js: null,
             currentPage: 'news'

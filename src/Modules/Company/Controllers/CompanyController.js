@@ -41,7 +41,7 @@ const CompanyController = {
             const company = await CompanyRepository.findByCompanyName(req.user.companyName);
             res.render('Main', {
                 title: 'Şirkət Profili',
-                body: 'Company/Profile.ejs',
+                body: 'Dashboard/Company.ejs',
                 js: 'CompanyProfile.js',
                 currentPage: 'company-profile',
                 company

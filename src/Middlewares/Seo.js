@@ -1,59 +1,38 @@
 import Seo from '../Modules/System/Entities/Seo.js';
 import Cache from '../Helpers/Cache.js';
 
-const SEO_CACHE_TTL = 600; // 10 minutes
+const SEO_CACHE_TTL = 600;
 
 const seoMiddleware = async (req, res, next) => {
     try {
-        let path = req.path.replace(/\/+$/, '') || '/';
+        let reqPath = req.path.replace(/\/+$/, '') || '/';
 
-        // Custom route redirect check — cached (rarely changes)
-        let routeWithCustom = Cache.get(`seo:redirect:${path}`);
-        if (routeWithCustom === undefined) {
-            routeWithCustom = await Seo.findOne({ route: path, isActive: true, customRoute: { $ne: '' } }).lean() || null;
-            Cache.set(`seo:redirect:${path}`, routeWithCustom, SEO_CACHE_TTL);
-        }
-        if (routeWithCustom) {
-            const qs = req.url.includes('?') ? req.url.slice(req.url.indexOf('?')) : '';
-            return res.redirect(301, routeWithCustom.customRoute + qs);
-        }
-
-        // Custom route alias check — cached
-        let customEntry = Cache.get(`seo:alias:${path}`);
-        if (customEntry === undefined) {
-            customEntry = await Seo.findOne({ customRoute: path, isActive: true }).lean() || null;
-            Cache.set(`seo:alias:${path}`, customEntry, SEO_CACHE_TTL);
-        }
-        if (customEntry && customEntry.route) {
-            req.url = req.originalUrl.replace(req.path, customEntry.route);
-            path = customEntry.route;
-        }
-
-        // Look up SEO data — cached
-        let seoData = Cache.get(`seo:data:${path}`);
+        // Look up SEO data by path — cached
+        let seoData = Cache.get(`seo:data:${reqPath}`);
         if (seoData === undefined) {
-            seoData = await Seo.findOne({ route: path, isActive: true }).lean() || null;
-            Cache.set(`seo:data:${path}`, seoData, SEO_CACHE_TTL);
+            seoData = await Seo.findOne({ where: { path: reqPath, isActive: true } });
+            Cache.set(`seo:data:${reqPath}`, seoData || null, SEO_CACHE_TTL);
         }
 
+        // Fallback: try parent path
         if (!seoData) {
-            const parentPath = '/' + path.split('/').filter(Boolean).slice(0, 1).join('/');
-            if (parentPath !== path) {
+            const parentPath = '/' + reqPath.split('/').filter(Boolean).slice(0, 1).join('/');
+            if (parentPath !== reqPath) {
                 seoData = Cache.get(`seo:data:${parentPath}`);
                 if (seoData === undefined) {
-                    seoData = await Seo.findOne({ route: parentPath, isActive: true }).lean() || null;
-                    Cache.set(`seo:data:${parentPath}`, seoData, SEO_CACHE_TTL);
+                    seoData = await Seo.findOne({ where: { path: parentPath, isActive: true } });
+                    Cache.set(`seo:data:${parentPath}`, seoData || null, SEO_CACHE_TTL);
                 }
             }
         }
 
         if (seoData) {
-            res.locals.seo = seoData;
+            res.locals.seo = seoData.toJSON ? seoData.toJSON() : seoData;
         }
 
         next();
     } catch (error) {
-        console.error('SEO middleware error:', error.message);
+        // Silently continue if SEO table doesn't exist yet
         next();
     }
 };

@@ -21,7 +21,7 @@ class JobSeekerService extends IJobSeekerService {
             jobs: rows,
             totalCount: count,
             hideLoadMore: (limit + offset >= count),
-            body: "JobSeeker/List.ejs",
+            body: "JobSeeker/Index.ejs",
             js: "JobSeekerList.js"
         };
     }

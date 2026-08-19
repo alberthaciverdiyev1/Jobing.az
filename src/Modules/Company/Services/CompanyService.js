@@ -42,7 +42,7 @@ class CompanyService extends ICompanyService {
             ogTitle: company.companyName,
             ogImage: company.imageUrl,
             ogType: 'website',
-            body: "Company/Details.ejs",
+            body: "Company/Detail.ejs",
             data: company,
             jobs,
             js: null,

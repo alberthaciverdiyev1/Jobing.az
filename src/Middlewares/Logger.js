@@ -42,10 +42,17 @@ export const morganMiddleware = morgan(
 // Global Error Handler Middleware
 export const globalErrorHandler = (err, req, res, next) => {
     logger.error(`${err.status || 500} - ${err.message} - ${req.originalUrl} - ${req.method} - ${req.ip}`);
-    
+
+    const status = err.status || 500;
+    // JSON API requests get a structured error response
+    if (req.path.startsWith('/api/') || req.xhr || req.headers.accept?.includes('json')) {
+        return res.status(status).json({
+            error: process.env.NODE_ENV === 'development' ? err.message : 'Sistemdə gözlənilməz bir xəta baş verdi.'
+        });
+    }
     // In pure MVC, we render an error page
-    res.status(err.status || 500);
-    res.render('Partials/Error.ejs', { 
+    res.status(status);
+    res.render('Partials/Error.ejs', {
         title: 'Xəta Baş Verdi',
         message: process.env.NODE_ENV === 'development' ? err.message : 'Sistemdə gözlənilməz bir xəta baş verdi.'
     });

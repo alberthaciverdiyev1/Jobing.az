@@ -89,6 +89,9 @@ app.use('/', routes);
 
 // 404 and Global Error Handling
 app.use((req, res, next) => {
+    if (req.path.startsWith('/api/') || req.xhr || req.headers.accept?.includes('json')) {
+        return res.status(404).json({ error: 'Tapılmadı' });
+    }
     res.status(404).render('Partials/Error.ejs', { title: '404 - Tapılmadı', message: 'Səhifə tapılmadı.' });
 });
 app.use(globalErrorHandler);

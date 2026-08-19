@@ -48,13 +48,26 @@ router.post('/set-lang', (req, res) => {
 // 404 HANDLER
 // ============================================================
 router.use((req, res) => {
-    res.render('Partials/Error.ejs');
+    // JSON API requests get a structured 404, everything else gets the error page
+    if (req.path.startsWith('/api/') || req.xhr || req.headers.accept?.includes('json')) {
+        return res.status(404).json({ error: 'Tapılmadı' });
+    }
+    res.status(404).render('Partials/Error.ejs', {
+        title: '404 - Tapılmadı',
+        message: 'Səhifə tapılmadı.'
+    });
 });
 
 router.use((err, req, res, next) => {
     logError(err, { source: 'main-router-error', url: req?.originalUrl || req?.url });
     console.error('Route error:', err.message);
-    res.render('Partials/Error.ejs');
+    if (req.path.startsWith('/api/') || req.xhr || req.headers.accept?.includes('json')) {
+        return res.status(500).json({ error: 'Daxili xəta baş verdi' });
+    }
+    res.status(500).render('Partials/Error.ejs', {
+        title: '500 - Daxili Xəta',
+        message: err.message || 'Daxili xəta baş verdi.'
+    });
 });
 
 export default router;
