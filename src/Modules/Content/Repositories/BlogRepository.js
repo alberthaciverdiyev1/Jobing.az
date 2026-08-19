@@ -25,5 +25,4 @@ class BlogRepository extends BaseRepository {
         });
     }
 }
-Object.setPrototypeOf(BlogRepository.prototype, IBlogRepository.prototype);
 export default new BlogRepository();

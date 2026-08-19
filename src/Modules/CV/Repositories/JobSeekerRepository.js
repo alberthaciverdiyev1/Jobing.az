@@ -37,5 +37,4 @@ class JobSeekerRepository extends BaseRepository {
         });
     }
 }
-Object.setPrototypeOf(JobSeekerRepository.prototype, IJobSeekerRepository.prototype);
 export default new JobSeekerRepository();

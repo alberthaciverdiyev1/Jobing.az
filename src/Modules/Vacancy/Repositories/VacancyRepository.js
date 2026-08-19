@@ -62,7 +62,4 @@ class VacancyRepository extends BaseRepository {
     }
 }
 
-// Enforce interface in JS (Duck typing check or just documentation)
-Object.setPrototypeOf(VacancyRepository.prototype, IVacancyRepository.prototype);
-
 export default new VacancyRepository();

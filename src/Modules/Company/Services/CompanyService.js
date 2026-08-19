@@ -28,7 +28,11 @@ class CompanyService extends ICompanyService {
 
     async getCompanyDetailsViewModel(id) {
         const company = await CompanyRepository.findById(id);
-        if (!company) throw new Error('Şirkət tapılmadı');
+        if (!company) {
+            const error = new Error('Şirkət tapılmadı');
+            error.status = 404;
+            throw error;
+        }
 
         const jobs = await VacancyRepository.model.findAll({
             where: { companyName: company.companyName, isActive: true },

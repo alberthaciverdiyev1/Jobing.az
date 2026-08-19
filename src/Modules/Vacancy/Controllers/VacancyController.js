@@ -29,7 +29,9 @@ const vacancyController = {
             title: 'Vakansiya Əlavə Et',
             body: 'Jobs/Add.ejs',
             js: 'AddJob.js',
-            currentPage: 'add-job'
+            currentPage: 'add-job',
+            // The form disables company fields when companyInfo is present
+            companyInfo: null
         });
     },
 

@@ -1,5 +1,6 @@
 import CompanyService from '../Services/CompanyService.js';
 import CompanyRepository from '../Repositories/CompanyRepository.js';
+import VacancyRepository from '../../Vacancy/Repositories/VacancyRepository.js';
 import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
@@ -39,12 +40,18 @@ const CompanyController = {
         try {
             if (req.user.role !== 'company') return res.redirect('/');
             const company = await CompanyRepository.findByCompanyName(req.user.companyName);
+            const jobs = await VacancyRepository.model.findAll({
+                where: { companyName: req.user.companyName },
+                order: [['createdAt', 'DESC']],
+                limit: 50
+            });
             res.render('Main', {
                 title: 'Şirkət Profili',
                 body: 'Dashboard/Company.ejs',
                 js: 'CompanyProfile.js',
                 currentPage: 'company-profile',
-                company
+                company,
+                jobs
             });
         } catch (error) {
             next(error);

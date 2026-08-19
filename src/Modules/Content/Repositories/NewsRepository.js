@@ -25,5 +25,4 @@ class NewsRepository extends BaseRepository {
         });
     }
 }
-Object.setPrototypeOf(NewsRepository.prototype, INewsRepository.prototype);
 export default new NewsRepository();

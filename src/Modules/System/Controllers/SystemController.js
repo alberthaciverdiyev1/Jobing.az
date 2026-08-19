@@ -53,7 +53,12 @@ const SystemController = {
                 currentPage: 'pricing',
                 plans,
                 hasDaily: true,
-                hasMonthly: true
+                hasMonthly: true,
+                // The view groups plans by type (promote/premium) and duration (daily/monthly)
+                promoteDaily: plans.filter(p => p.type === 'promote' && p.duration === 'daily'),
+                premiumDaily: plans.filter(p => p.type === 'premium' && p.duration === 'daily'),
+                promoteMonthly: plans.filter(p => p.type === 'promote' && p.duration === 'monthly'),
+                premiumMonthly: plans.filter(p => p.type === 'premium' && p.duration === 'monthly')
             });
         } catch (error) {
             next(error);
