@@ -4,6 +4,9 @@ namespace App\Modules\Application\Filament\Resources;
 
 use App\Modules\Application\Filament\Resources\MyApplicationsResource\Pages;
 use App\Modules\Application\Models\Application;
+use Filament\Infolists\Components\Section;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -69,6 +72,76 @@ class MyApplicationsResource extends Resource
             ->defaultSort('created_at', 'desc')
             ->actions([
                 Tables\Actions\ViewAction::make(),
+            ]);
+    }
+
+    public static function infolist(Infolist $infolist): Infolist
+    {
+        return $infolist
+            ->schema([
+                Section::make('Vakansiya Detalları')
+                    ->description(__('Müraciət etdiyiniz vakansiya haqqında məlumat.'))
+                    ->schema([
+                        TextEntry::make('vacancy.company.name')
+                            ->label('Şirkət')
+                            ->icon('heroicon-o-building-office-2'),
+                        TextEntry::make('vacancy.title')
+                            ->label('Pozisyon')
+                            ->weight('bold')
+                            ->color('primary')
+                            ->url(fn (Application $record): ?string => $record->vacancy
+                                ? route('jobs.show', $record->vacancy->slug)
+                                : null),
+                        TextEntry::make('vacancy.workplace_type_name')
+                            ->label('İş Yeri')
+                            ->placeholder('—'),
+                        TextEntry::make('vacancy.job_type_name')
+                            ->label('İş Rejimi')
+                            ->placeholder('—'),
+                        TextEntry::make('vacancy.experience_level_name')
+                            ->label('Təcrübə')
+                            ->placeholder('—'),
+                        TextEntry::make('vacancy.city_name')
+                            ->label('Şəhər')
+                            ->icon('heroicon-o-map-pin')
+                            ->placeholder('—'),
+                        TextEntry::make('vacancy.formatted_salary')
+                            ->label('Maaş')
+                            ->badge()
+                            ->color('success'),
+                        TextEntry::make('vacancy.deadline')
+                            ->label('Son Müraciət Tarixi')
+                            ->date('d.m.Y')
+                            ->placeholder('—'),
+                    ])->columns(2),
+
+                Section::make('Müraciətim')
+                    ->description(__('Müraciətinizin vəziyyəti və şirkətin cavabı.'))
+                    ->schema([
+                        TextEntry::make('status')
+                            ->label('Durum')
+                            ->badge()
+                            ->color(fn (string $state): string => match ($state) {
+                                'Beklemede' => 'gray',
+                                'İncelendi' => 'info',
+                                'Mülakat' => 'warning',
+                                'Teklif', 'Kabul' => 'success',
+                                'Red' => 'danger',
+                                default => 'primary',
+                            }),
+                        TextEntry::make('created_at')
+                            ->label('Müraciət Tarixi')
+                            ->dateTime('d.m.Y H:i'),
+                        TextEntry::make('viewed_at')
+                            ->label('Şirkət Baxışı')
+                            ->dateTime('d.m.Y H:i')
+                            ->placeholder(__('Şirkət hələ baxmayıb')),
+                        TextEntry::make('notes')
+                            ->label('Şirkətin Cavabı')
+                            ->placeholder(__('Şirkət hələ cavab yazmayıb'))
+                            ->markdown()
+                            ->columnSpanFull(),
+                    ])->columns(3),
             ]);
     }
 
