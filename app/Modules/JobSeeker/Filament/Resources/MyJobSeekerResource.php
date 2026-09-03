@@ -189,10 +189,6 @@ class MyJobSeekerResource extends Resource
                     ->weight('bold')
                     ->limit(35),
 
-                Tables\Columns\TextColumn::make('category.name')
-                    ->label('Kateqoriya')
-                    ->searchable(),
-
                 Tables\Columns\TextColumn::make('formatted_salary')
                     ->label('Gözlənilən Maaş')
                     ->badge()
@@ -233,6 +229,39 @@ class MyJobSeekerResource extends Resource
             ])
             ->defaultSort('created_at', 'desc')
             ->actions([
+
+                // İrəli çək (WhatsApp siparişi — web modalı)
+                Tables\Actions\Action::make('promote_bump')
+                    ->label('İrəli Çək')
+                    ->icon('heroicon-o-arrow-up-circle')
+                    ->color('success')
+                    ->modalHeading('Elanı İrəli Çək')
+                    ->modalWidth('md')
+                    ->modalSubmitAction(fn () => false)
+                    ->modalCancelActionLabel('Bağla')
+                    ->modalContent(fn (JobSeeker $record) => view('components.promotion-whatsapp', [
+                        'mode' => 'bump',
+                        'itemLabel' => __('İş Axtarış Elanı'),
+                        'title' => $record->title,
+                        'id' => $record->id,
+                    ])),
+
+                // Premium (WhatsApp siparişi — web modalı)
+                Tables\Actions\Action::make('promote_premium')
+                    ->label('Premium Et')
+                    ->icon('heroicon-o-sparkles')
+                    ->color('amber')
+                    ->modalHeading('Premium Status Qazan')
+                    ->modalWidth('md')
+                    ->modalSubmitAction(fn () => false)
+                    ->modalCancelActionLabel('Bağla')
+                    ->modalContent(fn (JobSeeker $record) => view('components.promotion-whatsapp', [
+                        'mode' => 'premium',
+                        'itemLabel' => __('İş Axtarış Elanı'),
+                        'title' => $record->title,
+                        'id' => $record->id,
+                    ])),
+
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
             ]);
