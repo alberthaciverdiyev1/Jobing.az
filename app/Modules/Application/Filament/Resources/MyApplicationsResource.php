@@ -64,6 +64,16 @@ class MyApplicationsResource extends Resource
                         default => 'primary',
                     }),
 
+                // Şirkət cavab veribsə (mesaj varsa) bunu göstər.
+                Tables\Columns\TextColumn::make('reply_marker')
+                    ->label('Cavab')
+                    ->state(fn (Application $record): string => filled($record->notes)
+                        ? __('Yeni mesaj')
+                        : '—')
+                    ->badge()
+                    ->color(fn (string $state): string => $state === '—' ? 'gray' : 'success')
+                    ->icon(fn (string $state) => $state === '—' ? null : 'heroicon-o-chat-bubble-left-right'),
+
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Başvuru Tarihi')
                     ->dateTime('d.m.Y')
