@@ -37,7 +37,7 @@ class UserPanelProvider extends PanelProvider
             ->resources([
                 \App\Modules\Application\Filament\Resources\MyApplicationsResource::class,
                 \App\Modules\JobSeeker\Filament\Resources\MyJobSeekerResource::class,
-                \App\Modules\Resume\Filament\Resources\ResumeResource::class,
+                \App\Modules\Resume\Filament\Resources\MyResumeResource::class,
             ])
             ->pages([
                 Pages\Dashboard::class,

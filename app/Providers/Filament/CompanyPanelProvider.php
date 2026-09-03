@@ -34,11 +34,11 @@ class CompanyPanelProvider extends PanelProvider
             ->databaseNotifications()
             ->breadcrumbs(false)
             ->resources([
-                \App\Modules\Vacancy\Filament\Resources\VacancyResource::class,
+                \App\Modules\Vacancy\Filament\Resources\CompanyVacancyResource::class,
                 \App\Modules\Application\Filament\Resources\CompanyApplicationResource::class,
-                \App\Modules\JobSeeker\Filament\Resources\JobSeekerResource::class,
-                \App\Modules\Resume\Filament\Resources\ResumeResource::class,
-                \App\Modules\Company\Filament\Resources\MessageTemplateResource::class,
+                \App\Modules\JobSeeker\Filament\Resources\CompanyJobSeekerResource::class,
+                \App\Modules\Resume\Filament\Resources\CompanyResumeResource::class,
+                \App\Modules\Company\Filament\Resources\CompanyMessageTemplateResource::class,
             ])
             ->pages([
                 \App\Modules\Company\Filament\Pages\CompanyProfile::class,
