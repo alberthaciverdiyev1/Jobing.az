@@ -27,6 +27,11 @@ class CompanyMessageTemplateResource extends Resource
         return true;
     }
 
+    public static function canCreate(): bool
+    {
+        return true;
+    }
+
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()->where('company_id', auth()->user()?->company_id);
