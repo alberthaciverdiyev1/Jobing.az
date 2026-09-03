@@ -34,7 +34,16 @@ class MyApplicationsResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()->where('user_id', auth()->id());
+        $query = parent::getEloquentQuery()
+            ->where('user_id', auth()->id());
+
+        // Mesajı olanlar üstte (ən son cavaba görə), mesajı olmayanlar isə tarixə görə.
+        $query->orderByRaw("
+            CASE WHEN notes IS NOT NULL AND TRIM(notes) <> '' THEN 0 ELSE 1 END ASC,
+            CASE WHEN notes IS NOT NULL AND TRIM(notes) <> '' THEN COALESCE(updated_at, created_at) ELSE created_at END DESC
+        ");
+
+        return $query;
     }
 
     public static function table(Table $table): Table
@@ -64,10 +73,10 @@ class MyApplicationsResource extends Resource
                         default => 'primary',
                     }),
 
-                // Şirkət cavab veribsə (mesaj varsa) bunu göstər.
+                // Şirkət cavabı varsa və hələ oxunmayıbsa "Yeni mesaj" göstər.
                 Tables\Columns\TextColumn::make('reply_marker')
                     ->label('Cavab')
-                    ->state(fn (Application $record): string => filled($record->notes)
+                    ->state(fn (Application $record): string => $record->hasUnseenReply()
                         ? __('Yeni mesaj')
                         : '—')
                     ->badge()
@@ -79,7 +88,6 @@ class MyApplicationsResource extends Resource
                     ->dateTime('d.m.Y')
                     ->sortable(),
             ])
-            ->defaultSort('created_at', 'desc')
             ->actions([
                 Tables\Actions\ViewAction::make(),
             ]);

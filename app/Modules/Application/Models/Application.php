@@ -44,12 +44,26 @@ class Application extends Model
         'linkedin_url',
         'status',
         'viewed_at',
+        'reply_seen_at',
         'notes',
     ];
 
     protected $casts = [
         'viewed_at' => 'datetime',
+        'reply_seen_at' => 'datetime',
     ];
+
+    /**
+     * Şirkət cavabı varsa və hələ oxunmayıbsa true (rozet göstərilir).
+     */
+    public function hasUnseenReply(): bool
+    {
+        if (! filled($this->notes)) {
+            return false;
+        }
+
+        return $this->reply_seen_at === null || $this->reply_seen_at->lt($this->updated_at);
+    }
 
     public function vacancy(): BelongsTo
     {
