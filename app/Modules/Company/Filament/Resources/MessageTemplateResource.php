@@ -45,7 +45,8 @@ class MessageTemplateResource extends Resource
         return $form
             ->schema([
                 Forms\Components\Section::make('Şablon Məlumatları')
-                    ->description('Bütün namizədlərə göndəriləcək mesaj şablonunu 4 dildə tənzimləyin. Dinamik dəyişənlər: {applicant_name}, {vacancy_title}, {company_name}')
+                    ->description('Mesaj şablonunu 4 dildə tənzimləyin. Göndərmə zamanı { } içindəki parametrlər avtomatik dolur: '
+                        . \App\Modules\Company\Support\MessagePlaceholders::tokensText())
                     ->schema([
                         Forms\Components\Select::make('type')
                             ->label('Şablon Növü')
