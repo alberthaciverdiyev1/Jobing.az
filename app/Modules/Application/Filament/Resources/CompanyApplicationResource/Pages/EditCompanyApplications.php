@@ -14,4 +14,19 @@ class EditCompanyApplications extends EditRecord
     {
         return [];
     }
+
+    protected function afterSave(): void
+    {
+        $record = $this->record;
+
+        if ($record->notes) {
+            $record->viewed_at = $record->viewed_at ?? now();
+
+            if ($record->wasChanged('notes') && $record->user_id && $record->user) {
+                $record->user->notify(new \App\Modules\Application\Notifications\ApplicationRepliedNotification($record->notes, $record->vacancy?->title));
+            }
+        }
+
+        $record->saveQuietly();
+    }
 }

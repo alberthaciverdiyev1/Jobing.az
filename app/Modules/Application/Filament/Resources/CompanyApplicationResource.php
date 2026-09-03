@@ -78,16 +78,36 @@ class CompanyApplicationResource extends Resource
                         Forms\Components\Textarea::make('cover_letter')->label('Ön Yazı / Not')->disabled()->rows(3)->columnSpanFull(),
                     ])->columns(2),
 
-                Forms\Components\Section::make('Değerlendirme & Adaya Mesaj')
+                Forms\Components\Section::make('İncele & Adaya Mesaj')
                     ->schema([
                         Forms\Components\Select::make('status')
                             ->label('Başvuru Durumu')
                             ->options(static::statusOptions())
                             ->required(),
+
+                        Forms\Components\Select::make('template_pick')
+                            ->label('Şablondan doldur (isteğe bağlı)')
+                            ->placeholder('Şablon seçin — mesaj alanı dolar…')
+                            ->options(fn () => MessageTemplate::active()
+                                ->forCompany(Auth::user()?->company_id)
+                                ->get()
+                                ->sortBy(fn ($t) => (string) $t->title)
+                                ->mapWithKeys(fn ($t) => [(string) $t->id => (string) $t->title])
+                                ->all())
+                            ->searchable()
+                            ->live()
+                            ->dehydrated(false)
+                            ->afterStateUpdated(function (Forms\Get $get, Forms\Set $set): void {
+                                $template = MessageTemplate::find($get('template_pick'));
+                                if ($template) {
+                                    $set('notes', $template->content ?: '');
+                                }
+                            }),
+
                         Forms\Components\Textarea::make('notes')
-                            ->label('Adaya Mesaj / Cavab (başvuruda görünür)')
-                            ->rows(3)
-                            ->helperText('Bu mətn adayın "Başvurularım" səhifəsində görünür.')
+                            ->label('Mesaj / Adaya Cavab (başvuruda görünür)')
+                            ->rows(4)
+                            ->helperText('Bu mətn adayın "Başvurularım" səhifəsində görünür; daxili qeyd deyil.')
                             ->columnSpanFull(),
                     ])->columns(2),
             ]);
@@ -115,50 +135,7 @@ class CompanyApplicationResource extends Resource
             ->defaultSort('created_at', 'desc')
             ->actions([
 
-                Tables\Actions\EditAction::make()->label('İncele / Düzenle'),
-
-                Tables\Actions\Action::make('send_message')
-                    ->label('Mesaj Gönder')
-                    ->icon('heroicon-o-chat-bubble-left-right')
-                    ->color('primary')
-                    ->modalHeading('Adaya Mesaj Gönder')
-                    ->modalWidth('lg')
-                    ->modalSubmitActionLabel('Gönder')
-                    ->form([
-                        Forms\Components\Select::make('template_id')
-                            ->label('Şablon Mesaj (isteğe bağlı)')
-                            ->placeholder('Şablon seçin və ya özünüz yazın…')
-                            ->options(fn () => MessageTemplate::active()
-                                ->forCompany(Auth::user()?->company_id)
-                                ->get()
-                                ->sortBy(fn ($t) => (string) $t->title)
-                                ->mapWithKeys(fn ($t) => [(string) $t->id => (string) $t->title])
-                                ->all())
-                            ->searchable()
-                            ->live()
-                            ->afterStateUpdated(function (Forms\Get $get, Forms\Set $set): void {
-                                $template = MessageTemplate::find($get('template_id'));
-                                $set('message', $template?->content ?: '');
-                            }),
-                        Forms\Components\Textarea::make('message')->label('Mesaj')->rows(5)->required()->columnSpanFull(),
-                    ])
-                    ->action(function (Application $record, array $data): void {
-                        $record->notes = $data['message'];
-                        $record->viewed_at = $record->viewed_at ?? now();
-                        $record->save();
-
-                        if ($record->user_id && $record->user) {
-                            \Filament\Notifications\Notification::make()
-                                ->title('Şirkətinizdən yeni mesaj')
-                                ->body($data['message'])
-                                ->sendToDatabase($record->user);
-                        }
-
-                        \Filament\Notifications\Notification::make()
-                            ->title('Mesaj gönderildi')
-                            ->success()
-                            ->send();
-                    }),
+                Tables\Actions\EditAction::make()->label('İncele'),
             ]);
     }
 
