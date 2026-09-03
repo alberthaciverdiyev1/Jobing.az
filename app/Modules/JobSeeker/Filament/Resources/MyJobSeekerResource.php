@@ -75,15 +75,18 @@ class MyJobSeekerResource extends Resource
 
                         Forms\Components\Select::make('job_type_id')
                             ->label('İş Rejimi')
-                            ->options(JobType::pluck('name', 'id')),
+                            ->options(static::jobTypeOptions())
+                            ->searchable(),
 
                         Forms\Components\Select::make('workplace_type_id')
                             ->label('İş Yeri')
-                            ->options(WorkplaceType::pluck('name', 'id')),
+                            ->options(static::workplaceTypeOptions())
+                            ->searchable(),
 
                         Forms\Components\Select::make('experience_level_id')
                             ->label('Təcrübə Səviyyəsi')
-                            ->options(ExperienceLevel::pluck('name', 'id')),
+                            ->options(static::experienceLevelOptions())
+                            ->searchable(),
 
                         Forms\Components\Select::make('availability')
                             ->label('İşə Başlama Tezliyi')

@@ -55,9 +55,9 @@ class JobSeekerResource extends Resource
                             ->options(fn (Forms\Get $get): array => static::subcategoryOptions($get('category_parent_id') ? (int) $get('category_parent_id') : null))
                             ->searchable()->preload()->nullable()
                             ->placeholder('Əvvəlcə Kateqoriya seçin…'),
-                        Forms\Components\Select::make('job_type_id')->label('İş Rejimi')->relationship('jobType', 'name')->nullable(),
-                        Forms\Components\Select::make('workplace_type_id')->label('Çalışma Yeri')->relationship('workplaceType', 'name')->nullable(),
-                        Forms\Components\Select::make('experience_level_id')->label('Təcrübə Səviyyəsi')->relationship('experienceLevel', 'name')->nullable(),
+                        Forms\Components\Select::make('job_type_id')->label('İş Rejimi')->options(static::jobTypeOptions())->searchable()->nullable(),
+                        Forms\Components\Select::make('workplace_type_id')->label('Çalışma Yeri')->options(static::workplaceTypeOptions())->searchable()->nullable(),
+                        Forms\Components\Select::make('experience_level_id')->label('Təcrübə Səviyyəsi')->options(static::experienceLevelOptions())->searchable()->nullable(),
                         Forms\Components\Select::make('location')->label('Şəhər')->options(static::cityOptions())->searchable()->placeholder('Şəhər seçin…'),
                         Forms\Components\Textarea::make('description')->label('Təcrübə və bacarıqlar')->rows(4)->columnSpanFull(),
                         Forms\Components\Select::make('skills')
@@ -127,7 +127,10 @@ class JobSeekerResource extends Resource
                     'rejected' => 'İmtina edilib',
                     'closed' => 'Bağlanıb',
                 ]),
-                Tables\Filters\SelectFilter::make('category')->label('Kateqoriya')->relationship('category', 'name'),
+                Tables\Filters\SelectFilter::make('category')
+                    ->label('Kateqoriya')
+                    ->options(static::categoryOptions())
+                    ->attribute('category_id'),
             ])
             ->actions([
                 Tables\Actions\Action::make('bump')

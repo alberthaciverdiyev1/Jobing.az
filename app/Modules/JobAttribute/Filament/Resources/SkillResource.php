@@ -61,7 +61,10 @@ class SkillResource extends Resource
 
                         Forms\Components\Select::make('category_id')
                             ->label('Kateqoriya')
-                            ->relationship('category', 'name', modifyQueryUsing: fn (\Illuminate\Database\Eloquent\Builder $query) => $query->whereNull('parent_id'))
+                            ->options(fn (): array => collect(\App\Modules\Category\Models\Category::parents()->get())
+                                ->sortBy(fn ($c) => (string) $c->name)
+                                ->mapWithKeys(fn ($c) => [(string) $c->id => (string) $c->name])
+                                ->all())
                             ->searchable()
                             ->preload()
                             ->nullable()
@@ -125,7 +128,10 @@ class SkillResource extends Resource
             ->filters([
                 Tables\Filters\SelectFilter::make('category_id')
                     ->label('Kateqoriya')
-                    ->relationship('category', 'name', modifyQueryUsing: fn (\Illuminate\Database\Eloquent\Builder $query) => $query->whereNull('parent_id')),
+                    ->options(fn (): array => collect(\App\Modules\Category\Models\Category::parents()->get())
+                        ->sortBy(fn ($c) => (string) $c->name)
+                        ->mapWithKeys(fn ($c) => [(string) $c->id => (string) $c->name])
+                        ->all()),
                 Tables\Filters\TernaryFilter::make('is_active')
                     ->label('Aktivlik Durumu'),
             ])
