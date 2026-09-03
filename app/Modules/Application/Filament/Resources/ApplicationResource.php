@@ -13,6 +13,10 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * Admin paneline özel, global başvuru yönetimi.
+ * (Company: CompanyApplicationResource, User: MyApplicationsResource.)
+ */
 class ApplicationResource extends Resource
 {
     protected static ?string $model = Application::class;
@@ -25,21 +29,7 @@ class ApplicationResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        $query = parent::getEloquentQuery();
-
-        switch (Filament::getCurrentPanel()?->getId()) {
-            case 'company':
-                // Companies only see applications to their own vacancies.
-                $companyId = Auth::user()?->company_id;
-                $query->whereHas('vacancy', fn ($q) => $q->where('company_id', $companyId));
-                break;
-            case 'user':
-                // Users only see their own applications.
-                $query->where('user_id', Auth::id());
-                break;
-        }
-
-        return $query;
+        return parent::getEloquentQuery();
     }
 
     public static function form(Form $form): Form
@@ -50,42 +40,16 @@ class ApplicationResource extends Resource
                     ->schema([
                         Forms\Components\Select::make('vacancy_id')
                             ->label('Başvurulan İlan')
-                            ->relationship('vacancy', 'title', function (Builder $query): Builder {
-                                if (Filament::getCurrentPanel()?->getId() === 'company') {
-                                    $query->where('company_id', Auth::user()?->company_id);
-                                }
-                                return $query;
-                            })
+                            ->relationship('vacancy', 'title')
                             ->searchable()
                             ->preload()
                             ->required(),
 
-                        Forms\Components\TextInput::make('applicant_name')
-                            ->label('Aday Adı Soyadı')
-                            ->required()
-                            ->maxLength(255),
-
-                        Forms\Components\TextInput::make('applicant_email')
-                            ->label('E-Posta Adresi')
-                            ->email()
-                            ->required()
-                            ->maxLength(255),
-
-                        Forms\Components\TextInput::make('applicant_phone')
-                            ->label('Telefon')
-                            ->tel()
-                            ->maxLength(255),
-
-                        Forms\Components\TextInput::make('portfolio_url')
-                            ->label('Portfolyo / GitHub URL')
-                            ->url()
-                            ->maxLength(255),
-
-                        Forms\Components\TextInput::make('linkedin_url')
-                            ->label('LinkedIn Profili')
-                            ->url()
-                            ->maxLength(255),
-
+                        Forms\Components\TextInput::make('applicant_name')->label('Aday Adı Soyadı')->required()->maxLength(255),
+                        Forms\Components\TextInput::make('applicant_email')->label('E-Posta Adresi')->email()->required()->maxLength(255),
+                        Forms\Components\TextInput::make('applicant_phone')->label('Telefon')->tel()->maxLength(255),
+                        Forms\Components\TextInput::make('portfolio_url')->label('Portfolyo / GitHub URL')->url()->maxLength(255),
+                        Forms\Components\TextInput::make('linkedin_url')->label('LinkedIn Profili')->url()->maxLength(255),
                         Forms\Components\FileUpload::make('resume_path')
                             ->label('CV / Özgeçmiş Dosyası')
                             ->disk('public')
@@ -95,11 +59,7 @@ class ApplicationResource extends Resource
                             ->openable()
                             ->downloadable()
                             ->columnSpanFull(),
-
-                        Forms\Components\Textarea::make('cover_letter')
-                            ->label('Ön Yazı / Not')
-                            ->rows(3)
-                            ->columnSpanFull(),
+                        Forms\Components\Textarea::make('cover_letter')->label('Ön Yazı / Not')->rows(3)->columnSpanFull(),
                     ])->columns(2),
 
                 Forms\Components\Section::make('Değerlendirme & Durum')
@@ -117,10 +77,7 @@ class ApplicationResource extends Resource
                             ->required()
                             ->default('Beklemede'),
 
-                        Forms\Components\Textarea::make('notes')
-                            ->label('İK Dahili Notları')
-                            ->rows(3)
-                            ->columnSpanFull(),
+                        Forms\Components\Textarea::make('notes')->label('İK Dahili Notları')->rows(3)->columnSpanFull(),
                     ]),
             ]);
     }
@@ -129,26 +86,10 @@ class ApplicationResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('applicant_name')
-                    ->label('Aday Adı')
-                    ->searchable()
-                    ->sortable()
-                    ->weight('bold'),
-
-                Tables\Columns\TextColumn::make('vacancy.title')
-                    ->label('İlan')
-                    ->searchable()
-                    ->sortable()
-                    ->limit(30),
-
-                Tables\Columns\TextColumn::make('applicant_email')
-                    ->label('E-Posta')
-                    ->searchable()
-                    ->copyable(),
-
-                Tables\Columns\TextColumn::make('status')
-                    ->label('Durum')
-                    ->badge()
+                Tables\Columns\TextColumn::make('applicant_name')->label('Aday Adı')->searchable()->sortable()->weight('bold'),
+                Tables\Columns\TextColumn::make('vacancy.title')->label('İlan')->searchable()->sortable()->limit(30),
+                Tables\Columns\TextColumn::make('applicant_email')->label('E-Posta')->searchable()->copyable(),
+                Tables\Columns\TextColumn::make('status')->label('Durum')->badge()
                     ->color(fn (string $state): string => match ($state) {
                         'Beklemede' => 'gray',
                         'İncelendi' => 'info',
@@ -157,18 +98,13 @@ class ApplicationResource extends Resource
                         'Red' => 'danger',
                         default => 'primary',
                     }),
-
                 Tables\Columns\TextColumn::make('resume_path')
                     ->label('CV')
                     ->formatStateUsing(fn ($state) => $state ? 'İndir / Görüntüle' : 'Yok')
                     ->url(fn (Application $record): ?string => $record->resume_path ? asset('storage/' . $record->resume_path) : null, shouldOpenInNewTab: true)
                     ->icon(fn ($state) => $state ? 'heroicon-o-arrow-down-tray' : null)
                     ->color('primary'),
-
-                Tables\Columns\TextColumn::make('created_at')
-                    ->label('Başvuru Tarihi')
-                    ->dateTime('d.m.Y H:i')
-                    ->sortable(),
+                Tables\Columns\TextColumn::make('created_at')->label('Başvuru Tarihi')->dateTime('d.m.Y H:i')->sortable(),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('status')
@@ -191,13 +127,6 @@ class ApplicationResource extends Resource
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
-    }
-
-    public static function getRelations(): array
-    {
-        return [
-            //
-        ];
     }
 
     public static function getPages(): array
