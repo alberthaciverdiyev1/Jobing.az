@@ -117,21 +117,30 @@ class VacancyResource extends Resource
                             ->schema([
                                 Forms\Components\Select::make('job_type_id')
                                     ->label('İş Rejimi')
-                                    ->options(fn () => \App\Modules\JobAttribute\Models\JobType::all()->pluck('name', 'id'))
+                                    ->options(fn () => \App\Modules\JobAttribute\Models\JobType::all()
+                                        ->sortBy(fn ($m) => (string) $m->name)
+                                        ->mapWithKeys(fn ($m) => [(string) $m->id => (string) $m->name])
+                                        ->all())
                                     ->searchable()
                                     ->preload()
                                     ->required(),
 
                                 Forms\Components\Select::make('workplace_type_id')
                                     ->label('Çalışma Yeri')
-                                    ->options(fn () => \App\Modules\JobAttribute\Models\WorkplaceType::all()->pluck('name', 'id'))
+                                    ->options(fn () => \App\Modules\JobAttribute\Models\WorkplaceType::all()
+                                        ->sortBy(fn ($m) => (string) $m->name)
+                                        ->mapWithKeys(fn ($m) => [(string) $m->id => (string) $m->name])
+                                        ->all())
                                     ->searchable()
                                     ->preload()
                                     ->required(),
 
                                 Forms\Components\Select::make('experience_level_id')
                                     ->label('Təcrübə Səviyyəsi')
-                                    ->options(fn () => \App\Modules\JobAttribute\Models\ExperienceLevel::all()->pluck('name', 'id'))
+                                    ->options(fn () => \App\Modules\JobAttribute\Models\ExperienceLevel::all()
+                                        ->sortBy(fn ($m) => (string) $m->name)
+                                        ->mapWithKeys(fn ($m) => [(string) $m->id => (string) $m->name])
+                                        ->all())
                                     ->searchable()
                                     ->preload()
                                     ->required(),
@@ -282,8 +291,12 @@ class VacancyResource extends Resource
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('category')
-                    ->relationship('category', 'name')
-                    ->label('Kategoriye Göre'),
+                    ->label('Kategoriye Göre')
+                    ->attribute('category_id')
+                    ->options(fn (): array => collect(\App\Modules\Category\Models\Category::all())
+                        ->sortBy(fn ($c) => (string) $c->name)
+                        ->mapWithKeys(fn ($c) => [(string) $c->id => (string) $c->name])
+                        ->all()),
 
                 Tables\Filters\SelectFilter::make('workplace_type')
                     ->options([

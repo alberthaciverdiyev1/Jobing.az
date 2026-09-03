@@ -132,8 +132,12 @@ class CategoryResource extends Resource
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('parent')
-                    ->relationship('parent', 'name')
-                    ->label('Üst Kategoriye Göre'),
+                    ->label('Üst Kategoriye Göre')
+                    ->attribute('parent_id')
+                    ->options(fn (): array => collect(\App\Modules\Category\Models\Category::parents()->get())
+                        ->sortBy(fn ($c) => (string) $c->name)
+                        ->mapWithKeys(fn ($c) => [(string) $c->id => (string) $c->name])
+                        ->all()),
 
                 Tables\Filters\Filter::make('only_parents')
                     ->label('Sadece Ana Kategoriler')

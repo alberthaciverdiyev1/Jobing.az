@@ -4,7 +4,10 @@ namespace App\Modules\JobSeeker\Filament\Concerns;
 
 use App\Modules\Category\Models\Category;
 use App\Modules\JobAttribute\Models\City;
+use App\Modules\JobAttribute\Models\ExperienceLevel;
+use App\Modules\JobAttribute\Models\JobType;
 use App\Modules\JobAttribute\Models\Skill;
+use App\Modules\JobAttribute\Models\WorkplaceType;
 
 /**
  * İş axtarışı elanı formlarında skiller, admin tarafından eklenen Skill
@@ -81,6 +84,46 @@ trait HasSkillPicker
             ->unique()
             ->values()
             ->mapWithKeys(fn (string $cityName) => [$cityName => $cityName])
+            ->all();
+    }
+
+    /**
+     * Translatable (json) name kolonu Postgres'te ORDER BY yapılamaz;
+     * bu yüzden seçenekler localized PHP tarafında üretilir.
+     *
+     * @return array<string, string>  [id => lokalize ad]
+     */
+    public static function jobTypeOptions(): array
+    {
+        return static::localizedIdLabelOptions(JobType::active()->get());
+    }
+
+    public static function workplaceTypeOptions(): array
+    {
+        return static::localizedIdLabelOptions(WorkplaceType::active()->get());
+    }
+
+    public static function experienceLevelOptions(): array
+    {
+        return static::localizedIdLabelOptions(ExperienceLevel::active()->get());
+    }
+
+    public static function categoryOptions(): array
+    {
+        return static::localizedIdLabelOptions(Category::all());
+    }
+
+    /**
+     * [id => lokalize ad] üretir; json name kolonunu DB'de sıralamaz.
+     *
+     * @param  iterable<\Illuminate\Database\Eloquent\Model>  $models
+     * @return array<string, string>
+     */
+    protected static function localizedIdLabelOptions(iterable $models): array
+    {
+        return collect($models)
+            ->sortBy(fn ($model) => (string) $model->getAttribute('name'))
+            ->mapWithKeys(fn ($model) => [(string) $model->getKey() => (string) $model->getAttribute('name')])
             ->all();
     }
 
