@@ -89,7 +89,13 @@ class MyApplicationsResource extends Resource
                     ->sortable(),
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
+                // Gör modalı açıldığında mesajı "okundu" işaretle (rozet sönsün).
+                Tables\Actions\ViewAction::make()
+                    ->mountUsing(function (Application $record): void {
+                        if ($record->user_id === auth()->id() && $record->hasUnseenReply()) {
+                            $record->update(['reply_seen_at' => now()]);
+                        }
+                    }),
             ]);
     }
 
