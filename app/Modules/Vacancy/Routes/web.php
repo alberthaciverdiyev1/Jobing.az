@@ -9,7 +9,7 @@ Route::prefix('jobs')->name('jobs.')->group(function () {
     Route::get('/create', [VacancyController::class, 'create'])->name('create');
     Route::post('/', [VacancyController::class, 'store'])->name('store');
     Route::get('/{slug}', [VacancyController::class, 'show'])->name('show');
-    Route::post('/{slug}/apply', [VacancyController::class, 'apply'])->name('apply');
+    Route::post('/{slug}/apply', [VacancyController::class, 'apply'])->name('apply')->middleware('throttle:6,1');
 });
 
 // SEO-friendly category listing URLs (/isler/{category}/{city})

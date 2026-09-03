@@ -11,8 +11,8 @@ Route::get('/is-ariyorum', [JobSeekerController::class, 'index']);
 Route::middleware(['auth'])->group(function () {
     Route::get('/iş-ariyorum/elan-ver', [JobSeekerController::class, 'create'])->name('job-seekers.create');
     Route::get('/is-ariyorum/elan-ver', [JobSeekerController::class, 'create']);
-    Route::post('/iş-ariyorum/elan-ver', [JobSeekerController::class, 'store'])->name('job-seekers.store');
-    Route::post('/is-ariyorum/elan-ver', [JobSeekerController::class, 'store']);
+    Route::post('/iş-ariyorum/elan-ver', [JobSeekerController::class, 'store'])->name('job-seekers.store')->middleware('throttle:6,10');
+    Route::post('/is-ariyorum/elan-ver', [JobSeekerController::class, 'store'])->middleware('throttle:6,10');
 });
 
 // Job Seeker Detail Page

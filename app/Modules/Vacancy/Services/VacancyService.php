@@ -204,7 +204,9 @@ class VacancyService
             ->where('slug', $slug)
             ->firstOrFail();
 
-        $job->increment('views_count');
+        if (! is_bot_request()) {
+            $job->increment('views_count');
+        }
 
         $relatedJobs = Vacancy::with(['company', 'category', 'jobType', 'workplaceType', 'experienceLevel'])
             ->active()
@@ -432,7 +434,7 @@ class VacancyService
             'portfolio_url' => $data['portfolio_url'] ?? ($resume ? $resume->portfolio_url : null),
             'linkedin_url' => $data['linkedin_url'] ?? ($resume ? $resume->linkedin_url : null),
             'cover_letter' => $data['cover_letter'] ?? null,
-            'status' => 'Beklemede',
+            'status' => Application::STATUS_PENDING,
         ]);
     }
 }

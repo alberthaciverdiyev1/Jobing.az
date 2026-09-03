@@ -160,7 +160,7 @@
                     </div>
                     <div class="bg-white/10 backdrop-blur-md border border-white/10 p-6 rounded-2xl text-center hover:bg-white/20 transition-colors cursor-default">
                         <div class="text-3xl sm:text-4xl font-bold text-white mb-2 font-mono">{{ $stats['applications'] }}+</div>
-                        <div class="text-gray-300 font-medium text-xs sm:text-sm">{{ __('Qeydiyyatlı Namizəd') }}</div>
+                        <div class="text-gray-300 font-medium text-xs sm:text-sm">{{ __('Ümumi Başvuru') }}</div>
                     </div>
                     <div class="bg-white/10 backdrop-blur-md border border-white/10 p-6 rounded-2xl text-center hover:bg-white/20 transition-colors cursor-default">
                         <div class="text-3xl sm:text-4xl font-bold text-white mb-2 font-mono">{{ $stats['verified_companies'] }}+</div>

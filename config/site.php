@@ -14,6 +14,18 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Remote Workplace Slugs
+    |--------------------------------------------------------------------------
+    | "Remote/Uzaktan" kabul edilen çalışma yeri slug'ları. İstatistik
+    | (remote ilan sayısı) bu listeye göre hesaplanır; veride değişirse
+    | buradan güncellenir — blade/servis içinde sabit string aranmaz.
+    |
+    */
+
+    'remote_workplace_slugs' => ['uzaktan', 'remote'],
+
+    /*
+    |--------------------------------------------------------------------------
     | Promotion Pricing (bump & premium)
     |--------------------------------------------------------------------------
     | Promosyon paket fiyatları (₼) blade yerine config'de tutulur.

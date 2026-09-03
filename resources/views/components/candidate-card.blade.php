@@ -44,13 +44,7 @@
                     <span>•</span>
                     <span class="text-emerald-600 font-medium flex items-center gap-1">
                         <i class="fas fa-bolt text-[10px]"></i>
-                        {{ match($seeker->availability) {
-                            'immediate' => __('Dərhal başlaya bilər'),
-                            '1_week' => __('1 həftə ərzində'),
-                            '2_weeks' => __('2 həftə ərzində'),
-                            '1_month' => __('1 ay ərzində'),
-                            default => $seeker->availability
-                        } }}
+                        {{ $seeker->availability_label }}
                     </span>
                     @endif
                 </div>
