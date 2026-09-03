@@ -9,15 +9,14 @@ class ViewMyApplications extends ViewRecord
 {
     protected static string $resource = MyApplicationsResource::class;
 
-    protected function afterMount(): void
+    public function mount(int | string $record): void
     {
-        parent::afterMount();
-
-        $record = $this->record;
+        parent::mount($record);
 
         // Kullanıcı mesajı gördüyse rozet sönsün.
-        if ($record && $record->user_id === auth()->id() && $record->hasUnseenReply()) {
-            $record->update(['reply_seen_at' => now()]);
+        $application = $this->record;
+        if ($application && $application->user_id === auth()->id() && $application->hasUnseenReply()) {
+            $application->update(['reply_seen_at' => now()]);
         }
     }
 }
