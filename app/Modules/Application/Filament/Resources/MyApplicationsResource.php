@@ -128,6 +128,15 @@ class MyApplicationsResource extends Resource
                                 'Teklif', 'Kabul' => 'success',
                                 'Red' => 'danger',
                                 default => 'primary',
+                            })
+                            ->formatStateUsing(fn (string $state): string => match ($state) {
+                                'Beklemede' => 'Gözləmədə',
+                                'İncelendi' => 'Baxılıb',
+                                'Mülakat' => 'Müsahibəyə çağrıldı',
+                                'Teklif' => 'Təklif göndərildi',
+                                'Kabul' => 'Qəbul edildi',
+                                'Red' => 'Rədd edildi',
+                                default => $state,
                             }),
                         TextEntry::make('created_at')
                             ->label('Müraciət Tarixi')
@@ -136,10 +145,34 @@ class MyApplicationsResource extends Resource
                             ->label('Şirkət Baxışı')
                             ->dateTime('d.m.Y H:i')
                             ->placeholder(__('Şirkət hələ baxmayıb')),
+                        TextEntry::make('updated_at')
+                            ->label('Son Yenilənmə')
+                            ->dateTime('d.m.Y H:i')
+                            ->placeholder('—'),
                         TextEntry::make('notes')
                             ->label('Şirkətin Cavabı')
                             ->placeholder(__('Şirkət hələ cavab yazmayıb'))
-                            ->markdown()
+                            ->html()
+                            ->formatStateUsing(function (?string $state, ?Application $record): string {
+                                if (! $state) {
+                                    return '';
+                                }
+
+                                $escaped = nl2br(htmlspecialchars($state, ENT_QUOTES, 'UTF-8'));
+                                $replyDate = $record?->updated_at?->format('d.m.Y H:i');
+
+                                $footer = $replyDate
+                                    ? '<div style="font-size:10px;color:#9ca3af;margin-top:10px;border-top:1px dashed #e5e7eb;padding-top:8px;">' .
+                                      __('Cavab tarixi:') . ' ' . $replyDate . '</div>'
+                                    : '';
+
+                                return '<div style="background:#f9fafb;border:1px solid #e5e7eb;border-left:4px solid #10b981;border-radius:10px;padding:16px;">' .
+                                    '<div style="font-size:11px;font-weight:700;color:#059669;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;">' .
+                                    __('Şirkətin Cavabı') . '</div>' .
+                                    '<div style="font-size:13px;line-height:1.7;color:#111827;white-space:normal;">' . $escaped . '</div>' .
+                                    $footer .
+                                    '</div>';
+                            })
                             ->columnSpanFull(),
                     ])->columns(3),
             ]);
