@@ -35,7 +35,7 @@ class CompanyPanelProvider extends PanelProvider
             ->breadcrumbs(false)
             ->resources([
                 \App\Modules\Vacancy\Filament\Resources\VacancyResource::class,
-                \App\Modules\Application\Filament\Resources\ApplicationResource::class,
+                \App\Modules\Application\Filament\Resources\CompanyApplicationResource::class,
                 \App\Modules\JobSeeker\Filament\Resources\JobSeekerResource::class,
                 \App\Modules\Resume\Filament\Resources\ResumeResource::class,
                 \App\Modules\Company\Filament\Resources\MessageTemplateResource::class,
