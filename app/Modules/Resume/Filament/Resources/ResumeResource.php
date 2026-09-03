@@ -21,82 +21,13 @@ class ResumeResource extends Resource
     protected static ?string $pluralModelLabel = 'CV & Rezümələrim';
     protected static ?int $navigationSort = 3;
 
+    /**
+     * Admin panelinə özel, global CV yönetimi.
+     * (User: MyResumeResource, Company: CompanyResumeResource.)
+     */
     public static function canViewAny(): bool
     {
         return true;
-    }
-
-    public static function canCreate(): bool
-    {
-        if (\Filament\Facades\Filament::getCurrentPanel()?->getId() === 'company') {
-            return false;
-        }
-
-        return true;
-    }
-
-    public static function canView(\Illuminate\Database\Eloquent\Model $record): bool
-    {
-        $panel = \Filament\Facades\Filament::getCurrentPanel()?->getId();
-
-        // admin tümü, company aday CV-lərinə baxa bilər, user yalnız özününkü.
-        if ($panel !== 'user') {
-            return true;
-        }
-
-        return $record->user_id === auth()->id();
-    }
-
-    public static function canEdit(\Illuminate\Database\Eloquent\Model $record): bool
-    {
-        return static::canMutateRecord($record);
-    }
-
-    public static function canDelete(\Illuminate\Database\Eloquent\Model $record): bool
-    {
-        return static::canMutateRecord($record);
-    }
-
-    /**
-     * Düzenleme/silmə: admin her şeyə; /user panelində yalnız sahibi;
-     * company paneli CV-ləri yalnız baxmaq üçün görür (dəyişdirə bilməz).
-     */
-    protected static function canMutateRecord(\Illuminate\Database\Eloquent\Model $record): bool
-    {
-        $panel = \Filament\Facades\Filament::getCurrentPanel()?->getId();
-
-        if ($panel === 'admin') {
-            return true;
-        }
-
-        if ($panel === 'user') {
-            return $record->user_id === auth()->id();
-        }
-
-        return false; // company
-    }
-
-    public static function canDeleteAny(): bool
-    {
-        if (\Filament\Facades\Filament::getCurrentPanel()?->getId() === 'company') {
-            return false;
-        }
-
-        return true;
-    }
-
-    public static function getEloquentQuery(): Builder
-    {
-        $query = parent::getEloquentQuery();
-        $panelId = \Filament\Facades\Filament::getCurrentPanel()?->getId();
-
-        if ($panelId === 'user') {
-            $query->where('user_id', auth()->id());
-        } elseif ($panelId === 'company') {
-            $query->where('is_public', true);
-        }
-
-        return $query;
     }
 
     public static function form(Form $form): Form
