@@ -26,7 +26,7 @@ class AdminPanelProvider extends PanelProvider
             ->default()
             ->id('admin')
             ->path('admin')
-            ->login()
+            // ->login() kaldırıldı: tek giriş noktası sitenin /login sayfası.
             ->profile()
             ->brandName('Jobing Portal')
             ->colors([

@@ -2,6 +2,7 @@
 
 namespace App\Modules\JobSeeker\Filament\Resources;
 
+use App\Modules\JobSeeker\Filament\Concerns\HasSkillPicker;
 use App\Modules\JobSeeker\Filament\Resources\JobSeekerResource\Pages;
 use App\Modules\JobSeeker\Models\JobSeeker;
 use Filament\Forms;
@@ -9,9 +10,12 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Model;
 
 class JobSeekerResource extends Resource
 {
+    use HasSkillPicker;
+
     protected static ?string $model = JobSeeker::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
@@ -38,14 +42,31 @@ class JobSeekerResource extends Resource
                 Forms\Components\Section::make('Elan Məlumatları')
                     ->schema([
                         Forms\Components\TextInput::make('title')->label('Başlıq')->required()->maxLength(255),
-                        Forms\Components\TextInput::make('position')->label('Vəzifə / Mövqe')->maxLength(255),
-                        Forms\Components\Select::make('category_id')->label('Kateqoriya')->relationship('category', 'name')->searchable()->preload()->nullable(),
+                        Forms\Components\Select::make('category_parent_id')
+                            ->label('Kateqoriya')
+                            ->options(static::parentCategoryOptions())
+                            ->searchable()->preload()->live()
+                            ->default(fn (?Model $record): ?string => $record?->category?->parent_id ? (string) $record->category->parent_id : null)
+                            ->afterStateUpdated(fn (Forms\Set $set) => $set('category_id', null))
+                            ->dehydrated(false)
+                            ->placeholder('Kateqoriya seçin…'),
+                        Forms\Components\Select::make('category_id')
+                            ->label('Vəzifə / Peşə')
+                            ->options(fn (Forms\Get $get): array => static::subcategoryOptions($get('category_parent_id') ? (int) $get('category_parent_id') : null))
+                            ->searchable()->preload()->nullable()
+                            ->placeholder('Əvvəlcə Kateqoriya seçin…'),
                         Forms\Components\Select::make('job_type_id')->label('İş Rejimi')->relationship('jobType', 'name')->nullable(),
                         Forms\Components\Select::make('workplace_type_id')->label('Çalışma Yeri')->relationship('workplaceType', 'name')->nullable(),
                         Forms\Components\Select::make('experience_level_id')->label('Təcrübə Səviyyəsi')->relationship('experienceLevel', 'name')->nullable(),
-                        Forms\Components\TextInput::make('location')->label('Şəhər'),
+                        Forms\Components\Select::make('location')->label('Şəhər')->options(static::cityOptions())->searchable()->placeholder('Şəhər seçin…'),
                         Forms\Components\Textarea::make('description')->label('Təcrübə və bacarıqlar')->rows(4)->columnSpanFull(),
-                        Forms\Components\Textarea::make('skills')->label('Bacarıqlar')->formatStateUsing(fn ($state) => is_array($state) ? implode(', ', $state) : $state)->columnSpanFull(),
+                        Forms\Components\Select::make('skills')
+                            ->label('Bacarıqlar (Admin kataloqu)')
+                            ->multiple()
+                            ->searchable()
+                            ->preload()
+                            ->options(fn (Forms\Get $get): array => static::skillOptions($get('category_parent_id') ? (int) $get('category_parent_id') : null))
+                            ->columnSpanFull(),
                     ])->columns(2),
 
                 Forms\Components\Section::make('Maaş & Əlaqə')

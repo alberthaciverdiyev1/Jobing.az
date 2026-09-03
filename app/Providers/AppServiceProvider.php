@@ -13,7 +13,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        // Filament panelinden çıkışta kullanıcı sitenin giriş sayfasına gider.
+        $this->app->bind(
+            \Filament\Http\Responses\Auth\Contracts\LogoutResponse::class,
+            \App\Http\Responses\FilamentLogoutResponse::class,
+        );
     }
 
     public function boot(): void

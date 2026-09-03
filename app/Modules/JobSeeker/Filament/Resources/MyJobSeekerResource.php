@@ -6,6 +6,7 @@ use App\Modules\Category\Models\Category;
 use App\Modules\JobAttribute\Models\ExperienceLevel;
 use App\Modules\JobAttribute\Models\JobType;
 use App\Modules\JobAttribute\Models\WorkplaceType;
+use App\Modules\JobSeeker\Filament\Concerns\HasSkillPicker;
 use App\Modules\JobSeeker\Filament\Resources\MyJobSeekerResource\Pages;
 use App\Modules\JobSeeker\Models\JobSeeker;
 use Filament\Forms;
@@ -14,9 +15,12 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 
 class MyJobSeekerResource extends Resource
 {
+    use HasSkillPicker;
+
     protected static ?string $model = JobSeeker::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-user-circle';
@@ -48,16 +52,26 @@ class MyJobSeekerResource extends Resource
                             ->maxLength(255)
                             ->columnSpanFull(),
 
-                        Forms\Components\TextInput::make('position')
-                            ->label('Vəzifə / Peşə')
-                            ->placeholder('Örn: Backend Developer')
-                            ->maxLength(255),
+                        Forms\Components\Select::make('category_parent_id')
+                            ->label('Kateqoriya')
+                            ->options(static::parentCategoryOptions())
+                            ->searchable()
+                            ->preload()
+                            ->live()
+                            // Düzenlemede saklı alt kategorinin üstünü otomatik seç.
+                            ->default(fn (?Model $record): ?string => $record?->category?->parent_id ? (string) $record->category->parent_id : null)
+                            ->afterStateUpdated(fn (Forms\Set $set) => $set('category_id', null))
+                            ->dehydrated(false)
+                            ->placeholder('Kateqoriya seçin…'),
 
                         Forms\Components\Select::make('category_id')
-                            ->label('Kateqoriya')
-                            ->options(Category::pluck('name', 'id'))
+                            ->label('Vəzifə / Peşə')
+                            ->options(fn (Forms\Get $get): array => static::subcategoryOptions($get('category_parent_id') ? (int) $get('category_parent_id') : null))
                             ->searchable()
-                            ->required(),
+                            ->preload()
+                            ->required()
+                            ->placeholder('Əvvəlcə Kateqoriya seçin…')
+                            ->helperText('Seçilən Kateqoriyanın alt mövqeləri (subcategory) burada göstərilir.'),
 
                         Forms\Components\Select::make('job_type_id')
                             ->label('İş Rejimi')
@@ -81,10 +95,11 @@ class MyJobSeekerResource extends Resource
                             ])
                             ->default('immediate'),
 
-                        Forms\Components\TextInput::make('location')
+                        Forms\Components\Select::make('location')
                             ->label('Şəhər / Region')
-                            ->placeholder('Örn: Bakı')
-                            ->maxLength(255),
+                            ->options(fn (): array => static::cityOptions())
+                            ->searchable()
+                            ->placeholder('Şəhər seçin…'),
                     ])->columns(2),
 
                 Forms\Components\Section::make('Gözlənilən Maaş')
@@ -118,9 +133,13 @@ class MyJobSeekerResource extends Resource
 
                 Forms\Components\Section::make('Təcrübə və Bacarıqlar')
                     ->schema([
-                        Forms\Components\TagsInput::make('skills')
-                            ->label('Texnologiyalar & Bacarıqlar')
-                            ->placeholder('Bacarıq əlavə et və Enter bas')
+                        Forms\Components\Select::make('skills')
+                            ->label('Bacarıqlar (Admin kataloqu)')
+                            ->multiple()
+                            ->searchable()
+                            ->preload()
+                            ->options(fn (Forms\Get $get): array => static::skillOptions($get('category_parent_id') ? (int) $get('category_parent_id') : null))
+                            ->helperText('Seçilən kateqoriyaya (alt kateqoriyalar daxil) aid admin bacarıqları göstərilir.')
                             ->columnSpanFull(),
 
                         Forms\Components\Textarea::make('description')

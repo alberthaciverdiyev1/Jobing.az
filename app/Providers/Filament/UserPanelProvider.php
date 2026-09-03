@@ -24,7 +24,7 @@ class UserPanelProvider extends PanelProvider
         return $panel
             ->id('user')
             ->path('user')
-            ->login()
+            // ->login() kaldırıldı: tek giriş noktası sitenin /login sayfası.
             ->profile()
             ->brandName('Jobing Hesabım')
             ->colors([

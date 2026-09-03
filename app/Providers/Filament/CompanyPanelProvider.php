@@ -24,7 +24,7 @@ class CompanyPanelProvider extends PanelProvider
         return $panel
             ->id('company')
             ->path('company')
-            ->login()
+            // ->login() kaldırıldı: tek giriş noktası sitenin /login sayfası.
             ->profile()
             ->brandName('Jobing Şirkət')
             ->colors([
