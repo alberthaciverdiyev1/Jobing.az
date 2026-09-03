@@ -102,7 +102,6 @@ class JobSeekerController extends Controller
             'experienceLevels' => ExperienceLevel::active()->withCount(['jobSeekers' => fn ($q) => $q->published()])->get(),
             'cities' => VacancyService::cityOptions(),
             'cityCounts' => $cityCounts,
-            'totalCount' => JobSeeker::published()->count(),
         ]);
     }
 
@@ -145,11 +144,11 @@ class JobSeekerController extends Controller
             'contact_name' => $data['contact_name'],
             'contact_email' => $data['contact_email'] ?? null,
             'contact_phone' => $data['contact_phone'] ?? null,
-            'status' => 'published',
+            'status' => JobSeeker::STATUS_PENDING, // Admin onayı bekler; onaylanınca yayınlanır.
         ]);
 
-        return redirect()->route('job-seekers.show', $jobSeeker->slug)
-            ->with('success', __('İş axtarış elanınız uğurla yayınlandı!'));
+        return redirect()->route('home')
+            ->with('success', __('İş axtarış elanınız qəbul edildi və admin onayından sonra yayınlanacaq.'));
     }
 
     public function show(string $slug): View
@@ -158,7 +157,9 @@ class JobSeekerController extends Controller
             ->where('slug', $slug)
             ->firstOrFail();
 
-        $jobSeeker->increment('views_count');
+        if (! is_bot_request()) {
+            $jobSeeker->increment('views_count');
+        }
 
         return view('pages.job-seekers.show', [
             'jobSeeker' => $jobSeeker,

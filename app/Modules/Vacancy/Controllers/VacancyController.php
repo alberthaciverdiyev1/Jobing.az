@@ -101,6 +101,20 @@ class VacancyController extends Controller
             return back()->with('error', __('Siz artıq bu vakansiyaya müraciət etmisiniz.'));
         }
 
+        // Misafir kullanıcılar için e-posta bazlı tekrar kontrolü (spam önleme)
+        if (! auth()->check()) {
+            $applicantEmail = mb_strtolower(trim((string) ($request->validated()['applicant_email'] ?? '')));
+            if ($applicantEmail !== '' && \App\Modules\Application\Models\Application::where('vacancy_id', $vacancy->id)
+                ->whereRaw('LOWER(applicant_email) = ?', [$applicantEmail])
+                ->exists()) {
+                $duplicateMsg = __('Bu e-poçt ünvanı ilə artıq bu vakansiyaya müraciət etmisiniz.');
+                if ($request->wantsJson() || $request->ajax()) {
+                    return response()->json(['success' => false, 'message' => $duplicateMsg], 422);
+                }
+                return back()->with('error', $duplicateMsg);
+            }
+        }
+
         // Reject applications for inactive or expired vacancies
         abort_unless(
             $vacancy->is_active && (!$vacancy->deadline || $vacancy->deadline->gte(today())),

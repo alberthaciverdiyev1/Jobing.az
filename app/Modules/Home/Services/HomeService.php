@@ -4,10 +4,25 @@ namespace App\Modules\Home\Services;
 
 use App\Modules\Category\Models\Category;
 use App\Modules\Company\Models\Company;
+use App\Modules\JobSeeker\Models\JobSeeker;
+use App\Modules\Resume\Models\Resume;
 use App\Modules\Vacancy\Models\Vacancy;
 
 class HomeService
 {
+    /**
+     * About sayfası için ortak istatistikler (tek kaynak).
+     */
+    public function getAboutStats(): array
+    {
+        return [
+            'vacancies' => Vacancy::active()->count(),
+            'companies' => Company::count(),
+            'resumes' => Resume::where('is_public', true)->count(),
+            'jobSeekers' => JobSeeker::published()->count(),
+        ];
+    }
+
     /**
      * Retrieve aggregated data for the homepage.
      *
@@ -50,7 +65,9 @@ class HomeService
             'verified_companies' => Company::where('is_verified', true)->count(),
             'categories' => Category::count(),
             'applications' => \App\Modules\Application\Models\Application::count(),
-            'remote' => Vacancy::active()->whereHas('workplaceType', fn ($q) => $q->where('slug', 'remote')->orWhere('name', 'ilike', '%Uzaktan%')->orWhere('name', 'ilike', '%Məsafədən%'))->count(),
+            'remote' => Vacancy::active()
+                ->whereHas('workplaceType', fn ($q) => $q->whereIn('slug', config('site.remote_workplace_slugs', ['uzaktan', 'remote'])))
+                ->count(),
             'recent_7_days' => $recentJobsCount,
         ];
 

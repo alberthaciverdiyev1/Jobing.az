@@ -12,6 +12,9 @@ class Application extends Model
 {
     use HasFactory;
 
+    /** Yeni oluşturulan başvurunun durumu (DB değeriyle birebir — tek kaynak). */
+    public const STATUS_PENDING = 'Beklemede';
+
     protected static function booted(): void
     {
         static::observe(\App\Modules\Application\Observers\ApplicationObserver::class);
@@ -22,6 +25,9 @@ class Application extends Model
             } catch (\Throwable $e) {
                 report($e);
             }
+
+            // Başvuru listesi memoize'i bayatlamasın (bkz. User::appliedVacancyIds).
+            \App\Models\User::flushAppliedVacancyCache($application->user_id);
         });
     }
 

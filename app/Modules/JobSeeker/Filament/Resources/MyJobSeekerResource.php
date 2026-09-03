@@ -149,10 +149,11 @@ class MyJobSeekerResource extends Resource
                         Forms\Components\Select::make('status')
                             ->label('Status')
                             ->options([
-                                'published' => 'Aktiv (Yayınlanıb)',
+                                \App\Modules\JobSeeker\Models\JobSeeker::STATUS_PENDING => 'Gözləmədə (Admin onayı)',
                                 'draft' => 'Qaralama (Gizli)',
                             ])
-                            ->default('published')
+                            // Kullanıcı kendi elanını yayınlayamaz; onayı admin (JobSeekerResource) verir.
+                            ->default(\App\Modules\JobSeeker\Models\JobSeeker::STATUS_PENDING)
                             ->required(),
                     ])->columns(2),
             ]);

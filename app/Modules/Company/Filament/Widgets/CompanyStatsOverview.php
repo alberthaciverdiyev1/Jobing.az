@@ -19,7 +19,7 @@ class CompanyStatsOverview extends BaseWidget
 
         $applicationsQuery = Application::whereHas('vacancy', fn ($q) => $q->where('company_id', $companyId));
         $applicationCount = (clone $applicationsQuery)->count();
-        $pendingCount = (clone $applicationsQuery)->where('status', 'Beklemede')->count();
+        $pendingCount = (clone $applicationsQuery)->where('status', \App\Modules\Application\Models\Application::STATUS_PENDING)->count();
 
         return [
             Stat::make('Toplam İlan', $vacancyCount)

@@ -18,6 +18,15 @@ class User extends Authenticatable implements FilamentUser
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
+    /**
+     * appliedVacancyIds() için istek-içi memoize.
+     * Octane/uzun ömürlü worker'larda bayat kalmaması için yeni başvuru
+     * oluşturulduğunda flushAppliedVacancyCache() çağrılmalıdır.
+     *
+     * @var array<int, array<int, int>>
+     */
+    protected static array $appliedVacancyIdsMemo = [];
+
     public function canAccessPanel(Panel $panel): bool
     {
         if ((bool) $this->is_admin) {
@@ -113,15 +122,24 @@ class User extends Authenticatable implements FilamentUser
      */
     public function appliedVacancyIds(): array
     {
-        static $memoized = [];
-
-        if (! array_key_exists($this->id, $memoized)) {
-            $memoized[$this->id] = $this->applications()
+        if (! array_key_exists($this->id, static::$appliedVacancyIdsMemo)) {
+            static::$appliedVacancyIdsMemo[$this->id] = $this->applications()
                 ->pluck('vacancy_id')
                 ->all();
         }
 
-        return $memoized[$this->id];
+        return static::$appliedVacancyIdsMemo[$this->id];
+    }
+
+    /**
+     * Bir kullanıcının başvuru memoize'ini boşaltır.
+     * Yeni başvuru eklendiğinde çağrılır (bkz. Application::created).
+     */
+    public static function flushAppliedVacancyCache(?int $userId): void
+    {
+        if ($userId !== null) {
+            unset(static::$appliedVacancyIdsMemo[$userId]);
+        }
     }
 
     public function resumes(): HasMany

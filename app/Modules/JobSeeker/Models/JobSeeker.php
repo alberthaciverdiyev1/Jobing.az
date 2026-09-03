@@ -31,6 +31,11 @@ class JobSeeker extends Model
 
     protected string $slugSource = 'title';
 
+    /** Yayın durumları (DB değerleriyle birebir — tek kaynak). */
+    public const STATUS_PUBLISHED = 'published';
+    public const STATUS_PENDING = 'pending';
+    public const STATUS_REJECTED = 'rejected';
+
     protected $fillable = [
         'user_id',
         'title',

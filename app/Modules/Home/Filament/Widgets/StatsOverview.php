@@ -21,7 +21,7 @@ class StatsOverview extends BaseWidget
                 ->chart([7, 12, 10, 18, 14, 22, Vacancy::count()]),
 
             Stat::make('Toplam Başvuru', Application::count())
-                ->description(Application::where('status', 'Beklemede')->count() . ' incelenmeyi bekliyor')
+                ->description(Application::where('status', Application::STATUS_PENDING)->count() . ' incelenmeyi bekliyor')
                 ->descriptionIcon('heroicon-m-document-text')
                 ->color('warning')
                 ->chart([3, 6, 8, 14, 12, 20, Application::count()]),
