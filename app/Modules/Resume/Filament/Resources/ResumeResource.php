@@ -35,22 +35,45 @@ class ResumeResource extends Resource
         return true;
     }
 
-    public static function canEdit(\Illuminate\Database\Eloquent\Model $record): bool
+    public static function canView(\Illuminate\Database\Eloquent\Model $record): bool
     {
-        if (\Filament\Facades\Filament::getCurrentPanel()?->getId() === 'company') {
-            return false;
+        $panel = \Filament\Facades\Filament::getCurrentPanel()?->getId();
+
+        // admin tümü, company aday CV-lərinə baxa bilər, user yalnız özününkü.
+        if ($panel !== 'user') {
+            return true;
         }
 
-        return true;
+        return $record->user_id === auth()->id();
+    }
+
+    public static function canEdit(\Illuminate\Database\Eloquent\Model $record): bool
+    {
+        return static::canMutateRecord($record);
     }
 
     public static function canDelete(\Illuminate\Database\Eloquent\Model $record): bool
     {
-        if (\Filament\Facades\Filament::getCurrentPanel()?->getId() === 'company') {
-            return false;
+        return static::canMutateRecord($record);
+    }
+
+    /**
+     * Düzenleme/silmə: admin her şeyə; /user panelində yalnız sahibi;
+     * company paneli CV-ləri yalnız baxmaq üçün görür (dəyişdirə bilməz).
+     */
+    protected static function canMutateRecord(\Illuminate\Database\Eloquent\Model $record): bool
+    {
+        $panel = \Filament\Facades\Filament::getCurrentPanel()?->getId();
+
+        if ($panel === 'admin') {
+            return true;
         }
 
-        return true;
+        if ($panel === 'user') {
+            return $record->user_id === auth()->id();
+        }
+
+        return false; // company
     }
 
     public static function canDeleteAny(): bool
