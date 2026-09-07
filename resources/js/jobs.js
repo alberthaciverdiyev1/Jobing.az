@@ -79,7 +79,8 @@ export default function jobsManager(config = null) {
                 if (pathCity) {
                     this.city = [pathCity];
                 } else {
-                    this.city = params.getAll('city');
+                    const queryCity = params.get('city');
+                    this.city = queryCity ? [queryCity] : [];
                 }
 
                 this.q = params.get('q') || '';
@@ -197,6 +198,10 @@ export default function jobsManager(config = null) {
         },
 
         toggleFilter(filterName, value) {
+            if (filterName === 'city') {
+                this.toggleCity(value);
+                return;
+            }
             const arr = this[filterName];
             const idx = arr.indexOf(value);
             if (idx > -1) {
@@ -204,6 +209,20 @@ export default function jobsManager(config = null) {
             } else {
                 arr.push(value);
             }
+            this.applyFilters();
+        },
+
+        toggleCity(slug) {
+            if (this.city.includes(slug)) {
+                this.city = [];
+            } else {
+                this.city = [slug];
+            }
+            this.applyFilters();
+        },
+
+        clearCity() {
+            this.city = [];
             this.applyFilters();
         },
 
@@ -264,11 +283,6 @@ export default function jobsManager(config = null) {
             // If there are additional subcategories / categories beyond the first
             if (this.category.length > 1) {
                 this.category.slice(1).forEach(c => params.append('category[]', c));
-            }
-
-            // If there are additional cities beyond the first
-            if (this.city.length > 1) {
-                this.city.slice(1).forEach(c => params.append('city[]', c));
             }
 
             if (this.q) params.set('q', this.q);
