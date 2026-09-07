@@ -51,6 +51,17 @@ class Resume extends Model
         'is_public' => 'boolean',
     ];
 
+    protected static function booted(): void
+    {
+        static::saving(function (Resume $resume) {
+            if ($resume->is_default && $resume->user_id) {
+                static::where('user_id', $resume->user_id)
+                    ->where('id', '!=', $resume->id ?? 0)
+                    ->update(['is_default' => false]);
+            }
+        });
+    }
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

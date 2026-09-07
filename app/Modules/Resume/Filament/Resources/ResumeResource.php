@@ -149,13 +149,11 @@ class ResumeResource extends Resource
                     ->collapsible()
                     ->schema([
                         Forms\Components\Grid::make(2)->schema([
-                            Forms\Components\Grid::make(2)->schema([
-                                Forms\Components\ViewField::make('certificates')
-                                    ->view('filament.forms.components.custom-certificates'),
+                            Forms\Components\ViewField::make('certificates')
+                                ->view('filament.forms.components.custom-certificates'),
 
-                                Forms\Components\ViewField::make('awards')
-                                    ->view('filament.forms.components.custom-awards'),
-                            ]),
+                            Forms\Components\ViewField::make('awards')
+                                ->view('filament.forms.components.custom-awards'),
                         ]),
                     ]),
             ]);
@@ -197,6 +195,9 @@ class ResumeResource extends Resource
                     ->sortable(),
             ])
             ->defaultSort('updated_at', 'desc')
+            ->emptyStateActions([
+                Tables\Actions\CreateAction::make()->label('Yeni CV Əlavə Et'),
+            ])
             ->actions([
                 Tables\Actions\Action::make('preview')
                     ->label('CV-yə Bax')

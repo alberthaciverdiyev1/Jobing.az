@@ -28,6 +28,11 @@ class MyResumeResource extends Resource
         return true;
     }
 
+    public static function canCreate(): bool
+    {
+        return true;
+    }
+
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()->where('user_id', auth()->id());

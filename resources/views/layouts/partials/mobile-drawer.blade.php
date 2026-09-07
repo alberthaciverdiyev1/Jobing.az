@@ -120,6 +120,14 @@
               </span>
               @endif
             </a>
+            @if(auth()->user()->isUser())
+            <a href="{{ route('filament.user.resources.my-resumes.index') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-50">
+              <span class="flex items-center gap-3">
+                <i class="fa-solid fa-file-lines text-primary w-5 text-center"></i>
+                <span>{{ __('CV & Rezümələrim') }}</span>
+              </span>
+            </a>
+            @endif
             <form method="POST" action="{{ route('logout') }}" class="m-0 js-logout pt-1">
               @csrf
               <button type="submit" class="w-full flex items-center px-3.5 py-2.5 text-sm text-red-600 hover:bg-red-50 text-left font-medium rounded-xl cursor-pointer">
