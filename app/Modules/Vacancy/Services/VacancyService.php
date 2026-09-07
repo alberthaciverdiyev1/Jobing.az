@@ -412,6 +412,9 @@ class VacancyService
         $workplaceTypeModel = $workplaceTypeId ? WorkplaceType::find($workplaceTypeId) : null;
         $experienceLevelModel = $experienceLevelId ? ExperienceLevel::find($experienceLevelId) : null;
 
+        $canUseInternal = auth()->check() && (auth()->user()->isCompany() || auth()->user()->is_admin);
+        $applicationType = $canUseInternal ? ($data['application_type'] ?? 'internal') : 'email';
+
         // 5. Create Vacancy
         return Vacancy::create([
             'company_id' => $company->id,
@@ -433,7 +436,7 @@ class VacancyService
             'benefits' => $data['benefits'] ?? null,
             'skills' => $skills,
             'deadline' => $data['deadline'] ?? null,
-            'application_type' => $data['application_type'] ?? 'internal',
+            'application_type' => $applicationType,
             'application_email' => $data['application_email'] ?? $company->email,
             'application_fields' => $data['application_fields'] ?? ['phone', 'linkedin', 'portfolio', 'cover_letter'],
             'is_active' => false, // Requires admin approval before appearing publicly

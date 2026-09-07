@@ -35,6 +35,7 @@
         @endif
 
         @php
+            $canUseInternal = auth()->check() && (auth()->user()->isCompany() || auth()->user()->is_admin);
             // Determine initial parent/subcategory from the previously submitted value (on validation errors)
             $initialParent = '';
             $initialSub = '';
@@ -52,7 +53,7 @@
 
         <form action="{{ route('jobs.store') }}" method="POST" class="space-y-6" @submit="syncQuillBeforeSubmit()"
               x-data="{
-                applicationType: @js(old('application_type', auth()->check() ? 'internal' : 'email')),
+                applicationType: @js(old('application_type', $canUseInternal ? 'internal' : 'email')),
                 salaryNegotiable: @js((bool) old('salary_negotiable', false)),
                 skillSearch: '',
                 selectedSkills: @js((array) old('skills', [])),
@@ -401,7 +402,7 @@
 
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                     {{-- Internal (CV upload to platform) --}}
-                    @if(auth()->check())
+                    @if($canUseInternal)
                     <label :class="applicationType === 'internal' ? 'border-primary bg-orange-50/60 ring-1 ring-primary' : 'border-gray-200 hover:border-gray-300'"
                            class="cursor-pointer rounded-2xl border p-4 transition flex flex-col gap-1.5">
                         <input type="radio" name="application_type" value="internal" x-model="applicationType" class="sr-only">
@@ -421,11 +422,11 @@
                             <i class="fas fa-cloud-arrow-up text-gray-400 text-lg"></i>
                             <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200 flex items-center gap-1">
                                 <i class="fas fa-lock text-[8px]"></i>
-                                {{ __('Giriş tələb olunur') }}
+                                {{ __('Şirkət hesabı tələb olunur') }}
                             </span>
                         </div>
                         <span class="font-bold text-gray-500 text-xs mt-1">{{ __('CV ilə (Daxili)') }}</span>
-                        <span class="text-[11px] text-gray-400 leading-relaxed">{{ __('Platforma daxili CV qəbulu üçün şirkət hesabına daxil olmalısınız.') }}</span>
+                        <span class="text-[11px] text-gray-400 leading-relaxed">{{ __('Platforma daxili CV qəbulu və idarəetmə yalnız qeydiyyatlı şirkət hesabları üçündür.') }}</span>
                     </div>
                     @endif
 
@@ -445,7 +446,7 @@
                     </label>
 
                     {{-- Both --}}
-                    @if(auth()->check())
+                    @if($canUseInternal)
                     <label :class="applicationType === 'both' ? 'border-primary bg-orange-50/60 ring-1 ring-primary' : 'border-gray-200 hover:border-gray-300'"
                            class="cursor-pointer rounded-2xl border p-4 transition flex flex-col gap-1.5">
                         <input type="radio" name="application_type" value="both" x-model="applicationType" class="sr-only">
@@ -465,14 +466,21 @@
                             <i class="fas fa-layer-group text-gray-400 text-lg"></i>
                             <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200 flex items-center gap-1">
                                 <i class="fas fa-lock text-[8px]"></i>
-                                {{ __('Giriş tələb olunur') }}
+                                {{ __('Şirkət hesabı tələb olunur') }}
                             </span>
                         </div>
                         <span class="font-bold text-gray-500 text-xs mt-1">{{ __('Hər İkisi') }}</span>
-                        <span class="text-[11px] text-gray-400 leading-relaxed">{{ __('Platforma daxili idarəetmə üçün şirkət hesabına daxil olmalısınız.') }}</span>
+                        <span class="text-[11px] text-gray-400 leading-relaxed">{{ __('Platforma daxili CV qəbulu və idarəetmə yalnız qeydiyyatlı şirkət hesabları üçündür.') }}</span>
                     </div>
                     @endif
                 </div>
+
+                @if(auth()->check() && auth()->user()->isUser())
+                <div class="p-3.5 rounded-xl bg-orange-50/70 border border-orange-100 text-orange-900 text-xs flex items-center gap-2.5">
+                    <i class="fas fa-info-circle text-orange-500 text-sm shrink-0"></i>
+                    <span>{{ __('Fərdi istifadəçi hesabı ilə yerləşdirilən vakansiyalarda müraciətlər yalnız e-poçt vasitəsilə qəbul edilir.') }}</span>
+                </div>
+                @endif
 
                 @guest
                 <div class="p-3.5 rounded-xl bg-blue-50 border border-blue-100 text-blue-800 text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
@@ -480,7 +488,7 @@
                         <i class="fas fa-info-circle text-blue-500 text-sm shrink-0"></i>
                         <span>{{ __('Giriş etmədiyiniz üçün müraciətlər yalnız e-poçt vasitəsilə qəbul ediləcək. Müraciətləri panelinizdə idarə etmək üçün şirkət hesabınıza daxil ola bilərsiniz.') }}</span>
                     </div>
-                    <a href="{{ url('/admin/login') }}" class="shrink-0 font-bold text-primary hover:underline flex items-center gap-1 text-xs">
+                    <a href="{{ route('login') }}" class="shrink-0 font-bold text-primary hover:underline flex items-center gap-1 text-xs">
                         <span>{{ __('Daxil ol') }}</span>
                         <i class="fas fa-arrow-right text-[10px]"></i>
                     </a>
@@ -495,19 +503,19 @@
                      class="pt-2">
                     <label class="block text-xs font-bold text-gray-700 mb-1">
                         {{ __('Müraciət Qəbul Ediləcək E-Posta Adresi') }}
-                        @guest * @endguest
+                        @if(!$canUseInternal) * @endif
                     </label>
                     <input type="email" name="application_email"
-                           value="{{ old('application_email', $authCompany->email ?? '') }}"
+                           value="{{ old('application_email', $authCompany->email ?? (auth()->user()?->isUser() ? auth()->user()->email : '')) }}"
                            placeholder="hr@company.com"
-                           @guest required @endguest
+                           {{ !$canUseInternal ? 'required' : '' }}
                            class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs focus:ring-1 focus:ring-primary focus:border-primary focus:outline-hidden">
                     <p class="text-[11px] text-gray-400 mt-1">
-                        @auth
-                        {{ __('Boş buraxsanız, şirkət profilinizdəki rəsmi e-poçt ünvanı istifadə olunacaq.') }}
+                        @if($canUseInternal)
+                            {{ __('Boş buraxsanız, şirkət profilinizdəki rəsmi e-poçt ünvanı istifadə olunacaq.') }}
                         @else
-                        {{ __('Namizədlərin müraciətləri və CV-ləri birbaşa bu e-poçt ünvanına göndəriləcək.') }}
-                        @endauth
+                            {{ __('Namizədlərin müraciətləri və CV-ləri birbaşa bu e-poçt ünvanına göndəriləcək.') }}
+                        @endif
                     </p>
                 </div>
 
