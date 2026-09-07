@@ -14,6 +14,7 @@ export default function resumesManager(config = null) {
         sort: config.initialSort || 'latest',
         totalCount: config.initialTotal || 0,
         cityCounts: config.initialCityCounts || {},
+        categoryCounts: config.initialCategoryCounts || {},
         categorySkills: config.categorySkills || {},
         allSkills: config.allSkills || [],
 
@@ -53,6 +54,13 @@ export default function resumesManager(config = null) {
         getCityCount(name, fallback = 0) {
             if (this.cityCounts && this.cityCounts[name] !== undefined) {
                 return this.cityCounts[name];
+            }
+            return fallback;
+        },
+
+        getCategoryCount(slug, fallback = 0) {
+            if (this.categoryCounts && this.categoryCounts[slug] !== undefined) {
+                return this.categoryCounts[slug];
             }
             return fallback;
         },
@@ -143,7 +151,10 @@ export default function resumesManager(config = null) {
                     }
                     this.totalCount = data.total;
                     if (data.cityCounts) {
-                        this.cityCounts = data.cityCounts;
+                         this.cityCounts = data.cityCounts;
+                    }
+                    if (data.categoryCounts) {
+                        this.categoryCounts = data.categoryCounts;
                     }
                     window.scrollTo({ top: 150, behavior: 'smooth' });
                 }
@@ -180,6 +191,9 @@ export default function resumesManager(config = null) {
                     this.totalCount = data.total;
                     if (data.cityCounts) {
                         this.cityCounts = data.cityCounts;
+                    }
+                    if (data.categoryCounts) {
+                        this.categoryCounts = data.categoryCounts;
                     }
                 }
             } catch (err) {

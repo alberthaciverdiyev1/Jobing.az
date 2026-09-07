@@ -34,11 +34,14 @@ class ResumeController extends Controller
         $selectedSkills = array_filter($selectedSkills);
         if ($categorySlug = $request->input('category')) {
             if (empty($selectedSkills)) {
-                $categoryModel = \App\Modules\Category\Models\Category::where('slug', $categorySlug)->with('skills')->first();
-                if ($categoryModel && $categoryModel->skills->isNotEmpty()) {
-                    $catSkillNames = $categoryModel->skills->map(function ($s) {
+                $categoryModel = \App\Modules\Category\Models\Category::where('slug', $categorySlug)
+                    ->with(['skills' => fn ($q) => $q->active(), 'children.skills' => fn ($q) => $q->active()])
+                    ->first();
+                if ($categoryModel) {
+                    $allSkills = $categoryModel->skills->merge($categoryModel->children->flatMap->skills);
+                    $catSkillNames = $allSkills->map(function ($s) {
                         return is_array($s->name) ? ($s->name['az'] ?? reset($s->name)) : $s->name;
-                    })->filter()->values()->all();
+                    })->filter()->unique()->values()->all();
 
                     if (!empty($catSkillNames)) {
                         $query->where(function ($q) use ($catSkillNames) {
@@ -91,13 +94,18 @@ class ResumeController extends Controller
             ->toArray();
 
         $categories = \App\Modules\Category\Models\Category::parents()
-            ->with(['skills' => fn ($q) => $q->active()])
+            ->with(['skills' => fn ($q) => $q->active(), 'children.skills' => fn ($q) => $q->active()])
             ->get();
 
-        // Build array of skills grouped by category slug for seamless Alpine.js switching
+        // Build array of skills and resume count per category
         $categorySkillsMap = [];
+        $categoryResumeCounts = [];
+        $publicResumes = Resume::where('is_public', true)->get(['id', 'skills']);
+
         foreach ($categories as $cat) {
             $catSkills = [];
+            $allSkills = $cat->skills->merge($cat->children->flatMap->skills);
+
             foreach ($cat->skills as $sk) {
                 $skillName = is_array($sk->name) ? ($sk->name['az'] ?? reset($sk->name)) : $sk->name;
                 $catSkills[] = [
@@ -106,6 +114,27 @@ class ResumeController extends Controller
                 ];
             }
             $categorySkillsMap[$cat->slug] = $catSkills;
+
+            $allSkillNames = $allSkills->map(function ($s) {
+                return is_array($s->name) ? ($s->name['az'] ?? reset($s->name)) : $s->name;
+            })->filter()->unique()->values()->all();
+
+            if (empty($allSkillNames)) {
+                $categoryResumeCounts[$cat->slug] = 0;
+            } else {
+                $categoryResumeCounts[$cat->slug] = $publicResumes->filter(function ($r) use ($allSkillNames) {
+                    if (empty($r->skills) || !is_array($r->skills)) {
+                        return false;
+                    }
+                    $rSkillText = json_encode($r->skills);
+                    foreach ($allSkillNames as $sn) {
+                        if (stripos($rSkillText, $sn) !== false) {
+                            return true;
+                        }
+                    }
+                    return false;
+                })->count();
+            }
         }
 
         $popularSkills = Skill::active()->orderBy('order')->take(25)->get();
@@ -119,6 +148,7 @@ class ResumeController extends Controller
                 ])->render(),
                 'total' => $resumes->total(),
                 'cityCounts' => $cityCounts,
+                'categoryCounts' => $categoryResumeCounts,
             ])
             ->header('Vary', 'X-Requested-With, Accept')
             ->header('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0, private');
@@ -130,6 +160,7 @@ class ResumeController extends Controller
             'cityCounts' => $cityCounts,
             'categories' => $categories,
             'categorySkillsMap' => $categorySkillsMap,
+            'categoryCounts' => $categoryResumeCounts,
             'popularSkills' => $popularSkills,
             'totalCount' => $resumes->total(),
         ]);
