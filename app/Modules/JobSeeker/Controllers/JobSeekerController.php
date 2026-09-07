@@ -72,12 +72,18 @@ class JobSeekerController extends Controller
 
         // Sorting
         $sort = $request->input('sort', 'latest');
-        if ($sort === 'salary_desc') {
-            $query->orderBy('is_featured', 'desc')->orderByRaw('COALESCE(salary_max, salary_min, 0) DESC')->orderByRaw('COALESCE(job_seekers.bumped_at, job_seekers.created_at) DESC');
+        if ($sort === 'oldest') {
+            $query->orderBy('is_featured', 'desc')->orderByRaw('COALESCE(job_seekers.bumped_at, job_seekers.created_at) ASC');
+        } elseif ($sort === 'salary_desc') {
+            $query->orderBy('is_featured', 'desc')->orderByRaw('COALESCE(salary_max, salary_min, 0) DESC NULLS LAST')->orderByRaw('COALESCE(job_seekers.bumped_at, job_seekers.created_at) DESC');
         } elseif ($sort === 'salary_asc') {
-            $query->orderBy('is_featured', 'desc')->orderByRaw('COALESCE(salary_min, salary_max, 999999) ASC')->orderByRaw('COALESCE(job_seekers.bumped_at, job_seekers.created_at) DESC');
+            $query->orderBy('is_featured', 'desc')->orderByRaw('COALESCE(salary_min, salary_max, 999999) ASC NULLS LAST')->orderByRaw('COALESCE(job_seekers.bumped_at, job_seekers.created_at) DESC');
         } elseif ($sort === 'popular') {
             $query->orderBy('is_featured', 'desc')->orderByDesc('views_count')->orderByRaw('COALESCE(job_seekers.bumped_at, job_seekers.created_at) DESC');
+        } elseif ($sort === 'featured') {
+            $query->orderByDesc('is_featured')->orderByRaw('COALESCE(job_seekers.bumped_at, job_seekers.created_at) DESC');
+        } elseif ($sort === 'alphabetical') {
+            $query->orderBy('title', 'asc');
         } else {
             // Default: Premium first, then latest bumped/created
             $query->orderBy('is_featured', 'desc')->orderByRaw('COALESCE(job_seekers.bumped_at, job_seekers.created_at) DESC');

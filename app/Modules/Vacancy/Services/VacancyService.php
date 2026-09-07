@@ -39,19 +39,36 @@ class VacancyService
         $selectedTypes       = array_filter((array) ($filters['type'] ?? []));
         $selectedExperiences = array_filter((array) ($filters['experience'] ?? []));
 
-        // 2. Category / Subcategory (multi-select, includes children of selected parents)
-        if (!empty($selectedCategories)) {
+        // 2. Category / Subcategory (multi-select: if a child is selected, parent is excluded)
+        $resolveCategoryIds = function (array $catSlugs): array {
+            if (empty($catSlugs)) {
+                return [];
+            }
+            $cats = Category::with('children')->whereIn('slug', $catSlugs)->get();
+            $parentIdsOfSelectedChildren = $cats->whereNotNull('parent_id')->pluck('parent_id')->unique()->all();
+
+            $effectiveCats = $cats->reject(function ($cat) use ($parentIdsOfSelectedChildren) {
+                return is_null($cat->parent_id) && in_array($cat->id, $parentIdsOfSelectedChildren, true);
+            });
+
             $categoryIds = [];
-            foreach ($selectedCategories as $catSlug) {
-                $categoryObj = Category::with('children')->where('slug', $catSlug)->first();
-                if ($categoryObj) {
-                    $categoryIds[] = $categoryObj->id;
-                    foreach ($categoryObj->children as $child) {
+            foreach ($effectiveCats as $cat) {
+                $categoryIds[] = $cat->id;
+                if ($cat->children->isNotEmpty()) {
+                    foreach ($cat->children as $child) {
                         $categoryIds[] = $child->id;
                     }
                 }
             }
-            $query->whereIn('category_id', array_unique($categoryIds));
+
+            return array_unique($categoryIds);
+        };
+
+        if (!empty($selectedCategories)) {
+            $categoryIds = $resolveCategoryIds($selectedCategories);
+            if (!empty($categoryIds)) {
+                $query->whereIn('category_id', $categoryIds);
+            }
         }
 
         // 3. Workplace type (multi-select)
@@ -88,12 +105,20 @@ class VacancyService
         $sort = $filters['sort'] ?? 'latest';
         if ($sort === 'oldest') {
             $query->orderBy('is_featured', 'desc')->orderByRaw('COALESCE(vacancies.bumped_at, vacancies.created_at) ASC');
-        } elseif ($sort === 'salary_desc') {
-            $query->orderBy('is_featured', 'desc')->orderByRaw('COALESCE(salary_max, salary_min) DESC')->orderByRaw('COALESCE(vacancies.bumped_at, vacancies.created_at) DESC');
+        } elseif ($sort === 'salary_desc' || $sort === 'salary_high') {
+            $query->orderBy('is_featured', 'desc')->orderByRaw('COALESCE(salary_max, salary_min) DESC NULLS LAST')->orderByRaw('COALESCE(vacancies.bumped_at, vacancies.created_at) DESC');
         } elseif ($sort === 'salary_asc') {
-            $query->orderBy('is_featured', 'desc')->orderByRaw('COALESCE(salary_min, salary_max) ASC')->orderByRaw('COALESCE(vacancies.bumped_at, vacancies.created_at) DESC');
+            $query->orderBy('is_featured', 'desc')->orderByRaw('COALESCE(salary_min, salary_max) ASC NULLS LAST')->orderByRaw('COALESCE(vacancies.bumped_at, vacancies.created_at) DESC');
         } elseif ($sort === 'views') {
             $query->orderBy('is_featured', 'desc')->orderByDesc('views_count')->orderByRaw('COALESCE(vacancies.bumped_at, vacancies.created_at) DESC');
+        } elseif ($sort === 'deadline') {
+            $query->orderBy('is_featured', 'desc')->orderByRaw('deadline ASC NULLS LAST')->orderByRaw('COALESCE(vacancies.bumped_at, vacancies.created_at) DESC');
+        } elseif ($sort === 'featured') {
+            $query->orderByDesc('is_featured')->orderByRaw('COALESCE(vacancies.bumped_at, vacancies.created_at) DESC');
+        } elseif ($sort === 'title_asc' || $sort === 'alphabetical') {
+            $query->orderBy('title', 'asc');
+        } elseif ($sort === 'title_desc') {
+            $query->orderBy('title', 'desc');
         } else {
             // Default latest: Premium first, then latest bumped/created
             $query->orderBy('is_featured', 'desc')->orderByRaw('COALESCE(vacancies.bumped_at, vacancies.created_at) DESC');
@@ -104,21 +129,14 @@ class VacancyService
         // Count scopes based on currently applied filters.
         // $attributeScope includes the selected category; $categoryCountScope does not
         // (so category counts reflect search/other filters but aren't narrowed by the category itself).
-        $makeScope = function (bool $includeCategory) use ($selectedCategories, $selectedWorkplaces, $selectedTypes, $selectedExperiences, $selectedCities, $filters) {
-            return function ($q) use ($includeCategory, $selectedCategories, $selectedWorkplaces, $selectedTypes, $selectedExperiences, $selectedCities, $filters) {
+        $makeScope = function (bool $includeCategory) use ($selectedCategories, $selectedWorkplaces, $selectedTypes, $selectedExperiences, $selectedCities, $filters, $resolveCategoryIds) {
+            return function ($q) use ($includeCategory, $selectedCategories, $selectedWorkplaces, $selectedTypes, $selectedExperiences, $selectedCities, $filters, $resolveCategoryIds) {
                 $q->active();
                 if ($includeCategory && !empty($selectedCategories)) {
-                    $categoryIds = [];
-                    foreach ($selectedCategories as $catSlug) {
-                        $cat = Category::with('children')->where('slug', $catSlug)->first();
-                        if ($cat) {
-                            $categoryIds[] = $cat->id;
-                            foreach ($cat->children as $child) {
-                                $categoryIds[] = $child->id;
-                            }
-                        }
+                    $categoryIds = $resolveCategoryIds($selectedCategories);
+                    if (!empty($categoryIds)) {
+                        $q->whereIn('category_id', $categoryIds);
                     }
-                    $q->whereIn('category_id', array_unique($categoryIds));
                 }
                 if (!empty($filters['q'])) {
                     $search = $filters['q'];
@@ -403,6 +421,7 @@ class VacancyService
             'deadline' => $data['deadline'] ?? null,
             'application_type' => $data['application_type'] ?? 'internal',
             'application_email' => $data['application_email'] ?? $company->email,
+            'application_fields' => $data['application_fields'] ?? ['phone', 'linkedin', 'portfolio', 'cover_letter'],
             'is_active' => false, // Requires admin approval before appearing publicly
             'is_featured' => false,
         ]);

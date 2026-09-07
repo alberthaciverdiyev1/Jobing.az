@@ -11,7 +11,7 @@
 
         <!-- Mobile Filter Trigger -->
         <div class="lg:hidden mb-4">
-            <button type="button" 
+            <button type="button"
                     @click="mobileFiltersOpen = !mobileFiltersOpen"
                     class="w-full flex items-center justify-between px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-xs font-bold text-gray-700 shadow-2xs cursor-pointer">
                 <span class="flex items-center gap-2">
@@ -39,7 +39,7 @@
                                 <span>{{ __('Filtrlər') }}</span>
                             </h3>
                             @if(request()->hasAny(['q', 'category', 'job_type', 'type', 'workplace_type', 'experience_level', 'city']))
-                            <a href="{{ route('job-seekers.index', array_merge(request()->only(['sort']))) }}" 
+                            <a href="{{ route('job-seekers.index', array_merge(request()->only(['sort']))) }}"
                                class="text-xs text-primary hover:text-primary-dark font-medium transition cursor-pointer">
                                 {{ __('Təmizlə') }}
                             </a>
@@ -50,15 +50,15 @@
                         <div>
                             <h4 class="text-xs font-bold text-gray-800 uppercase tracking-wider mb-2">{{ __('Axtarış') }}</h4>
                             <div class="relative">
-                                <input type="text" 
-                                       name="q" 
+                                <input type="text"
+                                       name="q"
                                        value="{{ request('q') }}"
-                                       placeholder="{{ __('Vəzifə, bacarıq, ad...') }}" 
+                                       placeholder="{{ __('Vəzifə, bacarıq, ad...') }}"
                                        onkeydown="if(event.key === 'Enter') this.form.submit()"
                                        class="w-full pl-8 pr-7 py-2 bg-gray-50 hover:bg-white focus:bg-white border border-gray-200 rounded-lg focus:outline-hidden focus:border-primary focus:ring-1 focus:ring-primary text-xs transition">
                                 <i class="fas fa-search absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400 text-[11px]"></i>
                                 @if(request('q'))
-                                <a href="{{ route('job-seekers.index', array_merge(request()->except('q'))) }}" 
+                                <a href="{{ route('job-seekers.index', array_merge(request()->except('q'))) }}"
                                    class="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 text-xs cursor-pointer">
                                     <i class="fas fa-times"></i>
                                 </a>
@@ -74,7 +74,6 @@
                                 <!-- All Categories Option -->
                                 <a href="{{ route('job-seekers.index', array_merge(request()->except(['category', 'page']))) }}"
                                    class="w-full flex items-center gap-2 px-2.5 py-2 rounded-lg transition text-left cursor-pointer {{ !request('category') ? 'bg-primary text-white font-semibold shadow-xs' : 'text-gray-600 hover:bg-gray-50' }}">
-                                    <i class="fas fa-th-large text-[10px]"></i>
                                     <span>{{ __('Bütün kateqoriyalar') }}</span>
                                 </a>
 
@@ -309,14 +308,17 @@
 
                     <div class="flex items-center gap-2 text-xs">
                         <span class="text-gray-500 hidden sm:inline">{{ __('Sıralama:') }}</span>
-                        <select name="sort" 
+                        <select name="sort"
                                 form="jobSeekersFilterForm"
-                                onchange="document.getElementById('jobSeekersFilterForm').submit()" 
+                                onchange="document.getElementById('jobSeekersFilterForm').submit()"
                                 class="text-xs border border-gray-200 rounded-lg px-3 py-1.5 bg-white focus:outline-hidden focus:border-primary text-gray-700 shadow-2xs cursor-pointer">
                             <option value="latest" @selected(request('sort') === 'latest')>{{ __('Tarixə görə (yeni)') }}</option>
+                            <option value="oldest" @selected(request('sort') === 'oldest')>{{ __('Tarixə görə (köhnə)') }}</option>
                             <option value="popular" @selected(request('sort') === 'popular')>{{ __('Ən çox baxılan') }}</option>
                             <option value="salary_desc" @selected(request('sort') === 'salary_desc')>{{ __('Maaşa görə (çoxdan aza)') }}</option>
                             <option value="salary_asc" @selected(request('sort') === 'salary_asc')>{{ __('Maaşa görə (azdan çoxa)') }}</option>
+                            <option value="featured" @selected(request('sort') === 'featured')>{{ __('Premium elanlar') }}</option>
+                            <option value="alphabetical" @selected(request('sort') === 'alphabetical')>{{ __('Əlifba sırası (A-Z)') }}</option>
                         </select>
                     </div>
                 </div>
