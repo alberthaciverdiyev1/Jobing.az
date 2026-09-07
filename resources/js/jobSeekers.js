@@ -33,7 +33,8 @@ export default function jobSeekersManager(config = null) {
                 const params = new URLSearchParams(window.location.search);
                 this.q = params.get('q') || '';
                 this.category = params.getAll('category');
-                this.city = params.getAll('city');
+                const queryCity = params.get('city');
+                this.city = queryCity ? [queryCity] : [];
                 this.workplaceType = params.getAll('workplace_type');
                 this.jobType = params.getAll('job_type');
                 this.experienceLevel = params.getAll('experience_level');
@@ -94,31 +95,24 @@ export default function jobSeekersManager(config = null) {
             if (wasActive) {
                 this.category.splice(idx, 1);
             } else {
-                this.category.push(slug);
-
-                // If a subcategory was selected, remove parent category from search
                 if (parentSlug) {
-                    const parentIdx = this.category.indexOf(parentSlug);
-                    if (parentIdx > -1) {
-                        this.category.splice(parentIdx, 1);
+                    // Subcategory clicked:
+                    // Keep only sibling subcategories of the SAME parent category, remove other parents/children
+                    const allowedChildren = this.categoryChildrenMap[parentSlug] || [];
+                    this.category = this.category.filter(c => allowedChildren.includes(c) && c !== parentSlug);
+                    this.category.push(slug);
+
+                    if (!this.openAccordions.includes(parentSlug)) {
+                        this.openAccordions.push(parentSlug);
                     }
-                }
+                } else {
+                    // Parent category clicked:
+                    // Parent categories cannot be multi-selected: clear other parents & their subcategories
+                    this.category = [slug];
 
-                // If parent was selected, remove any child subcategories
-                const childrenSlugs = this.categoryChildrenMap[slug] || [];
-                if (childrenSlugs && childrenSlugs.length) {
-                    this.category = this.category.filter(c => !childrenSlugs.includes(c));
-                }
-            }
-
-            // Open accordion
-            if (parentSlug) {
-                if (!this.openAccordions.includes(parentSlug)) {
-                    this.openAccordions.push(parentSlug);
-                }
-            } else {
-                if (!this.openAccordions.includes(slug)) {
-                    this.openAccordions.push(slug);
+                    if (!this.openAccordions.includes(slug)) {
+                        this.openAccordions.push(slug);
+                    }
                 }
             }
 
@@ -131,6 +125,10 @@ export default function jobSeekersManager(config = null) {
         },
 
         toggleFilter(filterName, value) {
+            if (filterName === 'city') {
+                this.toggleCity(value);
+                return;
+            }
             const arr = this[filterName];
             if (!arr) return;
             const idx = arr.indexOf(value);
@@ -138,6 +136,15 @@ export default function jobSeekersManager(config = null) {
                 arr.splice(idx, 1);
             } else {
                 arr.push(value);
+            }
+            this.applyFilters();
+        },
+
+        toggleCity(name) {
+            if (this.city.includes(name)) {
+                this.city = [];
+            } else {
+                this.city = [name];
             }
             this.applyFilters();
         },
@@ -170,7 +177,7 @@ export default function jobSeekersManager(config = null) {
             const params = new URLSearchParams();
             if (this.q) params.set('q', this.q);
             if (this.category.length) this.category.forEach(v => params.append('category[]', v));
-            if (this.city.length) this.city.forEach(v => params.append('city[]', v));
+            if (this.city.length) params.set('city', this.city[0]);
             if (this.workplaceType.length) this.workplaceType.forEach(v => params.append('workplace_type[]', v));
             if (this.jobType.length) this.jobType.forEach(v => params.append('job_type[]', v));
             if (this.experienceLevel.length) this.experienceLevel.forEach(v => params.append('experience_level[]', v));
