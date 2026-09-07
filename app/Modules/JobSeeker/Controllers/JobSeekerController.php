@@ -121,10 +121,22 @@ class JobSeekerController extends Controller
             ->header('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0, private');
         }
 
+        $requestedCategories = (array) $request->input('category', []);
+        $activeParentCategories = $categories->filter(function ($c) use ($requestedCategories) {
+            if (in_array($c->slug, $requestedCategories)) {
+                return true;
+            }
+            if ($c->children && $c->children->isNotEmpty()) {
+                return $c->children->contains(fn ($child) => in_array($child->slug, $requestedCategories));
+            }
+            return false;
+        })->pluck('slug')->values()->all();
+
         return view('pages.job-seekers.index', [
             'jobSeekers' => $jobSeekers,
             'categories' => $categories,
             'categoryChildrenMap' => $categoryChildrenMap,
+            'activeParentCategories' => $activeParentCategories,
             'jobTypes' => JobType::active()->withCount(['jobSeekers' => fn ($q) => $q->published()])->get(),
             'workplaceTypes' => WorkplaceType::active()->withCount(['jobSeekers' => fn ($q) => $q->published()])->get(),
             'experienceLevels' => ExperienceLevel::active()->withCount(['jobSeekers' => fn ($q) => $q->published()])->get(),
