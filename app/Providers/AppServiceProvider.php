@@ -23,7 +23,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         // Navbar bildirim verisini blade dışında (composer) hazırla.
-        View::composer('components.navbar', NavbarComposer::class);
+        View::composer(['components.navbar', 'layouts.partials.*'], NavbarComposer::class);
 
         \Filament\Support\Facades\FilamentView::registerRenderHook(
             \Filament\View\PanelsRenderHook::HEAD_END,
