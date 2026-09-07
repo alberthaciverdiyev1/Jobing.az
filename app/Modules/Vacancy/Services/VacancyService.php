@@ -35,6 +35,10 @@ class VacancyService
 
         // Normalize filters to arrays for multi-select support (also accept single values)
         $selectedCategories = array_filter((array) ($filters['category'] ?? []));
+        if (!empty($filters['subcategory'])) {
+            $subcategories = array_filter((array) $filters['subcategory']);
+            $selectedCategories = array_unique(array_merge($selectedCategories, $subcategories));
+        }
         $selectedWorkplaces  = array_filter((array) ($filters['workplace'] ?? []));
         $selectedTypes       = array_filter((array) ($filters['type'] ?? []));
         $selectedExperiences = array_filter((array) ($filters['experience'] ?? []));
@@ -199,9 +203,19 @@ class VacancyService
         // Cities derived from City model
         $cities = \App\Modules\JobAttribute\Models\City::active()->withCount(['vacancies' => $attributeScope])->get();
 
+        $categoryParentMap = [];
+        foreach ($categories as $parent) {
+            foreach ($parent->children as $child) {
+                $categoryParentMap[$child->slug] = $parent->slug;
+            }
+        }
+
         return [
             'jobs' => $jobs,
             'categories' => $categories,
+            'categoryParentMap' => $categoryParentMap,
+            'parentCategorySlugs' => $categories->pluck('slug')->values()->all(),
+            'citySlugs' => $cities->pluck('slug')->values()->all(),
             'jobTypes' => $jobTypes,
             'workplaceTypes' => $workplaceTypes,
             'experienceLevels' => $experienceLevels,

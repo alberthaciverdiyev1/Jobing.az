@@ -4,6 +4,7 @@ namespace App\Modules\Vacancy\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Modules\Category\Models\Category;
+use App\Modules\JobAttribute\Models\City;
 use App\Modules\Vacancy\Models\Vacancy;
 use App\Modules\Vacancy\Requests\ApplyVacancyRequest;
 use App\Modules\Vacancy\Requests\StoreVacancyRequest;
@@ -64,6 +65,101 @@ class VacancyController extends Controller
         $data = $this->vacancyService->getVacancyDetails($slug);
 
         return view('pages.jobs.show', $data);
+    }
+
+    /**
+     * Resolve single segment URL: /jobs/{slug}
+     * Can match City, Category, or individual Vacancy.
+     */
+    public function resolveSlug(Request $request, string $slug): View|JsonResponse|Response
+    {
+        $cleanSlug = strtolower(trim($slug));
+
+        // 1. Check if slug matches a City
+        $city = City::where('slug', $cleanSlug)->first();
+        if ($city) {
+            $existingCities = (array) $request->input('city', []);
+            if (!in_array($city->slug, $existingCities, true)) {
+                $existingCities[] = $city->slug;
+            }
+            $request->merge(['city' => $existingCities]);
+
+            return $this->index($request);
+        }
+
+        // 2. Check if slug matches a Category (parent or subcategory)
+        $category = Category::where('slug', $cleanSlug)->first();
+        if ($category) {
+            if ($sub = $request->input('subcategory')) {
+                $request->merge(['category' => [$sub]]);
+            } else {
+                $existingCats = (array) $request->input('category', []);
+                if (!in_array($category->slug, $existingCats, true)) {
+                    $existingCats[] = $category->slug;
+                }
+                $request->merge(['category' => $existingCats]);
+            }
+
+            return $this->index($request);
+        }
+
+        // 3. Check if slug matches a Vacancy (job detail)
+        $vacancy = Vacancy::where('slug', $slug)->first();
+        if ($vacancy) {
+            return $this->show($slug);
+        }
+
+        abort(404);
+    }
+
+    /**
+     * Resolve two segment URL: /jobs/{citySlug}/{categorySlug}
+     * e.g. /jobs/baki/computer-science or /jobs/baki/computer-science?subcategory=backend
+     */
+    public function filterTwoParams(Request $request, string $param1, string $param2): View|JsonResponse|Response
+    {
+        $cleanParam1 = strtolower(trim($param1));
+        $cleanParam2 = strtolower(trim($param2));
+
+        // Case A: /jobs/{citySlug}/{categorySlug}
+        $city = City::where('slug', $cleanParam1)->first();
+        $category = Category::where('slug', $cleanParam2)->first();
+
+        // Case B: /jobs/{categorySlug}/{citySlug} (fallback)
+        if (!$city || !$category) {
+            $categoryAlt = Category::where('slug', $cleanParam1)->first();
+            $cityAlt = City::where('slug', $cleanParam2)->first();
+            if ($categoryAlt && $cityAlt) {
+                $category = $categoryAlt;
+                $city = $cityAlt;
+            }
+        }
+
+        if (!$city && !$category) {
+            abort(404);
+        }
+
+        if ($city) {
+            $existingCities = (array) $request->input('city', []);
+            if (!in_array($city->slug, $existingCities, true)) {
+                $existingCities[] = $city->slug;
+            }
+            $request->merge(['city' => $existingCities]);
+        }
+
+        if ($category) {
+            if ($sub = $request->input('subcategory')) {
+                $request->merge(['category' => [$sub]]);
+            } else {
+                $existingCats = (array) $request->input('category', []);
+                if (!in_array($category->slug, $existingCats, true)) {
+                    $existingCats[] = $category->slug;
+                }
+                $request->merge(['category' => $existingCats]);
+            }
+        }
+
+        return $this->index($request);
     }
 
     /**

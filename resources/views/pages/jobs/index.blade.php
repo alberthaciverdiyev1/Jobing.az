@@ -19,6 +19,9 @@ window.__JOBS_CONFIG__ = {
     activeParentCategory: @json($selectedCategory ? ($selectedCategory->parent_id ? $selectedCategory->parent->slug : $selectedCategory->slug) : ''),
     activeParentCategories: @json($selectedCategories->map(fn ($c) => $c->parent_id ? $c->parent->slug : $c->slug)->values()),
     categoryChildrenMap: @json($categories->mapWithKeys(fn ($c) => [$c->slug => $c->children->pluck('slug')->values()])),
+    categoryParentMap: @json($categoryParentMap),
+    parentCategorySlugs: @json($parentCategorySlugs),
+    citySlugs: @json($citySlugs),
     initialCounts: {
         jobTypes: @json($jobTypes->pluck('vacancies_count', 'slug')),
         workplaceTypes: @json($workplaceTypes->pluck('vacancies_count', 'slug')),
