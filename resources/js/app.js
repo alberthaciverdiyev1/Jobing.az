@@ -3,11 +3,13 @@ import Alpine from 'alpinejs';
 import { createIcons, icons } from 'lucide';
 import jobsManager from './jobs';
 import resumesManager from './resumes';
+import companiesManager from './companies';
 import Favorites from './favorites';
 
 window.Alpine = Alpine;
 Alpine.data('jobsManager', jobsManager);
 Alpine.data('resumesManager', resumesManager);
+Alpine.data('companiesManager', companiesManager);
 
 // Contact reveal (lead tracking): mask contact until clicked, then fetch & log.
 const contactReveal = (url, hasPhone) => ({
