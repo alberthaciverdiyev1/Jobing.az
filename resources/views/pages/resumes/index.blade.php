@@ -13,6 +13,7 @@ window.__RESUMES_CONFIG__ = {
     initialSort: @json(request('sort', 'latest')),
     initialTotal: {{ (int) $resumes->total() }},
     initialCityCounts: @json($cityCounts),
+    initialCategoryCounts: @json($categoryCounts),
     categorySkills: @json($categorySkillsMap),
     allSkills: @json($categories->flatMap(fn($c) => $c->skills->where('is_active', true))->map(fn($s) => ['id' => $s->id, 'name' => is_array($s->name) ? ($s->name['az'] ?? reset($s->name)) : $s->name])->unique('name')->values())
 };
@@ -110,9 +111,11 @@ window.__RESUMES_CONFIG__ = {
                                     <span class="flex items-center gap-2">
                                         <span class="truncate">{{ $cat->name }}</span>
                                     </span>
-                                    @if(isset($categorySkillsMap[$cat->slug]))
-                                    <span class="text-[10px] text-gray-400 font-mono">({{ count($categorySkillsMap[$cat->slug]) }})</span>
-                                    @endif
+                                    <span class="text-[10px] text-gray-400 font-mono"
+                                          x-show="getCategoryCount('{{ $cat->slug }}', {{ $categoryCounts[$cat->slug] ?? 0 }}) > 0"
+                                          x-text="'(' + getCategoryCount('{{ $cat->slug }}', {{ $categoryCounts[$cat->slug] ?? 0 }}) + ')'">
+                                        ({{ $categoryCounts[$cat->slug] ?? 0 }})
+                                    </span>
                                 </button>
                                 @endforeach
                             </div>
