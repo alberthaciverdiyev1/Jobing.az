@@ -30,9 +30,15 @@ class HomeService
      */
     public function getHomeData(): array
     {
+        $featuredJobs = Vacancy::with(['company', 'category', 'jobType', 'workplaceType', 'experienceLevel'])
+            ->active()
+            ->where('is_featured', true)
+            ->orderByRaw('COALESCE(bumped_at, created_at) DESC')
+            ->take(6)
+            ->get();
+
         $latestJobs = Vacancy::with(['company', 'category', 'jobType', 'workplaceType', 'experienceLevel'])
             ->active()
-            ->orderBy('is_featured', 'desc')
             ->orderByRaw('COALESCE(bumped_at, created_at) DESC')
             ->take(8)
             ->get();
@@ -72,6 +78,7 @@ class HomeService
         ];
 
         return [
+            'featuredJobs' => $featuredJobs,
             'latestJobs' => $latestJobs,
             'categories' => $categories,
             'allCategories' => $allCategories,

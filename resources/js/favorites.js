@@ -56,6 +56,10 @@ const Favorites = {
                 body: JSON.stringify({ vacancy_id: vacancyId }),
             });
             const data = await res.json();
+            if (res.status === 401 || data.auth_required) {
+                window.location.href = data.redirect_url || '/login';
+                return;
+            }
             if (data.success) {
                 if (data.is_favorite) this.ids.add(vacancyId);
                 else this.ids.delete(vacancyId);

@@ -96,7 +96,6 @@
                 <div class="bg-white rounded-xl border border-gray-200 p-6 sm:p-8 shadow-2xs space-y-6">
                     <div class="space-y-3">
                         <h2 class="text-sm font-bold text-gray-900 uppercase tracking-wider flex items-center gap-2 pb-3 border-b border-gray-100">
-                            <span class="w-1.5 h-4 bg-primary rounded-full"></span>
                             <span>{{ __('Təcrübə və Bacarıqlar') }}</span>
                         </h2>
                         <div class="text-xs sm:text-sm text-gray-700 leading-relaxed whitespace-pre-line space-y-3">

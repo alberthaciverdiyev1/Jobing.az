@@ -4,7 +4,7 @@
     $isFeatured = (bool) ($job->is_featured ?? false);
 @endphp
 
-<div {{ $attributes->merge(['class' => ($isFeatured ? 'bg-amber-50/20 border-amber-300 hover:border-amber-400' : 'bg-white border-gray-200 hover:border-gray-300') . ' rounded-xl p-4 md:p-5 border hover:shadow-xs transition-all duration-200 group flex flex-col justify-between relative']) }}>
+<div {{ $attributes->merge(['class' => ($isFeatured ? 'bg-white border-amber-300 hover:border-amber-400' : 'bg-white border-gray-200 hover:border-gray-300') . ' rounded-xl p-4 md:p-5 border hover:shadow-xs transition-all duration-200 group flex flex-col justify-between relative']) }}>
     <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
 
         <!-- Left: Logo & Details -->

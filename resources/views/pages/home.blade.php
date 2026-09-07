@@ -6,12 +6,12 @@
 <!-- Modern Hero Section (Light Mode, Pill Search, No Background Shapes) -->
 <section class="relative bg-white pt-12 pb-16 lg:pt-20 lg:pb-24 border-b border-gray-100">
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        
+
         <!-- Headline -->
         <h1 class="text-3xl md:text-4xl lg:text-5xl font-extrabold text-gray-900 tracking-tight mb-4 animate-fade-in-up mx-auto">
             {{ __('Uğurlu karyera yolu buradan başlayır') }}
         </h1>
-        
+
         <!-- Subtext / Stats -->
         <p class="text-base md:text-lg text-gray-600 mb-10 animate-fade-in-up delay-100 mx-auto">
             <span class="inline-block border-b border-gray-300 pb-1">
@@ -20,35 +20,30 @@
         </p>
 
         <!-- Pill-shaped Search Bar (Alpine.js) -->
-        <form action="{{ route('jobs.index') }}" method="GET" 
+        <form action="{{ route('jobs.index') }}" method="GET"
               class="bg-white p-1.5 md:p-2 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.06)] hover:shadow-[0_8px_30px_rgba(251,146,60,0.15)] border border-gray-100 max-w-3xl mx-auto flex items-center gap-2 transition-all duration-300 transform hover:-translate-y-0.5 animate-fade-in-up delay-200">
             <!-- Search Icon & Input -->
             <div class="flex-1 flex items-center pl-4 pr-2 py-2 group">
                 <i class="fas fa-search text-gray-400 mr-3 group-focus-within:text-primary transition-colors"></i>
-                <input type="text" name="q" placeholder="{{ __('Peşə, vəzifə və ya şirkət') }}..." 
+                <input type="text" name="q" placeholder="{{ __('Peşə, vəzifə və ya şirkət') }}..."
                        class="w-full bg-transparent border-none focus:outline-hidden text-gray-700 placeholder-gray-400 text-sm md:text-base">
             </div>
-            
-            <!-- Filter link -->
-            <a href="{{ route('jobs.index') }}" class="hidden sm:flex items-center justify-center p-3 text-gray-400 hover:text-primary transition-colors border-l border-gray-100" title="{{ __('Genişləndirilmiş axtarış') }}">
-                <i class="fas fa-sliders-h text-lg"></i>
-            </a>
 
             <!-- Action Button -->
             <button type="submit" class="bg-primary hover:bg-primary-dark text-white font-medium py-3 px-8 rounded-full transition-all duration-300 shadow-md hover:shadow-lg hover:shadow-orange-500/30 flex items-center justify-center whitespace-nowrap cursor-pointer">
-                {{ __('İş tap') }}
+                {{ __('Axtar') }}
             </button>
         </form>
 
         <!-- Category Tags (Hidden on mobile) -->
         <div class="mt-8 hidden sm:flex flex-wrap justify-center items-center gap-2 md:gap-3 max-w-4xl mx-auto animate-fade-in-up delay-300">
-            @foreach($allCategories->take(8) as $cat)
-            <a href="{{ route('jobs.index', ['category' => $cat->slug]) }}" 
+            @foreach($allCategories as $cat)
+            <a href="{{ route('jobs.index', ['category' => $cat->slug]) }}"
                class="px-4 py-2 bg-white/80 backdrop-blur-xs border border-gray-200 rounded-full text-sm text-gray-600 hover:border-primary hover:bg-primary hover:text-white transition-all duration-300 shadow-2xs">
                 {{ $cat->name }}
             </a>
             @endforeach
-            <a href="{{ route('jobs.index') }}" 
+            <a href="{{ route('jobs.index') }}"
                class="px-4 py-2 bg-white/80 backdrop-blur-xs border border-gray-200 rounded-full text-sm text-gray-600 hover:border-primary hover:bg-primary hover:text-white transition-all duration-300 shadow-2xs">
                 {{ __('Bütün kateqoriyalar') }}
             </a>
@@ -72,7 +67,7 @@
 
         <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-4 gap-3 sm:gap-4 animate-fade-in-up delay-100">
             @foreach($categories as $category)
-            <a href="{{ route('jobs.index', ['category' => $category->slug]) }}" 
+            <a href="{{ route('jobs.index', ['category' => $category->slug]) }}"
                class="group border border-gray-100 p-3.5 sm:p-4 rounded-xl hover:border-orange-200 hover:shadow-xs hover:-translate-y-0.5 transition-all duration-200 bg-white flex flex-col items-center text-center">
                 <div class="w-9 h-9 sm:w-10 sm:h-10 bg-orange-50 text-primary rounded-full flex items-center justify-center text-base mb-2 group-hover:bg-primary group-hover:text-white transition-colors duration-300">
                     <i class="fas {{ $category->icon ?: 'fa-briefcase' }}"></i>
@@ -93,16 +88,48 @@
     </div>
 </section>
 
+<!-- Premium Vacancies Section (VIP Showcase) -->
+@if(isset($featuredJobs) && $featuredJobs->count() > 0)
+<section class="py-14">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8 animate-fade-in-up">
+            <div>
+                <h2 class="text-2xl md:text-3xl font-extrabold text-gray-900 tracking-tight flex items-center gap-2.5">
+                    <span>{{ __('Premium Vakansiyalar') }}</span>
+                </h2>
+            </div>
+            <a href="{{ route('jobs.index', ['sort' => 'featured']) }}"
+               class="inline-flex items-center gap-1.5 text-xs font-bold text-amber-700 hover:text-amber-900 transition-colors self-start sm:self-auto group">
+                <span>{{ __('Bütün premium vakansiyalar') }}</span>
+                <i class="fas fa-arrow-right text-[10px] group-hover:translate-x-0.5 transition-transform"></i>
+            </a>
+        </div>
+
+        <!-- Premium Cards Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 animate-fade-in-up delay-100">
+            @foreach($featuredJobs as $job)
+            <x-job-card :job="$job" />
+            @endforeach
+        </div>
+    </div>
+</section>
+@endif
+
 <!-- Latest Vacancies Section -->
 <section class="py-16 bg-gray-50 border-t border-gray-100">
     <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="mb-10 animate-fade-in-up">
-            <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-1">{{ __('Ən Son Vakansiyalar') }}</h2>
-            <p class="text-sm text-gray-500">{{ __('Platformaya əlavə edilən ən yeni iş imkanları.') }}</p>
+        <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8 animate-fade-in-up">
+            <div>
+                <h2 class="text-2xl md:text-3xl font-extrabold text-gray-900 tracking-tight">{{ __('Ən Son Vakansiyalar') }}</h2>
+            </div>
+            <a href="{{ route('jobs.index') }}"
+               class="inline-flex items-center gap-1.5 text-xs font-bold text-primary hover:text-primary-dark transition-colors self-start sm:self-auto group">
+                <span>{{ __('Bütün elanlar') }} ({{ $stats['jobs'] }}+)</span>
+                <i class="fas fa-arrow-right text-[10px] group-hover:translate-x-0.5 transition-transform"></i>
+            </a>
         </div>
 
-        <!-- Job Cards Grid -->
-        <!-- Job Cards Grid (Using same card component as list page) -->
+        <!-- Latest Job Cards Grid -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 animate-fade-in-up delay-200">
             @foreach($latestJobs as $job)
             <x-job-card :job="$job" />
@@ -111,7 +138,7 @@
 
         <!-- All Jobs CTA Button -->
         <div class="mt-10 text-center">
-            <a href="{{ route('jobs.index') }}" 
+            <a href="{{ route('jobs.index') }}"
                class="inline-flex items-center justify-center gap-2 bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 hover:text-primary font-semibold py-3 px-8 rounded-xl transition-all duration-300 shadow-2xs hover:shadow-sm text-sm">
                 <span>{{ __('Bütün vakansiyalara bax') }} ({{ $stats['jobs'] }}+)</span>
                 <i class="fas fa-arrow-right text-xs"></i>
@@ -139,19 +166,19 @@
                     {{ __('Minlərlə aktiv istifadəçisi olan platformamızda elanınızı yerləşdirin və komandanızı peşəkarlarla gücləndirin. İndi qeydiyyatdan keçin və ilk elanınızı pulsuz yerləşdirin.') }}
                 </p>
                 <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                    <a href="{{ route('jobs.create') }}" 
+                    <a href="{{ route('jobs.create') }}"
                        class="bg-primary hover:bg-primary-dark text-white font-semibold py-3.5 px-8 rounded-xl transition-colors shadow-lg shadow-orange-500/30 flex items-center justify-center gap-2 text-sm">
-                        <i class="fas fa-building text-xs"></i> 
+                        <i class="fas fa-building text-xs"></i>
                         <span>{{ __('İşəgötürən kimi qoşul') }}</span>
                     </a>
-                    <a href="{{ config('site.panels.admin') }}" target="_blank" 
+                    <a href="{{ config('site.panels.admin') }}" target="_blank"
                        class="bg-white/10 hover:bg-white/20 text-white border border-white/20 font-semibold py-3.5 px-8 rounded-xl transition-colors backdrop-blur-xs flex items-center justify-center gap-2 text-sm">
                         <i class="fas fa-shield-alt text-xs"></i>
                         <span>{{ __('Admin Paneli') }}</span>
                     </a>
                 </div>
             </div>
-            
+
             <div class="lg:w-1/2 w-full">
                 <div class="grid grid-cols-2 gap-4 sm:gap-6">
                     <div class="bg-white/10 backdrop-blur-md border border-white/10 p-6 rounded-2xl text-center hover:bg-white/20 transition-colors cursor-default">
