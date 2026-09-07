@@ -13,6 +13,27 @@ class EditApplication extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
+            Actions\Action::make('view_resume')
+                ->label('CV-yə Bax')
+                ->icon('heroicon-o-eye')
+                ->color('warning')
+                ->visible(fn (): bool => (bool) $this->record->resume_id)
+                ->url(fn (): string => route('resumes.show', $this->record->resume_id), shouldOpenInNewTab: true),
+
+            Actions\Action::make('download_pdf')
+                ->label('PDF Endir')
+                ->icon('heroicon-o-arrow-down-tray')
+                ->color('success')
+                ->visible(fn (): bool => (bool) $this->record->resume_id)
+                ->url(fn (): string => route('resumes.show', ['resume' => $this->record->resume_id, 'print' => 1]), shouldOpenInNewTab: true),
+
+            Actions\Action::make('download_file')
+                ->label('CV Faylını Endir')
+                ->icon('heroicon-o-arrow-down-tray')
+                ->color('info')
+                ->visible(fn (): bool => (bool) ($this->record->resume_path && ! $this->record->resume_id))
+                ->url(fn (): string => asset('storage/' . $this->record->resume_path), shouldOpenInNewTab: true),
+
             Actions\DeleteAction::make(),
         ];
     }

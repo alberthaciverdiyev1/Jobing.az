@@ -67,6 +67,11 @@ class Resume extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function applications(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(\App\Modules\Application\Models\Application::class);
+    }
+
     public function getFullNameAttribute(): string
     {
         return trim(($this->first_name ?? '') . ' ' . ($this->last_name ?? ''));
