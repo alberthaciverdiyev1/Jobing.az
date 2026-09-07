@@ -188,6 +188,12 @@
                             </span>
                             @endif
                         </a>
+                        @if(auth()->user()->isUser())
+                        <a href="{{ route('filament.user.resources.my-resumes.index') }}" class="flex items-center gap-2 px-3.5 py-2 text-xs font-semibold text-gray-700 hover:bg-gray-50 transition">
+                            <i class="fas fa-file-lines text-[11px] text-primary"></i>
+                            <span>{{ __('CV & Rezümələrim') }}</span>
+                        </a>
+                        @endif
                         <a href="{{ route('jobs.create') }}" class="flex items-center gap-2 px-3.5 py-2 text-xs font-semibold text-gray-700 hover:bg-gray-50 transition">
                             <i class="fas fa-plus text-[11px] text-primary"></i>
                             <span>{{ __('Vakansiya yerləşdir') }}</span>
