@@ -1323,7 +1323,10 @@ class CategorySeeder extends Seeder
             ],
         ];
 
+        $validSlugs = [];
+
         foreach ($categoriesData as $catData) {
+            $validSlugs[] = $catData['slug'];
             $children = $catData['children'] ?? [];
             unset($catData['children']);
 
@@ -1337,6 +1340,7 @@ class CategorySeeder extends Seeder
             );
 
             foreach ($children as $childData) {
+                $validSlugs[] = $childData['slug'];
                 Category::updateOrCreate(
                     ['slug' => $childData['slug']],
                     [
@@ -1346,6 +1350,25 @@ class CategorySeeder extends Seeder
                     ]
                 );
             }
+        }
+
+        // Cleanup any legacy categories not in the new list
+        $legacyCategories = Category::whereNotIn('slug', $validSlugs)->get();
+        if ($legacyCategories->isNotEmpty()) {
+            $fallbackCategory = Category::where('slug', 'informasiya-texnologiyalari')->first()
+                ?? Category::first();
+
+            if ($fallbackCategory) {
+                foreach ($legacyCategories as $legacy) {
+                    \App\Modules\Vacancy\Models\Vacancy::where('category_id', $legacy->id)->update(['category_id' => $fallbackCategory->id]);
+                    \App\Modules\JobSeeker\Models\JobSeeker::where('category_id', $legacy->id)->update(['category_id' => $fallbackCategory->id]);
+                    \App\Modules\JobAttribute\Models\Skill::where('category_id', $legacy->id)->update(['category_id' => $fallbackCategory->id]);
+                }
+            }
+
+            // Delete legacy children first, then parents
+            Category::whereNotIn('slug', $validSlugs)->whereNotNull('parent_id')->delete();
+            Category::whereNotIn('slug', $validSlugs)->delete();
         }
     }
 }
