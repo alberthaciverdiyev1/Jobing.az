@@ -90,15 +90,15 @@ class VacancyController extends Controller
         // 2. Check if slug matches a Category (parent or subcategory)
         $category = Category::where('slug', $cleanSlug)->first();
         if ($category) {
+            $existingCats = array_filter((array) $request->input('category', []));
             if ($sub = $request->input('subcategory')) {
-                $request->merge(['category' => [$sub]]);
-            } else {
-                $existingCats = (array) $request->input('category', []);
-                if (!in_array($category->slug, $existingCats, true)) {
-                    $existingCats[] = $category->slug;
-                }
-                $request->merge(['category' => $existingCats]);
+                $subCats = array_filter((array) $sub);
+                $existingCats = array_unique(array_merge($existingCats, $subCats));
             }
+            if (empty($existingCats)) {
+                $existingCats = [$category->slug];
+            }
+            $request->merge(['category' => array_values($existingCats)]);
 
             return $this->index($request);
         }
@@ -148,15 +148,15 @@ class VacancyController extends Controller
         }
 
         if ($category) {
+            $existingCats = array_filter((array) $request->input('category', []));
             if ($sub = $request->input('subcategory')) {
-                $request->merge(['category' => [$sub]]);
-            } else {
-                $existingCats = (array) $request->input('category', []);
-                if (!in_array($category->slug, $existingCats, true)) {
-                    $existingCats[] = $category->slug;
-                }
-                $request->merge(['category' => $existingCats]);
+                $subCats = array_filter((array) $sub);
+                $existingCats = array_unique(array_merge($existingCats, $subCats));
             }
+            if (empty($existingCats)) {
+                $existingCats = [$category->slug];
+            }
+            $request->merge(['category' => array_values($existingCats)]);
         }
 
         return $this->index($request);
