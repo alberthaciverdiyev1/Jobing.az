@@ -268,7 +268,6 @@
                 @if($relatedJobs->count() > 0)
                 <div class="space-y-4 pt-6 border-t border-gray-200">
                     <h3 class="text-base font-bold text-gray-900 flex items-center gap-2">
-                        <span class="w-1.5 h-4 bg-primary rounded-full"></span>
                         <span>{{ __('Oxşar Vakansiyalar') }}</span>
                     </h3>
 
@@ -442,7 +441,7 @@
                     @else
                     <div class="p-3 rounded-xl bg-gray-50 border border-gray-100 flex items-center justify-between text-xs">
                         <span class="text-gray-600">{{ __('Hələ sistemdə yaradılmış CV-niz yoxdur?') }}</span>
-                        <a href="{{ route('filament.user.resources.resumes.create') }}" target="_blank" class="text-primary hover:underline font-bold">
+                        <a href="{{ route('filament.user.resources.my-resumes.create') }}" target="_blank" class="text-primary hover:underline font-bold">
                             + {{ __('CV Yaradın') }}
                         </a>
                     </div>
@@ -456,17 +455,19 @@
                                    class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs focus:ring-1 focus:ring-primary focus:border-primary focus:outline-hidden">
                         </div>
 
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div class="grid grid-cols-1 {{ $job->hasApplicationField('phone') ? 'sm:grid-cols-2' : '' }} gap-3">
                             <div>
                                 <label class="block text-xs font-bold text-gray-700 mb-1">{{ __('E-poçt Ünvanı') }} *</label>
                                 <input type="email" x-model="formData.applicant_email" :required="!formData.resume_id"
                                        class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs focus:ring-1 focus:ring-primary focus:border-primary focus:outline-hidden">
                             </div>
+                            @if($job->hasApplicationField('phone'))
                             <div>
                                 <label class="block text-xs font-bold text-gray-700 mb-1">{{ __('Telefon Nömrəsi') }}</label>
                                 <input type="tel" x-model="formData.applicant_phone"
                                        class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs focus:ring-1 focus:ring-primary focus:border-primary focus:outline-hidden">
                             </div>
+                            @endif
                         </div>
 
                         <div>
@@ -484,25 +485,33 @@
                             </div>
                         </div>
 
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        @if($job->hasApplicationField('linkedin') || $job->hasApplicationField('portfolio'))
+                        <div class="grid grid-cols-1 {{ ($job->hasApplicationField('linkedin') && $job->hasApplicationField('portfolio')) ? 'sm:grid-cols-2' : '' }} gap-3">
+                            @if($job->hasApplicationField('linkedin'))
                             <div>
                                 <label class="block text-xs font-bold text-gray-700 mb-1">LinkedIn URL</label>
                                 <input type="url" x-model="formData.linkedin_url" placeholder="https://linkedin.com/in/..."
                                        class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs focus:ring-1 focus:ring-primary focus:border-primary focus:outline-hidden">
                             </div>
+                            @endif
+                            @if($job->hasApplicationField('portfolio'))
                             <div>
                                 <label class="block text-xs font-bold text-gray-700 mb-1">Portfolyo / GitHub</label>
                                 <input type="url" x-model="formData.portfolio_url" placeholder="https://github.com/..."
                                        class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs focus:ring-1 focus:ring-primary focus:border-primary focus:outline-hidden">
                             </div>
+                            @endif
                         </div>
+                        @endif
                     </div>
 
+                    @if($job->hasApplicationField('cover_letter'))
                     <div>
                         <label class="block text-xs font-bold text-gray-700 mb-1">{{ __('Ön Yazı / Qeydlər') }}</label>
                         <textarea x-model="formData.cover_letter" rows="3" placeholder="{{ __('Özünüz haqqında qısa məlumat verin...') }}"
                                   class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs focus:ring-1 focus:ring-primary focus:border-primary focus:outline-hidden"></textarea>
                     </div>
+                    @endif
 
                     <!-- Feedback message -->
                     <div x-show="formMessage" x-cloak class="p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-medium">

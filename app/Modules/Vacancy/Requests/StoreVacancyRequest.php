@@ -55,6 +55,8 @@ class StoreVacancyRequest extends FormRequest
             'application_email' => $isInternalOnly
                 ? 'nullable|email|max:255'
                 : ($hasCompanyEmail ? 'nullable|email|max:255' : 'required|email|max:255'),
+            'application_fields' => 'nullable|array',
+            'application_fields.*' => 'string|in:phone,linkedin,portfolio,cover_letter',
         ];
     }
 

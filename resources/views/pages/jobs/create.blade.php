@@ -9,7 +9,7 @@
     .quill-editor .ql-editor { min-height: 160px; font-size: 0.875rem; }
 </style>
 <div class="bg-gray-50 min-h-screen pb-16">
-    
+
     <!-- Page Header -->
     <div class="bg-white border-b border-gray-200 py-10">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -168,7 +168,7 @@
                 <div class="space-y-4">
                     <div>
                         <label class="block text-xs font-bold text-gray-700 mb-1">{{ __('Pozisiya / Vakansiya Adı') }} *</label>
-                        <input type="text" name="title" x-model="jobTitle" required placeholder="Məsələn: Senior Laravel Developer" 
+                        <input type="text" name="title" x-model="jobTitle" required placeholder="Məsələn: Senior Laravel Developer"
                                class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs focus:ring-1 focus:ring-primary focus:border-primary focus:outline-hidden">
                     </div>
 
@@ -246,7 +246,6 @@
                         <input type="checkbox" name="salary_negotiable" value="1" x-model="salaryNegotiable" class="mt-0.5 rounded border-gray-300 text-primary focus:ring-primary">
                         <span class="flex flex-col gap-0.5">
                             <span class="text-xs font-bold text-gray-900">{{ __('Maaş razılaşma yolu ilə') }}</span>
-                            <span class="text-[11px] text-gray-500">{{ __('Seçilərsə, maaş namizədlə razılaşma əsasında müəyyən edilir.') }}</span>
                         </span>
                     </label>
 
@@ -298,7 +297,7 @@
                                     <span>{{ __('Seçilmiş Bacarıqlar') }}</span>
                                     <span class="px-1.5 py-0.2 rounded-full bg-primary text-white text-[10px] font-bold" x-text="selectedSkills.length"></span>
                                 </span>
-                                <button type="button" 
+                                <button type="button"
                                         @click="selectedSkills = []"
                                         class="text-[11px] text-gray-500 hover:text-rose-600 transition font-medium hover:underline cursor-pointer">
                                     {{ __('Hamısını təmizlə') }}
@@ -308,7 +307,7 @@
                                 <template x-for="skill in selectedSkills" :key="skill">
                                     <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white border border-orange-200 text-orange-950 text-xs font-semibold shadow-2xs">
                                         <span x-text="skill"></span>
-                                        <button type="button" 
+                                        <button type="button"
                                                 @click="selectedSkills = selectedSkills.filter(s => s !== skill)"
                                                 class="w-4 h-4 rounded-full hover:bg-orange-100 text-gray-400 hover:text-rose-600 flex items-center justify-center transition cursor-pointer"
                                                 title="{{ __('Sil') }}">
@@ -381,8 +380,8 @@
 
                     <div>
                         <label class="block text-xs font-bold text-gray-700 mb-1">{{ __('Son Müraciət Tarixi') }}</label>
-                        <input type="date" name="deadline" 
-                               value="{{ old('deadline', now()->addMonth()->format('Y-m-d')) }}" 
+                        <input type="date" name="deadline"
+                               value="{{ old('deadline', now()->addMonth()->format('Y-m-d')) }}"
                                min="{{ now()->addDay()->format('Y-m-d') }}"
                                class="w-full sm:w-64 px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs focus:ring-1 focus:ring-primary focus:border-primary focus:outline-hidden bg-white cursor-pointer">
                     </div>
@@ -493,7 +492,7 @@
                      x-transition:enter-end="opacity-100 translate-y-0"
                      class="pt-2">
                     <label class="block text-xs font-bold text-gray-700 mb-1">
-                        {{ __('Müraciət Qəbul Ediləcək E-Posta Adresi') }} 
+                        {{ __('Müraciət Qəbul Ediləcək E-Posta Adresi') }}
                         @guest * @endguest
                     </label>
                     <input type="email" name="application_email"
@@ -508,6 +507,58 @@
                         {{ __('Namizədlərin müraciətləri və CV-ləri birbaşa bu e-poçt ünvanına göndəriləcək.') }}
                         @endauth
                     </p>
+                </div>
+
+                {{-- Application form fields (shown when internal or both is selected) --}}
+                @php
+                    $selectedAppFields = (array) old('application_fields', ['phone', 'linkedin', 'portfolio', 'cover_letter']);
+                @endphp
+                <div x-show="applicationType === 'internal' || applicationType === 'both'" x-cloak
+                     class="pt-3 border-t border-gray-100">
+                    <label class="block text-xs font-bold text-gray-700 mb-1">
+                        {{ __('Müraciət Formu Sahələri') }}
+                    </label>
+                    <p class="text-[11px] text-gray-400 mb-3">
+                        {{ __('Namizədlər sayt üzərindən müraciət edərkən hansı əlavə məlumatların istənildiyini seçin:') }}
+                    </p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                        <label class="flex items-center gap-2.5 p-3 rounded-xl border border-gray-200 bg-white hover:border-gray-300 cursor-pointer transition">
+                            <input type="checkbox" name="application_fields[]" value="phone"
+                                   {{ in_array('phone', $selectedAppFields) ? 'checked' : '' }}
+                                   class="rounded text-primary focus:ring-primary h-4 w-4 border-gray-300">
+                            <div class="text-xs">
+                                <span class="font-bold text-gray-800 block">{{ __('Telefon nömrəsi') }}</span>
+                                <span class="text-[10px] text-gray-400">{{ __('Namizədin əlaqə nömrəsi') }}</span>
+                            </div>
+                        </label>
+                        <label class="flex items-center gap-2.5 p-3 rounded-xl border border-gray-200 bg-white hover:border-gray-300 cursor-pointer transition">
+                            <input type="checkbox" name="application_fields[]" value="linkedin"
+                                   {{ in_array('linkedin', $selectedAppFields) ? 'checked' : '' }}
+                                   class="rounded text-primary focus:ring-primary h-4 w-4 border-gray-300">
+                            <div class="text-xs">
+                                <span class="font-bold text-gray-800 block">{{ __('LinkedIn Profili') }}</span>
+                                <span class="text-[10px] text-gray-400">{{ __('Namizədin LinkedIn profil linki') }}</span>
+                            </div>
+                        </label>
+                        <label class="flex items-center gap-2.5 p-3 rounded-xl border border-gray-200 bg-white hover:border-gray-300 cursor-pointer transition">
+                            <input type="checkbox" name="application_fields[]" value="portfolio"
+                                   {{ in_array('portfolio', $selectedAppFields) ? 'checked' : '' }}
+                                   class="rounded text-primary focus:ring-primary h-4 w-4 border-gray-300">
+                            <div class="text-xs">
+                                <span class="font-bold text-gray-800 block">{{ __('Portfolyo / GitHub') }}</span>
+                                <span class="text-[10px] text-gray-400">{{ __('İş nümunələri və layihə linki') }}</span>
+                            </div>
+                        </label>
+                        <label class="flex items-center gap-2.5 p-3 rounded-xl border border-gray-200 bg-white hover:border-gray-300 cursor-pointer transition">
+                            <input type="checkbox" name="application_fields[]" value="cover_letter"
+                                   {{ in_array('cover_letter', $selectedAppFields) ? 'checked' : '' }}
+                                   class="rounded text-primary focus:ring-primary h-4 w-4 border-gray-300">
+                            <div class="text-xs">
+                                <span class="font-bold text-gray-800 block">{{ __('Ön Yazı / Qeydlər') }}</span>
+                                <span class="text-[10px] text-gray-400">{{ __('Namizədin qısa məlumat və ya qeydləri') }}</span>
+                            </div>
+                        </label>
+                    </div>
                 </div>
             </div>
 

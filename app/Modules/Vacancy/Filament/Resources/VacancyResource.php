@@ -210,6 +210,18 @@ class VacancyResource extends Resource
                                     ->helperText('E-posta / hər ikisi seçildiyində tələb olunur.')
                                     ->visible(fn (Forms\Get $get): bool => in_array($get('application_type'), ['email', 'both'], true))
                                     ->required(fn (Forms\Get $get): bool => in_array($get('application_type'), ['email', 'both'], true)),
+
+                                Forms\Components\CheckboxList::make('application_fields')
+                                    ->label('Müraciət Formu Sahələri')
+                                    ->helperText('Namizəd platforma daxili müraciət edərkən hansı sahələrin görünəcəyini seçin.')
+                                    ->options([
+                                        'phone' => 'Telefon nömrəsi',
+                                        'linkedin' => 'LinkedIn profili',
+                                        'portfolio' => 'Portfolyo / GitHub',
+                                        'cover_letter' => 'Ön yazı / Qeydlər',
+                                    ])
+                                    ->default(['phone', 'linkedin', 'portfolio', 'cover_letter'])
+                                    ->visible(fn (Forms\Get $get): bool => in_array($get('application_type'), ['internal', 'both'], true)),
                             ]),
 
                         Forms\Components\Section::make('Yayın Durumu')
