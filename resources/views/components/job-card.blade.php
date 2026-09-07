@@ -8,9 +8,9 @@
     <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
 
         <!-- Left: Logo & Details -->
-        <div class="flex items-start gap-4">
+        <div class="flex items-start gap-4 flex-1 min-w-0">
             <x-company-avatar :name="$job->company?->name" :logo="$job->company?->logo" :featured="$isFeatured" size="md" />
-            <div class="space-y-1">
+            <div class="space-y-1 flex-1 min-w-0">
                 <div class="flex items-center gap-2">
                     <span class="text-xs font-medium text-gray-500">{{ $job->company->name ?? '' }}</span>
                     @if($isFeatured)
@@ -29,16 +29,19 @@
                         {{ $job->title }}
                     </a>
                 </h3>
-                <div class="flex flex-wrap items-center gap-2 text-xs text-gray-500 pt-0.5">
-                    @if($job->workplace_type_name)
-                    <span>{{ $job->workplace_type_name }}</span>
-                    @endif
-                    @if($job->workplace_type_name && $job->job_type_name)
-                    <span>•</span>
-                    @endif
-                    @if($job->job_type_name)
-                    <span>{{ $job->job_type_name }}</span>
-                    @endif
+                <div class="flex items-center justify-between gap-2 text-xs text-gray-500 pt-0.5">
+                    <div class="flex flex-wrap items-center gap-2">
+                        @if($job->workplace_type_name)
+                        <span>{{ $job->workplace_type_name }}</span>
+                        @endif
+                        @if($job->workplace_type_name && $job->job_type_name)
+                        <span>•</span>
+                        @endif
+                        @if($job->job_type_name)
+                        <span>{{ $job->job_type_name }}</span>
+                        @endif
+                    </div>
+                    <span class="sm:hidden text-gray-400 text-[11px] shrink-0">{{ $job->created_at?->diffForHumans() }}</span>
                 </div>
             </div>
         </div>
@@ -52,7 +55,7 @@
                 </div>
                 <span class="sm:hidden text-sm font-bold text-gray-900 font-mono">{{ $job->formatted_salary }}</span>
             </div>
-            <div class="text-gray-400 text-[11px] mt-0.5 sm:mt-0">{{ $job->created_at?->diffForHumans() }}</div>
+            <div class="hidden sm:block text-gray-400 text-[11px] mt-0.5 sm:mt-0">{{ $job->created_at?->diffForHumans() }}</div>
         </div>
 
     </div>
