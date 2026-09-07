@@ -9,10 +9,10 @@
     <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
 
         <!-- Left: Avatar & Details -->
-        <div class="flex items-start gap-4">
+        <div class="flex items-start gap-4 flex-1 min-w-0">
             <x-company-avatar :name="$seeker->contact_name" size="md" :featured="$isSeekerFeatured" />
 
-            <div class="space-y-1">
+            <div class="space-y-1 flex-1 min-w-0">
                 <div class="flex items-center gap-2">
                     <span class="text-xs font-medium text-gray-500">{{ $seeker->contact_name }}</span>
                     @if($isSeekerFeatured)
@@ -30,23 +30,26 @@
                     </a>
                 </h3>
 
-                <div class="flex flex-wrap items-center gap-2 text-xs text-gray-500 pt-0.5">
-                    @if($seeker->workplaceType)
-                    <span>{{ $seeker->workplaceType->name }}</span>
-                    @endif
-                    @if($seeker->workplaceType && $seeker->jobType)
-                    <span>•</span>
-                    @endif
-                    @if($seeker->jobType)
-                    <span>{{ $seeker->jobType->name }}</span>
-                    @endif
-                    @if($seeker->availability)
-                    <span>•</span>
-                    <span class="text-emerald-600 font-medium flex items-center gap-1">
-                        <i class="fas fa-bolt text-[10px]"></i>
-                        {{ $seeker->availability_label }}
-                    </span>
-                    @endif
+                <div class="flex items-center justify-between gap-2 text-xs text-gray-500 pt-0.5">
+                    <div class="flex flex-wrap items-center gap-2">
+                        @if($seeker->workplaceType)
+                        <span>{{ $seeker->workplaceType->name }}</span>
+                        @endif
+                        @if($seeker->workplaceType && $seeker->jobType)
+                        <span>•</span>
+                        @endif
+                        @if($seeker->jobType)
+                        <span>{{ $seeker->jobType->name }}</span>
+                        @endif
+                        @if($seeker->availability)
+                        <span>•</span>
+                        <span class="text-emerald-600 font-medium flex items-center gap-1">
+                            <i class="fas fa-bolt text-[10px]"></i>
+                            {{ $seeker->availability_label }}
+                        </span>
+                        @endif
+                    </div>
+                    <span class="sm:hidden text-gray-400 text-[11px] shrink-0">{{ $seeker->created_at?->diffForHumans() }}</span>
                 </div>
             </div>
         </div>
@@ -60,7 +63,7 @@
                 </div>
                 <span class="sm:hidden text-sm font-bold text-gray-900 font-mono">{{ $seeker->formatted_salary }}</span>
             </div>
-            <div class="text-gray-400 text-[11px] mt-0.5 sm:mt-0">{{ $seeker->created_at?->diffForHumans() }}</div>
+            <div class="hidden sm:block text-gray-400 text-[11px] mt-0.5 sm:mt-0">{{ $seeker->created_at?->diffForHumans() }}</div>
         </div>
 
     </div>
