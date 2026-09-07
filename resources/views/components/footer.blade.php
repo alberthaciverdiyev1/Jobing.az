@@ -1,4 +1,6 @@
-@php($siteSetting = \App\Modules\Setting\Models\SiteSetting::current())
+@php
+    $siteSetting = \App\Modules\Setting\Models\SiteSetting::current();
+@endphp
 
 <footer {{ $attributes->merge(['class' => 'bg-white pt-16 pb-8 border-t border-gray-200 mt-auto']) }}>
     <div class="container mx-auto px-4 sm:px-6 lg:px-8">
