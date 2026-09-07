@@ -22,7 +22,8 @@ window.__JOBS_CONFIG__ = {
     initialCounts: {
         jobTypes: @json($jobTypes->pluck('vacancies_count', 'slug')),
         workplaceTypes: @json($workplaceTypes->pluck('vacancies_count', 'slug')),
-        experienceLevels: @json($experienceLevels->pluck('vacancies_count', 'slug'))
+        experienceLevels: @json($experienceLevels->pluck('vacancies_count', 'slug')),
+        cities: @json($cities->pluck('vacancies_count', 'slug'))
     },
     initialCategoryCounts: @json($categoryCounts)
 };
@@ -173,11 +174,11 @@ window.__JOBS_CONFIG__ = {
                                     </span>
                                     <span>{{ $cityName }}</span>
                                 </span>
-                                @if(is_object($city) && isset($city->vacancies_count) && $city->vacancies_count > 0)
-                                <span class="text-[10px] text-gray-400 font-mono">
-                                    ({{ $city->vacancies_count }})
+                                <span class="text-[10px] text-gray-400 font-mono"
+                                      x-show="getCount('cities', '{{ addslashes($citySlug) }}', {{ is_object($city) ? (int)$city->vacancies_count : 0 }}) > 0"
+                                      x-text="'(' + getCount('cities', '{{ addslashes($citySlug) }}', {{ is_object($city) ? (int)$city->vacancies_count : 0 }}) + ')'">
+                                    ({{ is_object($city) ? (int)$city->vacancies_count : 0 }})
                                 </span>
-                                @endif
                             </button>
                             @empty
                             <p class="text-[11px] text-gray-400 px-2.5 py-1.5">{{ __('Şəhər mövcud deyil') }}</p>

@@ -44,6 +44,7 @@ class VacancyController extends Controller
                     'jobTypes' => $data['jobTypes']->pluck('vacancies_count', 'slug'),
                     'workplaceTypes' => $data['workplaceTypes']->pluck('vacancies_count', 'slug'),
                     'experienceLevels' => $data['experienceLevels']->pluck('vacancies_count', 'slug'),
+                    'cities' => $data['cities']->pluck('vacancies_count', 'slug'),
                     'categories' => $data['categoryCounts'],
                 ],
             ])
