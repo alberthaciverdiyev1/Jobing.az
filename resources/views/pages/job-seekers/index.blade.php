@@ -171,25 +171,25 @@ window.__JOB_SEEKERS_CONFIG__ = {
                                 </button>
                             </div>
                             <div class="grid grid-cols-2 gap-2">
-                                <div class="relative">
+                                <div class="relative flex items-center">
+                                    <span class="absolute left-3 text-gray-400 text-xs font-medium pointer-events-none select-none">₼</span>
                                     <input type="number"
                                            x-model="minSalary"
                                            @input.debounce.500ms="applyFilters()"
                                            @keydown.enter.prevent="applyFilters()"
                                            placeholder="{{ __('Min') }}"
                                            min="0"
-                                           class="w-full pl-6 pr-2 py-1.5 bg-gray-50 hover:bg-white focus:bg-white border border-gray-200 rounded-lg focus:outline-hidden focus:border-primary focus:ring-1 focus:ring-primary text-xs transition">
-                                    <span class="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs font-medium">₼</span>
+                                           class="w-full pl-8 pr-2.5 py-2 bg-gray-50 hover:bg-white focus:bg-white border border-gray-200 rounded-lg focus:outline-hidden focus:border-primary focus:ring-1 focus:ring-primary text-xs text-gray-800 placeholder-gray-400 transition [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none">
                                 </div>
-                                <div class="relative">
+                                <div class="relative flex items-center">
+                                    <span class="absolute left-3 text-gray-400 text-xs font-medium pointer-events-none select-none">₼</span>
                                     <input type="number"
                                            x-model="maxSalary"
                                            @input.debounce.500ms="applyFilters()"
                                            @keydown.enter.prevent="applyFilters()"
                                            placeholder="{{ __('Maks') }}"
                                            min="0"
-                                           class="w-full pl-6 pr-2 py-1.5 bg-gray-50 hover:bg-white focus:bg-white border border-gray-200 rounded-lg focus:outline-hidden focus:border-primary focus:ring-1 focus:ring-primary text-xs transition">
-                                    <span class="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs font-medium">₼</span>
+                                           class="w-full pl-8 pr-2.5 py-2 bg-gray-50 hover:bg-white focus:bg-white border border-gray-200 rounded-lg focus:outline-hidden focus:border-primary focus:ring-1 focus:ring-primary text-xs text-gray-800 placeholder-gray-400 transition [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none">
                                 </div>
                             </div>
                         </div>
