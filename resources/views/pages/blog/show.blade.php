@@ -9,9 +9,9 @@
 
         <!-- Breadcrumbs -->
         <nav class="flex items-center gap-2 text-xs text-gray-500 mb-6">
-            <a href="{{ route('home') }}" class="hover:text-primary transition">{{ __('Ana Sayfa') }}</a>
+            <a href="{{ route('home') }}" class="hover:text-primary transition">{{ __('Home') }}</a>
             <span>/</span>
-            <a href="{{ route('blog.index') }}" class="hover:text-primary transition">{{ __('Kariyer Bloğu') }}</a>
+            <a href="{{ route('blog.index') }}" class="hover:text-primary transition">{{ __('Career Blog') }}</a>
             <span>/</span>
             <span class="text-gray-900 font-medium truncate">{{ $blog->title }}</span>
         </nav>
@@ -32,7 +32,7 @@
             @endif
             <span>{{ $blog->formatted_date }}</span>
             <span>•</span>
-            <span>{{ $blog->reading_time }} {{ __('dəq oxu') }}</span>
+            <span>{{ $blog->reading_time }} {{ __('min read') }}</span>
             <span>•</span>
             <span><i class="fas fa-eye text-[10px] mr-1"></i>{{ number_format($blog->views_count) }}</span>
         </div>
@@ -47,7 +47,7 @@
         <!-- Related -->
         @if($related->isNotEmpty())
         <div class="mt-12 pt-8 border-t border-gray-200">
-            <h3 class="font-bold text-gray-900 text-sm mb-4">{{ __('Əlaqəli məqalələr') }}</h3>
+            <h3 class="font-bold text-gray-900 text-sm mb-4">{{ __('Related articles') }}</h3>
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 @foreach($related as $r)
                 <a href="{{ route('blog.show', $r->slug) }}" class="bg-white rounded-xl border border-gray-200 p-4 hover:border-primary hover:shadow-xs transition group">

@@ -16,7 +16,7 @@
             <div class="flex items-center gap-2 text-[11px] text-gray-400 mb-2">
                 <span>{{ $blog->formatted_date }}</span>
                 <span>•</span>
-                <span>{{ $blog->reading_time }} {{ __('dəq oxu') }}</span>
+                <span>{{ $blog->reading_time }} {{ __('min read') }}</span>
             </div>
             <h3 class="font-bold text-gray-900 text-sm leading-snug group-hover:text-primary transition line-clamp-2">{{ $blog->title }}</h3>
             @if($blog->excerpt)
@@ -33,13 +33,13 @@
     <div class="w-16 h-16 bg-orange-50 text-primary rounded-2xl flex items-center justify-center mx-auto mb-4 border border-orange-100">
         <i class="fas fa-newspaper text-xl"></i>
     </div>
-    <h3 class="text-base font-bold text-gray-900 mb-1">{{ __('Bloq yazısı tapılmadı') }}</h3>
-    <p class="text-xs text-gray-500 max-w-sm mx-auto mb-5">{{ __('Axtarış meyarlarını dəyişərək və ya filtri sıfırlayaraq yenidən cəhd edə bilərsiniz.') }}</p>
+    <h3 class="text-base font-bold text-gray-900 mb-1">{{ __('No blog posts found') }}</h3>
+    <p class="text-xs text-gray-500 max-w-sm mx-auto mb-5">{{ __('Try again by changing your search criteria or resetting the filter.') }}</p>
     <button type="button"
             @click="resetAllFilters()"
             class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary hover:bg-primary-dark text-white text-xs font-bold transition shadow-xs cursor-pointer">
         <i class="fas fa-sync-alt text-xs"></i>
-        <span>{{ __('Bütün filtrləri sıfırla') }}</span>
+        <span>{{ __('Reset all filters') }}</span>
     </button>
 </div>
 @endif

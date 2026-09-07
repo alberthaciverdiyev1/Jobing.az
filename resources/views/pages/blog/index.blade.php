@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', __('Kariyer Bloğu') . ' - ' . config('app.full_name'))
+@section('title', __('Career Blog') . ' - ' . config('app.full_name'))
 
 @section('content')
 <script>
@@ -19,8 +19,8 @@ window.__BLOG_CONFIG__ = {
             <div class="w-14 h-14 bg-primary/10 text-primary rounded-2xl flex items-center justify-center mx-auto mb-4 border border-orange-100 shadow-2xs">
                 <i class="fas fa-blog text-xl"></i>
             </div>
-            <h1 class="text-3xl font-extrabold text-gray-900 tracking-tight">{{ __('Kariyer Bloğu') }}</h1>
-            <p class="text-sm text-gray-500 mt-2 max-w-lg mx-auto">{{ __('İş axtarışı, CV hazırlama və karyera ipuçları.') }}</p>
+            <h1 class="text-3xl font-extrabold text-gray-900 tracking-tight">{{ __('Career Blog') }}</h1>
+            <p class="text-sm text-gray-500 mt-2 max-w-lg mx-auto">{{ __('Job search, CV writing and career tips.') }}</p>
 
             <!-- Search bar -->
             <div class="max-w-md mx-auto mt-6 relative">
@@ -28,7 +28,7 @@ window.__BLOG_CONFIG__ = {
                        x-model="q"
                        @input.debounce.400ms="applyFilters()"
                        @keydown.enter.prevent="applyFilters()"
-                       placeholder="{{ __('Məqalələrdə axtar...') }}"
+                       placeholder="{{ __('Search in articles...') }}"
                        class="w-full pl-10 pr-10 py-2.5 bg-white border border-gray-200 rounded-xl text-xs text-gray-800 placeholder-gray-400 focus:ring-1 focus:ring-primary focus:border-primary focus:outline-hidden transition shadow-2xs">
                 <i class="fas fa-search absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs pointer-events-none"></i>
                 <button type="button"
@@ -48,7 +48,7 @@ window.__BLOG_CONFIG__ = {
                     @click="selectCategory('')"
                     class="px-4 py-1.5 rounded-full text-xs font-semibold border transition cursor-pointer"
                     :class="category === '' ? 'bg-primary text-white border-primary shadow-xs' : 'bg-white text-gray-600 border-gray-200 hover:border-primary hover:text-primary'">
-                {{ __('Hamısı') }}
+                {{ __('All') }}
             </button>
             @foreach($categories as $cat)
             <button type="button"

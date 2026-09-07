@@ -23,13 +23,13 @@
                         <i class="fas fa-clock text-base"></i>
                     </div>
                     <div>
-                        <h4 class="text-xs sm:text-sm font-bold text-amber-950">{{ __('Admin Təsdiqi Gözləyir') }}</h4>
-                        <p class="text-[11px] sm:text-xs text-amber-800">{{ __('Bu vakansiya qəbul edilib və admin təsdiqindən sonra ümumi axtarışda və saytda dərc ediləcək.') }}</p>
+                        <h4 class="text-xs sm:text-sm font-bold text-amber-950">{{ __('Awaiting Admin Approval') }}</h4>
+                        <p class="text-[11px] sm:text-xs text-amber-800">{{ __('This vacancy has been submitted and will be published on the site and in general search after admin approval.') }}</p>
                     </div>
                 </div>
                 <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-200/80 text-amber-900 font-bold text-xs shrink-0 self-start sm:self-auto">
                     <i class="fas fa-shield-halved text-[10px]"></i>
-                    {{ __('Yoxlanışdadır') }}
+                    {{ __('Under review') }}
                 </span>
             </div>
         </div>
@@ -64,7 +64,7 @@
                             <a href="{{ route('companies.show', $job->company->slug) }}" class="font-bold text-gray-900 hover:text-primary transition flex items-center gap-1">
                                 <span>{{ $job->company->name }}</span>
                                 @if($job->company?->is_verified)
-                                <i class="fas fa-check-circle text-sky-500 text-xs" title="{{ __('Təsdiqlənmiş İşəgötürən') }}"></i>
+                                <i class="fas fa-check-circle text-sky-500 text-xs" title="{{ __('Verified Employer') }}"></i>
                                 @endif
                             </a>
                             @else
@@ -95,31 +95,31 @@
                     <button type="button"
                             class="js-save-job px-4 py-3 rounded-xl border border-gray-200 hover:border-gray-300 hover:bg-gray-50 text-gray-700 font-bold text-xs transition duration-150 flex items-center gap-2 cursor-pointer shadow-2xs"
                             data-vacancy-id="{{ $job->id }}"
-                            data-save-label="{{ __('Sevimlilərə əlavə et') }}"
-                            data-saved-label="{{ __('Sevimlilərdən çıxar') }}"
+                            data-save-label="{{ __('Add to favorites') }}"
+                            data-saved-label="{{ __('Remove from favorites') }}"
                             aria-pressed="false"
-                            title="{{ __('Sevimlilərə əlavə et') }}">
+                            title="{{ __('Add to favorites') }}">
                         <i class="far fa-heart text-sm text-rose-500"></i>
-                        <span class="js-save-label">{{ __('Sevimlilərə əlavə et') }}</span>
+                        <span class="js-save-label">{{ __('Add to favorites') }}</span>
                     </button>
 
                     @if(isset($hasApplied) && $hasApplied)
                     <div class="px-5 py-2.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold flex items-center gap-2 shadow-2xs">
                         <i class="fas fa-check-circle text-emerald-600 text-sm"></i>
-                        <span>{{ __('Siz artıq bu vakansiyaya müraciət etmisiniz') }}</span>
+                        <span>{{ __('You have already applied to this vacancy') }}</span>
                     </div>
                     @else
                     @if($canInternal)
                     <button @click="openModal()" type="button" class="px-6 py-3 rounded-xl bg-primary hover:bg-primary-dark text-white font-bold text-xs shadow-xs transition duration-150 flex items-center gap-2 cursor-pointer">
                         <i class="fas fa-paper-plane text-xs"></i>
-                        <span>{{ __('CV ilə müraciət et') }}</span>
+                        <span>{{ __('Apply with your CV') }}</span>
                     </button>
                     @endif
 
                     @if($canEmail && $applyEmail)
                     <a href="{{ $mailtoHref }}" class="px-5 py-3 rounded-xl border border-gray-200 hover:border-gray-300 hover:bg-gray-50 text-gray-700 font-bold text-xs transition duration-150 flex items-center gap-2">
                         <i class="far fa-envelope text-xs text-gray-500"></i>
-                        <span>{{ __('E-poçtla müraciət') }}</span>
+                        <span>{{ __('Apply by email') }}</span>
                     </a>
                     @endif
                     @endif
@@ -142,15 +142,15 @@
                     <div class="grid grid-cols-2 sm:grid-cols-3 gap-6">
                         <!-- Row 1 -->
                         <div>
-                            <span class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider block">{{ __('Maaş Təklifi') }}</span>
+                            <span class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider block">{{ __('Salary Offer') }}</span>
                             <span class="text-sm sm:text-base font-extrabold text-primary font-mono mt-1 block">{{ $job->formatted_salary }}</span>
                         </div>
                         <div>
-                            <span class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider block">{{ __('Təcrübə') }}</span>
+                            <span class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider block">{{ __('Experience') }}</span>
                             <span class="text-xs sm:text-sm font-bold text-gray-900 mt-1 block">{{ $job->experience_level_name ?: '-' }}</span>
                         </div>
                         <div>
-                            <span class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider block">{{ __('İş Rejimi') }}</span>
+                            <span class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider block">{{ __('Employment type') }}</span>
                             <span class="text-xs sm:text-sm font-bold text-gray-900 mt-1 block">{{ $job->job_type_name ?: '-' }}</span>
                         </div>
 
@@ -159,17 +159,17 @@
 
                         <!-- Row 2 -->
                         <div>
-                            <span class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider block">{{ __('Çalışma Yeri') }}</span>
+                            <span class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider block">{{ __('Workplace') }}</span>
                             <span class="text-xs sm:text-sm font-bold text-gray-900 mt-1 block">{{ $job->workplace_type_name ?: '-' }}</span>
                         </div>
                         <div>
-                            <span class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider block">{{ __('Şəhər / Lokasiya') }}</span>
+                            <span class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider block">{{ __('City / Location') }}</span>
                             <span class="text-xs sm:text-sm font-bold text-gray-900 mt-1 block">{{ $job->city_name ?: '-' }}</span>
                         </div>
                         <div>
-                            <span class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider block">{{ __('Son Müraciət') }}</span>
+                            <span class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider block">{{ __('Latest Application') }}</span>
                             <span class="text-xs sm:text-sm font-bold text-gray-900 font-mono mt-1 block">
-                                {{ $job->deadline ? $job->deadline->format('d.m.Y') : __('Müddətsiz') }}
+                                {{ $job->deadline ? $job->deadline->format('d.m.Y') : __('Open-ended') }}
                             </span>
                         </div>
                     </div>
@@ -181,7 +181,7 @@
                     <!-- 1. Job Description -->
                     <div class="">
                         <h2 class="text-sm font-bold text-gray-900 uppercase tracking-wider flex items-center gap-2 pb-3 border-b border-gray-100">
-                            <span>{{ __('Vəzifə Öhdəlikləri') }}</span>
+                            <span>{{ __('Job Responsibilities') }}</span>
                         </h2>
                         <div class="text-xs sm:text-sm text-gray-700 leading-relaxed whitespace-pre-line space-y-3">
                             {!! $job->description !!}
@@ -192,7 +192,7 @@
                     @if($job->requirements)
                     <div >
                         <h2 class="text-sm font-bold text-gray-900 uppercase tracking-wider flex items-center gap-2 border-b border-gray-100">
-                            <span>{{ __('Tələblər & Təcrübə') }}</span>
+                            <span>{{ __('Requirements & Experience') }}</span>
                         </h2>
                         <div class="text-xs sm:text-sm text-gray-700 leading-relaxed whitespace-pre-line space-y-3">
                             {!! $job->requirements !!}
@@ -207,7 +207,7 @@
                     @endphp
                     @if(!empty($skillsList) && count($skillsList) > 0)
                     <div class="space-y-3 pt-6 border-t border-gray-100">
-                        <h3 class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">{{ __('Tələb olunan Texnologiyalar & Bacarıqlar') }}</h3>
+                        <h3 class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">{{ __('Required Technologies & Skills') }}</h3>
                         <div class="flex flex-wrap gap-2">
                             @foreach($skillsList as $skill)
                             <span class="px-2.5 py-1 rounded-md bg-gray-100 text-gray-700 text-xs font-semibold font-mono border border-gray-200">
@@ -220,8 +220,8 @@
 
                     <!-- Article Footer Meta -->
                     <div class="pt-6 border-t border-gray-100 flex items-center justify-between text-xs text-gray-400">
-                        <span>{{ __('Baxış sayı:') }} <strong class="text-gray-700 font-mono">{{ $job->views_count }}</strong></span>
-                        <span>{{ __('İlan ID:') }} <strong class="text-gray-700 font-mono">#{{ $job->id }}</strong></span>
+                        <span>{{ __('Views:') }} <strong class="text-gray-700 font-mono">{{ $job->views_count }}</strong></span>
+                        <span>{{ __('Listing ID:') }} <strong class="text-gray-700 font-mono">#{{ $job->id }}</strong></span>
                     </div>
 
                 </div>
@@ -234,30 +234,30 @@
                             <i class="fas fa-check text-lg"></i>
                         </div>
                         <div>
-                            <h3 class="text-sm font-bold text-white">{{ __('Müraciətiniz Qeydə Alınıb') }}</h3>
-                            <p class="text-xs text-slate-300 mt-0.5">{{ __('Bu vakansiya üzrə müraciətiniz artıq işəgötürənə çatdırılıb.') }}</p>
+                            <h3 class="text-sm font-bold text-white">{{ __('Your Application Has Been Recorded') }}</h3>
+                            <p class="text-xs text-slate-300 mt-0.5">{{ __('Your application for this vacancy has already been delivered to the employer.') }}</p>
                         </div>
                     </div>
                     <span class="px-4 py-2 rounded-lg bg-emerald-500/20 text-emerald-300 font-bold text-xs border border-emerald-500/30 shrink-0 flex items-center gap-1.5">
                         <i class="fas fa-check-circle text-emerald-400"></i>
-                        <span>{{ __('Müraciət Edilib') }}</span>
+                        <span>{{ __('Applied') }}</span>
                     </span>
                 </div>
                 @else
                 <div class="p-6 rounded-xl bg-slate-900 text-white flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-xs">
                     <div>
-                        <h3 class="text-sm font-bold text-white">{{ __('Bu vəzifəyə müraciət etmək istəyirsiniz?') }}</h3>
-                        <p class="text-xs text-slate-300 mt-0.5">{{ __('CV-nizi göndərərək müraciətinizi birbaşa işəgötürənə çatdırın.') }}</p>
+                        <h3 class="text-sm font-bold text-white">{{ __('Do you want to apply for this position?') }}</h3>
+                        <p class="text-xs text-slate-300 mt-0.5">{{ __('Submit your CV to deliver your application directly to the employer.') }}</p>
                     </div>
                     <div class="shrink-0 flex items-center gap-2">
                         @if($canInternal)
                         <button @click="openModal()" type="button" class="px-5 py-2.5 rounded-lg bg-primary hover:bg-primary-dark text-white font-bold text-xs shadow-xs transition duration-150 cursor-pointer">
-                            {{ __('CV ilə müraciət') }}
+                            {{ __('Apply with CV') }}
                         </button>
                         @endif
                         @if($canEmail && $applyEmail)
                         <a href="{{ $mailtoHref }}" class="px-4 py-2.5 rounded-lg border border-slate-700 hover:bg-slate-800 text-white font-bold text-xs transition duration-150">
-                            {{ __('E-poçtla') }}
+                            {{ __('By email') }}
                         </a>
                         @endif
                     </div>
@@ -268,7 +268,7 @@
                 @if($relatedJobs->count() > 0)
                 <div class="space-y-4 pt-6 border-t border-gray-200">
                     <h3 class="text-base font-bold text-gray-900 flex items-center gap-2">
-                        <span>{{ __('Oxşar Vakansiyalar') }}</span>
+                        <span>{{ __('Similar Vacancies') }}</span>
                     </h3>
 
                     <div class="space-y-3">
@@ -287,7 +287,7 @@
                 <!-- Company Profile Summary Card -->
                 <div class="bg-white rounded-xl border border-gray-200 p-5 shadow-2xs space-y-4">
                     <h3 class="text-[10px] font-bold text-gray-400 uppercase tracking-wider pb-2 border-b border-gray-100">
-                        {{ __('İşəgötürən Şirkət') }}
+                        {{ __('Employer Company') }}
                     </h3>
 
                     <div class="flex items-center gap-3.5">
@@ -318,7 +318,7 @@
                                 <span class="truncate">{{ $job->company->name }}</span>
                                 @endif
                             </h4>
-                            <span class="text-xs text-gray-500 truncate block">{{ $job->company->city_name ?: ($job->company?->location ?? __('Bakı, Azərbaycan')) }}</span>
+                            <span class="text-xs text-gray-500 truncate block">{{ $job->company->city_name ?: ($job->company?->location ?? __('Baku, Azerbaijan')) }}</span>
                         </div>
                     </div>
 
@@ -333,7 +333,7 @@
                         @if($job->company && $job->company->hasPublicProfile())
                         <a href="{{ route('companies.show', $job->company->slug) }}"
                            class="w-full py-2 px-3 rounded-lg border border-gray-200 hover:border-orange-200 hover:bg-orange-50/50 text-gray-700 hover:text-primary font-semibold text-xs text-center block transition">
-                            {{ __('Şirkətin bütün vakansiyaları') }}
+                            {{ __('All vacancies of the company') }}
                         </a>
                         @endif
 
@@ -352,20 +352,20 @@
                 <!-- Promote Vacancy Card (İrəli çək & Premium et) -->
                 <div class="bg-white rounded-xl border border-gray-200 p-5 shadow-2xs space-y-3">
                     <div>
-                        <h4 class="font-bold text-gray-900 text-xs uppercase tracking-wider">{{ __('Elanı Tanıt & Fərqləndir') }}</h4>
-                        <p class="text-[11px] text-gray-500 mt-0.5">{{ __('Vakansiyanızı daha çox namizədə çatdırmaq üçün önə çıxarın.') }}</p>
+                        <h4 class="font-bold text-gray-900 text-xs uppercase tracking-wider">{{ __('Promote & Stand Out') }}</h4>
+                        <p class="text-[11px] text-gray-500 mt-0.5">{{ __('Promote your vacancy to reach more candidates.') }}</p>
                     </div>
 
                     <div class="grid grid-cols-2 gap-2.5 pt-1">
                         <button type="button" @click="bumpModalOpen = true"
                                 class="w-full py-2.5 px-3 rounded-xl border border-orange-200 bg-orange-50/70 hover:bg-orange-100 text-primary font-bold text-xs transition duration-150 flex items-center justify-center gap-1.5 cursor-pointer shadow-2xs">
                             <i class="fas fa-rocket text-[11px]"></i>
-                            <span>{{ __('İrəli çək') }}</span>
+                            <span>{{ __('Boost') }}</span>
                         </button>
                         <button type="button" @click="premiumModalOpen = true"
                                 class="w-full py-2.5 px-3 rounded-xl border border-amber-300 bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs transition duration-150 flex items-center justify-center gap-1.5 cursor-pointer shadow-2xs">
                             <i class="fas fa-crown text-[11px]"></i>
-                            <span>{{ __('Premium et') }}</span>
+                            <span>{{ __('Make Premium') }}</span>
                         </button>
                     </div>
                 </div>
@@ -406,7 +406,7 @@
                 <!-- Modal Header -->
                 <div class="bg-gray-50 px-6 py-4 border-b border-gray-100 flex items-center justify-between">
                     <div>
-                        <div class="text-[10px] font-bold text-primary uppercase tracking-wider">{{ __('İş Müraciəti') }}</div>
+                        <div class="text-[10px] font-bold text-primary uppercase tracking-wider">{{ __('Job Application') }}</div>
                         <h3 class="text-sm font-bold text-gray-900 truncate max-w-xs">{{ $job->title }}</h3>
                     </div>
                     <button @click="closeModal()" type="button" class="text-gray-400 hover:text-gray-700 p-1 cursor-pointer">
@@ -421,28 +421,28 @@
                     @if(isset($userResumes) && $userResumes->count() > 0)
                     <div class="p-3.5 rounded-xl bg-orange-50/70 border border-orange-200/60 space-y-2">
                         <label class="block text-xs font-bold text-gray-900 flex items-center justify-between">
-                            <span>{{ __('Sistemdə Yaradılmış CV ilə Müraciət') }}</span>
-                            <span class="text-[10px] text-primary font-semibold">★ {{ __('Tövsiyə olunan') }}</span>
+                            <span>{{ __('Apply with a System-Created CV') }}</span>
+                            <span class="text-[10px] text-primary font-semibold">★ {{ __('Recommended') }}</span>
                         </label>
                         <select x-model="formData.resume_id"
                                 class="w-full px-3 py-2 rounded-lg border border-gray-200 text-xs focus:ring-1 focus:ring-primary focus:border-primary focus:outline-hidden bg-white font-medium text-gray-800">
                             @foreach($userResumes as $res)
                             <option value="{{ $res->id }}">
-                                {{ $res->title ?: ($res->first_name . ' ' . $res->last_name . ' CV') }} {{ $res->is_default ? ' (' . __('Əsas CV') . ')' : '' }}
+                                {{ $res->title ?: ($res->first_name . ' ' . $res->last_name . ' CV') }} {{ $res->is_default ? ' (' . __('Primary CV') . ')' : '' }}
                             </option>
                             @endforeach
-                            <option value="">-- {{ __('Fayl kimi yeni CV yüklə') }} --</option>
+                            <option value="">-- {{ __('Upload a new CV as a file') }} --</option>
                         </select>
                         <p class="text-[11px] text-gray-500" x-show="formData.resume_id">
                             <i class="fas fa-info-circle text-primary mr-0.5"></i>
-                            {{ __('Seçilmiş CV profiliniz birbaşa işəgötürənin qiymətləndirmə panelinə göndəriləcək.') }}
+                            {{ __("Your selected CV profile will be sent directly to the employer's review panel.") }}
                         </p>
                     </div>
                     @else
                     <div class="p-3 rounded-xl bg-gray-50 border border-gray-100 flex items-center justify-between text-xs">
-                        <span class="text-gray-600">{{ __('Hələ sistemdə yaradılmış CV-niz yoxdur?') }}</span>
+                        <span class="text-gray-600">{{ __("Don't have a CV created in the system yet?") }}</span>
                         <a href="{{ route('filament.user.resources.my-resumes.create') }}" target="_blank" class="text-primary hover:underline font-bold">
-                            + {{ __('CV Yaradın') }}
+                            + {{ __('Create CV') }}
                         </a>
                     </div>
                     @endif
@@ -450,20 +450,20 @@
                     <!-- Manual details (Only shown when not using a created CV) -->
                     <div x-show="!formData.resume_id" class="space-y-4">
                         <div>
-                            <label class="block text-xs font-bold text-gray-700 mb-1">{{ __('Adınız Soyadınız') }} *</label>
+                            <label class="block text-xs font-bold text-gray-700 mb-1">{{ __('Your Full Name') }} *</label>
                             <input type="text" x-model="formData.applicant_name" :required="!formData.resume_id"
                                    class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs focus:ring-1 focus:ring-primary focus:border-primary focus:outline-hidden">
                         </div>
 
                         <div class="grid grid-cols-1 {{ $job->hasApplicationField('phone') ? 'sm:grid-cols-2' : '' }} gap-3">
                             <div>
-                                <label class="block text-xs font-bold text-gray-700 mb-1">{{ __('E-poçt Ünvanı') }} *</label>
+                                <label class="block text-xs font-bold text-gray-700 mb-1">{{ __('Email Address') }} *</label>
                                 <input type="email" x-model="formData.applicant_email" :required="!formData.resume_id"
                                        class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs focus:ring-1 focus:ring-primary focus:border-primary focus:outline-hidden">
                             </div>
                             @if($job->hasApplicationField('phone'))
                             <div>
-                                <label class="block text-xs font-bold text-gray-700 mb-1">{{ __('Telefon Nömrəsi') }}</label>
+                                <label class="block text-xs font-bold text-gray-700 mb-1">{{ __('Phone Number') }}</label>
                                 <input type="tel" x-model="formData.applicant_phone"
                                        class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs focus:ring-1 focus:ring-primary focus:border-primary focus:outline-hidden">
                             </div>
@@ -472,14 +472,14 @@
 
                         <div>
                             <label class="block text-xs font-bold text-gray-700 mb-1">
-                                <span>{{ __('CV / Rezüme Faylı (PDF, DOC)') }}</span> *
+                                <span>{{ __('CV / Resume File (PDF, DOC)') }}</span> *
                             </label>
                             <div class="relative border-2 border-dashed border-gray-200 hover:border-primary rounded-xl p-4 text-center cursor-pointer transition bg-gray-50/50">
                                 <input type="file" @change="handleFileUpload" accept=".pdf,.doc,.docx" :required="!formData.resume_id"
                                        class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
                                 <div class="space-y-1">
                                     <i class="fas fa-cloud-arrow-up text-xl text-primary"></i>
-                                    <div class="text-xs text-gray-600" x-text="fileName ? fileName : '{{ __('Faylı seçin və ya bura sürükləyin') }}'"></div>
+                                    <div class="text-xs text-gray-600" x-text="fileName ? fileName : '{{ __('Select a file or drag it here') }}'"></div>
                                     <div class="text-[10px] text-gray-400 font-mono">PDF, DOC, DOCX (Maks 10MB)</div>
                                 </div>
                             </div>
@@ -507,8 +507,8 @@
 
                     @if($job->hasApplicationField('cover_letter'))
                     <div>
-                        <label class="block text-xs font-bold text-gray-700 mb-1">{{ __('Ön Yazı / Qeydlər') }}</label>
-                        <textarea x-model="formData.cover_letter" rows="3" placeholder="{{ __('Özünüz haqqında qısa məlumat verin...') }}"
+                        <label class="block text-xs font-bold text-gray-700 mb-1">{{ __('Cover Letter / Notes') }}</label>
+                        <textarea x-model="formData.cover_letter" rows="3" placeholder="{{ __('Tell us briefly about yourself...') }}"
                                   class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs focus:ring-1 focus:ring-primary focus:border-primary focus:outline-hidden"></textarea>
                     </div>
                     @endif
@@ -524,11 +524,11 @@
                     <!-- Modal Actions -->
                     <div class="pt-3 border-t border-gray-100 flex items-center justify-end gap-2">
                         <button @click="closeModal()" type="button" class="px-4 py-2 rounded-xl text-xs font-semibold text-gray-500 hover:bg-gray-100 transition cursor-pointer">
-                            {{ __('Ləğv et') }}
+                            {{ __('Cancel') }}
                         </button>
                         <button type="submit" :disabled="isLoading" class="px-6 py-2.5 rounded-xl bg-primary hover:bg-primary-dark text-white text-xs font-bold shadow-xs flex items-center gap-2 disabled:opacity-50 transition cursor-pointer">
-                            <span x-show="!isLoading">{{ __('Müraciəti Tamamla') }}</span>
-                            <span x-show="isLoading" x-cloak>{{ __('Göndərilir...') }}</span>
+                            <span x-show="!isLoading">{{ __('Submit Application') }}</span>
+                            <span x-show="isLoading" x-cloak>{{ __('Sending...') }}</span>
                         </button>
                     </div>
                 </form>

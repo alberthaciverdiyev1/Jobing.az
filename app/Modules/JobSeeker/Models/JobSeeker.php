@@ -107,7 +107,7 @@ class JobSeeker extends Model
     public function getFormattedSalaryAttribute(): string
     {
         if ($this->salary_negotiable) {
-            return __('Razılaşma yolu ilə');
+            return __('Negotiable');
         }
 
         $symbol = match ($this->currency) {
@@ -119,7 +119,7 @@ class JobSeeker extends Model
         };
 
         if (!$this->salary_min && !$this->salary_max) {
-            return __('Göstərilməyib');
+            return __('Not shown');
         }
 
         if ($this->salary_min && $this->salary_max) {
@@ -130,17 +130,17 @@ class JobSeeker extends Model
             return number_format($this->salary_min, 0, ',', '.') . '+ ' . $symbol;
         }
 
-        return __('qədər') . ' ' . number_format($this->salary_max, 0, ',', '.') . ' ' . $symbol;
+        return __('up to') . ' ' . number_format($this->salary_max, 0, ',', '.') . ' ' . $symbol;
     }
 
     public function getAvailabilityLabelAttribute(): string
     {
         return match ($this->availability) {
-            'immediate' => __('Dərhal başlaya bilər'),
-            'two_weeks' => __('2 həftə içində'),
-            'one_month' => __('1 ay içində'),
-            'flexible' => __('Esnek'),
-            default => __('Esnek'),
+            'immediate' => __('Can start immediately'),
+            'two_weeks' => __('Within 2 weeks'),
+            'one_month' => __('Within 1 month'),
+            'flexible' => __('Flexible'),
+            default => __('Flexible'),
         };
     }
 }

@@ -15,7 +15,7 @@
             <i class="fas {{ $isSuccess ? 'fa-check-circle' : 'fa-exclamation-circle' }} text-lg"></i>
         </div>
         <div class="flex-1 pt-0.5">
-            <h4 class="text-sm font-bold">{{ $isSuccess ? __('Uğurlu!') : __('Xəta!') }}</h4>
+            <h4 class="text-sm font-bold">{{ $isSuccess ? __('Success!') : __('Error!') }}</h4>
             <p class="text-xs text-slate-200 mt-0.5">{{ session('success') ?? session('error') }}</p>
         </div>
         <button @click="show = false" class="text-slate-400 hover:text-white p-1 cursor-pointer">

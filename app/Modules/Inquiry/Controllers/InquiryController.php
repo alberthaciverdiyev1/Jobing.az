@@ -32,10 +32,10 @@ class InquiryController extends Controller
         if ($request->wantsJson() || $request->ajax()) {
             return response()->json([
                 'success' => true,
-                'message' => __('Mesajınız uğurla göndərildi. Ən qısa zamanda sizinlə əlaqə saxlayacağıq.'),
+                'message' => __("Your message has been sent successfully. We'll contact you shortly."),
             ]);
         }
 
-        return back()->with('success', __('Mesajınız uğurla göndərildi. Ən qısa zamanda sizinlə əlaqə saxlayacağıq.'));
+        return back()->with('success', __("Your message has been sent successfully. We'll contact you shortly."));
     }
 }

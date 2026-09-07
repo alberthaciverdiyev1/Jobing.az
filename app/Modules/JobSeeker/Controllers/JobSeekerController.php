@@ -216,7 +216,7 @@ class JobSeekerController extends Controller
         ]);
 
         return redirect()->route('home')
-            ->with('success', __('İş axtarış elanınız qəbul edildi və admin onayından sonra yayınlanacaq.'));
+            ->with('success', __('Your job seeking listing has been submitted and will be published after admin approval.'));
     }
 
     public function show(string $slug): View

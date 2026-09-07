@@ -20,7 +20,7 @@
                     @if(auth()->check() && in_array($job->id, auth()->user()->appliedVacancyIds(), true))
                     <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center gap-1">
                         <i class="fas fa-check text-[9px]"></i>
-                        <span>{{ __('Müraciət edilib') }}</span>
+                        <span>{{ __('Applied') }}</span>
                     </span>
                     @endif
                 </div>

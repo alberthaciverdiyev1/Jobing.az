@@ -22,7 +22,7 @@ class ApplicationRepliedNotification extends Notification
     public function toDatabase(object $notifiable): array
     {
         return [
-            'title' => __('Şirkətinizdən yeni mesaj'),
+            'title' => __('New message from your company'),
             'body' => $this->vacancyTitle ? $this->message . "\n(" . $this->vacancyTitle . ')' : $this->message,
             'actions' => [],
         ];

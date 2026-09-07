@@ -42,7 +42,7 @@
                         <div class="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-gray-500 pt-0.5">
                             <span class="flex items-center gap-1">
                                 <i class="fas fa-map-marker-alt text-gray-400 text-xs"></i>
-                                <span>{{ $jobSeeker->location ?: __('Bakı, Azərbaycan') }}</span>
+                                <span>{{ $jobSeeker->location ?: __('Baku, Azerbaijan') }}</span>
                             </span>
                             @if($jobSeeker->workplaceType)
                             <span class="text-gray-300">•</span>
@@ -60,7 +60,7 @@
                 <div class="shrink-0 self-start md:self-center">
                     <div class="px-5 py-2.5 rounded-xl bg-orange-50/80 border border-orange-100 text-center min-w-[130px] shadow-2xs">
                         <span class="text-lg sm:text-xl font-black text-primary font-mono block leading-tight">{{ $jobSeeker->formatted_salary }}</span>
-                        <span class="text-[11px] font-bold text-orange-950 uppercase tracking-wider block mt-0.5">{{ __('Gözlənilən Maaş') }}</span>
+                        <span class="text-[11px] font-bold text-orange-950 uppercase tracking-wider block mt-0.5">{{ __('Expected Salary') }}</span>
                     </div>
                 </div>
 
@@ -79,16 +79,16 @@
                 <!-- Key Facts Grid -->
                 <div class="bg-white rounded-xl border border-gray-200 p-5 sm:p-6 shadow-2xs grid grid-cols-2 sm:grid-cols-3 gap-4 divide-y sm:divide-y-0 sm:divide-x divide-gray-100">
                     <div>
-                        <span class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider block">{{ __('Müsabiqə / Çıxış') }}</span>
+                        <span class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider block">{{ __('Competition / Exit') }}</span>
                         <span class="text-xs font-bold text-gray-900 mt-1 block">{{ $jobSeeker->availability_label }}</span>
                     </div>
                     <div class="pt-3 sm:pt-0 sm:pl-4">
-                        <span class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider block">{{ __('Təcrübə Səviyyəsi') }}</span>
+                        <span class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider block">{{ __('Experience Level') }}</span>
                         <span class="text-xs font-bold text-gray-900 mt-1 block">{{ $jobSeeker->experienceLevel?->name ?: '—' }}</span>
                     </div>
                     <div class="pt-3 sm:pt-0 sm:pl-4">
-                        <span class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider block">{{ __('Şəhər / Region') }}</span>
-                        <span class="text-xs font-bold text-gray-900 mt-1 block">{{ $jobSeeker->location ?: __('Bakı') }}</span>
+                        <span class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider block">{{ __('City / Region') }}</span>
+                        <span class="text-xs font-bold text-gray-900 mt-1 block">{{ $jobSeeker->location ?: __('Baku') }}</span>
                     </div>
                 </div>
 
@@ -96,7 +96,7 @@
                 <div class="bg-white rounded-xl border border-gray-200 p-6 sm:p-8 shadow-2xs space-y-6">
                     <div class="space-y-3">
                         <h2 class="text-sm font-bold text-gray-900 uppercase tracking-wider flex items-center gap-2 pb-3 border-b border-gray-100">
-                            <span>{{ __('Təcrübə və Bacarıqlar') }}</span>
+                            <span>{{ __('Experience and Skills') }}</span>
                         </h2>
                         <div class="text-xs sm:text-sm text-gray-700 leading-relaxed whitespace-pre-line space-y-3">
                             {!! nl2br(e($jobSeeker->description)) !!}
@@ -105,7 +105,7 @@
 
                     @if($jobSeeker->skills && count($jobSeeker->skills) > 0)
                     <div class="space-y-3 pt-6 border-t border-gray-100">
-                        <h3 class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">{{ __('Texnologiyalar & Bacarıqlar') }}</h3>
+                        <h3 class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">{{ __('Technologies & Skills') }}</h3>
                         <div class="flex flex-wrap gap-2">
                             @foreach($jobSeeker->skills as $skill)
                             <span class="px-2.5 py-1 rounded-md bg-gray-100 text-gray-700 text-xs font-semibold font-mono border border-gray-200">
@@ -117,8 +117,8 @@
                     @endif
 
                     <div class="pt-6 border-t border-gray-100 flex items-center justify-between text-xs text-gray-400">
-                        <span>{{ __('Baxış sayı:') }} <strong class="text-gray-700 font-mono">{{ $jobSeeker->views_count }}</strong></span>
-                        <span>{{ __('Elan ID:') }} <strong class="text-gray-700 font-mono">#{{ $jobSeeker->id }}</strong></span>
+                        <span>{{ __('Views:') }} <strong class="text-gray-700 font-mono">{{ $jobSeeker->views_count }}</strong></span>
+                        <span>{{ __('Listing ID:') }} <strong class="text-gray-700 font-mono">#{{ $jobSeeker->id }}</strong></span>
                     </div>
                 </div>
 
@@ -131,20 +131,20 @@
 
                     <h3 class="text-xs font-bold text-gray-900 uppercase tracking-wider pb-3 border-b border-gray-100 flex items-center gap-2">
                         <i class="fas fa-shield-alt text-primary text-xs"></i>
-                        <span>{{ __('Namizədlə Əlaqə') }}</span>
+                        <span>{{ __('Contact the Candidate') }}</span>
                     </h3>
 
                     <!-- Blurred / masked state -->
                     <div x-show="!revealed" class="space-y-3">
                         <div class="rounded-xl bg-gray-50 border border-gray-100 p-4 text-center">
                             <p class="text-xs text-gray-500 mb-3">
-                                {{ __('Namizədin e-poçt və ya telefon nömrəsini görmək üçün aşağıdakı düyməyə toxunun.') }}
+                                {{ __("Tap the button below to see the candidate's email or phone number.") }}
                             </p>
                             <button type="button" @click="reveal()" :disabled="loading"
                                     class="w-full px-5 py-3 rounded-xl bg-primary hover:bg-primary-dark text-white font-bold text-xs shadow-xs transition duration-150 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60">
                                 <i class="fas fa-eye text-xs" x-show="!loading"></i>
                                 <i class="fas fa-spinner fa-spin text-xs" x-show="loading" x-cloak></i>
-                                <span x-text="loading ? '{{ __('Göstərilir...') }}' : '{{ __('Əlaqə məlumatlarını göstər') }}'"></span>
+                                <span x-text="loading ? '{{ __('Revealing...') }}' : '{{ __('Show contact details') }}'"></span>
                             </button>
                         </div>
                     </div>
@@ -168,13 +168,13 @@
                                 <span x-text="phone"></span>
                             </a>
                         </template>
-                        <p x-show="!email && !hasPhone" class="text-xs text-gray-400 text-center">{{ __('Əlaqə məlumatı qeyd olunmayıb') }}</p>
+                        <p x-show="!email && !hasPhone" class="text-xs text-gray-400 text-center">{{ __('No contact details recorded') }}</p>
                     </div>
 
                     @if($jobSeeker->contact_phone || $jobSeeker->contact_email)
                     <p class="text-[10px] text-gray-400 text-center flex items-center justify-center gap-1 pt-1">
                         <i class="fas fa-lock text-[9px]"></i>
-                        <span>{{ __('Məlumatlar spamdan qorunmaq üçün gizlədilir.') }}</span>
+                        <span>{{ __('Contact details are hidden to protect against spam.') }}</span>
                     </p>
                     @endif
                 </div>
@@ -182,20 +182,20 @@
                 <!-- Promote JobSeeker Card (İrəli çək & Premium et) -->
                 <div class="bg-white rounded-xl border border-gray-200 p-5 shadow-2xs space-y-3">
                     <div>
-                        <h4 class="font-bold text-gray-900 text-xs uppercase tracking-wider">{{ __('Elanı Tanıt & Fərqləndir') }}</h4>
-                        <p class="text-[11px] text-gray-500 mt-0.5">{{ __('Profilinizi şirkətlərin və işəgötürənlərin diqqətinə çatdırın.') }}</p>
+                        <h4 class="font-bold text-gray-900 text-xs uppercase tracking-wider">{{ __('Promote & Stand Out') }}</h4>
+                        <p class="text-[11px] text-gray-500 mt-0.5">{{ __('Bring your profile to the attention of companies and employers.') }}</p>
                     </div>
 
                     <div class="grid grid-cols-2 gap-2.5 pt-1">
                         <button type="button" @click="bumpModalOpen = true"
                                 class="w-full py-2.5 px-3 rounded-xl border border-orange-200 bg-orange-50/70 hover:bg-orange-100 text-primary font-bold text-xs transition duration-150 flex items-center justify-center gap-1.5 cursor-pointer shadow-2xs">
                             <i class="fas fa-rocket text-[11px]"></i>
-                            <span>{{ __('İrəli çək') }}</span>
+                            <span>{{ __('Boost') }}</span>
                         </button>
                         <button type="button" @click="premiumModalOpen = true"
                                 class="w-full py-2.5 px-3 rounded-xl border border-amber-300 bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs transition duration-150 flex items-center justify-center gap-1.5 cursor-pointer shadow-2xs">
                             <i class="fas fa-crown text-[11px]"></i>
-                            <span>{{ __('Premium et') }}</span>
+                            <span>{{ __('Make Premium') }}</span>
                         </button>
                     </div>
                 </div>

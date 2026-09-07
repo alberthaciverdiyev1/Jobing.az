@@ -8,8 +8,8 @@
     @php
         // Resolve per-page SEO config (admin-managed). Falls back to static defaults when a @section overrides or no config exists.
         $curPageSeo = \App\Modules\Seo\Models\PageSeo::findForCurrentRoute();
-        $seoDefaultTitle = $curPageSeo?->getTrans('title') ?: (config('app.full_name') . ' - ' . __('Modern İş İlanları və Karyera Platforması'));
-        $seoDefaultDesc = $curPageSeo?->getTrans('description') ?: __('Yazılım, tasarım, ürün, veri ve pazarlama alanlarında önde gelen teknoloji şirketlerinin açık pozisyonlarına anında başvurun.');
+        $seoDefaultTitle = $curPageSeo?->getTrans('title') ?: (config('app.full_name') . ' - ' . __('Modern Job Board & Career Platform'));
+        $seoDefaultDesc = $curPageSeo?->getTrans('description') ?: __('Instantly apply to open positions at leading technology companies in software, design, product, data and marketing.');
     @endphp
     <title>@yield('title', $seoDefaultTitle)</title>
     <meta name="description" content="@yield('meta_description', $seoDefaultDesc)">

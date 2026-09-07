@@ -27,7 +27,7 @@ class AuthController extends Controller
 
         if (!$this->authService->login($credentials, $request->boolean('remember'))) {
             return back()
-                ->withErrors(['email' => __('E-poçt və ya şifrə yanlışdır.')])
+                ->withErrors(['email' => __('Email or password is incorrect.')])
                 ->onlyInput('email');
         }
 
@@ -50,7 +50,7 @@ class AuthController extends Controller
         $request->session()->regenerate();
 
         return redirect($this->authService->getRedirectPath())
-            ->with('success', __('Hesabınız uğurla yaradıldı!'));
+            ->with('success', __('Your account has been created successfully!'));
     }
 
     public function logout(): RedirectResponse

@@ -8,7 +8,7 @@
 @php
     $whatsapp = \App\Modules\Setting\Models\SiteSetting::current()->whatsapp ?? config('site.whatsapp_fallback');
     $cleanWa = preg_replace('/[^0-9]/', '', $whatsapp);
-    $itemTypeLabel = $type === 'vacancy' ? __('Vakansiya') : __('İş Axtarış Elanı');
+    $itemTypeLabel = $type === 'vacancy' ? __('Vacancy') : __('Job Seeking Listing');
     $safeTitle = addslashes($title);
 
     // Promosyon fiyatları config'ten gelir.
@@ -52,8 +52,8 @@
                         <i class="fas fa-rocket"></i>
                     </div>
                     <div>
-                        <h3 class="text-sm font-extrabold text-gray-900" id="bump-modal-title">{{ __('Elanı İrəli Çək') }}</h3>
-                        <p class="text-[11px] text-gray-500">{{ __('Axtarış nəticələrində ən yuxarı mövqeyə qalxın') }}</p>
+                        <h3 class="text-sm font-extrabold text-gray-900" id="bump-modal-title">{{ __('Boost Your Listing') }}</h3>
+                        <p class="text-[11px] text-gray-500">{{ __('Rise to the top of search results') }}</p>
                     </div>
                 </div>
                 <button @click="bumpModalOpen = false" type="button" class="text-gray-400 hover:text-gray-600 p-1.5 rounded-lg hover:bg-gray-100 transition cursor-pointer">
@@ -73,44 +73,44 @@
                 <div class="space-y-2 text-xs text-gray-600">
                     <div class="flex items-start gap-2.5">
                         <i class="fas fa-check text-emerald-500 mt-0.5 shrink-0"></i>
-                        <span>{{ __('Elanınız axtarışda və ana səhifədə dərhal ən birinci sıraya yüksəlir.') }}</span>
+                        <span>{{ __('Your listing instantly rises to the very first position in search and on the homepage.') }}</span>
                     </div>
                     <div class="flex items-start gap-2.5">
                         <i class="fas fa-check text-emerald-500 mt-0.5 shrink-0"></i>
-                        <span>{{ __('Tarix yenilənərək elan ən yeni kimi təqdim olunur.') }}</span>
+                        <span>{{ __('The date is refreshed and the listing is presented as the newest.') }}</span>
                     </div>
                 </div>
 
                 <!-- 3 Options Selection: 1 dəfə, 3 dəfə, 7 dəfə -->
                 <div class="space-y-1.5">
-                    <label class="block text-[11px] font-bold text-gray-700 uppercase tracking-wider">{{ __('Paketi seçin:') }}</label>
+                    <label class="block text-[11px] font-bold text-gray-700 uppercase tracking-wider">{{ __('Choose a package:') }}</label>
                     <div class="grid grid-cols-3 gap-2.5">
                         <!-- Option 1: 1 dəfə -->
                         <button type="button" @click="selectedBump = '1'"
                                 class="p-3 rounded-xl border text-center transition cursor-pointer"
                                 :class="selectedBump === '1' ? 'border-primary bg-orange-50 ring-1 ring-primary shadow-xs' : 'border-gray-200 hover:border-gray-300 bg-white'">
-                            <span class="text-xs font-bold text-gray-800 block">{{ __('1 dəfə') }}</span>
+                            <span class="text-xs font-bold text-gray-800 block">{{ __('1 time') }}</span>
                             <span class="text-base sm:text-lg font-black text-primary font-mono block mt-1">{{ $bumpPrices[1] }} ₼</span>
-                            <span class="text-[10px] text-gray-400 block mt-0.5">{{ __('Standart') }}</span>
+                            <span class="text-[10px] text-gray-400 block mt-0.5">{{ __('Standard') }}</span>
                         </button>
 
                         <!-- Option 2: 3 dəfə -->
                         <button type="button" @click="selectedBump = '3'"
                                 class="p-3 rounded-xl border text-center transition cursor-pointer relative"
                                 :class="selectedBump === '3' ? 'border-primary bg-orange-50 ring-1 ring-primary shadow-xs' : 'border-gray-200 hover:border-gray-300 bg-white'">
-                            <span class="absolute -top-2 left-1/2 -translate-x-1/2 px-1.5 py-0.2 rounded-full bg-primary text-[8px] font-black text-white uppercase tracking-wider">{{ __('Populyar') }}</span>
-                            <span class="text-xs font-bold text-gray-800 block">{{ __('3 dəfə') }}</span>
+                            <span class="absolute -top-2 left-1/2 -translate-x-1/2 px-1.5 py-0.2 rounded-full bg-primary text-[8px] font-black text-white uppercase tracking-wider">{{ __('Popular') }}</span>
+                            <span class="text-xs font-bold text-gray-800 block">{{ __('3 times') }}</span>
                             <span class="text-base sm:text-lg font-black text-primary font-mono block mt-1">{{ $bumpPrices[3] }} ₼</span>
-                            <span class="text-[10px] text-emerald-600 font-bold block mt-0.5">{{ __('Qənaət') }}</span>
+                            <span class="text-[10px] text-emerald-600 font-bold block mt-0.5">{{ __('Savings') }}</span>
                         </button>
 
                         <!-- Option 3: 7 dəfə -->
                         <button type="button" @click="selectedBump = '7'"
                                 class="p-3 rounded-xl border text-center transition cursor-pointer"
                                 :class="selectedBump === '7' ? 'border-primary bg-orange-50 ring-1 ring-primary shadow-xs' : 'border-gray-200 hover:border-gray-300 bg-white'">
-                            <span class="text-xs font-bold text-gray-800 block">{{ __('7 dəfə') }}</span>
+                            <span class="text-xs font-bold text-gray-800 block">{{ __('7 times') }}</span>
                             <span class="text-base sm:text-lg font-black text-primary font-mono block mt-1">{{ $bumpPrices[7] }} ₼</span>
-                            <span class="text-[10px] text-emerald-600 font-bold block mt-0.5">{{ __('Maksimum') }}</span>
+                            <span class="text-[10px] text-emerald-600 font-bold block mt-0.5">{{ __('Maximum') }}</span>
                         </button>
                     </div>
                 </div>
@@ -121,10 +121,10 @@
                        target="_blank" rel="noopener"
                        class="w-full py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-xs transition duration-150 flex items-center justify-center gap-2 cursor-pointer">
                         <i class="fab fa-whatsapp text-base"></i>
-                        <span>{{ __('WhatsApp ilə Sifariş Et') }} (<span x-text="bumpPrices[selectedBump]"></span>)</span>
+                        <span>{{ __('Order via WhatsApp') }} (<span x-text="bumpPrices[selectedBump]"></span>)</span>
                     </a>
                     <button @click="bumpModalOpen = false" type="button" class="w-full py-2 text-xs text-gray-400 hover:text-gray-600 font-semibold text-center cursor-pointer">
-                        {{ __('Bağla') }}
+                        {{ __('Close') }}
                     </button>
                 </div>
             </div>
@@ -168,10 +168,10 @@
                     </div>
                     <div>
                         <div class="flex items-center gap-2">
-                            <h3 class="text-sm font-extrabold text-white" id="premium-modal-title">{{ __('Premium Status Qazan') }}</h3>
+                            <h3 class="text-sm font-extrabold text-white" id="premium-modal-title">{{ __('Earn Premium Status') }}</h3>
                             <span class="px-1.5 py-0.5 rounded bg-amber-600 text-[9px] font-black uppercase tracking-wider text-white">VIP</span>
                         </div>
-                        <p class="text-[11px] text-amber-100">{{ __('Maksimum diqqət və xüsusi fərqlənmə nişanı') }}</p>
+                        <p class="text-[11px] text-amber-100">{{ __('Maximum attention and a special standout badge') }}</p>
                     </div>
                 </div>
                 <button @click="premiumModalOpen = false" type="button" class="text-white/80 hover:text-white p-1.5 rounded-lg hover:bg-white/10 transition cursor-pointer">
@@ -191,46 +191,46 @@
                 <div class="space-y-2 text-xs text-gray-600">
                     <div class="flex items-start gap-2.5">
                         <i class="fas fa-star text-amber-500 mt-0.5 shrink-0"></i>
-                        <span>{{ __('Xüsusi "PREMIUM" nişanı') }}</span>
+                        <span>{{ __('Special "PREMIUM" badge') }}</span>
                     </div>
                     <div class="flex items-start gap-2.5">
                         <i class="fas fa-star text-amber-500 mt-0.5 shrink-0"></i>
-                        <span>{{ __('Axtarış və kateqoriya səhifələrində hər zaman ən yuxarı blokda qalır.') }}</span>
+                        <span>{{ __('Always stays in the top block on search and category pages.') }}</span>
                     </div>
                     <div class="flex items-start gap-2.5">
                         <i class="fas fa-star text-amber-500 mt-0.5 shrink-0"></i>
-                        <span>{{ __('Ana səhifədəki "Önə Çıxan Vakansiyalar" vitrininə daxil edilir.') }}</span>
+                        <span>{{ __('Featured in the "Featured Vacancies" showcase on the homepage.') }}</span>
                     </div>
                 </div>
 
                 <!-- 3 Options Selection: 1 dəfə, 3 dəfə, 7 dəfə -->
                 <div class="space-y-1.5">
-                    <label class="block text-[11px] font-bold text-gray-700 uppercase tracking-wider">{{ __('Paketi seçin:') }}</label>
+                    <label class="block text-[11px] font-bold text-gray-700 uppercase tracking-wider">{{ __('Choose a package:') }}</label>
                     <div class="grid grid-cols-3 gap-2.5">
                         <!-- Option 1: 1 dəfə -->
                         <button type="button" @click="selectedPremium = '1'"
                                 class="p-3 rounded-xl border text-center transition cursor-pointer"
                                 :class="selectedPremium === '1' ? 'border-amber-500 bg-amber-50 ring-1 ring-amber-500 shadow-xs' : 'border-gray-200 hover:border-amber-300 bg-white'">
-                            <span class="text-xs font-bold text-gray-800 block">{{ __('1 dəfə') }}</span>
+                            <span class="text-xs font-bold text-gray-800 block">{{ __('1 time') }}</span>
                             <span class="text-base sm:text-lg font-black text-amber-600 font-mono block mt-1">{{ $premiumPrices[1] }} ₼</span>
-                            <span class="text-[10px] text-gray-400 block mt-0.5">{{ __('Sınaq') }}</span>
+                            <span class="text-[10px] text-gray-400 block mt-0.5">{{ __('Trial') }}</span>
                         </button>
 
                         <!-- Option 2: 3 dəfə -->
                         <button type="button" @click="selectedPremium = '3'"
                                 class="p-3 rounded-xl border text-center transition cursor-pointer relative"
                                 :class="selectedPremium === '3' ? 'border-amber-500 bg-amber-50 ring-1 ring-amber-500 shadow-xs' : 'border-gray-200 hover:border-amber-300 bg-white'">
-                            <span class="absolute -top-2 left-1/2 -translate-x-1/2 px-1.5 py-0.2 rounded-full bg-amber-500 text-[8px] font-black text-white uppercase tracking-wider">{{ __('Populyar') }}</span>
-                            <span class="text-xs font-bold text-gray-800 block">{{ __('3 dəfə') }}</span>
+                            <span class="absolute -top-2 left-1/2 -translate-x-1/2 px-1.5 py-0.2 rounded-full bg-amber-500 text-[8px] font-black text-white uppercase tracking-wider">{{ __('Popular') }}</span>
+                            <span class="text-xs font-bold text-gray-800 block">{{ __('3 times') }}</span>
                             <span class="text-base sm:text-lg font-black text-amber-600 font-mono block mt-1">{{ $premiumPrices[3] }} ₼</span>
-                            <span class="text-[10px] text-amber-800 font-bold block mt-0.5">{{ __('Tövsiyə') }}</span>
+                            <span class="text-[10px] text-amber-800 font-bold block mt-0.5">{{ __('Recommendation') }}</span>
                         </button>
 
                         <!-- Option 3: 7 dəfə -->
                         <button type="button" @click="selectedPremium = '7'"
                                 class="p-3 rounded-xl border text-center transition cursor-pointer"
                                 :class="selectedPremium === '7' ? 'border-amber-500 bg-amber-50 ring-1 ring-amber-500 shadow-xs' : 'border-gray-200 hover:border-amber-300 bg-white'">
-                            <span class="text-xs font-bold text-gray-800 block">{{ __('7 dəfə') }}</span>
+                            <span class="text-xs font-bold text-gray-800 block">{{ __('7 times') }}</span>
                             <span class="text-base sm:text-lg font-black text-amber-600 font-mono block mt-1">{{ $premiumPrices[7] }} ₼</span>
                             <span class="text-[10px] text-emerald-600 font-bold block mt-0.5">{{ __('VIP') }}</span>
                         </button>
@@ -243,10 +243,10 @@
                        target="_blank" rel="noopener"
                        class="w-full py-3 px-4 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs shadow-xs transition duration-150 flex items-center justify-center gap-2 cursor-pointer">
                         <i class="fab fa-whatsapp text-base"></i>
-                        <span>{{ __('WhatsApp ilə Sifariş Et') }} (<span x-text="premiumPrices[selectedPremium]"></span>)</span>
+                        <span>{{ __('Order via WhatsApp') }} (<span x-text="premiumPrices[selectedPremium]"></span>)</span>
                     </a>
                     <button @click="premiumModalOpen = false" type="button" class="w-full py-2 text-xs text-gray-400 hover:text-gray-600 font-semibold text-center cursor-pointer">
-                        {{ __('Bağla') }}
+                        {{ __('Close') }}
                     </button>
                 </div>
             </div>

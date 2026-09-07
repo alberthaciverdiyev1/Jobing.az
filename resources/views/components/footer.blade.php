@@ -12,7 +12,7 @@
                     <span class="font-bold text-xl text-dark tracking-tight">{{ config('app.brand_name') }}<span class="text-primary">{{ config('app.brand_suffix') }}</span></span>
                 </a>
                 <p class="text-gray-500 mb-6 max-w-sm text-sm leading-relaxed">
-                    {{ $siteSetting->getTrans('footer_description', null, __('Azərbaycanda iş axtaranlar və işəgötürənlər üçün ən ideal platforma. Karyera yüksəlişinizə bizimlə başlayın.')) }}
+                    {{ $siteSetting->getTrans('footer_description', null, __('The ideal platform for job seekers and employers in Azerbaijan. Start your career growth with us.')) }}
                 </p>
                 <div class="flex space-x-3">
                     @if($siteSetting->facebook_url)
@@ -40,23 +40,23 @@
 
             <!-- Links Col 1 -->
             <div>
-                <h4 class="font-bold text-gray-900 mb-4 text-sm">{{ __('Namizədlər üçün') }}</h4>
+                <h4 class="font-bold text-gray-900 mb-4 text-sm">{{ __('For Candidates') }}</h4>
                 <ul class="space-y-2.5 text-xs">
-                    <li><a href="{{ route('jobs.index') }}" class="text-gray-500 hover:text-primary transition-colors">{{ __('Vakansiya axtarışı') }}</a></li>
-                    <li><a href="{{ route('jobs.index') }}" class="text-gray-500 hover:text-primary transition-colors">{{ __('Uzaktan (Remote) Pozisyon') }}</a></li>
-                    <li><a href="{{ route('jobs.index') }}" class="text-gray-500 hover:text-primary transition-colors">{{ __('Tam Zamanlı') }}</a></li>
-                    <li><a href="{{ route('jobs.index', ['sort' => 'featured']) }}" class="text-gray-500 hover:text-primary transition-colors">{{ __('Öne Çıkan Fırsatlar') }}</a></li>
+                    <li><a href="{{ route('jobs.index') }}" class="text-gray-500 hover:text-primary transition-colors">{{ __('Vacancy search') }}</a></li>
+                    <li><a href="{{ route('jobs.index') }}" class="text-gray-500 hover:text-primary transition-colors">{{ __('Remote Position') }}</a></li>
+                    <li><a href="{{ route('jobs.index') }}" class="text-gray-500 hover:text-primary transition-colors">{{ __('Full-time') }}</a></li>
+                    <li><a href="{{ route('jobs.index', ['sort' => 'featured']) }}" class="text-gray-500 hover:text-primary transition-colors">{{ __('Featured Opportunities') }}</a></li>
                 </ul>
             </div>
 
             <!-- Links Col 2 -->
             <div>
-                <h4 class="font-bold text-gray-900 mb-4 text-sm">{{ __('Şirkətlər üçün') }}</h4>
+                <h4 class="font-bold text-gray-900 mb-4 text-sm">{{ __('For Companies') }}</h4>
                 <ul class="space-y-2.5 text-xs">
-                    <li><a href="{{ route('jobs.create') }}" class="text-gray-500 hover:text-primary transition-colors">{{ __('Elan yerləşdir') }}</a></li>
-                    <li><a href="{{ route('companies.index') }}" class="text-gray-500 hover:text-primary transition-colors">{{ __('Şirkətlər') }}</a></li>
-                    <li><a href="{{ route('resumes.index') }}" class="text-gray-500 hover:text-primary transition-colors">{{ __('CV Bazası') }}</a></li>
-                    <li><a href="{{ config('site.panels.admin') }}" target="_blank" class="text-gray-500 hover:text-primary transition-colors">{{ __('Yönetim Paneli') }}</a></li>
+                    <li><a href="{{ route('jobs.create') }}" class="text-gray-500 hover:text-primary transition-colors">{{ __('Post an ad') }}</a></li>
+                    <li><a href="{{ route('companies.index') }}" class="text-gray-500 hover:text-primary transition-colors">{{ __('Companies') }}</a></li>
+                    <li><a href="{{ route('resumes.index') }}" class="text-gray-500 hover:text-primary transition-colors">{{ __('Resume Database') }}</a></li>
+                    <li><a href="{{ config('site.panels.admin') }}" target="_blank" class="text-gray-500 hover:text-primary transition-colors">{{ __('Admin Panel') }}</a></li>
                 </ul>
             </div>
 
@@ -64,12 +64,12 @@
             <div>
                 <h4 class="font-bold text-gray-900 mb-4 text-sm">{{ config('app.full_name') }}</h4>
                 <ul class="space-y-2.5 text-xs">
-                    <li><a href="{{ route('home') }}" class="text-gray-500 hover:text-primary transition-colors">{{ __('Ana Sayfa') }}</a></li>
-                    <li><a href="{{ route('about') }}" class="text-gray-500 hover:text-primary transition-colors">{{ __('Haqqımızda') }}</a></li>
-                    <li><a href="{{ route('jobs.index') }}" class="text-gray-500 hover:text-primary transition-colors">{{ __('Kategoriler') }}</a></li>
-                    <li><a href="{{ route('blog.index') }}" class="text-gray-500 hover:text-primary transition-colors">{{ __('Kariyer Bloğu') }}</a></li>
-                    <li><a href="{{ route('faq.index') }}" class="text-gray-500 hover:text-primary transition-colors">{{ __('Sıkça Sorulan Sorular') }}</a></li>
-                    <li><a href="{{ route('contact.index') }}" class="text-gray-500 hover:text-primary transition-colors">{{ __('İletişim') }}</a></li>
+                    <li><a href="{{ route('home') }}" class="text-gray-500 hover:text-primary transition-colors">{{ __('Home') }}</a></li>
+                    <li><a href="{{ route('about') }}" class="text-gray-500 hover:text-primary transition-colors">{{ __('About Us') }}</a></li>
+                    <li><a href="{{ route('jobs.index') }}" class="text-gray-500 hover:text-primary transition-colors">{{ __('Categories') }}</a></li>
+                    <li><a href="{{ route('blog.index') }}" class="text-gray-500 hover:text-primary transition-colors">{{ __('Career Blog') }}</a></li>
+                    <li><a href="{{ route('faq.index') }}" class="text-gray-500 hover:text-primary transition-colors">{{ __('Frequently Asked Questions') }}</a></li>
+                    <li><a href="{{ route('contact.index') }}" class="text-gray-500 hover:text-primary transition-colors">{{ __('Contact') }}</a></li>
                     <li><a href="{{ config('site.panels.admin') }}" target="_blank" class="text-gray-500 hover:text-primary transition-colors">Admin Portal</a></li>
                 </ul>
             </div>
@@ -77,7 +77,7 @@
 
         <div class="border-t border-gray-200 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-500">
             <p>
-                &copy; {{ date('Y') }} {{ $siteSetting->copyright_text ?: config('app.full_name') }}. {{ __('Tüm Hakları Saklıdır') }}.
+                &copy; {{ date('Y') }} {{ $siteSetting->copyright_text ?: config('app.full_name') }}. {{ __('All Rights Reserved') }}.
             </p>
             <div class="flex items-center gap-2">
                 Made with <i class="fas fa-heart text-red-500"></i> in Azerbaijan

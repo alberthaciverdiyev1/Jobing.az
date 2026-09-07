@@ -77,7 +77,7 @@ class MyApplicationsResource extends Resource
                 Tables\Columns\TextColumn::make('reply_marker')
                     ->label('Cavab')
                     ->state(fn (Application $record): string => $record->hasUnseenReply()
-                        ? __('Yeni mesaj')
+                        ? __('New message')
                         : '—')
                     ->badge()
                     ->color(fn (string $state): string => $state === '—' ? 'gray' : 'success')
@@ -104,7 +104,7 @@ class MyApplicationsResource extends Resource
         return $infolist
             ->schema([
                 Section::make('Vakansiya Detalları')
-                    ->description(__('Müraciət etdiyiniz vakansiya haqqında məlumat.'))
+                    ->description(__('Information about the vacancy you applied to.'))
                     ->schema([
                         TextEntry::make('vacancy.company.name')
                             ->label('Şirkət')
@@ -140,7 +140,7 @@ class MyApplicationsResource extends Resource
                     ])->columns(2),
 
                 Section::make('Müraciətim')
-                    ->description(__('Müraciətinizin vəziyyəti və şirkətin cavabı.'))
+                    ->description(__("The status of your application and the company's reply."))
                     ->schema([
                         TextEntry::make('status')
                             ->label('Durum')
@@ -168,14 +168,14 @@ class MyApplicationsResource extends Resource
                         TextEntry::make('viewed_at')
                             ->label('Şirkət Baxışı')
                             ->dateTime('d.m.Y H:i')
-                            ->placeholder(__('Şirkət hələ baxmayıb')),
+                            ->placeholder(__('The company has not viewed it yet')),
                         TextEntry::make('updated_at')
                             ->label('Son Yenilənmə')
                             ->dateTime('d.m.Y H:i')
                             ->placeholder('—'),
                         TextEntry::make('notes')
                             ->label('Şirkətin Cavabı')
-                            ->placeholder(__('Şirkət hələ cavab yazmayıb'))
+                            ->placeholder(__('The company has not replied yet'))
                             ->html()
                             ->formatStateUsing(function (?string $state, ?Application $record): string {
                                 if (! $state) {
@@ -187,12 +187,12 @@ class MyApplicationsResource extends Resource
 
                                 $footer = $replyDate
                                     ? '<div style="font-size:10px;color:#9ca3af;margin-top:10px;border-top:1px dashed #e5e7eb;padding-top:8px;">' .
-                                      __('Cavab tarixi:') . ' ' . $replyDate . '</div>'
+                                      __('Reply date:') . ' ' . $replyDate . '</div>'
                                     : '';
 
                                 return '<div style="background:#f9fafb;border:1px solid #e5e7eb;border-left:4px solid #10b981;border-radius:10px;padding:16px;">' .
                                     '<div style="font-size:11px;font-weight:700;color:#059669;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;">' .
-                                    __('Şirkətin Cavabı') . '</div>' .
+                                    __("Company's Reply") . '</div>' .
                                     '<div style="font-size:13px;line-height:1.7;color:#111827;white-space:normal;">' . $escaped . '</div>' .
                                     $footer .
                                     '</div>';

@@ -1,9 +1,9 @@
 @extends('layouts.app')
 
-@section('title', ($selectedCategory?->name ? $selectedCategory->name . ' | ' : '') . __('Vakansiyalar') . ' - ' . config('app.full_name'))
+@section('title', ($selectedCategory?->name ? $selectedCategory->name . ' | ' : '') . __('Vacancies') . ' - ' . config('app.full_name'))
 @section('meta_description', $selectedCategory?->name
-    ? __('Kategori') . ' ' . $selectedCategory->name . ' — ' . __('bu kateqoriyadakı bütün vakansiyalara baxın və başvurun.')
-    : __('Yazılım, tasarım, ürün, veri ve pazarlama alanlarında önde gelen teknoloji şirketlerinin açık pozisyonlarına anında başvurun.'))
+    ? __('Category') . ' ' . $selectedCategory->name . ' — ' . __('browse all vacancies in this category and apply.')
+    : __('Instantly apply to open positions at leading technology companies in software, design, product, data and marketing.'))
 
 @section('content')
 <script>
@@ -45,7 +45,7 @@ window.__JOBS_CONFIG__ = {
                     class="w-full py-2.5 px-4 rounded-xl bg-white border border-gray-200 text-gray-700 font-semibold text-xs flex items-center justify-between shadow-2xs">
                 <span class="flex items-center gap-2">
                     <i class="fas fa-sliders-h text-primary"></i>
-                    <span>{{ __('Filtrlər') }}</span>
+                    <span>{{ __('Filters') }}</span>
                 </span>
                 <i class="fas fa-chevron-down text-[10px] text-gray-400 transition-transform" :class="mobileFiltersOpen ? 'rotate-180' : ''"></i>
             </button>
@@ -61,25 +61,25 @@ window.__JOBS_CONFIG__ = {
                     <div class="flex justify-between items-center pb-3 border-b border-gray-100">
                         <h3 class="font-bold text-gray-900 text-sm flex items-center gap-2">
                             <i class="fas fa-filter text-xs text-primary"></i>
-                            <span>{{ __('Filtrlər') }}</span>
+                            <span>{{ __('Filters') }}</span>
                         </h3>
                         <button type="button"
                                 x-show="hasActiveFilters"
                                 @click="resetAllFilters()"
                                 class="text-xs text-primary hover:text-primary-dark font-medium transition cursor-pointer">
-                            {{ __('Təmizlə') }}
+                            {{ __('Clear') }}
                         </button>
                     </div>
 
                     <!-- Search Input in Sidebar -->
                     <div>
-                        <h4 class="text-xs font-bold text-gray-800 uppercase tracking-wider mb-2">{{ __('Axtarış') }}</h4>
+                        <h4 class="text-xs font-bold text-gray-800 uppercase tracking-wider mb-2">{{ __('Search') }}</h4>
                         <div class="relative">
                             <input type="text"
                                    x-model="q"
                                    @input.debounce.400ms="applyFilters()"
                                    @keydown.enter.prevent="applyFilters()"
-                                   placeholder="{{ __('Vəzifə və ya şirkət...') }}"
+                                   placeholder="{{ __('Role or company...') }}"
                                    class="w-full pl-8 pr-7 py-2 bg-gray-50 hover:bg-white focus:bg-white border border-gray-200 rounded-lg focus:outline-hidden focus:border-primary focus:ring-1 focus:ring-primary text-xs transition">
                             <i class="fas fa-search absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400 text-[11px]"></i>
                             <button type="button"
@@ -93,7 +93,7 @@ window.__JOBS_CONFIG__ = {
 
                     <!-- Categories & Subcategories (collapsed by default, expand on demand) -->
                     <div class="pt-3 border-t border-gray-100">
-                        <h4 class="text-xs font-bold text-gray-800 uppercase tracking-wider mb-2.5">{{ __('Kateqoriyalar') }}</h4>
+                        <h4 class="text-xs font-bold text-gray-800 uppercase tracking-wider mb-2.5">{{ __('Categories') }}</h4>
 
                         <div class="space-y-1 text-xs" x-data="{ showAll: false }">
                             <!-- All Categories Option -->
@@ -101,7 +101,7 @@ window.__JOBS_CONFIG__ = {
                                     @click="clearCategories()"
                                     class="w-full flex items-center gap-2 px-2.5 py-2 rounded-lg transition text-left cursor-pointer"
                                     :class="!category.length ? 'bg-primary text-white font-semibold shadow-xs' : 'text-gray-600 hover:bg-gray-50'">
-                                <span>{{ __('Bütün kateqoriyalar') }}</span>
+                                <span>{{ __('All categories') }}</span>
                             </button>
 
                             <!-- Category List (parents visible, children collapsed by default) -->
@@ -162,7 +162,7 @@ window.__JOBS_CONFIG__ = {
                             <button type="button" @click="showAll = !showAll"
                                     class="w-full text-left px-2.5 py-1.5 text-[11px] font-semibold text-primary hover:text-primary-dark cursor-pointer">
                                 <i class="fas fa-chevron-down text-[8px] mr-1 transition-transform" :class="showAll ? 'rotate-180' : ''"></i>
-                                <span x-text="showAll ? '{{ __('Daha az göstər') }}' : '{{ __('Daha çox göstər') }} (' + ({{ $categories->count() }} - 5) + ')'"></span>
+                                <span x-text="showAll ? '{{ __('Show less') }}' : '{{ __('Show more') }} (' + ({{ $categories->count() }} - 5) + ')'"></span>
                             </button>
                             @endif
                         </div>
@@ -171,13 +171,13 @@ window.__JOBS_CONFIG__ = {
                     <!-- Salary (Maaş) -->
                     <div class="pt-3 border-t border-gray-100">
                         <div class="flex items-center justify-between mb-2.5">
-                            <h4 class="text-xs font-bold text-gray-800 uppercase tracking-wider">{{ __('Maaş (AZN)') }}</h4>
+                            <h4 class="text-xs font-bold text-gray-800 uppercase tracking-wider">{{ __('Salary (AZN)') }}</h4>
                             <button type="button"
                                     x-show="min_salary || max_salary"
                                     x-cloak
                                     @click="min_salary = ''; max_salary = ''; applyFilters()"
                                     class="text-[11px] text-primary hover:text-primary-dark font-medium transition cursor-pointer">
-                                {{ __('Sıfırla') }}
+                                {{ __('Reset') }}
                             </button>
                         </div>
                         <div class="grid grid-cols-2 gap-2">
@@ -197,7 +197,7 @@ window.__JOBS_CONFIG__ = {
                                        x-model="max_salary"
                                        @input.debounce.500ms="applyFilters()"
                                        @keydown.enter.prevent="applyFilters()"
-                                       placeholder="{{ __('Maks') }}"
+                                       placeholder="{{ __('Max') }}"
                                        min="0"
                                        class="w-full pl-8 pr-2.5 py-2 bg-gray-50 hover:bg-white focus:bg-white border border-gray-200 rounded-lg focus:outline-hidden focus:border-primary focus:ring-1 focus:ring-primary text-xs text-gray-800 placeholder-gray-400 transition [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none">
                             </div>
@@ -206,7 +206,7 @@ window.__JOBS_CONFIG__ = {
 
                     <!-- City (Şəhər) -->
                     <div class="pt-3 border-t border-gray-100">
-                        <h4 class="text-xs font-bold text-gray-800 uppercase tracking-wider mb-2.5">{{ __('Şəhər') }}</h4>
+                        <h4 class="text-xs font-bold text-gray-800 uppercase tracking-wider mb-2.5">{{ __('City') }}</h4>
                         <div class="space-y-1 text-xs" x-data="{ showAll: false }">
                             @forelse($cities as $city)
                             @php
@@ -232,14 +232,14 @@ window.__JOBS_CONFIG__ = {
                                 </span>
                             </button>
                             @empty
-                            <p class="text-[11px] text-gray-400 px-2.5 py-1.5">{{ __('Şəhər mövcud deyil') }}</p>
+                            <p class="text-[11px] text-gray-400 px-2.5 py-1.5">{{ __('City is not available') }}</p>
                             @endforelse
 
                             @if($cities->count() > 5)
                             <button type="button" @click="showAll = !showAll"
                                     class="w-full text-left px-2.5 py-1.5 text-[11px] font-semibold text-primary hover:text-primary-dark cursor-pointer">
                                 <i class="fas fa-chevron-down text-[8px] mr-1 transition-transform" :class="showAll ? 'rotate-180' : ''"></i>
-                                <span x-text="showAll ? '{{ __('Daha az göstər') }}' : '{{ __('Daha çox göstər') }} (' + ({{ $cities->count() }} - 5) + ')'"></span>
+                                <span x-text="showAll ? '{{ __('Show less') }}' : '{{ __('Show more') }} (' + ({{ $cities->count() }} - 5) + ')'"></span>
                             </button>
                             @endif
                         </div>
@@ -247,7 +247,7 @@ window.__JOBS_CONFIG__ = {
 
                     <!-- Work Type (İş rejimi) -->
                     <div class="pt-3 border-t border-gray-100">
-                        <h4 class="text-xs font-bold text-gray-800 uppercase tracking-wider mb-2.5">{{ __('İş rejimi') }}</h4>
+                        <h4 class="text-xs font-bold text-gray-800 uppercase tracking-wider mb-2.5">{{ __('Job type') }}</h4>
                         <div class="space-y-1 text-xs" x-data="{ showAll: false }">
                             @foreach($jobTypes as $jt)
                             <button type="button"
@@ -274,7 +274,7 @@ window.__JOBS_CONFIG__ = {
                             <button type="button" @click="showAll = !showAll"
                                     class="w-full text-left px-2.5 py-1.5 text-[11px] font-semibold text-primary hover:text-primary-dark cursor-pointer">
                                 <i class="fas fa-chevron-down text-[8px] mr-1 transition-transform" :class="showAll ? 'rotate-180' : ''"></i>
-                                <span x-text="showAll ? '{{ __('Daha az göstər') }}' : '{{ __('Daha çox göstər') }} (' + ({{ $jobTypes->count() }} - 5) + ')'"></span>
+                                <span x-text="showAll ? '{{ __('Show less') }}' : '{{ __('Show more') }} (' + ({{ $jobTypes->count() }} - 5) + ')'"></span>
                             </button>
                             @endif
                         </div>
@@ -282,7 +282,7 @@ window.__JOBS_CONFIG__ = {
 
                     <!-- Workplace Type (Çalışma Yeri) -->
                     <div class="pt-3 border-t border-gray-100">
-                        <h4 class="text-xs font-bold text-gray-800 uppercase tracking-wider mb-2.5">{{ __('Çalışma Yeri') }}</h4>
+                        <h4 class="text-xs font-bold text-gray-800 uppercase tracking-wider mb-2.5">{{ __('Workplace') }}</h4>
                         <div class="space-y-1 text-xs" x-data="{ showAll: false }">
                             @foreach($workplaceTypes as $wt)
                             <button type="button"
@@ -309,7 +309,7 @@ window.__JOBS_CONFIG__ = {
                             <button type="button" @click="showAll = !showAll"
                                     class="w-full text-left px-2.5 py-1.5 text-[11px] font-semibold text-primary hover:text-primary-dark cursor-pointer">
                                 <i class="fas fa-chevron-down text-[8px] mr-1 transition-transform" :class="showAll ? 'rotate-180' : ''"></i>
-                                <span x-text="showAll ? '{{ __('Daha az göstər') }}' : '{{ __('Daha çox göstər') }} (' + ({{ $workplaceTypes->count() }} - 5) + ')'"></span>
+                                <span x-text="showAll ? '{{ __('Show less') }}' : '{{ __('Show more') }} (' + ({{ $workplaceTypes->count() }} - 5) + ')'"></span>
                             </button>
                             @endif
                         </div>
@@ -317,7 +317,7 @@ window.__JOBS_CONFIG__ = {
 
                     <!-- Experience Level (Təcrübə Səviyyəsi) -->
                     <div class="pt-3 border-t border-gray-100">
-                        <h4 class="text-xs font-bold text-gray-800 uppercase tracking-wider mb-2.5">{{ __('Deneyim Seviyesi') }}</h4>
+                        <h4 class="text-xs font-bold text-gray-800 uppercase tracking-wider mb-2.5">{{ __('Experience Level') }}</h4>
                         <div class="space-y-1 text-xs" x-data="{ showAll: false }">
                             @foreach($experienceLevels as $el)
                             <button type="button"
@@ -344,7 +344,7 @@ window.__JOBS_CONFIG__ = {
                             <button type="button" @click="showAll = !showAll"
                                     class="w-full text-left px-2.5 py-1.5 text-[11px] font-semibold text-primary hover:text-primary-dark cursor-pointer">
                                 <i class="fas fa-chevron-down text-[8px] mr-1 transition-transform" :class="showAll ? 'rotate-180' : ''"></i>
-                                <span x-text="showAll ? '{{ __('Daha az göstər') }}' : '{{ __('Daha çox göstər') }} (' + ({{ $experienceLevels->count() }} - 5) + ')'"></span>
+                                <span x-text="showAll ? '{{ __('Show less') }}' : '{{ __('Show more') }} (' + ({{ $experienceLevels->count() }} - 5) + ')'"></span>
                             </button>
                             @endif
                         </div>
@@ -360,30 +360,30 @@ window.__JOBS_CONFIG__ = {
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-5 pb-3 border-b border-gray-200">
                     <div>
                         <h2 class="text-lg md:text-xl font-bold text-gray-900 leading-tight flex items-center gap-2">
-                            <span>{{ __('Vakansiyalar') }}</span>
+                            <span>{{ __('Vacancies') }}</span>
                             <span x-show="isLoading" class="inline-block animate-spin text-primary text-xs">
                                 <i class="fas fa-spinner"></i>
                             </span>
                         </h2>
                         <p class="text-xs text-gray-500 mt-0.5">
-                            <span class="font-bold text-primary" x-text="totalCount"></span> {{ __('aktiv iş elanı tapıldı') }}
+                            <span class="font-bold text-primary" x-text="totalCount"></span> {{ __('active job listings found') }}
                         </p>
                     </div>
 
                     <div class="flex items-center gap-2 text-xs">
-                        <span class="text-gray-500 hidden sm:inline">{{ __('Sıralama:') }}</span>
+                        <span class="text-gray-500 hidden sm:inline">{{ __('Sort by:') }}</span>
                         <select x-model="sort"
                                 @change="applyFilters()"
                                 class="text-xs border border-gray-200 rounded-lg px-3 py-1.5 bg-white focus:outline-hidden focus:border-primary text-gray-700 shadow-2xs cursor-pointer">
-                            <option value="latest">{{ __('Tarixə görə (yeni)') }}</option>
-                            <option value="oldest">{{ __('Tarixə görə (köhnə)') }}</option>
-                            <option value="salary_desc">{{ __('Maaşa görə (çoxdan aza)') }}</option>
-                            <option value="salary_asc">{{ __('Maaşa görə (azdan çoxa)') }}</option>
-                            <option value="views">{{ __('Ən çox baxılan') }}</option>
-                            <option value="deadline">{{ __('Son müraciət tarixinə görə') }}</option>
-                            <option value="featured">{{ __('Premium elanlar') }}</option>
-                            <option value="title_asc">{{ __('Əlifba sırası (A-Z)') }}</option>
-                            <option value="title_desc">{{ __('Əlifba sırası (Z-A)') }}</option>
+                            <option value="latest">{{ __('By date (newest)') }}</option>
+                            <option value="oldest">{{ __('By date (oldest)') }}</option>
+                            <option value="salary_desc">{{ __('Sort by salary (high to low)') }}</option>
+                            <option value="salary_asc">{{ __('Sort by salary (low to high)') }}</option>
+                            <option value="views">{{ __('Most viewed') }}</option>
+                            <option value="deadline">{{ __('By latest application date') }}</option>
+                            <option value="featured">{{ __('Premium listings') }}</option>
+                            <option value="title_asc">{{ __('Alphabetical order (A-Z)') }}</option>
+                            <option value="title_desc">{{ __('Alphabetical order (Z-A)') }}</option>
                         </select>
                     </div>
                 </div>

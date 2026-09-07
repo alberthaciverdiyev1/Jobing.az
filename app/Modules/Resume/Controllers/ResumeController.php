@@ -181,7 +181,7 @@ class ResumeController extends Controller
         $hasApplicationToCompany = $user && $user->company_id && $resume->applications()->whereHas('vacancy', fn ($v) => $v->where('company_id', $user->company_id))->exists();
 
         if (!$resume->is_public && !$isOwner && !$isAdmin && !$isCompany && !$hasApplicationToCompany) {
-            abort(403, __('Bu CV gizlidir və yalnız sahibi tərəfindən baxıla bilər.'));
+            abort(403, __('This resume is private and can only be viewed by its owner.'));
         }
 
         $view = request()->boolean('print') ? 'pages.resumes.print' : 'pages.resumes.show';

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', __('CV Bazası') . ' - ' . config('app.full_name'))
-@section('meta_description', __('Ən istedadlı mütəxəssislərin CV bazası. Şirkətlər üçün peşəkar namizədləri axtarın və CV-lərini incələyin.'))
+@section('title', __('Resume Database') . ' - ' . config('app.full_name'))
+@section('meta_description', __('The CV database of the most talented professionals. Search for professional candidates and review their CVs.'))
 
 @section('content')
 <script>
@@ -31,7 +31,7 @@ window.__RESUMES_CONFIG__ = {
                     class="w-full flex items-center justify-between px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-xs font-bold text-gray-700 shadow-2xs cursor-pointer">
                 <span class="flex items-center gap-2">
                     <i class="fas fa-sliders-h text-primary"></i>
-                    <span>{{ __('Filtrlər') }}</span>
+                    <span>{{ __('Filters') }}</span>
                 </span>
                 <i class="fas fa-chevron-down text-[10px] text-gray-400 transition-transform" :class="mobileFiltersOpen ? 'rotate-180' : ''"></i>
             </button>
@@ -48,26 +48,26 @@ window.__RESUMES_CONFIG__ = {
                         <div class="flex justify-between items-center pb-3 border-b border-gray-100">
                             <h3 class="font-bold text-gray-900 text-sm flex items-center gap-2">
                                 <i class="fas fa-filter text-xs text-primary"></i>
-                                <span>{{ __('Filtrlər') }}</span>
+                                <span>{{ __('Filters') }}</span>
                             </h3>
                             <button type="button"
                                     x-show="hasActiveFilters"
                                     x-cloak
                                     @click="resetAllFilters()"
                                     class="text-xs text-primary hover:text-primary-dark font-medium transition cursor-pointer">
-                                {{ __('Təmizlə') }}
+                                {{ __('Clear') }}
                             </button>
                         </div>
 
                         <!-- Search Input in Sidebar -->
                         <div>
-                            <h4 class="text-xs font-bold text-gray-800 uppercase tracking-wider mb-2">{{ __('Axtarış') }}</h4>
+                            <h4 class="text-xs font-bold text-gray-800 uppercase tracking-wider mb-2">{{ __('Search') }}</h4>
                             <div class="relative">
                                 <input type="text"
                                        x-model="q"
                                        @input.debounce.400ms="applyFilters()"
                                        @keydown.enter.prevent="applyFilters()"
-                                       placeholder="{{ __('Vəzifə, ad, bacarıq...') }}"
+                                       placeholder="{{ __('Position, name, skill...') }}"
                                        class="w-full pl-8 pr-7 py-2 bg-gray-50 hover:bg-white focus:bg-white border border-gray-200 rounded-lg focus:outline-hidden focus:border-primary focus:ring-1 focus:ring-primary text-xs transition">
                                 <i class="fas fa-search absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400 text-[11px]"></i>
                                 <button type="button"
@@ -83,13 +83,13 @@ window.__RESUMES_CONFIG__ = {
                         <!-- Category Selection (Dynamically switches skills below) -->
                         <div class="pt-3 border-t border-gray-100">
                             <div class="flex items-center justify-between mb-2">
-                                <h4 class="text-xs font-bold text-gray-800 uppercase tracking-wider">{{ __('Kateqoriya') }}</h4>
+                                <h4 class="text-xs font-bold text-gray-800 uppercase tracking-wider">{{ __('Category') }}</h4>
                                 <button type="button"
                                         x-show="category !== ''"
                                         x-cloak
                                         @click="selectCategory('')"
                                         class="text-[10px] text-primary font-bold hover:underline cursor-pointer">
-                                    {{ __('Bütün kateqoriyalar') }}
+                                    {{ __('All categories') }}
                                 </button>
                             </div>
 
@@ -99,7 +99,7 @@ window.__RESUMES_CONFIG__ = {
                                         class="w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg transition text-left cursor-pointer"
                                         :class="category === '' ? 'bg-orange-50 text-primary font-bold border border-orange-200 shadow-2xs' : 'text-gray-600 hover:bg-gray-50 border border-transparent'">
                                     <span class="flex items-center gap-2">
-                                        <span>{{ __('Bütün Sahələr') }}</span>
+                                        <span>{{ __('All Fields') }}</span>
                                     </span>
                                 </button>
 
@@ -124,8 +124,8 @@ window.__RESUMES_CONFIG__ = {
                         <!-- Skills Filter (Dynamically changes based on selected category) -->
                         <div class="pt-3 border-t border-gray-100">
                             <div class="flex items-center justify-between mb-2">
-                                <h4 class="text-xs font-bold text-gray-800 uppercase tracking-wider">{{ __('Bacarıqlar') }}</h4>
-                                <span class="text-[10px] text-gray-400 font-medium" x-text="filteredSkills.length + ' {{ __('bacarıq') }}'"></span>
+                                <h4 class="text-xs font-bold text-gray-800 uppercase tracking-wider">{{ __('Skills') }}</h4>
+                                <span class="text-[10px] text-gray-400 font-medium" x-text="filteredSkills.length + ' {{ __('skill') }}'"></span>
                             </div>
 
                             <!-- Skills list -->
@@ -149,14 +149,14 @@ window.__RESUMES_CONFIG__ = {
                                 </template>
 
                                 <div x-show="filteredSkills.length === 0" x-cloak class="py-3 text-center text-xs text-gray-400">
-                                    {{ __('Bu kateqoriyaya aid bacarıq tapılmadı') }}
+                                    {{ __('No skills found for this category') }}
                                 </div>
                             </div>
                         </div>
 
                         <!-- City Filter -->
                         <div class="pt-3 border-t border-gray-100">
-                            <h4 class="text-xs font-bold text-gray-800 uppercase tracking-wider mb-2.5">{{ __('Şəhər') }}</h4>
+                            <h4 class="text-xs font-bold text-gray-800 uppercase tracking-wider mb-2.5">{{ __('City') }}</h4>
                             <div class="space-y-1 text-xs" x-data="{ showAll: false }">
                                 @foreach($cities as $c)
                                 <label x-show="showAll || {{ $loop->index }} < 5"
@@ -184,7 +184,7 @@ window.__RESUMES_CONFIG__ = {
                                 <button type="button" @click="showAll = !showAll"
                                         class="w-full text-left px-2.5 py-1.5 text-[11px] font-semibold text-primary hover:text-primary-dark cursor-pointer">
                                     <i class="fas fa-chevron-down text-[8px] mr-1 transition-transform" :class="showAll ? 'rotate-180' : ''"></i>
-                                    <span x-text="showAll ? '{{ __('Daha az göstər') }}' : '{{ __('Daha çox göstər') }} (' + ({{ count($cities) }} - 5) + ')'"></span>
+                                    <span x-text="showAll ? '{{ __('Show less') }}' : '{{ __('Show more') }} (' + ({{ count($cities) }} - 5) + ')'"></span>
                                 </button>
                                 @endif
                             </div>
@@ -201,22 +201,22 @@ window.__RESUMES_CONFIG__ = {
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-5 pb-3 border-b border-gray-200">
                     <div>
                         <h2 class="text-lg md:text-xl font-bold text-gray-900 leading-tight flex items-center gap-2">
-                            <span>{{ __('CV Bazası') }}</span>
+                            <span>{{ __('Resume Database') }}</span>
                         </h2>
                         <p class="text-xs text-gray-500 mt-0.5">
-                            <span class="font-bold text-primary" x-text="totalCount">{{ $resumes->total() }}</span> {{ __('namizəd CV-si tapıldı') }}
+                            <span class="font-bold text-primary" x-text="totalCount">{{ $resumes->total() }}</span> {{ __('candidate resumes found') }}
                         </p>
                     </div>
 
                     <div class="flex items-center gap-2 text-xs">
-                        <span class="text-gray-500 hidden sm:inline">{{ __('Sıralama:') }}</span>
+                        <span class="text-gray-500 hidden sm:inline">{{ __('Sort by:') }}</span>
                         <select x-model="sort"
                                 @change="applyFilters()"
                                 class="text-xs border border-gray-200 rounded-lg px-3 py-1.5 bg-white focus:outline-hidden focus:border-primary text-gray-700 shadow-2xs cursor-pointer">
-                            <option value="latest">{{ __('Tarixə görə (yeni)') }}</option>
-                            <option value="oldest">{{ __('Tarixə görə (köhnə)') }}</option>
-                            <option value="alphabetical">{{ __('Əlifba sırası (A-Z)') }}</option>
-                            <option value="alphabetical_desc">{{ __('Əlifba sırası (Z-A)') }}</option>
+                            <option value="latest">{{ __('By date (newest)') }}</option>
+                            <option value="oldest">{{ __('By date (oldest)') }}</option>
+                            <option value="alphabetical">{{ __('Alphabetical order (A-Z)') }}</option>
+                            <option value="alphabetical_desc">{{ __('Alphabetical order (Z-A)') }}</option>
                         </select>
                     </div>
                 </div>

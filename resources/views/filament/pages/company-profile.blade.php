@@ -6,19 +6,19 @@
         <div class="flex items-center gap-2 text-sm font-semibold">
             @if($company->is_verified)
                 <x-filament::icon icon="heroicon-m-check-badge" class="h-5 w-5" />
-                <span>{{ __('Şirkətiniz təsdiqlənmişdir ✓') }}</span>
+                <span>{!! __('Your company is verified') . ' ✓' !!}</span>
             @elseif($company->verification_requested)
                 <x-filament::icon icon="heroicon-m-clock" class="h-5 w-5" />
-                <span>{{ __('Doğrulama sorğusu göndərilib — admin tərəfindən nəzərdən keçirilir.') }}</span>
+                <span>{{ __('Verification request sent - under review by the admin.') }}</span>
             @else
                 <x-filament::icon icon="heroicon-m-shield-exclamation" class="h-5 w-5" />
-                <span>{{ __('Şirkətiniz hələ təsdiqlənməyib.') }}</span>
+                <span>{{ __('Your company is not verified yet.') }}</span>
             @endif
         </div>
 
         @if(!$company->is_verified && !$company->verification_requested)
             <x-filament::button wire:click="requestVerification" color="primary" size="sm">
-                {{ __('Doğrulama İstə') }}
+                {{ __('Request Verification') }}
             </x-filament::button>
         @endif
     </div>
@@ -27,7 +27,7 @@
         {{ $this->form }}
 
         <x-filament::button type="submit">
-            {{ __('Yadda saxla') }}
+            {{ __('Save') }}
         </x-filament::button>
     </form>
 </x-filament-panels::page>

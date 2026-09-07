@@ -6,5 +6,5 @@
     <span>{{ $label }}</span>
 </span>
 @else
-<i {{ $attributes->merge(['class' => 'fas fa-check-circle text-sky-500 text-xs']) }} title="{{ __('Təsdiqlənmiş Şirkət') }}"></i>
+<i {{ $attributes->merge(['class' => 'fas fa-check-circle text-sky-500 text-xs']) }} title="{{ __('Verified Companies') }}"></i>
 @endif

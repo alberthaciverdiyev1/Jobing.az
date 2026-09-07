@@ -14,14 +14,14 @@
 @else
 <!-- Empty State -->
 <x-empty-state icon="fa-building"
-               :title="__('Axtarışa uyğun şirkət tapılmadı')"
-               :description="__('Axtarış sözünü dəyişərək və ya tətbiq etdiyiniz filtrləri sıfırlayaraq yenidən cəhd edə bilərsiniz.')">
+               :title="__('No companies matching your search')"
+               :description="__('Try again by changing your search term or resetting the filters you applied.')">
     @slot('actions')
     <button type="button"
             @click="resetAllFilters()"
             class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary hover:bg-primary-dark text-white text-xs font-bold transition shadow-xs cursor-pointer">
         <i class="fas fa-sync-alt text-xs"></i>
-        <span>{{ __('Bütün filtrləri sıfırla') }}</span>
+        <span>{{ __('Reset all filters') }}</span>
     </button>
     @endslot
 </x-empty-state>
