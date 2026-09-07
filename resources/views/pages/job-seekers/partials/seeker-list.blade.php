@@ -24,11 +24,13 @@
             <i class="fas fa-sync-alt text-xs"></i>
             <span>{{ __('Filtrləri sıfırla') }}</span>
         </button>
+        @if(!auth()->check() || !auth()->user()->isCompany())
         <a href="{{ route('job-seekers.create') }}"
            class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary hover:bg-primary-dark text-white text-xs font-bold transition shadow-xs cursor-pointer">
             <i class="fas fa-plus text-xs"></i>
             <span>{{ __('İlk elanınızı yerləşdirin') }}</span>
         </a>
+        @endif
     </div>
     @endslot
 </x-empty-state>
