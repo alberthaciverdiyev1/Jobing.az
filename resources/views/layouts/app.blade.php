@@ -43,7 +43,7 @@
         }
     </style>
 </head>
-<body class="h-full antialiased font-sans text-gray-800 flex flex-col min-h-screen selection:bg-orange-500 selection:text-white" x-data="{ mobileMenuOpen: false }">
+<body class="h-full antialiased font-sans text-gray-800 flex flex-col min-h-screen selection:bg-orange-500 selection:text-white" x-data="{ mobileDrawerOpen: false }">
 
     <!-- Flash Messages (component) -->
     <x-flash-messages />
@@ -52,7 +52,7 @@
     <x-navbar />
 
     <!-- Main Content Body -->
-    <main class="flex-grow">
+    <main class="flex-grow pb-16 md:pb-0">
         @yield('content')
     </main>
 

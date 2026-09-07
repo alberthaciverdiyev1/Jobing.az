@@ -73,17 +73,23 @@ const Favorites = {
     },
 
     renderAll() {
-        const badge = document.getElementById('favorites-count-nav');
-        if (badge) {
-            if (this.ids.size > 0) {
-                badge.textContent = this.ids.size > 99 ? '99+' : this.ids.size;
-                badge.classList.remove('hidden');
-                badge.classList.add('inline-flex');
-            } else {
-                badge.classList.add('hidden');
-                badge.classList.remove('inline-flex');
+        const badges = [
+            document.getElementById('favorites-count-nav'),
+            document.getElementById('mobile-bottom-fav-count'),
+            document.getElementById('drawer-favorites-count')
+        ];
+        badges.forEach(badge => {
+            if (badge) {
+                if (this.ids.size > 0) {
+                    badge.textContent = this.ids.size > 99 ? '99+' : this.ids.size;
+                    badge.classList.remove('hidden');
+                    badge.classList.add('inline-flex');
+                } else {
+                    badge.classList.add('hidden');
+                    badge.classList.remove('inline-flex');
+                }
             }
-        }
+        });
 
         document.querySelectorAll('.js-save-job').forEach((btn) => {
             const id = Number(btn.dataset.vacancyId);
