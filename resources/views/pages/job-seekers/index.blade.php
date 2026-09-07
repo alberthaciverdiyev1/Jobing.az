@@ -16,12 +16,7 @@ window.__JOB_SEEKERS_CONFIG__ = {
     initialTotal: {{ (int) $jobSeekers->total() }},
     initialCityCounts: @json($cityCounts),
     categoryChildrenMap: @json($categoryChildrenMap),
-    activeParentCategories: @json(
-        $categories->filter(fn($c) =>
-            in_array($c->slug, (array) request('category', [])) ||
-            ($c->children && $c->children->contains(fn($child) => in_array($child->slug, (array) request('category', []))))
-        )->pluck('slug')->values()
-    )
+    activeParentCategories: @json($activeParentCategories)
 };
 </script>
 
