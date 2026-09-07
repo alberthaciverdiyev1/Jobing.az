@@ -29,265 +29,9 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        // 2. Categories & Hierarchical Subcategories (Multilingual: AZ, EN, TR, RU)
-        $categoriesStructure = [
-            [
-                'name' => [
-                    'az' => 'Proqramlaşdırma & IT',
-                    'en' => 'Software & IT',
-                    'tr' => 'Yazılım & Bilişim',
-                    'ru' => 'Программирование & IT',
-                ],
-                'slug' => 'yazilim-bilisim',
-                'icon' => 'fa-laptop-code',
-                'description' => [
-                    'az' => 'Backend, Frontend, Full Stack, Mobil, DevOps və Süni İntellekt vakansiyaları.',
-                    'en' => 'Backend, Frontend, Full Stack, Mobile, DevOps and AI positions.',
-                    'tr' => 'Backend, Frontend, Full Stack, Mobil, DevOps ve Yapay Zekâ pozisyonları.',
-                    'ru' => 'Backend, Frontend, Full Stack, Mobile, DevOps и AI вакансии.',
-                ],
-                'children' => [
-                    [
-                        'name' => [
-                            'az' => 'Backend Proqramlaşdırma (PHP / Laravel / Go / Node)',
-                            'en' => 'Backend Development (PHP / Laravel / Go / Node)',
-                            'tr' => 'Backend Geliştirme (PHP / Laravel / Go / Node)',
-                            'ru' => 'Backend Разработка (PHP / Laravel / Go / Node)',
-                        ],
-                        'slug' => 'backend-gelistirme',
-                        'description' => [
-                            'az' => 'Server tərəfli arxitektura, mikroservislər və API sistemləri.',
-                            'en' => 'Server-side architecture, microservices and API development.',
-                            'tr' => 'Sunucu taraflı mimari, mikroservisler ve API geliştirme.',
-                            'ru' => 'Серверная архитектура, микросервисы и API разработка.',
-                        ],
-                    ],
-                    [
-                        'name' => [
-                            'az' => 'Frontend Proqramlaşdırma (Vue / React / Alpine.js)',
-                            'en' => 'Frontend Development (Vue / React / Alpine.js)',
-                            'tr' => 'Frontend Geliştirme (Vue / React / Alpine.js)',
-                            'ru' => 'Frontend Разработка (Vue / React / Alpine.js)',
-                        ],
-                        'slug' => 'frontend-gelistirme',
-                        'description' => [
-                            'az' => 'İstifadəçi interfeysi və müasir JavaScript freymvorkləri.',
-                            'en' => 'User interfaces and modern JavaScript frameworks.',
-                            'tr' => 'Kullanıcı arayüzü ve modern JavaScript frameworkleri.',
-                            'ru' => 'Пользовательский интерфейс и современные JavaScript фреймворки.',
-                        ],
-                    ],
-                    [
-                        'name' => [
-                            'az' => 'Full Stack Veb Proqramlaşdırma',
-                            'en' => 'Full Stack Web Development',
-                            'tr' => 'Full Stack Web Geliştirme',
-                            'ru' => 'Full Stack Веб Разработка',
-                        ],
-                        'slug' => 'full-stack-web-gelistirme',
-                        'description' => [
-                            'az' => 'Ucdan-uca veb tətbiqləri arxitekturası.',
-                            'en' => 'End-to-end web applications architecture.',
-                            'tr' => 'Uçtan uca web uygulamaları mimarisi.',
-                            'ru' => 'Комплексная архитектура веб-приложений.',
-                        ],
-                    ],
-                    [
-                        'name' => [
-                            'az' => 'DevOps & Bulud (Cloud) İnfrastrukturu',
-                            'en' => 'DevOps & Cloud Platform',
-                            'tr' => 'DevOps & Cloud Platform',
-                            'ru' => 'DevOps & Облачные Платформы',
-                        ],
-                        'slug' => 'devops-cloud-platform',
-                        'description' => [
-                            'az' => 'Kubernetes, Docker, CI/CD və bulud infrastrukturu.',
-                            'en' => 'Kubernetes, Docker, CI/CD and cloud infrastructure.',
-                            'tr' => 'Kubernetes, Docker, CI/CD ve bulut altyapısı.',
-                            'ru' => 'Kubernetes, Docker, CI/CD и облачная инфраструктура.',
-                        ],
-                    ],
-                    [
-                        'name' => [
-                            'az' => 'Mobil Tətbiqlər (iOS / Android / Flutter)',
-                            'en' => 'Mobile App Development (iOS / Android / Flutter)',
-                            'tr' => 'Mobil Uygulama (iOS / Android / Flutter)',
-                            'ru' => 'Мобильные Приложения (iOS / Android / Flutter)',
-                        ],
-                        'slug' => 'mobil-uygulama-gelistirme',
-                        'description' => [
-                            'az' => 'Mobil platformalar üçün native və hibrid tətbiqlər.',
-                            'en' => 'Native and hybrid apps for mobile platforms.',
-                            'tr' => 'Mobil platformlar için native ve hibrit uygulama geliştirme.',
-                            'ru' => 'Нативные и гибридные приложения для мобильных платформ.',
-                        ],
-                    ],
-                ]
-            ],
-            [
-                'name' => [
-                    'az' => 'Dizayn & Kreativ',
-                    'en' => 'Design & Creative',
-                    'tr' => 'Tasarım & Kreatif',
-                    'ru' => 'Дизайн & Креатив',
-                ],
-                'slug' => 'tasarim-kreatif',
-                'icon' => 'fa-paint-brush',
-                'description' => [
-                    'az' => 'UI/UX Dizayn, Qrafik Dizayn, 3D Modelləşdirmə və Motion.',
-                    'en' => 'UI/UX Design, Graphic Design, 3D Modeling and Motion.',
-                    'tr' => 'UI/UX Tasarım, Grafik Tasarım, 3D Modelleme ve Hareketli Grafik.',
-                    'ru' => 'UI/UX Дизайн, Графический Дизайн, 3D Моделирование.',
-                ],
-                'children' => [
-                    [
-                        'name' => [
-                            'az' => 'UI/UX Məhsul Dizaynı',
-                            'en' => 'UI/UX Product Design',
-                            'tr' => 'UI/UX Ürün Tasarımı',
-                            'ru' => 'UI/UX Дизайн Продукта',
-                        ],
-                        'slug' => 'ui-ux-urun-tasarimi',
-                        'description' => [
-                            'az' => 'İstifadəçi təcrübəsi və dizayn sistemləri.',
-                            'en' => 'User experience and design systems.',
-                            'tr' => 'Kullanıcı arayüzü, deneyimi ve tasarım sistemleri.',
-                            'ru' => 'Пользовательский интерфейс и дизайн-системы.',
-                        ],
-                    ],
-                    [
-                        'name' => [
-                            'az' => '3D Sənət & Oyun Vizualizasiyası',
-                            'en' => '3D Art & Game Visualization',
-                            'tr' => '3D Sanat & Oyun Görselleştirme',
-                            'ru' => '3D Арт & Игровая Визуализация',
-                        ],
-                        'slug' => '3d-sanat-oyun-gorsellestirme',
-                        'description' => [
-                            'az' => 'Oyun içi 3D modellər, VFX və animasiyalar.',
-                            'en' => 'In-game 3D modeling, VFX and animation.',
-                            'tr' => 'Oyun içi 3D modelleme, VFX ve animasyon.',
-                            'ru' => 'Игровое 3D моделирование, VFX и анимация.',
-                        ],
-                    ],
-                ]
-            ],
-            [
-                'name' => [
-                    'az' => 'Data & Süni İntellekt',
-                    'en' => 'Data & AI',
-                    'tr' => 'Veri & Yapay Zekâ',
-                    'ru' => 'Данные & Искусственный Интеллект',
-                ],
-                'slug' => 'veri-yapay-zeka',
-                'icon' => 'fa-database',
-                'description' => [
-                    'az' => 'Data Science, Machine Learning, Deep Learning və Data Analitika.',
-                    'en' => 'Data Science, Machine Learning, Deep Learning and Analytics.',
-                    'tr' => 'Data Scientist, Data Engineer, Machine Learning ve Analitik pozisyonları.',
-                    'ru' => 'Data Science, Machine Learning, Deep Learning и Аналитика.',
-                ],
-                'children' => [
-                    [
-                        'name' => [
-                            'az' => 'Süni İntellekt & Maşın Öyrənməsi (ML / AI)',
-                            'en' => 'Artificial Intelligence & Machine Learning (ML / AI)',
-                            'tr' => 'Yapay Zekâ & Makine Öğrenimi (ML / AI)',
-                            'ru' => 'Искусственный Интеллект & Машинное Обучение',
-                        ],
-                        'slug' => 'yapay-zeka-makine-ogrenimi',
-                        'description' => [
-                            'az' => 'Model inkişafı, LLM və dərin öyrənmə alqoritmləri.',
-                            'en' => 'Model development, LLMs and deep learning.',
-                            'tr' => 'Model geliştirme, LLM ve derin öğrenme.',
-                            'ru' => 'Разработка моделей, LLM и глубокое обучение.',
-                        ],
-                    ],
-                ]
-            ],
-            [
-                'name' => [
-                    'az' => 'Məhsul & Layihə İdarəetməsi',
-                    'en' => 'Product & Project Management',
-                    'tr' => 'Ürün & Proje Yönetimi',
-                    'ru' => 'Управление Продуктами & Проектами',
-                ],
-                'slug' => 'urun-proje-yonetimi',
-                'icon' => 'fa-th-large',
-                'description' => [
-                    'az' => 'Product Manager, Scrum Master və Agile liderləri.',
-                    'en' => 'Product Managers, Scrum Masters and Agile leaders.',
-                    'tr' => 'Product Owner, Scrum Master, Proje Yöneticisi ve Agile liderleri.',
-                    'ru' => 'Product Managers, Scrum Masters и Agile лидеры.',
-                ],
-                'children' => [
-                    [
-                        'name' => [
-                            'az' => 'Məhsul İdarəetməsi (Product Manager)',
-                            'en' => 'Product Management (Product Manager / Owner)',
-                            'tr' => 'Ürün Yönetimi (Product Manager / Owner)',
-                            'ru' => 'Управление Продуктом (Product Manager)',
-                        ],
-                        'slug' => 'urun-yonetimi-product-manager',
-                        'description' => [
-                            'az' => 'Məhsul strategiyası və yol xəritəsi idarəetməsi.',
-                            'en' => 'Product roadmap and strategy management.',
-                            'tr' => 'Ürün yol haritası ve strateji yönetimi.',
-                            'ru' => 'Управление стратегией и дорожной картой продукта.',
-                        ],
-                    ],
-                ]
-            ],
-            [
-                'name' => [
-                    'az' => 'Marketinq & Böyümə',
-                    'en' => 'Marketing & Growth',
-                    'tr' => 'Pazarlama & Büyüme',
-                    'ru' => 'Маркетинг & Рост (Growth)',
-                ],
-                'slug' => 'pazarlama-buyume',
-                'icon' => 'fa-chart-line',
-                'description' => [
-                    'az' => 'Growth Marketing, Rəqəmsal Marketinq, SEO və Performans.',
-                    'en' => 'Growth Hacking, Digital Marketing, SEO, Performance Marketing.',
-                    'tr' => 'Growth Hacking, Dijital Pazarlama, SEO, Performans Pazarlaması.',
-                    'ru' => 'Growth Marketing, Цифровой Маркетинг, SEO, Таргетинг.',
-                ],
-                'children' => [
-                    [
-                        'name' => [
-                            'az' => 'Böyümə & Performans Marketinqi',
-                            'en' => 'Growth & Performance Marketing',
-                            'tr' => 'Büyüme & Performans Pazarlaması (Growth)',
-                            'ru' => 'Growth & Performance Маркетинг',
-                        ],
-                        'slug' => 'buyume-performans-pazarlamasi',
-                        'description' => [
-                            'az' => 'Rəqəmsal reklam kanalları və konversiya optimizasiyası.',
-                            'en' => 'Digital ad channels, CAC/LTV optimization.',
-                            'tr' => 'Dijital reklam kanalları, CAC/LTV optimizasyonu.',
-                            'ru' => 'Каналы рекламы и оптимизация конверсий.',
-                        ],
-                    ],
-                ]
-            ],
-        ];
-
-        $categories = [];
-        foreach ($categoriesStructure as $catData) {
-            $children = $catData['children'] ?? [];
-            unset($catData['children']);
-
-            $parent = Category::firstOrCreate(['slug' => $catData['slug']], $catData);
-            $categories[$catData['slug']] = $parent;
-
-            foreach ($children as $childData) {
-                $childData['parent_id'] = $parent->id;
-                $childData['icon'] = $childData['icon'] ?? $parent->icon;
-                $child = Category::firstOrCreate(['slug' => $childData['slug']], $childData);
-                $categories[$childData['slug']] = $child;
-            }
-        }
+        // 2. Categories & Hierarchical Subcategories (Multilingual: AZ, EN, TR, RU from category.html)
+        $this->call(CategorySeeder::class);
+        $categories = Category::all()->keyBy('slug');
 
         // 3. Job Attributes (4 Languages: AZ, TR, EN, RU)
         $jobTypesData = [
@@ -516,7 +260,7 @@ class DatabaseSeeder extends Seeder
         $jobsData = [
             [
                 'company_slug' => 'foxsoft-teknoloji',
-                'category_slug' => 'backend-gelistirme',
+                'category_slug' => 'proqramlasdirma',
                 'title' => 'Senior Laravel & Vue.js Developer',
                 'slug' => 'senior-laravel-vuejs-developer-fx1',
                 'job_type' => 'Tam Zamanlı',
@@ -537,7 +281,7 @@ class DatabaseSeeder extends Seeder
             ],
             [
                 'company_slug' => 'foxsoft-teknoloji',
-                'category_slug' => 'full-stack-web-gelistirme',
+                'category_slug' => 'proqramlasdirma',
                 'title' => 'Mid-Level Full Stack PHP & Alpine.js Geliştirici',
                 'slug' => 'mid-level-full-stack-php-alpinejs-fx2',
                 'job_type' => 'Tam Zamanlı',
@@ -558,7 +302,7 @@ class DatabaseSeeder extends Seeder
             ],
             [
                 'company_slug' => 'trendyol-tech',
-                'category_slug' => 'devops-cloud-platform',
+                'category_slug' => 'sistem-idareetmesi',
                 'title' => 'DevOps & Cloud Platform Engineer (Kubernetes / AWS)',
                 'slug' => 'devops-cloud-platform-engineer-ty1',
                 'job_type' => 'Tam Zamanlı',
@@ -579,7 +323,7 @@ class DatabaseSeeder extends Seeder
             ],
             [
                 'company_slug' => 'insider-growth',
-                'category_slug' => 'ui-ux-urun-tasarimi',
+                'category_slug' => 'veb-dizayn-ui-ux',
                 'title' => 'Lead Product Designer (UI/UX & Design System)',
                 'slug' => 'lead-product-designer-ui-ux-in1',
                 'job_type' => 'Tam Zamanlı',
@@ -600,7 +344,7 @@ class DatabaseSeeder extends Seeder
             ],
             [
                 'company_slug' => 'papara-fintech',
-                'category_slug' => 'yapay-zeka-makine-ogrenimi',
+                'category_slug' => 'proqramlasdirma',
                 'title' => 'Senior Machine Learning & Fraud Detection Engineer',
                 'slug' => 'senior-ml-fraud-detection-engineer-pp1',
                 'job_type' => 'Tam Zamanlı',
@@ -621,7 +365,7 @@ class DatabaseSeeder extends Seeder
             ],
             [
                 'company_slug' => 'peak-games',
-                'category_slug' => '3d-sanat-oyun-gorsellestirme',
+                'category_slug' => 'dizayn',
                 'title' => 'Senior 3D / 2D Game Artist',
                 'slug' => 'senior-game-artist-peak1',
                 'job_type' => 'Tam Zamanlı',
@@ -642,7 +386,7 @@ class DatabaseSeeder extends Seeder
             ],
             [
                 'company_slug' => 'getir-hub',
-                'category_slug' => 'urun-yonetimi-product-manager',
+                'category_slug' => 'it-layihelerin-idare-edilmesi',
                 'title' => 'Technical Product Manager (Logistics & Routing)',
                 'slug' => 'technical-product-manager-getir1',
                 'job_type' => 'Tam Zamanlı',
@@ -663,7 +407,7 @@ class DatabaseSeeder extends Seeder
             ],
             [
                 'company_slug' => 'foxsoft-teknoloji',
-                'category_slug' => 'buyume-performans-pazarlamasi',
+                'category_slug' => 'marketinq-meneceri-reqemsal-marketoloq',
                 'title' => 'Performance & Growth Marketing Specialist',
                 'slug' => 'performance-growth-marketing-specialist-fx3',
                 'job_type' => 'Tam Zamanlı',
