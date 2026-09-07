@@ -29,15 +29,17 @@
       </div>
 
       <!-- Quick Action Buttons -->
-      <div class="grid grid-cols-2 gap-2.5">
+      <div class="grid {{ (auth()->check() && auth()->user()->isCompany()) ? 'grid-cols-1' : 'grid-cols-2' }} gap-2.5">
         <a href="{{ route('jobs.create') }}" class="flex items-center justify-center gap-2 py-3 px-4 bg-primary hover:bg-primary-dark text-white rounded-2xl font-bold text-xs shadow-sm active:scale-95 transition-all">
           <i class="fa-solid fa-plus text-sm"></i>
           <span>{{ __('Vakansiya ver') }}</span>
         </a>
+        @if(!auth()->check() || !auth()->user()->isCompany())
         <a href="{{ route('job-seekers.create') }}" class="flex items-center justify-center gap-2 py-3 px-4 bg-orange-50 hover:bg-orange-100 text-primary border border-orange-200 rounded-2xl font-bold text-xs shadow-xs active:scale-95 transition-all">
           <i class="fa-solid fa-user-plus text-xs"></i>
           <span>{{ __('İş axtarış elanı') }}</span>
         </a>
+        @endif
       </div>
 
       <!-- Navigation Links List -->

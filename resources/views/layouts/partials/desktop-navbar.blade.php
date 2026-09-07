@@ -198,10 +198,12 @@
                             <i class="fas fa-plus text-[11px] text-primary"></i>
                             <span>{{ __('Vakansiya yerləşdir') }}</span>
                         </a>
+                        @if(!auth()->user()->isCompany())
                         <a href="{{ route('job-seekers.create') }}" class="flex items-center gap-2 px-3.5 py-2 text-xs font-semibold text-gray-700 hover:bg-gray-50 transition">
                             <i class="fas fa-user-plus text-[11px] text-primary"></i>
                             <span>{{ __('İş axtarış elanı əlavə et') }}</span>
                         </a>
+                        @endif
                         <form method="POST" action="{{ route('logout') }}" class="border-t border-gray-100 mt-1">
                             @csrf
                             <button type="submit" class="w-full flex items-center gap-2 px-3.5 py-2 text-xs font-semibold text-rose-600 hover:bg-rose-50 transition cursor-pointer">
@@ -219,11 +221,13 @@
                 @endauth
 
                 <!-- Job Seeker CTA Button -->
+                @if(!auth()->check() || !auth()->user()->isCompany())
                 <a href="{{ route('job-seekers.create') }}"
                    class="hidden lg:inline-flex items-center gap-1.5 border border-gray-200 hover:border-primary hover:text-primary bg-white text-gray-700 font-bold px-3.5 py-2 rounded-lg transition-colors text-xs shadow-2xs">
                     <i class="fas fa-user-plus text-[11px] text-primary"></i>
                     <span>{{ __('İş axtarış elanı') }}</span>
                 </a>
+                @endif
 
                 <!-- Post Vacancy CTA Button -->
                 <a href="{{ route('jobs.create') }}" class="bg-primary hover:bg-primary-dark text-white px-3.5 py-2 rounded-lg font-bold transition-colors shadow-xs hover:shadow-md flex items-center gap-1.5 text-xs whitespace-nowrap">
