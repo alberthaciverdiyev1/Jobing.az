@@ -70,6 +70,26 @@ class JobSeekerController extends Controller
             $query->whereIn('location', $selectedCities);
         }
 
+        // Min Salary filter
+        if ($minSalary = $request->input('min_salary')) {
+            $minSalary = (float) $minSalary;
+            $query->where(function ($q) use ($minSalary) {
+                $q->where('salary_max', '>=', $minSalary)
+                    ->orWhere('salary_min', '>=', $minSalary);
+            });
+        }
+
+        // Max Salary filter
+        if ($maxSalary = $request->input('max_salary')) {
+            $maxSalary = (float) $maxSalary;
+            $query->where(function ($q) use ($maxSalary) {
+                $q->where('salary_min', '<=', $maxSalary)
+                    ->orWhere(function ($sub) use ($maxSalary) {
+                        $sub->whereNull('salary_min')->where('salary_max', '<=', $maxSalary);
+                    });
+            });
+        }
+
         // Sorting
         $sort = $request->input('sort', 'latest');
         if ($sort === 'oldest') {

@@ -8,6 +8,8 @@ export default function jobSeekersManager(config = null) {
         mobileFiltersOpen: false,
         isLoading: false,
         q: config.initialQuery || '',
+        minSalary: config.initialMinSalary || '',
+        maxSalary: config.initialMaxSalary || '',
         category: Array.isArray(config.initialCategory) ? config.initialCategory : (config.initialCategory ? [config.initialCategory] : []),
         city: Array.isArray(config.initialCity) ? config.initialCity : (config.initialCity ? [config.initialCity] : []),
         workplaceType: Array.isArray(config.initialWorkplaceType) ? config.initialWorkplaceType : (config.initialWorkplaceType ? [config.initialWorkplaceType] : []),
@@ -32,6 +34,8 @@ export default function jobSeekersManager(config = null) {
             window.addEventListener('popstate', () => {
                 const params = new URLSearchParams(window.location.search);
                 this.q = params.get('q') || '';
+                this.minSalary = params.get('min_salary') || '';
+                this.maxSalary = params.get('max_salary') || '';
                 this.category = params.getAll('category');
                 const queryCity = params.get('city');
                 this.city = queryCity ? [queryCity] : [];
@@ -62,6 +66,8 @@ export default function jobSeekersManager(config = null) {
         get hasActiveFilters() {
             return !!(
                 this.q ||
+                this.minSalary ||
+                this.maxSalary ||
                 this.category.length ||
                 this.city.length ||
                 this.workplaceType.length ||
@@ -163,6 +169,8 @@ export default function jobSeekersManager(config = null) {
 
         resetAllFilters() {
             this.q = '';
+            this.minSalary = '';
+            this.maxSalary = '';
             this.category = [];
             this.city = [];
             this.workplaceType = [];
@@ -176,6 +184,8 @@ export default function jobSeekersManager(config = null) {
         buildUrl(baseUrl = window.location.pathname) {
             const params = new URLSearchParams();
             if (this.q) params.set('q', this.q);
+            if (this.minSalary) params.set('min_salary', this.minSalary);
+            if (this.maxSalary) params.set('max_salary', this.maxSalary);
             if (this.category.length) this.category.forEach(v => params.append('category[]', v));
             if (this.city.length) params.set('city', this.city[0]);
             if (this.workplaceType.length) this.workplaceType.forEach(v => params.append('workplace_type[]', v));

@@ -10,6 +10,8 @@
 window.__JOBS_CONFIG__ = {
     initialCategory: @json(array_values((array) request('category', []))),
     initialQuery: @json(request('q', '')),
+    initialMinSalary: @json(request('min_salary', '')),
+    initialMaxSalary: @json(request('max_salary', '')),
     initialType: @json(array_values((array) request('type', []))),
     initialWorkplace: @json(array_values((array) request('workplace', []))),
     initialExperience: @json(array_values((array) request('experience', []))),
@@ -163,6 +165,42 @@ window.__JOBS_CONFIG__ = {
                                 <span x-text="showAll ? '{{ __('Daha az göstər') }}' : '{{ __('Daha çox göstər') }} (' + ({{ $categories->count() }} - 5) + ')'"></span>
                             </button>
                             @endif
+                        </div>
+                    </div>
+
+                    <!-- Salary (Maaş) -->
+                    <div class="pt-3 border-t border-gray-100">
+                        <div class="flex items-center justify-between mb-2.5">
+                            <h4 class="text-xs font-bold text-gray-800 uppercase tracking-wider">{{ __('Maaş (AZN)') }}</h4>
+                            <button type="button"
+                                    x-show="min_salary || max_salary"
+                                    x-cloak
+                                    @click="min_salary = ''; max_salary = ''; applyFilters()"
+                                    class="text-[11px] text-primary hover:text-primary-dark font-medium transition cursor-pointer">
+                                {{ __('Sıfırla') }}
+                            </button>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div class="relative">
+                                <input type="number"
+                                       x-model="min_salary"
+                                       @input.debounce.500ms="applyFilters()"
+                                       @keydown.enter.prevent="applyFilters()"
+                                       placeholder="{{ __('Min') }}"
+                                       min="0"
+                                       class="w-full pl-6 pr-2 py-1.5 bg-gray-50 hover:bg-white focus:bg-white border border-gray-200 rounded-lg focus:outline-hidden focus:border-primary focus:ring-1 focus:ring-primary text-xs transition">
+                                <span class="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs font-medium">₼</span>
+                            </div>
+                            <div class="relative">
+                                <input type="number"
+                                       x-model="max_salary"
+                                       @input.debounce.500ms="applyFilters()"
+                                       @keydown.enter.prevent="applyFilters()"
+                                       placeholder="{{ __('Maks') }}"
+                                       min="0"
+                                       class="w-full pl-6 pr-2 py-1.5 bg-gray-50 hover:bg-white focus:bg-white border border-gray-200 rounded-lg focus:outline-hidden focus:border-primary focus:ring-1 focus:ring-primary text-xs transition">
+                                <span class="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs font-medium">₼</span>
+                            </div>
                         </div>
                     </div>
 

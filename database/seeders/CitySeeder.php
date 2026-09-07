@@ -89,24 +89,7 @@ class CitySeeder extends Seeder
             ['name' => ['az' => 'Yardımlı', 'en' => 'Yardimli', 'tr' => 'Yardımlı', 'ru' => 'Ярдымлы'], 'slug' => 'yardimli', 'order' => 74],
             ['name' => ['az' => 'Zaqatala', 'en' => 'Zagatala', 'tr' => 'Zakatala', 'ru' => 'Загатала'], 'slug' => 'zaqatala', 'order' => 75],
             ['name' => ['az' => 'Zərdab', 'en' => 'Zardab', 'tr' => 'Zerdab', 'ru' => 'Зердаб'], 'slug' => 'zerdab', 'order' => 76],
-            // Xarici şəhərlər & Beynəlxalq / Remote
-            ['name' => ['az' => 'Ankara', 'en' => 'Ankara', 'tr' => 'Ankara', 'ru' => 'Анкара'], 'slug' => 'ankara', 'order' => 80],
-            ['name' => ['az' => 'İstanbul', 'en' => 'Istanbul', 'tr' => 'İstanbul', 'ru' => 'Стамбул'], 'slug' => 'istanbul', 'order' => 81],
-            ['name' => ['az' => 'Tbilisi', 'en' => 'Tbilisi', 'tr' => 'Tiflis', 'ru' => 'Тбилиси'], 'slug' => 'tbilisi', 'order' => 82],
-            ['name' => ['az' => 'Batumi', 'en' => 'Batumi', 'tr' => 'Batum', 'ru' => 'Батуми'], 'slug' => 'batumi', 'order' => 83],
-            ['name' => ['az' => 'Dubay', 'en' => 'Dubai', 'tr' => 'Dubai', 'ru' => 'Дубай'], 'slug' => 'dubay', 'order' => 84],
-            ['name' => ['az' => 'Xor Fakkan', 'en' => 'Khor Fakkan', 'tr' => 'Khor Fakkan', 'ru' => 'Корфаккан'], 'slug' => 'xor-fakkan', 'order' => 85],
-            ['name' => ['az' => 'Moskva', 'en' => 'Moscow', 'tr' => 'Moskova', 'ru' => 'Москва'], 'slug' => 'moskva', 'order' => 86],
-            ['name' => ['az' => 'Berlin', 'en' => 'Berlin', 'tr' => 'Berlin', 'ru' => 'Берлин'], 'slug' => 'berlin', 'order' => 87],
-            ['name' => ['az' => 'Belqrad', 'en' => 'Belgrade', 'tr' => 'Belgrad', 'ru' => 'Белград'], 'slug' => 'belqrad', 'order' => 88],
-            ['name' => ['az' => 'Odessa', 'en' => 'Odesa', 'tr' => 'Odessa', 'ru' => 'Одесса'], 'slug' => 'odessa', 'order' => 89],
-            ['name' => ['az' => 'Obuxov', 'en' => 'Obukhiv', 'tr' => 'Obukhov', 'ru' => 'Обухов'], 'slug' => 'obuxov', 'order' => 90],
-            ['name' => ['az' => 'Boysun', 'en' => 'Boysun', 'tr' => 'Boysun', 'ru' => 'Байсун'], 'slug' => 'boysun', 'order' => 91],
-            ['name' => ['az' => 'Kaliforniya', 'en' => 'California', 'tr' => 'Kaliforniya', 'ru' => 'Калифорния'], 'slug' => 'kaliforniya', 'order' => 92],
-            ['name' => ['az' => 'Seul', 'en' => 'Seoul', 'tr' => 'Seul', 'ru' => 'Сеул'], 'slug' => 'seul', 'order' => 93],
-            ['name' => ['az' => 'Tobolsk', 'en' => 'Tobolsk', 'tr' => 'Tobolsk', 'ru' => 'Тобольск'], 'slug' => 'tobolsk', 'order' => 94],
-            ['name' => ['az' => 'Remote (Məsafədən)', 'en' => 'Remote', 'tr' => 'Uzaktan (Remote)', 'ru' => 'Удаленно (Remote)'], 'slug' => 'remote', 'order' => 99],
-        ];
+           ];
 
         foreach ($cities as $cityData) {
             City::updateOrCreate(
