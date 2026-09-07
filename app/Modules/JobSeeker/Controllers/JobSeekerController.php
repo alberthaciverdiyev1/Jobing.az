@@ -15,7 +15,7 @@ use Illuminate\View\View;
 
 class JobSeekerController extends Controller
 {
-    public function index(Request $request): View
+    public function index(Request $request): View|\Illuminate\Http\JsonResponse
     {
         $query = JobSeeker::with(['category', 'jobType', 'workplaceType', 'experienceLevel'])
             ->published();
@@ -100,9 +100,31 @@ class JobSeekerController extends Controller
             ->pluck('count', 'location')
             ->toArray();
 
+        $categories = Category::parents()->with('children')->withCount(['jobSeekers' => fn ($q) => $q->published()])->get();
+
+        $categoryChildrenMap = [];
+        foreach ($categories as $cat) {
+            $categoryChildrenMap[$cat->slug] = $cat->children->pluck('slug')->values()->all();
+        }
+
+        $isAjax = ($request->ajax() || $request->header('X-Partial') || $request->wantsJson()) && !$request->acceptsHtml();
+
+        if ($isAjax) {
+            return response()->json([
+                'html' => view('pages.job-seekers.partials.seeker-list', [
+                    'jobSeekers' => $jobSeekers,
+                ])->render(),
+                'total' => $jobSeekers->total(),
+                'cityCounts' => $cityCounts,
+            ])
+            ->header('Vary', 'X-Requested-With, Accept')
+            ->header('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0, private');
+        }
+
         return view('pages.job-seekers.index', [
             'jobSeekers' => $jobSeekers,
-            'categories' => Category::parents()->with('children')->withCount(['jobSeekers' => fn ($q) => $q->published()])->get(),
+            'categories' => $categories,
+            'categoryChildrenMap' => $categoryChildrenMap,
             'jobTypes' => JobType::active()->withCount(['jobSeekers' => fn ($q) => $q->published()])->get(),
             'workplaceTypes' => WorkplaceType::active()->withCount(['jobSeekers' => fn ($q) => $q->published()])->get(),
             'experienceLevels' => ExperienceLevel::active()->withCount(['jobSeekers' => fn ($q) => $q->published()])->get(),
