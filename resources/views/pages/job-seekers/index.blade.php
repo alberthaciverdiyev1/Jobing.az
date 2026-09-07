@@ -4,10 +4,31 @@
 @section('meta_description', __('İş axtaranların elanları və CV bazası. Şirkətlər burada istedadlı namizədləri kəşf edib birbaşa əlaqə saxlaya bilər.'))
 
 @section('content')
+<script>
+window.__JOB_SEEKERS_CONFIG__ = {
+    initialQuery: @json(request('q', '')),
+    initialCategory: @json(array_values((array) request('category', []))),
+    initialCity: @json(array_values((array) request('city', []))),
+    initialWorkplaceType: @json(array_values((array) request('workplace_type', []))),
+    initialJobType: @json(array_values((array) request('job_type', request('type', [])))),
+    initialExperienceLevel: @json(array_values((array) request('experience_level', []))),
+    initialSort: @json(request('sort', 'latest')),
+    initialTotal: {{ (int) $jobSeekers->total() }},
+    initialCityCounts: @json($cityCounts),
+    categoryChildrenMap: @json($categoryChildrenMap),
+    activeParentCategories: @json(
+        $categories->filter(fn($c) =>
+            in_array($c->slug, (array) request('category', [])) ||
+            ($c->children && $c->children->contains(fn($child) => in_array($child->slug, (array) request('category', []))))
+        )->pluck('slug')->values()
+    )
+};
+</script>
+
 <div class="bg-gray-50 min-h-screen pb-16">
 
     <!-- Main Content Container -->
-    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8" x-data="{ mobileFiltersOpen: false }">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8" x-data="jobSeekersManager()">
 
         <!-- Mobile Filter Trigger -->
         <div class="lg:hidden mb-4">
@@ -27,10 +48,7 @@
             <!-- Sidebar Filters -->
             <div class="lg:w-1/4 w-full" :class="mobileFiltersOpen ? 'block' : 'hidden lg:block'">
                 <div class="bg-white rounded-xl border border-gray-200 p-5 sticky top-24 space-y-5 shadow-2xs">
-                    <form method="GET" action="{{ route('job-seekers.index') }}" id="jobSeekersFilterForm" class="space-y-5">
-                        @if(request('sort'))
-                        <input type="hidden" name="sort" value="{{ request('sort') }}">
-                        @endif
+                    <div class="space-y-5">
 
                         <!-- Filter Top Header -->
                         <div class="flex justify-between items-center pb-3 border-b border-gray-100">
@@ -38,12 +56,13 @@
                                 <i class="fas fa-filter text-xs text-primary"></i>
                                 <span>{{ __('Filtrlər') }}</span>
                             </h3>
-                            @if(request()->hasAny(['q', 'category', 'job_type', 'type', 'workplace_type', 'experience_level', 'city']))
-                            <a href="{{ route('job-seekers.index', array_merge(request()->only(['sort']))) }}"
-                               class="text-xs text-primary hover:text-primary-dark font-medium transition cursor-pointer">
+                            <button type="button"
+                                    x-show="hasActiveFilters"
+                                    x-cloak
+                                    @click="resetAllFilters()"
+                                    class="text-xs text-primary hover:text-primary-dark font-medium transition cursor-pointer">
                                 {{ __('Təmizlə') }}
-                            </a>
-                            @endif
+                            </button>
                         </div>
 
                         <!-- Search Input in Sidebar -->
@@ -51,18 +70,19 @@
                             <h4 class="text-xs font-bold text-gray-800 uppercase tracking-wider mb-2">{{ __('Axtarış') }}</h4>
                             <div class="relative">
                                 <input type="text"
-                                       name="q"
-                                       value="{{ request('q') }}"
+                                       x-model="q"
+                                       @input.debounce.400ms="applyFilters()"
+                                       @keydown.enter.prevent="applyFilters()"
                                        placeholder="{{ __('Vəzifə, bacarıq, ad...') }}"
-                                       onkeydown="if(event.key === 'Enter') this.form.submit()"
                                        class="w-full pl-8 pr-7 py-2 bg-gray-50 hover:bg-white focus:bg-white border border-gray-200 rounded-lg focus:outline-hidden focus:border-primary focus:ring-1 focus:ring-primary text-xs transition">
                                 <i class="fas fa-search absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400 text-[11px]"></i>
-                                @if(request('q'))
-                                <a href="{{ route('job-seekers.index', array_merge(request()->except('q'))) }}"
-                                   class="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 text-xs cursor-pointer">
+                                <button type="button"
+                                        x-show="q"
+                                        x-cloak
+                                        @click="q = ''; applyFilters()"
+                                        class="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 text-xs cursor-pointer">
                                     <i class="fas fa-times"></i>
-                                </a>
-                                @endif
+                                </button>
                             </div>
                         </div>
 
@@ -72,47 +92,53 @@
 
                             <div class="space-y-1 text-xs" x-data="{ showAll: false }">
                                 <!-- All Categories Option -->
-                                <a href="{{ route('job-seekers.index', array_merge(request()->except(['category', 'page']))) }}"
-                                   class="w-full flex items-center gap-2 px-2.5 py-2 rounded-lg transition text-left cursor-pointer {{ !request('category') ? 'bg-primary text-white font-semibold shadow-xs' : 'text-gray-600 hover:bg-gray-50' }}">
+                                <button type="button"
+                                        @click="clearCategories()"
+                                        class="w-full flex items-center gap-2 px-2.5 py-2 rounded-lg transition text-left cursor-pointer"
+                                        :class="category.length === 0 ? 'bg-orange-50 text-primary font-bold border border-orange-200 shadow-2xs' : 'text-gray-600 hover:bg-gray-50 border border-transparent'">
                                     <span>{{ __('Bütün kateqoriyalar') }}</span>
-                                </a>
+                                </button>
 
                                 <!-- Category List -->
                                 @foreach($categories as $cat)
-                                <div x-show="showAll || {{ $loop->index }} < 5" x-data="{ open: {{ (request('category') === $cat->slug || ($cat->children && in_array(request('category'), $cat->children->pluck('slug')->toArray()))) ? 'true' : 'false' }} }">
-                                    <div class="flex items-center justify-between rounded-lg transition group {{ request('category') === $cat->slug ? 'bg-orange-50 text-primary font-bold' : 'text-gray-700 hover:bg-gray-50' }}">
-                                        <a href="{{ route('job-seekers.index', array_merge(request()->except(['page']), ['category' => $cat->slug])) }}"
-                                           class="flex-1 text-left px-2.5 py-2 truncate cursor-pointer">
+                                <div x-show="showAll || {{ $loop->index }} < 5">
+                                    <div class="flex items-center justify-between rounded-lg transition group"
+                                         :class="isCategoryActive('{{ $cat->slug }}') ? 'bg-orange-50 text-primary font-bold border border-orange-200 shadow-2xs' : 'text-gray-700 hover:bg-gray-50 border border-transparent'">
+                                        <button type="button"
+                                                @click="toggleCategory('{{ $cat->slug }}')"
+                                                class="flex-1 text-left px-2.5 py-2 truncate cursor-pointer flex items-center justify-between">
                                             <span class="truncate">{{ $cat->name }}</span>
-                                        </a>
-                                        @if($cat->job_seekers_count > 0)
-                                        <span class="text-[10px] text-gray-400 font-mono shrink-0">({{ $cat->job_seekers_count }})</span>
-                                        @endif
+                                            @if($cat->job_seekers_count > 0)
+                                            <span class="text-[10px] text-gray-400 font-mono shrink-0 ml-1">({{ $cat->job_seekers_count }})</span>
+                                            @endif
+                                        </button>
                                         @if($cat->children->isNotEmpty())
                                         <button type="button"
-                                                @click.prevent.stop="open = !open"
+                                                @click.prevent.stop="toggleAccordion('{{ $cat->slug }}')"
                                                 class="p-2 pl-1.5 text-gray-400 hover:text-primary transition cursor-pointer">
                                             <i class="fas fa-chevron-down text-[9px] transition-transform duration-200"
-                                               :class="open ? 'rotate-180 text-primary' : ''"></i>
+                                               :class="isAccordionOpen('{{ $cat->slug }}') ? 'rotate-180 text-primary' : ''"></i>
                                         </button>
                                         @endif
                                     </div>
 
                                     @if($cat->children->isNotEmpty())
                                     <div class="pl-4 ml-2.5 border-l border-gray-100 space-y-0.5 mt-0.5"
-                                         x-show="open"
+                                         x-show="isAccordionOpen('{{ $cat->slug }}')"
                                          x-transition:enter="transition ease-out duration-150"
                                          x-transition:enter-start="opacity-0 -translate-y-1"
                                          x-transition:enter-end="opacity-100 translate-y-0"
                                          x-cloak>
                                         @foreach($cat->children as $child)
-                                        <a href="{{ route('job-seekers.index', array_merge(request()->except(['page']), ['category' => $child->slug])) }}"
-                                           class="w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg transition text-left cursor-pointer {{ request('category') === $child->slug ? 'bg-orange-50 text-primary font-bold' : 'text-gray-500 hover:text-primary hover:bg-gray-50' }}">
+                                        <button type="button"
+                                                @click="toggleCategory('{{ $child->slug }}', '{{ $cat->slug }}')"
+                                                class="w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg transition text-left cursor-pointer"
+                                                :class="isCategoryActive('{{ $child->slug }}') ? 'bg-orange-50 text-primary font-bold' : 'text-gray-500 hover:text-primary hover:bg-gray-50'">
                                             <span class="truncate">{{ $child->name }}</span>
                                             @if($child->job_seekers_count > 0)
                                             <span class="text-[10px] text-gray-400 font-mono shrink-0 ml-2">({{ $child->job_seekers_count }})</span>
                                             @endif
-                                        </a>
+                                        </button>
                                         @endforeach
                                     </div>
                                     @endif
@@ -133,28 +159,25 @@
                         <div class="pt-3 border-t border-gray-100">
                             <h4 class="text-xs font-bold text-gray-800 uppercase tracking-wider mb-2.5">{{ __('Şəhər') }}</h4>
                             <div class="space-y-1 text-xs" x-data="{ showAll: false }">
-                                @php
-                                    $selectedCities = (array) request('city', []);
-                                @endphp
                                 @foreach($cities as $c)
-                                @php
-                                    $isSelected = in_array($c, $selectedCities);
-                                    $count = $cityCounts[$c] ?? 0;
-                                @endphp
                                 <label x-show="showAll || {{ $loop->index }} < 5"
-                                       class="w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg transition text-left cursor-pointer select-none {{ $isSelected ? 'bg-orange-50 text-primary font-bold' : 'text-gray-600 hover:bg-gray-50' }}">
-                                    <input type="checkbox" name="city[]" value="{{ $c }}" onchange="this.form.submit()" class="sr-only" @checked($isSelected)>
+                                       class="w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg transition text-left cursor-pointer select-none"
+                                       :class="isFilterSelected('city', '{{ addslashes($c) }}') ? 'bg-orange-50 text-primary font-bold' : 'text-gray-600 hover:bg-gray-50'">
+                                    <input type="checkbox"
+                                           value="{{ $c }}"
+                                           :checked="isFilterSelected('city', '{{ addslashes($c) }}')"
+                                           @change="toggleFilter('city', '{{ addslashes($c) }}')"
+                                           class="sr-only">
                                     <span class="flex items-center gap-2">
-                                        <span class="w-3.5 h-3.5 rounded border flex items-center justify-center text-[8px] {{ $isSelected ? 'bg-primary border-primary text-white' : 'border-gray-300' }}">
-                                            @if($isSelected)
-                                            <i class="fas fa-check"></i>
-                                            @endif
+                                        <span class="w-3.5 h-3.5 rounded border flex items-center justify-center text-[8px]"
+                                              :class="isFilterSelected('city', '{{ addslashes($c) }}') ? 'bg-primary border-primary text-white' : 'border-gray-300'">
+                                            <i class="fas fa-check" x-show="isFilterSelected('city', '{{ addslashes($c) }}')"></i>
                                         </span>
                                         <span>{{ $c }}</span>
                                     </span>
-                                    @if($count > 0)
-                                    <span class="text-[10px] text-gray-400 font-mono">({{ $count }})</span>
-                                    @endif
+                                    <span class="text-[10px] text-gray-400 font-mono"
+                                          x-show="getCityCount('{{ addslashes($c) }}', {{ $cityCounts[$c] ?? 0 }}) > 0"
+                                          x-text="'(' + getCityCount('{{ addslashes($c) }}', {{ $cityCounts[$c] ?? 0 }}) + ')'"></span>
                                 </label>
                                 @endforeach
 
@@ -173,21 +196,19 @@
                         <div class="pt-3 border-t border-gray-100">
                             <h4 class="text-xs font-bold text-gray-800 uppercase tracking-wider mb-2.5">{{ __('Çalışma Yeri') }}</h4>
                             <div class="space-y-1 text-xs" x-data="{ showAll: false }">
-                                @php
-                                    $selectedWorkplaces = (array) request('workplace_type', []);
-                                @endphp
                                 @foreach($workplaceTypes as $wt)
-                                @php
-                                    $isSelected = in_array($wt->slug, $selectedWorkplaces);
-                                @endphp
                                 <label x-show="showAll || {{ $loop->index }} < 5"
-                                       class="w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg transition text-left cursor-pointer select-none {{ $isSelected ? 'bg-orange-50 text-primary font-bold' : 'text-gray-600 hover:bg-gray-50' }}">
-                                    <input type="checkbox" name="workplace_type[]" value="{{ $wt->slug }}" onchange="this.form.submit()" class="sr-only" @checked($isSelected)>
+                                       class="w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg transition text-left cursor-pointer select-none"
+                                       :class="isFilterSelected('workplaceType', '{{ $wt->slug }}') ? 'bg-orange-50 text-primary font-bold' : 'text-gray-600 hover:bg-gray-50'">
+                                    <input type="checkbox"
+                                           value="{{ $wt->slug }}"
+                                           :checked="isFilterSelected('workplaceType', '{{ $wt->slug }}')"
+                                           @change="toggleFilter('workplaceType', '{{ $wt->slug }}')"
+                                           class="sr-only">
                                     <span class="flex items-center gap-2">
-                                        <span class="w-3.5 h-3.5 rounded border flex items-center justify-center text-[8px] {{ $isSelected ? 'bg-primary border-primary text-white' : 'border-gray-300' }}">
-                                            @if($isSelected)
-                                            <i class="fas fa-check"></i>
-                                            @endif
+                                        <span class="w-3.5 h-3.5 rounded border flex items-center justify-center text-[8px]"
+                                              :class="isFilterSelected('workplaceType', '{{ $wt->slug }}') ? 'bg-primary border-primary text-white' : 'border-gray-300'">
+                                            <i class="fas fa-check" x-show="isFilterSelected('workplaceType', '{{ $wt->slug }}')"></i>
                                         </span>
                                         <span>{{ $wt->name }}</span>
                                     </span>
@@ -213,21 +234,19 @@
                         <div class="pt-3 border-t border-gray-100">
                             <h4 class="text-xs font-bold text-gray-800 uppercase tracking-wider mb-2.5">{{ __('İş Rejimi') }}</h4>
                             <div class="space-y-1 text-xs" x-data="{ showAll: false }">
-                                @php
-                                    $selectedJobTypes = (array) request('job_type', request('type', []));
-                                @endphp
                                 @foreach($jobTypes as $jt)
-                                @php
-                                    $isSelected = in_array($jt->slug, $selectedJobTypes);
-                                @endphp
                                 <label x-show="showAll || {{ $loop->index }} < 5"
-                                       class="w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg transition text-left cursor-pointer select-none {{ $isSelected ? 'bg-orange-50 text-primary font-bold' : 'text-gray-600 hover:bg-gray-50' }}">
-                                    <input type="checkbox" name="job_type[]" value="{{ $jt->slug }}" onchange="this.form.submit()" class="sr-only" @checked($isSelected)>
+                                       class="w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg transition text-left cursor-pointer select-none"
+                                       :class="isFilterSelected('jobType', '{{ $jt->slug }}') ? 'bg-orange-50 text-primary font-bold' : 'text-gray-600 hover:bg-gray-50'">
+                                    <input type="checkbox"
+                                           value="{{ $jt->slug }}"
+                                           :checked="isFilterSelected('jobType', '{{ $jt->slug }}')"
+                                           @change="toggleFilter('jobType', '{{ $jt->slug }}')"
+                                           class="sr-only">
                                     <span class="flex items-center gap-2">
-                                        <span class="w-3.5 h-3.5 rounded border flex items-center justify-center text-[8px] {{ $isSelected ? 'bg-primary border-primary text-white' : 'border-gray-300' }}">
-                                            @if($isSelected)
-                                            <i class="fas fa-check"></i>
-                                            @endif
+                                        <span class="w-3.5 h-3.5 rounded border flex items-center justify-center text-[8px]"
+                                              :class="isFilterSelected('jobType', '{{ $jt->slug }}') ? 'bg-primary border-primary text-white' : 'border-gray-300'">
+                                            <i class="fas fa-check" x-show="isFilterSelected('jobType', '{{ $jt->slug }}')"></i>
                                         </span>
                                         <span>{{ $jt->name }}</span>
                                     </span>
@@ -253,21 +272,19 @@
                         <div class="pt-3 border-t border-gray-100">
                             <h4 class="text-xs font-bold text-gray-800 uppercase tracking-wider mb-2.5">{{ __('Təcrübə') }}</h4>
                             <div class="space-y-1 text-xs" x-data="{ showAll: false }">
-                                @php
-                                    $selectedExp = (array) request('experience_level', []);
-                                @endphp
                                 @foreach($experienceLevels as $el)
-                                @php
-                                    $isSelected = in_array($el->slug, $selectedExp);
-                                @endphp
                                 <label x-show="showAll || {{ $loop->index }} < 5"
-                                       class="w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg transition text-left cursor-pointer select-none {{ $isSelected ? 'bg-orange-50 text-primary font-bold' : 'text-gray-600 hover:bg-gray-50' }}">
-                                    <input type="checkbox" name="experience_level[]" value="{{ $el->slug }}" onchange="this.form.submit()" class="sr-only" @checked($isSelected)>
+                                       class="w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg transition text-left cursor-pointer select-none"
+                                       :class="isFilterSelected('experienceLevel', '{{ $el->slug }}') ? 'bg-orange-50 text-primary font-bold' : 'text-gray-600 hover:bg-gray-50'">
+                                    <input type="checkbox"
+                                           value="{{ $el->slug }}"
+                                           :checked="isFilterSelected('experienceLevel', '{{ $el->slug }}')"
+                                           @change="toggleFilter('experienceLevel', '{{ $el->slug }}')"
+                                           class="sr-only">
                                     <span class="flex items-center gap-2">
-                                        <span class="w-3.5 h-3.5 rounded border flex items-center justify-center text-[8px] {{ $isSelected ? 'bg-primary border-primary text-white' : 'border-gray-300' }}">
-                                            @if($isSelected)
-                                            <i class="fas fa-check"></i>
-                                            @endif
+                                        <span class="w-3.5 h-3.5 rounded border flex items-center justify-center text-[8px]"
+                                              :class="isFilterSelected('experienceLevel', '{{ $el->slug }}') ? 'bg-primary border-primary text-white' : 'border-gray-300'">
+                                            <i class="fas fa-check" x-show="isFilterSelected('experienceLevel', '{{ $el->slug }}')"></i>
                                         </span>
                                         <span>{{ $el->name }}</span>
                                     </span>
@@ -288,7 +305,7 @@
                         </div>
                         @endif
 
-                    </form>
+                    </div>
                 </div>
             </div>
 
@@ -302,54 +319,30 @@
                             <span>{{ __('İş Axtaranlar') }}</span>
                         </h2>
                         <p class="text-xs text-gray-500 mt-0.5">
-                            <span class="font-bold text-primary">{{ $jobSeekers->total() }}</span> {{ __('namizəd elanı tapıldı') }}
+                            <span class="font-bold text-primary" x-text="totalCount">{{ $jobSeekers->total() }}</span> {{ __('namizəd elanı tapıldı') }}
                         </p>
                     </div>
 
                     <div class="flex items-center gap-2 text-xs">
                         <span class="text-gray-500 hidden sm:inline">{{ __('Sıralama:') }}</span>
-                        <select name="sort"
-                                form="jobSeekersFilterForm"
-                                onchange="document.getElementById('jobSeekersFilterForm').submit()"
+                        <select x-model="sort"
+                                @change="applyFilters()"
                                 class="text-xs border border-gray-200 rounded-lg px-3 py-1.5 bg-white focus:outline-hidden focus:border-primary text-gray-700 shadow-2xs cursor-pointer">
-                            <option value="latest" @selected(request('sort') === 'latest')>{{ __('Tarixə görə (yeni)') }}</option>
-                            <option value="oldest" @selected(request('sort') === 'oldest')>{{ __('Tarixə görə (köhnə)') }}</option>
-                            <option value="popular" @selected(request('sort') === 'popular')>{{ __('Ən çox baxılan') }}</option>
-                            <option value="salary_desc" @selected(request('sort') === 'salary_desc')>{{ __('Maaşa görə (çoxdan aza)') }}</option>
-                            <option value="salary_asc" @selected(request('sort') === 'salary_asc')>{{ __('Maaşa görə (azdan çoxa)') }}</option>
-                            <option value="featured" @selected(request('sort') === 'featured')>{{ __('Premium elanlar') }}</option>
-                            <option value="alphabetical" @selected(request('sort') === 'alphabetical')>{{ __('Əlifba sırası (A-Z)') }}</option>
+                            <option value="latest">{{ __('Tarixə görə (yeni)') }}</option>
+                            <option value="oldest">{{ __('Tarixə görə (köhnə)') }}</option>
+                            <option value="popular">{{ __('Ən çox baxılan') }}</option>
+                            <option value="salary_desc">{{ __('Maaşa görə (çoxdan aza)') }}</option>
+                            <option value="salary_asc">{{ __('Maaşa görə (azdan çoxa)') }}</option>
+                            <option value="featured">{{ __('Premium elanlar') }}</option>
+                            <option value="alphabetical">{{ __('Əlifba sırası (A-Z)') }}</option>
                         </select>
                     </div>
                 </div>
 
-                <!-- Candidate Cards List -->
-                @if($jobSeekers->count() > 0)
-                <div class="space-y-3">
-                    @foreach($jobSeekers as $seeker)
-                    <x-candidate-card :seeker="$seeker" />
-                    @endforeach
+                <!-- Candidate Cards Container -->
+                <div id="job-seekers-container" class="relative min-h-[300px]" :class="isLoading ? 'opacity-50 pointer-events-none transition-opacity duration-150' : ''">
+                    @include('pages.job-seekers.partials.seeker-list', ['jobSeekers' => $jobSeekers])
                 </div>
-
-                <!-- Pagination -->
-                <div class="mt-8 pagination-wrapper">
-                    {{ $jobSeekers->links() }}
-                </div>
-
-                @else
-                <!-- Empty State -->
-                <x-empty-state icon="fa-user-tie" :tight="true"
-                               :title="__('Axtarışa uyğun namizəd elanı tapılmadı')"
-                               :description="__('Axtarış meyarlarını dəyişərək və ya filtrləri sıfırlayaraq yenidən cəhd edə bilərsiniz.')">
-                    @slot('actions')
-                    <a href="{{ route('job-seekers.create') }}"
-                       class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary hover:bg-primary-dark text-white text-xs font-bold transition shadow-xs cursor-pointer">
-                        <i class="fas fa-plus text-xs"></i>
-                        <span>{{ __('İlk elanınızı yerləşdirin') }}</span>
-                    </a>
-                    @endslot
-                </x-empty-state>
-                @endif
 
             </div>
 
