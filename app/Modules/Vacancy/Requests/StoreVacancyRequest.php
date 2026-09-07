@@ -22,6 +22,7 @@ class StoreVacancyRequest extends FormRequest
 
     public function rules(): array
     {
+        $canUseInternal = auth()->check() && (auth()->user()->isCompany() || auth()->user()->is_admin);
         $hasCompany = auth()->check() && auth()->user()->company;
         $hasCompanyEmail = $hasCompany && !empty(auth()->user()->company->email);
         $isInternalOnly = $this->input('application_type') === 'internal';
@@ -49,10 +50,10 @@ class StoreVacancyRequest extends FormRequest
             'skills' => 'nullable',
             'skills.*' => 'string|max:100',
             'deadline' => 'nullable|date|after:today',
-            'application_type' => auth()->check() ? 'required|in:internal,email,both' : 'required|in:email',
+            'application_type' => $canUseInternal ? 'required|in:internal,email,both' : 'required|in:email',
             // application_email is NEVER required if application_type is 'internal'.
             // For 'email' or 'both', it is required ONLY if the user has no company email to fall back to.
-            'application_email' => $isInternalOnly
+            'application_email' => ($isInternalOnly && $canUseInternal)
                 ? 'nullable|email|max:255'
                 : ($hasCompanyEmail ? 'nullable|email|max:255' : 'required|email|max:255'),
             'application_fields' => 'nullable|array',
