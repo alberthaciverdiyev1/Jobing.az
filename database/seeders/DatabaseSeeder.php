@@ -29,8 +29,11 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        // 2. Categories & Hierarchical Subcategories (Multilingual: AZ, EN, TR, RU from category.html)
-        $this->call(CategorySeeder::class);
+        // 2. Categories & Cities (Multilingual: AZ, EN, TR, RU from category.html & city.html)
+        $this->call([
+            CategorySeeder::class,
+            CitySeeder::class,
+        ]);
         $categories = Category::all()->keyBy('slug');
 
         // 3. Job Attributes (4 Languages: AZ, TR, EN, RU)
