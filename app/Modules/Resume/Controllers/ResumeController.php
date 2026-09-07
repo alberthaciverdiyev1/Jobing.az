@@ -11,7 +11,7 @@ use Illuminate\View\View;
 
 class ResumeController extends Controller
 {
-    public function index(Request $request): View
+    public function index(Request $request): View|\Illuminate\Http\JsonResponse
     {
         $query = Resume::where('is_public', true)->with('user');
 
@@ -29,9 +29,29 @@ class ResumeController extends Controller
             });
         }
 
-        // Skill filter
+        // Category filter
         $selectedSkills = (array) $request->input('skills', []);
         $selectedSkills = array_filter($selectedSkills);
+        if ($categorySlug = $request->input('category')) {
+            if (empty($selectedSkills)) {
+                $categoryModel = \App\Modules\Category\Models\Category::where('slug', $categorySlug)->with('skills')->first();
+                if ($categoryModel && $categoryModel->skills->isNotEmpty()) {
+                    $catSkillNames = $categoryModel->skills->map(function ($s) {
+                        return is_array($s->name) ? ($s->name['az'] ?? reset($s->name)) : $s->name;
+                    })->filter()->values()->all();
+
+                    if (!empty($catSkillNames)) {
+                        $query->where(function ($q) use ($catSkillNames) {
+                            foreach ($catSkillNames as $s) {
+                                $q->orWhereRaw("CAST(skills AS text) ILIKE ?", ["%{$s}%"]);
+                            }
+                        });
+                    }
+                }
+            }
+        }
+
+        // Skill filter
         if (!empty($selectedSkills)) {
             $query->where(function ($q) use ($selectedSkills) {
                 foreach ($selectedSkills as $s) {
@@ -90,6 +110,20 @@ class ResumeController extends Controller
 
         $popularSkills = Skill::active()->orderBy('order')->take(25)->get();
 
+        $isAjax = ($request->ajax() || $request->header('X-Partial') || $request->wantsJson()) && !$request->acceptsHtml();
+
+        if ($isAjax) {
+            return response()->json([
+                'html' => view('pages.resumes.partials.resume-list', [
+                    'resumes' => $resumes,
+                ])->render(),
+                'total' => $resumes->total(),
+                'cityCounts' => $cityCounts,
+            ])
+            ->header('Vary', 'X-Requested-With, Accept')
+            ->header('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0, private');
+        }
+
         return view('pages.resumes.index', [
             'resumes' => $resumes,
             'cities' => VacancyService::cityOptions(),
@@ -97,7 +131,7 @@ class ResumeController extends Controller
             'categories' => $categories,
             'categorySkillsMap' => $categorySkillsMap,
             'popularSkills' => $popularSkills,
-            'totalCount' => Resume::where('is_public', true)->count(),
+            'totalCount' => $resumes->total(),
         ]);
     }
 

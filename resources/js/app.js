@@ -2,10 +2,12 @@ import './bootstrap';
 import Alpine from 'alpinejs';
 import { createIcons, icons } from 'lucide';
 import jobsManager from './jobs';
+import resumesManager from './resumes';
 import Favorites from './favorites';
 
 window.Alpine = Alpine;
 Alpine.data('jobsManager', jobsManager);
+Alpine.data('resumesManager', resumesManager);
 
 // Contact reveal (lead tracking): mask contact until clicked, then fetch & log.
 const contactReveal = (url, hasPhone) => ({
