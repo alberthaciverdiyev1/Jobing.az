@@ -147,8 +147,10 @@
                                 class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs focus:ring-1 focus:ring-primary focus:border-primary focus:outline-hidden bg-white">
                             <option value="">{{ __('Şəhər seçin') }}</option>
                             @foreach($cities as $city)
-                            @php($cityName = is_object($city) ? (is_array($city->name) ? ($city->name['az'] ?? reset($city->name)) : $city->name) : $city)
-                            @php($cityVal = is_object($city) ? $city->id : $city)
+                            @php
+                                $cityName = is_object($city) ? (is_array($city->name) ? ($city->name['az'] ?? reset($city->name)) : $city->name) : $city;
+                                $cityVal = is_object($city) ? $city->id : $city;
+                            @endphp
                             <option value="{{ $cityVal }}" {{ (old('company_location', $authCompany->city_id ?? '') == $cityVal || old('company_location') == $cityName) ? 'selected' : '' }}>
                                 {{ $cityName }}
                             </option>

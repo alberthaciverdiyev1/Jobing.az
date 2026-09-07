@@ -3,7 +3,9 @@
 @section('title', __('İletişim') . ' - ' . config('app.full_name'))
 
 @section('content')
-@php($siteSetting = \App\Modules\Setting\Models\SiteSetting::current())
+@php
+    $siteSetting = \App\Modules\Setting\Models\SiteSetting::current();
+@endphp
 <div class="bg-gray-50 min-h-screen pb-16">
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-10">
 
