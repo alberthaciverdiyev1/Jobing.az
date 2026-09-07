@@ -23,7 +23,7 @@ class VacancyController extends Controller
 
     public function index(Request $request): View|JsonResponse|Response
     {
-        $data = $this->vacancyService->getPaginatedVacancies($request->query());
+        $data = $this->vacancyService->getPaginatedVacancies($request->all());
 
         // Only return JSON if this is an explicit AJAX fetch call and not standard browser page navigation.
         // When navigating back, browsers send Accept: text/html, which must receive the full HTML view.
