@@ -6,10 +6,12 @@ use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Navigation\MenuItem;
 use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
+use Filament\View\PanelsRenderHook;
 use Filament\Widgets;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
@@ -37,6 +39,17 @@ class AdminPanelProvider extends PanelProvider
             ->databaseNotifications()
             ->breadcrumbs(false)
             ->favicon('https://img.icons8.com/isometric-line/64/4a90e2/briefcase.png')
+            ->renderHook(
+                PanelsRenderHook::USER_MENU_BEFORE,
+                fn () => view('filament.components.topbar-website-link'),
+            )
+            ->userMenuItems([
+                MenuItem::make()
+                    ->label('Sayta bax')
+                    ->url(fn (): string => url('/'))
+                    ->icon('heroicon-o-globe-alt')
+                    ->openUrlInNewTab(),
+            ])
             ->resources([
                 \App\Modules\Vacancy\Filament\Resources\VacancyResource::class,
                 \App\Modules\Category\Filament\Resources\CategoryResource::class,

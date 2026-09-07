@@ -6,10 +6,12 @@ use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Navigation\MenuItem;
 use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
+use Filament\View\PanelsRenderHook;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
@@ -34,6 +36,17 @@ class UserPanelProvider extends PanelProvider
             ->breadcrumbs(false)
             ->font('Inter')
             ->maxContentWidth('full')
+            ->renderHook(
+                PanelsRenderHook::USER_MENU_BEFORE,
+                fn () => view('filament.components.topbar-website-link'),
+            )
+            ->userMenuItems([
+                MenuItem::make()
+                    ->label('Sayta bax')
+                    ->url(fn (): string => url('/'))
+                    ->icon('heroicon-o-globe-alt')
+                    ->openUrlInNewTab(),
+            ])
             ->resources([
                 \App\Modules\Application\Filament\Resources\MyApplicationsResource::class,
                 \App\Modules\JobSeeker\Filament\Resources\MyJobSeekerResource::class,
