@@ -145,15 +145,23 @@ class JobSeekerController extends Controller
         ]);
     }
 
-    public function create(): View
+    public function create(): \Illuminate\Http\RedirectResponse
     {
-        return view('pages.job-seekers.create', [
-            'categories' => Category::parents()->with('children')->get(),
-            'jobTypes' => JobType::active()->get(),
-            'workplaceTypes' => WorkplaceType::active()->get(),
-            'experienceLevels' => ExperienceLevel::active()->get(),
-            'cities' => VacancyService::cityOptions(),
-        ]);
+        $user = auth()->user();
+
+        if (! $user) {
+            return redirect()->guest(route('login'));
+        }
+
+        if ($user->is_admin) {
+            return redirect()->to(route('filament.admin.resources.job-seekers.create'));
+        }
+
+        if ($user->isCompany()) {
+            return redirect()->to(route('filament.company.resources.company-job-seekers.index'));
+        }
+
+        return redirect()->to(route('filament.user.resources.my-job-seekers.create'));
     }
 
     public function store(StoreJobSeekerRequest $request)
