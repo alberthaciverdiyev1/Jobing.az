@@ -17,17 +17,27 @@ export default function jobsManager(config = null) {
         city: Array.isArray(config.initialCity) ? config.initialCity : (config.initialCity ? [config.initialCity] : []),
         sort: config.initialSort || 'latest',
         totalCount: config.initialTotal || 0,
-        openAccordion: (Array.isArray(config.activeParentCategories) && config.activeParentCategories.length) ? config.activeParentCategories[0] : (config.activeParentCategory || null),
+        openAccordions: (Array.isArray(config.activeParentCategories) && config.activeParentCategories.length)
+            ? [...config.activeParentCategories]
+            : (config.activeParentCategory ? [config.activeParentCategory] : []),
         counts: config.initialCounts || {},
         categoryCounts: config.initialCategoryCounts || {},
 
         init() {
             if (Array.isArray(config.activeParentCategories) && config.activeParentCategories.length) {
-                this.openAccordion = config.activeParentCategories[0];
-            } else if (config.activeParentCategory) {
-                this.openAccordion = config.activeParentCategory;
+                config.activeParentCategories.forEach(p => {
+                    if (p && !this.openAccordions.includes(p)) {
+                        this.openAccordions.push(p);
+                    }
+                });
+            } else if (config.activeParentCategory && !this.openAccordions.includes(config.activeParentCategory)) {
+                this.openAccordions.push(config.activeParentCategory);
             } else if (this.category.length) {
-                this.openAccordion = this.category[0];
+                this.category.forEach(c => {
+                    if (c && !this.openAccordions.includes(c)) {
+                        this.openAccordions.push(c);
+                    }
+                });
             }
 
             // Popstate for browser back/forward buttons
@@ -41,7 +51,11 @@ export default function jobsManager(config = null) {
                 this.city = params.getAll('city');
                 this.sort = params.get('sort') || 'latest';
                 if (this.category.length) {
-                    this.openAccordion = this.category[0];
+                    this.category.forEach(c => {
+                        if (c && !this.openAccordions.includes(c)) {
+                            this.openAccordions.push(c);
+                        }
+                    });
                 }
                 this.fetchJobs(false);
             });
@@ -61,11 +75,16 @@ export default function jobsManager(config = null) {
         },
 
         isAccordionOpen(slug) {
-            return this.openAccordion === slug;
+            return this.openAccordions.includes(slug);
         },
 
         toggleAccordion(slug) {
-            this.openAccordion = this.openAccordion === slug ? null : slug;
+            const idx = this.openAccordions.indexOf(slug);
+            if (idx > -1) {
+                this.openAccordions.splice(idx, 1);
+            } else {
+                this.openAccordions.push(slug);
+            }
         },
 
         getCount(group, slug, fallback = 0) {
@@ -110,15 +129,15 @@ export default function jobsManager(config = null) {
                 }
             }
 
+            // Always open subcategories when category is clicked
             if (parentSlug) {
-                // subcategory: keep parent accordion open so selection is visible
-                this.openAccordion = parentSlug;
-            } else if (wasActive) {
-                // parent deselected -> collapse its children
-                if (this.openAccordion === slug) this.openAccordion = null;
+                if (!this.openAccordions.includes(parentSlug)) {
+                    this.openAccordions.push(parentSlug);
+                }
             } else {
-                // parent selected -> open accordion
-                this.openAccordion = slug;
+                if (!this.openAccordions.includes(slug)) {
+                    this.openAccordions.push(slug);
+                }
             }
 
             this.applyFilters();
@@ -126,7 +145,6 @@ export default function jobsManager(config = null) {
 
         clearCategories() {
             this.category = [];
-            this.openAccordion = null;
             this.applyFilters();
         },
 
@@ -149,7 +167,7 @@ export default function jobsManager(config = null) {
             this.experience = [];
             this.city = [];
             this.sort = 'latest';
-            this.openAccordion = null;
+            this.openAccordions = [];
             this.applyFilters();
         },
 
