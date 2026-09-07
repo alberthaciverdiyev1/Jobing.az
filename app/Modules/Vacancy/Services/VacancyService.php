@@ -96,12 +96,21 @@ class VacancyService
             $query->whereHas('city', fn ($cq) => $cq->whereIn('slug', $selectedCities));
         }
 
-        // 6. Min Salary
+        // 6. Salary Filter (Min & Max)
         if (!empty($filters['min_salary'])) {
             $minSalary = (float)$filters['min_salary'];
             $query->where(function ($q) use ($minSalary) {
-                $q->where('salary_min', '>=', $minSalary)
-                    ->orWhere('salary_max', '>=', $minSalary);
+                $q->where('salary_max', '>=', $minSalary)
+                    ->orWhere('salary_min', '>=', $minSalary);
+            });
+        }
+        if (!empty($filters['max_salary'])) {
+            $maxSalary = (float)$filters['max_salary'];
+            $query->where(function ($q) use ($maxSalary) {
+                $q->where('salary_min', '<=', $maxSalary)
+                    ->orWhere(function ($sub) use ($maxSalary) {
+                        $sub->whereNull('salary_min')->where('salary_max', '<=', $maxSalary);
+                    });
             });
         }
 
@@ -165,8 +174,17 @@ class VacancyService
                 if (!empty($filters['min_salary'])) {
                     $minSalary = (float) $filters['min_salary'];
                     $q->where(function ($sub) use ($minSalary) {
-                        $sub->where('salary_min', '>=', $minSalary)
-                            ->orWhere('salary_max', '>=', $minSalary);
+                        $sub->where('salary_max', '>=', $minSalary)
+                            ->orWhere('salary_min', '>=', $minSalary);
+                    });
+                }
+                if (!empty($filters['max_salary'])) {
+                    $maxSalary = (float) $filters['max_salary'];
+                    $q->where(function ($sub) use ($maxSalary) {
+                        $sub->where('salary_min', '<=', $maxSalary)
+                            ->orWhere(function ($sub2) use ($maxSalary) {
+                                $sub2->whereNull('salary_min')->where('salary_max', '<=', $maxSalary);
+                            });
                     });
                 }
             };

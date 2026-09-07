@@ -11,6 +11,8 @@ export default function jobsManager(config = null) {
         category: Array.isArray(config.initialCategory) ? config.initialCategory : (config.initialCategory ? [config.initialCategory] : []),
         categoryName: '',
         q: config.initialQuery || '',
+        min_salary: config.initialMinSalary || '',
+        max_salary: config.initialMaxSalary || '',
         type: Array.isArray(config.initialType) ? config.initialType : (config.initialType ? [config.initialType] : []),
         workplace: Array.isArray(config.initialWorkplace) ? config.initialWorkplace : (config.initialWorkplace ? [config.initialWorkplace] : []),
         experience: Array.isArray(config.initialExperience) ? config.initialExperience : (config.initialExperience ? [config.initialExperience] : []),
@@ -84,6 +86,8 @@ export default function jobsManager(config = null) {
                 }
 
                 this.q = params.get('q') || '';
+                this.min_salary = params.get('min_salary') || '';
+                this.max_salary = params.get('max_salary') || '';
                 this.type = params.getAll('type');
                 this.workplace = params.getAll('workplace');
                 this.experience = params.getAll('experience');
@@ -114,6 +118,8 @@ export default function jobsManager(config = null) {
             return !!(
                 this.category.length ||
                 this.q ||
+                this.min_salary ||
+                this.max_salary ||
                 this.type.length ||
                 this.workplace.length ||
                 this.experience.length ||
@@ -222,6 +228,8 @@ export default function jobsManager(config = null) {
         resetAllFilters() {
             this.category = [];
             this.q = '';
+            this.min_salary = '';
+            this.max_salary = '';
             this.type = [];
             this.workplace = [];
             this.experience = [];
@@ -279,6 +287,8 @@ export default function jobsManager(config = null) {
             }
 
             if (this.q) params.set('q', this.q);
+            if (this.min_salary) params.set('min_salary', this.min_salary);
+            if (this.max_salary) params.set('max_salary', this.max_salary);
             if (this.type.length) this.type.forEach(v => params.append('type[]', v));
             if (this.workplace.length) this.workplace.forEach(v => params.append('workplace[]', v));
             if (this.experience.length) this.experience.forEach(v => params.append('experience[]', v));
