@@ -5,6 +5,7 @@ import jobsManager from './jobs';
 import resumesManager from './resumes';
 import companiesManager from './companies';
 import jobSeekersManager from './jobSeekers';
+import blogManager from './blog';
 import Favorites from './favorites';
 
 window.Alpine = Alpine;
@@ -12,6 +13,7 @@ Alpine.data('jobsManager', jobsManager);
 Alpine.data('resumesManager', resumesManager);
 Alpine.data('companiesManager', companiesManager);
 Alpine.data('jobSeekersManager', jobSeekersManager);
+Alpine.data('blogManager', blogManager);
 
 // Contact reveal (lead tracking): mask contact until clicked, then fetch & log.
 const contactReveal = (url, hasPhone) => ({
