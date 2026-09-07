@@ -173,12 +173,14 @@ class ResumeController extends Controller
         // 1. Owner can always view their own CV
         // 2. Admin can always view
         // 3. Logged-in Company accounts can view
-        // 4. If public, anyone can view
+        // 4. Company that received an application with this CV can view
+        // 5. If public, anyone can view
         $isOwner = $user && $user->id === $resume->user_id;
         $isAdmin = $user && (bool) $user->is_admin;
-        $isCompany = $user && ($user->isCompany() || $user->user_type === 'company');
+        $isCompany = $user && ($user->isCompany() || $user->user_type === 'company' || (bool) $user->company_id);
+        $hasApplicationToCompany = $user && $user->company_id && $resume->applications()->whereHas('vacancy', fn ($v) => $v->where('company_id', $user->company_id))->exists();
 
-        if (!$resume->is_public && !$isOwner && !$isAdmin && !$isCompany) {
+        if (!$resume->is_public && !$isOwner && !$isAdmin && !$isCompany && !$hasApplicationToCompany) {
             abort(403, __('Bu CV gizlidir və yalnız sahibi tərəfindən baxıla bilər.'));
         }
 
