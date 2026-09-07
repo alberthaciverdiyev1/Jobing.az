@@ -87,14 +87,29 @@ export default function jobsManager(config = null) {
         },
 
         // Category multi-select toggle (with accordion management)
-        toggleCategory(slug, parentSlug = null) {
+        toggleCategory(slug, parentSlug = null, childrenSlugs = []) {
             const idx = this.category.indexOf(slug);
             const wasActive = idx > -1;
+
             if (wasActive) {
                 this.category.splice(idx, 1);
             } else {
                 this.category.push(slug);
+
+                // If a subcategory (child) was selected, ensure its parent category is NOT in search
+                if (parentSlug) {
+                    const parentIdx = this.category.indexOf(parentSlug);
+                    if (parentIdx > -1) {
+                        this.category.splice(parentIdx, 1);
+                    }
+                }
+
+                // If a parent category was selected, remove any of its selected children from search
+                if (childrenSlugs && childrenSlugs.length) {
+                    this.category = this.category.filter(c => !childrenSlugs.includes(c));
+                }
             }
+
             if (parentSlug) {
                 // subcategory: keep parent accordion open so selection is visible
                 this.openAccordion = parentSlug;
@@ -102,9 +117,10 @@ export default function jobsManager(config = null) {
                 // parent deselected -> collapse its children
                 if (this.openAccordion === slug) this.openAccordion = null;
             } else {
-                // parent selected -> reveal its children
+                // parent selected -> open accordion
                 this.openAccordion = slug;
             }
+
             this.applyFilters();
         },
 

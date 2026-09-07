@@ -31,10 +31,10 @@ window.__JOBS_CONFIG__ = {
 
     <!-- Content Grid -->
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        
+
         <!-- Mobile Filter Trigger -->
         <div class="lg:hidden mb-4">
-            <button @click="mobileFiltersOpen = !mobileFiltersOpen" 
+            <button @click="mobileFiltersOpen = !mobileFiltersOpen"
                     class="w-full py-2.5 px-4 rounded-xl bg-white border border-gray-200 text-gray-700 font-semibold text-xs flex items-center justify-between shadow-2xs">
                 <span class="flex items-center gap-2">
                     <i class="fas fa-sliders-h text-primary"></i>
@@ -45,20 +45,20 @@ window.__JOBS_CONFIG__ = {
         </div>
 
         <div class="flex flex-col lg:flex-row gap-6">
-            
+
             <!-- Sidebar Filters -->
             <div class="lg:w-1/4 w-full" :class="mobileFiltersOpen ? 'block' : 'hidden lg:block'">
                 <div class="bg-white rounded-xl border border-gray-200 p-5 sticky top-24 space-y-5 shadow-2xs">
-                    
+
                     <!-- Filter Top Header -->
                     <div class="flex justify-between items-center pb-3 border-b border-gray-100">
                         <h3 class="font-bold text-gray-900 text-sm flex items-center gap-2">
                             <i class="fas fa-filter text-xs text-primary"></i>
                             <span>{{ __('Filtrlər') }}</span>
                         </h3>
-                        <button type="button" 
-                                x-show="hasActiveFilters" 
-                                @click="resetAllFilters()" 
+                        <button type="button"
+                                x-show="hasActiveFilters"
+                                @click="resetAllFilters()"
                                 class="text-xs text-primary hover:text-primary-dark font-medium transition cursor-pointer">
                             {{ __('Təmizlə') }}
                         </button>
@@ -68,16 +68,16 @@ window.__JOBS_CONFIG__ = {
                     <div>
                         <h4 class="text-xs font-bold text-gray-800 uppercase tracking-wider mb-2">{{ __('Axtarış') }}</h4>
                         <div class="relative">
-                            <input type="text" 
-                                   x-model="q" 
-                                   @input.debounce.400ms="applyFilters()" 
+                            <input type="text"
+                                   x-model="q"
+                                   @input.debounce.400ms="applyFilters()"
                                    @keydown.enter.prevent="applyFilters()"
-                                   placeholder="{{ __('Vəzifə və ya şirkət...') }}" 
+                                   placeholder="{{ __('Vəzifə və ya şirkət...') }}"
                                    class="w-full pl-8 pr-7 py-2 bg-gray-50 hover:bg-white focus:bg-white border border-gray-200 rounded-lg focus:outline-hidden focus:border-primary focus:ring-1 focus:ring-primary text-xs transition">
                             <i class="fas fa-search absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400 text-[11px]"></i>
-                            <button type="button" 
-                                    x-show="q" 
-                                    @click="q = ''; applyFilters()" 
+                            <button type="button"
+                                    x-show="q"
+                                    @click="q = ''; applyFilters()"
                                     class="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 text-xs cursor-pointer">
                                 <i class="fas fa-times"></i>
                             </button>
@@ -94,7 +94,6 @@ window.__JOBS_CONFIG__ = {
                                     @click="clearCategories()"
                                     class="w-full flex items-center gap-2 px-2.5 py-2 rounded-lg transition text-left cursor-pointer"
                                     :class="!category.length ? 'bg-primary text-white font-semibold shadow-xs' : 'text-gray-600 hover:bg-gray-50'">
-                                <i class="fas fa-th-large text-[10px]"></i>
                                 <span>{{ __('Bütün kateqoriyalar') }}</span>
                             </button>
 
@@ -104,7 +103,7 @@ window.__JOBS_CONFIG__ = {
                                 <div class="flex items-center justify-between rounded-lg transition group"
                                      :class="category.includes('{{ $cat->slug }}') ? 'bg-orange-50 text-primary font-bold' : 'text-gray-700 hover:bg-gray-50'">
                                     <button type="button"
-                                            @click="toggleCategory('{{ $cat->slug }}')"
+                                            @click="toggleCategory('{{ $cat->slug }}', null, @json($cat->children->pluck('slug')->values()))"
                                             class="flex-1 text-left px-2.5 py-2 truncate cursor-pointer"
                                             :aria-expanded="isAccordionOpen('{{ $cat->slug }}')">
                                         <span class="truncate">{{ $cat->name }}</span>
@@ -303,7 +302,7 @@ window.__JOBS_CONFIG__ = {
 
             <!-- List Area -->
             <div class="lg:w-3/4 w-full">
-                
+
                 <!-- List Header (Title + Count + Sorting) -->
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-5 pb-3 border-b border-gray-200">
                     <div>
@@ -320,12 +319,18 @@ window.__JOBS_CONFIG__ = {
 
                     <div class="flex items-center gap-2 text-xs">
                         <span class="text-gray-500 hidden sm:inline">{{ __('Sıralama:') }}</span>
-                        <select x-model="sort" 
-                                @change="applyFilters()" 
+                        <select x-model="sort"
+                                @change="applyFilters()"
                                 class="text-xs border border-gray-200 rounded-lg px-3 py-1.5 bg-white focus:outline-hidden focus:border-primary text-gray-700 shadow-2xs cursor-pointer">
                             <option value="latest">{{ __('Tarixə görə (yeni)') }}</option>
-                            <option value="salary_high">{{ __('Maaşa görə (çoxdan aza)') }}</option>
+                            <option value="oldest">{{ __('Tarixə görə (köhnə)') }}</option>
+                            <option value="salary_desc">{{ __('Maaşa görə (çoxdan aza)') }}</option>
+                            <option value="salary_asc">{{ __('Maaşa görə (azdan çoxa)') }}</option>
                             <option value="views">{{ __('Ən çox baxılan') }}</option>
+                            <option value="deadline">{{ __('Son müraciət tarixinə görə') }}</option>
+                            <option value="featured">{{ __('Premium elanlar') }}</option>
+                            <option value="title_asc">{{ __('Əlifba sırası (A-Z)') }}</option>
+                            <option value="title_desc">{{ __('Əlifba sırası (Z-A)') }}</option>
                         </select>
                     </div>
                 </div>

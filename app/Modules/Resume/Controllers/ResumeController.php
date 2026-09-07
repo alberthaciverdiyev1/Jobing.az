@@ -49,8 +49,12 @@ class ResumeController extends Controller
 
         // Sorting
         $sort = $request->input('sort', 'latest');
-        if ($sort === 'alphabetical') {
+        if ($sort === 'oldest') {
+            $query->oldest();
+        } elseif ($sort === 'alphabetical') {
             $query->orderBy('first_name', 'asc')->orderBy('last_name', 'asc');
+        } elseif ($sort === 'alphabetical_desc') {
+            $query->orderBy('first_name', 'desc')->orderBy('last_name', 'desc');
         } else {
             $query->latest();
         }

@@ -39,7 +39,7 @@
 
         <!-- Mobile Filter Trigger -->
         <div class="lg:hidden mb-4">
-            <button type="button" 
+            <button type="button"
                     @click="mobileFiltersOpen = !mobileFiltersOpen"
                     class="w-full flex items-center justify-between px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-xs font-bold text-gray-700 shadow-2xs cursor-pointer">
                 <span class="flex items-center gap-2">
@@ -67,7 +67,7 @@
                                 <span>{{ __('Filtrlər') }}</span>
                             </h3>
                             @if(request()->hasAny(['q', 'skills', 'city']))
-                            <a href="{{ route('resumes.index', array_merge(request()->only(['sort']))) }}" 
+                            <a href="{{ route('resumes.index', array_merge(request()->only(['sort']))) }}"
                                class="text-xs text-primary hover:text-primary-dark font-medium transition cursor-pointer">
                                 {{ __('Təmizlə') }}
                             </a>
@@ -78,22 +78,22 @@
                         <div>
                             <h4 class="text-xs font-bold text-gray-800 uppercase tracking-wider mb-2">{{ __('Axtarış') }}</h4>
                             <div class="relative">
-                                <input type="text" 
-                                       name="q" 
+                                <input type="text"
+                                       name="q"
                                        value="{{ request('q') }}"
-                                       placeholder="{{ __('Vəzifə, ad, bacarıq...') }}" 
+                                       placeholder="{{ __('Vəzifə, ad, bacarıq...') }}"
                                        onkeydown="if(event.key === 'Enter') this.form.submit()"
                                        class="w-full pl-8 pr-7 py-2 bg-gray-50 hover:bg-white focus:bg-white border border-gray-200 rounded-lg focus:outline-hidden focus:border-primary focus:ring-1 focus:ring-primary text-xs transition">
                                 <i class="fas fa-search absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400 text-[11px]"></i>
                                 @if(request('q'))
-                                <a href="{{ route('resumes.index', array_merge(request()->except('q'))) }}" 
+                                <a href="{{ route('resumes.index', array_merge(request()->except('q'))) }}"
                                    class="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 text-xs cursor-pointer">
                                     <i class="fas fa-times"></i>
                                 </a>
                                 @endif
                             </div>
                         </div>
-                        
+
                         <!-- Hidden Category Input for persistence -->
                         <input type="hidden" name="category" :value="selectedCategory">
 
@@ -101,32 +101,30 @@
                         <div class="pt-3 border-t border-gray-100">
                             <div class="flex items-center justify-between mb-2">
                                 <h4 class="text-xs font-bold text-gray-800 uppercase tracking-wider">{{ __('Kateqoriya') }}</h4>
-                                <button type="button" 
-                                        x-show="selectedCategory !== ''" 
-                                        @click="selectCategory('')" 
+                                <button type="button"
+                                        x-show="selectedCategory !== ''"
+                                        @click="selectCategory('')"
                                         class="text-[10px] text-primary font-bold hover:underline cursor-pointer">
                                     {{ __('Bütün kateqoriyalar') }}
                                 </button>
                             </div>
 
                             <div class="space-y-1 text-xs">
-                                <button type="button" 
+                                <button type="button"
                                         @click="selectCategory('')"
                                         class="w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg transition text-left cursor-pointer"
                                         :class="selectedCategory === '' ? 'bg-orange-50 text-primary font-bold border border-orange-200 shadow-2xs' : 'text-gray-600 hover:bg-gray-50 border border-transparent'">
                                     <span class="flex items-center gap-2">
-                                        <i class="fas fa-th-large text-[11px]" :class="selectedCategory === '' ? 'text-primary' : 'text-gray-400'"></i>
                                         <span>{{ __('Bütün Sahələr') }}</span>
                                     </span>
                                 </button>
 
                                 @foreach($categories as $cat)
-                                <button type="button" 
+                                <button type="button"
                                         @click="selectCategory('{{ $cat->slug }}')"
                                         class="w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg transition text-left cursor-pointer"
                                         :class="selectedCategory === '{{ $cat->slug }}' ? 'bg-orange-50 text-primary font-bold border border-orange-200 shadow-2xs' : 'text-gray-600 hover:bg-gray-50 border border-transparent'">
                                     <span class="flex items-center gap-2">
-                                        <i class="fas fa-folder text-[11px]" :class="selectedCategory === '{{ $cat->slug }}' ? 'text-primary' : 'text-gray-400'"></i>
                                         <span class="truncate">{{ $cat->name }}</span>
                                     </span>
                                     @if(isset($categorySkillsMap[$cat->slug]))
@@ -144,18 +142,14 @@
                                 <span class="text-[10px] text-gray-400 font-medium" x-text="filteredSkills.length + ' {{ __('bacarıq') }}'"></span>
                             </div>
 
-                            <p class="text-[11px] text-gray-400 mb-2 leading-tight">
-                                {{ __('Axtardığınız namizədlərin bacarıqlarını seçin.') }}
-                            </p>
-
                             <!-- Skills list -->
                             <div class="space-y-1 text-xs max-h-60 overflow-y-auto pr-1">
                                 <template x-for="sk in filteredSkills" :key="sk.name">
                                     <label class="w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg transition text-left cursor-pointer select-none"
                                            :class="isSkillSelected(sk.name) ? 'bg-orange-50 text-primary font-bold' : 'text-gray-600 hover:bg-gray-50'">
-                                        <input type="checkbox" 
-                                               name="skills[]" 
-                                               :value="sk.name" 
+                                        <input type="checkbox"
+                                               name="skills[]"
+                                               :value="sk.name"
                                                :checked="isSkillSelected(sk.name)"
                                                @change="toggleSkill(sk.name)"
                                                class="sr-only">
@@ -233,12 +227,14 @@
 
                     <div class="flex items-center gap-2 text-xs">
                         <span class="text-gray-500 hidden sm:inline">{{ __('Sıralama:') }}</span>
-                        <select name="sort" 
+                        <select name="sort"
                                 form="resumesFilterForm"
-                                onchange="document.getElementById('resumesFilterForm').submit()" 
+                                onchange="document.getElementById('resumesFilterForm').submit()"
                                 class="text-xs border border-gray-200 rounded-lg px-3 py-1.5 bg-white focus:outline-hidden focus:border-primary text-gray-700 shadow-2xs cursor-pointer">
                             <option value="latest" @selected(request('sort') === 'latest')>{{ __('Tarixə görə (yeni)') }}</option>
+                            <option value="oldest" @selected(request('sort') === 'oldest')>{{ __('Tarixə görə (köhnə)') }}</option>
                             <option value="alphabetical" @selected(request('sort') === 'alphabetical')>{{ __('Əlifba sırası (A-Z)') }}</option>
+                            <option value="alphabetical_desc" @selected(request('sort') === 'alphabetical_desc')>{{ __('Əlifba sırası (Z-A)') }}</option>
                         </select>
                     </div>
                 </div>
