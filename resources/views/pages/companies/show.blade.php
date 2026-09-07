@@ -159,13 +159,13 @@
                         </div>
                         @endif
 
-                        @if($company->location)
+                        @if($company->city_name)
                         <div class="flex items-start gap-3">
                             <i class="fas fa-map-marker-alt text-gray-400 text-xs mt-0.5"></i>
                             <div class="min-w-0 flex-1">
                                 <span class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider block">{{ __('Ünvan') }}</span>
                                 <span class="text-gray-800 font-medium block">
-                                    {{ $company->location }}
+                                    {{ $company->city_name }}
                                 </span>
                             </div>
                         </div>
