@@ -1,17 +1,17 @@
 @if ($paginator->hasPages())
     <div class="flex flex-col items-center justify-center my-6">
-        <nav role="navigation" aria-label="{{ __('Səhifələmə') }}">
+        <nav role="navigation" aria-label="{{ __('Pagination') }}">
             <ul class="inline-flex items-center gap-1 sm:gap-1.5 p-1 rounded-2xl bg-white shadow-2xs">
                 {{-- Previous Page Link --}}
                 @if ($paginator->onFirstPage())
-                    <li aria-disabled="true" aria-label="{{ __('Əvvəlki') }}">
+                    <li aria-disabled="true" aria-label="{{ __('Previous') }}">
                         <span class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center text-gray-300 bg-gray-50/60 cursor-not-allowed text-xs select-none">
                             <i class="fas fa-chevron-left text-[11px]"></i>
                         </span>
                     </li>
                 @else
                     <li>
-                        <a href="{{ $paginator->previousPageUrl() }}" rel="prev" aria-label="{{ __('Əvvəlki') }}"
+                        <a href="{{ $paginator->previousPageUrl() }}" rel="prev" aria-label="{{ __('Previous') }}"
                            class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center text-gray-700 bg-white hover:bg-orange-50 hover:text-primary transition text-xs font-bold shadow-2xs hover:shadow-xs">
                             <i class="fas fa-chevron-left text-[11px]"></i>
                         </a>
@@ -53,13 +53,13 @@
                 {{-- Next Page Link --}}
                 @if ($paginator->hasMorePages())
                     <li>
-                        <a href="{{ $paginator->nextPageUrl() }}" rel="next" aria-label="{{ __('Növbəti') }}"
+                        <a href="{{ $paginator->nextPageUrl() }}" rel="next" aria-label="{{ __('Next') }}"
                            class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center text-gray-700 bg-white hover:bg-orange-50 hover:text-primary transition text-xs font-bold shadow-2xs hover:shadow-xs">
                             <i class="fas fa-chevron-right text-[11px]"></i>
                         </a>
                     </li>
                 @else
-                    <li aria-disabled="true" aria-label="{{ __('Növbəti') }}">
+                    <li aria-disabled="true" aria-label="{{ __('Next') }}">
                         <span class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center text-gray-300 bg-gray-50/60 cursor-not-allowed text-xs select-none">
                             <i class="fas fa-chevron-right text-[11px]"></i>
                         </span>
@@ -70,7 +70,7 @@
 
         {{-- Results Info Under Pagination --}}
         <p class="text-xs text-gray-400 mt-2.5 text-center select-none">
-            {!! __('Cəmi :total nəticədən :first - :last arası göstərilir', [
+            {!! __('Showing :first - :last of :total results', [
                 'first' => '<span class="font-bold text-gray-700">' . $paginator->firstItem() . '</span>',
                 'last' => '<span class="font-bold text-gray-700">' . $paginator->lastItem() . '</span>',
                 'total' => '<span class="font-bold text-primary">' . $paginator->total() . '</span>'

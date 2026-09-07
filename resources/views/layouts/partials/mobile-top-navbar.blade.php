@@ -42,7 +42,7 @@
                  x-transition:leave-end="transform opacity-0 scale-95"
                  class="absolute right-0 mt-2 w-44 bg-white rounded-2xl shadow-2xl border border-gray-100 py-1.5 z-50 overflow-hidden">
                 <div class="px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-gray-400 border-b border-gray-100 mb-1">
-                    {{ __('Dil seçimi') }}
+                    {{ __('Language selection') }}
                 </div>
                 @foreach($locales as $lCode => $lData)
                     <a href="{{ route('lang.switch', $lCode) }}" 
@@ -77,7 +77,7 @@
         <a href="{{ route('login') }}"
            class="inline-flex items-center gap-1 bg-gray-900 text-white text-[11px] font-bold px-2.5 py-1.5 rounded-xl shadow-2xs active:scale-95 transition">
             <i class="fa-solid fa-arrow-right-to-bracket text-[10px]"></i>
-            <span>{{ __('Giriş') }}</span>
+            <span>{{ __('Login') }}</span>
         </a>
         @endauth
     </div>

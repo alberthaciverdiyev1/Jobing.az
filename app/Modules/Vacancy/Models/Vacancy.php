@@ -144,7 +144,7 @@ class Vacancy extends Model
     public function getFormattedSalaryAttribute(): string
     {
         if ($this->salary_negotiable) {
-            return __('Razılaşma yolu ilə');
+            return __('Negotiable');
         }
 
         $symbol = match($this->currency) {
@@ -156,7 +156,7 @@ class Vacancy extends Model
         };
 
         if (!$this->salary_min && !$this->salary_max) {
-            return __('Maaş göstərilməyib');
+            return __('Salary not specified');
         }
 
         if ($this->salary_min && $this->salary_max) {
@@ -167,7 +167,7 @@ class Vacancy extends Model
             return number_format($this->salary_min, 0, ',', '.') . '+ ' . $symbol;
         }
 
-        return __('qədər') . ' ' . number_format($this->salary_max, 0, ',', '.') . ' ' . $symbol;
+        return __('up to') . ' ' . number_format($this->salary_max, 0, ',', '.') . ' ' . $symbol;
     }
 
     public function hasApplicationField(string $field): bool

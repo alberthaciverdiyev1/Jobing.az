@@ -2,7 +2,7 @@
 @if(!empty($selectedCategories) && $selectedCategories->isNotEmpty())
 <div class="bg-orange-50/70 border border-orange-100 rounded-xl p-4 mb-4 flex items-center justify-between gap-3">
     <div>
-        <span class="text-xs text-orange-950 font-bold uppercase tracking-wider block mb-1.5">{{ __('Kateqoriyalar:') }}</span>
+        <span class="text-xs text-orange-950 font-bold uppercase tracking-wider block mb-1.5">{{ __('Categories:') }}</span>
         <div class="flex flex-wrap gap-1.5">
             @foreach($selectedCategories as $sc)
             <span class="text-xs font-semibold text-orange-900 bg-white/70 px-2 py-0.5 rounded border border-orange-100">{{ $sc->name }}</span>
@@ -11,7 +11,7 @@
     </div>
     <button type="button" @click="resetAllFilters()"
             class="text-xs text-primary font-bold hover:underline cursor-pointer shrink-0">
-        {{ __('Filtrı sıfırla') }} ✕
+        {{ __('Reset filter') }} ✕
     </button>
 </div>
 @endif
@@ -31,13 +31,13 @@
 @else
 <!-- Empty State -->
 <x-empty-state icon="fa-search"
-               :title="__('Axtarışa uyğun vakansiya tapılmadı')"
-               :description="__('Axtarış sözünü dəyişərək və ya filtrləri sıfırlayaraq yenidən cəhd edə bilərsiniz.')">
+               :title="__('No vacancies matching your search')"
+               :description="__('You can try again by changing your search term or resetting filters.')">
     @slot('actions')
     <button type="button" @click="resetAllFilters()"
             class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary hover:bg-primary-dark text-white text-xs font-bold transition shadow-xs cursor-pointer">
         <i class="fas fa-sync-alt text-xs"></i>
-        <span>{{ __('Bütün filtrləri sıfırla') }}</span>
+        <span>{{ __('Reset all filters') }}</span>
     </button>
     @endslot
 </x-empty-state>

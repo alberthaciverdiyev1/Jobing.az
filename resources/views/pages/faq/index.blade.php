@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', __('Sıkça Sorulan Sorular') . ' - ' . config('app.full_name'))
+@section('title', __('Frequently Asked Questions') . ' - ' . config('app.full_name'))
 
 @section('content')
 <div class="bg-gray-50 min-h-screen pb-16">
@@ -11,13 +11,13 @@
             <div class="w-14 h-14 bg-primary/10 text-primary rounded-2xl flex items-center justify-center mx-auto mb-4 border border-orange-100">
                 <i class="fas fa-question text-xl"></i>
             </div>
-            <h1 class="text-3xl font-extrabold text-gray-900 tracking-tight">{{ __('Sıkça Sorulan Sorular') }}</h1>
-            <p class="text-sm text-gray-500 mt-2 max-w-lg mx-auto">{{ __('İş axtarışı və vakansiya prosesləri ilə bağlı ən çox verilən suallar.') }}</p>
+            <h1 class="text-3xl font-extrabold text-gray-900 tracking-tight">{{ __('Frequently Asked Questions') }}</h1>
+            <p class="text-sm text-gray-500 mt-2 max-w-lg mx-auto">{{ __('The most frequently asked questions about job search and hiring processes.') }}</p>
         </div>
 
         @if($faqGroups->isEmpty())
         <div class="text-center py-16 bg-white rounded-2xl border border-gray-200 p-8 shadow-2xs">
-            <p class="text-sm text-gray-500">{{ __('Hələ heç bir sual əlavə olunmayıb.') }}</p>
+            <p class="text-sm text-gray-500">{{ __('No questions have been added yet.') }}</p>
         </div>
         @else
         <!-- FAQ Accordion (Alpine.js) -->
@@ -63,11 +63,11 @@
 
         <!-- Contact CTA -->
         <div class="mt-10 text-center bg-white rounded-2xl border border-gray-200 p-8 shadow-2xs">
-            <h3 class="text-base font-bold text-gray-900 mb-1">{{ __('Cavabınızı tapa bilmədiniz?') }}</h3>
-            <p class="text-xs text-gray-500 mb-5">{{ __('Bizimlə əlaqə saxlayın, sizə kömək edək.') }}</p>
+            <h3 class="text-base font-bold text-gray-900 mb-1">{{ __("Couldn't find your answer?") }}</h3>
+            <p class="text-xs text-gray-500 mb-5">{{ __("Contact us and we'll be happy to help.") }}</p>
             <a href="{{ route('companies.index') }}" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary hover:bg-primary-dark text-white text-xs font-bold transition shadow-xs cursor-pointer">
                 <i class="fas fa-paper-plane text-xs"></i>
-                <span>{{ __('Əlaqə saxla') }}</span>
+                <span>{{ __('Contact') }}</span>
             </a>
         </div>
 

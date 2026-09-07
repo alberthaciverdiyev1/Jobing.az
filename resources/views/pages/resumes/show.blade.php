@@ -28,7 +28,7 @@
                         </div>
 
                         <p class="text-sm sm:text-base font-bold text-primary">
-                            {{ $resume->title ?: __('Mütəxəssis') }}
+                            {{ $resume->title ?: __('Specialist') }}
                         </p>
                     </div>
                 </div>
@@ -39,7 +39,7 @@
                     <a href="{{ $resume->whatsapp_url }}" target="_blank"
                        class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition shadow-xs">
                         <i class="fab fa-whatsapp text-sm"></i>
-                        <span>{{ __('WhatsApp ilə yaz') }}</span>
+                        <span>{{ __('Write on WhatsApp') }}</span>
                     </a>
                     @endif
 
@@ -47,7 +47,7 @@
                     <a href="mailto:{{ $resume->email }}"
                        class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-primary hover:bg-primary-dark text-white text-xs font-bold transition shadow-xs">
                         <i class="far fa-envelope text-xs"></i>
-                        <span>{{ __('E-poçt Göndər') }}</span>
+                        <span>{{ __('Send Email') }}</span>
                     </a>
                     @endif
 
@@ -55,7 +55,7 @@
                     <a href="tel:{{ $resume->phone }}"
                        class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-gray-200 hover:border-primary hover:text-primary bg-white text-gray-800 text-xs font-bold transition shadow-2xs">
                         <i class="fas fa-phone text-xs text-primary"></i>
-                        <span>{{ __('Zəng Et') }}</span>
+                        <span>{{ __('Call') }}</span>
                     </a>
                     @endif
                 </div>
@@ -76,7 +76,7 @@
                 <div class="bg-white rounded-2xl border border-gray-200 p-6 shadow-2xs">
                     <h3 class="text-sm font-bold text-gray-900 uppercase tracking-wider mb-3 flex items-center gap-2">
                         <i class="fas fa-user-tie text-primary text-xs"></i>
-                        <span>{{ __('Haqqında / Peşəkar Xülasə') }}</span>
+                        <span>{{ __('About / Professional Summary') }}</span>
                     </h3>
                     <div class="text-xs sm:text-sm text-gray-700 leading-relaxed whitespace-pre-line">
                         {{ $resume->summary }}
@@ -89,7 +89,7 @@
                 <div class="bg-white rounded-2xl border border-gray-200 p-6 shadow-2xs">
                     <h3 class="text-sm font-bold text-gray-900 uppercase tracking-wider mb-5 flex items-center gap-2">
                         <i class="fas fa-briefcase text-primary text-xs"></i>
-                        <span>{{ __('İş Təcrübəsi') }}</span>
+                        <span>{{ __('Work Experience') }}</span>
                     </h3>
 
                     <div class="space-y-6 relative before:absolute before:inset-0 before:left-3.5 before:w-0.5 before:bg-gray-100">
@@ -106,7 +106,7 @@
                                         {{ $exp['position'] ?? '' }}
                                     </h4>
                                     <span class="text-xs font-mono font-medium text-gray-500">
-                                        {{ $exp['start_date'] ?? '' }} — {{ !empty($exp['is_current']) ? __('Hal-hazırda') : ($exp['end_date'] ?? '') }}
+                                        {{ $exp['start_date'] ?? '' }} — {{ !empty($exp['is_current']) ? __('Currently') : ($exp['end_date'] ?? '') }}
                                     </span>
                                 </div>
 
@@ -136,7 +136,7 @@
                 <div class="bg-white rounded-2xl border border-gray-200 p-6 shadow-2xs">
                     <h3 class="text-sm font-bold text-gray-900 uppercase tracking-wider mb-5 flex items-center gap-2">
                         <i class="fas fa-graduation-cap text-primary text-xs"></i>
-                        <span>{{ __('Təhsil') }}</span>
+                        <span>{{ __('Education') }}</span>
                     </h3>
 
                     <div class="space-y-4">
@@ -152,7 +152,7 @@
                                         {{ $edu['institution'] ?? '' }}
                                     </h4>
                                     <span class="text-xs font-mono text-gray-500">
-                                        {{ $edu['start_date'] ?? '' }} — {{ !empty($edu['is_current']) ? __('Davam edir') : ($edu['end_date'] ?? '') }}
+                                        {{ $edu['start_date'] ?? '' }} — {{ !empty($edu['is_current']) ? __('Ongoing') : ($edu['end_date'] ?? '') }}
                                     </span>
                                 </div>
 
@@ -174,7 +174,7 @@
                 <div class="bg-white rounded-2xl border border-gray-200 p-6 shadow-2xs">
                     <h3 class="text-sm font-bold text-gray-900 uppercase tracking-wider mb-4 flex items-center gap-2">
                         <i class="fas fa-laptop-code text-primary text-xs"></i>
-                        <span>{{ __('Layihələr') }}</span>
+                        <span>{{ __('Projects') }}</span>
                     </h3>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -230,7 +230,7 @@
                 <div class="bg-white rounded-2xl border border-gray-200 p-6 shadow-2xs">
                     <h3 class="text-sm font-bold text-gray-900 uppercase tracking-wider mb-4 flex items-center gap-2">
                         <i class="fas fa-award text-primary text-xs"></i>
-                        <span>{{ __('Sertifikatlar və Mükafatlar') }}</span>
+                        <span>{{ __('Certificates and Awards') }}</span>
                     </h3>
 
                     <div class="space-y-3">
@@ -280,7 +280,7 @@
                 <div class="bg-white rounded-2xl border border-gray-200 p-6 shadow-2xs">
                     <h3 class="text-sm font-bold text-gray-900 uppercase tracking-wider mb-4 flex items-center gap-2">
                         <i class="fas fa-hands-helping text-primary text-xs"></i>
-                        <span>{{ __('Könüllülük Fəaliyyəti') }}</span>
+                        <span>{{ __('Volunteer Experience') }}</span>
                     </h3>
 
                     <div class="space-y-3">
@@ -289,7 +289,7 @@
                             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
                                 <h4 class="text-xs font-bold text-gray-900">{{ $vol['role'] ?? '' }}</h4>
                                 @if(!empty($vol['start_date']))
-                                <span class="text-gray-400 font-mono text-[11px]">{{ $vol['start_date'] }} — {{ !empty($vol['end_date']) ? $vol['end_date'] : __('Davam edir') }}</span>
+                                <span class="text-gray-400 font-mono text-[11px]">{{ $vol['start_date'] }} — {{ !empty($vol['end_date']) ? $vol['end_date'] : __('Ongoing') }}</span>
                                 @endif
                             </div>
                             <span class="text-xs font-semibold text-primary block">{{ $vol['organization'] ?? '' }}</span>
@@ -313,7 +313,7 @@
                 <div class="bg-white rounded-2xl border border-gray-200 p-6 shadow-2xs space-y-4">
                     <h3 class="text-xs font-bold text-gray-900 uppercase tracking-wider pb-3 border-b border-gray-100 flex items-center gap-2">
                         <i class="fas fa-address-card text-primary text-xs"></i>
-                        <span>{{ __('Əlaqə Məlumatları') }}</span>
+                        <span>{{ __('Contact Information') }}</span>
                     </h3>
 
                     <div class="space-y-3 text-xs">
@@ -323,7 +323,7 @@
                                 <i class="far fa-envelope"></i>
                             </div>
                             <div class="min-w-0 flex-1 pt-1">
-                                <span class="text-[10px] text-gray-400 uppercase tracking-wider block font-bold">{{ __('E-poçt') }}</span>
+                                <span class="text-[10px] text-gray-400 uppercase tracking-wider block font-bold">{{ __('Email') }}</span>
                                 <a href="mailto:{{ $resume->email }}" class="font-bold text-gray-900 hover:text-primary transition truncate block">{{ $resume->email }}</a>
                             </div>
                         </div>
@@ -335,7 +335,7 @@
                                 <i class="fas fa-phone"></i>
                             </div>
                             <div class="min-w-0 flex-1 pt-1">
-                                <span class="text-[10px] text-gray-400 uppercase tracking-wider block font-bold">{{ __('Telefon') }}</span>
+                                <span class="text-[10px] text-gray-400 uppercase tracking-wider block font-bold">{{ __('Phone') }}</span>
                                 <a href="tel:{{ $resume->phone }}" class="font-bold text-gray-900 hover:text-primary transition truncate block">{{ $resume->phone }}</a>
                             </div>
                         </div>
@@ -362,7 +362,7 @@
                                 <i class="fas fa-map-marker-alt"></i>
                             </div>
                             <div class="min-w-0 flex-1 pt-1">
-                                <span class="text-[10px] text-gray-400 uppercase tracking-wider block font-bold">{{ __('Şəhər / Məkan') }}</span>
+                                <span class="text-[10px] text-gray-400 uppercase tracking-wider block font-bold">{{ __('City / Location') }}</span>
                                 <span class="font-bold text-gray-900 block">{{ $resume->location }}</span>
                             </div>
                         </div>
@@ -375,7 +375,7 @@
                 <div class="bg-white rounded-2xl border border-gray-200 p-6 shadow-2xs space-y-4">
                     <h3 class="text-xs font-bold text-gray-900 uppercase tracking-wider pb-3 border-b border-gray-100 flex items-center gap-2">
                         <i class="fas fa-tools text-primary text-xs"></i>
-                        <span>{{ __('Bacarıqlar') }}</span>
+                        <span>{{ __('Skills') }}</span>
                     </h3>
 
                     <div class="flex flex-wrap gap-2">
@@ -402,7 +402,7 @@
                 <div class="bg-white rounded-2xl border border-gray-200 p-6 shadow-2xs space-y-4">
                     <h3 class="text-xs font-bold text-gray-900 uppercase tracking-wider pb-3 border-b border-gray-100 flex items-center gap-2">
                         <i class="fas fa-language text-primary text-xs"></i>
-                        <span>{{ __('Xarici Dillər') }}</span>
+                        <span>{{ __('Foreign Languages') }}</span>
                     </h3>
 
                     <div class="space-y-2 text-xs">
@@ -423,7 +423,7 @@
                 <div class="bg-white rounded-2xl border border-gray-200 p-6 shadow-2xs space-y-4">
                     <h3 class="text-xs font-bold text-gray-900 uppercase tracking-wider pb-3 border-b border-gray-100 flex items-center gap-2">
                         <i class="fas fa-link text-primary text-xs"></i>
-                        <span>{{ __('Portfel və Sosial Şəbəkələr') }}</span>
+                        <span>{{ __('Portfolio and Social Networks') }}</span>
                     </h3>
 
                     <div class="space-y-2 text-xs">
@@ -454,7 +454,7 @@
                            class="flex items-center justify-between p-3 rounded-xl border border-gray-200 hover:border-primary hover:bg-orange-50/40 text-gray-700 hover:text-primary transition">
                             <span class="flex items-center gap-2 font-bold">
                                 <i class="fas fa-globe text-primary text-sm"></i>
-                                <span>{{ __('Veb Sayt / Portfel') }}</span>
+                                <span>{{ __('Website / Portfolio') }}</span>
                             </span>
                             <i class="fas fa-external-link-alt text-[10px] text-gray-400"></i>
                         </a>
@@ -468,14 +468,14 @@
                     <div class="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center mx-auto text-primary text-lg">
                         <i class="fas fa-file-pdf"></i>
                     </div>
-                    <h4 class="font-bold text-sm text-white">{{ __('CV Sənədini Çap Et') }}</h4>
+                    <h4 class="font-bold text-sm text-white">{{ __('Print CV Document') }}</h4>
                     <p class="text-xs text-slate-300 leading-relaxed">
-                        {{ __('Bu CV-ni orijinal PDF formatında endirə və ya birbaşa çap edə bilərsiniz.') }}
+                        {{ __('You can download this resume as an original PDF or print it directly.') }}
                     </p>
                     <a href="{{ route('resumes.show', ['resume' => $resume->id, 'print' => 1]) }}" target="_blank"
                        class="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-primary hover:bg-primary-dark text-white font-bold text-xs shadow-xs transition">
                         <i class="fas fa-print text-xs"></i>
-                        <span>{{ __('Çap Formatında Aç') }}</span>
+                        <span>{{ __('Open in Print Format') }}</span>
                     </a>
                 </div>
 

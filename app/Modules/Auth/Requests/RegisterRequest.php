@@ -25,11 +25,11 @@ class RegisterRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'name.required_if' => __('Ad soyad daxil edin.'),
-            'company_name.required_if' => __('Şirkət adı daxil edin.'),
-            'email.unique' => __('Bu e-poçt artıq qeydiyyatdan keçib.'),
-            'password.min' => __('Şifrə ən azı 8 simvol olmalıdır.'),
-            'password.confirmed' => __('Şifrələr uyğun gəlmir.'),
+            'name.required_if' => __('Enter your full name.'),
+            'company_name.required_if' => __('Enter the company name.'),
+            'email.unique' => __('This email is already registered.'),
+            'password.min' => __('Password must be at least 8 characters.'),
+            'password.confirmed' => __('Passwords do not match.'),
         ];
     }
 }

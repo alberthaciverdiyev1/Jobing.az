@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', __('Yeni Vakansiya Yerləşdir') . ' - ' . config('app.full_name'))
+@section('title', __('Post a New Vacancy') . ' - ' . config('app.full_name'))
 
 @section('content')
 <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet">
@@ -14,10 +14,10 @@
     <div class="bg-white border-b border-gray-200 py-10">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h1 class="text-2xl sm:text-3xl font-extrabold text-gray-900 tracking-tight">
-                {{ __('Yeni Vakansiya Yerləşdir') }}
+                {{ __('Post a New Vacancy') }}
             </h1>
             <p class="text-gray-500 text-xs sm:text-sm mt-2 max-w-xl mx-auto">
-                {{ __('Elanınızı minlərlə istedadlı namizədə çatdırın və komandanızı peşəkarlarla gücləndirin.') }}
+                {{ __('Reach thousands of talented candidates with your listing and strengthen your team with professionals.') }}
             </p>
         </div>
     </div>
@@ -124,29 +124,29 @@
             <div class="bg-white p-6 sm:p-8 rounded-2xl border border-gray-200 shadow-2xs space-y-5">
                 <div class="pb-3 border-b border-gray-100 flex items-center gap-2.5">
                     <div class="w-8 h-8 rounded-xl bg-orange-50 text-primary flex items-center justify-center font-bold text-sm">1</div>
-                    <h2 class="font-bold text-gray-900 text-base">{{ __('Şirkət Məlumatları') }}</h2>
+                    <h2 class="font-bold text-gray-900 text-base">{{ __('Company Information') }}</h2>
                 </div>
 
                 @if($authCompany)
                 <div class="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-medium flex items-start gap-2">
                     <i class="fas fa-building-circle-check mt-0.5"></i>
-                    <span>{{ __('Şirkət məlumatlarınız hesabınızdan avtomatik dolduruldu.') }}</span>
+                    <span>{{ __('Your company details were filled in automatically from your account.') }}</span>
                 </div>
                 @endif
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-xs font-bold text-gray-700 mb-1">{{ __('Şirkət Adı') }} *</label>
+                        <label class="block text-xs font-bold text-gray-700 mb-1">{{ __('Company Name') }} *</label>
                         <input type="text" name="company_name" value="{{ old('company_name', $authCompany->name ?? '') }}" required placeholder="FoxSoft Technology"
                                @if($authCompany) disabled @endif
                                class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs focus:ring-1 focus:ring-primary focus:border-primary focus:outline-hidden disabled:bg-gray-50 disabled:text-gray-500 disabled:cursor-not-allowed">
                     </div>
 
                     <div>
-                        <label class="block text-xs font-bold text-gray-700 mb-1">{{ __('Şəhər / Lokasiya') }}</label>
+                        <label class="block text-xs font-bold text-gray-700 mb-1">{{ __('City / Location') }}</label>
                         <select name="company_location"
                                 class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs focus:ring-1 focus:ring-primary focus:border-primary focus:outline-hidden bg-white">
-                            <option value="">{{ __('Şəhər seçin') }}</option>
+                            <option value="">{{ __('Select a city') }}</option>
                             @foreach($cities as $city)
                             @php
                                 $cityName = is_object($city) ? (is_array($city->name) ? ($city->name['az'] ?? reset($city->name)) : $city->name) : $city;
@@ -165,12 +165,12 @@
             <div class="bg-white p-6 sm:p-8 rounded-2xl border border-gray-200 shadow-2xs space-y-5">
                 <div class="pb-3 border-b border-gray-100 flex items-center gap-2.5">
                     <div class="w-8 h-8 rounded-xl bg-orange-50 text-primary flex items-center justify-center font-bold text-sm">2</div>
-                    <h2 class="font-bold text-gray-900 text-base">{{ __('Vakansiya Təfərrüatları') }}</h2>
+                    <h2 class="font-bold text-gray-900 text-base">{{ __('Vacancy Details') }}</h2>
                 </div>
 
                 <div class="space-y-4">
                     <div>
-                        <label class="block text-xs font-bold text-gray-700 mb-1">{{ __('Pozisiya / Vakansiya Adı') }} *</label>
+                        <label class="block text-xs font-bold text-gray-700 mb-1">{{ __('Position / Job Title') }} *</label>
                         <input type="text" name="title" x-model="jobTitle" required placeholder="Məsələn: Senior Laravel Developer"
                                class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs focus:ring-1 focus:ring-primary focus:border-primary focus:outline-hidden">
                     </div>
@@ -178,10 +178,10 @@
                     <!-- Category & Subcategory Row (Side by Side) -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div :class="subcategories.length > 0 ? '' : 'sm:col-span-2'">
-                            <label class="block text-xs font-bold text-gray-700 mb-1">{{ __('Kateqoriya') }} *</label>
+                            <label class="block text-xs font-bold text-gray-700 mb-1">{{ __('Category') }} *</label>
                             <select x-model="parentCat" @change="updateParent()" required
                                     class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs focus:ring-1 focus:ring-primary focus:border-primary focus:outline-hidden bg-white">
-                                <option value="">{{ __('Kateqoriya seçin') }}</option>
+                                <option value="">{{ __('Select category') }}</option>
                                 @foreach($categories as $parent)
                                 <option value="{{ $parent->id }}">{{ $parent->name }}</option>
                                 @endforeach
@@ -190,10 +190,10 @@
 
                         {{-- Subcategory: sits right next to Kateqoriya in the 2nd column --}}
                         <div x-show="subcategories.length > 0" x-cloak x-transition>
-                            <label class="block text-xs font-bold text-gray-700 mb-1">{{ __('Alt Kateqoriya') }}</label>
+                            <label class="block text-xs font-bold text-gray-700 mb-1">{{ __('Subcategory') }}</label>
                             <select x-model="subCat" @change="updateSubCat()"
                                     class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs focus:ring-1 focus:ring-primary focus:border-primary focus:outline-hidden bg-white">
-                                <option value="">{{ __('Alt kateqoriya seçin') }}</option>
+                                <option value="">{{ __('Select a subcategory') }}</option>
                                 <template x-for="c in subcategories" :key="c.id">
                                     <option :value="c.id" x-text="c.name"></option>
                                 </template>
@@ -207,9 +207,9 @@
                     <!-- Work Attributes Row -->
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <div>
-                            <label class="block text-xs font-bold text-gray-700 mb-1">{{ __('Çalışma Yeri') }} *</label>
+                            <label class="block text-xs font-bold text-gray-700 mb-1">{{ __('Workplace') }} *</label>
                             <select name="workplace_type_id" required class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs focus:ring-1 focus:ring-primary focus:border-primary focus:outline-hidden bg-white">
-                                <option value="">{{ __('Çalışma Yeri seçin') }}</option>
+                                <option value="">{{ __('Select workplace') }}</option>
                                 @foreach($workplaceTypes as $wt)
                                 <option value="{{ $wt->id }}" {{ old('workplace_type_id') == $wt->id ? 'selected' : '' }}>
                                     {{ $wt->name }}
@@ -219,9 +219,9 @@
                         </div>
 
                         <div>
-                            <label class="block text-xs font-bold text-gray-700 mb-1">{{ __('İş Rejimi') }} *</label>
+                            <label class="block text-xs font-bold text-gray-700 mb-1">{{ __('Employment type') }} *</label>
                             <select name="job_type_id" required class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs focus:ring-1 focus:ring-primary focus:border-primary focus:outline-hidden bg-white">
-                                <option value="">{{ __('İş Rejimi seçin') }}</option>
+                                <option value="">{{ __('Select employment type') }}</option>
                                 @foreach($jobTypes as $jt)
                                 <option value="{{ $jt->id }}" {{ old('job_type_id') == $jt->id ? 'selected' : '' }}>
                                     {{ $jt->name }}
@@ -231,9 +231,9 @@
                         </div>
 
                         <div>
-                            <label class="block text-xs font-bold text-gray-700 mb-1">{{ __('Deneyim Seviyesi') }} *</label>
+                            <label class="block text-xs font-bold text-gray-700 mb-1">{{ __('Experience Level') }} *</label>
                             <select name="experience_level_id" required class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs focus:ring-1 focus:ring-primary focus:border-primary focus:outline-hidden bg-white">
-                                <option value="">{{ __('Deneyim Seviyesi seçin') }}</option>
+                                <option value="">{{ __('Select experience level') }}</option>
                                 @foreach($experienceLevels as $el)
                                 <option value="{{ $el->id }}" {{ old('experience_level_id') == $el->id ? 'selected' : '' }}>
                                     {{ $el->name }}
@@ -248,23 +248,23 @@
                            :class="salaryNegotiable ? 'border-primary bg-orange-50/60' : 'border-gray-200 hover:border-gray-300'">
                         <input type="checkbox" name="salary_negotiable" value="1" x-model="salaryNegotiable" class="mt-0.5 rounded border-gray-300 text-primary focus:ring-primary">
                         <span class="flex flex-col gap-0.5">
-                            <span class="text-xs font-bold text-gray-900">{{ __('Maaş razılaşma yolu ilə') }}</span>
+                            <span class="text-xs font-bold text-gray-900">{{ __('Salary negotiable') }}</span>
                         </span>
                     </label>
 
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <div>
-                            <label class="block text-xs font-bold text-gray-700 mb-1">{{ __('Minimum Maaş') }}</label>
+                            <label class="block text-xs font-bold text-gray-700 mb-1">{{ __('Minimum Salary') }}</label>
                             <input type="number" name="salary_min" value="{{ old('salary_min') }}" placeholder="1500" :disabled="salaryNegotiable"
                                    class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs focus:ring-1 focus:ring-primary focus:border-primary focus:outline-hidden disabled:bg-gray-50 disabled:text-gray-400 disabled:cursor-not-allowed">
                         </div>
                         <div>
-                            <label class="block text-xs font-bold text-gray-700 mb-1">{{ __('Maksimum Maaş') }}</label>
+                            <label class="block text-xs font-bold text-gray-700 mb-1">{{ __('Maximum Salary') }}</label>
                             <input type="number" name="salary_max" value="{{ old('salary_max') }}" placeholder="3000" :disabled="salaryNegotiable"
                                    class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs focus:ring-1 focus:ring-primary focus:border-primary focus:outline-hidden disabled:bg-gray-50 disabled:text-gray-400 disabled:cursor-not-allowed">
                         </div>
                         <div>
-                            <label class="block text-xs font-bold text-gray-700 mb-1">{{ __('Məzənnə (Valyuta)') }}</label>
+                            <label class="block text-xs font-bold text-gray-700 mb-1">{{ __('Currency') }}</label>
                             <select name="currency" :disabled="salaryNegotiable" class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs focus:ring-1 focus:ring-primary focus:border-primary focus:outline-hidden bg-white disabled:bg-gray-50 disabled:text-gray-400 disabled:cursor-not-allowed">
                                 <option value="AZN" {{ old('currency') == 'AZN' ? 'selected' : '' }}>AZN (₼)</option>
                                 <option value="USD" {{ old('currency') == 'USD' ? 'selected' : '' }}>USD ($)</option>
@@ -280,10 +280,10 @@
                     <div>
                         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-2">
                             <label class="block text-xs font-bold text-gray-700">
-                                {{ __('Tələb olunan Bacarıqlar') }}
+                                {{ __('Required Skills') }}
                             </label>
                             <span class="text-[11px] text-gray-400">
-                                <span x-text="selectedSkills.length" class="font-bold text-primary"></span> {{ __('bacarıq seçilib') }}
+                                <span x-text="selectedSkills.length" class="font-bold text-primary"></span> {{ __('skill selected') }}
                             </span>
                         </div>
 
@@ -297,13 +297,13 @@
                             <div class="flex items-center justify-between mb-2">
                                 <span class="text-[11px] font-bold text-orange-950 uppercase tracking-wider flex items-center gap-1.5">
                                     <i class="fas fa-check-circle text-primary text-xs"></i>
-                                    <span>{{ __('Seçilmiş Bacarıqlar') }}</span>
+                                    <span>{{ __('Selected Skills') }}</span>
                                     <span class="px-1.5 py-0.2 rounded-full bg-primary text-white text-[10px] font-bold" x-text="selectedSkills.length"></span>
                                 </span>
                                 <button type="button"
                                         @click="selectedSkills = []"
                                         class="text-[11px] text-gray-500 hover:text-rose-600 transition font-medium hover:underline cursor-pointer">
-                                    {{ __('Hamısını təmizlə') }}
+                                    {{ __('Clear all') }}
                                 </button>
                             </div>
                             <div class="flex flex-wrap gap-1.5">
@@ -313,7 +313,7 @@
                                         <button type="button"
                                                 @click="selectedSkills = selectedSkills.filter(s => s !== skill)"
                                                 class="w-4 h-4 rounded-full hover:bg-orange-100 text-gray-400 hover:text-rose-600 flex items-center justify-center transition cursor-pointer"
-                                                title="{{ __('Sil') }}">
+                                                title="{{ __('Delete') }}">
                                             <i class="fas fa-times text-[9px]"></i>
                                         </button>
                                     </span>
@@ -324,7 +324,7 @@
                         <!-- Prompt when no category is selected -->
                         <div x-show="!parentCat" class="text-center py-5 px-4 rounded-xl border border-dashed border-gray-200 bg-gray-50/50">
                             <i class="fas fa-layer-group text-gray-300 text-lg mb-1 block"></i>
-                            <p class="text-xs text-gray-500">{{ __('Müvafiq bacarıqları görmək üçün əvvəlcə yuxarıdan Kateqoriya seçin.') }}</p>
+                            <p class="text-xs text-gray-500">{{ __('First select a Category above to see the relevant skills.') }}</p>
                         </div>
 
                         <!-- Search within skills (Shown when category is selected and has skills) -->
@@ -332,7 +332,7 @@
                             <div class="relative">
                                 <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs pointer-events-none"></i>
                                 <input type="text"
-                                       placeholder="{{ __('Bu kateqoriya üzrə bacarıq axtar...') }}"
+                                       placeholder="{{ __('Search skills in this category...') }}"
                                        x-model="skillSearch"
                                        class="w-full pl-9 pr-3.5 py-2 rounded-xl border border-gray-200 text-xs focus:ring-1 focus:ring-primary focus:border-primary focus:outline-hidden bg-gray-50/60">
                             </div>
@@ -355,34 +355,34 @@
 
                         <!-- No skills matching search query -->
                         <div x-show="parentCat && categorySkills.length > 0 && filteredSkills.length === 0" class="text-center py-4 px-3 rounded-xl border border-dashed border-gray-200 bg-gray-50/50">
-                            <p class="text-xs text-gray-400">{{ __('Axtarışa uyğun bacarıq tapılmadı.') }}</p>
+                            <p class="text-xs text-gray-400">{{ __('No skills matching your search found.') }}</p>
                         </div>
 
                         <!-- Category has no skills assigned yet -->
                         <div x-show="parentCat && categorySkills.length === 0" class="text-center py-5 px-4 rounded-xl border border-dashed border-gray-200 bg-gray-50/50">
-                            <p class="text-xs text-gray-400">{{ __('Bu kateqoriyaya aid əlavə edilmiş bacarıq yoxdur.') }}</p>
+                            <p class="text-xs text-gray-400">{{ __('No skills have been added for this category.') }}</p>
                         </div>
 
                         <span class="text-[11px] text-gray-400 mt-1.5 block">
-                            {{ __('Müvafiq bacarıqları işarələyin. Seçilən bacarıqlar vakansiya kartında etiket kimi göstəriləcək.') }}
+                            {{ __('Select the relevant skills. The selected skills will be shown as tags on the vacancy card.') }}
                         </span>
                     </div>
 
                     <div>
-                        <label class="block text-xs font-bold text-gray-700 mb-1">{{ __('İş Təsviri & Öhdəliklər') }} *</label>
+                        <label class="block text-xs font-bold text-gray-700 mb-1">{{ __('Job Description & Responsibilities') }} *</label>
                         <div id="editor-description" class="quill-editor bg-white rounded-xl border border-gray-200" data-initial="{{ old('description', '') }}"></div>
                         <input type="hidden" name="description" id="description" value="{{ old('description') }}">
                     </div>
 
                     <div>
-                        <label class="block text-xs font-bold text-gray-700 mb-1">{{ __('Tələblər & Təcrübə') }}</label>
+                        <label class="block text-xs font-bold text-gray-700 mb-1">{{ __('Requirements & Experience') }}</label>
                         <div id="editor-requirements" class="quill-editor bg-white rounded-xl border border-gray-200" data-initial="{{ old('requirements', '') }}"></div>
                         <input type="hidden" name="requirements" id="requirements" value="{{ old('requirements') }}">
                     </div>
 
 
                     <div>
-                        <label class="block text-xs font-bold text-gray-700 mb-1">{{ __('Son Müraciət Tarixi') }}</label>
+                        <label class="block text-xs font-bold text-gray-700 mb-1">{{ __('Application Deadline') }}</label>
                         <input type="date" name="deadline"
                                value="{{ old('deadline', now()->addMonth()->format('Y-m-d')) }}"
                                min="{{ now()->addDay()->format('Y-m-d') }}"
@@ -395,10 +395,10 @@
             <div class="bg-white p-6 sm:p-8 rounded-2xl border border-gray-200 shadow-2xs space-y-5">
                 <div class="pb-3 border-b border-gray-100 flex items-center gap-2.5">
                     <div class="w-8 h-8 rounded-xl bg-orange-50 text-primary flex items-center justify-center font-bold text-sm">3</div>
-                    <h2 class="font-bold text-gray-900 text-base">{{ __('Müraciət Növü') }}</h2>
+                    <h2 class="font-bold text-gray-900 text-base">{{ __('Application Type') }}</h2>
                 </div>
 
-                <p class="text-xs text-gray-500 -mt-1">{{ __('Namizədlərin müraciətlərini necə qəbul etmək istədiyinizi seçin.') }}</p>
+                <p class="text-xs text-gray-500 -mt-1">{{ __("Choose how you want to receive candidates' applications.") }}</p>
 
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                     {{-- Internal (CV upload to platform) --}}
@@ -413,8 +413,8 @@
                                 <i class="fas fa-check" x-show="applicationType === 'internal'"></i>
                             </span>
                         </div>
-                        <span class="font-bold text-gray-900 text-xs mt-1">{{ __('CV ilə (Daxili)') }}</span>
-                        <span class="text-[11px] text-gray-500 leading-relaxed">{{ __('Namizədlər platformada CV yükləyir. Müraciətlər panelinizə düşür.') }}</span>
+                        <span class="font-bold text-gray-900 text-xs mt-1">{{ __('With CV (Internal)') }}</span>
+                        <span class="text-[11px] text-gray-500 leading-relaxed">{{ __('Candidates upload their CVs on the platform. Applications appear in your panel.') }}</span>
                     </label>
                     @else
                     <div class="rounded-2xl border border-dashed border-gray-200 bg-gray-50/80 p-4 flex flex-col gap-1.5 opacity-60 cursor-not-allowed select-none relative">
@@ -422,11 +422,11 @@
                             <i class="fas fa-cloud-arrow-up text-gray-400 text-lg"></i>
                             <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200 flex items-center gap-1">
                                 <i class="fas fa-lock text-[8px]"></i>
-                                {{ __('Şirkət hesabı tələb olunur') }}
+                                {{ __('Company account required') }}
                             </span>
                         </div>
-                        <span class="font-bold text-gray-500 text-xs mt-1">{{ __('CV ilə (Daxili)') }}</span>
-                        <span class="text-[11px] text-gray-400 leading-relaxed">{{ __('Platforma daxili CV qəbulu və idarəetmə yalnız qeydiyyatlı şirkət hesabları üçündür.') }}</span>
+                        <span class="font-bold text-gray-500 text-xs mt-1">{{ __('With CV (Internal)') }}</span>
+                        <span class="text-[11px] text-gray-400 leading-relaxed">{{ __('In-platform CV collection and management is available only to registered company accounts.') }}</span>
                     </div>
                     @endif
 
@@ -441,8 +441,8 @@
                                 <i class="fas fa-check" x-show="applicationType === 'email'"></i>
                             </span>
                         </div>
-                        <span class="font-bold text-gray-900 text-xs mt-1">{{ __('E-Posta ilə') }}</span>
-                        <span class="text-[11px] text-gray-500 leading-relaxed">{{ __('Namizədlər birbaşa sizin e-poçt ünvanınıza müraciət göndərir.') }}</span>
+                        <span class="font-bold text-gray-900 text-xs mt-1">{{ __('By Email') }}</span>
+                        <span class="text-[11px] text-gray-500 leading-relaxed">{{ __('Candidates send applications directly to your email address.') }}</span>
                     </label>
 
                     {{-- Both --}}
@@ -457,8 +457,8 @@
                                 <i class="fas fa-check" x-show="applicationType === 'both'"></i>
                             </span>
                         </div>
-                        <span class="font-bold text-gray-900 text-xs mt-1">{{ __('Hər İkisi') }}</span>
-                        <span class="text-[11px] text-gray-500 leading-relaxed">{{ __('Namizədlər istər CV yükləyə, istərsə də e-poçt ilə müraciət edə bilər.') }}</span>
+                        <span class="font-bold text-gray-900 text-xs mt-1">{{ __('Both') }}</span>
+                        <span class="text-[11px] text-gray-500 leading-relaxed">{{ __('Candidates can either upload a CV or apply by email.') }}</span>
                     </label>
                     @else
                     <div class="rounded-2xl border border-dashed border-gray-200 bg-gray-50/80 p-4 flex flex-col gap-1.5 opacity-60 cursor-not-allowed select-none relative">
@@ -466,11 +466,11 @@
                             <i class="fas fa-layer-group text-gray-400 text-lg"></i>
                             <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200 flex items-center gap-1">
                                 <i class="fas fa-lock text-[8px]"></i>
-                                {{ __('Şirkət hesabı tələb olunur') }}
+                                {{ __('Company account required') }}
                             </span>
                         </div>
-                        <span class="font-bold text-gray-500 text-xs mt-1">{{ __('Hər İkisi') }}</span>
-                        <span class="text-[11px] text-gray-400 leading-relaxed">{{ __('Platforma daxili CV qəbulu və idarəetmə yalnız qeydiyyatlı şirkət hesabları üçündür.') }}</span>
+                        <span class="font-bold text-gray-500 text-xs mt-1">{{ __('Both') }}</span>
+                        <span class="text-[11px] text-gray-400 leading-relaxed">{{ __('In-platform CV collection and management is available only to registered company accounts.') }}</span>
                     </div>
                     @endif
                 </div>
@@ -478,7 +478,7 @@
                 @if(auth()->check() && auth()->user()->isUser())
                 <div class="p-3.5 rounded-xl bg-orange-50/70 border border-orange-100 text-orange-900 text-xs flex items-center gap-2.5">
                     <i class="fas fa-info-circle text-orange-500 text-sm shrink-0"></i>
-                    <span>{{ __('Fərdi istifadəçi hesabı ilə yerləşdirilən vakansiyalarda müraciətlər yalnız e-poçt vasitəsilə qəbul edilir.') }}</span>
+                    <span>{{ __('On vacancies posted with a personal user account, applications are accepted only by email.') }}</span>
                 </div>
                 @endif
 
@@ -486,10 +486,10 @@
                 <div class="p-3.5 rounded-xl bg-blue-50 border border-blue-100 text-blue-800 text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
                     <div class="flex items-center gap-2">
                         <i class="fas fa-info-circle text-blue-500 text-sm shrink-0"></i>
-                        <span>{{ __('Giriş etmədiyiniz üçün müraciətlər yalnız e-poçt vasitəsilə qəbul ediləcək. Müraciətləri panelinizdə idarə etmək üçün şirkət hesabınıza daxil ola bilərsiniz.') }}</span>
+                        <span>{{ __('Because you are not signed in, applications will be accepted only by email. You can sign in to your company account to manage applications in your panel.') }}</span>
                     </div>
                     <a href="{{ route('login') }}" class="shrink-0 font-bold text-primary hover:underline flex items-center gap-1 text-xs">
-                        <span>{{ __('Daxil ol') }}</span>
+                        <span>{{ __('Sign in') }}</span>
                         <i class="fas fa-arrow-right text-[10px]"></i>
                     </a>
                 </div>
@@ -502,7 +502,7 @@
                      x-transition:enter-end="opacity-100 translate-y-0"
                      class="pt-2">
                     <label class="block text-xs font-bold text-gray-700 mb-1">
-                        {{ __('Müraciət Qəbul Ediləcək E-Posta Adresi') }}
+                        {{ __('Email Address for Receiving Applications') }}
                         @if(!$canUseInternal) * @endif
                     </label>
                     <input type="email" name="application_email"
@@ -512,9 +512,9 @@
                            class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs focus:ring-1 focus:ring-primary focus:border-primary focus:outline-hidden">
                     <p class="text-[11px] text-gray-400 mt-1">
                         @if($canUseInternal)
-                            {{ __('Boş buraxsanız, şirkət profilinizdəki rəsmi e-poçt ünvanı istifadə olunacaq.') }}
+                            {{ __('If left empty, the official email on your company profile will be used.') }}
                         @else
-                            {{ __('Namizədlərin müraciətləri və CV-ləri birbaşa bu e-poçt ünvanına göndəriləcək.') }}
+                            {{ __("Candidates' applications and CVs will be sent directly to this email address.") }}
                         @endif
                     </p>
                 </div>
@@ -526,10 +526,10 @@
                 <div x-show="applicationType === 'internal' || applicationType === 'both'" x-cloak
                      class="pt-3 border-t border-gray-100">
                     <label class="block text-xs font-bold text-gray-700 mb-1">
-                        {{ __('Müraciət Formu Sahələri') }}
+                        {{ __('Application Form Fields') }}
                     </label>
                     <p class="text-[11px] text-gray-400 mb-3">
-                        {{ __('Namizədlər sayt üzərindən müraciət edərkən hansı əlavə məlumatların istənildiyini seçin:') }}
+                        {{ __('Choose which additional details candidates must provide when applying on the site:') }}
                     </p>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                         <label class="flex items-center gap-2.5 p-3 rounded-xl border border-gray-200 bg-white hover:border-gray-300 cursor-pointer transition">
@@ -537,8 +537,8 @@
                                    {{ in_array('phone', $selectedAppFields) ? 'checked' : '' }}
                                    class="rounded text-primary focus:ring-primary h-4 w-4 border-gray-300">
                             <div class="text-xs">
-                                <span class="font-bold text-gray-800 block">{{ __('Telefon nömrəsi') }}</span>
-                                <span class="text-[10px] text-gray-400">{{ __('Namizədin əlaqə nömrəsi') }}</span>
+                                <span class="font-bold text-gray-800 block">{{ __('Phone number') }}</span>
+                                <span class="text-[10px] text-gray-400">{{ __("The candidate's contact number") }}</span>
                             </div>
                         </label>
                         <label class="flex items-center gap-2.5 p-3 rounded-xl border border-gray-200 bg-white hover:border-gray-300 cursor-pointer transition">
@@ -546,8 +546,8 @@
                                    {{ in_array('linkedin', $selectedAppFields) ? 'checked' : '' }}
                                    class="rounded text-primary focus:ring-primary h-4 w-4 border-gray-300">
                             <div class="text-xs">
-                                <span class="font-bold text-gray-800 block">{{ __('LinkedIn Profili') }}</span>
-                                <span class="text-[10px] text-gray-400">{{ __('Namizədin LinkedIn profil linki') }}</span>
+                                <span class="font-bold text-gray-800 block">{{ __('LinkedIn Profile') }}</span>
+                                <span class="text-[10px] text-gray-400">{{ __("The candidate's LinkedIn profile link") }}</span>
                             </div>
                         </label>
                         <label class="flex items-center gap-2.5 p-3 rounded-xl border border-gray-200 bg-white hover:border-gray-300 cursor-pointer transition">
@@ -555,8 +555,8 @@
                                    {{ in_array('portfolio', $selectedAppFields) ? 'checked' : '' }}
                                    class="rounded text-primary focus:ring-primary h-4 w-4 border-gray-300">
                             <div class="text-xs">
-                                <span class="font-bold text-gray-800 block">{{ __('Portfolyo / GitHub') }}</span>
-                                <span class="text-[10px] text-gray-400">{{ __('İş nümunələri və layihə linki') }}</span>
+                                <span class="font-bold text-gray-800 block">{{ __('Portfolio / GitHub') }}</span>
+                                <span class="text-[10px] text-gray-400">{{ __('Work samples and project link') }}</span>
                             </div>
                         </label>
                         <label class="flex items-center gap-2.5 p-3 rounded-xl border border-gray-200 bg-white hover:border-gray-300 cursor-pointer transition">
@@ -564,8 +564,8 @@
                                    {{ in_array('cover_letter', $selectedAppFields) ? 'checked' : '' }}
                                    class="rounded text-primary focus:ring-primary h-4 w-4 border-gray-300">
                             <div class="text-xs">
-                                <span class="font-bold text-gray-800 block">{{ __('Ön Yazı / Qeydlər') }}</span>
-                                <span class="text-[10px] text-gray-400">{{ __('Namizədin qısa məlumat və ya qeydləri') }}</span>
+                                <span class="font-bold text-gray-800 block">{{ __('Cover Letter / Notes') }}</span>
+                                <span class="text-[10px] text-gray-400">{{ __('Short info or notes about the candidate') }}</span>
                             </div>
                         </label>
                     </div>
@@ -575,7 +575,7 @@
             <!-- Submit Button -->
             <div class="flex justify-end pt-4">
                 <button type="submit" class="px-8 py-3.5 rounded-xl bg-primary hover:bg-primary-dark text-white font-bold text-sm shadow-md hover:shadow-lg hover:shadow-orange-500/30 transition duration-200 cursor-pointer">
-                    {{ __('Vakansiyanı Dərc Et') }}
+                    {{ __('Publish Vacancy') }}
                 </button>
             </div>
         </form>

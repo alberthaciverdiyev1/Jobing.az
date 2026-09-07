@@ -244,7 +244,7 @@ class MyJobSeekerResource extends Resource
                     ->modalCancelActionLabel('Bağla')
                     ->modalContent(fn (JobSeeker $record) => view('components.promotion-whatsapp', [
                         'mode' => 'bump',
-                        'itemLabel' => __('İş Axtarış Elanı'),
+                        'itemLabel' => __('Job Seeking Listing'),
                         'title' => $record->title,
                         'id' => $record->id,
                     ])),
@@ -260,7 +260,7 @@ class MyJobSeekerResource extends Resource
                     ->modalCancelActionLabel('Bağla')
                     ->modalContent(fn (JobSeeker $record) => view('components.promotion-whatsapp', [
                         'mode' => 'premium',
-                        'itemLabel' => __('İş Axtarış Elanı'),
+                        'itemLabel' => __('Job Seeking Listing'),
                         'title' => $record->title,
                         'id' => $record->id,
                     ])),

@@ -12,10 +12,10 @@ enum JobSeekerStatus: string
     public function label(): string
     {
         return match ($this) {
-            self::Published => __('Yayınlandı'),
-            self::Pending => __('Gözləmədə'),
-            self::Rejected => __('İmtina edilib'),
-            self::Closed => __('Bağlanıb'),
+            self::Published => __('Published'),
+            self::Pending => __('Pending'),
+            self::Rejected => __('Rejected'),
+            self::Closed => __('Closed'),
         };
     }
 }

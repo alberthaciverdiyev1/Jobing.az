@@ -59,7 +59,7 @@
             <div class="flex items-center justify-between sm:justify-end gap-3 text-xs w-full sm:w-auto">
                 <div class="font-medium text-gray-700 flex items-center gap-1.5">
                     <i class="fas fa-map-marker-alt text-primary text-xs"></i>
-                    <span>{{ $seeker->location ?: __('Bakı, Azərbaycan') }}</span>
+                    <span>{{ $seeker->location ?: __('Baku, Azerbaijan') }}</span>
                 </div>
                 <span class="sm:hidden text-sm font-bold text-gray-900 font-mono">{{ $seeker->formatted_salary }}</span>
             </div>

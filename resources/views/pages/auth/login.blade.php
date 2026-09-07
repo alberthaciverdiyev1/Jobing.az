@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', __('Daxil ol') . ' - ' . config('app.full_name'))
+@section('title', __('Sign in') . ' - ' . config('app.full_name'))
 
 @section('content')
 <div class="bg-gray-50 min-h-screen py-12 sm:py-16 flex items-center justify-center px-4 sm:px-6 lg:px-8">
@@ -9,10 +9,10 @@
         <!-- Top Title / Logo -->
         <div class="text-center mb-8">
             <h1 class="text-2xl sm:text-3xl font-extrabold text-gray-900 tracking-tight">
-                {{ __('Hesabınıza daxil olun') }}
+                {{ __('Sign in to your account') }}
             </h1>
             <p class="text-xs sm:text-sm text-gray-500 mt-1.5">
-                {{ __('Jobing.az portalına xoş gəlmisiniz. Zəhmət olmasa məlumatlarınızı daxil edin.') }}
+                {{ __('Welcome to Jobing.az. Please enter your details.') }}
             </p>
         </div>
 
@@ -20,7 +20,7 @@
         <div class="mb-6 p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs">
             <div class="font-bold mb-1 flex items-center gap-1.5">
                 <i class="fas fa-exclamation-circle text-rose-600"></i>
-                <span>{{ __('Daxil olarkən xəta baş verdi:') }}</span>
+                <span>{{ __('An error occurred while signing in:') }}</span>
             </div>
             <ul class="list-disc pl-5 space-y-1 mt-1 text-[11px]">
                 @foreach ($errors->all() as $error)
@@ -37,7 +37,7 @@
 
                 <div>
                     <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">
-                        {{ __('E-poçt Ünvanı') }} <span class="text-rose-500">*</span>
+                        {{ __('Email Address') }} <span class="text-rose-500">*</span>
                     </label>
                     <div class="relative">
                         <i class="far fa-envelope absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
@@ -50,7 +50,7 @@
                 <div>
                     <div class="flex items-center justify-between mb-2">
                         <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider">
-                            {{ __('Şifrə') }} <span class="text-rose-500">*</span>
+                            {{ __('Password') }} <span class="text-rose-500">*</span>
                         </label>
                     </div>
                     <div class="relative">
@@ -64,26 +64,26 @@
                 <div class="flex items-center justify-between text-xs pt-1">
                     <label class="flex items-center gap-2 text-gray-600 cursor-pointer select-none">
                         <input type="checkbox" name="remember" class="rounded border-gray-300 text-primary focus:ring-primary h-4 w-4">
-                        <span class="font-medium">{{ __('Məni xatırla') }}</span>
+                        <span class="font-medium">{{ __('Remember me') }}</span>
                     </label>
                 </div>
 
                 <button type="submit"
                         class="w-full py-3.5 rounded-xl bg-primary hover:bg-primary-dark text-white font-bold text-sm shadow-sm hover:shadow-md transition duration-150 flex items-center justify-center gap-2 cursor-pointer mt-2">
                     <i class="fas fa-sign-in-alt text-xs"></i>
-                    <span>{{ __('Daxil ol') }}</span>
+                    <span>{{ __('Sign in') }}</span>
                 </button>
             </form>
 
             <!-- Switch to Register Banner -->
             <div class="pt-6 border-t border-gray-100 text-center">
                 <p class="text-xs text-gray-600">
-                    {{ __('Hesabınız yoxdur?') }}
+                    {{ __("Don't have an account?") }}
                 </p>
                 <a href="{{ route('register') }}"
                    class="inline-flex items-center justify-center gap-2 w-full mt-3 py-3 rounded-xl border border-gray-200 hover:border-primary hover:bg-orange-50/50 text-gray-800 hover:text-primary font-bold text-xs transition duration-150 shadow-2xs">
                     <i class="fas fa-user-plus text-primary text-xs"></i>
-                    <span>{{ __('Yeni hesab yarat') }}</span>
+                    <span>{{ __('Create a new account') }}</span>
                 </a>
             </div>
         </div>

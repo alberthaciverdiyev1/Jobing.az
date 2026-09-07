@@ -192,10 +192,10 @@ class VacancyController extends Controller
             if ($request->wantsJson() || $request->ajax()) {
                 return response()->json([
                     'success' => false,
-                    'message' => __('Siz artıq bu vakansiyaya müraciət etmisiniz.'),
+                    'message' => __('You have already applied to this vacancy.'),
                 ], 422);
             }
-            return back()->with('error', __('Siz artıq bu vakansiyaya müraciət etmisiniz.'));
+            return back()->with('error', __('You have already applied to this vacancy.'));
         }
 
         // Misafir kullanıcılar için e-posta bazlı tekrar kontrolü (spam önleme)
@@ -204,7 +204,7 @@ class VacancyController extends Controller
             if ($applicantEmail !== '' && \App\Modules\Application\Models\Application::where('vacancy_id', $vacancy->id)
                 ->whereRaw('LOWER(applicant_email) = ?', [$applicantEmail])
                 ->exists()) {
-                $duplicateMsg = __('Bu e-poçt ünvanı ilə artıq bu vakansiyaya müraciət etmisiniz.');
+                $duplicateMsg = __('You have already applied to this vacancy with this email address.');
                 if ($request->wantsJson() || $request->ajax()) {
                     return response()->json(['success' => false, 'message' => $duplicateMsg], 422);
                 }
@@ -216,7 +216,7 @@ class VacancyController extends Controller
         abort_unless(
             $vacancy->is_active && (!$vacancy->deadline || $vacancy->deadline->gte(today())),
             404,
-            __('Vakansiya artıq mövcud deyil')
+            __('Vacancy no longer available')
         );
 
         $application = $this->vacancyService->applyToVacancy(
@@ -228,12 +228,12 @@ class VacancyController extends Controller
         if ($request->wantsJson() || $request->ajax()) {
             return response()->json([
                 'success' => true,
-                'message' => __('Müraciətiniz uğurla göndərildi! İşəgötürən dəyərləndirmə prosesinə aldıqda sizinlə əlaqə saxlayacaq.'),
+                'message' => __('Your application was submitted successfully! The employer will contact you once your application is reviewed.'),
                 'application_id' => $application->id,
             ]);
         }
 
-        return back()->with('success', __('Müraciətiniz uğurla göndərildi!'));
+        return back()->with('success', __('Your application was submitted successfully!'));
     }
 
     public function create(): View
@@ -248,6 +248,6 @@ class VacancyController extends Controller
         $vacancy = $this->vacancyService->createVacancy($request->validated());
 
         return redirect()->route('jobs.show', $vacancy->slug)
-            ->with('success', __('İş elanınız qəbul edildi! Admin tərəfindən təsdiqləndikdən sonra saytda yayımlanacaq.'));
+            ->with('success', __('Your job listing has been submitted! It will be published on the site after admin approval.'));
     }
 }

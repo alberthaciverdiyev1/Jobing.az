@@ -19,7 +19,7 @@
                     </h3>
                     <span class="text-xs text-gray-500 flex items-center gap-1 mt-1 truncate">
                         <i class="fas fa-map-marker-alt text-gray-400 text-[11px]"></i>
-                        <span>{{ $company->city_name ?: __('Bakı, Azərbaycan') }}</span>
+                        <span>{{ $company->city_name ?: __('Baku, Azerbaijan') }}</span>
                     </span>
                 </div>
             </div>
@@ -28,18 +28,18 @@
             @if($company->vacancies_count > 0)
             <span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-orange-50 text-primary border border-orange-100 font-mono shrink-0 flex items-center gap-1.5 relative z-10">
 {{--                <span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>--}}
-                <span>{{ $company->vacancies_count }} {{ __('elan') }}</span>
+                <span>{{ $company->vacancies_count }} {{ __('listing') }}</span>
             </span>
             @else
             <span class="px-2 py-0.5 rounded-full text-[10px] font-medium bg-gray-50 text-gray-400 border border-gray-100 shrink-0 relative z-10">
-                {{ __('0 elan') }}
+                {{ __('0 listings') }}
             </span>
             @endif
         </div>
 
         <!-- About / Description -->
         <p class="text-xs text-gray-600 line-clamp-3 leading-relaxed mt-1">
-            {{ $company->about ?: __('Bu şirkət haqqında ətraflı məlumat tezliklə əlavə olunacaq.') }}
+            {{ $company->about ?: __('Detailed information about this company will be added soon.') }}
         </p>
     </div>
 
@@ -60,7 +60,7 @@
         @endif
 
         <span class="text-primary group-hover:text-primary-dark font-bold flex items-center gap-1 transition">
-            <span>{{ __('Şirkətə bax') }}</span>
+            <span>{{ __('View company') }}</span>
             <i class="fas fa-arrow-right text-[10px] group-hover:translate-x-1 transition duration-200"></i>
         </span>
     </div>

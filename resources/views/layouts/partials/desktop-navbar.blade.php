@@ -20,19 +20,19 @@
             <!-- Center: Desktop Menu -->
             <nav class="flex items-center justify-center space-x-6 lg:space-x-8">
                 <a href="{{ route('jobs.index') }}" class="{{ request()->routeIs('jobs.*') && !request()->routeIs('jobs.create') ? 'text-primary font-bold' : 'text-gray-600 hover:text-primary' }} font-medium transition-colors text-sm">
-                    {{ __('Vakansiyalar') }}
+                    {{ __('Vacancies') }}
                 </a>
                 <a href="{{ route('companies.index') }}" class="{{ request()->routeIs('companies.*') ? 'text-primary font-bold' : 'text-gray-600 hover:text-primary' }} font-medium transition-colors text-sm">
-                    {{ __('Şirkətlər') }}
+                    {{ __('Companies') }}
                 </a>
                 <a href="{{ route('job-seekers.index') }}" class="{{ request()->routeIs('job-seekers.*') && !request()->routeIs('job-seekers.create') ? 'text-primary font-bold' : 'text-gray-600 hover:text-primary' }} font-medium transition-colors text-sm">
-                    {{ __('İş Arıyorum') }}
+                    {{ __("I'm Hiring Myself") }}
                 </a>
                 <a href="{{ route('resumes.index') }}" class="{{ request()->routeIs('resumes.*') ? 'text-primary font-bold' : 'text-gray-600 hover:text-primary' }} font-medium transition-colors text-sm">
-                    {{ __('CV Bazası') }}
+                    {{ __('Resume Database') }}
                 </a>
                 <a href="{{ route('blog.index') }}" class="{{ request()->routeIs('blog.*') ? 'text-primary font-bold' : 'text-gray-600 hover:text-primary' }} font-medium transition-colors text-sm">
-                    {{ __('Bloq') }}
+                    {{ __('Blog') }}
                 </a>
             </nav>
 
@@ -72,7 +72,7 @@
                 <!-- Favorites Heart Button -->
                 <a href="{{ route('favorites.index') }}"
                    class="relative inline-flex items-center justify-center w-9 h-9 rounded-lg border border-gray-200 text-gray-600 hover:text-primary hover:bg-gray-50 transition cursor-pointer {{ request()->routeIs('favorites.*') ? 'border-primary text-primary bg-orange-50/50' : '' }}"
-                   title="{{ __('Sevimlilər') }}">
+                   title="{{ __('Favorites') }}">
                     <i class="far fa-heart text-sm"></i>
                     <span id="favorites-count-nav" class="hidden absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-primary text-white text-[10px] font-bold items-center justify-center border-2 border-white shadow-2xs"></span>
                 </a>
@@ -102,11 +102,11 @@
                         <div class="px-4 py-2.5 border-b border-gray-100 flex items-center justify-between">
                             <h4 class="text-xs font-extrabold text-gray-900 flex items-center gap-2">
                                 <i class="fas fa-bell text-primary"></i>
-                                <span>{{ __('Bildirişlərim') }}</span>
+                                <span>{{ __('My Notifications') }}</span>
                             </h4>
                             @if($unreadCount > 0)
                             <span class="px-2 py-0.5 rounded-full bg-orange-50 text-orange-700 text-[10px] font-bold">
-                                {{ $unreadCount }} {{ __('yeni') }}
+                                {{ $unreadCount }} {{ __('new') }}
                             </span>
                             @endif
                         </div>
@@ -115,7 +115,7 @@
                             @forelse($latestUserNotifs as $notif)
                             @php
                                 $nData = $notif->data ?? [];
-                                $nTitle = $nData['title'] ?? __('Bildiriş');
+                                $nTitle = $nData['title'] ?? __('Notification');
                                 $nBody = $nData['body'] ?? '';
                                 $nAction = $nData['actions'][0]['url'] ?? null;
                             @endphp
@@ -132,7 +132,7 @@
                             @empty
                             <div class="p-6 text-center text-xs text-gray-400">
                                 <i class="far fa-bell-slash text-xl mb-2 text-gray-300 block"></i>
-                                {{ __('Hələ heç bir bildirişiniz yoxdur') }}
+                                {{ __('You have no notifications yet') }}
                             </div>
                             @endforelse
                         </div>
@@ -142,7 +142,7 @@
                         @endphp
                         <div class="p-2 border-t border-gray-100 text-center bg-gray-50/50 rounded-b-2xl">
                             <a href="{{ $panelNotifUrl }}" class="text-[11px] font-bold text-primary hover:underline">
-                                {{ __('Bütün bildirişlərə bax') }} →
+                                {{ __('View all notifications') }} →
                             </a>
                         </div>
                     </div>
@@ -172,8 +172,8 @@
                         </div>
                         @php
                             $panelUrl = auth()->user()->panelPath();
-                            $panelLabel = auth()->user()->is_admin ? __('İdarə Paneli')
-                                : (auth()->user()->isCompany() ? __('Şirkət Paneli') : __('Hesabım'));
+                            $panelLabel = auth()->user()->is_admin ? __('Admin Panel')
+                                : (auth()->user()->isCompany() ? __('Company Panel') : __('My Account'));
                             $panelIcon = auth()->user()->is_admin ? 'fa-shield-alt'
                                 : (auth()->user()->isCompany() ? 'fa-building' : 'fa-user');
                         @endphp
@@ -191,24 +191,24 @@
                         @if(auth()->user()->isUser())
                         <a href="{{ route('filament.user.resources.my-resumes.index') }}" class="flex items-center gap-2 px-3.5 py-2 text-xs font-semibold text-gray-700 hover:bg-gray-50 transition">
                             <i class="fas fa-file-lines text-[11px] text-primary"></i>
-                            <span>{{ __('CV & Rezümələrim') }}</span>
+                            <span>{{ __('My CV & Resumes') }}</span>
                         </a>
                         @endif
                         <a href="{{ route('jobs.create') }}" class="flex items-center gap-2 px-3.5 py-2 text-xs font-semibold text-gray-700 hover:bg-gray-50 transition">
                             <i class="fas fa-plus text-[11px] text-primary"></i>
-                            <span>{{ __('Vakansiya yerləşdir') }}</span>
+                            <span>{{ __('Post a vacancy') }}</span>
                         </a>
                         @if(!auth()->user()->isCompany())
                         <a href="{{ route('job-seekers.create') }}" class="flex items-center gap-2 px-3.5 py-2 text-xs font-semibold text-gray-700 hover:bg-gray-50 transition">
                             <i class="fas fa-user-plus text-[11px] text-primary"></i>
-                            <span>{{ __('İş axtarış elanı əlavə et') }}</span>
+                            <span>{{ __('Add a job seeking listing') }}</span>
                         </a>
                         @endif
                         <form method="POST" action="{{ route('logout') }}" class="border-t border-gray-100 mt-1">
                             @csrf
                             <button type="submit" class="w-full flex items-center gap-2 px-3.5 py-2 text-xs font-semibold text-rose-600 hover:bg-rose-50 transition cursor-pointer">
                                 <i class="fas fa-sign-out-alt text-[11px]"></i>
-                                <span>{{ __('Çıxış') }}</span>
+                                <span>{{ __('Log out') }}</span>
                             </button>
                         </form>
                     </div>
@@ -216,7 +216,7 @@
                 @else
                 <a href="{{ route('login') }}" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg border border-gray-200 hover:border-primary hover:text-primary bg-white text-gray-800 font-bold text-xs transition shadow-2xs">
                     <i class="fas fa-sign-in-alt text-xs text-primary"></i>
-                    <span>{{ __('Daxil ol') }}</span>
+                    <span>{{ __('Sign in') }}</span>
                 </a>
                 @endauth
 
@@ -225,14 +225,14 @@
                 <a href="{{ route('job-seekers.create') }}"
                    class="hidden lg:inline-flex items-center gap-1.5 border border-gray-200 hover:border-primary hover:text-primary bg-white text-gray-700 font-bold px-3.5 py-2 rounded-lg transition-colors text-xs shadow-2xs">
                     <i class="fas fa-user-plus text-[11px] text-primary"></i>
-                    <span>{{ __('İş axtarış elanı') }}</span>
+                    <span>{{ __('Job seeking listing') }}</span>
                 </a>
                 @endif
 
                 <!-- Post Vacancy CTA Button -->
                 <a href="{{ route('jobs.create') }}" class="bg-primary hover:bg-primary-dark text-white px-3.5 py-2 rounded-lg font-bold transition-colors shadow-xs hover:shadow-md flex items-center gap-1.5 text-xs whitespace-nowrap">
                     <i class="fas fa-plus text-[10px]"></i>
-                    <span>{{ __('Elan yerləşdir') }}</span>
+                    <span>{{ __('Post an ad') }}</span>
                 </a>
             </div>
         </div>

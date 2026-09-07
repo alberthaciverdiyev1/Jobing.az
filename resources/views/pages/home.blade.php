@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', config('app.full_name') . ' - ' . __('Uğurlu karyera yolu buradan başlayır'))
+@section('title', config('app.full_name') . ' - ' . __('A successful career path starts here'))
 
 @section('content')
 <!-- Modern Hero Section (Light Mode, Pill Search, No Background Shapes) -->
@@ -9,13 +9,13 @@
 
         <!-- Headline -->
         <h1 class="text-3xl md:text-4xl lg:text-5xl font-extrabold text-gray-900 tracking-tight mb-4 animate-fade-in-up mx-auto">
-            {{ __('Uğurlu karyera yolu buradan başlayır') }}
+            {{ __('A successful career path starts here') }}
         </h1>
 
         <!-- Subtext / Stats -->
         <p class="text-base md:text-lg text-gray-600 mb-10 animate-fade-in-up delay-100 mx-auto">
             <span class="inline-block border-b border-gray-300 pb-1">
-                7 gün — <span class="text-primary font-bold">{{ $stats['recent_7_days'] }}</span> {{ __('yeni vakansiya') }}
+                7 gün — <span class="text-primary font-bold">{{ $stats['recent_7_days'] }}</span> {{ __('new vacancies') }}
             </span>
         </p>
 
@@ -25,13 +25,13 @@
             <!-- Search Icon & Input -->
             <div class="flex-1 flex items-center pl-4 pr-2 py-2 group">
                 <i class="fas fa-search text-gray-400 mr-3 group-focus-within:text-primary transition-colors"></i>
-                <input type="text" name="q" placeholder="{{ __('Peşə, vəzifə və ya şirkət') }}..."
+                <input type="text" name="q" placeholder="{{ __('Profession, role or company') }}..."
                        class="w-full bg-transparent border-none focus:outline-hidden text-gray-700 placeholder-gray-400 text-sm md:text-base">
             </div>
 
             <!-- Action Button -->
             <button type="submit" class="bg-primary hover:bg-primary-dark text-white font-medium py-3 px-8 rounded-full transition-all duration-300 shadow-md hover:shadow-lg hover:shadow-orange-500/30 flex items-center justify-center whitespace-nowrap cursor-pointer">
-                {{ __('Axtar') }}
+                {{ __('Search') }}
             </button>
         </form>
 
@@ -45,7 +45,7 @@
             @endforeach
             <a href="{{ route('jobs.index') }}"
                class="px-4 py-2 bg-white/80 backdrop-blur-xs border border-gray-200 rounded-full text-sm text-gray-600 hover:border-primary hover:bg-primary hover:text-white transition-all duration-300 shadow-2xs">
-                {{ __('Bütün kateqoriyalar') }}
+                {{ __('All categories') }}
             </a>
         </div>
     </div>
@@ -56,11 +56,11 @@
     <div class="container mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-end mb-4 animate-fade-in-up">
             <div>
-                <h2 class="text-lg md:text-xl font-bold text-gray-900 mb-0.5">{{ __('Populyar Kateqoriyalar') }}</h2>
-                <p class="text-[11px] md:text-xs text-gray-500">{{ __('Sizə uyğun sahəni seçin və fürsətləri kəşf edin.') }}</p>
+                <h2 class="text-lg md:text-xl font-bold text-gray-900 mb-0.5">{{ __('Popular Categories') }}</h2>
+                <p class="text-[11px] md:text-xs text-gray-500">{{ __('Choose your field and discover opportunities.') }}</p>
             </div>
             <a href="{{ route('jobs.index') }}" class="hidden sm:flex text-primary hover:text-primary-dark font-medium items-center gap-1 group text-xs">
-                <span>{{ __('Hamısına bax') }}</span>
+                <span>{{ __('View all') }}</span>
                 <i class="fas fa-arrow-right text-[10px] transform group-hover:translate-x-1 transition-transform"></i>
             </a>
         </div>
@@ -75,14 +75,14 @@
                 <h3 class="text-xs sm:text-sm font-semibold text-gray-800 mb-0.5 group-hover:text-primary transition-colors leading-tight line-clamp-1">
                     {{ $category->name }}
                 </h3>
-                <span class="text-[11px] text-gray-400 mt-auto">{{ $category->vacancies_count }} {{ __('Vakansiya') }}</span>
+                <span class="text-[11px] text-gray-400 mt-auto">{{ $category->vacancies_count }} {{ __('Vacancy') }}</span>
             </a>
             @endforeach
         </div>
 
         <div class="mt-4 text-center sm:hidden">
             <a href="{{ route('jobs.index') }}" class="text-primary hover:text-primary-dark text-xs font-medium inline-flex items-center gap-1">
-                {{ __('Bütün kateqoriyalar') }} <i class="fas fa-arrow-right text-[10px]"></i>
+                {{ __('All categories') }} <i class="fas fa-arrow-right text-[10px]"></i>
             </a>
         </div>
     </div>
@@ -95,12 +95,12 @@
         <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8 animate-fade-in-up">
             <div>
                 <h2 class="text-2xl md:text-3xl font-extrabold text-gray-900 tracking-tight flex items-center gap-2.5">
-                    <span>{{ __('Premium Vakansiyalar') }}</span>
+                    <span>{{ __('Premium Vacancies') }}</span>
                 </h2>
             </div>
             <a href="{{ route('jobs.index', ['sort' => 'featured']) }}"
                class="inline-flex items-center gap-1.5 text-xs font-bold text-amber-700 hover:text-amber-900 transition-colors self-start sm:self-auto group">
-                <span>{{ __('Bütün premium vakansiyalar') }}</span>
+                <span>{{ __('All premium vacancies') }}</span>
                 <i class="fas fa-arrow-right text-[10px] group-hover:translate-x-0.5 transition-transform"></i>
             </a>
         </div>
@@ -120,11 +120,11 @@
     <div class="container mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8 animate-fade-in-up">
             <div>
-                <h2 class="text-2xl md:text-3xl font-extrabold text-gray-900 tracking-tight">{{ __('Ən Son Vakansiyalar') }}</h2>
+                <h2 class="text-2xl md:text-3xl font-extrabold text-gray-900 tracking-tight">{{ __('Latest Vacancies') }}</h2>
             </div>
             <a href="{{ route('jobs.index') }}"
                class="inline-flex items-center gap-1.5 text-xs font-bold text-primary hover:text-primary-dark transition-colors self-start sm:self-auto group">
-                <span>{{ __('Bütün elanlar') }} ({{ $stats['jobs'] }}+)</span>
+                <span>{{ __('All listings') }} ({{ $stats['jobs'] }}+)</span>
                 <i class="fas fa-arrow-right text-[10px] group-hover:translate-x-0.5 transition-transform"></i>
             </a>
         </div>
@@ -140,7 +140,7 @@
         <div class="mt-10 text-center">
             <a href="{{ route('jobs.index') }}"
                class="inline-flex items-center justify-center gap-2 bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 hover:text-primary font-semibold py-3 px-8 rounded-xl transition-all duration-300 shadow-2xs hover:shadow-sm text-sm">
-                <span>{{ __('Bütün vakansiyalara bax') }} ({{ $stats['jobs'] }}+)</span>
+                <span>{{ __('View all vacancies') }} ({{ $stats['jobs'] }}+)</span>
                 <i class="fas fa-arrow-right text-xs"></i>
             </a>
         </div>
@@ -160,21 +160,21 @@
         <div class="flex flex-col lg:flex-row items-center justify-between gap-12">
             <div class="lg:w-1/2 text-center lg:text-left">
                 <h2 class="text-3xl md:text-4xl font-bold mb-6 leading-tight">
-                    {{ __('Şirkətiniz üçün') }} <span class="text-primary">{{ __('ən yaxşı kadrları') }}</span> {{ __('tapın') }}
+                    {{ __('For your company') }} <span class="text-primary">{{ __('the best talent') }}</span> {{ __('find') }}
                 </h2>
                 <p class="text-gray-300 text-base md:text-lg mb-8 max-w-xl mx-auto lg:mx-0 leading-relaxed font-light">
-                    {{ __('Minlərlə aktiv istifadəçisi olan platformamızda elanınızı yerləşdirin və komandanızı peşəkarlarla gücləndirin. İndi qeydiyyatdan keçin və ilk elanınızı pulsuz yerləşdirin.') }}
+                    {{ __('Post your listing on our platform with thousands of active users and strengthen your team with professionals. Register now and post your first listing for free.') }}
                 </p>
                 <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                     <a href="{{ route('jobs.create') }}"
                        class="bg-primary hover:bg-primary-dark text-white font-semibold py-3.5 px-8 rounded-xl transition-colors shadow-lg shadow-orange-500/30 flex items-center justify-center gap-2 text-sm">
                         <i class="fas fa-building text-xs"></i>
-                        <span>{{ __('İşəgötürən kimi qoşul') }}</span>
+                        <span>{{ __('Join as employer') }}</span>
                     </a>
                     <a href="{{ config('site.panels.admin') }}" target="_blank"
                        class="bg-white/10 hover:bg-white/20 text-white border border-white/20 font-semibold py-3.5 px-8 rounded-xl transition-colors backdrop-blur-xs flex items-center justify-center gap-2 text-sm">
                         <i class="fas fa-shield-alt text-xs"></i>
-                        <span>{{ __('Admin Paneli') }}</span>
+                        <span>{{ __('Admin Panel') }}</span>
                     </a>
                 </div>
             </div>
@@ -183,19 +183,19 @@
                 <div class="grid grid-cols-2 gap-4 sm:gap-6">
                     <div class="bg-white/10 backdrop-blur-md border border-white/10 p-6 rounded-2xl text-center hover:bg-white/20 transition-colors cursor-default">
                         <div class="text-3xl sm:text-4xl font-bold text-white mb-2 font-mono">{{ $stats['jobs'] }}+</div>
-                        <div class="text-gray-300 font-medium text-xs sm:text-sm">{{ __('Aktiv Vakansiya') }}</div>
+                        <div class="text-gray-300 font-medium text-xs sm:text-sm">{{ __('Active Vacancy') }}</div>
                     </div>
                     <div class="bg-white/10 backdrop-blur-md border border-white/10 p-6 rounded-2xl text-center hover:bg-white/20 transition-colors cursor-default">
                         <div class="text-3xl sm:text-4xl font-bold text-white mb-2 font-mono">{{ $stats['applications'] }}+</div>
-                        <div class="text-gray-300 font-medium text-xs sm:text-sm">{{ __('Ümumi Başvuru') }}</div>
+                        <div class="text-gray-300 font-medium text-xs sm:text-sm">{{ __('General Application') }}</div>
                     </div>
                     <div class="bg-white/10 backdrop-blur-md border border-white/10 p-6 rounded-2xl text-center hover:bg-white/20 transition-colors cursor-default">
                         <div class="text-3xl sm:text-4xl font-bold text-white mb-2 font-mono">{{ $stats['verified_companies'] }}+</div>
-                        <div class="text-gray-300 font-medium text-xs sm:text-sm">{{ __('Təsdiqlənmiş Şirkət') }}</div>
+                        <div class="text-gray-300 font-medium text-xs sm:text-sm">{{ __('Verified Companies') }}</div>
                     </div>
                     <div class="bg-white/10 backdrop-blur-md border border-white/10 p-6 rounded-2xl text-center hover:bg-white/20 transition-colors cursor-default">
                         <div class="text-3xl sm:text-4xl font-bold text-white mb-2 font-mono">{{ $stats['recent_7_days'] }}</div>
-                        <div class="text-gray-300 font-medium text-xs sm:text-sm">{{ __('yeni vakansiya') }}</div>
+                        <div class="text-gray-300 font-medium text-xs sm:text-sm">{{ __('new vacancies') }}</div>
                     </div>
                 </div>
             </div>
@@ -207,7 +207,7 @@
 <section class="py-12 bg-white border-b border-gray-100 overflow-hidden">
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 mb-6">
         <p class="text-center text-xs font-semibold text-gray-400 uppercase tracking-wider">
-            {{ __('Bizə güvənən lider şirkətlər') }}
+            {{ __('Leading companies that trust us') }}
         </p>
     </div>
 
