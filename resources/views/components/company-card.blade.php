@@ -27,7 +27,7 @@
             <!-- Vacancy Count Pill -->
             @if($company->vacancies_count > 0)
             <span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-orange-50 text-primary border border-orange-100 font-mono shrink-0 flex items-center gap-1.5 relative z-10">
-                <span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+{{--                <span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>--}}
                 <span>{{ $company->vacancies_count }} {{ __('elan') }}</span>
             </span>
             @else

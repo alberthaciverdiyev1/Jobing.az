@@ -46,6 +46,7 @@ class FavoriteController extends Controller
             return response()->json([
                 'success' => false,
                 'auth_required' => true,
+                'redirect_url' => route('login'),
                 'message' => 'Seçilmişlərə əlavə etmək üçün daxil olmalısınız.',
             ], 401);
         }
