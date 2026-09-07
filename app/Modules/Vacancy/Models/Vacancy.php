@@ -47,10 +47,12 @@ class Vacancy extends Model
         'deadline',
         'application_type',
         'application_email',
+        'application_fields',
     ];
 
     protected $casts = [
         'skills' => 'array',
+        'application_fields' => 'array',
         'is_featured' => 'boolean',
         'featured_until' => 'datetime',
         'bumped_at' => 'datetime',
@@ -166,5 +168,14 @@ class Vacancy extends Model
         }
 
         return __('qədər') . ' ' . number_format($this->salary_max, 0, ',', '.') . ' ' . $symbol;
+    }
+
+    public function hasApplicationField(string $field): bool
+    {
+        if ($this->application_fields === null) {
+            return true;
+        }
+
+        return in_array($field, (array) $this->application_fields, true);
     }
 }
