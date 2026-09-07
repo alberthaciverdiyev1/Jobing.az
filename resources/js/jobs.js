@@ -20,6 +20,7 @@ export default function jobsManager(config = null) {
         openAccordions: (Array.isArray(config.activeParentCategories) && config.activeParentCategories.length)
             ? [...config.activeParentCategories]
             : (config.activeParentCategory ? [config.activeParentCategory] : []),
+        categoryChildrenMap: config.categoryChildrenMap || {},
         counts: config.initialCounts || {},
         categoryCounts: config.initialCategoryCounts || {},
 
@@ -106,7 +107,7 @@ export default function jobsManager(config = null) {
         },
 
         // Category multi-select toggle (with accordion management)
-        toggleCategory(slug, parentSlug = null, childrenSlugs = []) {
+        toggleCategory(slug, parentSlug = null) {
             const idx = this.category.indexOf(slug);
             const wasActive = idx > -1;
 
@@ -124,6 +125,7 @@ export default function jobsManager(config = null) {
                 }
 
                 // If a parent category was selected, remove any of its selected children from search
+                const childrenSlugs = this.categoryChildrenMap[slug] || [];
                 if (childrenSlugs && childrenSlugs.length) {
                     this.category = this.category.filter(c => !childrenSlugs.includes(c));
                 }

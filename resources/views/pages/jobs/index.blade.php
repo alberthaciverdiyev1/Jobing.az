@@ -18,6 +18,7 @@ window.__JOBS_CONFIG__ = {
     initialTotal: {{ (int) $jobs->total() }},
     activeParentCategory: @json($selectedCategory ? ($selectedCategory->parent_id ? $selectedCategory->parent->slug : $selectedCategory->slug) : ''),
     activeParentCategories: @json($selectedCategories->map(fn ($c) => $c->parent_id ? $c->parent->slug : $c->slug)->values()),
+    categoryChildrenMap: @json($categories->mapWithKeys(fn ($c) => [$c->slug => $c->children->pluck('slug')->values()])),
     initialCounts: {
         jobTypes: @json($jobTypes->pluck('vacancies_count', 'slug')),
         workplaceTypes: @json($workplaceTypes->pluck('vacancies_count', 'slug')),
@@ -103,7 +104,7 @@ window.__JOBS_CONFIG__ = {
                                 <div class="flex items-center justify-between rounded-lg transition group"
                                      :class="category.includes('{{ $cat->slug }}') ? 'bg-orange-50 text-primary font-bold' : 'text-gray-700 hover:bg-gray-50'">
                                     <button type="button"
-                                            @click="toggleCategory('{{ $cat->slug }}', null, @json($cat->children->pluck('slug')->values()))"
+                                            @click="toggleCategory('{{ $cat->slug }}')"
                                             class="flex-1 text-left px-2.5 py-2 truncate cursor-pointer"
                                             :aria-expanded="isAccordionOpen('{{ $cat->slug }}')">
                                         <span class="truncate">{{ $cat->name }}</span>
@@ -161,14 +162,14 @@ window.__JOBS_CONFIG__ = {
                                 $cityName = is_object($city) ? $city->name : $city;
                             @endphp
                             <button type="button"
-                                    @click="toggleFilter('city', @js($citySlug))"
+                                    @click="toggleFilter('city', '{{ addslashes($citySlug) }}')"
                                     x-show="showAll || {{ $loop->index }} < 5"
                                     class="w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg transition text-left cursor-pointer"
-                                    :class="city.includes(@js($citySlug)) ? 'bg-orange-50 text-primary font-bold' : 'text-gray-600 hover:bg-gray-50'">
+                                    :class="city.includes('{{ addslashes($citySlug) }}') ? 'bg-orange-50 text-primary font-bold' : 'text-gray-600 hover:bg-gray-50'">
                                 <span class="flex items-center gap-2">
                                     <span class="w-3.5 h-3.5 rounded border flex items-center justify-center text-[8px]"
-                                          :class="city.includes(@js($citySlug)) ? 'bg-primary border-primary text-white' : 'border-gray-300'">
-                                        <i class="fas fa-check" x-show="city.includes(@js($citySlug))"></i>
+                                          :class="city.includes('{{ addslashes($citySlug) }}') ? 'bg-primary border-primary text-white' : 'border-gray-300'">
+                                        <i class="fas fa-check" x-show="city.includes('{{ addslashes($citySlug) }}')"></i>
                                     </span>
                                     <span>{{ $cityName }}</span>
                                 </span>
