@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Modules\Application\Models\Application;
 use App\Modules\Category\Models\Category;
 use App\Modules\Company\Models\Company;
+use App\Modules\JobAttribute\Models\City;
 use App\Modules\JobAttribute\Models\ExperienceLevel;
 use App\Modules\JobAttribute\Models\JobType;
 use App\Modules\JobAttribute\Models\WorkplaceType;
@@ -254,8 +255,16 @@ class DatabaseSeeder extends Seeder
             ],
         ];
 
+        // companies now reference cities via city_id (the legacy `location` string
+        // column was dropped in the schema refactor) and `about` is a translatable JSON.
+        $bakuCity = City::where('slug', 'baki')->first();
+
         $companies = [];
         foreach ($companiesData as $compData) {
+            unset($compData['location']); // column removed; location now lives on city_id
+            $compData['city_id'] = $bakuCity?->id;
+            $compData['about'] = ['az' => $compData['about']];
+
             $companies[$compData['slug']] = Company::firstOrCreate(['slug' => $compData['slug']], $compData);
         }
 
@@ -462,20 +471,16 @@ class DatabaseSeeder extends Seeder
                     [
                         'company_id' => $company->id,
                         'category_id' => $category->id,
+                        'city_id' => $bakuCity?->id,
                         'job_type_id' => $jobTypeMap[$jobData['job_type']] ?? null,
                         'workplace_type_id' => $workplaceTypeMap[$jobData['workplace_type']] ?? null,
                         'experience_level_id' => $experienceLevelMap[$jobData['experience_level']] ?? null,
                         'title' => $jobData['title'],
-                        'job_type' => $jobData['job_type'],
-                        'workplace_type' => $jobData['workplace_type'],
-                        'experience_level' => $jobData['experience_level'],
-                        'location' => $jobData['location'],
                         'salary_min' => $jobData['salary_min'],
                         'salary_max' => $jobData['salary_max'],
                         'currency' => $jobData['currency'],
                         'description' => $jobData['description'],
                         'requirements' => $jobData['requirements'],
-                        'benefits' => $jobData['benefits'],
                         'skills' => $jobData['skills'],
                         'is_featured' => $jobData['is_featured'],
                         'is_active' => $jobData['is_active'],
