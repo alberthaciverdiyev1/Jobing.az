@@ -153,7 +153,7 @@ export default function jobsManager(config = null) {
             return this.category.includes(slug);
         },
 
-        // Category multi-select toggle (with accordion management)
+        // Category toggle (parent categories are single-select, subcategories belong to one parent family)
         toggleCategory(slug, parentSlug = null) {
             const idx = this.category.indexOf(slug);
             const wasActive = idx > -1;
@@ -161,31 +161,24 @@ export default function jobsManager(config = null) {
             if (wasActive) {
                 this.category.splice(idx, 1);
             } else {
-                this.category.push(slug);
-
-                // If a subcategory (child) was selected, ensure its parent category is NOT in search
                 if (parentSlug) {
-                    const parentIdx = this.category.indexOf(parentSlug);
-                    if (parentIdx > -1) {
-                        this.category.splice(parentIdx, 1);
+                    // Subcategory clicked:
+                    // Keep only sibling subcategories of the SAME parent category, remove other parents/children
+                    const allowedChildren = this.categoryChildrenMap[parentSlug] || [];
+                    this.category = this.category.filter(c => allowedChildren.includes(c) && c !== parentSlug);
+                    this.category.push(slug);
+
+                    if (!this.openAccordions.includes(parentSlug)) {
+                        this.openAccordions.push(parentSlug);
                     }
-                }
+                } else {
+                    // Parent category clicked:
+                    // Parent categories cannot be multi-selected: clear other parents & their subcategories
+                    this.category = [slug];
 
-                // If a parent category was selected, remove any of its selected children from search
-                const childrenSlugs = this.categoryChildrenMap[slug] || [];
-                if (childrenSlugs && childrenSlugs.length) {
-                    this.category = this.category.filter(c => !childrenSlugs.includes(c));
-                }
-            }
-
-            // Always open subcategories when category is clicked
-            if (parentSlug) {
-                if (!this.openAccordions.includes(parentSlug)) {
-                    this.openAccordions.push(parentSlug);
-                }
-            } else {
-                if (!this.openAccordions.includes(slug)) {
-                    this.openAccordions.push(slug);
+                    if (!this.openAccordions.includes(slug)) {
+                        this.openAccordions.push(slug);
+                    }
                 }
             }
 
