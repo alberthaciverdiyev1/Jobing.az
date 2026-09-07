@@ -136,9 +136,19 @@ window.__JOBS_CONFIG__ = {
                                     <button type="button"
                                             @click="toggleCategory('{{ $child->slug }}', '{{ $cat->slug }}')"
                                             class="w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg transition text-left cursor-pointer"
-                                            :class="category.includes('{{ $child->slug }}') ? 'bg-orange-50 text-primary font-bold' : 'text-gray-500 hover:text-primary hover:bg-gray-50'">
-                                        <span class="truncate">{{ $child->name }}</span>
-                                        <span class="text-[10px] text-gray-400 font-mono shrink-0 ml-2">(<span x-text="getCategoryCount('{{ $child->slug }}', {{ $child->vacancies_count }})"></span>)</span>
+                                            :class="category.includes('{{ $child->slug }}') ? 'bg-orange-50 text-primary font-bold' : 'text-gray-600 hover:text-primary hover:bg-gray-50'">
+                                        <span class="flex items-center gap-2 truncate">
+                                            <span class="w-3.5 h-3.5 rounded border flex items-center justify-center text-[8px] shrink-0"
+                                                  :class="category.includes('{{ $child->slug }}') ? 'bg-primary border-primary text-white' : 'border-gray-300'">
+                                                <i class="fas fa-check" x-show="category.includes('{{ $child->slug }}')"></i>
+                                            </span>
+                                            <span class="truncate">{{ $child->name }}</span>
+                                        </span>
+                                        <span class="text-[10px] text-gray-400 font-mono shrink-0 ml-2"
+                                              x-show="getCategoryCount('{{ $child->slug }}', {{ $child->vacancies_count }}) > 0"
+                                              x-text="'(' + getCategoryCount('{{ $child->slug }}', {{ $child->vacancies_count }}) + ')'">
+                                            ({{ $child->vacancies_count }})
+                                        </span>
                                     </button>
                                     @endforeach
                                 </div>
