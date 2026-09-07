@@ -9,7 +9,7 @@ use Illuminate\View\View;
 
 class BlogController extends Controller
 {
-    public function index(Request $request): View
+    public function index(Request $request): View|\Illuminate\Http\JsonResponse
     {
         $query = Blog::published();
 
@@ -17,10 +17,13 @@ class BlogController extends Controller
             $query->where('category', $category);
         }
 
-        if ($search = $request->input('search')) {
+        if ($search = ($request->input('search') ?: $request->input('q'))) {
+            $search = trim($search);
             $query->where(function ($q) use ($search) {
                 $q->where('title', 'ilike', "%{$search}%")
-                    ->orWhere('category', 'ilike', "%{$search}%");
+                    ->orWhere('category', 'ilike', "%{$search}%")
+                    ->orWhere('excerpt', 'ilike', "%{$search}%")
+                    ->orWhere('content', 'ilike', "%{$search}%");
             });
         }
 
@@ -33,6 +36,19 @@ class BlogController extends Controller
             ->distinct()
             ->orderBy('category')
             ->pluck('category');
+
+        $isAjax = ($request->ajax() || $request->header('X-Partial') || $request->wantsJson()) && !$request->acceptsHtml();
+
+        if ($isAjax) {
+            return response()->json([
+                'html' => view('pages.blog.partials.blog-list', [
+                    'blogs' => $blogs,
+                ])->render(),
+                'total' => $blogs->total(),
+            ])
+            ->header('Vary', 'X-Requested-With, Accept')
+            ->header('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0, private');
+        }
 
         return view('pages.blog.index', [
             'blogs' => $blogs,
