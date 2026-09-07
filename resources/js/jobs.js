@@ -68,14 +68,16 @@ export default function jobsManager(config = null) {
                 }
 
                 const params = new URLSearchParams(window.location.search);
+                const queryCategories = params.getAll('category[]').concat(params.getAll('category'));
                 const subcategory = params.get('subcategory');
+                const combinedCategories = [...new Set([...queryCategories, ...(subcategory ? [subcategory] : [])])];
 
-                if (subcategory) {
-                    this.category = [subcategory];
+                if (combinedCategories.length > 0) {
+                    this.category = combinedCategories;
                 } else if (pathCategory) {
                     this.category = [pathCategory];
                 } else {
-                    this.category = params.getAll('category');
+                    this.category = [];
                 }
 
                 if (pathCity) {
