@@ -132,7 +132,7 @@ window.__JOBS_CONFIG__ = {
                                     <button type="button"
                                             @click="toggleCategory('{{ $child->slug }}', '{{ $cat->slug }}')"
                                             class="w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg transition text-left cursor-pointer"
-                                            :class="category.includes('{{ $child->slug }}') ? 'bg-orange-100 text-orange-900 font-bold' : 'text-gray-500 hover:text-primary hover:bg-gray-50'">
+                                            :class="category.includes('{{ $child->slug }}') ? 'bg-orange-50 text-primary font-bold' : 'text-gray-500 hover:text-primary hover:bg-gray-50'">
                                         <span class="truncate">{{ $child->name }}</span>
                                         <span class="text-[10px] text-gray-400 font-mono shrink-0 ml-2">(<span x-text="getCategoryCount('{{ $child->slug }}', {{ $child->vacancies_count }})"></span>)</span>
                                     </button>
