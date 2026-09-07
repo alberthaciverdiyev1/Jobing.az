@@ -71,7 +71,7 @@ class AuthService
             return '/company';
         }
 
-        return '/user';
+        return route('home');
     }
 
     public function logout(): void
