@@ -29,7 +29,11 @@
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
+    "express-handlebars": "^9.0.1",
     "helmet": "^8.3.0",
+    "i18next": "^26.4.2",
+    "i18next-fs-backend": "^2.6.8",
+    "i18next-http-middleware": "^3.9.9",
     "pino": "^10.3.1",
     "pino-http": "^11.0.0",
     "zod": "^4.6.5"

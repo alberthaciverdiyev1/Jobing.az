@@ -4,9 +4,11 @@
 
 **Jobing** is a multilingual (Azerbaijani, Turkish, English, Russian) job-board platform.
 
-This repository is being rebuilt with **Express.js + TypeScript**. The previous
-Laravel implementation is preserved read-only under `old/` for reference — **do not
-build on it, do not copy from it, and treat it as non-authoritative.**
+> **One process, two audiences.** This app serves server-rendered pages *and* a JSON API.
+> Keep that split in mind for every feature you add.
+
+The previous Laravel implementation is preserved read-only under `old/` for reference —
+**do not build on it, do not copy from it, and treat it as non-authoritative.**
 
 ## Stack
 
@@ -15,51 +17,97 @@ build on it, do not copy from it, and treat it as non-authoritative.**
 | Runtime | Node.js >= 22 |
 | Language | TypeScript (strict, ESM, `NodeNext`) |
 | Framework | Express 5 |
+| Views | Handlebars (`express-handlebars`) |
+| i18n | i18next + `i18next-http-middleware` + `i18next-fs-backend` |
 | Dev runner | `tsx watch` |
 | Build | `tsc` → `dist/` |
 | Tests | Vitest + Supertest |
-| Lint/Format | ESLint 9 (flat config) + Prettier |
+| Lint / Format | ESLint 9 (flat config) + Prettier |
 | Logging | Pino + pino-http |
 | Validation | Zod |
-| Templating | **UNDECIDED (HBS vs EJS)** |
+
+## Naming conventions
+
+- **Files and folders: `PascalCase`** — `Core/Http/ErrorHandler.ts`, `Modules/Home/HomeController.ts`.
+  Only `index.ts` and `*.test.ts` are exempt.
+- **Functions, variables, object keys: `camelCase`** — `createApp()`, `registerViewEngine()`.
+- **Types, interfaces, classes, enums: `PascalCase`** — `AppError`, `LocaleInfo`, `ApiSuccess`.
+- **API response fields: `camelCase`** — `uptimeSeconds`, `statusCode`, `totalPages`.
 
 ## Layout
 
 ```
 src/
-├── config/         env (Zod-validated) + paths — the only place process.env is read
-├── core/
-│   ├── database/   data-layer seam (driver TBD)
-│   ├── http/       app factory, server, error handler, error classes
-│   └── logger.ts   Pino instance
-├── middlewares/    request-id, validate, not-found
-├── modules/        feature modules (one folder per domain)
-│   └── health/
-├── routes/         root router — mounts every module router
-├── types/          global type augmentation
-└── index.ts        entrypoint
+├── Config/             Env.ts (Zod-validated), Paths.ts, Locales.ts
+├── Core/
+│   ├── Database/       data-layer seam (driver TBD)
+│   ├── Http/           App.ts, Server.ts, ErrorHandler.ts, Errors.ts, Responses.ts
+│   ├── Localization/   I18n.ts
+│   ├── View/           Engine.ts, Helpers.ts
+│   └── Logger.ts
+├── Middlewares/        RequestId, Validate, ViewLocals, NotFound
+├── Modules/            one folder per domain
+│   ├── Health/         HealthController.ts + HealthApiRoutes.ts
+│   ├── Home/           HomeController.ts + HomeRoutes.ts
+│   └── Localization/   LocalizationController.ts + LocalizationRoutes.ts
+├── Routes/             index.ts (root), Web.ts (pages), Api.ts (JSON)
+├── Types/              global type augmentation
+└── index.ts            entrypoint
 
-views/  locales/  public/   # runtime assets, NOT compiled by tsc
-tests/                     # Vitest, mirrors src/
-old/                       # previous Laravel app (reference only)
+views/
+├── Layouts/Main.hbs
+├── Partials/           Head, Navbar, Footer, LanguageSwitcher
+└── Pages/              Home, Errors/NotFound, Errors/ServerError
+
+locales/<lng>/translation.json   public/   tests/   old/
 ```
 
-## Conventions
+## The Web / API split
 
-- **ESM only.** Relative imports must carry the `.js` extension (`./foo.js`), even in `.ts` files.
-- Type-only imports must use `import type` (`verbatimModuleSyntax` is on).
-- `process.env` is read **only** in `src/config/env.ts`. Add new variables to both
-  the Zod schema there and to `.env.example`.
-- Errors: throw subclasses of `AppError` (`NotFoundError`, `ValidationError`, …).
-  Anything else becomes an opaque 500 in production.
-- Every request gets `req.requestId`, echoed as `X-Request-Id`.
-- Feature code lives in `src/modules/<domain>/` (`*.routes.ts`, `*.controller.ts`,
-  `*.service.ts`, `*.schema.ts`), never loose in `src/`.
+Routing is two-branched, decided in `src/Routes/index.ts`:
+
+| Branch | Mount | Purpose |
+|---|---|---|
+| `Api.ts` | `/api/v1/*` | JSON API. **Always** answers JSON, even on errors. |
+| `Web.ts` | `/` | Server-rendered Handlebars pages. |
+
+A module that needs both declares two route files: `<Name>Routes.ts` (web) and
+`<Name>ApiRoutes.ts` (API), and registers each in `Web.ts` / `Api.ts`.
+
+The error handler picks the response shape from the URL: `/api/*` → JSON; anything
+else → HTML unless the client sends `Accept` that explicitly prefers JSON.
 
 ## Response envelope
 
-Success: `{ "success": true, "data": ... }`
-Error:   `{ "success": false, "error": { "code", "message", "details?" } }`
+```jsonc
+// success
+{ "success": true, "data": { } }
+
+// failure
+{ "success": false, "error": { "code": "NOT_FOUND", "message": "…", "details": { } } }
+```
+
+Use the helpers in `Core/Http/Responses.ts` (`ok`, `created`, `noContent`, `paginated`).
+
+## Views & i18n
+
+- `res.render('Pages/Home', { ... })` — paths are relative to `views/`, PascalCase.
+- Every template receives: `t`, `locale`, `locales`, `appName`, `appSuffix`, `appUrl`,
+  `currentUrl`, `year`, `isProduction` (set in `Middlewares/ViewLocals.ts`).
+- Translate with `{{t "home.title"}}`. Add keys to **all four** files under `locales/`.
+- Locale resolves from the `lang` cookie, then `Accept-Language`, falling back to
+  `DEFAULT_LOCALE`. `GET /lang/:locale` sets the cookie and redirects back.
+
+## Conventions
+
+- **ESM only.** Relative imports carry the `.js` extension in `.ts` files.
+- Type-only imports use `import type` (`verbatimModuleSyntax` is on).
+- `process.env` is read **only** in `src/Config/Env.ts`. New variables go there *and* in `.env.example`.
+- Errors: throw subclasses of `AppError` (`NotFoundError`, `ValidationError`, …).
+  Anything else becomes an opaque 500 in production.
+- Every request gets `req.requestId`, echoed as `X-Request-Id`.
+- Validate input with the `validate()` middleware; results land on `req.validated`
+  (never mutate Express 5's getter-only `req.query`).
 
 ## Commands
 
@@ -76,6 +124,6 @@ npm run format     # prettier
 ## Notes
 
 - `.env` is gitignored; copy from `.env.example`.
-- Node/npm blocks install scripts by default. `esbuild` is approved via
-  `npm install-scripts approve esbuild` — needed for tsx/vitest.
+- npm blocks install scripts by default. `esbuild` is approved via
+  `npm install-scripts approve esbuild` (needed by tsx/vitest).
 - Commit messages go in English.

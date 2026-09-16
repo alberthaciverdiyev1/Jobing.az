@@ -1,0 +1,18 @@
+<header class="site-header">
+  <div class="container site-header__inner">
+    <a class="brand" href="/">
+      <span class="brand__mark">J</span>
+      <span class="brand__name">{{appName}}<span class="brand__suffix">{{appSuffix}}</span></span>
+    </a>
+
+    <nav class="site-nav" aria-label="{{t 'a11y.mainNavigation'}}">
+      <a href="/">{{t "nav.home"}}</a>
+      <a href="/jobs">{{t "nav.jobs"}}</a>
+      <a href="/companies">{{t "nav.companies"}}</a>
+      <a href="/blog">{{t "nav.blog"}}</a>
+      <a href="/contact">{{t "nav.contact"}}</a>
+    </nav>
+
+    {{> LanguageSwitcher}}
+  </div>
+</header>

@@ -1,0 +1,49 @@
+{
+  "nav": {
+    "home": "Home",
+    "jobs": "Jobs",
+    "companies": "Companies",
+    "blog": "Blog",
+    "contact": "Contact"
+  },
+  "a11y": {
+    "skipToContent": "Skip to main content",
+    "languageSwitcher": "Language selection",
+    "mainNavigation": "Main navigation"
+  },
+  "home": {
+    "title": "Take the next step in your career",
+    "subtitle": "Thousands of vacancies and candidates on Azerbaijan's largest job board.",
+    "findJobs": "Find a job",
+    "postJob": "Post a job",
+    "why": {
+      "title": "Why Jobing?",
+      "verified": {
+        "title": "Verified companies",
+        "text": "Every company profile is reviewed and approved by hand."
+      },
+      "candidates": {
+        "title": "Active candidates",
+        "text": "Reach out directly through the CV database and job-seeker ads."
+      },
+      "multilingual": {
+        "title": "Multilingual by design",
+        "text": "Full support for Azerbaijani, Turkish, Russian and English."
+      }
+    }
+  },
+  "footer": {
+    "rights": "All rights reserved."
+  },
+  "errors": {
+    "backHome": "Back to home",
+    "notFound": {
+      "title": "Page not found",
+      "text": "The page you are looking for does not exist or has been moved."
+    },
+    "server": {
+      "title": "Something went wrong",
+      "text": "An unexpected error occurred. Please try again in a moment."
+    }
+  }
+}

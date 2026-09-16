@@ -33,6 +33,3 @@ old/vendor/
 old/.env
 old/.phpunit.result.cache
 
-# --- Runtime storage ---
-/storage/*
-!/storage/**/.gitkeep

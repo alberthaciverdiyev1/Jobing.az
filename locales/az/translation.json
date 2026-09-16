@@ -1,0 +1,49 @@
+{
+  "nav": {
+    "home": "Ana səhifə",
+    "jobs": "İş elanları",
+    "companies": "Şirkətlər",
+    "blog": "Bloq",
+    "contact": "Əlaqə"
+  },
+  "a11y": {
+    "skipToContent": "Əsas məzmuna keç",
+    "languageSwitcher": "Dil seçimi",
+    "mainNavigation": "Əsas naviqasiya"
+  },
+  "home": {
+    "title": "Karyeranızda növbəti addımı atın",
+    "subtitle": "Azərbaycanın ən böyük iş elanları platformasında minlərlə vakansiya və namizəd.",
+    "findJobs": "İş tap",
+    "postJob": "Elan yerləşdir",
+    "why": {
+      "title": "Niyə Jobing?",
+      "verified": {
+        "title": "Yoxlanılmış şirkətlər",
+        "text": "Hər şirkət profili əl ilə yoxlanılır və təsdiqlənir."
+      },
+      "candidates": {
+        "title": "Aktiv namizədlər",
+        "text": "CV bazası və iş axtaran elanları ilə birbaşa əlaqə saxlayın."
+      },
+      "multilingual": {
+        "title": "Çoxdilli platforma",
+        "text": "Azərbaycan, türk, rus və ingilis dillərində dəstək."
+      }
+    }
+  },
+  "footer": {
+    "rights": "Bütün hüquqlar qorunur."
+  },
+  "errors": {
+    "backHome": "Ana səhifəyə qayıt",
+    "notFound": {
+      "title": "Səhifə tapılmadı",
+      "text": "Axtardığınız səhifə mövcud deyil və ya köçürülüb."
+    },
+    "server": {
+      "title": "Xəta baş verdi",
+      "text": "Gözlənilməz bir xəta yarandı. Zəhmət olmasa bir az sonra yenidən cəhd edin."
+    }
+  }
+}

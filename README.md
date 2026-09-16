@@ -1,23 +1,24 @@
 # Jobing
 
-Multilingual job-board platform, built with **Express.js + TypeScript**.
+Multilingual job-board platform built with **Express.js + TypeScript**.
+Serves server-rendered pages and a JSON API from a single process.
 
 > The previous Laravel implementation lives in [`old/`](./old) for reference only.
 
 ## Requirements
 
 - Node.js >= 22
-- npm
 
 ## Getting started
 
 ```bash
 npm install
 cp .env.example .env
-npm run dev          # http://localhost:3000
+npm run dev
 ```
 
-Health check: `GET /health`
+- Pages: <http://localhost:3000>
+- API: <http://localhost:3000/api/v1/health>
 
 ## Scripts
 
@@ -26,18 +27,26 @@ Health check: `GET /health`
 | `npm run dev` | Dev server with hot reload (`tsx watch`) |
 | `npm run build` | Compile TypeScript to `dist/` |
 | `npm start` | Run the compiled server |
-| `npm test` | Run Vitest test suite |
+| `npm test` | Vitest test suite |
 | `npm run typecheck` | Type-check without emitting |
 | `npm run lint` | ESLint |
 | `npm run format` | Prettier |
 
-## Project structure
+## Routes
 
-See [CLAUDE.md](./CLAUDE.md).
+| Route | Kind | Description |
+|---|---|---|
+| `GET /` | page | Landing page |
+| `GET /lang/:locale` | page | Switch language (sets cookie, redirects back) |
+| `GET /api/v1/health` | API | Health check |
 
 ## Architecture
 
-- **Modular**: every domain is a folder under `src/modules/`.
-- **Validated config**: all environment access goes through `src/config/env.ts`.
+- **Web + API**: `/api/v1/*` is JSON-only; every other route renders Handlebars.
+- **Modular**: each domain is a folder under `src/Modules/`.
+- **Validated config**: all environment access goes through `src/Config/Env.ts`.
 - **Type-safe errors**: an `AppError` hierarchy maps to HTTP status codes.
-- **Structured logging**: Pino, with per-request correlation ids.
+- **Structured logging**: Pino with per-request correlation ids.
+- **Four locales**: `az` (default), `tr`, `en`, `ru`.
+
+See [CLAUDE.md](./CLAUDE.md) for the full guide and conventions.

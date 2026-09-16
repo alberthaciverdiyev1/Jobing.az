@@ -1,0 +1,10 @@
+<div class="lang-switcher" role="group" aria-label="{{t 'a11y.languageSwitcher'}}">
+  {{#each locales}}
+    <a
+      class="lang-switcher__item{{#if (eq this.code ../locale)}} is-active{{/if}}"
+      href="/lang/{{this.code}}"
+      hreflang="{{this.code}}"
+      {{#if (eq this.code ../locale)}}aria-current="true"{{/if}}
+    >{{this.flag}} {{this.code}}</a>
+  {{/each}}
+</div>

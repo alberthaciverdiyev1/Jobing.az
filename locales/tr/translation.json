@@ -1,0 +1,49 @@
+{
+  "nav": {
+    "home": "Ana sayfa",
+    "jobs": "İş ilanları",
+    "companies": "Şirketler",
+    "blog": "Blog",
+    "contact": "İletişim"
+  },
+  "a11y": {
+    "skipToContent": "Ana içeriğe geç",
+    "languageSwitcher": "Dil seçimi",
+    "mainNavigation": "Ana gezinme"
+  },
+  "home": {
+    "title": "Kariyerinizde bir sonraki adımı atın",
+    "subtitle": "Azerbaycan'ın en büyük iş ilanları platformunda binlerce ilan ve aday.",
+    "findJobs": "İş bul",
+    "postJob": "İlan ver",
+    "why": {
+      "title": "Neden Jobing?",
+      "verified": {
+        "title": "Doğrulanmış şirketler",
+        "text": "Her şirket profili elle incelenir ve onaylanır."
+      },
+      "candidates": {
+        "title": "Aktif adaylar",
+        "text": "CV havuzu ve iş arayan ilanlarıyla doğrudan iletişime geçin."
+      },
+      "multilingual": {
+        "title": "Çok dilli platform",
+        "text": "Azerice, Türkçe, Rusça ve İngilizce desteği."
+      }
+    }
+  },
+  "footer": {
+    "rights": "Tüm hakları saklıdır."
+  },
+  "errors": {
+    "backHome": "Ana sayfaya dön",
+    "notFound": {
+      "title": "Sayfa bulunamadı",
+      "text": "Aradığınız sayfa mevcut değil veya taşınmış."
+    },
+    "server": {
+      "title": "Bir hata oluştu",
+      "text": "Beklenmeyen bir hata oluştu. Lütfen birazdan tekrar deneyin."
+    }
+  }
+}
