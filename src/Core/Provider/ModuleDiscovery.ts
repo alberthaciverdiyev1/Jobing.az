@@ -22,6 +22,8 @@ export interface DiscoveredModule {
   migrationsDirectory?: string;
   /** Absolute path to the module's `Views` folder, when it renders templates. */
   viewsDirectory?: string;
+  /** Absolute path to the module's `Configurations` folder (entity → table). */
+  configurationsDirectory?: string;
 }
 
 async function isDirectory(target: string): Promise<boolean> {
@@ -53,6 +55,24 @@ async function resolveDirectory(candidate: string): Promise<string | undefined> 
   return (await isDirectory(candidate)) ? candidate : undefined;
 }
 
+/** Lists the loadable source files (`.ts`/`.js`) directly inside a folder. */
+export async function listSourceFiles(directory: string): Promise<string[]> {
+  try {
+    const entries = await fs.readdir(directory);
+    return entries
+      .filter(
+        (entry) =>
+          (entry.endsWith('.ts') || entry.endsWith('.js')) &&
+          !entry.endsWith('.d.ts') &&
+          !entry.endsWith('.test.ts'),
+      )
+      .sort()
+      .map((entry) => path.join(directory, entry));
+  } catch {
+    return [];
+  }
+}
+
 /**
  * Walks `Modules/` and reports what each module provides.
  * This is the single source of truth for route and migration registration —
@@ -80,6 +100,7 @@ export async function discoverModules(): Promise<DiscoveredModule[]> {
       apiRoutesFile: await resolveFile(path.join(directory, 'Routes'), 'Api'),
       migrationsDirectory: await resolveDirectory(path.join(directory, 'Migrations')),
       viewsDirectory: await resolveDirectory(path.join(directory, 'Views')),
+      configurationsDirectory: await resolveDirectory(path.join(directory, 'Configurations')),
     });
   }
 

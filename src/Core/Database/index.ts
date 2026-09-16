@@ -1,10 +1,11 @@
-import { sql } from 'kysely';
+import { sql } from 'drizzle-orm';
 import { env } from '../../Config/Env.js';
 import { logger } from '../Logger.js';
+import { appDbContext } from './AppDbContext.js';
 import { destroyDb, getDb } from './Client.js';
 
+export { appDbContext } from './AppDbContext.js';
 export { destroyDb, getDb, getPool } from './Client.js';
-export type { Database } from './Types.js';
 
 export interface DatabaseHealth {
   connected: boolean;
@@ -16,7 +17,7 @@ export interface DatabaseHealth {
 export async function databaseHealth(): Promise<DatabaseHealth> {
   try {
     const startedAt = Date.now();
-    await sql`select 1`.execute(getDb());
+    await getDb().execute(sql`select 1`);
     return { connected: true, driver: 'postgres', latencyMs: Date.now() - startedAt };
   } catch {
     return { connected: false, driver: 'postgres' };
@@ -24,10 +25,13 @@ export async function databaseHealth(): Promise<DatabaseHealth> {
 }
 
 /**
- * Eager connection check at boot. A missing database is fatal in production but
- * only a warning elsewhere, so development and tests can run without one.
+ * Loads the entity configurations, then checks the connection.
+ * A missing database is fatal in production but only a warning elsewhere, so
+ * development and tests can run without one.
  */
 export async function connectDatabase(): Promise<void> {
+  await appDbContext.load();
+
   const health = await databaseHealth();
 
   if (health.connected) {

@@ -1,8 +1,4 @@
-import type { Selectable } from 'kysely';
-import type { UsersTable } from '../../../Core/Database/Types.js';
-
-/** A `users` row as returned by a select. */
-export type UserRow = Selectable<UsersTable>;
+import type { UserRow } from '../Configurations/UserConfiguration.js';
 
 /** Domain representation of an account. Never carries the password hash. */
 export interface User {
@@ -44,3 +40,5 @@ export function toUser(entity: UserWithPassword): User {
   const { passwordHash: _passwordHash, ...user } = entity;
   return user;
 }
+
+export type { UserRow };

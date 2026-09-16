@@ -1,4 +1,6 @@
+import { count, desc, eq } from 'drizzle-orm';
 import { getDb } from '../../../Core/Database/index.js';
+import { users } from '../Configurations/UserConfiguration.js';
 import {
   toUser,
   toUserWithPassword,
@@ -18,75 +20,62 @@ export function normalizeEmail(email: string): string {
 
 export class UserRepository implements UserRepositoryInterface {
   async findById(id: string): Promise<UserWithPassword | undefined> {
-    const row = await getDb()
-      .selectFrom('users')
-      .selectAll()
-      .where('id', '=', id)
-      .executeTakeFirst();
-
+    const [row] = await getDb().select().from(users).where(eq(users.id, id)).limit(1);
     return row ? toUserWithPassword(row) : undefined;
   }
 
   async findByEmail(email: string): Promise<UserWithPassword | undefined> {
-    const row = await getDb()
-      .selectFrom('users')
-      .selectAll()
-      .where('email', '=', normalizeEmail(email))
-      .executeTakeFirst();
+    const [row] = await getDb()
+      .select()
+      .from(users)
+      .where(eq(users.email, normalizeEmail(email)))
+      .limit(1);
 
     return row ? toUserWithPassword(row) : undefined;
   }
 
   async existsByEmail(email: string): Promise<boolean> {
-    const row = await getDb()
-      .selectFrom('users')
-      .select('id')
-      .where('email', '=', normalizeEmail(email))
-      .executeTakeFirst();
+    const [row] = await getDb()
+      .select({ id: users.id })
+      .from(users)
+      .where(eq(users.email, normalizeEmail(email)))
+      .limit(1);
 
     return row !== undefined;
   }
 
   async create(data: CreateUserData): Promise<UserWithPassword> {
-    const row = await getDb()
-      .insertInto('users')
-      .values({
-        email: normalizeEmail(data.email),
-        name: data.name.trim(),
-        passwordHash: data.passwordHash,
-        ...(data.isAdmin === undefined ? {} : { isAdmin: data.isAdmin }),
-      })
-      .returningAll()
-      .executeTakeFirstOrThrow();
+    const values = {
+      email: normalizeEmail(data.email),
+      name: data.name.trim(),
+      passwordHash: data.passwordHash,
+      ...(data.isAdmin === undefined ? {} : { isAdmin: data.isAdmin }),
+    };
+
+    const [row] = await getDb().insert(users).values(values).returning();
+    if (!row) throw new Error('Insert did not return the created user');
 
     return toUserWithPassword(row);
   }
 
   async updatePasswordHash(id: string, passwordHash: string): Promise<void> {
     await getDb()
-      .updateTable('users')
+      .update(users)
       .set({ passwordHash, updatedAt: new Date() })
-      .where('id', '=', id)
-      .execute();
+      .where(eq(users.id, id));
   }
 
   async paginate(page: number, perPage: number): Promise<PaginatedResult<User>> {
     const offset = (page - 1) * perPage;
 
-    const [rows, countRow] = await Promise.all([
-      getDb()
-        .selectFrom('users')
-        .selectAll()
-        .orderBy('createdAt', 'desc')
-        .limit(perPage)
-        .offset(offset)
-        .execute(),
-      getDb().selectFrom('users').select(({ fn }) => fn.countAll<string>().as('total')).executeTakeFirst(),
+    const [rows, totals] = await Promise.all([
+      getDb().select().from(users).orderBy(desc(users.createdAt)).limit(perPage).offset(offset),
+      getDb().select({ total: count() }).from(users),
     ]);
 
     return {
       items: rows.map((row) => toUser(toUserWithPassword(row))),
-      total: Number(countRow?.total ?? 0),
+      total: totals[0]?.total ?? 0,
       page,
       perPage,
     };

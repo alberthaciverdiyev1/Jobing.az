@@ -18,7 +18,7 @@ The previous Laravel implementation is preserved read-only under `old/` for refe
 | Language | TypeScript (strict, ESM, `NodeNext`) |
 | Framework | Express 5 |
 | Database | PostgreSQL |
-| Query layer | **Kysely** (typed SQL query builder — no ORM magic) |
+| ORM | **Drizzle ORM** (TypeScript schema, SQL-shaped queries) |
 | Driver | `pg` |
 | Views | Handlebars (`express-handlebars`) |
 | i18n | i18next + `i18next-http-middleware` + `i18next-fs-backend` |
@@ -32,7 +32,7 @@ The previous Laravel implementation is preserved read-only under `old/` for refe
 ## Naming conventions
 
 - **Files and folders: `PascalCase`** — `Core/Http/ErrorHandler.ts`, `Modules/Home/HomeController.ts`.
-  Only `index.ts`, `*.test.ts` and timestamped migrations are exempt.
+  Only `index.ts` and `*.test.ts` are exempt.
 - **Functions, variables, object keys: `camelCase`** — `createApp()`, `registerViewEngine()`.
 - **Types, interfaces, classes, enums: `PascalCase`** — `AppError`, `LocaleInfo`, `ApiSuccess`.
 - **API response fields: `camelCase`** — `uptimeSeconds`, `statusCode`, `totalPages`.
@@ -43,10 +43,10 @@ The previous Laravel implementation is preserved read-only under `old/` for refe
 ```
 src/
 ├── Config/             Env.ts (Zod-validated), Paths.ts, Locales.ts
-├── Console/            CLI entrypoints (Migrate.ts)
+├── Console/            CLI entrypoints (Sync.ts)
 ├── Core/Provider/      ModuleDiscovery.ts, ModuleProvider.ts — auto-registration
 ├── Core/
-│   ├── Database/       Client.ts, Types.ts, Migrator.ts, Migrations/
+│   ├── Database/       Client.ts (Drizzle), AppDbContext.ts, Configurations/
 │   ├── Http/           App.ts, Server.ts, ErrorHandler.ts, Errors.ts, Responses.ts
 │   ├── Localization/   I18n.ts
 │   ├── View/           Engine.ts, Helpers.ts
@@ -81,7 +81,7 @@ Modules/<Name>/
 ├── Services/                     business rules; depends on the interface only
 ├── Validators/                   Zod schemas shared by both controllers
 ├── Middlewares/                  module-specific middleware (auth guards)
-├── Migrations/                   the module's own tables
+├── Configurations/               entity → table mapping (EF-style)
 ├── Routes/
 │   ├── Web.ts                    exports `basePath` + `router`
 │   └── Api.ts                    exports `basePath` + `router`
@@ -95,9 +95,9 @@ one with no pages skips `Routes/Web.ts` + `Views/`.
 
 ### Dependency direction
 
-`Routes → Controller → Service → RepositoryInterface ← Repository → Kysely`
+`Routes → Controller → Service → RepositoryInterface ← Repository → Drizzle`
 
-Services never import Kysely; they depend on the interface, which keeps them testable
+Services never import Drizzle; they depend on the interface, which keeps them testable
 with a fake repository.
 
 ## Module routes
@@ -152,22 +152,54 @@ the client's `Accept` explicitly prefers JSON.
 
 Use `Core/Http/Responses.ts` — `ok`, `created`, `noContent`, `paginated`.
 
-## Database (Kysely + PostgreSQL)
+## Database (Drizzle ORM + PostgreSQL)
 
-- Import the query builder with `const db = getDb()` from `Core/Database/index.js`.
-- Never build raw SQL by string concatenation; use the Kysely builder or `sql` tags.
-- Table types live in `Core/Database/Types.ts` and **must** stay in sync with migrations.
-- Migrations live in `Core/Database/Migrations/` as
-  `<timestamp>_<PascalCaseName>.ts`, each exporting `up(db)` and `down(db)`.
+**The schema is declared in TypeScript, never written by hand.** Each entity owns a
+configuration file — the same idea as an EF Core entity configuration feeding
+`AppDbContext`:
 
-```bash
-npm run db:migrate    # apply pending migrations
-npm run db:rollback   # revert the last batch
-npm run db:status     # list migrations and whether they ran
+```ts
+// Modules/User/Configurations/UserConfiguration.ts
+export const users = pgTable('users', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  email: varchar('email', { length: 255 }).notNull().unique(),
+  passwordHash: text('password_hash').notNull(),
+  isAdmin: boolean('is_admin').notNull().default(false),
+  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+});
+
+export type UserRow = typeof users.$inferSelect;
+export type NewUserRow = typeof users.$inferInsert;
 ```
 
-The connection is created lazily on first use (`getDb()`), so tests can run without a
-database. `connectDatabase()` at boot only warns outside production.
+### Where configurations live
+
+| Location | Purpose |
+|---|---|
+| `Core/Database/Configurations/*.ts` | infrastructure tables (sessions, …) |
+| `Modules/<Name>/Configurations/*.ts` | domain tables |
+
+`drizzle.config.ts` collects both with globs, and `Core/Database/AppDbContext.ts`
+does the same at runtime — **adding a module never requires editing either file.**
+
+### Migrations
+
+```bash
+npm run db:generate   # diff the configurations, write drizzle/NNNN_*.sql
+npm run db:migrate    # apply pending migrations
+npm run db:push       # push the schema straight to the database (dev)
+npm run db:studio     # browse the data
+```
+
+Generated SQL is committed under `drizzle/` and reviewed like any other change.
+
+### Querying
+
+- `const db = getDb()` from `Core/Database/index.js`.
+- Prefer the query builder; `sql` tags are fine when you need raw SQL.
+- Column names are snake_case in PostgreSQL, camelCase in TypeScript — Drizzle maps
+  them, so `users.isAdmin` is the `is_admin` column.
+- Repositories import their own module's table; no global schema import needed.
 
 ## Views & i18n
 
@@ -221,7 +253,7 @@ npm test           # vitest
 npm run typecheck  # tsc --noEmit
 npm run lint       # eslint
 npm run format     # prettier
-npm run db:migrate # apply migrations
+npm run db:migrate # apply pending migrations
 ```
 
 ## Notes

@@ -1,14 +1,14 @@
-import { CamelCasePlugin, Kysely, PostgresDialect } from 'kysely';
+import { drizzle } from 'drizzle-orm/node-postgres';
 import { Pool } from 'pg';
 import { env } from '../../Config/Env.js';
 import { logger } from '../Logger.js';
-import type { Database } from './Types.js';
+import { appDbContext } from './AppDbContext.js';
 
 /** Fail fast instead of hanging a request when the database is unreachable. */
 const CONNECTION_TIMEOUT_MS = 5_000;
 
 let pool: Pool | null = null;
-let client: Kysely<Database> | null = null;
+let client: ReturnType<typeof createClient> | null = null;
 
 function createPool(): Pool {
   const shared = {
@@ -37,24 +37,28 @@ function createPool(): Pool {
   return created;
 }
 
+function createClient() {
+  return drizzle(getPool(), { schema: appDbContext.schema });
+}
+
 export function getPool(): Pool {
   pool ??= createPool();
   return pool;
 }
 
-/** The Kysely query builder. Import this from repositories/services. */
-export function getDb(): Kysely<Database> {
-  client ??= new Kysely<Database>({
-    dialect: new PostgresDialect({ pool: getPool() }),
-    // Database columns are snake_case, TypeScript properties are camelCase.
-    plugins: [new CamelCasePlugin()],
-  });
+/**
+ * The Drizzle query builder. Import this from repositories/services.
+ * Call `appDbContext.load()` first (`connectDatabase()` does) if you need the
+ * relational query API.
+ */
+export function getDb(): ReturnType<typeof createClient> {
+  client ??= createClient();
   return client;
 }
 
 export async function destroyDb(): Promise<void> {
   if (client) {
-    await client.destroy();
+    await client.$client.end();
     client = null;
   }
   pool = null;

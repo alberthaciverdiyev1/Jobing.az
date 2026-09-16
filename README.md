@@ -2,7 +2,7 @@
 
 Multilingual job-board platform built with **Express.js + TypeScript**.
 Serves server-rendered pages and a JSON API from a single process, backed by
-**PostgreSQL** through **Kysely**.
+**PostgreSQL** through **Drizzle ORM**.
 
 > The previous Laravel implementation lives in [`old/`](./old) for reference only.
 
@@ -34,9 +34,10 @@ npm run dev
 | `npm run typecheck` | Type-check without emitting |
 | `npm run lint` | ESLint |
 | `npm run format` | Prettier |
+| `npm run db:generate` | Generate migration SQL from the entity configurations |
 | `npm run db:migrate` | Apply pending migrations |
-| `npm run db:rollback` | Revert the last migration |
-| `npm run db:status` | Show migration status |
+| `npm run db:push` | Push the schema directly (development) |
+| `npm run db:studio` | Browse the database |
 
 ## Routes
 
@@ -57,11 +58,15 @@ npm run dev
 ## Architecture
 
 - **Web + API**: `/api/v1/*` is JSON-only; every other route renders Handlebars.
-- **Modular**: each domain is a folder under `src/Modules/` containing its own
-  Entity, Repository, Interface, Service, Validators, Controllers (separate web and
-  API), Routes, Migrations and Views.
-- **SQL-first data layer**: Kysely query builder over PostgreSQL, with typed tables
-  and file-based migrations.
+- **Modular and self-registering**: each domain is a folder under `src/Modules/`
+  containing its own Entity, Repository, Interface, Service, Validators, Controllers
+  (separate web and API), Routes, Configurations and Views. `Core/Provider`
+  discovers them at boot — routes are never listed by hand.
+- **Configuration-driven schema**: each entity declares its table in
+  `Modules/<Name>/Configurations/<Name>Configuration.ts`; `AppDbContext` and
+  `drizzle-kit` collect them automatically and generate migrations from the diff.
+- **Typed data layer**: Drizzle ORM over PostgreSQL — column names are snake_case in
+  the database and camelCase in TypeScript.
 - **Validated config**: all environment access goes through `src/Config/Env.ts`.
 - **Type-safe errors**: an `AppError` hierarchy maps to HTTP status codes.
 - **Structured logging**: Pino with per-request correlation ids.
