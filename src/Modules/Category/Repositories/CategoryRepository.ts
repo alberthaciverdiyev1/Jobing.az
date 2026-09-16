@@ -1,5 +1,6 @@
 import { and, count, eq, isNull, ne, sql } from 'drizzle-orm';
 import { getDb } from '../../../Core/Database/index.js';
+import { normalizeSearch } from '../../../Core/Support/NormalizeSearch.js';
 import { categories } from '../Configurations/CategoryConfiguration.js';
 import type { Category } from '../Entities/Category.js';
 import type { NewCategory } from '../Entities/NewCategory.js';
@@ -54,7 +55,7 @@ export class CategoryRepository {
 
     if (filters.search) {
       conditions.push(
-        sql`lower(${categories.name} ->> 'az') like ${`%${filters.search.toLowerCase()}%`}`,
+        sql`lower(${categories.name} ->> 'az') like ${`%${normalizeSearch(filters.search)}%`}`,
       );
     }
 

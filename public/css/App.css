@@ -521,3 +521,112 @@ a {
   border-color: var(--primary);
   color: var(--primary);
 }
+
+/* Company cards */
+.company-card {
+  padding: 1.3rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.company-card__head {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.company-card__logo {
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  object-fit: contain;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  flex: none;
+}
+
+.company-card__logo--empty {
+  display: grid;
+  place-items: center;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--muted);
+  overflow: hidden;
+  text-align: center;
+  padding: 0.2rem;
+}
+
+.company-card__title {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.company-card__badges {
+  margin: 0.85rem 0 0;
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+/* Badges */
+.badge {
+  display: inline-block;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  border: 1px solid var(--border);
+  color: var(--muted);
+}
+
+.badge--verified {
+  color: #16a34a;
+  border-color: color-mix(in srgb, #16a34a 40%, var(--border));
+}
+
+.badge--premium {
+  color: #b45309;
+  border-color: color-mix(in srgb, #b45309 40%, var(--border));
+}
+
+/* Company detail */
+.company-banner {
+  display: block;
+  width: 100%;
+  max-height: 280px;
+  object-fit: cover;
+}
+
+.company-head {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  margin-bottom: 1.75rem;
+}
+
+.company-head__logo {
+  width: 96px;
+  height: 96px;
+  border-radius: var(--radius);
+  object-fit: contain;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  flex: none;
+}
+
+.company-head__meta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin: 0.4rem 0 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.company-about {
+  max-width: 70ch;
+  color: var(--text);
+  white-space: pre-line;
+}

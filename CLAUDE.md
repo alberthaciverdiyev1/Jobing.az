@@ -51,6 +51,7 @@ src/
 │   │                   Responses.ts, RootRouter.ts, Envelope/, Errors/
 │   ├── Localization/   I18n.ts, TranslatedText.ts, TranslateText.ts,
 │   │                   TranslatedTextSchema.ts
+│   ├── Storage/        ImageStorage.ts — writes under public/images
 │   ├── Provider/       ModuleDiscovery.ts, ModuleProvider.ts — auto-registration
 │   ├── View/           Edge.ts, RenderPage.ts, PageShell.ts, PageState.ts
 │   └── Logger.ts
@@ -64,7 +65,8 @@ src/
 └── index.ts            entrypoint
 
 locales/<lng>/translation.json
-public/  tools/  tests/  old/
+public/images/          uploaded images (gitignored), served at /static/images/…
+tools/  tests/  old/
 ```
 
 There is **no top-level `src/Routes/`** — modules own their routes, and the root
@@ -77,6 +79,7 @@ router is part of the HTTP layer (`Core/Http/RootRouter.ts`).
 | `User` | accounts, authentication (JWT), admin guard |
 | `Category` | job categories, self-referencing hierarchy, translated names |
 | `City` | cities and regions vacancies are located in |
+| `Company` | company profiles, ownership, verification, logo/banner uploads |
 | `Home` | landing page |
 | `Localization` | language switching |
 | `Health` | health endpoint |
@@ -378,6 +381,27 @@ boundary.
 | `req.session.userId` | the token's `sub` claim |
 | CSRF token | **double-submit cookie** — `jobing.csrf` (httpOnly) must be echoed in the `_csrf` field or `X-CSRF-Token` header. Another origin can force a request but cannot read the cookie. |
 | Flash messages | short-lived `jobing.flash` cookie holding a JSON array, read once and cleared |
+
+## Uploaded images
+
+Uploads are written to **`public/images/`** on disk and served by the existing
+`/static` middleware — there is no "serve the image" endpoint and no binary in the
+database.
+
+| Concern | Where |
+|---|---|
+| Bytes | `public/images/companies/<id>/logo-<sha1>.png` |
+| Metadata (path, mime, size) | `company_media`, one row per company per kind |
+| Upload | `Middlewares/UploadImage.ts` (multer, in-memory, 2 MB, 1 file) |
+| Validation | `Core/Support/ImagePayload.ts` — decides by **magic bytes**, never the client's `Content-Type` |
+| Writing | `Core/Storage/ImageStorage.ts` → `storeImage` / `deleteImage` / `imageUrl` |
+
+The file name carries a digest of the bytes, so replacing an image changes its URL
+and browsers never show a stale one.
+
+**Files do not cascade.** Deleting a company removes its `company_media` rows via
+the foreign key, so `CompanyService.remove()` collects the paths first and unlinks
+the files afterwards. Anything else that deletes companies must do the same.
 
 ### Deliberately absent
 

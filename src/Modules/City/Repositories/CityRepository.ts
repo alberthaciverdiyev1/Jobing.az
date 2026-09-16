@@ -1,5 +1,6 @@
 import { and, eq, ne, sql } from 'drizzle-orm';
 import { getDb } from '../../../Core/Database/index.js';
+import { normalizeSearch } from '../../../Core/Support/NormalizeSearch.js';
 import { cities } from '../Configurations/CityConfiguration.js';
 import type { City } from '../Entities/City.js';
 import type { NewCity } from '../Entities/NewCity.js';
@@ -41,7 +42,7 @@ export class CityRepository {
 
     if (filters.search) {
       conditions.push(
-        sql`lower(${cities.name} ->> 'az') like ${`%${filters.search.toLowerCase()}%`}`,
+        sql`lower(${cities.name} ->> 'az') like ${`%${normalizeSearch(filters.search)}%`}`,
       );
     }
 

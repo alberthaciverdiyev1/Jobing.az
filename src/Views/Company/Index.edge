@@ -1,0 +1,36 @@
+@component('Components/Layout', { shell: shell })
+  @slot('main')
+    <section class="container section">
+      <h1 class="page-title">{{ t('company.title') }}</h1>
+      <p class="page-subtitle">{{ t('company.subtitle') }}</p>
+
+      @if(companies.length === 0)
+        <p class="empty-state">{{ t('company.empty') }}</p>
+      @else
+        <div class="cards">
+          @each(company in companies)
+            <article class="company-card">
+              <a class="company-card__head" href="/companies/{{ company.slug }}">
+                @if(company.logoUrl)
+                  <img class="company-card__logo" src="{{ company.logoUrl }}" alt="{{ company.name }}" width="48" height="48" loading="lazy" />
+                @else
+                  <span class="company-card__logo company-card__logo--empty">{{ company.name }}</span>
+                @end
+                <h2 class="company-card__title">{{ company.name }}</h2>
+              </a>
+
+              <p class="company-card__badges">
+                @if(company.isVerified)
+                  <span class="badge badge--verified">{{ t('company.verified') }}</span>
+                @end
+                @if(company.isPremium)
+                  <span class="badge badge--premium">{{ t('company.premium') }}</span>
+                @end
+              </p>
+            </article>
+          @end
+        </div>
+      @end
+    </section>
+  @endslot
+@end

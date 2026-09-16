@@ -84,5 +84,16 @@
     "title": "Jobs by city",
     "subtitle": "Find the vacancies available in your region.",
     "empty": "No cities have been added yet."
+  },
+  "company": {
+    "title": "Companies",
+    "subtitle": "Get to know the companies hiring in Azerbaijan.",
+    "empty": "No companies have been added yet.",
+    "verified": "Verified",
+    "premium": "Premium",
+    "noDescription": "This company has not added a description yet.",
+    "website": "Website",
+    "email": "Email",
+    "phone": "Phone"
   }
 }

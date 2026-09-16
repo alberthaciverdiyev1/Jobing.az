@@ -84,5 +84,16 @@
     "title": "Şəhərlər üzrə işlər",
     "subtitle": "Regionunuzda mövcud vakansiyaları tapın.",
     "empty": "Hələ şəhər əlavə edilməyib."
+  },
+  "company": {
+    "title": "Şirkətlər",
+    "subtitle": "Azərbaycanda fəaliyyət göstərən şirkətlərlə tanış olun.",
+    "empty": "Hələ şirkət əlavə edilməyib.",
+    "verified": "Təsdiqlənmiş",
+    "premium": "Premium",
+    "noDescription": "Bu şirkət hələ təsvir əlavə etməyib.",
+    "website": "Veb sayt",
+    "email": "E-poçt",
+    "phone": "Telefon"
   }
 }

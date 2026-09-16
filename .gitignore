@@ -33,3 +33,6 @@ old/vendor/
 old/.env
 old/.phpunit.result.cache
 
+
+# Uploaded images
+/public/images/

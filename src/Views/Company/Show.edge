@@ -1,0 +1,57 @@
+@component('Components/Layout', { shell: shell })
+  @slot('main')
+    @if(company.bannerUrl)
+      <img class="company-banner" src="{{ company.bannerUrl }}" alt="" loading="lazy" />
+    @end
+
+    <section class="container section">
+      <header class="company-head">
+        @if(company.logoUrl)
+          <img class="company-head__logo" src="{{ company.logoUrl }}" alt="{{ company.name }}" width="96" height="96" />
+        @end
+
+        <div>
+          <h1 class="page-title">{{ company.name }}</h1>
+          <p class="company-head__meta">
+            @if(cityName)
+              {{ cityName }}
+            @end
+            @if(company.isVerified)
+              <span class="badge badge--verified">{{ t('company.verified') }}</span>
+            @end
+            @if(company.isPremium)
+              <span class="badge badge--premium">{{ t('company.premium') }}</span>
+            @end
+          </p>
+        </div>
+      </header>
+
+      @if(company.description)
+        <p class="company-about">{{ company.description }}</p>
+      @else
+        <p class="empty-state">{{ t('company.noDescription') }}</p>
+      @end
+
+      <dl class="profile">
+        @if(company.website)
+          <div class="profile__row">
+            <dt class="profile__term">{{ t('company.website') }}</dt>
+            <dd class="profile__value"><a href="{{ company.website }}" rel="nofollow noopener" target="_blank">{{ company.website }}</a></dd>
+          </div>
+        @end
+        @if(company.email)
+          <div class="profile__row">
+            <dt class="profile__term">{{ t('company.email') }}</dt>
+            <dd class="profile__value"><a href="mailto:{{ company.email }}">{{ company.email }}</a></dd>
+          </div>
+        @end
+        @if(company.phone)
+          <div class="profile__row">
+            <dt class="profile__term">{{ t('company.phone') }}</dt>
+            <dd class="profile__value">{{ company.phone }}</dd>
+          </div>
+        @end
+      </dl>
+    </section>
+  @endslot
+@end

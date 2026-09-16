@@ -66,6 +66,16 @@ npm run dev
 | `POST /api/v1/cities` | API | Create a city (admin) |
 | `PATCH /api/v1/cities/:id` | API | Update a city (admin) |
 | `DELETE /api/v1/cities/:id` | API | Delete a city (admin) |
+| `GET /companies` | page | Company directory |
+| `GET /companies/:slug` | page | Company profile |
+| `GET /api/v1/companies` | API | List companies — `?active=`, `?verified=`, `?cityId=`, `?search=` |
+| `GET /api/v1/companies/:slug` | API | A single company |
+| `POST /api/v1/companies` | API | Register a company (signed in; caller becomes owner) |
+| `PATCH /api/v1/companies/:id` | API | Edit the profile (owner or admin) |
+| `PATCH /api/v1/companies/:id/status` | API | Verify / premium / active (admin) |
+| `PUT /api/v1/companies/:id/logo` \| `/banner` | API | Upload an image (owner or admin, multipart `file`) |
+| `DELETE /api/v1/companies/:id/logo` \| `/banner` | API | Remove an image (owner or admin) |
+| `DELETE /api/v1/companies/:id` | API | Delete a company and its files (admin) |
 
 ## Architecture
 

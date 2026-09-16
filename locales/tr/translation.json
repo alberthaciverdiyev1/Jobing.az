@@ -84,5 +84,16 @@
     "title": "Şehre göre işler",
     "subtitle": "Bölgenizdeki güncel ilanları bulun.",
     "empty": "Henüz şehir eklenmemiş."
+  },
+  "company": {
+    "title": "Şirketler",
+    "subtitle": "Azerbaycan’da işe alım yapan şirketleri keşfedin.",
+    "empty": "Henüz şirket eklenmemiş.",
+    "verified": "Onaylı",
+    "premium": "Premium",
+    "noDescription": "Bu şirket henüz açıklama eklememiş.",
+    "website": "Web sitesi",
+    "email": "E-posta",
+    "phone": "Telefon"
   }
 }
