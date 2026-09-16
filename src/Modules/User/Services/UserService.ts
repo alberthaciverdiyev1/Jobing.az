@@ -1,6 +1,6 @@
 import { ConflictError, NotFoundError, UnauthorizedError } from '../../../Core/Http/Errors.js';
 import { hashPassword, verifyPassword } from '../../../Core/Security/Password.js';
-import { toUser, type User } from '../Entities/User.js';
+import type { User } from '../Entities/User.js';
 import type {
   PaginatedResult,
   UserRepositoryInterface,
@@ -13,6 +13,10 @@ export interface RegisterInput {
   password: string;
 }
 
+/**
+ * Business rules for accounts. Returns entities; turning them into a client-safe
+ * shape is the transformer's job.
+ */
 export class UserService {
   constructor(private readonly users: UserRepositoryInterface) {}
 
@@ -21,13 +25,11 @@ export class UserService {
       throw new ConflictError('This email address is already registered');
     }
 
-    const created = await this.users.create({
+    return this.users.create({
       email: input.email,
       name: input.name,
       passwordHash: await hashPassword(input.password),
     });
-
-    return toUser(created);
   }
 
   /** Throws `UnauthorizedError` for both unknown email and wrong password. */
@@ -38,13 +40,13 @@ export class UserService {
     if (!found) throw invalid;
     if (!(await verifyPassword(password, found.passwordHash))) throw invalid;
 
-    return toUser(found);
+    return found;
   }
 
   async getById(id: string): Promise<User> {
     const found = await this.users.findById(id);
     if (!found) throw new NotFoundError('User not found');
-    return toUser(found);
+    return found;
   }
 
   async changePassword(id: string, currentPassword: string, newPassword: string): Promise<void> {

@@ -75,10 +75,11 @@ Modules/<Name>/
 ├── Controllers/
 │   ├── <Name>WebController.ts    renders Handlebars, form posts, redirects
 │   └── <Name>ApiController.ts    JSON in / JSON out
-├── Entities/                     domain types + row mappers
+├── Entities/                     the entity, typed from its configuration
 ├── Interfaces/                   repository contracts (ports)
-├── Repositories/                 Kysely implementations + singleton instance
+├── Repositories/                 Drizzle implementations + singleton instance
 ├── Services/                     business rules; depends on the interface only
+├── Transformers/                 entity → client-safe resource
 ├── Validators/                   Zod schemas shared by both controllers
 ├── Middlewares/                  module-specific middleware (auth guards)
 ├── Configurations/               entity → table mapping (EF-style)
@@ -95,10 +96,45 @@ one with no pages skips `Routes/Web.ts` + `Views/`.
 
 ### Dependency direction
 
-`Routes → Controller → Service → RepositoryInterface ← Repository → Drizzle`
+```
+Routes → Controller → Service → RepositoryInterface ← Repository → Drizzle
+                          ↓
+                     Transformer
+```
 
 Services never import Drizzle; they depend on the interface, which keeps them testable
 with a fake repository.
+
+### Entities
+
+**The entity is derived from its configuration — never hand-written twice.**
+
+```ts
+// Entities/User.ts
+export type User = UserRow;      // typeof users.$inferSelect
+export type NewUser = NewUserRow; // typeof users.$inferInsert
+```
+
+Because the row type comes from the Drizzle table, the entity cannot drift from the
+schema and no row mapper is needed: repositories return database rows directly.
+`Entities/` may depend on `Configurations/` — that is the one accepted direction.
+
+### Transformers
+
+Entities are internal. Anything leaving the server goes through a transformer:
+
+```ts
+// Transformers/UserTransformer.ts
+export function transformUser(user: User): UserResource {
+  return { ...user, createdAt: user.createdAt.toISOString() };
+}
+```
+
+- The password hash and any other internal column must be dropped here.
+- Timestamps become ISO strings so the JSON API and templates agree.
+- `req.user` holds the **entity**; `res.locals.currentUser` holds the **resource**.
+  Never put an entity into `res.locals` — templates would see every column.
+- Add `transform<Entity>` and `transform<Entities>` (collection) per module.
 
 ## Module routes
 

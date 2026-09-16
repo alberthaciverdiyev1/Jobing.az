@@ -1,44 +1,14 @@
-import type { UserRow } from '../Configurations/UserConfiguration.js';
+import type { NewUserRow, UserRow } from '../Configurations/UserConfiguration.js';
 
-/** Domain representation of an account. Never carries the password hash. */
-export interface User {
-  id: string;
-  email: string;
-  name: string;
-  isAdmin: boolean;
-  createdAt: Date;
-  updatedAt: Date;
-}
+/**
+ * An account exactly as stored in the `users` table.
+ *
+ * The row type comes straight from the Drizzle configuration, so the entity can
+ * never drift from the schema and no hand-written row mapper is needed.
+ */
+export type User = UserRow;
 
-/** Repository-internal shape — keeps the hash out of the domain type. */
-export interface UserWithPassword extends User {
-  passwordHash: string;
-}
+/** The fields accepted when creating an account. */
+export type NewUser = NewUserRow;
 
-export interface CreateUserData {
-  email: string;
-  name: string;
-  passwordHash: string;
-  isAdmin?: boolean;
-}
-
-/** Maps a database row to the persistence-facing entity. */
-export function toUserWithPassword(row: UserRow): UserWithPassword {
-  return {
-    id: row.id,
-    email: row.email,
-    name: row.name,
-    isAdmin: row.isAdmin,
-    passwordHash: row.passwordHash,
-    createdAt: row.createdAt,
-    updatedAt: row.updatedAt,
-  };
-}
-
-/** Drops the credential before the entity leaves the service layer. */
-export function toUser(entity: UserWithPassword): User {
-  const { passwordHash: _passwordHash, ...user } = entity;
-  return user;
-}
-
-export type { UserRow };
+export type { NewUserRow, UserRow };

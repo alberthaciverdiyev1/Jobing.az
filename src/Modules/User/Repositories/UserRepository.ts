@@ -1,13 +1,7 @@
 import { count, desc, eq } from 'drizzle-orm';
 import { getDb } from '../../../Core/Database/index.js';
 import { users } from '../Configurations/UserConfiguration.js';
-import {
-  toUser,
-  toUserWithPassword,
-  type CreateUserData,
-  type User,
-  type UserWithPassword,
-} from '../Entities/User.js';
+import type { NewUser, User } from '../Entities/User.js';
 import type {
   PaginatedResult,
   UserRepositoryInterface,
@@ -19,19 +13,19 @@ export function normalizeEmail(email: string): string {
 }
 
 export class UserRepository implements UserRepositoryInterface {
-  async findById(id: string): Promise<UserWithPassword | undefined> {
+  async findById(id: string): Promise<User | undefined> {
     const [row] = await getDb().select().from(users).where(eq(users.id, id)).limit(1);
-    return row ? toUserWithPassword(row) : undefined;
+    return row;
   }
 
-  async findByEmail(email: string): Promise<UserWithPassword | undefined> {
+  async findByEmail(email: string): Promise<User | undefined> {
     const [row] = await getDb()
       .select()
       .from(users)
       .where(eq(users.email, normalizeEmail(email)))
       .limit(1);
 
-    return row ? toUserWithPassword(row) : undefined;
+    return row;
   }
 
   async existsByEmail(email: string): Promise<boolean> {
@@ -44,18 +38,14 @@ export class UserRepository implements UserRepositoryInterface {
     return row !== undefined;
   }
 
-  async create(data: CreateUserData): Promise<UserWithPassword> {
-    const values = {
-      email: normalizeEmail(data.email),
-      name: data.name.trim(),
-      passwordHash: data.passwordHash,
-      ...(data.isAdmin === undefined ? {} : { isAdmin: data.isAdmin }),
-    };
+  async create(data: NewUser): Promise<User> {
+    const [row] = await getDb()
+      .insert(users)
+      .values({ ...data, email: normalizeEmail(data.email), name: data.name.trim() })
+      .returning();
 
-    const [row] = await getDb().insert(users).values(values).returning();
     if (!row) throw new Error('Insert did not return the created user');
-
-    return toUserWithPassword(row);
+    return row;
   }
 
   async updatePasswordHash(id: string, passwordHash: string): Promise<void> {
@@ -68,17 +58,12 @@ export class UserRepository implements UserRepositoryInterface {
   async paginate(page: number, perPage: number): Promise<PaginatedResult<User>> {
     const offset = (page - 1) * perPage;
 
-    const [rows, totals] = await Promise.all([
+    const [items, totals] = await Promise.all([
       getDb().select().from(users).orderBy(desc(users.createdAt)).limit(perPage).offset(offset),
       getDb().select({ total: count() }).from(users),
     ]);
 
-    return {
-      items: rows.map((row) => toUser(toUserWithPassword(row))),
-      total: totals[0]?.total ?? 0,
-      page,
-      perPage,
-    };
+    return { items, total: totals[0]?.total ?? 0, page, perPage };
   }
 }
 
