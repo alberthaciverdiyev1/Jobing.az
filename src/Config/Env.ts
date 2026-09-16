@@ -42,11 +42,10 @@ const envSchema = z.object({
   DB_POOL_MIN: z.coerce.number().int().min(0).default(1),
   DB_POOL_MAX: z.coerce.number().int().min(1).default(10),
 
-  // --- Session / Cookies ---
-  SESSION_SECRET: z.string().min(1).default('dev-session-secret'),
-  SESSION_LIFETIME: z.coerce.number().int().positive().default(120),
-  COOKIE_SECRET: z.string().min(1).default('dev-cookie-secret'),
-  COOKIE_DOMAIN: z.string().default(''),
+  // --- Auth (stateless JWT) ---
+  JWT_SECRET: z.string().min(32, 'JWT_SECRET must be at least 32 characters'),
+  /** Anything `jose` accepts: `15m`, `7d`, `12h`. */
+  JWT_TTL: z.string().min(1).default('7d'),
 
   // --- CORS (comma separated; falls back to APP_URL when empty) ---
   CORS_ORIGINS: z

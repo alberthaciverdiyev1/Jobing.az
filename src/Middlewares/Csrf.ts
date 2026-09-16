@@ -1,10 +1,19 @@
 import { randomBytes, timingSafeEqual } from 'node:crypto';
-import type { RequestHandler } from 'express';
+import type { CookieOptions, RequestHandler } from 'express';
+import { isProduction } from '../Config/Env.js';
 import { ForbiddenError } from '../Core/Http/Errors/index.js';
 
 const SAFE_METHODS = new Set(['GET', 'HEAD', 'OPTIONS']);
-const TOKEN_BYTES = 32;
 const HEADER = 'x-csrf-token';
+const COOKIE = 'jobing.csrf';
+const TOKEN_PATTERN = /^[a-f0-9]{64}$/;
+
+const cookieOptions: CookieOptions = {
+  httpOnly: true,
+  sameSite: 'lax',
+  secure: isProduction,
+  path: '/',
+};
 
 function tokensMatch(provided: string, expected: string): boolean {
   const left = Buffer.from(provided);
@@ -13,13 +22,21 @@ function tokensMatch(provided: string, expected: string): boolean {
 }
 
 /**
- * Session-backed CSRF protection for state-changing requests.
- * The token reaches templates as `csrfToken` and is accepted from either the
- * `_csrf` form field or the `X-CSRF-Token` header.
+ * Double-submit CSRF protection.
+ *
+ * The token lives in a cookie the page's JavaScript cannot read, and must also
+ * be echoed back in the `_csrf` form field or the `X-CSRF-Token` header. Another
+ * origin can force a request but cannot read the cookie, so it cannot echo it.
  */
 export const csrfProtection: RequestHandler = (req, res, next) => {
-  req.session.csrfToken ??= randomBytes(TOKEN_BYTES).toString('hex');
-  res.locals.csrfToken = req.session.csrfToken;
+  let token = req.cookies?.[COOKIE] as string | undefined;
+
+  if (typeof token !== 'string' || !TOKEN_PATTERN.test(token)) {
+    token = randomBytes(32).toString('hex');
+    res.cookie(COOKIE, token, cookieOptions);
+  }
+
+  res.locals.csrfToken = token;
 
   if (SAFE_METHODS.has(req.method)) {
     next();
@@ -30,17 +47,10 @@ export const csrfProtection: RequestHandler = (req, res, next) => {
   const fromBody = body?._csrf;
   const provided = typeof fromBody === 'string' ? fromBody : req.get(HEADER);
 
-  if (provided && tokensMatch(provided, req.session.csrfToken)) {
+  if (provided && tokensMatch(provided, token)) {
     next();
     return;
   }
 
   next(new ForbiddenError('Invalid or missing CSRF token'));
 };
-
-declare module 'express-session' {
-  interface SessionData {
-    /** Token issued with every rendered form. */
-    csrfToken?: string;
-  }
-}

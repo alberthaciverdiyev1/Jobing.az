@@ -77,6 +77,22 @@ describe('User API validation (no database required)', () => {
   });
 });
 
+describe('auth token transport (no database required)', () => {
+  it('rejects a tampered bearer token', async () => {
+    const response = await request(app)
+      .get('/api/v1/auth/me')
+      .set('Authorization', 'Bearer not.a.real.token');
+
+    expect(response.status).toBe(401);
+  });
+
+  it('ignores a malformed Authorization header', async () => {
+    const response = await request(app).get('/api/v1/auth/me').set('Authorization', 'Basic abc');
+
+    expect(response.status).toBe(401);
+  });
+});
+
 describe.runIf(dbAvailable)('User API (requires PostgreSQL)', () => {
   it('registers a new account and starts a session', async () => {
     const register = await agent
@@ -86,6 +102,8 @@ describe.runIf(dbAvailable)('User API (requires PostgreSQL)', () => {
     expect(register.status).toBe(201);
     expect(register.body.data.user.email).toBe(email);
     expect(register.body.data.user).not.toHaveProperty('passwordHash');
+    expect(typeof register.body.data.token).toBe('string');
+    expect(new Date(register.body.data.expiresAt).getTime()).toBeGreaterThan(Date.now());
 
     const me = await agent.get('/api/v1/auth/me');
     expect(me.status).toBe(200);
@@ -118,6 +136,28 @@ describe.runIf(dbAvailable)('User API (requires PostgreSQL)', () => {
 
     const me = await fresh.get('/api/v1/auth/me');
     expect(me.status).toBe(200);
+  });
+
+  it('authenticates with a bearer token and no cookie', async () => {
+    const login = await request(app).post('/api/v1/auth/login').send({ email, password });
+    const token = login.body.data.token as string;
+
+    const me = await request(app).get('/api/v1/auth/me').set('Authorization', `Bearer ${token}`);
+
+    expect(me.status).toBe(200);
+    expect(me.body.data.user.email).toBe(email);
+  });
+
+  it('clears the auth cookie on logout', async () => {
+    const login = await request(app).post('/api/v1/auth/login').send({ email, password });
+    const token = login.body.data.token as string;
+
+    const response = await request(app)
+      .post('/api/v1/auth/logout')
+      .set('Authorization', `Bearer ${token}`);
+
+    expect(response.status).toBe(204);
+    expect(response.headers['set-cookie']?.join(';')).toContain('jobing.token=;');
   });
 
   it('supports the full web flow with CSRF tokens', async () => {

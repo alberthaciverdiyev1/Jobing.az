@@ -26,6 +26,7 @@ The previous Laravel implementation is preserved read-only under `old/` for refe
 | Build | `tsc` → `dist/` |
 | Tests | Vitest + Supertest |
 | Lint / Format | ESLint 9 (flat config) + Prettier |
+| Auth | Stateless JWT (`jose`), no server-side sessions |
 | Logging | Pino + pino-http |
 | Validation | Zod |
 
@@ -44,9 +45,10 @@ The previous Laravel implementation is preserved read-only under `old/` for refe
 src/
 ├── Config/             Env.ts (Zod-validated), Paths.ts, Locales.ts
 ├── Core/
+│   ├── Auth/           Jwt.ts, AuthCookie.ts, AuthTokenCookie.ts
 │   ├── Database/       Client.ts (Drizzle), AppDbContext.ts, Configurations/
 │   ├── Http/           App.ts, RootRouter.ts, Server.ts, ErrorHandler.ts,
-│   │                   Responses.ts, Session.ts, Envelope/, Errors/
+│   │                   Responses.ts, RootRouter.ts, Envelope/, Errors/
 │   ├── Localization/   I18n.ts
 │   ├── Provider/       ModuleDiscovery.ts, ModuleProvider.ts — auto-registration
 │   ├── View/           Edge.ts, RenderPage.ts, PageShell.ts, PageState.ts
@@ -264,7 +266,7 @@ export type NewUserRow = typeof users.$inferInsert;
 
 | Location | Purpose |
 |---|---|
-| `Core/Database/Configurations/*.ts` | infrastructure tables (sessions, …) |
+| `Core/Database/Configurations/*.ts` | infrastructure tables |
 | `Modules/<Name>/Configurations/*.ts` | domain tables |
 
 `drizzle.config.ts` collects both with globs, and `Core/Database/AppDbContext.ts`
@@ -339,23 +341,40 @@ boundary.
 - Add new keys to **all four** files under `locales/`.
 - We own the language cookie — i18next's cookie cache is deliberately disabled.
 
-## Auth, sessions and CSRF
+## Auth: stateless JWT
 
-- Sessions: `express-session` + `connect-pg-simple`, cookie `jobing.sid`
-  (`httpOnly`, `sameSite: 'lax'`, `secure` in production). Table: `session`.
-  Under `NODE_ENV=test` an in-memory store is used so the suite needs no database.
-- `req.session.userId` is the only thing stored about the account.
-  `Modules/User/Middlewares/CurrentUser.ts` resolves it into `req.user` +
-  `currentUser` for templates; `RequireAuth.ts` guards protected routes.
-- **CSRF is enforced on every web route** (`Middlewares/Csrf.ts`, applied in
-  `Routes/Web.ts`). Forms must include `<input type="hidden" name="_csrf" value="{{csrfToken}}">`.
-  The header `X-CSRF-Token` is accepted as an alternative. API routes rely on the
-  `SameSite=Lax` cookie instead.
-- Passwords are hashed with Node's built-in scrypt (`Core/Security/Password.ts`) —
-  no native dependency. Format: `scrypt$<salt>$<hash>`.
-- Login and registration regenerate the session id before storing `userId`.
-- `addFlash(req, 'success' | 'error', message)` queues a one-shot message for the
-  next rendered page (rendered by `src/Views/Components/Flash.edge`).
+**There is no server-side session.** The account id travels in a signed token.
+
+| Where | How the token is carried |
+|---|---|
+| API clients | `Authorization: Bearer <token>` |
+| Server-rendered pages | httpOnly cookie `jobing.token` (`SameSite=Lax`, `Secure` in prod) |
+
+- `Core/Auth/Jwt.ts` — `signAuthToken()` / `verifyAuthToken()` (HS256, `JWT_SECRET`).
+- `Core/Auth/AuthTokenCookie.ts` — `issueAuthToken(res, userId)` signs, sets the cookie
+  and returns the token; `clearAuthToken(res)` removes it.
+- `Modules/User/Middlewares/CurrentUser.ts` reads the Bearer header first, then the
+  cookie, and resolves `req.user` (entity) + `currentUser` (resource). Invalid or
+  stale tokens are discarded and the cookie cleared.
+- `RequireAuth.ts` guards pages (redirect to `/login?next=…`) and API routes (401).
+- `POST /api/v1/auth/login` returns `{ user, token, expiresAt }`; the same request also
+  sets the cookie, so one endpoint serves both audiences.
+
+### Things that used to live in the session
+
+| Concern | Replacement |
+|---|---|
+| `req.session.userId` | the token's `sub` claim |
+| CSRF token | **double-submit cookie** — `jobing.csrf` (httpOnly) must be echoed in the `_csrf` field or `X-CSRF-Token` header. Another origin can force a request but cannot read the cookie. |
+| Flash messages | short-lived `jobing.flash` cookie holding a JSON array, read once and cleared |
+
+### Deliberately absent
+
+- **No refresh tokens.** Access tokens live `JWT_TTL` (default `7d`). Add refresh tokens
+  (and a `refresh_tokens` table for revocation) if you need short-lived access plus
+  long-lived sessions.
+- **No server-side revocation.** Logout clears the cookie, but an already-issued token
+  stays valid until it expires. Keep `JWT_TTL` modest if that matters.
 
 ## Type augmentation
 
@@ -380,9 +399,7 @@ declare module 'express-serve-static-core' {
 |---|---|
 | `Request.requestId` | `Middlewares/RequestId.ts` |
 | `Request.validated` | `Middlewares/Validate.ts` |
-| `SessionData.csrfToken` | `Middlewares/Csrf.ts` |
-| `SessionData.flash` | `Middlewares/Flash.ts` |
-| `Request.user`, `SessionData.userId` | `Modules/User/Middlewares/CurrentUser.ts` |
+| `Request.user` | `Modules/User/Middlewares/CurrentUser.ts` |
 
 Two rules that cost an afternoon if forgotten:
 
@@ -393,7 +410,7 @@ Two rules that cost an afternoon if forgotten:
   or exports), otherwise the declaration replaces the module instead of extending it.
 
 There is deliberately **no `src/Types/`**: a shared bucket would have forced `Core` to
-import from `Modules` (`SessionData.userId` belongs to the User module).
+import from `Modules` (`Request.user` belongs to the User module).
 
 ## General conventions
 

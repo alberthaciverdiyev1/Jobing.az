@@ -29,13 +29,12 @@ describe('AppDbContext', () => {
 
     const names = appDbContext.allTables.map((table) => getTableName(table));
     expect(names).toContain('users');
-    expect(names).toContain('session');
   });
 
   it('exposes the tables through a schema object', async () => {
     await appDbContext.load();
 
-    expect(Object.keys(appDbContext.schema).sort()).toEqual(['session', 'users']);
+    expect(Object.keys(appDbContext.schema)).toEqual(['users']);
     expect(appDbContext.table('users')).toBe(users);
   });
 });

@@ -1,10 +1,11 @@
 import type { Request, RequestHandler } from 'express';
+import { clearAuthToken, issueAuthToken } from '../../../Core/Auth/AuthTokenCookie.js';
 import { isAppError } from '../../../Core/Http/Errors/index.js';
 import { fieldErrors } from '../../../Core/Http/Validation.js';
 import { renderPage } from '../../../Core/View/RenderPage.js';
 import { addFlash } from '../../../Middlewares/Flash.js';
-import { userService } from '../Services/index.js';
 import { loginRequest, registerRequest } from '../Requests/index.js';
+import { userService } from '../Services/index.js';
 
 /** Only same-origin paths are accepted as post-login destinations. */
 function safeRedirect(value: unknown): string {
@@ -39,9 +40,8 @@ export const register: RequestHandler = async (req, res) => {
 
   try {
     const user = await userService.register(parsed.data);
-    await regenerateSession(req);
-    req.session.userId = user.id;
-    addFlash(req, 'success', res.locals.t('auth.register.success'));
+    await issueAuthToken(res, user.id);
+    addFlash(res, 'success', res.locals.t('auth.register.success'));
     res.redirect('/profile');
   } catch (error) {
     if (!isAppError(error)) throw error;
@@ -79,9 +79,8 @@ export const login: RequestHandler = async (req, res) => {
 
   try {
     const user = await userService.authenticate(parsed.data.email, parsed.data.password);
-    await regenerateSession(req);
-    req.session.userId = user.id;
-    addFlash(req, 'success', res.locals.t('auth.login.success'));
+    await issueAuthToken(res, user.id);
+    addFlash(res, 'success', res.locals.t('auth.login.success'));
     res.redirect(safeRedirect(body.next));
   } catch (error) {
     if (!isAppError(error)) throw error;
@@ -95,11 +94,9 @@ export const login: RequestHandler = async (req, res) => {
   }
 };
 
-export const logout: RequestHandler = (req, res) => {
-  req.session.destroy(() => {
-    res.clearCookie('jobing.sid');
-    res.redirect('/');
-  });
+export const logout: RequestHandler = (_req, res) => {
+  clearAuthToken(res);
+  res.redirect('/');
 };
 
 export const profile: RequestHandler = async (_req, res) => {
@@ -109,10 +106,3 @@ export const profile: RequestHandler = async (_req, res) => {
     values: {},
   });
 };
-
-/** Drops the old session id so a stolen cookie cannot be reused after login. */
-async function regenerateSession(req: Request): Promise<void> {
-  await new Promise<void>((resolve, reject) => {
-    req.session.regenerate((error) => (error ? reject(error) : resolve()));
-  });
-}

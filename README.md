@@ -53,7 +53,7 @@ npm run dev
 | `POST /api/v1/auth/register` | API | Create an account |
 | `POST /api/v1/auth/login` | API | Sign in |
 | `POST /api/v1/auth/logout` | API | Sign out |
-| `GET /api/v1/auth/me` | API | Current account (auth required) |
+| `GET /api/v1/auth/me` | API | Current account (Bearer token or cookie) |
 
 ## Architecture
 
@@ -70,8 +70,8 @@ npm run dev
 - **Validated config**: all environment access goes through `src/Config/Env.ts`.
 - **Type-safe errors**: an `AppError` hierarchy maps to HTTP status codes.
 - **Structured logging**: Pino with per-request correlation ids.
-- **Sessions & CSRF**: PostgreSQL-backed sessions, scrypt password hashing, and
-  CSRF-protected forms.
+- **Auth**: stateless JWT (`jose`), scrypt password hashing, double-submit CSRF
+  protection. No server-side sessions.
 - **Four locales**: `az` (default), `tr`, `en`, `ru`.
 
 See [CLAUDE.md](./CLAUDE.md) for the full guide and conventions.

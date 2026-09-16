@@ -8,7 +8,6 @@ import { pinoHttp } from 'pino-http';
 import { env, isProduction } from '../../Config/Env.js';
 import { paths } from '../../Config/Paths.js';
 import { i18nMiddleware, initI18n } from '../Localization/I18n.js';
-import { createSessionMiddleware } from './Session.js';
 import { logger } from '../Logger.js';
 import { notFound } from '../../Middlewares/NotFound.js';
 import { requestId } from '../../Middlewares/RequestId.js';
@@ -64,10 +63,7 @@ export async function createApp(): Promise<Express> {
 
   app.use(express.json({ limit: '10mb' }));
   app.use(express.urlencoded({ extended: true, limit: '10mb' }));
-  app.use(cookieParser(env.COOKIE_SECRET));
-
-  // Sessions must exist before anything that reads `req.session`.
-  app.use(createSessionMiddleware());
+  app.use(cookieParser());
 
   // Locale detection must run before anything that renders or translates.
   app.use(i18nMiddleware);

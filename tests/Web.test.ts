@@ -32,7 +32,7 @@ describe('GET /lang/:locale', () => {
     const response = await request(app).get('/lang/tr');
 
     expect(response.status).toBe(302);
-    expect(response.headers['set-cookie']?.[0]).toContain('lang=tr');
+    expect(response.headers['set-cookie']?.join(';')).toContain('lang=tr');
   });
 
   it('rejects unsupported locales', async () => {
