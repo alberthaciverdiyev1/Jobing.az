@@ -3,14 +3,14 @@ import { UnauthorizedError } from '../../../Core/Http/Errors.js';
 import { created, noContent, ok } from '../../../Core/Http/Responses.js';
 import { userService } from '../Services/UserService.js';
 import { transformUser } from '../Transformers/UserTransformer.js';
-import type { LoginInputSchema, RegisterInputSchema } from '../Validators/UserValidators.js';
+import type { LoginRequest, RegisterRequest } from '../Requests/index.js';
 
-function registerInput(req: Request): RegisterInputSchema {
-  return req.validated?.body as RegisterInputSchema;
+function registerInput(req: Request): RegisterRequest {
+  return req.validated?.body as RegisterRequest;
 }
 
-function loginInput(req: Request): LoginInputSchema {
-  return req.validated?.body as LoginInputSchema;
+function loginInput(req: Request): LoginRequest {
+  return req.validated?.body as LoginRequest;
 }
 
 /** Replaces the session id so a stolen cookie cannot be reused after login. */

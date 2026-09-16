@@ -4,7 +4,7 @@ import { fieldErrors } from '../../../Core/Http/Validation.js';
 import { moduleView } from '../../../Core/View/ModuleView.js';
 import { addFlash } from '../../../Middlewares/Flash.js';
 import { userService } from '../Services/UserService.js';
-import { loginSchema, registerSchema } from '../Validators/UserValidators.js';
+import { loginRequest, registerRequest } from '../Requests/index.js';
 
 const VIEW = (name: string): string => moduleView('User', name);
 
@@ -28,7 +28,7 @@ export const showRegister: RequestHandler = (_req, res) => {
 };
 
 export const register: RequestHandler = async (req, res) => {
-  const parsed = registerSchema.safeParse(bodyOf(req));
+  const parsed = registerRequest.safeParse(bodyOf(req));
 
   if (!parsed.success) {
     res.status(422).render(VIEW('Register'), {
@@ -67,7 +67,7 @@ export const showLogin: RequestHandler = (req, res) => {
 
 export const login: RequestHandler = async (req, res) => {
   const body = bodyOf(req);
-  const parsed = loginSchema.safeParse(body);
+  const parsed = loginRequest.safeParse(body);
 
   if (!parsed.success) {
     res.status(422).render(VIEW('Login'), {

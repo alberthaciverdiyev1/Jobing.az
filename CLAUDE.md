@@ -80,7 +80,7 @@ Modules/<Name>/
 ├── Repositories/                 Drizzle implementations + singleton instance
 ├── Services/                     business rules; depends on the interface only
 ├── Transformers/                 entity → client-safe resource
-├── Validators/                   Zod schemas shared by both controllers
+├── Requests/                     one request schema per endpoint
 ├── Middlewares/                  module-specific middleware (auth guards)
 ├── Configurations/               entity → table mapping (EF-style)
 ├── Routes/
@@ -118,6 +118,36 @@ export type NewUser = NewUserRow; // typeof users.$inferInsert
 Because the row type comes from the Drizzle table, the entity cannot drift from the
 schema and no row mapper is needed: repositories return database rows directly.
 `Entities/` may depend on `Configurations/` — that is the one accepted direction.
+
+### Requests
+
+**Every endpoint gets its own request schema**, like a Laravel Form Request:
+
+```
+Requests/
+├── Fields.ts               reusable field rules (email, password, …)
+├── RegisterRequest.ts      export const registerRequest = z.object({ … })
+├── LoginRequest.ts
+├── ChangePasswordRequest.ts
+└── index.ts                barrel
+```
+
+```ts
+// Requests/RegisterRequest.ts
+export const registerRequest = z.object({
+  email: emailField,
+  name: nameField,
+  password: passwordField,
+});
+export type RegisterRequest = z.infer<typeof registerRequest>;
+```
+
+- One file per request — never a single `Validators.ts` holding everything.
+- Shared field rules live in `Fields.ts` so `email` means the same thing everywhere.
+- The web controller calls `safeParse` itself and re-renders the form with
+  `fieldErrors(error)`; the API mounts `validate({ body: registerRequest })` and gets
+  a 422 envelope for free.
+- Derive the input type with `z.infer` — do not declare a second interface.
 
 ### Transformers
 
