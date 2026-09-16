@@ -3,3 +3,4 @@ node_modules
 old
 coverage
 *.md
+*.hbs
