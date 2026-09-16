@@ -57,10 +57,12 @@ src/
 ├── Types/              global type augmentation
 └── index.ts            entrypoint
 
-views/                  LAYOUT + shared partials + error pages only
+views/                  every template, in one place
 ├── Layouts/Main.hbs
 ├── Partials/           Head, Navbar, Footer, Flash, LanguageSwitcher
-└── Pages/Errors/       NotFound, ServerError
+├── Pages/Errors/       NotFound, ServerError
+├── Home/               module pages, one folder per module
+└── User/               Login, Register, Profile
 
 locales/<lng>/translation.json
 public/  tools/  tests/  old/
@@ -83,14 +85,13 @@ Modules/<Name>/
 ├── Requests/                     one request schema per endpoint
 ├── Middlewares/                  module-specific middleware (auth guards)
 ├── Configurations/               entity → table mapping (EF-style)
-├── Routes/
-│   ├── Web.ts                    exports `basePath` + `router`
-│   └── Api.ts                    exports `basePath` + `router`
-└── Views/                        the module's own .hbs templates
+└── Routes/
+    ├── Web.ts                    exports `basePath` + `router`
+    └── Api.ts                    exports `basePath` + `router`
 ```
 
-Layers are optional — a module with no tables skips Entities/Repositories/Migrations,
-one with no pages skips `Routes/Web.ts` + `Views/`.
+Layers are optional — a module with no tables skips Configurations/Entities/Repositories,
+one with no pages skips `Routes/Web.ts`.
 
 **Web and API always get separate controllers**, even when the logic looks similar.
 
@@ -269,11 +270,12 @@ Generated SQL is committed under `drizzle/` and reviewed like any other change.
 
 ## Views & i18n
 
-- Module templates: `res.render(moduleView('User', 'Login'), { ... })`. `moduleView()`
-  resolves to `Modules/<Name>/Views` in both `src` and `dist` — templates are copied by
-  `tools/CopyModuleViews.mjs` during `npm run build`.
-- Global templates (layout, partials, error pages) stay in `views/` and render by
-  relative path, e.g. `'Pages/Errors/NotFound'`.
+- **All templates live under `views/`, grouped by module** (`views/User/Login.hbs`).
+  Nothing is rendered from inside `src/`, so the build needs no copy step.
+- Render a module page with `moduleView('User', 'Login')`, which resolves to
+  `'User/Login'`. The helper is the only place encoding that convention.
+- Layout, partials and error pages render by relative path directly
+  (`'Pages/Errors/NotFound'`).
 - Every template receives: `t`, `locale`, `locales`, `appName`, `appSuffix`, `appUrl`,
   `currentUrl`, `year`, `isProduction` (set in `Middlewares/ViewLocals.ts`).
 - Translate with `{{t "home.title"}}`. Add keys to **all four** files under `locales/`.

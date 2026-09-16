@@ -1,17 +1,12 @@
-import path from 'node:path';
-import { modulesRoot } from '../Provider/ModuleDiscovery.js';
-
 /**
- * Absolute template path for a module-owned view.
+ * Resolves a module view to a path relative to the `views/` directory.
  *
- * Views live inside their module (`Modules/User/Views/Login.hbs`), so we hand
- * Express an absolute path instead of relying on a shared `views` directory —
- * that keeps two modules from ever resolving the same template name.
+ * All templates live in one place, grouped by module:
+ *   views/User/Login.hbs  ->  moduleView('User', 'Login')
  *
- *   res.render(moduleView('User', 'Login'), { ... })
+ * The helper is the single place that encodes that convention, so moving the
+ * view tree later means editing this file only.
  */
 export function moduleView(module: string, view: string): string {
-  return path.join(modulesRoot, module, 'Views', view);
+  return `${module}/${view}`;
 }
-
-export { modulesRoot };

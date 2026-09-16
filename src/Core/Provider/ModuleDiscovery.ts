@@ -20,8 +20,6 @@ export interface DiscoveredModule {
   apiRoutesFile?: string;
   /** Absolute path to the module's `Migrations` folder, when it owns tables. */
   migrationsDirectory?: string;
-  /** Absolute path to the module's `Views` folder, when it renders templates. */
-  viewsDirectory?: string;
   /** Absolute path to the module's `Configurations` folder (entity → table). */
   configurationsDirectory?: string;
 }
@@ -99,7 +97,6 @@ export async function discoverModules(): Promise<DiscoveredModule[]> {
       webRoutesFile: await resolveFile(path.join(directory, 'Routes'), 'Web'),
       apiRoutesFile: await resolveFile(path.join(directory, 'Routes'), 'Api'),
       migrationsDirectory: await resolveDirectory(path.join(directory, 'Migrations')),
-      viewsDirectory: await resolveDirectory(path.join(directory, 'Views')),
       configurationsDirectory: await resolveDirectory(path.join(directory, 'Configurations')),
     });
   }

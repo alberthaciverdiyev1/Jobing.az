@@ -60,7 +60,7 @@ npm run dev
 - **Web + API**: `/api/v1/*` is JSON-only; every other route renders Handlebars.
 - **Modular and self-registering**: each domain is a folder under `src/Modules/`
   containing its own Entity, Repository, Interface, Service, Validators, Controllers
-  (separate web and API), Routes, Configurations and Views. `Core/Provider`
+  (separate web and API), Routes and Configurations. `Core/Provider`
   discovers them at boot — routes are never listed by hand.
 - **Configuration-driven schema**: each entity declares its table in
   `Modules/<Name>/Configurations/<Name>Configuration.ts`; `AppDbContext` and
