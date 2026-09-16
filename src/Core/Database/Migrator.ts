@@ -1,17 +1,85 @@
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { FileMigrationProvider, Migrator, type MigrationResultSet } from 'kysely/migration';
+import {
+  FileMigrationProvider,
+  Migrator,
+  type Migration,
+  type MigrationProvider,
+  type MigrationResultSet,
+} from 'kysely/migration';
 import { logger } from '../Logger.js';
 import { getDb } from './Client.js';
 
-/** Resolves next to this file, so it follows src (tsx) vs dist (compiled). */
-const migrationsDir = path.join(path.dirname(fileURLToPath(import.meta.url)), 'Migrations');
+const currentDir = path.dirname(fileURLToPath(import.meta.url));
 
-function createMigrator(): Migrator {
+async function isDirectory(target: string): Promise<boolean> {
+  try {
+    return (await fs.stat(target)).isDirectory();
+  } catch {
+    return false;
+  }
+}
+
+async function readDirectory(target: string): Promise<string[]> {
+  try {
+    return await fs.readdir(target);
+  } catch {
+    return [];
+  }
+}
+
+/**
+ * Migrations are owned by whoever owns the table:
+ *  - `Core/Database/Migrations` for infrastructure (sessions, …)
+ *  - `Modules/<Name>/Migrations` for domain tables
+ *
+ * Resolved relative to this file, so it follows `src` (tsx) and `dist` (build).
+ */
+async function collectMigrationFolders(): Promise<string[]> {
+  const folders: string[] = [];
+
+  const coreMigrations = path.join(currentDir, 'Migrations');
+  if (await isDirectory(coreMigrations)) folders.push(coreMigrations);
+
+  const modulesDir = path.resolve(currentDir, '..', '..', 'Modules');
+  for (const entry of await readDirectory(modulesDir)) {
+    const candidate = path.join(modulesDir, entry, 'Migrations');
+    if (await isDirectory(candidate)) folders.push(candidate);
+  }
+
+  return folders;
+}
+
+/** Merges the migration folders into a single provider, rejecting name clashes. */
+class MultiFolderMigrationProvider implements MigrationProvider {
+  constructor(private readonly folders: string[]) {}
+
+  async getMigrations(): Promise<Record<string, Migration>> {
+    const merged: Record<string, Migration> = {};
+
+    for (const migrationFolder of this.folders) {
+      const provider = new FileMigrationProvider({ fs, path, migrationFolder });
+      const migrations = await provider.getMigrations();
+
+      for (const [name, migration] of Object.entries(migrations)) {
+        if (merged[name]) {
+          throw new Error(`Duplicate migration name "${name}" (found in ${migrationFolder})`);
+        }
+        merged[name] = migration;
+      }
+    }
+
+    return merged;
+  }
+}
+
+async function createMigrator(): Promise<Migrator> {
+  const folders = await collectMigrationFolders();
+
   return new Migrator({
     db: getDb(),
-    provider: new FileMigrationProvider({ fs, path, migrationFolder: migrationsDir }),
+    provider: new MultiFolderMigrationProvider(folders),
   });
 }
 
@@ -19,8 +87,7 @@ function reportResults(results: MigrationResultSet, direction: string): void {
   const { error, results: executed } = results;
 
   for (const result of executed ?? []) {
-    const label = result.direction === 'Down' ? 'reverted' : 'applied';
-    logger.info(`${label} ${result.migrationName}`);
+    logger.info(`${result.direction === 'Down' ? 'reverted' : 'applied'} ${result.migrationName}`);
   }
 
   if (error) {
@@ -34,15 +101,15 @@ function reportResults(results: MigrationResultSet, direction: string): void {
 }
 
 export async function migrateToLatest(): Promise<void> {
-  reportResults(await createMigrator().migrateToLatest(), 'migrate');
+  reportResults(await (await createMigrator()).migrateToLatest(), 'migrate');
 }
 
 export async function migrateDown(): Promise<void> {
-  reportResults(await createMigrator().migrateDown(), 'rollback');
+  reportResults(await (await createMigrator()).migrateDown(), 'rollback');
 }
 
 export async function migrationStatus(): Promise<void> {
-  const migrations = await createMigrator().getMigrations();
+  const migrations = await (await createMigrator()).getMigrations();
 
   if (migrations.length === 0) {
     process.stdout.write('No migrations found\n');

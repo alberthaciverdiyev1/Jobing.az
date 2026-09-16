@@ -1,7 +1,7 @@
 import type { Request, RequestHandler } from 'express';
-import { env } from '../../Config/Env.js';
-import { isSupportedLocale } from '../../Config/Locales.js';
-import { NotFoundError } from '../../Core/Http/Errors.js';
+import { env } from '../../../Config/Env.js';
+import { isSupportedLocale } from '../../../Config/Locales.js';
+import { NotFoundError } from '../../../Core/Http/Errors.js';
 
 const ONE_YEAR_MS = 365 * 24 * 60 * 60 * 1000;
 

@@ -1,4 +1,4 @@
-import { Kysely, PostgresDialect } from 'kysely';
+import { CamelCasePlugin, Kysely, PostgresDialect } from 'kysely';
 import { Pool } from 'pg';
 import { env } from '../../Config/Env.js';
 import { logger } from '../Logger.js';
@@ -44,7 +44,11 @@ export function getPool(): Pool {
 
 /** The Kysely query builder. Import this from repositories/services. */
 export function getDb(): Kysely<Database> {
-  client ??= new Kysely<Database>({ dialect: new PostgresDialect({ pool: getPool() }) });
+  client ??= new Kysely<Database>({
+    dialect: new PostgresDialect({ pool: getPool() }),
+    // Database columns are snake_case, TypeScript properties are camelCase.
+    plugins: [new CamelCasePlugin()],
+  });
   return client;
 }
 

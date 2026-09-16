@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import * as localizationController from '../LocalizationController.js';
+import * as localizationController from '../Controllers/LocalizationController.js';
 
 export const basePath = '/';
 

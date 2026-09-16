@@ -51,19 +51,53 @@ src/
 │   ├── View/           Engine.ts, Helpers.ts
 │   └── Logger.ts
 ├── Middlewares/        RequestId, Validate, ViewLocals, NotFound
-├── Modules/            one folder per domain
-│   └── <Name>/
-│       ├── Routes/     Web.ts and/or Api.ts  (always)
-│       ├── <Name>Controller.ts
-│       └── <Name>Service.ts
+├── Modules/            one folder per domain (see below)
 ├── Routes/             index.ts (root), Web.ts (page aggregator), Api.ts (API aggregator)
 ├── Types/              global type augmentation
 └── index.ts            entrypoint
 
-views/  Layouts/ Partials/ Pages/
+views/                  LAYOUT + shared partials + error pages only
+├── Layouts/Main.hbs
+├── Partials/           Head, Navbar, Footer, Flash, LanguageSwitcher
+└── Pages/Errors/       NotFound, ServerError
+
 locales/<lng>/translation.json
-public/  tests/  old/
+public/  tools/  tests/  old/
 ```
+
+## Module anatomy
+
+Each domain module is self-contained:
+
+```
+Modules/<Name>/
+├── Controllers/
+│   ├── <Name>WebController.ts    renders Handlebars, form posts, redirects
+│   └── <Name>ApiController.ts    JSON in / JSON out
+├── Entities/                     domain types + row mappers
+├── Interfaces/                   repository contracts (ports)
+├── Repositories/                 Kysely implementations + singleton instance
+├── Services/                     business rules; depends on the interface only
+├── Validators/                   Zod schemas shared by both controllers
+├── Middlewares/                  module-specific middleware (auth guards)
+├── Migrations/                   the module's own tables
+├── Routes/
+│   ├── Web.ts                    exports `basePath` + `router`
+│   └── Api.ts                    exports `basePath` + `router`
+└── Views/                        the module's own .hbs templates
+```
+
+Layers are optional — a module with no tables skips Entities/Repositories/Migrations,
+one with no pages skips `Routes/Web.ts` + `Views/`.
+
+**Web and API always get separate controllers**, even when the logic looks similar.
+
+### Dependency direction
+
+`Routes → Controller → Service → RepositoryInterface ← Repository → Kysely`
+
+Services never import Kysely; they depend on the interface, which keeps them testable
+with a fake repository.
 
 ## Module routes
 
@@ -127,13 +161,35 @@ database. `connectDatabase()` at boot only warns outside production.
 
 ## Views & i18n
 
-- `res.render('Pages/Home', { ... })` — paths are relative to `views/`, PascalCase.
+- Module templates: `res.render(moduleView('User', 'Login'), { ... })`. `moduleView()`
+  resolves to `Modules/<Name>/Views` in both `src` and `dist` — templates are copied by
+  `tools/CopyModuleViews.mjs` during `npm run build`.
+- Global templates (layout, partials, error pages) stay in `views/` and render by
+  relative path, e.g. `'Pages/Errors/NotFound'`.
 - Every template receives: `t`, `locale`, `locales`, `appName`, `appSuffix`, `appUrl`,
   `currentUrl`, `year`, `isProduction` (set in `Middlewares/ViewLocals.ts`).
 - Translate with `{{t "home.title"}}`. Add keys to **all four** files under `locales/`.
 - Locale comes from the `lang` cookie, then `Accept-Language`, falling back to
   `DEFAULT_LOCALE`. `GET /lang/:locale` sets the cookie and redirects back.
 - We own the language cookie — i18next's cookie cache is deliberately disabled.
+
+## Auth, sessions and CSRF
+
+- Sessions: `express-session` + `connect-pg-simple`, cookie `jobing.sid`
+  (`httpOnly`, `sameSite: 'lax'`, `secure` in production). Table: `session`.
+  Under `NODE_ENV=test` an in-memory store is used so the suite needs no database.
+- `req.session.userId` is the only thing stored about the account.
+  `Modules/User/Middlewares/CurrentUser.ts` resolves it into `req.user` +
+  `currentUser` for templates; `RequireAuth.ts` guards protected routes.
+- **CSRF is enforced on every web route** (`Middlewares/Csrf.ts`, applied in
+  `Routes/Web.ts`). Forms must include `<input type="hidden" name="_csrf" value="{{csrfToken}}">`.
+  The header `X-CSRF-Token` is accepted as an alternative. API routes rely on the
+  `SameSite=Lax` cookie instead.
+- Passwords are hashed with Node's built-in scrypt (`Core/Security/Password.ts`) —
+  no native dependency. Format: `scrypt$<salt>$<hash>`.
+- Login and registration regenerate the session id before storing `userId`.
+- `addFlash(req, 'success' | 'error', message)` queues a one-shot message for the
+  next rendered page (rendered by `views/Partials/Flash.hbs`).
 
 ## General conventions
 

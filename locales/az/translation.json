@@ -4,7 +4,10 @@
     "jobs": "İş elanları",
     "companies": "Şirkətlər",
     "blog": "Bloq",
-    "contact": "Əlaqə"
+    "contact": "Əlaqə",
+    "login": "Daxil ol",
+    "register": "Qeydiyyat",
+    "logout": "Çıxış"
   },
   "a11y": {
     "skipToContent": "Əsas məzmuna keç",
@@ -44,6 +47,29 @@
     "server": {
       "title": "Xəta baş verdi",
       "text": "Gözlənilməz bir xəta yarandı. Zəhmət olmasa bir az sonra yenidən cəhd edin."
+    }
+  },
+  "auth": {
+    "fields": {
+      "name": "Ad",
+      "email": "E-poçt",
+      "password": "Şifrə"
+    },
+    "register": {
+      "title": "Qeydiyyatdan keç",
+      "submit": "Hesab yarat",
+      "success": "Hesabınız yaradıldı. Xoş gəlmisiniz!",
+      "haveAccount": "Artıq hesabınız var?"
+    },
+    "login": {
+      "title": "Daxil ol",
+      "submit": "Daxil ol",
+      "success": "Uğurla daxil oldunuz.",
+      "invalid": "E-poçt və ya şifrə yanlışdır.",
+      "noAccount": "Hesabınız yoxdur?"
+    },
+    "profile": {
+      "title": "Profilim"
     }
   }
 }

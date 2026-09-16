@@ -272,3 +272,164 @@ a {
     display: none;
   }
 }
+
+/* Header actions */
+.site-header__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-inline-start: 1rem;
+}
+
+.site-header__link {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.site-header__link:hover {
+  color: var(--text);
+}
+
+.btn--sm {
+  padding: 0.4rem 0.8rem;
+  font-size: 0.83rem;
+  border-radius: 8px;
+}
+
+.link-button {
+  border: 0;
+  background: none;
+  padding: 0;
+  font: inherit;
+  font-size: 0.9rem;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.link-button:hover {
+  color: var(--text);
+}
+
+/* Flash messages */
+.flash {
+  padding-top: 1rem;
+}
+
+.flash__item {
+  margin: 0 0 0.5rem;
+  padding: 0.7rem 0.9rem;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  border: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.flash__item--success {
+  border-color: color-mix(in srgb, #16a34a 40%, var(--border));
+  color: #16a34a;
+}
+
+.flash__item--error {
+  border-color: color-mix(in srgb, #dc2626 40%, var(--border));
+  color: #dc2626;
+}
+
+/* Auth forms */
+.auth {
+  max-width: 460px;
+  padding: 3.5rem 0;
+}
+
+.auth__title {
+  margin: 0 0 1.5rem;
+  font-size: 1.7rem;
+  letter-spacing: -0.02em;
+}
+
+.auth__alt {
+  margin-top: 1.25rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.auth__alt a {
+  color: var(--primary);
+}
+
+.form {
+  display: grid;
+  gap: 1rem;
+}
+
+.form__field {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.form__label {
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.form__input {
+  width: 100%;
+  padding: 0.65rem 0.8rem;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg);
+  color: var(--text);
+  font: inherit;
+  font-size: 0.95rem;
+}
+
+.form__input:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 1px;
+  border-color: var(--primary);
+}
+
+.form__input.is-invalid {
+  border-color: #dc2626;
+}
+
+.form__error {
+  font-size: 0.82rem;
+  color: #dc2626;
+}
+
+.form__submit {
+  justify-self: start;
+  cursor: pointer;
+  border: 0;
+}
+
+/* Profile */
+.profile {
+  margin: 0 0 1.5rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.profile__row {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: 1rem;
+  padding: 0.85rem 1.1rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.profile__row:last-child {
+  border-bottom: 0;
+}
+
+.profile__term {
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+.profile__value {
+  margin: 0;
+  font-size: 0.95rem;
+}

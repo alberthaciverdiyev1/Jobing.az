@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import * as homeController from '../HomeController.js';
+import * as homeController from '../Controllers/HomeController.js';
 
 export const basePath = '/';
 

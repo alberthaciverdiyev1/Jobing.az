@@ -2,11 +2,12 @@ import type { ColumnType, Generated } from 'kysely';
 
 /**
  * Shape of the database as seen by Kysely.
- * Keep this in sync with the files in `Migrations/` — Kysely trusts it blindly.
+ * Property names are camelCase; the CamelCasePlugin maps them to snake_case
+ * columns, so this file must stay in sync with the migrations.
  */
 
 /** `timestamptz` that the database fills in for us. */
-type Timestamp = ColumnType<Date, Date | string | undefined, Date | string>;
+export type Timestamp = ColumnType<Date, Date | string | undefined, Date | string>;
 
 export interface UsersTable {
   id: Generated<string>;
@@ -18,6 +19,14 @@ export interface UsersTable {
   updatedAt: Timestamp;
 }
 
+/** connect-pg-simple's storage table. */
+export interface SessionsTable {
+  sid: string;
+  sess: unknown;
+  expire: Date;
+}
+
 export interface Database {
   users: UsersTable;
+  session: SessionsTable;
 }

@@ -1,4 +1,6 @@
 import { Router } from 'express';
+import { flash } from '../Middlewares/Flash.js';
+import { currentUser } from '../Modules/User/Middlewares/CurrentUser.js';
 import { apiRouter } from './Api.js';
 import { webRouter } from './Web.js';
 
@@ -12,6 +14,9 @@ import { webRouter } from './Web.js';
  * routes in `Modules/<Name>/Routes/{Web,Api}.ts` and exports `basePath` + `router`.
  */
 export const router = Router();
+
+router.use(flash);
+router.use(currentUser);
 
 router.use('/api/v1', apiRouter);
 router.use('/', webRouter);

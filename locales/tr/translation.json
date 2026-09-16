@@ -4,7 +4,10 @@
     "jobs": "İş ilanları",
     "companies": "Şirketler",
     "blog": "Blog",
-    "contact": "İletişim"
+    "contact": "İletişim",
+    "login": "Giriş yap",
+    "register": "Kayıt ol",
+    "logout": "Çıkış yap"
   },
   "a11y": {
     "skipToContent": "Ana içeriğe geç",
@@ -44,6 +47,29 @@
     "server": {
       "title": "Bir hata oluştu",
       "text": "Beklenmeyen bir hata oluştu. Lütfen birazdan tekrar deneyin."
+    }
+  },
+  "auth": {
+    "fields": {
+      "name": "Ad",
+      "email": "E-posta",
+      "password": "Şifre"
+    },
+    "register": {
+      "title": "Kayıt ol",
+      "submit": "Hesap oluştur",
+      "success": "Hesabınız oluşturuldu. Hoş geldiniz!",
+      "haveAccount": "Zaten hesabınız var mı?"
+    },
+    "login": {
+      "title": "Giriş yap",
+      "submit": "Giriş yap",
+      "success": "Başarıyla giriş yaptınız.",
+      "invalid": "E-posta veya şifre hatalı.",
+      "noAccount": "Hesabınız yok mu?"
+    },
+    "profile": {
+      "title": "Profilim"
     }
   }
 }

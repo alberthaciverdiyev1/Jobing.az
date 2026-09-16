@@ -4,7 +4,10 @@
     "jobs": "Jobs",
     "companies": "Companies",
     "blog": "Blog",
-    "contact": "Contact"
+    "contact": "Contact",
+    "login": "Log in",
+    "register": "Sign up",
+    "logout": "Log out"
   },
   "a11y": {
     "skipToContent": "Skip to main content",
@@ -44,6 +47,29 @@
     "server": {
       "title": "Something went wrong",
       "text": "An unexpected error occurred. Please try again in a moment."
+    }
+  },
+  "auth": {
+    "fields": {
+      "name": "Name",
+      "email": "Email",
+      "password": "Password"
+    },
+    "register": {
+      "title": "Create an account",
+      "submit": "Create account",
+      "success": "Your account is ready. Welcome!",
+      "haveAccount": "Already have an account?"
+    },
+    "login": {
+      "title": "Log in",
+      "submit": "Log in",
+      "success": "You are signed in.",
+      "invalid": "Incorrect email or password.",
+      "noAccount": "Don't have an account?"
+    },
+    "profile": {
+      "title": "My profile"
     }
   }
 }
