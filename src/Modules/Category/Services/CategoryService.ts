@@ -1,30 +1,14 @@
-import { ConflictError, NotFoundError, ValidationError } from '../../../Core/Http/Errors/index.js';
-import { slugify } from '../../../Core/Support/Slugify.js';
+import { NotFoundError, ValidationError } from '../../../Core/Http/Errors/index.js';
+import { normalizeTranslation } from '../../../Core/Localization/TranslateText.js';
+import type { TranslatedText } from '../../../Core/Localization/TranslatedText.js';
+import { uniqueSlug } from '../../../Core/Support/UniqueSlug.js';
 import type { Category } from '../Entities/Category.js';
-import type { CategoryName } from '../Entities/CategoryName.js';
 import type { NewCategory } from '../Entities/NewCategory.js';
 import type { CategoryListFilters } from '../Interfaces/CategoryListFilters.js';
 import type { CategoryRepositoryInterface } from '../Interfaces/CategoryRepositoryInterface.js';
 import type { CategoryServiceInterface } from '../Interfaces/CategoryServiceInterface.js';
 import type { CreateCategoryInput } from '../Interfaces/CreateCategoryInput.js';
 import type { UpdateCategoryInput } from '../Interfaces/UpdateCategoryInput.js';
-
-const MAX_SLUG_ATTEMPTS = 50;
-const SECONDARY_LOCALES = ['en', 'ru', 'tr'] as const;
-
-/** Trims every locale and drops the empty ones so fallback works predictably. */
-function normalizeName(name: CategoryName): CategoryName {
-  const normalized: CategoryName = { az: name.az.trim() };
-
-  for (const locale of SECONDARY_LOCALES) {
-    const value = name[locale];
-    if (typeof value === 'string' && value.trim().length > 0) {
-      normalized[locale] = value.trim();
-    }
-  }
-
-  return normalized;
-}
 
 /**
  * Business rules for categories: unique slugs, a valid parent, and no cycles.
@@ -49,7 +33,7 @@ export class CategoryService implements CategoryServiceInterface {
   }
 
   async create(input: CreateCategoryInput): Promise<Category> {
-    const name = normalizeName(input.name);
+    const name = normalizeTranslation(input.name);
     await this.assertParentIsUsable(input.parentId ?? null, null);
 
     return this.categories.create({
@@ -63,7 +47,7 @@ export class CategoryService implements CategoryServiceInterface {
 
   async update(id: string, input: UpdateCategoryInput): Promise<Category> {
     const existing = await this.getById(id);
-    const name = input.name ? normalizeName(input.name) : existing.name;
+    const name = input.name ? normalizeTranslation(input.name) : existing.name;
     const changes: Partial<NewCategory> = {};
 
     if (input.name) changes.name = name;
@@ -94,23 +78,12 @@ export class CategoryService implements CategoryServiceInterface {
 
   private async freeSlug(
     candidate: string | undefined,
-    name: CategoryName,
+    name: TranslatedText,
     exceptId?: string,
   ): Promise<string> {
-    const base = slugify(candidate?.trim() || name.az);
-
-    if (base.length === 0) {
-      throw new ValidationError('Could not build a slug from the name — provide one explicitly');
-    }
-
-    if (!(await this.categories.slugExists(base, exceptId))) return base;
-
-    for (let suffix = 2; suffix <= MAX_SLUG_ATTEMPTS; suffix += 1) {
-      const withSuffix = `${base}-${suffix}`;
-      if (!(await this.categories.slugExists(withSuffix, exceptId))) return withSuffix;
-    }
-
-    throw new ConflictError(`Could not find a free slug for "${base}"`);
+    return uniqueSlug(candidate?.trim() || name.az, (slug) =>
+      this.categories.slugExists(slug, exceptId),
+    );
   }
 
   /** Rejects a missing parent, a self-parent and any move that would make a cycle. */

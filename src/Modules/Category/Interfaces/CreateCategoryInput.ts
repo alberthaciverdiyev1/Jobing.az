@@ -1,7 +1,7 @@
-import type { CategoryName } from '../Entities/CategoryName.js';
+import type { TranslatedText } from '../../../Core/Localization/TranslatedText.js';
 
 export interface CreateCategoryInput {
-  name: CategoryName;
+  name: TranslatedText;
   /** Defaults to a slug built from the `az` name. */
   slug?: string;
   parentId?: string | null;

@@ -497,3 +497,27 @@ a {
   font-size: 0.9rem;
   color: var(--primary);
 }
+
+/* City list */
+.city-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+}
+
+.city-list__item a {
+  display: block;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  font-size: 0.95rem;
+}
+
+.city-list__item a:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}

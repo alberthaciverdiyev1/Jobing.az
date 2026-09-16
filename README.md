@@ -60,6 +60,12 @@ npm run dev
 | `POST /api/v1/categories` | API | Create a category (admin) |
 | `PATCH /api/v1/categories/:id` | API | Update a category (admin) |
 | `DELETE /api/v1/categories/:id` | API | Delete a category and its subtree (admin) |
+| `GET /cities` | page | City listing |
+| `GET /api/v1/cities` | API | List cities — `?active=true`, `?search=` |
+| `GET /api/v1/cities/:slug` | API | A single city |
+| `POST /api/v1/cities` | API | Create a city (admin) |
+| `PATCH /api/v1/cities/:id` | API | Update a city (admin) |
+| `DELETE /api/v1/cities/:id` | API | Delete a city (admin) |
 
 ## Architecture
 

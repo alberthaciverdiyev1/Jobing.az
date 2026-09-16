@@ -8,7 +8,8 @@
     "login": "Log in",
     "register": "Sign up",
     "logout": "Log out",
-    "categories": "Categories"
+    "categories": "Categories",
+    "cities": "Cities"
   },
   "a11y": {
     "skipToContent": "Skip to main content",
@@ -78,5 +79,10 @@
     "subtitle": "Pick the category that matches your field and browse the vacancies.",
     "empty": "No categories have been added yet.",
     "browse": "Browse vacancies"
+  },
+  "city": {
+    "title": "Jobs by city",
+    "subtitle": "Find the vacancies available in your region.",
+    "empty": "No cities have been added yet."
   }
 }

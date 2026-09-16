@@ -8,7 +8,8 @@
     "login": "Giriş yap",
     "register": "Kayıt ol",
     "logout": "Çıkış yap",
-    "categories": "Kategoriler"
+    "categories": "Kategoriler",
+    "cities": "Şehirler"
   },
   "a11y": {
     "skipToContent": "Ana içeriğe geç",
@@ -78,5 +79,10 @@
     "subtitle": "Alanınıza uygun kategoriyi seçin ve ilanlara göz atın.",
     "empty": "Henüz kategori eklenmemiş.",
     "browse": "İlanlara göz at"
+  },
+  "city": {
+    "title": "Şehre göre işler",
+    "subtitle": "Bölgenizdeki güncel ilanları bulun.",
+    "empty": "Henüz şehir eklenmemiş."
   }
 }

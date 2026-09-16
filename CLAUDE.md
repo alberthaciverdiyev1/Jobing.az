@@ -49,7 +49,8 @@ src/
 │   ├── Database/       Client.ts (Drizzle), AppDbContext.ts, Configurations/
 │   ├── Http/           App.ts, RootRouter.ts, Server.ts, ErrorHandler.ts,
 │   │                   Responses.ts, RootRouter.ts, Envelope/, Errors/
-│   ├── Localization/   I18n.ts
+│   ├── Localization/   I18n.ts, TranslatedText.ts, TranslateText.ts,
+│   │                   TranslatedTextSchema.ts
 │   ├── Provider/       ModuleDiscovery.ts, ModuleProvider.ts — auto-registration
 │   ├── View/           Edge.ts, RenderPage.ts, PageShell.ts, PageState.ts
 │   └── Logger.ts
@@ -75,11 +76,13 @@ router is part of the HTTP layer (`Core/Http/RootRouter.ts`).
 |---|---|
 | `User` | accounts, authentication (JWT), admin guard |
 | `Category` | job categories, self-referencing hierarchy, translated names |
+| `City` | cities and regions vacancies are located in |
 | `Home` | landing page |
 | `Localization` | language switching |
 | `Health` | health endpoint |
 
-`Category` is the fullest example of the layering below; `User` adds auth on top.
+`Category` is the fullest example of the layering below (hierarchy, cycles, tree
+output); `City` is the minimal one; `User` adds authentication on top.
 
 ## Module anatomy
 

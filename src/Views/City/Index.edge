@@ -1,0 +1,20 @@
+@component('Components/Layout', { shell: shell })
+  @slot('main')
+    <section class="container section">
+      <h1 class="page-title">{{ t('city.title') }}</h1>
+      <p class="page-subtitle">{{ t('city.subtitle') }}</p>
+
+      @if(cities.length === 0)
+        <p class="empty-state">{{ t('city.empty') }}</p>
+      @else
+        <ul class="city-list">
+          @each(city in cities)
+            <li class="city-list__item">
+              <a href="/jobs?city={{ city.slug }}">{{ city.name }}</a>
+            </li>
+          @end
+        </ul>
+      @end
+    </section>
+  @endslot
+@end

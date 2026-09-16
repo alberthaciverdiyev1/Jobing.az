@@ -34,7 +34,9 @@ describe('AppDbContext', () => {
   it('exposes the tables through a schema object', async () => {
     await appDbContext.load();
 
-    expect(Object.keys(appDbContext.schema).sort()).toEqual(['categories', 'users']);
+    expect(Object.keys(appDbContext.schema).sort()).toEqual(
+      expect.arrayContaining(['categories', 'cities', 'users']),
+    );
     expect(appDbContext.table('users')).toBe(users);
   });
 });

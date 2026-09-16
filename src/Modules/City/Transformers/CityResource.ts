@@ -1,9 +1,8 @@
 import type { TranslatedText } from '../../../Core/Localization/TranslatedText.js';
 
-/** A category as sent to clients. */
-export interface CategoryResource {
+/** A city as sent to clients. */
+export interface CityResource {
   id: string;
-  parentId: string | null;
   slug: string;
   /** Resolved for the request locale, falling back to Azerbaijani. */
   name: string;
