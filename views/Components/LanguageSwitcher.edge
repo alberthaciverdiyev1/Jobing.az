@@ -1,0 +1,9 @@
+<div class="lang-switcher" role="group" aria-label="{{ shell.t('a11y.languageSwitcher') }}">
+  @each(language in shell.locales)
+    <a
+      class="lang-switcher__item{{ language.code === shell.locale ? ' is-active' : '' }}"
+      href="/lang/{{ language.code }}"
+      hreflang="{{ language.code }}"
+    >{{ language.flag }} {{ language.code }}</a>
+  @end
+</div>

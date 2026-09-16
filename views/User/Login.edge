@@ -1,0 +1,50 @@
+@component('Components/Layout', { shell: shell })
+  @slot('main')
+    <section class="container auth">
+      <h1 class="auth__title">{{ t('auth.login.title') }}</h1>
+
+      <form class="form" method="post" action="/login" novalidate>
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+        <input type="hidden" name="next" value="{{ next }}" />
+
+        <label class="form__field">
+          <span class="form__label">{{ t('auth.fields.email') }}</span>
+          <input
+            class="form__input{{ errors.email ? ' is-invalid' : '' }}"
+            type="email"
+            name="email"
+            value="{{ values.email }}"
+            autocomplete="email"
+            required
+          />
+          @if(errors.email)
+            <span class="form__error">{{ errors.email }}</span>
+          @end
+        </label>
+
+        <label class="form__field">
+          <span class="form__label">{{ t('auth.fields.password') }}</span>
+          <input
+            class="form__input{{ errors.password ? ' is-invalid' : '' }}"
+            type="password"
+            name="password"
+            autocomplete="current-password"
+            required
+          />
+          @if(errors.password)
+            <span class="form__error">{{ errors.password }}</span>
+          @end
+        </label>
+
+        <button class="btn btn--primary form__submit" type="submit">
+          {{ t('auth.login.submit') }}
+        </button>
+      </form>
+
+      <p class="auth__alt">
+        {{ t('auth.login.noAccount') }}
+        <a href="/register">{{ t('auth.register.title') }}</a>
+      </p>
+    </section>
+  @endslot
+@end

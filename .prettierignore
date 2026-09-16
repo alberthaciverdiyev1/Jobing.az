@@ -6,3 +6,4 @@ coverage
 *.hbs
 # drizzle-kit generated
 /drizzle
+*.edge

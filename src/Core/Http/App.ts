@@ -10,7 +10,6 @@ import { paths } from '../../Config/Paths.js';
 import { i18nMiddleware, initI18n } from '../Localization/I18n.js';
 import { createSessionMiddleware } from './Session.js';
 import { logger } from '../Logger.js';
-import { registerViewEngine } from '../View/Engine.js';
 import { notFound } from '../../Middlewares/NotFound.js';
 import { requestId } from '../../Middlewares/RequestId.js';
 import { viewLocals } from '../../Middlewares/ViewLocals.js';
@@ -21,7 +20,7 @@ import { errorHandler } from './ErrorHandler.js';
  * Builds the Express application.
  *
  * Serves two audiences from one process:
- *  - server-rendered Handlebars pages on all non-API routes
+ *  - server-rendered Edge pages on all non-API routes
  *  - a JSON API under `/api/v1`
  */
 export async function createApp(): Promise<Express> {
@@ -31,8 +30,6 @@ export async function createApp(): Promise<Express> {
 
   app.set('trust proxy', true);
   app.disable('x-powered-by');
-
-  registerViewEngine(app);
 
   app.use(
     helmet({

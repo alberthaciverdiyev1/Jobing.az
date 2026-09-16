@@ -20,7 +20,7 @@ The previous Laravel implementation is preserved read-only under `old/` for refe
 | Database | PostgreSQL |
 | ORM | **Drizzle ORM** (TypeScript schema, SQL-shaped queries) |
 | Driver | `pg` |
-| Views | Handlebars (`express-handlebars`) |
+| Views | **Edge** (`edge.js`) |
 | i18n | i18next + `i18next-http-middleware` + `i18next-fs-backend` |
 | Dev runner | `tsx watch` |
 | Build | `tsc` → `dist/` |
@@ -58,9 +58,8 @@ src/
 └── index.ts            entrypoint
 
 views/                  every template, in one place
-├── Layouts/Main.hbs
-├── Partials/           Head, Navbar, Footer, Flash, LanguageSwitcher
-├── Pages/Errors/       NotFound, ServerError
+├── Components/         Layout, Head, Navbar, Footer, Flash, LanguageSwitcher
+├── Errors/             NotFound, ServerError
 ├── Home/               module pages, one folder per module
 └── User/               Login, Register, Profile
 
@@ -75,7 +74,7 @@ Each domain module is self-contained:
 ```
 Modules/<Name>/
 ├── Controllers/
-│   ├── <Name>WebController.ts    renders Handlebars, form posts, redirects
+│   ├── <Name>WebController.ts    renders Edge pages, form posts, redirects
 │   └── <Name>ApiController.ts    JSON in / JSON out
 ├── Entities/                     the entity, typed from its configuration
 ├── Interfaces/                   repository contracts (ports)
@@ -190,7 +189,7 @@ router.get('/', vacancyController.index);
 
 Then register it in the matching aggregator:
 
-- `Routes/Web.ts` → page routes (Handlebars)
+- `Routes/Web.ts` → page routes (Edge)
 - `Routes/Api.ts` → JSON routes
 
 ```ts
@@ -205,7 +204,7 @@ A module with only pages has just `Routes/Web.ts`; API-only modules just `Routes
 | Branch | Mount | Behaviour |
 |---|---|---|
 | `Routes/Api.ts` | `/api/v1/*` | **Always** JSON, errors included. |
-| `Routes/Web.ts` | `/` | Handlebars pages. |
+| `Routes/Web.ts` | `/` | Edge pages. |
 
 The error handler picks the shape from the URL: `/api/*` → JSON; otherwise HTML unless
 the client's `Accept` explicitly prefers JSON.
@@ -268,19 +267,54 @@ Generated SQL is committed under `drizzle/` and reviewed like any other change.
   them, so `users.isAdmin` is the `is_admin` column.
 - Repositories import their own module's table; no global schema import needed.
 
-## Views & i18n
+## Views (Edge)
 
-- **All templates live under `views/`, grouped by module** (`views/User/Login.hbs`).
-  Nothing is rendered from inside `src/`, so the build needs no copy step.
-- Render a module page with `moduleView('User', 'Login')`, which resolves to
-  `'User/Login'`. The helper is the only place encoding that convention.
-- Layout, partials and error pages render by relative path directly
-  (`'Pages/Errors/NotFound'`).
-- Every template receives: `t`, `locale`, `locales`, `appName`, `appSuffix`, `appUrl`,
-  `currentUrl`, `year`, `isProduction` (set in `Middlewares/ViewLocals.ts`).
-- Translate with `{{t "home.title"}}`. Add keys to **all four** files under `locales/`.
-- Locale comes from the `lang` cookie, then `Accept-Language`, falling back to
+**Edge has no Express adapter**, so nothing is registered via `app.set('view engine')`.
+Controllers render explicitly:
+
+```ts
+await renderPage(res, 'User/Login', { pageTitle: '…', errors: {}, values: {} });
+```
+
+`renderPage` (in `Core/View/Edge.ts`) merges `res.locals` with the given state and exposes
+it twice: flattened at the top level — so slot content can use `t`, `currentUser`, … —
+and as `shell`, so components and partials can still reach it after crossing a template
+boundary.
+
+### Template rules
+
+- A page wraps itself in the layout component:
+
+  ```edge
+  @component('Components/Layout', { shell: shell })
+    @slot('main')
+      <h1>{{ t('home.title') }}</h1>
+    @endslot
+  @end
+  ```
+
+- Shared pieces use `@include`, which renders **in the parent's scope** and takes no
+  state argument — so they read `shell.*`:
+
+  ```edge
+  @include('Components/Navbar')
+  ```
+
+- Every block tag (`@if` / `@else` / `@end`, `@each` / `@end`, `@component` / `@slot` /
+  `@endslot`) must sit on its **own line**. Edge's lexer rejects them inline.
+- `{{ }}` escapes, `{{{ }}}` is raw. The slot itself needs
+  `{{{ await $slots.main() }}}`.
+- Globals, callable in any template without a prefix: `asset`, `formatDate`, `truncate`,
+  `uppercase`, `lowercase`, `json`.
+- `t` is **not** a global — it is per-request state. Pages call `t('key')`, components
+  and partials call `shell.t('key')`.
+- `*.edge` is excluded from Prettier; it has no parser for it.
+
+### i18n
+
+- Locale resolves from the `lang` cookie, then `Accept-Language`, falling back to
   `DEFAULT_LOCALE`. `GET /lang/:locale` sets the cookie and redirects back.
+- Add new keys to **all four** files under `locales/`.
 - We own the language cookie — i18next's cookie cache is deliberately disabled.
 
 ## Auth, sessions and CSRF

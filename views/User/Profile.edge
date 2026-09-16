@@ -1,0 +1,23 @@
+@component('Components/Layout', { shell: shell })
+  @slot('main')
+    <section class="container auth">
+      <h1 class="auth__title">{{ t('auth.profile.title') }}</h1>
+
+      <dl class="profile">
+        <div class="profile__row">
+          <dt class="profile__term">{{ t('auth.fields.name') }}</dt>
+          <dd class="profile__value">{{ currentUser.name }}</dd>
+        </div>
+        <div class="profile__row">
+          <dt class="profile__term">{{ t('auth.fields.email') }}</dt>
+          <dd class="profile__value">{{ currentUser.email }}</dd>
+        </div>
+      </dl>
+
+      <form method="post" action="/logout">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+        <button class="btn btn--ghost" type="submit">{{ t('nav.logout') }}</button>
+      </form>
+    </section>
+  @endslot
+@end

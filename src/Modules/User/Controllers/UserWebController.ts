@@ -1,12 +1,10 @@
 import type { Request, RequestHandler } from 'express';
 import { isAppError } from '../../../Core/Http/Errors.js';
 import { fieldErrors } from '../../../Core/Http/Validation.js';
-import { moduleView } from '../../../Core/View/ModuleView.js';
+import { renderPage } from '../../../Core/View/Edge.js';
 import { addFlash } from '../../../Middlewares/Flash.js';
 import { userService } from '../Services/UserService.js';
 import { loginRequest, registerRequest } from '../Requests/index.js';
-
-const VIEW = (name: string): string => moduleView('User', name);
 
 /** Only same-origin paths are accepted as post-login destinations. */
 function safeRedirect(value: unknown): string {
@@ -19,8 +17,8 @@ function bodyOf(req: Request): Record<string, unknown> {
   return (req.body ?? {}) as Record<string, unknown>;
 }
 
-export const showRegister: RequestHandler = (_req, res) => {
-  res.render(VIEW('Register'), {
+export const showRegister: RequestHandler = async (_req, res) => {
+  await renderPage(res, 'User/Register', {
     pageTitle: res.locals.t('auth.register.title'),
     errors: {},
     values: {},
@@ -31,7 +29,7 @@ export const register: RequestHandler = async (req, res) => {
   const parsed = registerRequest.safeParse(bodyOf(req));
 
   if (!parsed.success) {
-    res.status(422).render(VIEW('Register'), {
+    await renderPage(res.status(422), 'User/Register', {
       pageTitle: res.locals.t('auth.register.title'),
       errors: fieldErrors(parsed.error),
       values: bodyOf(req),
@@ -48,7 +46,7 @@ export const register: RequestHandler = async (req, res) => {
   } catch (error) {
     if (!isAppError(error)) throw error;
 
-    res.status(error.statusCode).render(VIEW('Register'), {
+    await renderPage(res.status(error.statusCode), 'User/Register', {
       pageTitle: res.locals.t('auth.register.title'),
       errors: { email: error.message },
       values: bodyOf(req),
@@ -56,8 +54,8 @@ export const register: RequestHandler = async (req, res) => {
   }
 };
 
-export const showLogin: RequestHandler = (req, res) => {
-  res.render(VIEW('Login'), {
+export const showLogin: RequestHandler = async (req, res) => {
+  await renderPage(res, 'User/Login', {
     pageTitle: res.locals.t('auth.login.title'),
     errors: {},
     values: {},
@@ -70,7 +68,7 @@ export const login: RequestHandler = async (req, res) => {
   const parsed = loginRequest.safeParse(body);
 
   if (!parsed.success) {
-    res.status(422).render(VIEW('Login'), {
+    await renderPage(res.status(422), 'User/Login', {
       pageTitle: res.locals.t('auth.login.title'),
       errors: fieldErrors(parsed.error),
       values: body,
@@ -88,7 +86,7 @@ export const login: RequestHandler = async (req, res) => {
   } catch (error) {
     if (!isAppError(error)) throw error;
 
-    res.status(error.statusCode).render(VIEW('Login'), {
+    await renderPage(res.status(error.statusCode), 'User/Login', {
       pageTitle: res.locals.t('auth.login.title'),
       errors: { password: res.locals.t('auth.login.invalid') },
       values: body,
@@ -104,8 +102,8 @@ export const logout: RequestHandler = (req, res) => {
   });
 };
 
-export const profile: RequestHandler = (_req, res) => {
-  res.render(VIEW('Profile'), {
+export const profile: RequestHandler = async (_req, res) => {
+  await renderPage(res, 'User/Profile', {
     pageTitle: res.locals.t('auth.profile.title'),
     errors: {},
     values: {},

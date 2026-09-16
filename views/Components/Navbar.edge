@@ -1,0 +1,31 @@
+<header class="site-header">
+  <div class="container site-header__inner">
+    <a class="brand" href="/">
+      <span class="brand__mark">J</span>
+      <span class="brand__name">{{ shell.appName }}<span class="brand__suffix">{{ shell.appSuffix }}</span></span>
+    </a>
+
+    <nav class="site-nav" aria-label="{{ shell.t('a11y.mainNavigation') }}">
+      <a href="/">{{ shell.t('nav.home') }}</a>
+      <a href="/jobs">{{ shell.t('nav.jobs') }}</a>
+      <a href="/companies">{{ shell.t('nav.companies') }}</a>
+      <a href="/blog">{{ shell.t('nav.blog') }}</a>
+      <a href="/contact">{{ shell.t('nav.contact') }}</a>
+    </nav>
+
+    <div class="site-header__actions">
+      @if(shell.currentUser)
+        <a class="site-header__link" href="/profile">{{ shell.currentUser.name }}</a>
+        <form method="post" action="/logout">
+          <input type="hidden" name="_csrf" value="{{ shell.csrfToken }}" />
+          <button class="link-button" type="submit">{{ shell.t('nav.logout') }}</button>
+        </form>
+      @else
+        <a class="site-header__link" href="/login">{{ shell.t('nav.login') }}</a>
+        <a class="btn btn--primary btn--sm" href="/register">{{ shell.t('nav.register') }}</a>
+      @end
+
+      @include('Components/LanguageSwitcher')
+    </div>
+  </div>
+</header>

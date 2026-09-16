@@ -1,0 +1,8 @@
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>{{ shell.pageTitle ? shell.pageTitle + ' · ' : '' }}{{ shell.appName }}{{ shell.appSuffix }}</title>
+@if(shell.pageDescription)
+  <meta name="description" content="{{ shell.pageDescription }}" />
+@end
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="stylesheet" href="{{ asset('css/App.css') }}" />

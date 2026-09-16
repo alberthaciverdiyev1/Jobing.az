@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="{{ shell.locale }}">
+  <head>
+    @include('Components/Head')
+  </head>
+  <body>
+    <a class="skip-link" href="#main">{{ shell.t('a11y.skipToContent') }}</a>
+    @include('Components/Navbar')
+    @include('Components/Flash')
+    <main id="main" class="site-main">
+      {{{ await $slots.main() }}}
+    </main>
+    @include('Components/Footer')
+  </body>
+</html>

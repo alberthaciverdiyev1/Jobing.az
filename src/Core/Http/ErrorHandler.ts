@@ -1,6 +1,7 @@
 import type { ErrorRequestHandler, Request } from 'express';
 import { ZodError } from 'zod';
 import { env, isProduction } from '../../Config/Env.js';
+import { renderPage } from '../View/Edge.js';
 import { logger } from '../Logger.js';
 import { AppError, isAppError } from './Errors.js';
 
@@ -47,7 +48,7 @@ function prefersJson(req: Request): boolean {
   return req.accepts(['html', 'json']) === 'json';
 }
 
-export const errorHandler: ErrorRequestHandler = (error, req, res, _next) => {
+export const errorHandler: ErrorRequestHandler = async (error, req, res, _next) => {
   const appError = toAppError(error);
 
   const logContext = {
@@ -73,15 +74,17 @@ export const errorHandler: ErrorRequestHandler = (error, req, res, _next) => {
     appError.statusCode >= 500 && isProduction ? 'Internal server error' : appError.message;
 
   if (!prefersJson(req)) {
-    res
-      .status(appError.statusCode)
-      .render(appError.statusCode === 404 ? 'Pages/Errors/NotFound' : 'Pages/Errors/ServerError', {
+    await renderPage(
+      res.status(appError.statusCode),
+      appError.statusCode === 404 ? 'Errors/NotFound' : 'Errors/ServerError',
+      {
         pageTitle: appError.statusCode === 404 ? '404' : '500',
         statusCode: appError.statusCode,
         errorCode: appError.code,
         errorMessage: clientMessage,
         requestId: isProduction ? undefined : req.requestId,
-      });
+      },
+    );
     return;
   }
 

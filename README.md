@@ -1,7 +1,7 @@
 # Jobing
 
 Multilingual job-board platform built with **Express.js + TypeScript**.
-Serves server-rendered pages and a JSON API from a single process, backed by
+Serves server-rendered **Edge** templates and a JSON API from a single process, backed by
 **PostgreSQL** through **Drizzle ORM**.
 
 > The previous Laravel implementation lives in [`old/`](./old) for reference only.
@@ -57,7 +57,7 @@ npm run dev
 
 ## Architecture
 
-- **Web + API**: `/api/v1/*` is JSON-only; every other route renders Handlebars.
+- **Web + API**: `/api/v1/*` is JSON-only; every other route renders Edge templates.
 - **Modular and self-registering**: each domain is a folder under `src/Modules/`
   containing its own Entity, Repository, Interface, Service, Validators, Controllers
   (separate web and API), Routes and Configurations. `Core/Provider`

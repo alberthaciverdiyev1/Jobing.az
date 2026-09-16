@@ -1,0 +1,7 @@
+@if(shell.flash.length)
+  <div class="container flash">
+    @each(message in shell.flash)
+      <p class="flash__item flash__item--{{ message.type }}" role="status">{{ message.message }}</p>
+    @end
+  </div>
+@end
