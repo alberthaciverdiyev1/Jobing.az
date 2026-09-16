@@ -1,9 +1,9 @@
 import type { ErrorRequestHandler, Request } from 'express';
 import { ZodError } from 'zod';
 import { env, isProduction } from '../../Config/Env.js';
-import { renderPage } from '../View/Edge.js';
+import { renderPage } from '../View/RenderPage.js';
 import { logger } from '../Logger.js';
-import { AppError, isAppError } from './Errors.js';
+import { AppError, isAppError } from './Errors/index.js';
 
 interface ApiErrorBody {
   success: false;

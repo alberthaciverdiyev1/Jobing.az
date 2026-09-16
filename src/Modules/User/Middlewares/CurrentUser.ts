@@ -1,5 +1,5 @@
 import type { RequestHandler } from 'express';
-import { userService } from '../Services/UserService.js';
+import { userService } from '../Services/index.js';
 import { transformUser } from '../Transformers/UserTransformer.js';
 
 /**

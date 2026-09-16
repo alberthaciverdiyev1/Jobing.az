@@ -1,5 +1,5 @@
 import type { RequestHandler } from 'express';
-import { UnauthorizedError } from '../../../Core/Http/Errors.js';
+import { UnauthorizedError } from '../../../Core/Http/Errors/index.js';
 
 /** Blocks anonymous access to a web page or API route. */
 export const requireAuth: RequestHandler = (req, res, next) => {

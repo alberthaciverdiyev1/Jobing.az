@@ -1,7 +1,7 @@
 import type { Request, RequestHandler } from 'express';
-import { UnauthorizedError } from '../../../Core/Http/Errors.js';
+import { UnauthorizedError } from '../../../Core/Http/Errors/index.js';
 import { created, noContent, ok } from '../../../Core/Http/Responses.js';
-import { userService } from '../Services/UserService.js';
+import { userService } from '../Services/index.js';
 import { transformUser } from '../Transformers/UserTransformer.js';
 import type { LoginRequest, RegisterRequest } from '../Requests/index.js';
 

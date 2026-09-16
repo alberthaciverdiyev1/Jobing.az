@@ -76,17 +76,27 @@ Modules/<Name>/
 ├── Controllers/
 │   ├── <Name>WebController.ts    renders Edge pages, form posts, redirects
 │   └── <Name>ApiController.ts    JSON in / JSON out
-├── Entities/                     the entity, typed from its configuration
-├── Interfaces/                   repository contracts (ports)
-├── Repositories/                 Drizzle implementations + singleton instance
-├── Services/                     business rules; depends on the interface only
+├── Configurations/               entity → table mapping (EF-style)
+├── Entities/                     User.ts, NewUser.ts — typed from the configuration
+├── Interfaces/                   one contract per file (repository, service, DTOs)
+├── Repositories/                 UserRepository.ts (class) + index.ts (instance)
+├── Services/                     UserService.ts (class) + index.ts (instance)
 ├── Transformers/                 entity → client-safe resource
 ├── Requests/                     one request schema per endpoint
 ├── Middlewares/                  module-specific middleware (auth guards)
-├── Configurations/               entity → table mapping (EF-style)
 └── Routes/
     ├── Web.ts                    exports `basePath` + `router`
     └── Api.ts                    exports `basePath` + `router`
+```
+
+Example of the contract files:
+
+```
+Interfaces/
+├── PaginatedResult.ts
+├── RegisterInput.ts
+├── UserRepositoryInterface.ts
+└── UserServiceInterface.ts
 ```
 
 Layers are optional — a module with no tables skips Configurations/Entities/Repositories,
@@ -97,13 +107,33 @@ one with no pages skips `Routes/Web.ts`.
 ### Dependency direction
 
 ```
-Routes → Controller → Service → RepositoryInterface ← Repository → Drizzle
-                          ↓
-                     Transformer
+Routes → Controller → ServiceInterface ← Service → RepositoryInterface ← Repository → Drizzle
+                            ↓
+                       Transformer
 ```
 
-Services never import Drizzle; they depend on the interface, which keeps them testable
-with a fake repository.
+Controllers depend on `UserServiceInterface`, the service depends on
+`UserRepositoryInterface` — never on the concrete classes. Both layers are therefore
+testable with a fake implementation.
+
+### One declaration per file
+
+- **One class per file.** Never two. `Core/Http/Errors/` is the reference: nine
+  classes, nine files, plus an `index.ts` barrel.
+- **One exported interface/type per file.** If a type is only used inside its own
+  file, do not export it at all.
+- A class file holds **only** the class. The shared instance lives in an `index.ts`
+  next to it:
+
+  ```ts
+  // Repositories/index.ts
+  import { UserRepository } from './UserRepository.js';
+  export const userRepository = new UserRepository();
+  ```
+
+  Controllers import `userService` from `Services/index.js`, never the class.
+- Helper functions that form one cohesive unit may share a file
+  (`transformUser` + `transformUsers`).
 
 ### Entities
 

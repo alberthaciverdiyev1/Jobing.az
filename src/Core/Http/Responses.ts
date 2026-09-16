@@ -1,22 +1,7 @@
 import type { Response } from 'express';
+import type { ApiSuccess } from './Envelope/index.js';
 
-export interface ApiSuccess<T> {
-  success: true;
-  data: T;
-}
-
-export interface ApiErrorPayload {
-  code: string;
-  message: string;
-  details?: unknown;
-}
-
-export interface ApiFailure {
-  success: false;
-  error: ApiErrorPayload;
-}
-
-/** Shorthand for templates that need the camelCase envelope contract. */
+/** Sends the standard success envelope. */
 export function ok<T>(res: Response, data: T, status = 200): void {
   const body: ApiSuccess<T> = { success: true, data };
   res.status(status).json(body);

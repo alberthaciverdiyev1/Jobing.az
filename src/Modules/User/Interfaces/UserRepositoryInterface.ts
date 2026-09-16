@@ -1,11 +1,6 @@
-import type { NewUser, User } from '../Entities/User.js';
-
-export interface PaginatedResult<T> {
-  items: T[];
-  total: number;
-  page: number;
-  perPage: number;
-}
+import type { NewUser } from '../Entities/NewUser.js';
+import type { User } from '../Entities/User.js';
+import type { PaginatedResult } from './PaginatedResult.js';
 
 /** Persistence contract for users. The service layer only knows this shape. */
 export interface UserRepositoryInterface {

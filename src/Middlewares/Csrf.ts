@@ -1,6 +1,6 @@
 import { randomBytes, timingSafeEqual } from 'node:crypto';
 import type { RequestHandler } from 'express';
-import { ForbiddenError } from '../Core/Http/Errors.js';
+import { ForbiddenError } from '../Core/Http/Errors/index.js';
 
 const SAFE_METHODS = new Set(['GET', 'HEAD', 'OPTIONS']);
 const TOKEN_BYTES = 32;

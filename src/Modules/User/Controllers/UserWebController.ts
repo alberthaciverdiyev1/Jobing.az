@@ -1,9 +1,9 @@
 import type { Request, RequestHandler } from 'express';
-import { isAppError } from '../../../Core/Http/Errors.js';
+import { isAppError } from '../../../Core/Http/Errors/index.js';
 import { fieldErrors } from '../../../Core/Http/Validation.js';
-import { renderPage } from '../../../Core/View/Edge.js';
+import { renderPage } from '../../../Core/View/RenderPage.js';
 import { addFlash } from '../../../Middlewares/Flash.js';
-import { userService } from '../Services/UserService.js';
+import { userService } from '../Services/index.js';
 import { loginRequest, registerRequest } from '../Requests/index.js';
 
 /** Only same-origin paths are accepted as post-login destinations. */

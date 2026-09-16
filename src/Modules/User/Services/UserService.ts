@@ -1,23 +1,22 @@
-import { ConflictError, NotFoundError, UnauthorizedError } from '../../../Core/Http/Errors.js';
+import {
+  ConflictError,
+  NotFoundError,
+  UnauthorizedError,
+} from '../../../Core/Http/Errors/index.js';
 import { hashPassword, verifyPassword } from '../../../Core/Security/Password.js';
 import type { User } from '../Entities/User.js';
-import type {
-  PaginatedResult,
-  UserRepositoryInterface,
-} from '../Interfaces/UserRepositoryInterface.js';
-import { userRepository } from '../Repositories/UserRepository.js';
-
-export interface RegisterInput {
-  email: string;
-  name: string;
-  password: string;
-}
+import type { PaginatedResult } from '../Interfaces/PaginatedResult.js';
+import type { RegisterInput } from '../Interfaces/RegisterInput.js';
+import type { UserRepositoryInterface } from '../Interfaces/UserRepositoryInterface.js';
+import type { UserServiceInterface } from '../Interfaces/UserServiceInterface.js';
 
 /**
- * Business rules for accounts. Returns entities; turning them into a client-safe
- * shape is the transformer's job.
+ * Business rules for accounts.
+ *
+ * Returns entities; turning them into a client-safe shape is the transformer's
+ * job, and persistence is reached only through the repository interface.
  */
-export class UserService {
+export class UserService implements UserServiceInterface {
   constructor(private readonly users: UserRepositoryInterface) {}
 
   async register(input: RegisterInput): Promise<User> {
@@ -64,5 +63,3 @@ export class UserService {
     return this.users.paginate(page, perPage);
   }
 }
-
-export const userService = new UserService(userRepository);
