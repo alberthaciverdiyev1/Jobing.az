@@ -53,7 +53,6 @@ src/
 │   └── Logger.ts
 ├── Middlewares/        RequestId, Validate, ViewLocals, NotFound, Csrf, Flash
 ├── Modules/            one folder per domain (see below)
-├── Types/              global type augmentation
 ├── Views/              every template, in one place
 │   ├── Components/     Layout, Head, Navbar, Footer, Flash, LanguageSwitcher
 │   ├── Errors/         NotFound, ServerError
@@ -357,6 +356,44 @@ boundary.
 - Login and registration regenerate the session id before storing `userId`.
 - `addFlash(req, 'success' | 'error', message)` queues a one-shot message for the
   next rendered page (rendered by `src/Views/Components/Flash.edge`).
+
+## Type augmentation
+
+Extensions to third-party types live **in the file that owns the field** — never in a
+central `Types/` bucket:
+
+```ts
+// Middlewares/RequestId.ts
+export const requestId: RequestHandler = (req, res, next) => {
+  req.requestId = id;          // the value is written here…
+  …
+};
+
+declare module 'express-serve-static-core' {
+  interface Request {
+    requestId: string;         // …and declared right next to it, so they cannot drift
+  }
+}
+```
+
+| Field | Declared in |
+|---|---|
+| `Request.requestId` | `Middlewares/RequestId.ts` |
+| `Request.validated` | `Middlewares/Validate.ts` |
+| `SessionData.csrfToken` | `Middlewares/Csrf.ts` |
+| `SessionData.flash` | `Middlewares/Flash.ts` |
+| `Request.user`, `SessionData.userId` | `Modules/User/Middlewares/CurrentUser.ts` |
+
+Two rules that cost an afternoon if forgotten:
+
+- Augment **`express-serve-static-core`** for `Request`, not the global `Express`
+  namespace — and use a named type instead of `Express.Request['field']`, because the
+  global namespace does not see module augmentations.
+- A file with `declare module` / `declare global` must still be a module (have imports
+  or exports), otherwise the declaration replaces the module instead of extending it.
+
+There is deliberately **no `src/Types/`**: a shared bucket would have forced `Core` to
+import from `Modules` (`SessionData.userId` belongs to the User module).
 
 ## General conventions
 

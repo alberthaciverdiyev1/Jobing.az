@@ -1,4 +1,5 @@
 import type { RequestHandler } from 'express';
+import type { User } from '../Entities/User.js';
 import { userService } from '../Services/index.js';
 import { transformUser } from '../Transformers/UserTransformer.js';
 
@@ -28,3 +29,17 @@ export const currentUser: RequestHandler = async (req, res, next) => {
 
   next();
 };
+
+declare module 'express-session' {
+  interface SessionData {
+    /** The signed-in account, if any. */
+    userId?: string;
+  }
+}
+
+declare module 'express-serve-static-core' {
+  interface Request {
+    /** Resolved from the session by the currentUser middleware. */
+    user?: User;
+  }
+}

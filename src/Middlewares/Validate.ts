@@ -8,6 +8,13 @@ interface ValidationSchemas {
   params?: ZodType;
 }
 
+/** Parsed input, keyed by where in the request it came from. */
+interface ValidatedInput {
+  body?: unknown;
+  query?: unknown;
+  params?: unknown;
+}
+
 /**
  * Validates and replaces request input with parsed (and coerced) data.
  * Results land on `req.validated` so we never mutate Express 5's getter-only
@@ -15,7 +22,7 @@ interface ValidationSchemas {
  */
 export function validate(schemas: ValidationSchemas): RequestHandler {
   return (req, _res, next) => {
-    const validated: NonNullable<Express.Request['validated']> = {};
+    const validated: ValidatedInput = {};
 
     for (const key of ['body', 'query', 'params'] as const) {
       const schema = schemas[key];
@@ -40,4 +47,11 @@ export function validate(schemas: ValidationSchemas): RequestHandler {
     req.validated = validated;
     next();
   };
+}
+
+declare module 'express-serve-static-core' {
+  interface Request {
+    /** Parsed input from the validate() middleware, if any. */
+    validated?: ValidatedInput;
+  }
 }

@@ -11,3 +11,10 @@ export const requestId: RequestHandler = (req, res, next) => {
   res.setHeader('X-Request-Id', id);
   next();
 };
+
+declare module 'express-serve-static-core' {
+  interface Request {
+    /** Correlation id, echoed back as X-Request-Id. */
+    requestId: string;
+  }
+}

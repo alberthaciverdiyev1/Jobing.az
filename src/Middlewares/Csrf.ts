@@ -37,3 +37,10 @@ export const csrfProtection: RequestHandler = (req, res, next) => {
 
   next(new ForbiddenError('Invalid or missing CSRF token'));
 };
+
+declare module 'express-session' {
+  interface SessionData {
+    /** Token issued with every rendered form. */
+    csrfToken?: string;
+  }
+}

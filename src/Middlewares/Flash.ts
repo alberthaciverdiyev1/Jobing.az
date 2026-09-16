@@ -1,8 +1,8 @@
 import type { Request, RequestHandler } from 'express';
 
-export type FlashType = 'success' | 'error';
+type FlashType = 'success' | 'error';
 
-export interface FlashMessage {
+interface FlashMessage {
   type: FlashType;
   message: string;
 }
@@ -19,3 +19,10 @@ export const flash: RequestHandler = (req, res, next) => {
   delete req.session.flash;
   next();
 };
+
+declare module 'express-session' {
+  interface SessionData {
+    /** One-shot messages queued for the next rendered page. */
+    flash?: FlashMessage[];
+  }
+}
