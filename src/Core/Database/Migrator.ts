@@ -9,6 +9,7 @@ import {
   type MigrationResultSet,
 } from 'kysely/migration';
 import { logger } from '../Logger.js';
+import { discoverModules } from '../Provider/ModuleDiscovery.js';
 import { getDb } from './Client.js';
 
 const currentDir = path.dirname(fileURLToPath(import.meta.url));
@@ -18,14 +19,6 @@ async function isDirectory(target: string): Promise<boolean> {
     return (await fs.stat(target)).isDirectory();
   } catch {
     return false;
-  }
-}
-
-async function readDirectory(target: string): Promise<string[]> {
-  try {
-    return await fs.readdir(target);
-  } catch {
-    return [];
   }
 }
 
@@ -42,10 +35,8 @@ async function collectMigrationFolders(): Promise<string[]> {
   const coreMigrations = path.join(currentDir, 'Migrations');
   if (await isDirectory(coreMigrations)) folders.push(coreMigrations);
 
-  const modulesDir = path.resolve(currentDir, '..', '..', 'Modules');
-  for (const entry of await readDirectory(modulesDir)) {
-    const candidate = path.join(modulesDir, entry, 'Migrations');
-    if (await isDirectory(candidate)) folders.push(candidate);
+  for (const module of await discoverModules()) {
+    if (module.migrationsDirectory) folders.push(module.migrationsDirectory);
   }
 
   return folders;

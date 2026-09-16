@@ -1,13 +1,5 @@
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
-
-/** Resolves to `src/Modules` in development and `dist/Modules` after a build. */
-const modulesRoot = path.resolve(
-  path.dirname(fileURLToPath(import.meta.url)),
-  '..',
-  '..',
-  'Modules',
-);
+import { modulesRoot } from '../Provider/ModuleDiscovery.js';
 
 /**
  * Absolute template path for a module-owned view.

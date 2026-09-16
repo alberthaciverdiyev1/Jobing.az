@@ -44,6 +44,7 @@ The previous Laravel implementation is preserved read-only under `old/` for refe
 src/
 ├── Config/             Env.ts (Zod-validated), Paths.ts, Locales.ts
 ├── Console/            CLI entrypoints (Migrate.ts)
+├── Core/Provider/      ModuleDiscovery.ts, ModuleProvider.ts — auto-registration
 ├── Core/
 │   ├── Database/       Client.ts, Types.ts, Migrator.ts, Migrations/
 │   ├── Http/           App.ts, Server.ts, ErrorHandler.ts, Errors.ts, Responses.ts
@@ -101,8 +102,17 @@ with a fake repository.
 
 ## Module routes
 
-**Every module owns its routes in `Modules/<Name>/Routes/`.** A route file exports
-exactly two things:
+**Routes are never listed by hand.** `Core/Provider` walks `Modules/` at boot and
+mounts every `Routes/Web.*` / `Routes/Api.*` it finds. Adding a module means adding
+a folder — nothing else to edit. Discovery logs what it registered:
+
+```
+Registered 3 web route module(s) -> ['Home/', 'Localization/', 'User/']
+Registered 2 api route module(s) -> ['Health/health', 'User/auth']
+```
+
+A route file exports exactly two things (`basePath`, `router`) and optionally
+`order` to control registration order:
 
 ```ts
 // Modules/Vacancy/Routes/Api.ts

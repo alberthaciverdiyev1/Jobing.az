@@ -1,22 +1,37 @@
-import { Router } from 'express';
+import { Router, type Router as ExpressRouter } from 'express';
+import { buildModuleRouters } from '../Core/Provider/ModuleProvider.js';
+import { csrfProtection } from '../Middlewares/Csrf.js';
 import { flash } from '../Middlewares/Flash.js';
 import { currentUser } from '../Modules/User/Middlewares/CurrentUser.js';
-import { apiRouter } from './Api.js';
-import { webRouter } from './Web.js';
+
+/** Everything the JSON API lives under. */
+export const API_PREFIX = '/api/v1';
 
 /**
- * Root router.
+ * Builds the root router.
  *
- * - `/api/v1/*` -> JSON API
- * - everything else -> server-rendered Handlebars pages
+ * Modules are **not** listed here — `Core/Provider` discovers every
+ * `Modules/<Name>/Routes/{Web,Api}.ts` on disk and mounts it at its `basePath`.
  *
- * Module routers are registered in `Api.ts` / `Web.ts`. Every module owns its
- * routes in `Modules/<Name>/Routes/{Web,Api}.ts` and exports `basePath` + `router`.
+ * Only cross-cutting middlewares are wired by hand, and they must run before the
+ * module routers.
  */
-export const router = Router();
+export async function createRootRouter(): Promise<ExpressRouter> {
+  const router = Router();
 
-router.use(flash);
-router.use(currentUser);
+  router.use(flash);
+  router.use(currentUser);
 
-router.use('/api/v1', apiRouter);
-router.use('/', webRouter);
+  const { web, api } = await buildModuleRouters();
+
+  router.use(API_PREFIX, api);
+
+  // Pages are form-driven, so every web route sits behind CSRF protection.
+  // The JSON API relies on the SameSite=Lax session cookie instead.
+  const pages = Router();
+  pages.use(csrfProtection);
+  pages.use(web);
+  router.use('/', pages);
+
+  return router;
+}

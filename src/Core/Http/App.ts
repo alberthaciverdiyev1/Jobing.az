@@ -14,7 +14,7 @@ import { registerViewEngine } from '../View/Engine.js';
 import { notFound } from '../../Middlewares/NotFound.js';
 import { requestId } from '../../Middlewares/RequestId.js';
 import { viewLocals } from '../../Middlewares/ViewLocals.js';
-import { router } from '../../Routes/index.js';
+import { createRootRouter } from '../../Routes/index.js';
 import { errorHandler } from './ErrorHandler.js';
 
 /**
@@ -84,7 +84,7 @@ export async function createApp(): Promise<Express> {
     }),
   );
 
-  app.use(router);
+  app.use(await createRootRouter());
 
   app.use(notFound);
   app.use(errorHandler);
