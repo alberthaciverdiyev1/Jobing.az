@@ -4,3 +4,5 @@ old
 coverage
 *.md
 *.hbs
+# drizzle-kit generated
+/drizzle

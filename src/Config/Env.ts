@@ -60,9 +60,7 @@ const envSchema = z.object({
     ),
 
   // --- Logging ---
-  LOG_LEVEL: z
-    .enum(['fatal', 'error', 'warn', 'info', 'debug', 'trace', 'silent'])
-    .default('info'),
+  LOG_LEVEL: z.enum(['fatal', 'error', 'warn', 'info', 'debug', 'trace', 'silent']).default('info'),
   LOG_PRETTY: z
     .enum(['true', 'false'])
     .default('true')

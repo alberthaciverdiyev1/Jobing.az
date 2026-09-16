@@ -13,9 +13,8 @@ export const requireAuth: RequestHandler = (req, res, next) => {
     return;
   }
 
-  const next_ = req.originalUrl.startsWith('/') && !req.originalUrl.startsWith('//')
-    ? req.originalUrl
-    : '/';
+  const next_ =
+    req.originalUrl.startsWith('/') && !req.originalUrl.startsWith('//') ? req.originalUrl : '/';
 
   res.redirect(`/login?next=${encodeURIComponent(next_)}`);
 };

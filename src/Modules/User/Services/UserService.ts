@@ -1,7 +1,10 @@
 import { ConflictError, NotFoundError, UnauthorizedError } from '../../../Core/Http/Errors.js';
 import { hashPassword, verifyPassword } from '../../../Core/Security/Password.js';
 import { toUser, type User } from '../Entities/User.js';
-import type { PaginatedResult, UserRepositoryInterface } from '../Interfaces/UserRepositoryInterface.js';
+import type {
+  PaginatedResult,
+  UserRepositoryInterface,
+} from '../Interfaces/UserRepositoryInterface.js';
 import { userRepository } from '../Repositories/UserRepository.js';
 
 export interface RegisterInput {

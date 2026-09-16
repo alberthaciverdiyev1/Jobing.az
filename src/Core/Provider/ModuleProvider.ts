@@ -71,10 +71,17 @@ async function buildRouter(kind: RouteKind): Promise<ExpressRouter> {
   const modules = await discoverModules();
 
   const pending = modules
-    .map((module) => ({ module, file: kind === 'web' ? module.webRoutesFile : module.apiRoutesFile }))
-    .filter((entry): entry is { module: DiscoveredModule; file: string } => entry.file !== undefined);
+    .map((module) => ({
+      module,
+      file: kind === 'web' ? module.webRoutesFile : module.apiRoutesFile,
+    }))
+    .filter(
+      (entry): entry is { module: DiscoveredModule; file: string } => entry.file !== undefined,
+    );
 
-  const loaded = await Promise.all(pending.map(({ module, file }) => loadRoutes(module, file, kind)));
+  const loaded = await Promise.all(
+    pending.map(({ module, file }) => loadRoutes(module, file, kind)),
+  );
 
   // Deterministic order: explicit `order` first, then module name.
   loaded.sort((a, b) => a.order - b.order || a.moduleName.localeCompare(b.moduleName));

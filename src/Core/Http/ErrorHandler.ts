@@ -73,16 +73,15 @@ export const errorHandler: ErrorRequestHandler = (error, req, res, _next) => {
     appError.statusCode >= 500 && isProduction ? 'Internal server error' : appError.message;
 
   if (!prefersJson(req)) {
-    res.status(appError.statusCode).render(
-      appError.statusCode === 404 ? 'Pages/Errors/NotFound' : 'Pages/Errors/ServerError',
-      {
+    res
+      .status(appError.statusCode)
+      .render(appError.statusCode === 404 ? 'Pages/Errors/NotFound' : 'Pages/Errors/ServerError', {
         pageTitle: appError.statusCode === 404 ? '404' : '500',
         statusCode: appError.statusCode,
         errorCode: appError.code,
         errorMessage: clientMessage,
         requestId: isProduction ? undefined : req.requestId,
-      },
-    );
+      });
     return;
   }
 
