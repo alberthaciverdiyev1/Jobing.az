@@ -43,29 +43,30 @@ The previous Laravel implementation is preserved read-only under `old/` for refe
 ```
 src/
 ├── Config/             Env.ts (Zod-validated), Paths.ts, Locales.ts
-├── Console/            CLI entrypoints (Sync.ts)
-├── Core/Provider/      ModuleDiscovery.ts, ModuleProvider.ts — auto-registration
 ├── Core/
 │   ├── Database/       Client.ts (Drizzle), AppDbContext.ts, Configurations/
-│   ├── Http/           App.ts, Server.ts, ErrorHandler.ts, Errors.ts, Responses.ts
+│   ├── Http/           App.ts, RootRouter.ts, Server.ts, ErrorHandler.ts,
+│   │                   Responses.ts, Session.ts, Envelope/, Errors/
 │   ├── Localization/   I18n.ts
-│   ├── View/           Engine.ts, Helpers.ts
+│   ├── Provider/       ModuleDiscovery.ts, ModuleProvider.ts — auto-registration
+│   ├── View/           Edge.ts, RenderPage.ts, PageShell.ts, PageState.ts
 │   └── Logger.ts
-├── Middlewares/        RequestId, Validate, ViewLocals, NotFound
+├── Middlewares/        RequestId, Validate, ViewLocals, NotFound, Csrf, Flash
 ├── Modules/            one folder per domain (see below)
-├── Routes/             index.ts (root), Web.ts (page aggregator), Api.ts (API aggregator)
 ├── Types/              global type augmentation
+├── Views/              every template, in one place
+│   ├── Components/     Layout, Head, Navbar, Footer, Flash, LanguageSwitcher
+│   ├── Errors/         NotFound, ServerError
+│   ├── Home/           module pages, one folder per module
+│   └── User/           Login, Register, Profile
 └── index.ts            entrypoint
-
-views/                  every template, in one place
-├── Components/         Layout, Head, Navbar, Footer, Flash, LanguageSwitcher
-├── Errors/             NotFound, ServerError
-├── Home/               module pages, one folder per module
-└── User/               Login, Register, Profile
 
 locales/<lng>/translation.json
 public/  tools/  tests/  old/
 ```
+
+There is **no top-level `src/Routes/`** — modules own their routes, and the root
+router is part of the HTTP layer (`Core/Http/RootRouter.ts`).
 
 ## Module anatomy
 
@@ -219,14 +220,6 @@ router.get('/', vacancyController.index);
 
 Then register it in the matching aggregator:
 
-- `Routes/Web.ts` → page routes (Edge)
-- `Routes/Api.ts` → JSON routes
-
-```ts
-import * as vacancy from '../Modules/Vacancy/Routes/Api.js';
-apiRouter.use(vacancy.basePath, vacancy.router);
-```
-
 A module with only pages has just `Routes/Web.ts`; API-only modules just `Routes/Api.ts`.
 
 ## Web / API split
@@ -363,7 +356,7 @@ boundary.
   no native dependency. Format: `scrypt$<salt>$<hash>`.
 - Login and registration regenerate the session id before storing `userId`.
 - `addFlash(req, 'success' | 'error', message)` queues a one-shot message for the
-  next rendered page (rendered by `views/Partials/Flash.hbs`).
+  next rendered page (rendered by `src/Views/Components/Flash.edge`).
 
 ## General conventions
 

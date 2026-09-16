@@ -1,16 +1,21 @@
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 
-/** dist/Config/Paths.js -> dist -> project root */
 const currentDir = path.dirname(fileURLToPath(import.meta.url));
 
-export const ROOT_DIR = path.resolve(currentDir, '..', '..');
+/**
+ * Resolves to `src` in development and `dist` after a build, so anything that
+ * lives inside the source tree (views) is found in both.
+ */
+const packageRoot = path.resolve(currentDir, '..');
+
+/** The repository root — files that are never compiled live here. */
+export const ROOT_DIR = path.resolve(packageRoot, '..');
 
 export const paths = {
   root: ROOT_DIR,
-  src: path.join(ROOT_DIR, 'src'),
-  dist: path.join(ROOT_DIR, 'dist'),
-  views: path.join(ROOT_DIR, 'views'),
+  package: packageRoot,
+  views: path.join(packageRoot, 'Views'),
   locales: path.join(ROOT_DIR, 'locales'),
   public: path.join(ROOT_DIR, 'public'),
 } as const;

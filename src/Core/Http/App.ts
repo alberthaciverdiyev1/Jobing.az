@@ -13,7 +13,7 @@ import { logger } from '../Logger.js';
 import { notFound } from '../../Middlewares/NotFound.js';
 import { requestId } from '../../Middlewares/RequestId.js';
 import { viewLocals } from '../../Middlewares/ViewLocals.js';
-import { createRootRouter } from '../../Routes/index.js';
+import { createRootRouter } from './RootRouter.js';
 import { errorHandler } from './ErrorHandler.js';
 
 /**

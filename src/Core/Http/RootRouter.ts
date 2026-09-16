@@ -1,24 +1,23 @@
 import { Router, type Router as ExpressRouter } from 'express';
-import { buildModuleRouters } from '../Core/Provider/ModuleProvider.js';
-import { csrfProtection } from '../Middlewares/Csrf.js';
-import { flash } from '../Middlewares/Flash.js';
-import { currentUser } from '../Modules/User/Middlewares/CurrentUser.js';
+import { csrfProtection } from '../../Middlewares/Csrf.js';
+import { flash } from '../../Middlewares/Flash.js';
+import { currentUser } from '../../Modules/User/Middlewares/CurrentUser.js';
+import { buildModuleRouters } from '../Provider/ModuleProvider.js';
 
 /** Everything the JSON API lives under. */
-export const API_PREFIX = '/api/v1';
+const API_PREFIX = '/api/v1';
 
 /**
- * Builds the root router.
+ * Assembles the root router.
  *
- * Modules are **not** listed here — `Core/Provider` discovers every
- * `Modules/<Name>/Routes/{Web,Api}.ts` on disk and mounts it at its `basePath`.
- *
- * Only cross-cutting middlewares are wired by hand, and they must run before the
- * module routers.
+ * No module is named here: `Core/Provider` discovers every
+ * `Modules/<Name>/Routes/{Web,Api}.ts` and mounts it at its `basePath`. Only the
+ * cross-cutting middlewares and the two mount points are wired by hand.
  */
 export async function createRootRouter(): Promise<ExpressRouter> {
   const router = Router();
 
+  // Must run before any module router.
   router.use(flash);
   router.use(currentUser);
 
