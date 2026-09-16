@@ -1,0 +1,47 @@
+# Claude Code — files/dirs excluded from context & search
+
+# Dependencies
+/vendor
+/node_modules
+/composer.lock
+/package-lock.json
+
+# Environment & secrets
+/.env
+.env
+.env.*
+/auth.json
+
+# Build & compiled assets
+/public/build
+/public/hot
+/public/storage
+/resources/css/*.css
+/resources/js/*.js
+
+# IDE / editor
+/.idea
+/.vscode
+/.fleet
+/.zed
+/.nova
+/.phpactor.json
+
+# Caches & runtime
+/storage/framework/*
+/storage/logs/*
+/storage/pail
+/storage/*.key
+/bootstrap/cache/*
+/.phpunit.cache
+/.phpunit.result.cache
+
+# Databases
+/database/*.sqlite
+/database/*.sqlite-journal
+
+# OS / misc
+.DS_Store
+Thumbs.db
+*.log
+*.lock
