@@ -1,8 +1,10 @@
+import { eq } from 'drizzle-orm';
 import type { Express } from 'express';
 import request from 'supertest';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { destroyDb, getDb } from '../src/Core/Database/index.js';
 import { createApp } from '../src/Core/Http/App.js';
+import { users } from '../src/Modules/User/Configurations/UserConfiguration.js';
 import { canConnectToDatabase } from './helpers/database.js';
 
 const dbAvailable = await canConnectToDatabase();
@@ -26,7 +28,7 @@ beforeAll(async () => {
 
 afterAll(async () => {
   if (dbAvailable) {
-    await getDb().deleteFrom('users').where('email', '=', email).execute();
+    await getDb().delete(users).where(eq(users.email, email));
   }
   await destroyDb();
 });
