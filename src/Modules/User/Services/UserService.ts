@@ -6,9 +6,8 @@ import {
 import { hashPassword, verifyPassword } from '../../../Core/Security/Password.js';
 import type { User } from '../Entities/User.js';
 import type { PaginatedResult } from '../../../Core/Database/PaginatedResult.js';
-import type { RegisterInput } from '../Interfaces/RegisterInput.js';
-import type { UserRepositoryInterface } from '../Interfaces/UserRepositoryInterface.js';
-import type { UserServiceInterface } from '../Interfaces/UserServiceInterface.js';
+import type { UserRepository } from '../Repositories/UserRepository.js';
+import type { RegisterRequest } from '../Requests/index.js';
 
 /**
  * Business rules for accounts.
@@ -16,10 +15,10 @@ import type { UserServiceInterface } from '../Interfaces/UserServiceInterface.js
  * Returns entities; turning them into a client-safe shape is the transformer's
  * job, and persistence is reached only through the repository interface.
  */
-export class UserService implements UserServiceInterface {
-  constructor(private readonly users: UserRepositoryInterface) {}
+export class UserService {
+  constructor(private readonly users: UserRepository) {}
 
-  async register(input: RegisterInput): Promise<User> {
+  async register(input: RegisterRequest): Promise<User> {
     if (await this.users.existsByEmail(input.email)) {
       throw new ConflictError('This email address is already registered');
     }

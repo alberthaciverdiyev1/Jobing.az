@@ -3,10 +3,20 @@ import { getDb } from '../../../Core/Database/index.js';
 import { categories } from '../Configurations/CategoryConfiguration.js';
 import type { Category } from '../Entities/Category.js';
 import type { NewCategory } from '../Entities/NewCategory.js';
-import type { CategoryListFilters } from '../Interfaces/CategoryListFilters.js';
-import type { CategoryRepositoryInterface } from '../Interfaces/CategoryRepositoryInterface.js';
+/**
+ * Filters accepted when listing categories.
+ *
+ * `parentId` distinguishes three cases: `undefined` returns everything,
+ * `null` returns only roots, and a string returns that parent's children.
+ */
+export interface CategoryListFilters {
+  parentId?: string | null;
+  onlyActive?: boolean;
+  /** Case-insensitive match against the primary locale name. */
+  search?: string;
+}
 
-export class CategoryRepository implements CategoryRepositoryInterface {
+export class CategoryRepository {
   async findById(id: string): Promise<Category | undefined> {
     const [row] = await getDb().select().from(categories).where(eq(categories.id, id)).limit(1);
     return row;

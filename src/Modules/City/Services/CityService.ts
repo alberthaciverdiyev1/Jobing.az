@@ -4,15 +4,12 @@ import type { TranslatedText } from '../../../Core/Localization/TranslatedText.j
 import { uniqueSlug } from '../../../Core/Support/UniqueSlug.js';
 import type { City } from '../Entities/City.js';
 import type { NewCity } from '../Entities/NewCity.js';
-import type { CityListFilters } from '../Interfaces/CityListFilters.js';
-import type { CityRepositoryInterface } from '../Interfaces/CityRepositoryInterface.js';
-import type { CityServiceInterface } from '../Interfaces/CityServiceInterface.js';
-import type { CreateCityInput } from '../Interfaces/CreateCityInput.js';
-import type { UpdateCityInput } from '../Interfaces/UpdateCityInput.js';
+import type { CityListFilters, CityRepository } from '../Repositories/CityRepository.js';
+import type { CreateCityRequest, UpdateCityRequest } from '../Requests/index.js';
 
 /** Business rules for cities: unique slugs and translated names. */
-export class CityService implements CityServiceInterface {
-  constructor(private readonly cities: CityRepositoryInterface) {}
+export class CityService {
+  constructor(private readonly cities: CityRepository) {}
 
   async list(filters: CityListFilters): Promise<City[]> {
     return this.cities.list(filters);
@@ -30,7 +27,7 @@ export class CityService implements CityServiceInterface {
     return found;
   }
 
-  async create(input: CreateCityInput): Promise<City> {
+  async create(input: CreateCityRequest): Promise<City> {
     const name = normalizeTranslation(input.name);
 
     return this.cities.create({
@@ -41,7 +38,7 @@ export class CityService implements CityServiceInterface {
     });
   }
 
-  async update(id: string, input: UpdateCityInput): Promise<City> {
+  async update(id: string, input: UpdateCityRequest): Promise<City> {
     const existing = await this.getById(id);
     const name = input.name ? normalizeTranslation(input.name) : existing.name;
     const changes: Partial<NewCity> = {};

@@ -1,9 +1,0 @@
-import type { TranslatedText } from '../../../Core/Localization/TranslatedText.js';
-
-export interface UpdateCategoryInput {
-  name?: TranslatedText;
-  slug?: string;
-  parentId?: string | null;
-  position?: number;
-  isActive?: boolean;
-}

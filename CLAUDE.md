@@ -90,30 +90,17 @@ Each domain module is self-contained:
 
 ```
 Modules/<Name>/
-├── Controllers/
-│   ├── <Name>WebController.ts    renders Edge pages, form posts, redirects
-│   └── <Name>ApiController.ts    JSON in / JSON out
 ├── Configurations/               entity → table mapping (EF-style)
-├── Entities/                     User.ts, NewUser.ts — typed from the configuration
-├── Interfaces/                   one contract per file (repository, service, DTOs)
-├── Repositories/                 UserRepository.ts (class) + index.ts (instance)
-├── Services/                     UserService.ts (class) + index.ts (instance)
+├── Entities/                     Category.ts, NewCategory.ts — typed from the configuration
+├── Repositories/                 CategoryRepository.ts (class + its filter type) + index.ts
+├── Services/                     CategoryService.ts (class) + index.ts
 ├── Transformers/                 entity → client-safe resource
 ├── Requests/                     one request schema per endpoint
-├── Middlewares/                  module-specific middleware (auth guards)
+├── Controllers/                  <Name>WebController.ts and <Name>ApiController.ts
+├── Middlewares/                  module-specific middleware (guards)
 └── Routes/
     ├── Web.ts                    exports `basePath` + `router`
     └── Api.ts                    exports `basePath` + `router`
-```
-
-Example of the contract files:
-
-```
-Interfaces/
-├── PaginatedResult.ts
-├── RegisterInput.ts
-├── UserRepositoryInterface.ts
-└── UserServiceInterface.ts
 ```
 
 Layers are optional — a module with no tables skips Configurations/Entities/Repositories,
@@ -121,26 +108,35 @@ one with no pages skips `Routes/Web.ts`.
 
 **Web and API always get separate controllers**, even when the logic looks similar.
 
+There is **no `Interfaces/` folder**. See below.
+
 ### Dependency direction
 
 ```
-Routes → Controller → ServiceInterface ← Service → RepositoryInterface ← Repository → Drizzle
-                            ↓
-                       Transformer
+Routes → Controller → Service → Repository → Drizzle
+                          ↓
+                     Transformer
 ```
 
-Controllers depend on `UserServiceInterface`, the service depends on
-`UserRepositoryInterface` — never on the concrete classes. Both layers are therefore
-testable with a fake implementation.
+**No interfaces.** TypeScript is structurally typed: a service that takes the concrete
+repository class can still be handed a hand-rolled fake in a test. An interface with a
+single implementation and no consumer costs a file and buys nothing — we had thirteen
+of them before removing them.
 
-### One declaration per file
+The repository is the seam and the **only** place that imports Drizzle.
+
+Service inputs are the Zod request types (`z.infer<typeof createCategoryRequest>`). That
+is a *type-only* import, so services never load the HTTP layer at runtime and the input
+shape is defined exactly once.
+
+### One class per file
 
 - **One class per file.** Never two. `Core/Http/Errors/` is the reference: nine
   classes, nine files, plus an `index.ts` barrel.
-- **One exported interface/type per file.** If a type is only used inside its own
-  file, do not export it at all.
-- A class file holds **only** the class. The shared instance lives in an `index.ts`
-  next to it:
+- A class file may also export the small types that belong to it — its query filters,
+  its row shape. Those are not classes, so they do not need a file of their own.
+- If a type is only used inside its own file, do not export it at all.
+- The shared instance lives in an `index.ts` next to the class:
 
   ```ts
   // Repositories/index.ts

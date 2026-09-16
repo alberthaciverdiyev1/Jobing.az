@@ -4,17 +4,17 @@ import type { TranslatedText } from '../../../Core/Localization/TranslatedText.j
 import { uniqueSlug } from '../../../Core/Support/UniqueSlug.js';
 import type { Category } from '../Entities/Category.js';
 import type { NewCategory } from '../Entities/NewCategory.js';
-import type { CategoryListFilters } from '../Interfaces/CategoryListFilters.js';
-import type { CategoryRepositoryInterface } from '../Interfaces/CategoryRepositoryInterface.js';
-import type { CategoryServiceInterface } from '../Interfaces/CategoryServiceInterface.js';
-import type { CreateCategoryInput } from '../Interfaces/CreateCategoryInput.js';
-import type { UpdateCategoryInput } from '../Interfaces/UpdateCategoryInput.js';
+import type {
+  CategoryListFilters,
+  CategoryRepository,
+} from '../Repositories/CategoryRepository.js';
+import type { CreateCategoryRequest, UpdateCategoryRequest } from '../Requests/index.js';
 
 /**
  * Business rules for categories: unique slugs, a valid parent, and no cycles.
  */
-export class CategoryService implements CategoryServiceInterface {
-  constructor(private readonly categories: CategoryRepositoryInterface) {}
+export class CategoryService {
+  constructor(private readonly categories: CategoryRepository) {}
 
   async list(filters: CategoryListFilters): Promise<Category[]> {
     return this.categories.list(filters);
@@ -32,7 +32,7 @@ export class CategoryService implements CategoryServiceInterface {
     return found;
   }
 
-  async create(input: CreateCategoryInput): Promise<Category> {
+  async create(input: CreateCategoryRequest): Promise<Category> {
     const name = normalizeTranslation(input.name);
     await this.assertParentIsUsable(input.parentId ?? null, null);
 
@@ -45,7 +45,7 @@ export class CategoryService implements CategoryServiceInterface {
     });
   }
 
-  async update(id: string, input: UpdateCategoryInput): Promise<Category> {
+  async update(id: string, input: UpdateCategoryRequest): Promise<Category> {
     const existing = await this.getById(id);
     const name = input.name ? normalizeTranslation(input.name) : existing.name;
     const changes: Partial<NewCategory> = {};
