@@ -69,6 +69,18 @@ public/  tools/  tests/  old/
 There is **no top-level `src/Routes/`** — modules own their routes, and the root
 router is part of the HTTP layer (`Core/Http/RootRouter.ts`).
 
+## Modules
+
+| Module | What it owns |
+|---|---|
+| `User` | accounts, authentication (JWT), admin guard |
+| `Category` | job categories, self-referencing hierarchy, translated names |
+| `Home` | landing page |
+| `Localization` | language switching |
+| `Health` | health endpoint |
+
+`Category` is the fullest example of the layering below; `User` adds auth on top.
+
 ## Module anatomy
 
 Each domain module is self-contained:

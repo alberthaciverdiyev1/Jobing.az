@@ -28,13 +28,13 @@ describe('AppDbContext', () => {
     await appDbContext.load();
 
     const names = appDbContext.allTables.map((table) => getTableName(table));
-    expect(names).toContain('users');
+    expect(names).toEqual(expect.arrayContaining(['categories', 'users']));
   });
 
   it('exposes the tables through a schema object', async () => {
     await appDbContext.load();
 
-    expect(Object.keys(appDbContext.schema)).toEqual(['users']);
+    expect(Object.keys(appDbContext.schema).sort()).toEqual(['categories', 'users']);
     expect(appDbContext.table('users')).toBe(users);
   });
 });

@@ -1,5 +1,5 @@
 import type { User } from '../Entities/User.js';
-import type { PaginatedResult } from './PaginatedResult.js';
+import type { PaginatedResult } from '../../../Core/Database/PaginatedResult.js';
 import type { RegisterInput } from './RegisterInput.js';
 
 /**

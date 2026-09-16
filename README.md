@@ -54,6 +54,12 @@ npm run dev
 | `POST /api/v1/auth/login` | API | Sign in |
 | `POST /api/v1/auth/logout` | API | Sign out |
 | `GET /api/v1/auth/me` | API | Current account (Bearer token or cookie) |
+| `GET /categories` | page | Category listing |
+| `GET /api/v1/categories` | API | List categories — `?tree=true`, `?parentId=root\|<id>`, `?active=true`, `?search=` |
+| `GET /api/v1/categories/:slug` | API | A single category |
+| `POST /api/v1/categories` | API | Create a category (admin) |
+| `PATCH /api/v1/categories/:id` | API | Update a category (admin) |
+| `DELETE /api/v1/categories/:id` | API | Delete a category and its subtree (admin) |
 
 ## Architecture
 

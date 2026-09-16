@@ -7,7 +7,8 @@
     "contact": "Əlaqə",
     "login": "Daxil ol",
     "register": "Qeydiyyat",
-    "logout": "Çıxış"
+    "logout": "Çıxış",
+    "categories": "Kateqoriyalar"
   },
   "a11y": {
     "skipToContent": "Əsas məzmuna keç",
@@ -71,5 +72,11 @@
     "profile": {
       "title": "Profilim"
     }
+  },
+  "category": {
+    "title": "İş kateqoriyaları",
+    "subtitle": "Sahənizə uyğun kateqoriyanı seçin və vakansiyalara baxın.",
+    "empty": "Hələ kateqoriya əlavə edilməyib.",
+    "browse": "Vakansiyalara bax"
   }
 }

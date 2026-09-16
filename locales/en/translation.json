@@ -7,7 +7,8 @@
     "contact": "Contact",
     "login": "Log in",
     "register": "Sign up",
-    "logout": "Log out"
+    "logout": "Log out",
+    "categories": "Categories"
   },
   "a11y": {
     "skipToContent": "Skip to main content",
@@ -71,5 +72,11 @@
     "profile": {
       "title": "My profile"
     }
+  },
+  "category": {
+    "title": "Job categories",
+    "subtitle": "Pick the category that matches your field and browse the vacancies.",
+    "empty": "No categories have been added yet.",
+    "browse": "Browse vacancies"
   }
 }

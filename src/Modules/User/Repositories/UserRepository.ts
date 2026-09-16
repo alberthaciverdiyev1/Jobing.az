@@ -3,7 +3,7 @@ import { getDb } from '../../../Core/Database/index.js';
 import { users } from '../Configurations/UserConfiguration.js';
 import type { NewUser } from '../Entities/NewUser.js';
 import type { User } from '../Entities/User.js';
-import type { PaginatedResult } from '../Interfaces/PaginatedResult.js';
+import type { PaginatedResult } from '../../../Core/Database/PaginatedResult.js';
 import type { UserRepositoryInterface } from '../Interfaces/UserRepositoryInterface.js';
 
 export class UserRepository implements UserRepositoryInterface {

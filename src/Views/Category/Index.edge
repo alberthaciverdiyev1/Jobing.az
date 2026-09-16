@@ -1,0 +1,34 @@
+@component('Components/Layout', { shell: shell })
+  @slot('main')
+    <section class="container section">
+      <h1 class="page-title">{{ t('category.title') }}</h1>
+      <p class="page-subtitle">{{ t('category.subtitle') }}</p>
+
+      @if(categories.length === 0)
+        <p class="empty-state">{{ t('category.empty') }}</p>
+      @else
+        <div class="category-grid">
+          @each(category in categories)
+            <article class="category-card">
+              <h2 class="category-card__title">{{ category.name }}</h2>
+
+              @if(category.children.length > 0)
+                <ul class="category-card__children">
+                  @each(child in category.children)
+                    <li>
+                      <a href="/jobs?category={{ child.slug }}">{{ child.name }}</a>
+                    </li>
+                  @end
+                </ul>
+              @else
+                <a class="category-card__link" href="/jobs?category={{ category.slug }}">
+                  {{ t('category.browse') }}
+                </a>
+              @end
+            </article>
+          @end
+        </div>
+      @end
+    </section>
+  @endslot
+@end

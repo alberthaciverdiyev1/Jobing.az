@@ -5,7 +5,7 @@ import {
 } from '../../../Core/Http/Errors/index.js';
 import { hashPassword, verifyPassword } from '../../../Core/Security/Password.js';
 import type { User } from '../Entities/User.js';
-import type { PaginatedResult } from '../Interfaces/PaginatedResult.js';
+import type { PaginatedResult } from '../../../Core/Database/PaginatedResult.js';
 import type { RegisterInput } from '../Interfaces/RegisterInput.js';
 import type { UserRepositoryInterface } from '../Interfaces/UserRepositoryInterface.js';
 import type { UserServiceInterface } from '../Interfaces/UserServiceInterface.js';

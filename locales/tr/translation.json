@@ -7,7 +7,8 @@
     "contact": "İletişim",
     "login": "Giriş yap",
     "register": "Kayıt ol",
-    "logout": "Çıkış yap"
+    "logout": "Çıkış yap",
+    "categories": "Kategoriler"
   },
   "a11y": {
     "skipToContent": "Ana içeriğe geç",
@@ -71,5 +72,11 @@
     "profile": {
       "title": "Profilim"
     }
+  },
+  "category": {
+    "title": "İş kategorileri",
+    "subtitle": "Alanınıza uygun kategoriyi seçin ve ilanlara göz atın.",
+    "empty": "Henüz kategori eklenmemiş.",
+    "browse": "İlanlara göz at"
   }
 }
