@@ -5,21 +5,35 @@ import { logger } from '../Logger.js';
 
 const SHUTDOWN_TIMEOUT_MS = 10_000;
 
-export function startServer(app: Express): Server {
+export interface ServerHooks {
+  /** Runs before the HTTP server closes — use it to release the database pool. */
+  onShutdown?: () => Promise<void>;
+}
+
+export function startServer(app: Express, hooks: ServerHooks = {}): Server {
   const server = app.listen(env.PORT, () => {
-    logger.info(
-      `🚀 ${env.APP_NAME} listening on http://localhost:${env.PORT} (${env.NODE_ENV})`,
-    );
+    logger.info(`🚀 ${env.APP_NAME} listening on http://localhost:${env.PORT} (${env.NODE_ENV})`);
   });
 
-  const shutdown = (signal: NodeJS.Signals): void => {
+  let shuttingDown = false;
+
+  const shutdown = async (signal: NodeJS.Signals): Promise<void> => {
+    if (shuttingDown) return;
+    shuttingDown = true;
+
     logger.info({ signal }, 'Shutting down gracefully…');
 
-    const timer = setTimeout(() => {
+    const forced = setTimeout(() => {
       logger.error('Forced shutdown after timeout');
       process.exit(1);
     }, SHUTDOWN_TIMEOUT_MS);
-    timer.unref();
+    forced.unref();
+
+    try {
+      await hooks.onShutdown?.();
+    } catch (error) {
+      logger.error({ err: error }, 'Shutdown hook failed');
+    }
 
     server.close((error) => {
       if (error) {
@@ -32,7 +46,9 @@ export function startServer(app: Express): Server {
   };
 
   for (const signal of ['SIGINT', 'SIGTERM'] as const) {
-    process.on(signal, shutdown);
+    process.on(signal, (received) => {
+      void shutdown(received);
+    });
   }
 
   return server;

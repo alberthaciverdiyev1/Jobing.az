@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import { healthApiRouter } from '../Modules/Health/HealthApiRoutes.js';
+import * as health from '../Modules/Health/Routes/Api.js';
 
 /** JSON API. Mounted by the root router under `/api/v1`. */
 export const apiRouter = Router();
 
-apiRouter.use('/health', healthApiRouter);
+apiRouter.use(health.basePath, health.router);

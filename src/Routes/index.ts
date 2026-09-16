@@ -8,7 +8,8 @@ import { webRouter } from './Web.js';
  * - `/api/v1/*` -> JSON API
  * - everything else -> server-rendered Handlebars pages
  *
- * Feature modules register themselves in `Api.ts` / `Web.ts`.
+ * Module routers are registered in `Api.ts` / `Web.ts`. Every module owns its
+ * routes in `Modules/<Name>/Routes/{Web,Api}.ts` and exports `basePath` + `router`.
  */
 export const router = Router();
 

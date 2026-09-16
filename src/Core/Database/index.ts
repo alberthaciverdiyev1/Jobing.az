@@ -1,28 +1,50 @@
+import { sql } from 'kysely';
 import { env } from '../../Config/Env.js';
+import { logger } from '../Logger.js';
+import { destroyDb, getDb } from './Client.js';
 
-/**
- * Data-layer bootstrap.
- *
- * The storage engine is intentionally not wired up yet — it is decided in the
- * data-layer step. This module is the single seam every repository/model will
- * depend on, so swapping the driver touches only this file.
- */
+export { destroyDb, getDb, getPool } from './Client.js';
+export type { Database } from './Types.js';
+
 export interface DatabaseHealth {
   connected: boolean;
-  driver: string;
+  driver: 'postgres';
+  latencyMs?: number;
 }
 
-let connected = false;
+/** Pings the database. Returns a snapshot instead of throwing. */
+export async function databaseHealth(): Promise<DatabaseHealth> {
+  try {
+    const startedAt = Date.now();
+    await sql`select 1`.execute(getDb());
+    return { connected: true, driver: 'postgres', latencyMs: Date.now() - startedAt };
+  } catch {
+    return { connected: false, driver: 'postgres' };
+  }
+}
 
+/**
+ * Eager connection check at boot. A missing database is fatal in production but
+ * only a warning elsewhere, so development and tests can run without one.
+ */
 export async function connectDatabase(): Promise<void> {
-  // TODO(data-layer): initialise the chosen driver (Mongo/Postgres/MySQL).
-  connected = true;
+  const health = await databaseHealth();
+
+  if (health.connected) {
+    logger.info(
+      { database: env.DB_URL ? '(db url)' : env.DB_NAME, latencyMs: health.latencyMs },
+      'Connected to PostgreSQL',
+    );
+    return;
+  }
+
+  const message = 'Could not reach PostgreSQL';
+  if (env.NODE_ENV === 'production') {
+    throw new Error(message);
+  }
+  logger.warn({ host: env.DB_HOST, port: env.DB_PORT, database: env.DB_NAME }, message);
 }
 
 export async function disconnectDatabase(): Promise<void> {
-  connected = false;
-}
-
-export function databaseHealth(): DatabaseHealth {
-  return { connected, driver: env.DB_CONNECTION };
+  await destroyDb();
 }

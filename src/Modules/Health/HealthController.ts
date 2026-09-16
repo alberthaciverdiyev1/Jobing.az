@@ -5,13 +5,13 @@ import { ok } from '../../Core/Http/Responses.js';
 
 const startedAt = Date.now();
 
-export const show: RequestHandler = (_req, res) => {
+export const show: RequestHandler = async (_req, res) => {
   ok(res, {
     status: 'ok',
     app: env.APP_NAME,
     environment: env.NODE_ENV,
     uptimeSeconds: Math.round((Date.now() - startedAt) / 1000),
-    database: databaseHealth(),
+    database: await databaseHealth(),
     timestamp: new Date().toISOString(),
   });
 };

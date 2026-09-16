@@ -27,12 +27,20 @@ const envSchema = z.object({
         .filter((locale) => locale.length > 0),
     ),
 
-  // --- Database ---
-  DB_CONNECTION: z.enum(['mongodb', 'postgres', 'mysql', 'sqlite']).default('mongodb'),
-  DB_HOST: z.string().default('127.0.0.1'),
-  DB_PORT: z.coerce.number().int().positive().default(27017),
-  DB_NAME: z.string().default('jobing'),
+  // --- Database (PostgreSQL) ---
+  /** Full connection string. When set it wins over the discrete DB_* parts. */
   DB_URL: z.string().default(''),
+  DB_HOST: z.string().default('127.0.0.1'),
+  DB_PORT: z.coerce.number().int().positive().default(5432),
+  DB_NAME: z.string().default('jobing'),
+  DB_USER: z.string().default('postgres'),
+  DB_PASSWORD: z.string().default(''),
+  DB_SSL: z
+    .enum(['true', 'false'])
+    .default('false')
+    .transform((value) => value === 'true'),
+  DB_POOL_MIN: z.coerce.number().int().min(0).default(1),
+  DB_POOL_MAX: z.coerce.number().int().min(1).default(10),
 
   // --- Session / Cookies ---
   SESSION_SECRET: z.string().min(1).default('dev-session-secret'),

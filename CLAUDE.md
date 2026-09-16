@@ -17,6 +17,9 @@ The previous Laravel implementation is preserved read-only under `old/` for refe
 | Runtime | Node.js >= 22 |
 | Language | TypeScript (strict, ESM, `NodeNext`) |
 | Framework | Express 5 |
+| Database | PostgreSQL |
+| Query layer | **Kysely** (typed SQL query builder — no ORM magic) |
+| Driver | `pg` |
 | Views | Handlebars (`express-handlebars`) |
 | i18n | i18next + `i18next-http-middleware` + `i18next-fs-backend` |
 | Dev runner | `tsx watch` |
@@ -29,65 +32,98 @@ The previous Laravel implementation is preserved read-only under `old/` for refe
 ## Naming conventions
 
 - **Files and folders: `PascalCase`** — `Core/Http/ErrorHandler.ts`, `Modules/Home/HomeController.ts`.
-  Only `index.ts` and `*.test.ts` are exempt.
+  Only `index.ts`, `*.test.ts` and timestamped migrations are exempt.
 - **Functions, variables, object keys: `camelCase`** — `createApp()`, `registerViewEngine()`.
 - **Types, interfaces, classes, enums: `PascalCase`** — `AppError`, `LocaleInfo`, `ApiSuccess`.
 - **API response fields: `camelCase`** — `uptimeSeconds`, `statusCode`, `totalPages`.
+- **Database columns: `snake_case`** — map them in `Core/Database/Types.ts`.
 
 ## Layout
 
 ```
 src/
 ├── Config/             Env.ts (Zod-validated), Paths.ts, Locales.ts
+├── Console/            CLI entrypoints (Migrate.ts)
 ├── Core/
-│   ├── Database/       data-layer seam (driver TBD)
+│   ├── Database/       Client.ts, Types.ts, Migrator.ts, Migrations/
 │   ├── Http/           App.ts, Server.ts, ErrorHandler.ts, Errors.ts, Responses.ts
 │   ├── Localization/   I18n.ts
 │   ├── View/           Engine.ts, Helpers.ts
 │   └── Logger.ts
 ├── Middlewares/        RequestId, Validate, ViewLocals, NotFound
 ├── Modules/            one folder per domain
-│   ├── Health/         HealthController.ts + HealthApiRoutes.ts
-│   ├── Home/           HomeController.ts + HomeRoutes.ts
-│   └── Localization/   LocalizationController.ts + LocalizationRoutes.ts
-├── Routes/             index.ts (root), Web.ts (pages), Api.ts (JSON)
+│   └── <Name>/
+│       ├── Routes/     Web.ts and/or Api.ts  (always)
+│       ├── <Name>Controller.ts
+│       └── <Name>Service.ts
+├── Routes/             index.ts (root), Web.ts (page aggregator), Api.ts (API aggregator)
 ├── Types/              global type augmentation
 └── index.ts            entrypoint
 
-views/
-├── Layouts/Main.hbs
-├── Partials/           Head, Navbar, Footer, LanguageSwitcher
-└── Pages/              Home, Errors/NotFound, Errors/ServerError
-
-locales/<lng>/translation.json   public/   tests/   old/
+views/  Layouts/ Partials/ Pages/
+locales/<lng>/translation.json
+public/  tests/  old/
 ```
 
-## The Web / API split
+## Module routes
 
-Routing is two-branched, decided in `src/Routes/index.ts`:
+**Every module owns its routes in `Modules/<Name>/Routes/`.** A route file exports
+exactly two things:
 
-| Branch | Mount | Purpose |
+```ts
+// Modules/Vacancy/Routes/Api.ts
+export const basePath = '/vacancies';
+export const router = Router();
+router.get('/', vacancyController.index);
+```
+
+Then register it in the matching aggregator:
+
+- `Routes/Web.ts` → page routes (Handlebars)
+- `Routes/Api.ts` → JSON routes
+
+```ts
+import * as vacancy from '../Modules/Vacancy/Routes/Api.js';
+apiRouter.use(vacancy.basePath, vacancy.router);
+```
+
+A module with only pages has just `Routes/Web.ts`; API-only modules just `Routes/Api.ts`.
+
+## Web / API split
+
+| Branch | Mount | Behaviour |
 |---|---|---|
-| `Api.ts` | `/api/v1/*` | JSON API. **Always** answers JSON, even on errors. |
-| `Web.ts` | `/` | Server-rendered Handlebars pages. |
+| `Routes/Api.ts` | `/api/v1/*` | **Always** JSON, errors included. |
+| `Routes/Web.ts` | `/` | Handlebars pages. |
 
-A module that needs both declares two route files: `<Name>Routes.ts` (web) and
-`<Name>ApiRoutes.ts` (API), and registers each in `Web.ts` / `Api.ts`.
-
-The error handler picks the response shape from the URL: `/api/*` → JSON; anything
-else → HTML unless the client sends `Accept` that explicitly prefers JSON.
+The error handler picks the shape from the URL: `/api/*` → JSON; otherwise HTML unless
+the client's `Accept` explicitly prefers JSON.
 
 ## Response envelope
 
 ```jsonc
-// success
 { "success": true, "data": { } }
-
-// failure
 { "success": false, "error": { "code": "NOT_FOUND", "message": "…", "details": { } } }
 ```
 
-Use the helpers in `Core/Http/Responses.ts` (`ok`, `created`, `noContent`, `paginated`).
+Use `Core/Http/Responses.ts` — `ok`, `created`, `noContent`, `paginated`.
+
+## Database (Kysely + PostgreSQL)
+
+- Import the query builder with `const db = getDb()` from `Core/Database/index.js`.
+- Never build raw SQL by string concatenation; use the Kysely builder or `sql` tags.
+- Table types live in `Core/Database/Types.ts` and **must** stay in sync with migrations.
+- Migrations live in `Core/Database/Migrations/` as
+  `<timestamp>_<PascalCaseName>.ts`, each exporting `up(db)` and `down(db)`.
+
+```bash
+npm run db:migrate    # apply pending migrations
+npm run db:rollback   # revert the last batch
+npm run db:status     # list migrations and whether they ran
+```
+
+The connection is created lazily on first use (`getDb()`), so tests can run without a
+database. `connectDatabase()` at boot only warns outside production.
 
 ## Views & i18n
 
@@ -95,18 +131,18 @@ Use the helpers in `Core/Http/Responses.ts` (`ok`, `created`, `noContent`, `pagi
 - Every template receives: `t`, `locale`, `locales`, `appName`, `appSuffix`, `appUrl`,
   `currentUrl`, `year`, `isProduction` (set in `Middlewares/ViewLocals.ts`).
 - Translate with `{{t "home.title"}}`. Add keys to **all four** files under `locales/`.
-- Locale resolves from the `lang` cookie, then `Accept-Language`, falling back to
+- Locale comes from the `lang` cookie, then `Accept-Language`, falling back to
   `DEFAULT_LOCALE`. `GET /lang/:locale` sets the cookie and redirects back.
+- We own the language cookie — i18next's cookie cache is deliberately disabled.
 
-## Conventions
+## General conventions
 
 - **ESM only.** Relative imports carry the `.js` extension in `.ts` files.
 - Type-only imports use `import type` (`verbatimModuleSyntax` is on).
 - `process.env` is read **only** in `src/Config/Env.ts`. New variables go there *and* in `.env.example`.
-- Errors: throw subclasses of `AppError` (`NotFoundError`, `ValidationError`, …).
-  Anything else becomes an opaque 500 in production.
+- Errors: throw subclasses of `AppError`. Anything else becomes an opaque 500 in production.
 - Every request gets `req.requestId`, echoed as `X-Request-Id`.
-- Validate input with the `validate()` middleware; results land on `req.validated`
+- Validate input with `validate()`; results land on `req.validated`
   (never mutate Express 5's getter-only `req.query`).
 
 ## Commands
@@ -119,6 +155,7 @@ npm test           # vitest
 npm run typecheck  # tsc --noEmit
 npm run lint       # eslint
 npm run format     # prettier
+npm run db:migrate # apply migrations
 ```
 
 ## Notes
