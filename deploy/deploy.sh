@@ -31,8 +31,15 @@ log "Composer (production)"
 sudo -u "$APP_USER" composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist
 
 log "Frontend derleme (Vite)"
-sudo -u "$APP_USER" npm ci
-sudo -u "$APP_USER" npm run build
+# Serverdə Node köhnədirsə, /opt/node20 istifadə et; hələ də <18-dirsə, commit edilmiş assetlər qalır.
+export PATH="/opt/node20/bin:$PATH"
+NODE_MAJOR="$(node -v 2>/dev/null | sed 's/^v\([0-9]*\).*$/\1/')"
+if [ -n "$NODE_MAJOR" ] && [ "$NODE_MAJOR" -ge 18 ]; then
+  sudo -u "$APP_USER" env PATH="/opt/node20/bin:$PATH" npm ci
+  sudo -u "$APP_USER" env PATH="/opt/node20/bin:$PATH" npm run build
+else
+  echo "⚠ Node < 18 — commit edilmiş public/build istifadə olunur"
+fi
 
 log "Veritabanı migrasyonları"
 sudo -u "$APP_USER" "$PHP_BIN" artisan migrate --force
