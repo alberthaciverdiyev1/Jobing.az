@@ -90,5 +90,6 @@ class DatabaseSeeder extends Seeder
 
         // 5. Qlobal mesaj şablonları (referans)
         $this->call(MessageTemplateSeeder::class);
+        $this->call(SkillSeeder::class);
     }
 }
