@@ -90,10 +90,29 @@ class ActivityLogResource extends Resource
                     ->color(fn ($state) => (int) $state >= 400 ? 'danger' : 'success')
                     ->toggleable(),
 
+                Tables\Columns\TextColumn::make('location_text')
+                    ->label(__('Location'))
+                    ->state(fn (ActivityLog $record): string => $record->location_text)
+                    ->toggleable(),
+
+                Tables\Columns\TextColumn::make('duration_ms')
+                    ->label(__('Duration'))
+                    ->suffix(' ms')
+                    ->color(fn ($state) => (int) $state > 1000 ? 'warning' : 'gray')
+                    ->sortable()
+                    ->toggleable(),
+
                 Tables\Columns\TextColumn::make('created_at')
                     ->label(__('Date'))
                     ->dateTime('d.m.Y H:i')
                     ->sortable(),
+            ])
+            ->actions([
+                Tables\Actions\ViewAction::make()
+                    ->label(__('Details'))
+                    ->modalHeading(fn (ActivityLog $record): string => __('Activity Details'))
+                    ->modalSubmitAction(false)
+                    ->modalCancelActionLabel(__('Close')),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('action')
@@ -111,6 +130,44 @@ class ActivityLogResource extends Resource
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
+    }
+
+    public static function infolist(\Filament\Infolists\Infolist $infolist): \Filament\Infolists\Infolist
+    {
+        return $infolist->schema([
+            \Filament\Infolists\Components\Section::make(__('Overview'))->schema([
+                \Filament\Infolists\Components\TextEntry::make('user.name')->label(__('User'))->placeholder(__('Guest')),
+                \Filament\Infolists\Components\TextEntry::make('action')->label(__('Action'))->badge(),
+                \Filament\Infolists\Components\TextEntry::make('status_code')->label(__('Status')),
+                \Filament\Infolists\Components\TextEntry::make('duration_ms')->label(__('Duration'))->suffix(' ms'),
+                \Filament\Infolists\Components\TextEntry::make('method')->label(__('Method')),
+                \Filament\Infolists\Components\TextEntry::make('url')->label(__('URL'))->columnSpanFull()->copyable(),
+                \Filament\Infolists\Components\TextEntry::make('referer')->label(__('Referer'))->columnSpanFull()->placeholder('—'),
+                \Filament\Infolists\Components\TextEntry::make('created_at')->label(__('Date'))->dateTime('d.m.Y H:i:s'),
+            ])->columns(3),
+
+            \Filament\Infolists\Components\Section::make(__('Location & Device'))->schema([
+                \Filament\Infolists\Components\TextEntry::make('location_text')->label(__('Location')),
+                \Filament\Infolists\Components\TextEntry::make('ip_address')->label(__('IP'))->copyable(),
+                \Filament\Infolists\Components\TextEntry::make('isp')->label(__('ISP'))->placeholder('—'),
+                \Filament\Infolists\Components\TextEntry::make('device_type')->label(__('Device')),
+                \Filament\Infolists\Components\TextEntry::make('browser')->label(__('Browser')),
+                \Filament\Infolists\Components\TextEntry::make('os')->label(__('OS')),
+                \Filament\Infolists\Components\TextEntry::make('user_agent')->label(__('User Agent'))->columnSpanFull()->placeholder('—'),
+                \Filament\Infolists\Components\TextEntry::make('google_maps_url')
+                    ->label(__('Map'))
+                    ->placeholder('—')
+                    ->url(fn (ActivityLog $record): ?string => $record->google_maps_url, shouldOpenInNewTab: true),
+            ])->columns(3),
+
+            \Filament\Infolists\Components\Section::make(__('Payload'))->schema([
+                \Filament\Infolists\Components\TextEntry::make('payload')
+                    ->hiddenLabel()
+                    ->state(fn (ActivityLog $record): string => json_encode($record->payload, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?: '—')
+                    ->fontFamily(\Filament\Support\Enums\FontFamily::Mono)
+                    ->columnSpanFull(),
+            ]),
+        ]);
     }
 
     public static function getPages(): array

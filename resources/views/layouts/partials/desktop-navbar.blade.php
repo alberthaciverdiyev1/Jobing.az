@@ -10,7 +10,7 @@
             <!-- Left: Logo -->
             <div class="shrink-0 flex items-center">
                 <a href="{{ route('jobs.index') }}" class="flex items-center">
-                    <span class="font-semibold text-2xl text-dark tracking-tight">{{ config('app.brand_name') }}<span class="text-primary">{{ config('app.brand_suffix') }}</span></span>
+                    <img src="{{ asset('images/logo/jobing-wordmark.png') }}" alt="{{ config('app.full_name') }}" class="h-9 w-auto">
                 </a>
             </div>
 

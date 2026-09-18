@@ -99,4 +99,102 @@ class TelegramService
 
         $this->send($message);
     }
+    /**
+     * Inline klaviatura ilə mesaj göndərir (Təsdiq / Rədd düymələri).
+     */
+    public function sendWithKeyboard(string $message, array $keyboard): bool
+    {
+        if (! $this->token() || ! $this->chatId()) {
+            Log::warning('Telegram bildirişi göndərilmədi: token və ya chat_id təyin edilməyib.');
+            return false;
+        }
+
+        try {
+            $response = Http::timeout(5)->post($this->apiUrl() . '/sendMessage', [
+                'chat_id' => $this->chatId(),
+                'text' => $message,
+                'parse_mode' => 'HTML',
+                'disable_web_page_preview' => true,
+                'reply_markup' => json_encode(['inline_keyboard' => $keyboard]),
+            ]);
+
+            return (bool) $response->json('ok', false);
+        } catch (\Throwable $e) {
+            Log::warning('Telegram xətası: ' . $e->getMessage());
+            return false;
+        }
+    }
+
+    /** Yeni vakansiya üçün Təsdiq/Rədd sorğusu göndərir. */
+    public function sendVacancyApprovalRequest(\App\Modules\Vacancy\Models\Vacancy $vacancy): void
+    {
+        $message = "🆕 <b>YENİ VAKANSİYA (təsdiq gözləyir)</b>\n"
+            . "💼 <b>Vəzifə:</b> " . e($vacancy->title) . "\n"
+            . "🏢 <b>Şirkət:</b> " . e($vacancy->company?->name ?? '-') . "\n"
+            . "📍 <b>Şəhər:</b> " . e($vacancy->city_name ?: '-') . "\n"
+            . "💰 <b>Maaş:</b> " . e($vacancy->formatted_salary) . "\n"
+            . "🆔 <b>ID:</b> #{$vacancy->id}";
+
+        $this->sendWithKeyboard($message, [
+            [
+                ['text' => '✅ Təsdiqlə', 'callback_data' => 'vac_approve:' . $vacancy->id],
+                ['text' => '❌ Rədd et', 'callback_data' => 'vac_reject:' . $vacancy->id],
+            ],
+        ]);
+    }
+
+    /** Callback sorğusuna cavab (düyməni "yüklənir" vəziyyətindən çıxarır). */
+    public function answerCallbackQuery(string $callbackQueryId, string $text = ''): void
+    {
+        if (! $this->token()) {
+            return;
+        }
+
+        try {
+            Http::timeout(5)->post($this->apiUrl() . '/answerCallbackQuery', [
+                'callback_query_id' => $callbackQueryId,
+                'text' => $text,
+            ]);
+        } catch (\Throwable $e) {
+            Log::warning('Telegram callback xətası: ' . $e->getMessage());
+        }
+    }
+
+    /** Konkret chat-a mesaj göndərir (webhook cavabları üçün). */
+    public function sendToChat(string $chatId, string $message, ?array $keyboard = null): bool
+    {
+        if (! $this->token()) {
+            return false;
+        }
+
+        $payload = ['chat_id' => $chatId, 'text' => $message, 'parse_mode' => 'HTML'];
+        if ($keyboard) {
+            $payload['reply_markup'] = json_encode($keyboard);
+        }
+
+        try {
+            return (bool) Http::timeout(5)->post($this->apiUrl() . '/sendMessage', $payload)->json('ok', false);
+        } catch (\Throwable $e) {
+            Log::warning('Telegram xətası: ' . $e->getMessage());
+            return false;
+        }
+    }
+
+    /** Webhook-u qeyd edir. */
+    public function setWebhook(string $url): bool
+    {
+        if (! $this->token()) {
+            return false;
+        }
+
+        try {
+            return (bool) Http::timeout(10)->post($this->apiUrl() . '/setWebhook', [
+                'url' => $url,
+                'allowed_updates' => ['message', 'callback_query'],
+            ])->json('ok', false);
+        } catch (\Throwable $e) {
+            Log::warning('Telegram setWebhook xətası: ' . $e->getMessage());
+            return false;
+        }
+    }
 }

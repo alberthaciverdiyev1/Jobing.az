@@ -17,6 +17,12 @@ log() { echo -e "\n\033[1;36m▶ $*\033[0m"; }
 
 cd "$APP_DIR"
 
+# ── Deploy-dan ƏVVƏL: bütün verilənlər bazalarını yedəklə + Telegram-a göndər ──
+if [ -x "deploy/backup-databases.sh" ]; then
+  log "Verilənlər bazası yedəyi (deploy öncəsi)"
+  bash deploy/backup-databases.sh || echo "⚠ Yedək alınmadı, deploy davam edir"
+fi
+
 log "Kod çekiliyor ($BRANCH)"
 sudo -u "$APP_USER" git fetch --all --prune
 sudo -u "$APP_USER" git reset --hard "origin/$BRANCH"

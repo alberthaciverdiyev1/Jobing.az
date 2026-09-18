@@ -30,7 +30,7 @@
         <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-8 py-10 border-b border-gray-100">
             <div class="max-w-xl">
                 <a href="{{ url('/') }}" class="inline-flex items-center mb-4">
-                    <span class="font-semibold text-2xl text-dark tracking-tight">{{ config('app.brand_name') }}<span class="text-primary">{{ config('app.brand_suffix') }}</span></span>
+                    <img src="{{ asset('images/logo/jobing-wordmark.png') }}" alt="{{ config('app.full_name') }}" class="h-9 w-auto">
                 </a>
 
                 <p class="text-sm text-gray-500 leading-relaxed mb-5">{{ $footerDesc }}</p>

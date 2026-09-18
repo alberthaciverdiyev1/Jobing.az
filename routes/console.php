@@ -9,3 +9,6 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote');
 
 Schedule::command('promotions:expire')->hourly()->withoutOverlapping();
+
+// RSS xəbərlərini saatlıq idxal et.
+Schedule::command('news:import')->hourly()->withoutOverlapping();

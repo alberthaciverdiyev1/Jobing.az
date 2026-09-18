@@ -337,6 +337,12 @@ class VacancyResource extends Resource
                     ->color(fn (bool $state): string => $state ? 'success' : 'warning')
                     ->sortable(),
 
+                Tables\Columns\TextColumn::make('rejection_reason')
+                    ->label(__('Rejection Reason'))
+                    ->limit(40)
+                    ->tooltip(fn ($record) => $record->rejection_reason)
+                    ->toggleable(isToggledHiddenByDefault: true),
+
                 Tables\Columns\TextColumn::make('created_at')
                     ->label(__('Publication'))
                     ->dateTime('d.m.Y')
@@ -440,6 +446,9 @@ class VacancyResource extends Resource
                     ->requiresConfirmation()
                     ->action(function (Vacancy $record) {
                         $record->is_active = !$record->is_active;
+                        if ($record->is_active) {
+                            $record->rejection_reason = null;
+                        }
                         $record->save();
                         \Filament\Notifications\Notification::make()
                             ->title($record->is_active ? 'Vakansiya təsdiqləndi və yayına alındı.' : 'Vakansiya təsdiqi ləğv edildi.')

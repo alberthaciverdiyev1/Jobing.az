@@ -50,3 +50,45 @@ Yaptığı: `git reset --hard origin/main` → `composer install --no-dev` → `
 - Sunucuda `deploy` kullanıcısına `sudo systemctl reload php8.3-fpm` için yetki ver (veya `deploy.sh`'ı root/systemd ile çalıştır).
 - `main` dışında deploy etmek istersen workflow'daki `branches` ve `deploy.sh` içindeki `BRANCH`'i güncelle.
 - Lokal geliştirmede cache/session `file`; production'da `install-server.sh` bunları **Redis**'e çevirir.
+
+## 3) `backup-databases.sh` — deploy öncesi yedək + Telegram
+
+`deploy.sh` her deploy'dan **önce** bunu otomatik çalıştırır:
+- Serverdəki **bütün PostgreSQL bazalarını** (əsas + `jobing_logs`) `pg_dump` ilə yedəkləyir
+- `tar.gz` edib `/var/backups/jobing/`-də saxlayır (14 gün saxlanır)
+- Telegram bot vasitəsilə yedəyi sənə göndərir
+
+Gərəkli `.env` dəyişənləri:
+```
+DATABASE_BACKUP_TELEGRAM_BOT_TOKEN=...   # @BotFather-dən
+DATABASE_BACKUP_TELEGRAM_BOT_CHAT_ID=... # sənin chat id-in
+```
+> Təhlükəsizlik üçün chat_id **avtomatik aşkarlanmır** — yalnız göstərdiyin chat-a göndərilir.
+> Chat id-ni tapmaq üçün bot-a `/start` yaz, sonra: `curl "https://api.telegram.org/bot<TOKEN>/getUpdates"`
+
+## 4) Telegram ilə vakansiya təsdiqi
+
+Yeni vakansiya əlavə edildikdə (təsdiq gözləyən):
+1. Adminlərə panel bildirişi gedir
+2. Telegram-a **✅ Təsdiqlə / ❌ Rədd et** düymələri ilə mesaj gedir
+3. Rədd edərsənsə, bot səndən **rədd səbəbini** soruşur və onu saxlayır
+
+Webhook qeydiyyatı (deploy-dan sonra bir dəfə):
+```bash
+php artisan telegram:set-webhook
+```
+
+## 5) Loglar üçün ayrı verilənlər bazası
+
+`activity_logs` və `app_logs` əsas bazada deyil — **`jobing_logs`** bazasındadır (`logs` bağlantısı).
+`.env`:
+```
+LOG_DB_DATABASE=jobing_logs
+LOG_DB_HOST / PORT / USERNAME / PASSWORD
+```
+
+## Zamanlanmış tapşırıqlar (cron)
+```
+promotions:expire  → saatlıq
+news:import        → saatlıq (RSS xəbərləri)
+```

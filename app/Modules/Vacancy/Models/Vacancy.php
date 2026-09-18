@@ -64,6 +64,40 @@ class Vacancy extends Model
         'deadline' => 'date',
     ];
 
+    protected static function booted(): void
+    {
+        // Yeni vakansiya yaradıldıqda (təsdiq gözləyən) adminlərə + Telegram-a bildiriş.
+        static::created(function (Vacancy $vacancy) {
+            if ($vacancy->is_active) {
+                return;
+            }
+
+            try {
+                $reviewUrl = null;
+                try {
+                    $reviewUrl = \App\Modules\Vacancy\Filament\Resources\VacancyResource::getUrl(
+                        'edit', ['record' => $vacancy], isAbsolute: true, panel: 'admin'
+                    );
+                } catch (\Throwable) {
+                }
+
+                \App\Models\User::where('is_admin', true)->get()->each(
+                    fn (\App\Models\User $admin) => $admin->notify(
+                        new \App\Modules\Vacancy\Notifications\VacancyApprovalRequestedNotification(
+                            (string) $vacancy->title,
+                            (string) ($vacancy->company?->name ?? ''),
+                            $reviewUrl,
+                        )
+                    )
+                );
+
+                app(\App\Modules\Core\Services\TelegramService::class)->sendVacancyApprovalRequest($vacancy);
+            } catch (\Throwable $e) {
+                \Illuminate\Support\Facades\Log::warning('Vakansiya təsdiq bildirişi alınmadı: ' . $e->getMessage());
+            }
+        });
+    }
+
     public function company(): BelongsTo
     {
         return $this->belongsTo(Company::class);

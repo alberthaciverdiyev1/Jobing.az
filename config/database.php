@@ -99,6 +99,22 @@ return [
             'sslmode' => env('DB_SSLMODE', 'prefer'),
         ],
 
+        // Ayrı log veritabanı (activity log + sistem logları).
+        // LOG_DB_DATABASE set deyilsə, əsas baza ilə eyni olur (təhlükəsiz fallback).
+        'logs' => [
+            'driver' => 'pgsql',
+            'host' => env('LOG_DB_HOST', env('DB_HOST', '127.0.0.1')),
+            'port' => env('LOG_DB_PORT', env('DB_PORT', '5432')),
+            'database' => env('LOG_DB_DATABASE', env('DB_DATABASE', 'jobing')),
+            'username' => env('LOG_DB_USERNAME', env('DB_USERNAME', 'admin')),
+            'password' => env('LOG_DB_PASSWORD', env('DB_PASSWORD', 'secret')),
+            'charset' => env('DB_CHARSET', 'utf8'),
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'search_path' => 'public',
+            'sslmode' => env('DB_SSLMODE', 'prefer'),
+        ],
+
         'sqlsrv' => [
             'driver' => 'sqlsrv',
             'url' => env('DB_URL'),

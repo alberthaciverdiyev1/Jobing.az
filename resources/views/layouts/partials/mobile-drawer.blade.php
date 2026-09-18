@@ -18,7 +18,7 @@
       <!-- Drawer Header -->
       <div class="flex items-center justify-between pb-3 border-b border-gray-100">
         <div class="flex items-center space-x-2">
-          <span class="font-semibold text-lg text-gray-800">{{ config('app.brand_name', 'Jobing') }}<span class="text-primary">{{ config('app.brand_suffix', '.az') }}</span></span>
+          <img src="{{ asset('images/logo/jobing-wordmark.png') }}" alt="{{ config('app.full_name') }}" class="h-8 w-auto">
         </div>
         <button type="button" @click="mobileDrawerOpen = false" class="w-9 h-9 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-500 flex items-center justify-center transition cursor-pointer">
           <i class="fa-solid fa-xmark text-sm"></i>

@@ -21,6 +21,7 @@ APP_USER="${APP_USER:-deploy}"
 DB_NAME="${DB_NAME:-jobing}"
 DB_USER="${DB_USER:-jobing}"
 DB_PASS="${DB_PASS:-$(openssl rand -hex 16)}"
+LOG_DB_NAME="${LOG_DB_NAME:-jobing_logs}"
 REPO_URL="${REPO_URL:-git@github.com:CHANGE_ME/jobing.git}"
 BRANCH="${BRANCH:-main}"
 PHP_VER="${PHP_VER:-8.3}"
@@ -82,6 +83,10 @@ sudo -u postgres psql -tc "SELECT 1 FROM pg_roles WHERE rolname='${DB_USER}'" | 
 sudo -u postgres psql -tc "SELECT 1 FROM pg_database WHERE datname='${DB_NAME}'" | grep -q 1 \
   || sudo -u postgres createdb -O "${DB_USER}" "${DB_NAME}"
 
+# Ayrı log veritabanı (activity log + sistem logları)
+sudo -u postgres psql -tc "SELECT 1 FROM pg_database WHERE datname='${LOG_DB_NAME}'" | grep -q 1 \
+  || sudo -u postgres createdb -O "${DB_USER}" "${LOG_DB_NAME}"
+
 # ── 4. Proje kodu ───────────────────────────────────────────────────────────
 log "Repo klonlanıyor"
 if [[ ! -d "$APP_DIR/.git" ]]; then
@@ -106,6 +111,19 @@ if [[ ! -f .env ]]; then
   sed -i "s#^SESSION_DRIVER=.*#SESSION_DRIVER=redis#" .env
   sed -i "s#^QUEUE_CONNECTION=.*#QUEUE_CONNECTION=redis#" .env
   sed -i "s#^REDIS_CLIENT=.*#REDIS_CLIENT=phpredis#" .env
+  # Ayrı log verilənlər bazası
+  cat >> .env <<LOGDENV
+
+LOG_DB_HOST=${DB_HOST}
+LOG_DB_PORT=5432
+LOG_DB_DATABASE=${LOG_DB_NAME}
+LOG_DB_USERNAME=${DB_USER}
+LOG_DB_PASSWORD=${DB_PASS}
+
+# Deploy öncəsi bütün bazaların yedəyi Telegram-a göndərilir
+DATABASE_BACKUP_TELEGRAM_BOT_TOKEN=
+DATABASE_BACKUP_TELEGRAM_BOT_CHAT_ID=
+LOGDENV
 fi
 sudo -u "$APP_USER" php artisan key:generate --force
 

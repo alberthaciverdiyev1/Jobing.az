@@ -8,9 +8,7 @@
 <header class="md:hidden bg-white border-b border-gray-200/80 sticky top-0 z-30 px-3.5 h-28 flex items-center justify-between shadow-2xs select-none">
     {{-- Left: Brand Logo --}}
     <a href="{{ route('jobs.index') }}" class="shrink-0 flex items-center">
-        <span class="text-[18px] font-semibold text-gray-800 tracking-tight font-sans">
-            {{ config('app.brand_name', 'Jobing') }}<span class="text-primary font-semibold">{{ config('app.brand_suffix', '.az') }}</span>
-        </span>
+        <img src="{{ asset('images/logo/jobing-wordmark.png') }}" alt="{{ config('app.full_name') }}" class="h-9 w-auto">
     </a>
 
     {{-- Right: Language Dropdown + Notification / User Icon --}}
