@@ -15,7 +15,8 @@
 set -euo pipefail
 
 # ──────────────────────────── AYARLAR (düzenle) ────────────────────────────
-DOMAIN="${DOMAIN:-jobing.az}"
+DOMAIN="${DOMAIN:-new.jobing.az}"
+SITE_NAME="${SITE_NAME:-${DOMAIN//./-}}"
 APP_DIR="${APP_DIR:-/var/www/jobing}"
 APP_USER="${APP_USER:-deploy}"
 DB_NAME="${DB_NAME:-jobing}"
@@ -142,7 +143,7 @@ chmod -R o-rwx "$APP_DIR/.env"
 
 # ── 5. Nginx ────────────────────────────────────────────────────────────────
 log "Nginx yapılandırması"
-cat >/etc/nginx/sites-available/jobing <<NGINX
+cat >/etc/nginx/sites-available/${SITE_NAME} <<NGINX
 server {
     listen 80;
     listen [::]:80;
@@ -175,8 +176,7 @@ server {
     location ~ /\.(?!well-known).* { deny all; }
 }
 NGINX
-ln -sf /etc/nginx/sites-available/jobing /etc/nginx/sites-enabled/jobing
-rm -f /etc/nginx/sites-enabled/default
+ln -sf /etc/nginx/sites-available/${SITE_NAME} /etc/nginx/sites-enabled/${SITE_NAME}
 nginx -t
 systemctl reload nginx
 
@@ -195,7 +195,7 @@ systemctl restart php${PHP_VER}-fpm
 
 # ── 7. Queue worker (systemd, her zaman çalışır) ─────────────────────────────
 log "Queue worker servisi"
-cat >/etc/systemd/system/jobing-queue.service <<UNIT
+cat >/etc/systemd/system/${SITE_NAME}-queue.service <<UNIT
 [Unit]
 Description=Jobing queue worker
 After=network.target postgresql.service redis-server.service
@@ -214,7 +214,7 @@ StandardError=journal
 WantedBy=multi-user.target
 UNIT
 systemctl daemon-reload
-systemctl enable --now jobing-queue
+systemctl enable --now ${SITE_NAME}-queue
 
 # ── 8. Scheduler (cron) ─────────────────────────────────────────────────────
 log "Scheduler cron"

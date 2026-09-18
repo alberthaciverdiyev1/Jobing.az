@@ -10,22 +10,22 @@ use Illuminate\Http\Request;
 
 class PromotionRequestController extends Controller
 {
-    /** Şirkət premium / irəli çək sorğusu göndərir. */
-    public function store(Request $request, string $slug): JsonResponse
+    public function store(Request $request): JsonResponse
     {
-        $vacancy = Vacancy::where('slug', $slug)->firstOrFail();
-        $user = auth()->user();
-
-        // Yalnız vakansiyanın sahibi şirkət (və ya admin) sorğu göndərə bilər.
-        if (! $user || (! $user->is_admin && $user->company_id !== $vacancy->company_id)) {
-            return response()->json(['success' => false, 'message' => __('Permission denied')], 403);
-        }
-
         $data = $request->validate([
+            'vacancy_id' => 'required|integer|exists:vacancies,id',
             'mode' => 'required|in:premium,boost',
             'times' => 'required|integer|in:1,3,7',
             'phone' => 'nullable|string|max:30',
         ]);
+
+        $vacancy = Vacancy::findOrFail($data['vacancy_id']);
+        $user = auth()->user();
+
+        // Yalnız vakansiyanın sahibi şirkət (və ya admin)
+        if (! $user || (! $user->is_admin && (int) $user->company_id !== (int) $vacancy->company_id)) {
+            return response()->json(['success' => false, 'message' => __('Permission denied')], 403);
+        }
 
         $prices = config('site.promotions.' . ($data['mode'] === 'premium' ? 'premium' : 'bump') . '.prices', []);
 
@@ -35,7 +35,7 @@ class PromotionRequestController extends Controller
             'mode' => $data['mode'],
             'times' => $data['times'],
             'price' => $prices[$data['times']] ?? null,
-            'phone' => $data['phone'] ?? $user->phone,
+            'phone' => $data['phone'] ?? null,
             'status' => 'pending',
         ]);
 

@@ -8,7 +8,7 @@
 <header class="md:hidden bg-white border-b border-gray-200/80 sticky top-0 z-30 px-3.5 h-28 flex items-center justify-between shadow-2xs select-none">
     {{-- Left: Brand Logo --}}
     <a href="{{ route('jobs.index') }}" class="shrink-0 flex items-center">
-        <img src="{{ asset('images/logo/jobing-wordmark.png') }}" alt="{{ config('app.full_name') }}" class="h-9 w-auto">
+        <img src="{{ asset('images/logo/jobing-wordmark.png') }}" alt="{{ config('app.full_name') }}" class="h-6 sm:h-9 w-auto">
     </a>
 
     {{-- Right: Language Dropdown + Notification / User Icon --}}
@@ -37,7 +37,7 @@
                     {{ __('Language selection') }}
                 </div>
                 @foreach($locales as $lCode => $lData)
-                    <a href="{{ route('lang.switch', $lCode) }}" 
+                    <a href="{{ route('lang.switch', $lCode) }}"
                        class="flex items-center justify-between px-3 py-2 text-sm transition {{ $currentLocale === $lCode ? 'bg-orange-50 text-orange-600 font-semibold' : 'text-gray-700 hover:bg-gray-50' }}">
                         <div class="flex items-center gap-2.5">
                             <span>{{ $lData['name'] }}</span>

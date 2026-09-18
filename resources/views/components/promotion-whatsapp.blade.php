@@ -3,6 +3,7 @@
     'itemLabel' => 'Elan',
     'title' => '',
     'id' => null,
+    'vacancyId' => null,       // PromotionRequest qeydi üçün vakansiya ID-si
 ])
 
 @php
@@ -30,7 +31,30 @@
     $siteName = config('app.full_name', 'Jobing.az');
 @endphp
 
-<div x-data="{ selected: '3', prices: @js($priceLabels) }">
+<div x-data="{
+        selected: '3',
+        prices: @js($priceLabels),
+        sending: false,
+        async send() {
+            const wa = 'https://wa.me/{{ $cleanWa }}?text=' + encodeURIComponent('Salam, {{ $siteName }} saytındakı #{{ $id }} nömrəli {{ $itemLabel }}nı (\'{{ $safeTitle }}\') ' + this.selected + ' DƏFƏ {{ $verb }} istəyirəm (' + this.prices[this.selected] + ').');
+            @if($vacancyId ?? $id)
+            try {
+                this.sending = true;
+                await fetch('{{ route('promotion.request') }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': (document.querySelector('meta[name=csrf-token]') || {}).content || '',
+                    },
+                    body: JSON.stringify({ vacancy_id: {{ (int) ($vacancyId ?? $id) }}, mode: '{{ $mode === 'premium' ? 'premium' : 'boost' }}', times: parseInt(this.selected, 10) }),
+                });
+            } catch (e) { /* qeyd alınmasa da WhatsApp açılsın */ }
+            this.sending = false;
+            @endif
+            window.open(wa, '_blank');
+        }
+    }">
     <!-- Başlık -->
     <div style="display:flex;align-items:center;gap:12px;padding:2px 2px 14px;">
         <div style="flex:0 0 auto;width:42px;height:42px;border-radius:12px;background:{{ $accent }};color:#fff;font-weight:800;font-size:17px;display:flex;align-items:center;justify-content:center;">
@@ -69,7 +93,7 @@
     </div>
 
     <!-- WhatsApp CTA -->
-    <a :href="'https://wa.me/{{ $cleanWa }}?text=' + encodeURIComponent('Salam, {{ $siteName }} saytındakı #{{ $id }} nömrəli {{ $itemLabel }}nı (\'{{ $safeTitle }}\') ' + selected + ' DƏFƏ {{ $verb }} istəyirəm (' + prices[selected] + ').')"
+    <a @click.prevent="send()" :href="'https://wa.me/{{ $cleanWa }}?text=' + encodeURIComponent('Salam, {{ $siteName }} saytındakı #{{ $id }} nömrəli {{ $itemLabel }}nı (\'{{ $safeTitle }}\') ' + selected + ' DƏFƏ {{ $verb }} istəyirəm (' + prices[selected] + ').')"
        target="_blank" rel="noopener"
        style="display:flex;align-items:center;justify-content:center;gap:9px;width:100%;background:#25D366;color:#fff;font-size:13px;font-weight:700;padding:12px 16px;border-radius:12px;text-decoration:none;box-sizing:border-box;">
         <span style="display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:#fff;color:#25D366;font-weight:900;font-size:12px;">W</span>
