@@ -123,7 +123,9 @@ class ActivityLogResource extends Resource
                     ->options(['desktop' => 'Desktop', 'mobile' => 'Mobile', 'tablet' => 'Tablet']),
                 Tables\Filters\SelectFilter::make('user_id')
                     ->label(__('User'))
-                    ->relationship('user', 'name'),
+                    // Diqqət: "relationship" logs bazasında "users" axtarır (yoxdur) → options istifadə edirik.
+                    ->options(fn (): array => \App\Models\User::query()->orderBy('name')->pluck('name', 'id')->all())
+                    ->searchable(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
