@@ -14,21 +14,21 @@ class EditCompanyApplications extends EditRecord
     {
         return [
             Actions\Action::make('view_resume')
-                ->label('CV-yə Bax')
+                ->label(__('View CV'))
                 ->icon('heroicon-o-eye')
                 ->color('warning')
                 ->visible(fn (): bool => (bool) $this->record->resume_id)
                 ->url(fn (): string => route('resumes.show', $this->record->resume_id), shouldOpenInNewTab: true),
 
             Actions\Action::make('download_pdf')
-                ->label('PDF Endir')
+                ->label(__('Download PDF'))
                 ->icon('heroicon-o-arrow-down-tray')
                 ->color('success')
                 ->visible(fn (): bool => (bool) $this->record->resume_id)
                 ->url(fn (): string => route('resumes.show', ['resume' => $this->record->resume_id, 'print' => 1]), shouldOpenInNewTab: true),
 
             Actions\Action::make('download_file')
-                ->label('CV Faylını Endir')
+                ->label(__('Download CV File'))
                 ->icon('heroicon-o-arrow-down-tray')
                 ->color('info')
                 ->visible(fn (): bool => (bool) ($this->record->resume_path && ! $this->record->resume_id))

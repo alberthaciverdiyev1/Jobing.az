@@ -4,7 +4,7 @@ namespace App\Modules\Vacancy\Filament\Resources\CompanyVacancyResource\Pages;
 
 use App\Modules\Vacancy\Filament\Resources\CompanyVacancyResource;
 use Filament\Notifications\Notification;
-use Filament\Resources\Pages\CreateRecord;
+use App\Filament\Pages\CreateRecord;
 
 class CreateCompanyVacancy extends CreateRecord
 {
@@ -28,7 +28,7 @@ class CreateCompanyVacancy extends CreateRecord
     {
         return Notification::make()
             ->success()
-            ->title('Vakansiya uğurla yaradıldı!')
-            ->body('Elanınız admin təsdiqindən sonra saytda yayımlanacaq.');
+            ->title(__('Vacancy created successfully!'))
+            ->body(__('Your listing will be published on the site after admin approval.'));
     }
 }

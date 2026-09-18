@@ -3,7 +3,5 @@
 use App\Modules\Home\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 
-// Home
-Route::get('/', [HomeController::class, 'index'])->name('home');
+// Haqqımızda (kök route Vacancy modulundadır və vakansiya siyahısını göstərir).
 Route::get('/haqqimizda', [HomeController::class, 'about'])->name('about');
-Route::get('/about', [HomeController::class, 'about']);

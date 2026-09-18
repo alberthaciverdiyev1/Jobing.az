@@ -22,9 +22,24 @@ class ApplicationResource extends Resource
     protected static ?string $model = Application::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-document-text';
-    protected static ?string $navigationGroup = 'Aday & Başvuru Yönetimi';
-    protected static ?string $modelLabel = 'Başvuru';
-    protected static ?string $pluralModelLabel = 'İş Başvuruları';
+    protected static ?string $navigationGroup = null;
+
+    public static function getNavigationGroup(): string
+    {
+        return __('Candidate & Application Management');
+    }
+    protected static ?string $modelLabel = null;
+
+    public static function getModelLabel(): string
+    {
+        return __('Application');
+    }
+    protected static ?string $pluralModelLabel = null;
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('Job Applications');
+    }
     protected static ?int $navigationSort = 1;
 
     public static function getEloquentQuery(): Builder
@@ -36,23 +51,23 @@ class ApplicationResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Section::make('Aday Bilgileri')
+                Forms\Components\Section::make(__('Candidate Information'))
                     ->schema([
                         Forms\Components\Select::make('vacancy_id')
-                            ->label('Başvurulan İlan')
+                            ->label(__('Applied Vacancy'))
                             ->relationship('vacancy', 'title')
                             ->searchable()
                             ->preload()
                             ->required(),
 
-                        Forms\Components\TextInput::make('applicant_name')->label('Aday Adı Soyadı')->required()->maxLength(255),
-                        Forms\Components\TextInput::make('applicant_email')->label('E-Posta Adresi')->email()->required()->maxLength(255),
-                        Forms\Components\TextInput::make('applicant_phone')->label('Telefon')->tel()->maxLength(255),
-                        Forms\Components\TextInput::make('portfolio_url')->label('Portfolyo / GitHub URL')->url()->maxLength(255),
-                        Forms\Components\TextInput::make('linkedin_url')->label('LinkedIn Profili')->url()->maxLength(255),
+                        Forms\Components\TextInput::make('applicant_name')->label(__('Candidate Full Name'))->required()->maxLength(255),
+                        Forms\Components\TextInput::make('applicant_email')->label(__('Email Address'))->email()->required()->maxLength(255),
+                        Forms\Components\TextInput::make('applicant_phone')->label(__('Phone'))->tel()->maxLength(255),
+                        Forms\Components\TextInput::make('portfolio_url')->label(__('Portfolio / GitHub URL'))->url()->maxLength(255),
+                        Forms\Components\TextInput::make('linkedin_url')->label(__('LinkedIn Profile'))->url()->maxLength(255),
 
                         Forms\Components\Placeholder::make('resume_preview')
-                            ->label('Namizədin CV / Rezümesi')
+                            ->label(__('Candidate CV / Resume'))
                             ->content(function (?Application $record) {
                                 if (! $record) {
                                     return null;
@@ -70,7 +85,7 @@ class ApplicationResource extends Resource
                                                 <div>
                                                     <div class="font-extrabold text-sm text-gray-900 dark:text-white flex items-center gap-2">
                                                         <span class="px-2 py-0.5 rounded-full bg-orange-100 text-orange-800 text-[10px] font-bold">Daxili CV</span>
-                                                        <span>' . e($resume->title ?: 'CV / Rezüme') . '</span>
+                                                        <span>' . e($resume->title ?: __('CV / Resume')) . '</span>
                                                     </div>
                                                     <div class="text-xs text-gray-500 dark:text-gray-400 mt-1 flex items-center gap-2">
                                                         <span>' . e($resume->full_name) . '</span>
@@ -120,29 +135,29 @@ class ApplicationResource extends Resource
                                     ');
                                 }
 
-                                return new \Illuminate\Support\HtmlString('<span class="text-xs text-gray-400">CV əlavə olunmayıb</span>');
+                                return new \Illuminate\Support\HtmlString('<span class="text-xs text-gray-400">' . __('No CV added') . '</span>');
                             })
                             ->columnSpanFull(),
 
-                        Forms\Components\Textarea::make('cover_letter')->label('Ön Yazı / Not')->rows(3)->columnSpanFull(),
+                        Forms\Components\Textarea::make('cover_letter')->label(__('Cover Letter / Note'))->rows(3)->columnSpanFull(),
                     ])->columns(2),
 
-                Forms\Components\Section::make('Değerlendirme & Durum')
+                Forms\Components\Section::make(__('Evaluation & Status'))
                     ->schema([
                         Forms\Components\Select::make('status')
-                            ->label('Başvuru Durumu')
+                            ->label(__('Application Status'))
                             ->options([
-                                'Beklemede' => 'Beklemede',
-                                'İncelendi' => 'İncelendi',
-                                'Mülakat' => 'Mülakata Çağrıldı',
-                                'Teklif' => 'Teklif Yapıldı',
-                                'Kabul' => 'İşe Alındı',
-                                'Red' => 'Reddedildi',
+                                'Beklemede' => __('Pending'),
+                                'İncelendi' => __('Under Review'),
+                                'Mülakat' => __('Invited to Interview'),
+                                'Teklif' => __('Offer Made'),
+                                'Kabul' => __('Hired'),
+                                'Red' => __('Rejected'),
                             ])
                             ->required()
                             ->default('Beklemede'),
 
-                        Forms\Components\Textarea::make('notes')->label('İK Dahili Notları')->rows(3)->columnSpanFull(),
+                        Forms\Components\Textarea::make('notes')->label(__('HR Internal Notes'))->rows(3)->columnSpanFull(),
                     ]),
             ]);
     }
@@ -151,10 +166,10 @@ class ApplicationResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('applicant_name')->label('Aday Adı')->searchable()->sortable()->weight('bold'),
-                Tables\Columns\TextColumn::make('vacancy.title')->label('İlan')->searchable()->sortable()->limit(30),
-                Tables\Columns\TextColumn::make('applicant_email')->label('E-Posta')->searchable()->copyable(),
-                Tables\Columns\TextColumn::make('status')->label('Durum')->badge()
+                Tables\Columns\TextColumn::make('applicant_name')->label(__('Candidate Name'))->searchable()->sortable()->weight('bold'),
+                Tables\Columns\TextColumn::make('vacancy.title')->label(__('Listing'))->searchable()->sortable()->limit(30),
+                Tables\Columns\TextColumn::make('applicant_email')->label(__('Email'))->searchable()->copyable(),
+                Tables\Columns\TextColumn::make('status')->label(__('Status'))->badge()
                     ->color(fn (string $state): string => match ($state) {
                         'Beklemede' => 'gray',
                         'İncelendi' => 'info',
@@ -164,13 +179,13 @@ class ApplicationResource extends Resource
                         default => 'primary',
                     }),
                 Tables\Columns\TextColumn::make('cv_view')
-                    ->label('CV / Rezüme')
+                    ->label(__('CV / Resume'))
                     ->state(function (Application $record): string {
                         if ($record->resume_id && $record->resume) {
-                            return 'CV-yə Bax (' . ($record->resume->title ?: 'Daxili CV') . ')';
+                            return __('View CV (') . ($record->resume->title ?: 'Daxili CV') . ')';
                         }
                         if ($record->resume_path) {
-                            return 'Faylı Endir';
+                            return __('Download File');
                         }
                         return 'Yoxdur';
                     })
@@ -186,37 +201,37 @@ class ApplicationResource extends Resource
                         }
                         return null;
                     }, shouldOpenInNewTab: true),
-                Tables\Columns\TextColumn::make('created_at')->label('Başvuru Tarihi')->dateTime('d.m.Y H:i')->sortable(),
+                Tables\Columns\TextColumn::make('created_at')->label(__('Application Date'))->dateTime('d.m.Y H:i')->sortable(),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('status')
                     ->options([
-                        'Beklemede' => 'Beklemede',
-                        'İncelendi' => 'İncelendi',
-                        'Mülakat' => 'Mülakata Çağrıldı',
-                        'Teklif' => 'Teklif Yapıldı',
-                        'Kabul' => 'İşe Alındı',
-                        'Red' => 'Reddedildi',
+                        'Beklemede' => __('Pending'),
+                        'İncelendi' => __('Under Review'),
+                        'Mülakat' => __('Invited to Interview'),
+                        'Teklif' => __('Offer Made'),
+                        'Kabul' => __('Hired'),
+                        'Red' => __('Rejected'),
                     ])
-                    ->label('Duruma Göre'),
+                    ->label(__('By Status')),
             ])
             ->actions([
                 Tables\Actions\Action::make('view_resume')
-                    ->label('CV-yə Bax')
+                    ->label(__('View CV'))
                     ->icon('heroicon-o-eye')
                     ->color('warning')
                     ->visible(fn (Application $record): bool => (bool) $record->resume_id)
                     ->url(fn (Application $record): string => route('resumes.show', $record->resume_id), shouldOpenInNewTab: true),
 
                 Tables\Actions\Action::make('download_pdf')
-                    ->label('PDF Endir')
+                    ->label(__('Download PDF'))
                     ->icon('heroicon-o-arrow-down-tray')
                     ->color('success')
                     ->visible(fn (Application $record): bool => (bool) $record->resume_id)
                     ->url(fn (Application $record): string => route('resumes.show', ['resume' => $record->resume_id, 'print' => 1]), shouldOpenInNewTab: true),
 
                 Tables\Actions\Action::make('download_file')
-                    ->label('Faylı Endir')
+                    ->label(__('Download File'))
                     ->icon('heroicon-o-arrow-down-tray')
                     ->color('info')
                     ->visible(fn (Application $record): bool => (bool) ($record->resume_path && ! $record->resume_id))

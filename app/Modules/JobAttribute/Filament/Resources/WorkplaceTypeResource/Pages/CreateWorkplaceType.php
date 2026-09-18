@@ -3,7 +3,7 @@
 namespace App\Modules\JobAttribute\Filament\Resources\WorkplaceTypeResource\Pages;
 
 use App\Modules\JobAttribute\Filament\Resources\WorkplaceTypeResource;
-use Filament\Resources\Pages\CreateRecord;
+use App\Filament\Pages\CreateRecord;
 
 class CreateWorkplaceType extends CreateRecord
 {

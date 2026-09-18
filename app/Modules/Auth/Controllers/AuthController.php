@@ -57,6 +57,6 @@ class AuthController extends Controller
     {
         $this->authService->logout();
 
-        return redirect()->route('home');
+        return redirect()->route('jobs.index');
     }
 }

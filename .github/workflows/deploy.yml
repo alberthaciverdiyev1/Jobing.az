@@ -1,0 +1,47 @@
+name: Deploy to Production
+
+# main'e push edilince sunucuya SSH ile bağlanıp deploy/deploy.sh çalıştırır.
+# Laravel her zaman ayakta kalır (php-fpm + systemd queue worker); "down" yok.
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch: {}
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    name: Build & Deploy
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP (opsiyonel ön kontrol)
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          tools: composer
+
+      - name: Composer validate
+        run: composer validate --no-check-publish
+
+      - name: Deploy over SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script_stop: true
+          script: |
+            cd ${{ secrets.APP_DIR }}
+            bash deploy/deploy.sh
+
+      - name: Health check
+        run: |
+          sleep 3
+          curl -fsS "${{ secrets.HEALTH_URL }}/up" && echo "Sağlık kontrolü OK"

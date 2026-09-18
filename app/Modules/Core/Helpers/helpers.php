@@ -45,6 +45,116 @@ if (!function_exists('generate_unique_slug')) {
     }
 }
 
+if (! function_exists('sanitize_html')) {
+    /**
+     * RichEditor gibi kaynaklardan gelen zengin HTML'i XSS'e karşı temizler:
+     * etiket/öznitelik allowlist'i uygular, script/style/iframe'i tamamen atar,
+     * javascript/data/vbscript şemalarını ve on* olay özniteliklerini siler.
+     */
+    function sanitize_html(?string $html, ?array $allowedTags = null): string
+    {
+        $html = (string) $html;
+        if (trim($html) === '') {
+            return '';
+        }
+
+        $allowedTags = $allowedTags ?: [
+            'p', 'br', 'strong', 'b', 'em', 'i', 'u', 's', 'span', 'div',
+            'ul', 'ol', 'li', 'a', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+            'blockquote', 'hr', 'table', 'thead', 'tbody', 'tr', 'th', 'td',
+            'img', 'figure', 'figcaption',
+        ];
+
+        $allowedAttrs = [
+            'a' => ['href', 'title', 'target', 'rel'],
+            'img' => ['src', 'alt', 'title', 'width', 'height'],
+            'th' => ['colspan', 'rowspan', 'scope'],
+            'td' => ['colspan', 'rowspan'],
+        ];
+
+        // İçeriği ve çocuklarını tamamen atacak tehlikeli etiketler.
+        $dropTags = ['script', 'style', 'iframe', 'object', 'embed', 'noscript', 'template', 'svg', 'math', 'form'];
+
+        $doc = new \DOMDocument();
+        libxml_use_internal_errors(true);
+        $doc->loadHTML(
+            '<?xml encoding="UTF-8"><div id="__sanitize_root__">' . $html . '</div>',
+            LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD
+        );
+        libxml_clear_errors();
+
+        $xpath = new \DOMXPath($doc);
+        $root = $xpath->query('//*[@id="__sanitize_root__"]')->item(0);
+        if (! $root) {
+            return '';
+        }
+
+        $walk = function (\DOMNode $node) use (&$walk, $allowedTags, $allowedAttrs, $dropTags): void {
+            if (! $node instanceof \DOMElement) {
+                foreach (iterator_to_array($node->childNodes) as $child) {
+                    $walk($child);
+                }
+                return;
+            }
+
+            $tag = strtolower($node->tagName);
+
+            if (in_array($tag, $dropTags, true)) {
+                $node->parentNode?->removeChild($node);
+                return;
+            }
+
+            if (! in_array($tag, $allowedTags, true)) {
+                // Etiketi at, çocuklarını koru (ve temizlemek için tekrar gez).
+                $parent = $node->parentNode;
+                $children = iterator_to_array($node->childNodes);
+                foreach ($children as $child) {
+                    $parent->insertBefore($child, $node);
+                }
+                $parent->removeChild($node);
+                foreach ($children as $child) {
+                    $walk($child);
+                }
+                return;
+            }
+
+            $allowed = $allowedAttrs[$tag] ?? [];
+            foreach (iterator_to_array($node->attributes) as $attr) {
+                $name = strtolower($attr->name);
+
+                if (str_starts_with($name, 'on') || ! in_array($name, $allowed, true)) {
+                    $node->removeAttribute($attr->name);
+                    continue;
+                }
+
+                if (in_array($name, ['href', 'src'], true)) {
+                    $value = preg_replace('/[\x00-\x20\x7f]+/', '', strtolower(html_entity_decode($attr->value)));
+                    if (preg_match('/^(javascript|vbscript|data):/', $value) && ! str_starts_with($value, 'data:image/')) {
+                        $node->removeAttribute($attr->name);
+                    }
+                }
+            }
+
+            if ($tag === 'a' && $node->hasAttribute('href')) {
+                $node->setAttribute('rel', 'noopener noreferrer nofollow');
+            }
+
+            foreach (iterator_to_array($node->childNodes) as $child) {
+                $walk($child);
+            }
+        };
+
+        $walk($root);
+
+        $out = '';
+        foreach ($root->childNodes as $child) {
+            $out .= $doc->saveHTML($child);
+        }
+
+        return $out;
+    }
+}
+
 if (! function_exists('is_bot_request')) {
     /**
      * İsteğin bir arama motoru/sosyal medya botu (crawler) tarafından

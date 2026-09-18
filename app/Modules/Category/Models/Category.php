@@ -8,13 +8,14 @@ use App\Modules\Localization\Traits\HasTranslations;
 use App\Modules\Vacancy\Models\Vacancy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Modules\Core\Traits\ClearsCache;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Category extends Model
 {
-    use HasFactory, HasSlug, HasTranslations;
+    use HasFactory, HasSlug, HasTranslations, ClearsCache;
 
     protected string $slugSource = 'name';
 
@@ -64,5 +65,23 @@ class Category extends Model
     public function scopeSubcategories(Builder $query): Builder
     {
         return $query->whereNotNull('parent_id');
+    }
+    public const CACHE_KEY_TREE = 'ref.categories.tree';
+
+    public static function cacheKeys(): array
+    {
+        return [self::CACHE_KEY_TREE, 'ref.categories.with_skills'];
+    }
+
+    /** Ana kateqoriyalar + alt kateqoriyalar (keşlənmiş ağac). */
+    public static function cachedTree(): \Illuminate\Database\Eloquent\Collection
+    {
+        return static::remember(self::CACHE_KEY_TREE, fn () => static::parents()->with('children')->get());
+    }
+
+    /** Yalnız ana kateqoriyalar (keşlənmiş). */
+    public static function cachedParents(): \Illuminate\Database\Eloquent\Collection
+    {
+        return static::cachedTree();
     }
 }

@@ -14,6 +14,21 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Social media fallbacks
+    |--------------------------------------------------------------------------
+    | SiteSetting boş olduqda istifadə olunan sosial şəbəkə ünvanları.
+    */
+    'social_fallbacks' => [
+        'facebook_url' => env('SITE_FACEBOOK_URL', 'https://www.facebook.com/profile.php?id=61569206672024'),
+        'instagram_url' => env('SITE_INSTAGRAM_URL', 'https://www.instagram.com/jobing.az/'),
+        'linkedin_url' => env('SITE_LINKEDIN_URL', 'https://www.linkedin.com/company/jobing-az/'),
+        'telegram_url' => env('SITE_TELEGRAM_URL'),
+        'twitter_url' => env('SITE_TWITTER_URL'),
+        'youtube_url' => env('SITE_YOUTUBE_URL'),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Remote Workplace Slugs
     |--------------------------------------------------------------------------
     | "Remote/Uzaktan" kabul edilen çalışma yeri slug'ları. İstatistik

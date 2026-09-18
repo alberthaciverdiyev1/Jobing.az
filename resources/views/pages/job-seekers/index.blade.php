@@ -22,21 +22,24 @@ window.__JOB_SEEKERS_CONFIG__ = {
 };
 </script>
 
-<div class="bg-gray-50 min-h-screen pb-16">
+<div class="bg-gray-50 min-h-screen pb-16" x-data="jobSeekersManager()">
+
+    <!-- Hero -->
+    <x-list-hero :title="__('Job Seekers')" :placeholder="__('Position, skill, name...')" />
 
     <!-- Main Content Container -->
-    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8" x-data="jobSeekersManager()">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
         <!-- Mobile Filter Trigger -->
         <div class="lg:hidden mb-4">
             <button type="button"
                     @click="mobileFiltersOpen = !mobileFiltersOpen"
-                    class="w-full flex items-center justify-between px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-xs font-bold text-gray-700 shadow-2xs cursor-pointer">
+                    class="w-full flex items-center justify-between px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-xs font-semibold text-gray-700 shadow-2xs cursor-pointer">
                 <span class="flex items-center gap-2">
                     <i class="fas fa-sliders-h text-primary"></i>
                     <span>{{ __('Filters') }}</span>
                 </span>
-                <i class="fas fa-chevron-down text-[10px] text-gray-400 transition-transform" :class="mobileFiltersOpen ? 'rotate-180' : ''"></i>
+                <i class="fas fa-chevron-down text-[11px] text-gray-400 transition-transform" :class="mobileFiltersOpen ? 'rotate-180' : ''"></i>
             </button>
         </div>
 
@@ -49,7 +52,7 @@ window.__JOB_SEEKERS_CONFIG__ = {
 
                         <!-- Filter Top Header -->
                         <div class="flex justify-between items-center pb-3 border-b border-gray-100">
-                            <h3 class="font-bold text-gray-900 text-sm flex items-center gap-2">
+                            <h3 class="font-semibold text-gray-900 text-sm flex items-center gap-2">
                                 <i class="fas fa-filter text-xs text-primary"></i>
                                 <span>{{ __('Filters') }}</span>
                             </h3>
@@ -62,37 +65,16 @@ window.__JOB_SEEKERS_CONFIG__ = {
                             </button>
                         </div>
 
-                        <!-- Search Input in Sidebar -->
-                        <div>
-                            <h4 class="text-xs font-bold text-gray-800 uppercase tracking-wider mb-2">{{ __('Search') }}</h4>
-                            <div class="relative">
-                                <input type="text"
-                                       x-model="q"
-                                       @input.debounce.400ms="applyFilters()"
-                                       @keydown.enter.prevent="applyFilters()"
-                                       placeholder="{{ __('Position, skill, name...') }}"
-                                       class="w-full pl-8 pr-7 py-2 bg-gray-50 hover:bg-white focus:bg-white border border-gray-200 rounded-lg focus:outline-hidden focus:border-primary focus:ring-1 focus:ring-primary text-xs transition">
-                                <i class="fas fa-search absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400 text-[11px]"></i>
-                                <button type="button"
-                                        x-show="q"
-                                        x-cloak
-                                        @click="q = ''; applyFilters()"
-                                        class="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 text-xs cursor-pointer">
-                                    <i class="fas fa-times"></i>
-                                </button>
-                            </div>
-                        </div>
-
                         <!-- Categories & Subcategories -->
                         <div class="pt-3 border-t border-gray-100">
-                            <h4 class="text-xs font-bold text-gray-800 uppercase tracking-wider mb-2.5">{{ __('Categories') }}</h4>
+                            <h4 class="text-xs font-medium text-gray-800 mb-2.5">{{ __('Categories') }}</h4>
 
                             <div class="space-y-1 text-xs" x-data="{ showAll: false }">
                                 <!-- All Categories Option -->
                                 <button type="button"
                                         @click="clearCategories()"
                                         class="w-full flex items-center gap-2 px-2.5 py-2 rounded-lg transition text-left cursor-pointer"
-                                        :class="category.length === 0 ? 'bg-orange-50 text-primary font-bold border border-orange-200 shadow-2xs' : 'text-gray-600 hover:bg-gray-50 border border-transparent'">
+                                        :class="category.length === 0 ? 'bg-orange-50 text-primary font-semibold border border-orange-200 shadow-2xs' : 'text-gray-600 hover:bg-gray-50 border border-transparent'">
                                     <span>{{ __('All categories') }}</span>
                                 </button>
 
@@ -100,20 +82,20 @@ window.__JOB_SEEKERS_CONFIG__ = {
                                 @foreach($categories as $cat)
                                 <div x-show="showAll || {{ $loop->index }} < 5">
                                     <div class="flex items-center justify-between rounded-lg transition group"
-                                         :class="isCategoryActive('{{ $cat->slug }}') ? 'bg-orange-50 text-primary font-bold border border-orange-200 shadow-2xs' : 'text-gray-700 hover:bg-gray-50 border border-transparent'">
+                                         :class="isCategoryActive('{{ $cat->slug }}') ? 'bg-orange-50 text-primary font-semibold border border-orange-200 shadow-2xs' : 'text-gray-700 hover:bg-gray-50 border border-transparent'">
                                         <button type="button"
                                                 @click="toggleCategory('{{ $cat->slug }}')"
                                                 class="flex-1 text-left px-2.5 py-2 truncate cursor-pointer flex items-center justify-between">
                                             <span class="truncate">{{ $cat->name }}</span>
                                             @if($cat->job_seekers_count > 0)
-                                            <span class="text-[10px] text-gray-400 font-mono shrink-0 ml-1">({{ $cat->job_seekers_count }})</span>
+                                            <span class="text-[11px] text-gray-400 font-mono shrink-0 ml-1">({{ $cat->job_seekers_count }})</span>
                                             @endif
                                         </button>
                                         @if($cat->children->isNotEmpty())
                                         <button type="button"
                                                 @click.prevent.stop="toggleAccordion('{{ $cat->slug }}')"
                                                 class="p-2 pl-1.5 text-gray-400 hover:text-primary transition cursor-pointer">
-                                            <i class="fas fa-chevron-down text-[9px] transition-transform duration-200"
+                                            <i class="fas fa-chevron-down text-[10px] transition-transform duration-200"
                                                :class="isAccordionOpen('{{ $cat->slug }}') ? 'rotate-180 text-primary' : ''"></i>
                                         </button>
                                         @endif
@@ -130,16 +112,16 @@ window.__JOB_SEEKERS_CONFIG__ = {
                                         <button type="button"
                                                 @click="toggleCategory('{{ $child->slug }}', '{{ $cat->slug }}')"
                                                 class="w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg transition text-left cursor-pointer"
-                                                :class="isCategoryActive('{{ $child->slug }}') ? 'bg-orange-50 text-primary font-bold' : 'text-gray-600 hover:text-primary hover:bg-gray-50'">
+                                                :class="isCategoryActive('{{ $child->slug }}') ? 'bg-orange-50 text-primary font-semibold' : 'text-gray-600 hover:text-primary hover:bg-gray-50'">
                                             <span class="flex items-center gap-2 truncate">
-                                                <span class="w-3.5 h-3.5 rounded border flex items-center justify-center text-[8px] shrink-0"
+                                                <span class="w-3.5 h-3.5 rounded border flex items-center justify-center text-[9px] shrink-0"
                                                       :class="isCategoryActive('{{ $child->slug }}') ? 'bg-primary border-primary text-white' : 'border-gray-300'">
                                                     <i class="fas fa-check" x-show="isCategoryActive('{{ $child->slug }}')"></i>
                                                 </span>
                                                 <span class="truncate">{{ $child->name }}</span>
                                             </span>
                                             @if($child->job_seekers_count > 0)
-                                            <span class="text-[10px] text-gray-400 font-mono shrink-0 ml-2">({{ $child->job_seekers_count }})</span>
+                                            <span class="text-[11px] text-gray-400 font-mono shrink-0 ml-2">({{ $child->job_seekers_count }})</span>
                                             @endif
                                         </button>
                                         @endforeach
@@ -150,8 +132,8 @@ window.__JOB_SEEKERS_CONFIG__ = {
 
                                 @if($categories->count() > 5)
                                 <button type="button" @click="showAll = !showAll"
-                                        class="w-full text-left px-2.5 py-1.5 text-[11px] font-semibold text-primary hover:text-primary-dark cursor-pointer">
-                                    <i class="fas fa-chevron-down text-[8px] mr-1 transition-transform" :class="showAll ? 'rotate-180' : ''"></i>
+                                        class="w-full text-left px-2.5 py-1.5 text-[12px] font-semibold text-primary hover:text-primary-dark cursor-pointer">
+                                    <i class="fas fa-chevron-down text-[9px] mr-1 transition-transform" :class="showAll ? 'rotate-180' : ''"></i>
                                     <span x-text="showAll ? '{{ __('Show less') }}' : '{{ __('Show more') }} (' + ({{ $categories->count() }} - 5) + ')'"></span>
                                 </button>
                                 @endif
@@ -161,12 +143,12 @@ window.__JOB_SEEKERS_CONFIG__ = {
                         <!-- Salary (Gözlənilən Maaş) -->
                         <div class="pt-3 border-t border-gray-100">
                             <div class="flex items-center justify-between mb-2.5">
-                                <h4 class="text-xs font-bold text-gray-800 uppercase tracking-wider">{{ __('Salary (AZN)') }}</h4>
+                                <h4 class="text-xs font-medium text-gray-800">{{ __('Salary (AZN)') }}</h4>
                                 <button type="button"
                                         x-show="minSalary || maxSalary"
                                         x-cloak
                                         @click="minSalary = ''; maxSalary = ''; applyFilters()"
-                                        class="text-[11px] text-primary hover:text-primary-dark font-medium transition cursor-pointer">
+                                        class="text-[12px] text-primary hover:text-primary-dark font-medium transition cursor-pointer">
                                     {{ __('Reset') }}
                                 </button>
                             </div>
@@ -196,22 +178,22 @@ window.__JOB_SEEKERS_CONFIG__ = {
 
                         <!-- City (Şəhər) -->
                         <div class="pt-3 border-t border-gray-100">
-                            <h4 class="text-xs font-bold text-gray-800 uppercase tracking-wider mb-2.5">{{ __('City') }}</h4>
+                            <h4 class="text-xs font-medium text-gray-800 mb-2.5">{{ __('City') }}</h4>
                             <div class="space-y-1 text-xs" x-data="{ showAll: false }">
                                 @foreach($cities as $c)
                                 <button type="button"
                                         @click="toggleCity('{{ addslashes($c) }}')"
                                         x-show="showAll || {{ $loop->index }} < 5"
                                         class="w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg transition text-left cursor-pointer"
-                                        :class="isFilterSelected('city', '{{ addslashes($c) }}') ? 'bg-orange-50 text-primary font-bold' : 'text-gray-600 hover:bg-gray-50'">
+                                        :class="isFilterSelected('city', '{{ addslashes($c) }}') ? 'bg-orange-50 text-primary font-semibold' : 'text-gray-600 hover:bg-gray-50'">
                                     <span class="flex items-center gap-2">
-                                        <span class="w-3.5 h-3.5 rounded-full border flex items-center justify-center text-[8px]"
+                                        <span class="w-3.5 h-3.5 rounded-full border flex items-center justify-center text-[9px]"
                                               :class="isFilterSelected('city', '{{ addslashes($c) }}') ? 'border-primary bg-primary text-white' : 'border-gray-300'">
                                             <i class="fas fa-check" x-show="isFilterSelected('city', '{{ addslashes($c) }}')"></i>
                                         </span>
                                         <span>{{ $c }}</span>
                                     </span>
-                                    <span class="text-[10px] text-gray-400 font-mono"
+                                    <span class="text-[11px] text-gray-400 font-mono"
                                           x-show="getCityCount('{{ addslashes($c) }}', {{ $cityCounts[$c] ?? 0 }}) > 0"
                                           x-text="'(' + getCityCount('{{ addslashes($c) }}', {{ $cityCounts[$c] ?? 0 }}) + ')'"></span>
                                 </button>
@@ -219,8 +201,8 @@ window.__JOB_SEEKERS_CONFIG__ = {
 
                                 @if(count($cities) > 5)
                                 <button type="button" @click="showAll = !showAll"
-                                        class="w-full text-left px-2.5 py-1.5 text-[11px] font-semibold text-primary hover:text-primary-dark cursor-pointer">
-                                    <i class="fas fa-chevron-down text-[8px] mr-1 transition-transform" :class="showAll ? 'rotate-180' : ''"></i>
+                                        class="w-full text-left px-2.5 py-1.5 text-[12px] font-semibold text-primary hover:text-primary-dark cursor-pointer">
+                                    <i class="fas fa-chevron-down text-[9px] mr-1 transition-transform" :class="showAll ? 'rotate-180' : ''"></i>
                                     <span x-text="showAll ? '{{ __('Show less') }}' : '{{ __('Show more') }} (' + ({{ count($cities) }} - 5) + ')'"></span>
                                 </button>
                                 @endif
@@ -230,34 +212,34 @@ window.__JOB_SEEKERS_CONFIG__ = {
                         <!-- Workplace Type (Çalışma Yeri) -->
                         @if($workplaceTypes->count() > 0)
                         <div class="pt-3 border-t border-gray-100">
-                            <h4 class="text-xs font-bold text-gray-800 uppercase tracking-wider mb-2.5">{{ __('Workplace') }}</h4>
+                            <h4 class="text-xs font-medium text-gray-800 mb-2.5">{{ __('Workplace') }}</h4>
                             <div class="space-y-1 text-xs" x-data="{ showAll: false }">
                                 @foreach($workplaceTypes as $wt)
                                 <label x-show="showAll || {{ $loop->index }} < 5"
                                        class="w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg transition text-left cursor-pointer select-none"
-                                       :class="isFilterSelected('workplaceType', '{{ $wt->slug }}') ? 'bg-orange-50 text-primary font-bold' : 'text-gray-600 hover:bg-gray-50'">
+                                       :class="isFilterSelected('workplaceType', '{{ $wt->slug }}') ? 'bg-orange-50 text-primary font-semibold' : 'text-gray-600 hover:bg-gray-50'">
                                     <input type="checkbox"
                                            value="{{ $wt->slug }}"
                                            :checked="isFilterSelected('workplaceType', '{{ $wt->slug }}')"
                                            @change="toggleFilter('workplaceType', '{{ $wt->slug }}')"
                                            class="sr-only">
                                     <span class="flex items-center gap-2">
-                                        <span class="w-3.5 h-3.5 rounded border flex items-center justify-center text-[8px]"
+                                        <span class="w-3.5 h-3.5 rounded border flex items-center justify-center text-[9px]"
                                               :class="isFilterSelected('workplaceType', '{{ $wt->slug }}') ? 'bg-primary border-primary text-white' : 'border-gray-300'">
                                             <i class="fas fa-check" x-show="isFilterSelected('workplaceType', '{{ $wt->slug }}')"></i>
                                         </span>
                                         <span>{{ $wt->name }}</span>
                                     </span>
                                     @if($wt->job_seekers_count > 0)
-                                    <span class="text-[10px] text-gray-400 font-mono">({{ $wt->job_seekers_count }})</span>
+                                    <span class="text-[11px] text-gray-400 font-mono">({{ $wt->job_seekers_count }})</span>
                                     @endif
                                 </label>
                                 @endforeach
 
                                 @if($workplaceTypes->count() > 5)
                                 <button type="button" @click="showAll = !showAll"
-                                        class="w-full text-left px-2.5 py-1.5 text-[11px] font-semibold text-primary hover:text-primary-dark cursor-pointer">
-                                    <i class="fas fa-chevron-down text-[8px] mr-1 transition-transform" :class="showAll ? 'rotate-180' : ''"></i>
+                                        class="w-full text-left px-2.5 py-1.5 text-[12px] font-semibold text-primary hover:text-primary-dark cursor-pointer">
+                                    <i class="fas fa-chevron-down text-[9px] mr-1 transition-transform" :class="showAll ? 'rotate-180' : ''"></i>
                                     <span x-text="showAll ? '{{ __('Show less') }}' : '{{ __('Show more') }} (' + ({{ $workplaceTypes->count() }} - 5) + ')'"></span>
                                 </button>
                                 @endif
@@ -268,34 +250,34 @@ window.__JOB_SEEKERS_CONFIG__ = {
                         <!-- Job Type (İş Rejimi) -->
                         @if($jobTypes->count() > 0)
                         <div class="pt-3 border-t border-gray-100">
-                            <h4 class="text-xs font-bold text-gray-800 uppercase tracking-wider mb-2.5">{{ __('Employment type') }}</h4>
+                            <h4 class="text-xs font-medium text-gray-800 mb-2.5">{{ __('Employment type') }}</h4>
                             <div class="space-y-1 text-xs" x-data="{ showAll: false }">
                                 @foreach($jobTypes as $jt)
                                 <label x-show="showAll || {{ $loop->index }} < 5"
                                        class="w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg transition text-left cursor-pointer select-none"
-                                       :class="isFilterSelected('jobType', '{{ $jt->slug }}') ? 'bg-orange-50 text-primary font-bold' : 'text-gray-600 hover:bg-gray-50'">
+                                       :class="isFilterSelected('jobType', '{{ $jt->slug }}') ? 'bg-orange-50 text-primary font-semibold' : 'text-gray-600 hover:bg-gray-50'">
                                     <input type="checkbox"
                                            value="{{ $jt->slug }}"
                                            :checked="isFilterSelected('jobType', '{{ $jt->slug }}')"
                                            @change="toggleFilter('jobType', '{{ $jt->slug }}')"
                                            class="sr-only">
                                     <span class="flex items-center gap-2">
-                                        <span class="w-3.5 h-3.5 rounded border flex items-center justify-center text-[8px]"
+                                        <span class="w-3.5 h-3.5 rounded border flex items-center justify-center text-[9px]"
                                               :class="isFilterSelected('jobType', '{{ $jt->slug }}') ? 'bg-primary border-primary text-white' : 'border-gray-300'">
                                             <i class="fas fa-check" x-show="isFilterSelected('jobType', '{{ $jt->slug }}')"></i>
                                         </span>
                                         <span>{{ $jt->name }}</span>
                                     </span>
                                     @if($jt->job_seekers_count > 0)
-                                    <span class="text-[10px] text-gray-400 font-mono">({{ $jt->job_seekers_count }})</span>
+                                    <span class="text-[11px] text-gray-400 font-mono">({{ $jt->job_seekers_count }})</span>
                                     @endif
                                 </label>
                                 @endforeach
 
                                 @if($jobTypes->count() > 5)
                                 <button type="button" @click="showAll = !showAll"
-                                        class="w-full text-left px-2.5 py-1.5 text-[11px] font-semibold text-primary hover:text-primary-dark cursor-pointer">
-                                    <i class="fas fa-chevron-down text-[8px] mr-1 transition-transform" :class="showAll ? 'rotate-180' : ''"></i>
+                                        class="w-full text-left px-2.5 py-1.5 text-[12px] font-semibold text-primary hover:text-primary-dark cursor-pointer">
+                                    <i class="fas fa-chevron-down text-[9px] mr-1 transition-transform" :class="showAll ? 'rotate-180' : ''"></i>
                                     <span x-text="showAll ? '{{ __('Show less') }}' : '{{ __('Show more') }} (' + ({{ $jobTypes->count() }} - 5) + ')'"></span>
                                 </button>
                                 @endif
@@ -306,34 +288,34 @@ window.__JOB_SEEKERS_CONFIG__ = {
                         <!-- Experience Level (Təcrübə Səviyyəsi) -->
                         @if($experienceLevels->count() > 0)
                         <div class="pt-3 border-t border-gray-100">
-                            <h4 class="text-xs font-bold text-gray-800 uppercase tracking-wider mb-2.5">{{ __('Experience') }}</h4>
+                            <h4 class="text-xs font-medium text-gray-800 mb-2.5">{{ __('Experience') }}</h4>
                             <div class="space-y-1 text-xs" x-data="{ showAll: false }">
                                 @foreach($experienceLevels as $el)
                                 <label x-show="showAll || {{ $loop->index }} < 5"
                                        class="w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg transition text-left cursor-pointer select-none"
-                                       :class="isFilterSelected('experienceLevel', '{{ $el->slug }}') ? 'bg-orange-50 text-primary font-bold' : 'text-gray-600 hover:bg-gray-50'">
+                                       :class="isFilterSelected('experienceLevel', '{{ $el->slug }}') ? 'bg-orange-50 text-primary font-semibold' : 'text-gray-600 hover:bg-gray-50'">
                                     <input type="checkbox"
                                            value="{{ $el->slug }}"
                                            :checked="isFilterSelected('experienceLevel', '{{ $el->slug }}')"
                                            @change="toggleFilter('experienceLevel', '{{ $el->slug }}')"
                                            class="sr-only">
                                     <span class="flex items-center gap-2">
-                                        <span class="w-3.5 h-3.5 rounded border flex items-center justify-center text-[8px]"
+                                        <span class="w-3.5 h-3.5 rounded border flex items-center justify-center text-[9px]"
                                               :class="isFilterSelected('experienceLevel', '{{ $el->slug }}') ? 'bg-primary border-primary text-white' : 'border-gray-300'">
                                             <i class="fas fa-check" x-show="isFilterSelected('experienceLevel', '{{ $el->slug }}')"></i>
                                         </span>
                                         <span>{{ $el->name }}</span>
                                     </span>
                                     @if($el->job_seekers_count > 0)
-                                    <span class="text-[10px] text-gray-400 font-mono">({{ $el->job_seekers_count }})</span>
+                                    <span class="text-[11px] text-gray-400 font-mono">({{ $el->job_seekers_count }})</span>
                                     @endif
                                 </label>
                                 @endforeach
 
                                 @if($experienceLevels->count() > 5)
                                 <button type="button" @click="showAll = !showAll"
-                                        class="w-full text-left px-2.5 py-1.5 text-[11px] font-semibold text-primary hover:text-primary-dark cursor-pointer">
-                                    <i class="fas fa-chevron-down text-[8px] mr-1 transition-transform" :class="showAll ? 'rotate-180' : ''"></i>
+                                        class="w-full text-left px-2.5 py-1.5 text-[12px] font-semibold text-primary hover:text-primary-dark cursor-pointer">
+                                    <i class="fas fa-chevron-down text-[9px] mr-1 transition-transform" :class="showAll ? 'rotate-180' : ''"></i>
                                     <span x-text="showAll ? '{{ __('Show less') }}' : '{{ __('Show more') }} (' + ({{ $experienceLevels->count() }} - 5) + ')'"></span>
                                 </button>
                                 @endif
@@ -348,16 +330,11 @@ window.__JOB_SEEKERS_CONFIG__ = {
             <!-- List Area -->
             <div class="lg:w-3/4 w-full">
 
-                <!-- List Header (Title + Count + Sorting) -->
+                <!-- List Header (Count + Sorting) -->
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-5 pb-3 border-b border-gray-200">
-                    <div>
-                        <h2 class="text-lg md:text-xl font-bold text-gray-900 leading-tight flex items-center gap-2">
-                            <span>{{ __('Job Seekers') }}</span>
-                        </h2>
-                        <p class="text-xs text-gray-500 mt-0.5">
-                            <span class="font-bold text-primary" x-text="totalCount">{{ $jobSeekers->total() }}</span> {{ __('candidate listings found') }}
-                        </p>
-                    </div>
+                    <p class="text-sm text-gray-500">
+                        <span class="font-semibold text-primary" x-text="totalCount">{{ $jobSeekers->total() }}</span> {{ __('candidate listings found') }}
+                    </p>
 
                     <div class="flex items-center gap-2 text-xs">
                         <span class="text-gray-500 hidden sm:inline">{{ __('Sort by:') }}</span>

@@ -215,7 +215,7 @@ class JobSeekerController extends Controller
             'status' => JobSeeker::STATUS_PENDING, // Admin onayı bekler; onaylanınca yayınlanır.
         ]);
 
-        return redirect()->route('home')
+        return redirect()->route('jobs.index')
             ->with('success', __('Your job seeking listing has been submitted and will be published after admin approval.'));
     }
 

@@ -17,7 +17,7 @@
     $bg = $featured ? 'bg-amber-500 text-white' : 'bg-slate-900 text-white';
 @endphp
 
-<div {{ $attributes->merge(['class' => $boxClass . ' ' . $bg . ' border flex items-center justify-center font-bold shrink-0 overflow-hidden' . ($border ?: ' border-gray-100')]) }}>
+<div {{ $attributes->merge(['class' => $boxClass . ' ' . $bg . ' border flex items-center justify-center font-semibold shrink-0 overflow-hidden' . ($border ?: ' border-gray-100')]) }}>
     @if($logo)
         <img src="{{ asset('storage/' . $logo) }}" alt="{{ $name }}" class="w-full h-full object-cover">
     @else

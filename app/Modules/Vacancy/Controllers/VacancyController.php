@@ -113,6 +113,84 @@ class VacancyController extends Controller
     }
 
     /**
+     * Kök səviyyəli siyahı yolu: /{categorySlug}
+     * Yalnız şəhər və ya kateqoriya həll edir (vakansiya detalı burada AÇILMIR —
+     * detal üçün /vakansiya/{slug} istifadə olunur).
+     */
+    public function resolveListingSlug(Request $request, string $slug): View|JsonResponse|Response
+    {
+        $cleanSlug = strtolower(trim($slug));
+
+        // 1. Şəhər?
+        $city = City::where('slug', $cleanSlug)->first();
+        if ($city) {
+            $existingCities = (array) $request->input('city', []);
+            if (! in_array($city->slug, $existingCities, true)) {
+                $existingCities[] = $city->slug;
+            }
+            $request->merge(['city' => $existingCities]);
+
+            return $this->index($request);
+        }
+
+        // 2. Kateqoriya (alt kateqoriya ilə birlikdə mümkündür → ?subcategory=)
+        $category = Category::where('slug', $cleanSlug)->first();
+        if ($category) {
+            $existingCats = array_filter((array) $request->input('category', []));
+            if ($sub = $request->input('subcategory')) {
+                $subCats = array_filter((array) $sub);
+                $existingCats = array_unique(array_merge($existingCats, $subCats));
+            }
+            if (empty($existingCats)) {
+                $existingCats = [$category->slug];
+            }
+            $request->merge(['category' => array_values($existingCats)]);
+
+            return $this->index($request);
+        }
+
+        abort(404);
+    }
+
+    /**
+     * Fallback: statik route'lara uyğun gəlməyən kök yolları siyahıya çevirir.
+     *   /{category}            → kateqoriya siyahısı
+     *   /{city}                → şəhər siyahısı
+     *   /{city}/{category}     → şəhər + kateqoriya
+     */
+    public function fallback(Request $request): View|JsonResponse|Response
+    {
+        if (! $request->isMethod('GET') && ! $request->isMethod('HEAD')) {
+            abort(404);
+        }
+
+        $segments = array_values(array_filter(explode('/', trim($request->path(), '/'))));
+
+        if (count($segments) === 2) {
+            $a = strtolower(trim(urldecode($segments[0])));
+            $b = strtolower(trim(urldecode($segments[1])));
+
+            // Yalnız {şəhər}/{kateqoriya} və ya {kateqoriya}/{şəhər} cütləri keçərlidir.
+            $isCityA = City::where('slug', $a)->exists();
+            $isCatA = Category::where('slug', $a)->exists();
+            $isCityB = City::where('slug', $b)->exists();
+            $isCatB = Category::where('slug', $b)->exists();
+
+            if (! (($isCityA && $isCatB) || ($isCatA && $isCityB))) {
+                abort(404);
+            }
+
+            return $this->filterTwoParams($request, urldecode($segments[0]), urldecode($segments[1]));
+        }
+
+        if (count($segments) === 1) {
+            return $this->resolveListingSlug($request, urldecode($segments[0]));
+        }
+
+        abort(404);
+    }
+
+    /**
      * Resolve two segment URL: /jobs/{citySlug}/{categorySlug}
      * e.g. /jobs/baki/computer-science or /jobs/baki/computer-science?subcategory=backend
      */
@@ -248,6 +326,6 @@ class VacancyController extends Controller
         $vacancy = $this->vacancyService->createVacancy($request->validated());
 
         return redirect()->route('jobs.show', $vacancy->slug)
-            ->with('success', __('Your job listing has been submitted! It will be published on the site after admin approval.'));
+            ->with('success', __(__('Your job listing has been submitted! It will be published on the site after admin approval.')));
     }
 }

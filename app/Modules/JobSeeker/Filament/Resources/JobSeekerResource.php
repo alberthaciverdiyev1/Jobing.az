@@ -19,9 +19,24 @@ class JobSeekerResource extends Resource
     protected static ?string $model = JobSeeker::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
-    protected static ?string $navigationGroup = 'İş Arıyorum';
-    protected static ?string $modelLabel = 'İş Arayan Elanı';
-    protected static ?string $pluralModelLabel = 'İş Arayan Elanları';
+    protected static ?string $navigationGroup = null;
+
+    public static function getNavigationGroup(): string
+    {
+        return __('Job Seeking');
+    }
+    protected static ?string $modelLabel = null;
+
+    public static function getModelLabel(): string
+    {
+        return __('Job Seeker Listing');
+    }
+    protected static ?string $pluralModelLabel = null;
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('Job Seeker Listings');
+    }
     protected static ?int $navigationSort = 1;
 
     public static function getNavigationBadge(): ?string
@@ -39,29 +54,29 @@ class JobSeekerResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Section::make('Elan Məlumatları')
+                Forms\Components\Section::make(__('Listing Details'))
                     ->schema([
-                        Forms\Components\TextInput::make('title')->label('Başlıq')->required()->maxLength(255),
+                        Forms\Components\TextInput::make('title')->label(__('Title'))->required()->maxLength(255),
                         Forms\Components\Select::make('category_parent_id')
-                            ->label('Kateqoriya')
+                            ->label(__('Category'))
                             ->options(static::parentCategoryOptions())
                             ->searchable()->preload()->live()
                             ->default(fn (?Model $record): ?string => $record?->category?->parent_id ? (string) $record->category->parent_id : null)
                             ->afterStateUpdated(fn (Forms\Set $set) => $set('category_id', null))
                             ->dehydrated(false)
-                            ->placeholder('Kateqoriya seçin…'),
+                            ->placeholder(__('Select a category…')),
                         Forms\Components\Select::make('category_id')
-                            ->label('Vəzifə / Peşə')
+                            ->label(__('Position / Occupation'))
                             ->options(fn (Forms\Get $get): array => static::subcategoryOptions($get('category_parent_id') ? (int) $get('category_parent_id') : null))
                             ->searchable()->preload()->nullable()
-                            ->placeholder('Əvvəlcə Kateqoriya seçin…'),
-                        Forms\Components\Select::make('job_type_id')->label('İş Rejimi')->options(static::jobTypeOptions())->searchable()->nullable(),
-                        Forms\Components\Select::make('workplace_type_id')->label('Çalışma Yeri')->options(static::workplaceTypeOptions())->searchable()->nullable(),
-                        Forms\Components\Select::make('experience_level_id')->label('Təcrübə Səviyyəsi')->options(static::experienceLevelOptions())->searchable()->nullable(),
-                        Forms\Components\Select::make('location')->label('Şəhər')->options(static::cityOptions())->searchable()->placeholder('Şəhər seçin…'),
-                        Forms\Components\Textarea::make('description')->label('Təcrübə və bacarıqlar')->rows(4)->columnSpanFull(),
+                            ->placeholder(__('Select a category first…')),
+                        Forms\Components\Select::make('job_type_id')->label(__('Job Type'))->options(static::jobTypeOptions())->searchable()->nullable(),
+                        Forms\Components\Select::make('workplace_type_id')->label(__('Workplace'))->options(static::workplaceTypeOptions())->searchable()->nullable(),
+                        Forms\Components\Select::make('experience_level_id')->label(__('Experience Level'))->options(static::experienceLevelOptions())->searchable()->nullable(),
+                        Forms\Components\Select::make('location')->label(__('City'))->options(static::cityOptions())->searchable()->placeholder(__('Select a city…')),
+                        Forms\Components\Textarea::make('description')->label(__('Experience & Skills'))->rows(4)->columnSpanFull(),
                         Forms\Components\Select::make('skills')
-                            ->label('Bacarıqlar (Admin kataloqu)')
+                            ->label(__('Skills (Admin catalog)'))
                             ->multiple()
                             ->searchable()
                             ->preload()
@@ -69,32 +84,32 @@ class JobSeekerResource extends Resource
                             ->columnSpanFull(),
                     ])->columns(2),
 
-                Forms\Components\Section::make('Maaş & Əlaqə')
+                Forms\Components\Section::make(__('Salary & Contact'))
                     ->schema([
-                        Forms\Components\TextInput::make('salary_min')->label('Min maaş')->numeric()->nullable(),
-                        Forms\Components\TextInput::make('salary_max')->label('Max maaş')->numeric()->nullable(),
-                        Forms\Components\TextInput::make('currency')->label('Valyuta')->default('AZN'),
-                        Forms\Components\Toggle::make('salary_negotiable')->label('Razılaşma yolu ilə'),
-                        Forms\Components\Select::make('availability')->label('Müsabiqə')->options([
+                        Forms\Components\TextInput::make('salary_min')->label(__('Min salary'))->numeric()->nullable(),
+                        Forms\Components\TextInput::make('salary_max')->label(__('Max salary'))->numeric()->nullable(),
+                        Forms\Components\TextInput::make('currency')->label(__('Currency'))->default('AZN'),
+                        Forms\Components\Toggle::make('salary_negotiable')->label(__('Negotiable')),
+                        Forms\Components\Select::make('availability')->label(__('Competition'))->options([
                             'immediate' => 'Dərhal',
                             'two_weeks' => '2 həftə',
                             'one_month' => '1 ay',
                             'flexible' => 'Esnek',
                         ]),
-                        Forms\Components\TextInput::make('contact_name')->label('Ad Soyad')->required(),
-                        Forms\Components\TextInput::make('contact_email')->label('E-Posta')->email(),
-                        Forms\Components\TextInput::make('contact_phone')->label('Telefon'),
+                        Forms\Components\TextInput::make('contact_name')->label(__('Full Name'))->required(),
+                        Forms\Components\TextInput::make('contact_email')->label(__('Email'))->email(),
+                        Forms\Components\TextInput::make('contact_phone')->label(__('Phone')),
                     ])->columns(2),
 
-                Forms\Components\Section::make('Status')
+                Forms\Components\Section::make(__('Status'))
                     ->schema([
-                        Forms\Components\Select::make('status')->label('Status')->options([
+                        Forms\Components\Select::make('status')->label(__('Status'))->options([
                             'published' => 'Yayınlandı',
-                            'pending' => 'Gözləmədə',
+                            'pending' => __('Pending'),
                             'rejected' => 'İmtina edilib',
                             'closed' => 'Bağlanıb',
                         ])->required()->default('published'),
-                        Forms\Components\TextInput::make('views_count')->label('Baxış sayı')->numeric()->disabled(),
+                        Forms\Components\TextInput::make('views_count')->label(__('View Count'))->numeric()->disabled(),
                     ])->columns(2),
             ]);
     }
@@ -104,48 +119,48 @@ class JobSeekerResource extends Resource
         return $table
             ->defaultSort('id', 'desc')
             ->columns([
-                Tables\Columns\TextColumn::make('title')->label('Başlıq')->searchable()->sortable()->weight('bold')->limit(40),
-                Tables\Columns\TextColumn::make('position')->label('Vəzifə')->searchable()->toggleable(),
-                Tables\Columns\TextColumn::make('category.name')->label('Kateqoriya')->toggleable(),
-                Tables\Columns\TextColumn::make('location')->label('Şəhər')->toggleable(),
-                Tables\Columns\TextColumn::make('contact_name')->label('Əlaqə')->searchable(),
-                Tables\Columns\TextColumn::make('status')->label('Status')->badge()->color(fn (string $state): string => match ($state) {
+                Tables\Columns\TextColumn::make('title')->label(__('Title'))->searchable()->sortable()->weight('bold')->limit(40),
+                Tables\Columns\TextColumn::make('position')->label(__('Position'))->searchable()->toggleable(),
+                Tables\Columns\TextColumn::make('category.name')->label(__('Category'))->toggleable(),
+                Tables\Columns\TextColumn::make('location')->label(__('City'))->toggleable(),
+                Tables\Columns\TextColumn::make('contact_name')->label(__('Contact'))->searchable(),
+                Tables\Columns\TextColumn::make('status')->label(__('Status'))->badge()->color(fn (string $state): string => match ($state) {
                     'published' => 'success',
                     'pending' => 'warning',
                     'rejected' => 'danger',
                     'closed' => 'gray',
                     default => 'primary',
                 }),
-                Tables\Columns\IconColumn::make('is_featured')->label('Premium')->boolean()->sortable(),
-                Tables\Columns\TextColumn::make('views_count')->label('Baxış')->sortable(),
-                Tables\Columns\TextColumn::make('created_at')->label('Tarix')->dateTime('d.m.Y')->sortable(),
+                Tables\Columns\IconColumn::make('is_featured')->label(__('Premium'))->boolean()->sortable(),
+                Tables\Columns\TextColumn::make('views_count')->label(__('Views'))->sortable(),
+                Tables\Columns\TextColumn::make('created_at')->label(__('Date'))->dateTime('d.m.Y')->sortable(),
             ])
             ->filters([
-                Tables\Filters\SelectFilter::make('status')->label('Status')->options([
+                Tables\Filters\SelectFilter::make('status')->label(__('Status'))->options([
                     'published' => 'Yayınlandı',
-                    'pending' => 'Gözləmədə',
+                    'pending' => __('Pending'),
                     'rejected' => 'İmtina edilib',
                     'closed' => 'Bağlanıb',
                 ]),
                 Tables\Filters\SelectFilter::make('category')
-                    ->label('Kateqoriya')
+                    ->label(__('Category'))
                     ->options(static::categoryOptions())
                     ->attribute('category_id'),
             ])
             ->actions([
                 Tables\Actions\Action::make('bump')
-                    ->label('İrəli Çək')
+                    ->label(__('Boost'))
                     ->icon('heroicon-o-arrow-up-circle')
                     ->color('warning')
                     ->requiresConfirmation()
-                    ->modalHeading('Elanı İrəli Çək')
-                    ->modalDescription('Bu iş axtarış elanı dərhal ən birinci sıraya yüksələcək.')
-                    ->modalSubmitActionLabel('İrəli Çək')
+                    ->modalHeading(__('Boost the Listing'))
+                    ->modalDescription(__('This job-seeking listing will immediately rise to the very first position.'))
+                    ->modalSubmitActionLabel(__('Boost'))
                     ->action(function (JobSeeker $record) {
                         $record->bumped_at = now();
                         $record->save();
                         \Filament\Notifications\Notification::make()
-                            ->title('Elan uğurla irəli çəkildi!')
+                            ->title(__('Listing boosted successfully!'))
                             ->success()
                             ->send();
                     }),

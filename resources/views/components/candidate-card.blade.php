@@ -24,7 +24,7 @@
                     @endif
                 </div>
 
-                <h3 class="text-base font-bold text-gray-900 group-hover:text-primary transition leading-tight">
+                <h3 class="text-base font-semibold text-gray-900 group-hover:text-primary transition leading-tight">
                     <a href="{{ route('job-seekers.show', $seeker->slug) }}" class="focus:outline-hidden before:absolute before:inset-0">
                         {{ $seeker->title }}
                     </a>
@@ -44,12 +44,12 @@
                         @if($seeker->availability)
                         <span>•</span>
                         <span class="text-emerald-600 font-medium flex items-center gap-1">
-                            <i class="fas fa-bolt text-[10px]"></i>
+                            <i class="fas fa-bolt text-[11px]"></i>
                             {{ $seeker->availability_label }}
                         </span>
                         @endif
                     </div>
-                    <span class="sm:hidden text-gray-400 text-[11px] shrink-0">{{ $seeker->created_at?->diffForHumans() }}</span>
+                    <span class="sm:hidden text-gray-400 text-[12px] shrink-0">{{ $seeker->created_at?->diffForHumans() }}</span>
                 </div>
             </div>
         </div>
@@ -61,9 +61,9 @@
                     <i class="fas fa-map-marker-alt text-primary text-xs"></i>
                     <span>{{ $seeker->location ?: __('Baku, Azerbaijan') }}</span>
                 </div>
-                <span class="sm:hidden text-sm font-bold text-gray-900 font-mono">{{ $seeker->formatted_salary }}</span>
+                <span class="sm:hidden text-sm font-semibold text-gray-900 font-mono">{{ $seeker->formatted_salary }}</span>
             </div>
-            <div class="hidden sm:block text-gray-400 text-[11px] mt-0.5 sm:mt-0">{{ $seeker->created_at?->diffForHumans() }}</div>
+            <div class="hidden sm:block text-gray-400 text-[12px] mt-0.5 sm:mt-0">{{ $seeker->created_at?->diffForHumans() }}</div>
         </div>
 
     </div>
@@ -71,7 +71,7 @@
     <!-- Footer: Skills & Salary (exact match to job-card) -->
     <div class="hidden sm:flex mt-3 pt-3 border-t border-gray-100 items-center justify-between gap-2">
         <x-skill-tags :skills="$seeker->skills" />
-        <span class="text-sm font-bold text-gray-900 font-mono sm:ml-auto">{{ $seeker->formatted_salary }}</span>
+        <span class="text-sm font-semibold text-gray-900 font-mono sm:ml-auto">{{ $seeker->formatted_salary }}</span>
     </div>
 
 </div>

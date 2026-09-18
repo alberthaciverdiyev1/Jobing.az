@@ -44,10 +44,18 @@ class VacancyService
         $selectedExperiences = array_filter((array) ($filters['experience'] ?? []));
 
         // 2. Category / Subcategory (multi-select: if a child is selected, parent is excluded)
-        $resolveCategoryIds = function (array $catSlugs): array {
+        // Nəticə memoizasiya olunur — eyni sorğuda facet sorguları üçün təkrar DB sorğusu olmasın.
+        $resolveCategoryIdsCache = [];
+        $resolveCategoryIds = function (array $catSlugs) use (&$resolveCategoryIdsCache): array {
             if (empty($catSlugs)) {
                 return [];
             }
+
+            $cacheKey = implode('|', $catSlugs);
+            if (isset($resolveCategoryIdsCache[$cacheKey])) {
+                return $resolveCategoryIdsCache[$cacheKey];
+            }
+
             $cats = Category::with('children')->whereIn('slug', $catSlugs)->get();
             $parentIdsOfSelectedChildren = $cats->whereNotNull('parent_id')->pluck('parent_id')->unique()->all();
 
@@ -65,7 +73,7 @@ class VacancyService
                 }
             }
 
-            return array_unique($categoryIds);
+            return $resolveCategoryIdsCache[$cacheKey] = array_unique($categoryIds);
         };
 
         if (!empty($selectedCategories)) {
@@ -117,24 +125,24 @@ class VacancyService
         // 7. Sort
         $sort = $filters['sort'] ?? 'latest';
         if ($sort === 'oldest') {
-            $query->orderBy('is_featured', 'desc')->orderByRaw('COALESCE(vacancies.bumped_at, vacancies.created_at) ASC');
+            $query->orderBy('is_featured', 'desc')->orderByRaw('vacancies.updated_at ASC');
         } elseif ($sort === 'salary_desc' || $sort === 'salary_high') {
-            $query->orderBy('is_featured', 'desc')->orderByRaw('COALESCE(salary_max, salary_min) DESC NULLS LAST')->orderByRaw('COALESCE(vacancies.bumped_at, vacancies.created_at) DESC');
+            $query->orderBy('is_featured', 'desc')->orderByRaw('COALESCE(salary_max, salary_min) DESC NULLS LAST')->orderByRaw('vacancies.updated_at DESC');
         } elseif ($sort === 'salary_asc') {
-            $query->orderBy('is_featured', 'desc')->orderByRaw('COALESCE(salary_min, salary_max) ASC NULLS LAST')->orderByRaw('COALESCE(vacancies.bumped_at, vacancies.created_at) DESC');
+            $query->orderBy('is_featured', 'desc')->orderByRaw('COALESCE(salary_min, salary_max) ASC NULLS LAST')->orderByRaw('vacancies.updated_at DESC');
         } elseif ($sort === 'views') {
-            $query->orderBy('is_featured', 'desc')->orderByDesc('views_count')->orderByRaw('COALESCE(vacancies.bumped_at, vacancies.created_at) DESC');
+            $query->orderBy('is_featured', 'desc')->orderByDesc('views_count')->orderByRaw('vacancies.updated_at DESC');
         } elseif ($sort === 'deadline') {
-            $query->orderBy('is_featured', 'desc')->orderByRaw('deadline ASC NULLS LAST')->orderByRaw('COALESCE(vacancies.bumped_at, vacancies.created_at) DESC');
+            $query->orderBy('is_featured', 'desc')->orderByRaw('deadline ASC NULLS LAST')->orderByRaw('vacancies.updated_at DESC');
         } elseif ($sort === 'featured') {
-            $query->orderByDesc('is_featured')->orderByRaw('COALESCE(vacancies.bumped_at, vacancies.created_at) DESC');
+            $query->orderByDesc('is_featured')->orderByRaw('vacancies.updated_at DESC');
         } elseif ($sort === 'title_asc' || $sort === 'alphabetical') {
             $query->orderBy('title', 'asc');
         } elseif ($sort === 'title_desc') {
             $query->orderBy('title', 'desc');
         } else {
             // Default latest: Premium first, then latest bumped/created
-            $query->orderBy('is_featured', 'desc')->orderByRaw('COALESCE(vacancies.bumped_at, vacancies.created_at) DESC');
+            $query->orderBy('is_featured', 'desc')->orderByRaw('vacancies.updated_at DESC');
         }
 
         $jobs = $query->paginate($perPage)->withQueryString();
@@ -190,43 +198,54 @@ class VacancyService
             };
         };
 
-        $attributeScope = $makeScope(true);
-        $categoryCountScope = $makeScope(false);
+        // Facet (say) sorğuları filtr imzasına görə keşlənir — ağır withCount subquery-ləri təkrarlanmasın.
+        $facetSignature = serialize([
+            $selectedCategories, $selectedWorkplaces, $selectedTypes,
+            $selectedExperiences, $selectedCities,
+            $filters['q'] ?? '', $filters['min_salary'] ?? '', $filters['max_salary'] ?? '',
+        ]);
 
-        $categories = Category::parents()
-            ->with(['children' => fn ($q) => $q->withCount(['vacancies' => $categoryCountScope])])
-            ->withCount(['vacancies' => $categoryCountScope])
-            ->get()
-            ->each(function ($cat) {
-                // Parent count includes its subcategories' vacancies
-                $cat->vacancies_count += $cat->children->sum('vacancies_count');
+        $facets = \App\Modules\Vacancy\Support\FacetCache::remember($facetSignature, function () use ($makeScope) {
+            $attributeScope = $makeScope(true);
+            $categoryCountScope = $makeScope(false);
+
+            $categories = Category::parents()
+                ->with(['children' => fn ($q) => $q->withCount(['vacancies' => $categoryCountScope])])
+                ->withCount(['vacancies' => $categoryCountScope])
+                ->get()
+                ->each(function ($cat) {
+                    $cat->vacancies_count += $cat->children->sum('vacancies_count');
+                });
+
+            $jobTypes = JobType::active()->withCount(['vacancies' => $attributeScope])->get();
+            $workplaceTypes = WorkplaceType::active()->withCount(['vacancies' => $attributeScope])->get();
+            $experienceLevels = ExperienceLevel::active()->withCount(['vacancies' => $attributeScope])->get();
+
+            $categoryCounts = $categories->flatMap(function ($cat) {
+                $map = [$cat->slug => $cat->vacancies_count];
+                foreach ($cat->children as $child) {
+                    $map[$child->slug] = $child->vacancies_count;
+                }
+                return $map;
             });
 
-        $jobTypes = JobType::active()->withCount(['vacancies' => $attributeScope])->get();
-        $workplaceTypes = WorkplaceType::active()->withCount(['vacancies' => $attributeScope])->get();
-        $experienceLevels = ExperienceLevel::active()->withCount(['vacancies' => $attributeScope])->get();
+            $cities = \App\Modules\JobAttribute\Models\City::active()->withCount(['vacancies' => $attributeScope])->get();
 
-        // Flat slug => count map for parent + subcategories (used by JS to update dynamically)
-        $categoryCounts = $categories->flatMap(function ($cat) {
-            $map = [$cat->slug => $cat->vacancies_count];
-            foreach ($cat->children as $child) {
-                $map[$child->slug] = $child->vacancies_count;
+            $categoryParentMap = [];
+            foreach ($categories as $parent) {
+                foreach ($parent->children as $child) {
+                    $categoryParentMap[$child->slug] = $parent->slug;
+                }
             }
-            return $map;
+
+            return compact('categories', 'jobTypes', 'workplaceTypes', 'experienceLevels', 'categoryCounts', 'cities', 'categoryParentMap');
         });
 
+        extract($facets);
+
+        // Seçilmiş kateqoriyalar (filtrdən asılı — keşlənmir)
         $selectedCategoryModels = Category::with('parent')->whereIn('slug', $selectedCategories)->get();
         $companies = Company::withCount('vacancies')->orderByDesc('vacancies_count')->take(10)->get();
-
-        // Cities derived from City model
-        $cities = \App\Modules\JobAttribute\Models\City::active()->withCount(['vacancies' => $attributeScope])->get();
-
-        $categoryParentMap = [];
-        foreach ($categories as $parent) {
-            foreach ($parent->children as $child) {
-                $categoryParentMap[$child->slug] = $parent->slug;
-            }
-        }
 
         return [
             'jobs' => $jobs,
@@ -258,7 +277,7 @@ class VacancyService
             $job->increment('views_count');
         }
 
-        $relatedJobs = Vacancy::with(['company', 'category', 'jobType', 'workplaceType', 'experienceLevel'])
+        $relatedJobs = Vacancy::with(['company', 'city', 'category', 'jobType', 'workplaceType', 'experienceLevel'])
             ->active()
             ->where('id', '!=', $job->id)
             ->where(function ($q) use ($job) {
@@ -266,7 +285,7 @@ class VacancyService
                     $q->where('category_id', $job->category_id);
                 }
             })
-            ->latest()
+            ->orderByDesc('updated_at')
             ->take(4)
             ->get();
 
@@ -292,13 +311,13 @@ class VacancyService
      */
     public function getCreationFormData(): array
     {
-        $categories = Category::parents()->with('children')->get();
-        $jobTypes = JobType::active()->get();
-        $workplaceTypes = WorkplaceType::active()->get();
-        $experienceLevels = ExperienceLevel::active()->get();
+        $categories = Category::cachedTree();
+        $jobTypes = JobType::cachedActive();
+        $workplaceTypes = WorkplaceType::cachedActive();
+        $experienceLevels = ExperienceLevel::cachedActive();
 
         // Skills for the form's tag picker (fetched here, not in blade).
-        $skills = Skill::active()->get()->sortBy('name')->values();
+        $skills = Skill::cachedActive();
 
         // If the logged-in user is registered as a company, pass their info
         // through so the form can auto-fill the company details.
@@ -481,7 +500,7 @@ class VacancyService
             'vacancy_id' => $vacancy->id,
             'user_id' => auth()->check() ? auth()->id() : null,
             'resume_id' => $data['resume_id'] ?? null,
-            'applicant_name' => $applicantName ?: 'İstifadəçi',
+            'applicant_name' => $applicantName ?: __('User'),
             'applicant_email' => $applicantEmail ?: 'user@jobing.az',
             'applicant_phone' => $applicantPhone,
             'resume_path' => $resumePath,

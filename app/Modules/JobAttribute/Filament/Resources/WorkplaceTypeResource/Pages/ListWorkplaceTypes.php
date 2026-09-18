@@ -13,7 +13,7 @@ class ListWorkplaceTypes extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make()->label('Yeni Çalışma Yeri Əlavə Et'),
+            Actions\CreateAction::make()->label(__('Add New Workplace')),
         ];
     }
 }

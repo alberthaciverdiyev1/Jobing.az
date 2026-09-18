@@ -3,7 +3,7 @@
 namespace App\Modules\Application\Filament\Resources\ApplicationResource\Pages;
 
 use App\Modules\Application\Filament\Resources\ApplicationResource;
-use Filament\Resources\Pages\CreateRecord;
+use App\Filament\Pages\CreateRecord;
 
 class CreateApplication extends CreateRecord
 {

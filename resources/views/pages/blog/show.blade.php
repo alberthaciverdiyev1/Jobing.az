@@ -1,7 +1,9 @@
 @extends('layouts.app')
 
-@section('title', $blog->title . ' - ' . config('app.full_name'))
-@section('meta_description', strip_tags((string) $blog->excerpt))
+@section('title', ($blog->meta_title ?: $blog->title) . ' - ' . config('app.full_name'))
+@section('meta_description', $blog->meta_description ?: strip_tags((string) $blog->excerpt))
+@section('og_type', 'article')
+@section('og_image', $blog->cover_image ? asset('storage/' . $blog->cover_image) : '')
 
 @section('content')
 <div class="bg-gray-50 min-h-screen pb-16">
@@ -9,7 +11,7 @@
 
         <!-- Breadcrumbs -->
         <nav class="flex items-center gap-2 text-xs text-gray-500 mb-6">
-            <a href="{{ route('home') }}" class="hover:text-primary transition">{{ __('Home') }}</a>
+            <a href="{{ route('jobs.index') }}" class="hover:text-primary transition">{{ __('Home') }}</a>
             <span>/</span>
             <a href="{{ route('blog.index') }}" class="hover:text-primary transition">{{ __('Career Blog') }}</a>
             <span>/</span>
@@ -34,25 +36,25 @@
             <span>•</span>
             <span>{{ $blog->reading_time }} {{ __('min read') }}</span>
             <span>•</span>
-            <span><i class="fas fa-eye text-[10px] mr-1"></i>{{ number_format($blog->views_count) }}</span>
+            <span><i class="fas fa-eye text-[11px] mr-1"></i>{{ number_format($blog->views_count) }}</span>
         </div>
 
-        <h1 class="text-2xl sm:text-3xl font-extrabold text-gray-900 tracking-tight leading-tight mb-6">{{ $blog->title }}</h1>
+        <h2 class="text-2xl sm:text-3xl font-semibold text-gray-900 tracking-tight leading-tight mb-6">{{ $blog->title }}</h2>
 
         <!-- Content -->
         <article class="prose prose-sm sm:prose-base max-w-none text-gray-700 leading-relaxed">
-            {!! $blog->content !!}
+            {!! sanitize_html($blog->content) !!}
         </article>
 
         <!-- Related -->
         @if($related->isNotEmpty())
         <div class="mt-12 pt-8 border-t border-gray-200">
-            <h3 class="font-bold text-gray-900 text-sm mb-4">{{ __('Related articles') }}</h3>
+            <h3 class="font-semibold text-gray-900 text-sm mb-4">{{ __('Related articles') }}</h3>
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 @foreach($related as $r)
                 <a href="{{ route('blog.show', $r->slug) }}" class="bg-white rounded-xl border border-gray-200 p-4 hover:border-primary hover:shadow-xs transition group">
-                    <span class="text-[10px] text-gray-400 block mb-1">{{ $r->formatted_date }}</span>
-                    <span class="text-xs font-bold text-gray-800 group-hover:text-primary transition leading-snug">{{ $r->title }}</span>
+                    <span class="text-[11px] text-gray-400 block mb-1">{{ $r->formatted_date }}</span>
+                    <span class="text-xs font-semibold text-gray-800 group-hover:text-primary transition leading-snug">{{ $r->title }}</span>
                 </a>
                 @endforeach
             </div>

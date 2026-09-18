@@ -13,9 +13,24 @@ class ContactRevealResource extends Resource
     protected static ?string $model = ContactReveal::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-eye';
-    protected static ?string $navigationGroup = 'Analitika';
-    protected static ?string $modelLabel = 'Əlaqə Açılması (Lead)';
-    protected static ?string $pluralModelLabel = 'Əlaqə Açılmaları (Lead)';
+    protected static ?string $navigationGroup = null;
+
+    public static function getNavigationGroup(): string
+    {
+        return __('Analytics');
+    }
+    protected static ?string $modelLabel = null;
+
+    public static function getModelLabel(): string
+    {
+        return __('Contact Reveal (Lead)');
+    }
+    protected static ?string $pluralModelLabel = null;
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('Contact Reveals (Lead)');
+    }
     protected static ?int $navigationSort = 10;
 
     public static function table(Table $table): Table
@@ -24,39 +39,39 @@ class ContactRevealResource extends Resource
             ->defaultSort('id', 'desc')
             ->columns([
                 Tables\Columns\TextColumn::make('listing_type')
-                    ->label('Növ')
+                    ->label(__('Type'))
                     ->badge()
                     ->formatStateUsing(fn (string $state): string => match ($state) {
                         'job_seeker' => 'İş Arayan',
-                        'vacancy' => 'Vakansiya',
+                        'vacancy' => __('Vacancy'),
                         default => $state,
                     })
                     ->color(fn (string $state): string => $state === 'job_seeker' ? 'info' : 'primary'),
 
                 Tables\Columns\TextColumn::make('listing_id')
-                    ->label('Elan ID')
+                    ->label(__('Listing ID'))
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('user.name')
-                    ->label('İstifadəçi')
+                    ->label(__('User'))
                     ->placeholder('—'),
 
                 Tables\Columns\TextColumn::make('ip_address')
-                    ->label('IP')
+                    ->label(__('IP'))
                     ->copyable()
                     ->toggleable(),
 
                 Tables\Columns\TextColumn::make('created_at')
-                    ->label('Tarix')
+                    ->label(__('Date'))
                     ->dateTime('d.m.Y H:i')
                     ->sortable(),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('listing_type')
-                    ->label('Növ')
+                    ->label(__('Type'))
                     ->options([
                         'job_seeker' => 'İş Arayan',
-                        'vacancy' => 'Vakansiya',
+                        'vacancy' => __('Vacancy'),
                     ]),
             ])
             ->bulkActions([

@@ -13,10 +13,10 @@ class MessagePlaceholders
     /** Formda göstəriləcək istifadə edilə bilən parametr siyahısı. */
     public static function tokensText(): string
     {
-        return '{user} və ya {applicant_name} — adayın adı, '
-            . '{position} və ya {vacancy_title} — vəzifə/pozisiya, '
-            . '{company} və ya {company_name} — şirkət adı, '
-            . '{date} — tarix.';
+        return __('{user} or {applicant_name} — candidate name, ')
+            . __('{position} or {vacancy_title} — position, ')
+            . __('{company} or {company_name} — company name, ')
+            . __('{date} — date.');
     }
 
     /**

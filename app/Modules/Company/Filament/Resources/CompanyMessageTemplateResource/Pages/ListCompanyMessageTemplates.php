@@ -13,7 +13,7 @@ class ListCompanyMessageTemplates extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make()->label('Şablon Əlavə Et'),
+            Actions\CreateAction::make()->label(__('Add Template')),
         ];
     }
 }

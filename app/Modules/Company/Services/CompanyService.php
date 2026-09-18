@@ -19,7 +19,7 @@ class CompanyService
     {
         $query = Company::publicProfile()
             ->withCount(['vacancies' => fn ($q) => $q->active()])
-            ->with(['city', 'vacancies' => fn ($q) => $q->active()->with(['jobType', 'workplaceType'])->latest()->take(3)]);
+            ->with(['city', 'vacancies' => fn ($q) => $q->active()->with(['company', 'city', 'jobType', 'workplaceType'])->orderByDesc('updated_at')->take(3)]);
 
         // Search query (name, city, about)
         if (!empty($filters['q'])) {
@@ -82,7 +82,7 @@ class CompanyService
      */
     public function getCompanyBySlug(string $slug): Company
     {
-        return Company::with(['vacancies' => fn ($q) => $q->active()->with(['category', 'jobType', 'workplaceType', 'experienceLevel'])->latest()])
+        return Company::with(['vacancies' => fn ($q) => $q->active()->with(['company', 'city', 'category', 'jobType', 'workplaceType', 'experienceLevel'])->orderByDesc('updated_at')])
             ->where('slug', $slug)
             ->firstOrFail();
     }

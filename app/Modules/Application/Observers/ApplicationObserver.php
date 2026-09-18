@@ -91,8 +91,8 @@ class ApplicationObserver
                 return;
             }
 
-            $companyName = $application->vacancy?->company?->name ?? 'İşəgötürən';
-            $vacancyTitle = $application->vacancy?->title ?? 'Vakansiya';
+            $companyName = $application->vacancy?->company?->name ?? __('Employer');
+            $vacancyTitle = $application->vacancy?->title ?? __('Vacancy');
             $status = $application->status;
 
             if (in_array($status, ['Interview', 'Mülakat', 'Müsahibə', 'Shortlisted', 'Seçilənlər'])) {
@@ -103,7 +103,7 @@ class ApplicationObserver
                     'heroicon-o-chat-bubble-left-right',
                     'warning',
                     '/user/my-applications',
-                    'Müraciətlərim'
+                    __('My Applications')
                 );
             } elseif (in_array($status, ['Accepted', 'Kabul', 'Teklif', 'Qəbul Edildi'])) {
                 self::notifyUser(
@@ -113,7 +113,7 @@ class ApplicationObserver
                     'heroicon-o-check-circle',
                     'success',
                     '/user/my-applications',
-                    'Müraciətlərim'
+                    __('My Applications')
                 );
             } elseif (in_array($status, ['Rejected', 'Red', 'İmtina Edildi'])) {
                 self::notifyUser(
@@ -123,7 +123,7 @@ class ApplicationObserver
                     'heroicon-o-x-circle',
                     'danger',
                     '/user/my-applications',
-                    'Müraciətlərim'
+                    __('My Applications')
                 );
             } elseif (in_array($status, ['Reviewed', 'İncelendi', 'Baxıldı'])) {
                 self::notifyUser(
@@ -133,7 +133,7 @@ class ApplicationObserver
                     'heroicon-o-eye',
                     'info',
                     '/user/my-applications',
-                    'Müraciətlərim'
+                    __('My Applications')
                 );
             } else {
                 self::notifyUser(
@@ -143,7 +143,7 @@ class ApplicationObserver
                     'heroicon-o-bell',
                     'gray',
                     '/user/my-applications',
-                    'Müraciətlərim'
+                    __('My Applications')
                 );
             }
         }

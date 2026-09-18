@@ -60,7 +60,7 @@ class AuthService
         $user = Auth::user();
 
         if (!$user) {
-            return route('home');
+            return route('jobs.index');
         }
 
         if ($user->is_admin) {
@@ -71,7 +71,7 @@ class AuthService
             return '/company';
         }
 
-        return route('home');
+        return route('jobs.index');
     }
 
     public function logout(): void

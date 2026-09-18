@@ -36,6 +36,18 @@ window.__JOBS_CONFIG__ = {
 
 <div class="bg-gray-50 min-h-screen pb-16" x-data="jobsManager()">
 
+    <!-- Hero -->
+    <x-list-hero :title="__('Vacancies')">
+        @if(isset($categories) && $categories->isNotEmpty())
+            @foreach($categories->take(6) as $cat)
+            <button type="button" @click="toggleCategory('{{ $cat->slug }}')"
+                    class="bg-white border border-gray-200 hover:border-primary hover:text-primary text-gray-700 text-sm px-3.5 py-2 rounded-lg transition cursor-pointer">
+                {{ $cat->name }}
+            </button>
+            @endforeach
+        @endif
+    </x-list-hero>
+
     <!-- Content Grid -->
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
@@ -47,7 +59,7 @@ window.__JOBS_CONFIG__ = {
                     <i class="fas fa-sliders-h text-primary"></i>
                     <span>{{ __('Filters') }}</span>
                 </span>
-                <i class="fas fa-chevron-down text-[10px] text-gray-400 transition-transform" :class="mobileFiltersOpen ? 'rotate-180' : ''"></i>
+                <i class="fas fa-chevron-down text-[11px] text-gray-400 transition-transform" :class="mobileFiltersOpen ? 'rotate-180' : ''"></i>
             </button>
         </div>
 
@@ -59,7 +71,7 @@ window.__JOBS_CONFIG__ = {
 
                     <!-- Filter Top Header -->
                     <div class="flex justify-between items-center pb-3 border-b border-gray-100">
-                        <h3 class="font-bold text-gray-900 text-sm flex items-center gap-2">
+                        <h3 class="font-semibold text-gray-900 text-sm flex items-center gap-2">
                             <i class="fas fa-filter text-xs text-primary"></i>
                             <span>{{ __('Filters') }}</span>
                         </h3>
@@ -71,29 +83,9 @@ window.__JOBS_CONFIG__ = {
                         </button>
                     </div>
 
-                    <!-- Search Input in Sidebar -->
-                    <div>
-                        <h4 class="text-xs font-bold text-gray-800 uppercase tracking-wider mb-2">{{ __('Search') }}</h4>
-                        <div class="relative">
-                            <input type="text"
-                                   x-model="q"
-                                   @input.debounce.400ms="applyFilters()"
-                                   @keydown.enter.prevent="applyFilters()"
-                                   placeholder="{{ __('Role or company...') }}"
-                                   class="w-full pl-8 pr-7 py-2 bg-gray-50 hover:bg-white focus:bg-white border border-gray-200 rounded-lg focus:outline-hidden focus:border-primary focus:ring-1 focus:ring-primary text-xs transition">
-                            <i class="fas fa-search absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400 text-[11px]"></i>
-                            <button type="button"
-                                    x-show="q"
-                                    @click="q = ''; applyFilters()"
-                                    class="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 text-xs cursor-pointer">
-                                <i class="fas fa-times"></i>
-                            </button>
-                        </div>
-                    </div>
-
                     <!-- Categories & Subcategories (collapsed by default, expand on demand) -->
                     <div class="pt-3 border-t border-gray-100">
-                        <h4 class="text-xs font-bold text-gray-800 uppercase tracking-wider mb-2.5">{{ __('Categories') }}</h4>
+                        <h4 class="text-xs font-medium text-gray-800 mb-2.5">{{ __('Categories') }}</h4>
 
                         <div class="space-y-1 text-xs" x-data="{ showAll: false }">
                             <!-- All Categories Option -->
@@ -108,20 +100,20 @@ window.__JOBS_CONFIG__ = {
                             @foreach($categories as $cat)
                             <div x-show="showAll || {{ $loop->index }} < 5">
                                 <div class="flex items-center justify-between rounded-lg transition group"
-                                     :class="category.includes('{{ $cat->slug }}') ? 'bg-orange-50 text-primary font-bold' : 'text-gray-700 hover:bg-gray-50'">
+                                     :class="category.includes('{{ $cat->slug }}') ? 'bg-orange-50 text-primary font-semibold' : 'text-gray-700 hover:bg-gray-50'">
                                     <button type="button"
                                             @click="toggleCategory('{{ $cat->slug }}')"
                                             class="flex-1 text-left px-2.5 py-2 truncate cursor-pointer"
                                             :aria-expanded="isAccordionOpen('{{ $cat->slug }}')">
                                         <span class="truncate">{{ $cat->name }}</span>
                                     </button>
-                                    <span class="text-[10px] text-gray-400 font-mono shrink-0" x-text="getCategoryCount('{{ $cat->slug }}', {{ $cat->vacancies_count }})"></span>
+                                    <span class="text-[11px] text-gray-400 font-mono shrink-0" x-text="getCategoryCount('{{ $cat->slug }}', {{ $cat->vacancies_count }})"></span>
                                     @if($cat->children->isNotEmpty())
                                     <button type="button"
                                             @click.stop="toggleAccordion('{{ $cat->slug }}')"
                                             class="p-2 pl-1.5 text-gray-400 hover:text-primary transition cursor-pointer"
                                             :aria-expanded="isAccordionOpen('{{ $cat->slug }}')">
-                                        <i class="fas fa-chevron-down text-[9px] transition-transform duration-200"
+                                        <i class="fas fa-chevron-down text-[10px] transition-transform duration-200"
                                            :class="isAccordionOpen('{{ $cat->slug }}') ? 'rotate-180 text-primary' : ''"></i>
                                     </button>
                                     @endif
@@ -138,15 +130,15 @@ window.__JOBS_CONFIG__ = {
                                     <button type="button"
                                             @click="toggleCategory('{{ $child->slug }}', '{{ $cat->slug }}')"
                                             class="w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg transition text-left cursor-pointer"
-                                            :class="category.includes('{{ $child->slug }}') ? 'bg-orange-50 text-primary font-bold' : 'text-gray-600 hover:text-primary hover:bg-gray-50'">
+                                            :class="category.includes('{{ $child->slug }}') ? 'bg-orange-50 text-primary font-semibold' : 'text-gray-600 hover:text-primary hover:bg-gray-50'">
                                         <span class="flex items-center gap-2 truncate">
-                                            <span class="w-3.5 h-3.5 rounded border flex items-center justify-center text-[8px] shrink-0"
+                                            <span class="w-3.5 h-3.5 rounded border flex items-center justify-center text-[9px] shrink-0"
                                                   :class="category.includes('{{ $child->slug }}') ? 'bg-primary border-primary text-white' : 'border-gray-300'">
                                                 <i class="fas fa-check" x-show="category.includes('{{ $child->slug }}')"></i>
                                             </span>
                                             <span class="truncate">{{ $child->name }}</span>
                                         </span>
-                                        <span class="text-[10px] text-gray-400 font-mono shrink-0 ml-2"
+                                        <span class="text-[11px] text-gray-400 font-mono shrink-0 ml-2"
                                               x-show="getCategoryCount('{{ $child->slug }}', {{ $child->vacancies_count }}) > 0"
                                               x-text="'(' + getCategoryCount('{{ $child->slug }}', {{ $child->vacancies_count }}) + ')'">
                                             ({{ $child->vacancies_count }})
@@ -160,8 +152,8 @@ window.__JOBS_CONFIG__ = {
 
                             @if($categories->count() > 5)
                             <button type="button" @click="showAll = !showAll"
-                                    class="w-full text-left px-2.5 py-1.5 text-[11px] font-semibold text-primary hover:text-primary-dark cursor-pointer">
-                                <i class="fas fa-chevron-down text-[8px] mr-1 transition-transform" :class="showAll ? 'rotate-180' : ''"></i>
+                                    class="w-full text-left px-2.5 py-1.5 text-[12px] font-semibold text-primary hover:text-primary-dark cursor-pointer">
+                                <i class="fas fa-chevron-down text-[9px] mr-1 transition-transform" :class="showAll ? 'rotate-180' : ''"></i>
                                 <span x-text="showAll ? '{{ __('Show less') }}' : '{{ __('Show more') }} (' + ({{ $categories->count() }} - 5) + ')'"></span>
                             </button>
                             @endif
@@ -171,12 +163,12 @@ window.__JOBS_CONFIG__ = {
                     <!-- Salary (Maaş) -->
                     <div class="pt-3 border-t border-gray-100">
                         <div class="flex items-center justify-between mb-2.5">
-                            <h4 class="text-xs font-bold text-gray-800 uppercase tracking-wider">{{ __('Salary (AZN)') }}</h4>
+                            <h4 class="text-xs font-medium text-gray-800">{{ __('Salary (AZN)') }}</h4>
                             <button type="button"
                                     x-show="min_salary || max_salary"
                                     x-cloak
                                     @click="min_salary = ''; max_salary = ''; applyFilters()"
-                                    class="text-[11px] text-primary hover:text-primary-dark font-medium transition cursor-pointer">
+                                    class="text-[12px] text-primary hover:text-primary-dark font-medium transition cursor-pointer">
                                 {{ __('Reset') }}
                             </button>
                         </div>
@@ -206,7 +198,7 @@ window.__JOBS_CONFIG__ = {
 
                     <!-- City (Şəhər) -->
                     <div class="pt-3 border-t border-gray-100">
-                        <h4 class="text-xs font-bold text-gray-800 uppercase tracking-wider mb-2.5">{{ __('City') }}</h4>
+                        <h4 class="text-xs font-medium text-gray-800 mb-2.5">{{ __('City') }}</h4>
                         <div class="space-y-1 text-xs" x-data="{ showAll: false }">
                             @forelse($cities as $city)
                             @php
@@ -217,28 +209,28 @@ window.__JOBS_CONFIG__ = {
                                     @click="toggleCity('{{ addslashes($citySlug) }}')"
                                     x-show="showAll || {{ $loop->index }} < 5"
                                     class="w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg transition text-left cursor-pointer"
-                                    :class="city.includes('{{ addslashes($citySlug) }}') ? 'bg-orange-50 text-primary font-bold' : 'text-gray-600 hover:bg-gray-50'">
+                                    :class="city.includes('{{ addslashes($citySlug) }}') ? 'bg-orange-50 text-primary font-semibold' : 'text-gray-600 hover:bg-gray-50'">
                                 <span class="flex items-center gap-2">
-                                    <span class="w-3.5 h-3.5 rounded-full border flex items-center justify-center text-[8px]"
+                                    <span class="w-3.5 h-3.5 rounded-full border flex items-center justify-center text-[9px]"
                                           :class="city.includes('{{ addslashes($citySlug) }}') ? 'border-primary bg-primary text-white' : 'border-gray-300'">
                                         <i class="fas fa-check" x-show="city.includes('{{ addslashes($citySlug) }}')"></i>
                                     </span>
                                     <span>{{ $cityName }}</span>
                                 </span>
-                                <span class="text-[10px] text-gray-400 font-mono"
+                                <span class="text-[11px] text-gray-400 font-mono"
                                       x-show="getCount('cities', '{{ addslashes($citySlug) }}', {{ is_object($city) ? (int)$city->vacancies_count : 0 }}) > 0"
                                       x-text="'(' + getCount('cities', '{{ addslashes($citySlug) }}', {{ is_object($city) ? (int)$city->vacancies_count : 0 }}) + ')'">
                                     ({{ is_object($city) ? (int)$city->vacancies_count : 0 }})
                                 </span>
                             </button>
                             @empty
-                            <p class="text-[11px] text-gray-400 px-2.5 py-1.5">{{ __('City is not available') }}</p>
+                            <p class="text-[12px] text-gray-400 px-2.5 py-1.5">{{ __('City is not available') }}</p>
                             @endforelse
 
                             @if($cities->count() > 5)
                             <button type="button" @click="showAll = !showAll"
-                                    class="w-full text-left px-2.5 py-1.5 text-[11px] font-semibold text-primary hover:text-primary-dark cursor-pointer">
-                                <i class="fas fa-chevron-down text-[8px] mr-1 transition-transform" :class="showAll ? 'rotate-180' : ''"></i>
+                                    class="w-full text-left px-2.5 py-1.5 text-[12px] font-semibold text-primary hover:text-primary-dark cursor-pointer">
+                                <i class="fas fa-chevron-down text-[9px] mr-1 transition-transform" :class="showAll ? 'rotate-180' : ''"></i>
                                 <span x-text="showAll ? '{{ __('Show less') }}' : '{{ __('Show more') }} (' + ({{ $cities->count() }} - 5) + ')'"></span>
                             </button>
                             @endif
@@ -247,22 +239,22 @@ window.__JOBS_CONFIG__ = {
 
                     <!-- Work Type (İş rejimi) -->
                     <div class="pt-3 border-t border-gray-100">
-                        <h4 class="text-xs font-bold text-gray-800 uppercase tracking-wider mb-2.5">{{ __('Job type') }}</h4>
+                        <h4 class="text-xs font-medium text-gray-800 mb-2.5">{{ __('Job type') }}</h4>
                         <div class="space-y-1 text-xs" x-data="{ showAll: false }">
                             @foreach($jobTypes as $jt)
                             <button type="button"
                                     @click="toggleFilter('type', '{{ $jt->slug }}')"
                                     x-show="showAll || {{ $loop->index }} < 5"
                                     class="w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg transition text-left cursor-pointer"
-                                    :class="type.includes('{{ $jt->slug }}') ? 'bg-orange-50 text-primary font-bold' : 'text-gray-600 hover:bg-gray-50'">
+                                    :class="type.includes('{{ $jt->slug }}') ? 'bg-orange-50 text-primary font-semibold' : 'text-gray-600 hover:bg-gray-50'">
                                 <span class="flex items-center gap-2">
-                                    <span class="w-3.5 h-3.5 rounded border flex items-center justify-center text-[8px]"
+                                    <span class="w-3.5 h-3.5 rounded border flex items-center justify-center text-[9px]"
                                           :class="type.includes('{{ $jt->slug }}') ? 'bg-primary border-primary text-white' : 'border-gray-300'">
                                         <i class="fas fa-check" x-show="type.includes('{{ $jt->slug }}')"></i>
                                     </span>
                                     <span>{{ $jt->name }}</span>
                                 </span>
-                                <span class="text-[10px] text-gray-400 font-mono"
+                                <span class="text-[11px] text-gray-400 font-mono"
                                       x-show="getCount('jobTypes', '{{ $jt->slug }}', {{ $jt->vacancies_count }}) > 0"
                                       x-text="'(' + getCount('jobTypes', '{{ $jt->slug }}', {{ $jt->vacancies_count }}) + ')'">
                                     ({{ $jt->vacancies_count }})
@@ -272,8 +264,8 @@ window.__JOBS_CONFIG__ = {
 
                             @if($jobTypes->count() > 5)
                             <button type="button" @click="showAll = !showAll"
-                                    class="w-full text-left px-2.5 py-1.5 text-[11px] font-semibold text-primary hover:text-primary-dark cursor-pointer">
-                                <i class="fas fa-chevron-down text-[8px] mr-1 transition-transform" :class="showAll ? 'rotate-180' : ''"></i>
+                                    class="w-full text-left px-2.5 py-1.5 text-[12px] font-semibold text-primary hover:text-primary-dark cursor-pointer">
+                                <i class="fas fa-chevron-down text-[9px] mr-1 transition-transform" :class="showAll ? 'rotate-180' : ''"></i>
                                 <span x-text="showAll ? '{{ __('Show less') }}' : '{{ __('Show more') }} (' + ({{ $jobTypes->count() }} - 5) + ')'"></span>
                             </button>
                             @endif
@@ -282,22 +274,22 @@ window.__JOBS_CONFIG__ = {
 
                     <!-- Workplace Type (Çalışma Yeri) -->
                     <div class="pt-3 border-t border-gray-100">
-                        <h4 class="text-xs font-bold text-gray-800 uppercase tracking-wider mb-2.5">{{ __('Workplace') }}</h4>
+                        <h4 class="text-xs font-medium text-gray-800 mb-2.5">{{ __('Workplace') }}</h4>
                         <div class="space-y-1 text-xs" x-data="{ showAll: false }">
                             @foreach($workplaceTypes as $wt)
                             <button type="button"
                                     @click="toggleFilter('workplace', '{{ $wt->slug }}')"
                                     x-show="showAll || {{ $loop->index }} < 5"
                                     class="w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg transition text-left cursor-pointer"
-                                    :class="workplace.includes('{{ $wt->slug }}') ? 'bg-orange-50 text-primary font-bold' : 'text-gray-600 hover:bg-gray-50'">
+                                    :class="workplace.includes('{{ $wt->slug }}') ? 'bg-orange-50 text-primary font-semibold' : 'text-gray-600 hover:bg-gray-50'">
                                 <span class="flex items-center gap-2">
-                                    <span class="w-3.5 h-3.5 rounded border flex items-center justify-center text-[8px]"
+                                    <span class="w-3.5 h-3.5 rounded border flex items-center justify-center text-[9px]"
                                           :class="workplace.includes('{{ $wt->slug }}') ? 'bg-primary border-primary text-white' : 'border-gray-300'">
                                         <i class="fas fa-check" x-show="workplace.includes('{{ $wt->slug }}')"></i>
                                     </span>
                                     <span>{{ $wt->name }}</span>
                                 </span>
-                                <span class="text-[10px] text-gray-400 font-mono"
+                                <span class="text-[11px] text-gray-400 font-mono"
                                       x-show="getCount('workplaceTypes', '{{ $wt->slug }}', {{ $wt->vacancies_count }}) > 0"
                                       x-text="'(' + getCount('workplaceTypes', '{{ $wt->slug }}', {{ $wt->vacancies_count }}) + ')'">
                                     ({{ $wt->vacancies_count }})
@@ -307,8 +299,8 @@ window.__JOBS_CONFIG__ = {
 
                             @if($workplaceTypes->count() > 5)
                             <button type="button" @click="showAll = !showAll"
-                                    class="w-full text-left px-2.5 py-1.5 text-[11px] font-semibold text-primary hover:text-primary-dark cursor-pointer">
-                                <i class="fas fa-chevron-down text-[8px] mr-1 transition-transform" :class="showAll ? 'rotate-180' : ''"></i>
+                                    class="w-full text-left px-2.5 py-1.5 text-[12px] font-semibold text-primary hover:text-primary-dark cursor-pointer">
+                                <i class="fas fa-chevron-down text-[9px] mr-1 transition-transform" :class="showAll ? 'rotate-180' : ''"></i>
                                 <span x-text="showAll ? '{{ __('Show less') }}' : '{{ __('Show more') }} (' + ({{ $workplaceTypes->count() }} - 5) + ')'"></span>
                             </button>
                             @endif
@@ -317,22 +309,22 @@ window.__JOBS_CONFIG__ = {
 
                     <!-- Experience Level (Təcrübə Səviyyəsi) -->
                     <div class="pt-3 border-t border-gray-100">
-                        <h4 class="text-xs font-bold text-gray-800 uppercase tracking-wider mb-2.5">{{ __('Experience Level') }}</h4>
+                        <h4 class="text-xs font-medium text-gray-800 mb-2.5">{{ __('Experience Level') }}</h4>
                         <div class="space-y-1 text-xs" x-data="{ showAll: false }">
                             @foreach($experienceLevels as $el)
                             <button type="button"
                                     @click="toggleFilter('experience', '{{ $el->slug }}')"
                                     x-show="showAll || {{ $loop->index }} < 5"
                                     class="w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg transition text-left cursor-pointer"
-                                    :class="experience.includes('{{ $el->slug }}') ? 'bg-orange-50 text-primary font-bold' : 'text-gray-600 hover:bg-gray-50'">
+                                    :class="experience.includes('{{ $el->slug }}') ? 'bg-orange-50 text-primary font-semibold' : 'text-gray-600 hover:bg-gray-50'">
                                 <span class="flex items-center gap-2">
-                                    <span class="w-3.5 h-3.5 rounded border flex items-center justify-center text-[8px]"
+                                    <span class="w-3.5 h-3.5 rounded border flex items-center justify-center text-[9px]"
                                           :class="experience.includes('{{ $el->slug }}') ? 'bg-primary border-primary text-white' : 'border-gray-300'">
                                         <i class="fas fa-check" x-show="experience.includes('{{ $el->slug }}')"></i>
                                     </span>
                                     <span>{{ $el->name }}</span>
                                 </span>
-                                <span class="text-[10px] text-gray-400 font-mono"
+                                <span class="text-[11px] text-gray-400 font-mono"
                                       x-show="getCount('experienceLevels', '{{ $el->slug }}', {{ $el->vacancies_count }}) > 0"
                                       x-text="'(' + getCount('experienceLevels', '{{ $el->slug }}', {{ $el->vacancies_count }}) + ')'">
                                     ({{ $el->vacancies_count }})
@@ -342,8 +334,8 @@ window.__JOBS_CONFIG__ = {
 
                             @if($experienceLevels->count() > 5)
                             <button type="button" @click="showAll = !showAll"
-                                    class="w-full text-left px-2.5 py-1.5 text-[11px] font-semibold text-primary hover:text-primary-dark cursor-pointer">
-                                <i class="fas fa-chevron-down text-[8px] mr-1 transition-transform" :class="showAll ? 'rotate-180' : ''"></i>
+                                    class="w-full text-left px-2.5 py-1.5 text-[12px] font-semibold text-primary hover:text-primary-dark cursor-pointer">
+                                <i class="fas fa-chevron-down text-[9px] mr-1 transition-transform" :class="showAll ? 'rotate-180' : ''"></i>
                                 <span x-text="showAll ? '{{ __('Show less') }}' : '{{ __('Show more') }} (' + ({{ $experienceLevels->count() }} - 5) + ')'"></span>
                             </button>
                             @endif
@@ -358,16 +350,13 @@ window.__JOBS_CONFIG__ = {
 
                 <!-- List Header (Title + Count + Sorting) -->
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-5 pb-3 border-b border-gray-200">
-                    <div>
-                        <h2 class="text-lg md:text-xl font-bold text-gray-900 leading-tight flex items-center gap-2">
-                            <span>{{ __('Vacancies') }}</span>
-                            <span x-show="isLoading" class="inline-block animate-spin text-primary text-xs">
-                                <i class="fas fa-spinner"></i>
-                            </span>
-                        </h2>
-                        <p class="text-xs text-gray-500 mt-0.5">
-                            <span class="font-bold text-primary" x-text="totalCount"></span> {{ __('active job listings found') }}
+                    <div class="flex items-center gap-2">
+                        <p class="text-sm text-gray-500">
+                            <span class="font-semibold text-primary" x-text="totalCount"></span> {{ __('active job listings found') }}
                         </p>
+                        <span x-show="isLoading" class="inline-block animate-spin text-primary text-xs">
+                            <i class="fas fa-spinner"></i>
+                        </span>
                     </div>
 
                     <div class="flex items-center gap-2 text-xs">

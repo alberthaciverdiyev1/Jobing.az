@@ -3,7 +3,7 @@
 namespace App\Modules\JobAttribute\Filament\Resources\SkillResource\Pages;
 
 use App\Modules\JobAttribute\Filament\Resources\SkillResource;
-use Filament\Resources\Pages\CreateRecord;
+use App\Filament\Pages\CreateRecord;
 
 class CreateSkill extends CreateRecord
 {

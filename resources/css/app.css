@@ -6,50 +6,68 @@
 @source '../**/*.js';
 
 @theme {
-    --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --font-display: 'Space Grotesk', 'Instrument Sans', ui-sans-serif, system-ui, sans-serif;
     --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-    --color-primary: #fb923c;
-    --color-primary-dark: #ea580c;
-    --color-secondary: #f8fafc;
-    --color-accent: #f59e0b;
-    --color-dark: #1e293b;
+
+    /* Type scale: nudged up ~1px across the small end; body reads larger. */
+    --text-xs: 0.8125rem;    /* 13px */
+    --text-xs--line-height: 1.125rem;
+    --text-sm: 0.9375rem;    /* 15px */
+    --text-sm--line-height: 1.375rem;
+    --text-base: 1.0625rem;  /* 17px */
+    --text-base--line-height: 1.625rem;
+    --text-lg: 1.1875rem;    /* 19px */
+    --text-xl: 1.3125rem;    /* 21px */
+    --text-2xl: 1.5rem;      /* 24px */
+
+    /* Brand palette: jobing.az (orange #FF8C00 / #CC7000), neutral Tailwind greys. */
+    --color-primary: #ff8c00;
+    --color-primary-dark: #cc7000;
+    --color-secondary: #f9fafb;
+    --color-accent: #ff8c00;
+    --color-dark: #1f2937;
+
+    /* Align Tailwind's orange scale with the brand where it differs. */
+    --color-orange-500: #ff8c00;
+    --color-orange-600: #cc7000;
+    --color-orange-700: #a35a00;
+
+    /* Shape language: softly rounded — between the sharp 2px and the old 16px. */
+    --radius-sm: 0.125rem;
+    --radius-md: 0.375rem;
+    --radius-lg: 0.375rem;
+    --radius-xl: 0.5rem;
+    --radius-2xl: 0.625rem;
+    --radius-3xl: 0.75rem;
+    --radius-4xl: 1rem;
+
+    /* Elevation: whisper-light lift; separation still comes mostly from borders. */
+    --shadow-2xs: 0 1px 2px 0 rgb(0 0 0 / 0.04);
+    --shadow-xs: 0 1px 3px 0 rgb(0 0 0 / 0.06);
+    --shadow-sm: 0 1px 4px 0 rgb(0 0 0 / 0.07);
 }
 
-@keyframes fadeInUp {
-    from { 
-        opacity: 0; 
-        transform: translateY(24px); 
+/* Hero decorative icons: gentle floating drift. */
+@keyframes heroFloat {
+    0%, 100% { transform: translate3d(0, 0, 0) rotate(var(--hero-rot, 0deg)); }
+    50%      { transform: translate3d(0, -26px, 0) rotate(var(--hero-rot, 0deg)); }
+}
+
+.hero-icon {
+    animation: heroFloat 7s ease-in-out infinite;
+    will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .hero-icon { animation: none; }
+}
+
+/* Headings use the display face at a single weight (600); hierarchy comes from size, not weight. */
+@layer base {
+    h1, h2, h3, h4, h5, h6 {
+        font-family: var(--font-display);
+        font-weight: 600;
     }
-    to { 
-        opacity: 1; 
-        transform: translateY(0); 
-    }
 }
 
-.animate-fade-in-up {
-    animation: fadeInUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-.delay-100 { animation-delay: 100ms; }
-.delay-200 { animation-delay: 200ms; }
-.delay-300 { animation-delay: 300ms; }
-
-.glass-nav {
-    background: rgba(255, 255, 255, 0.92);
-    backdrop-filter: blur(12px);
-}
-
-@keyframes marquee {
-    0% { transform: translateX(0%); }
-    100% { transform: translateX(-50%); }
-}
-
-.animate-marquee {
-    display: flex;
-    width: max-content;
-    animation: marquee 28s linear infinite;
-}
-
-.animate-marquee:hover {
-    animation-play-state: paused;
-}

@@ -66,12 +66,21 @@ class Company extends Model
      * (registered user account, verified, logo, or about description),
      * rather than just an ad-hoc name entered during unauthenticated job posting.
      */
+    /** Memoized nəticə (eyni sorğuda təkrar DB sorğusunun qarşısını alır). */
+    protected ?bool $hasPublicProfileMemo = null;
+
     public function hasPublicProfile(): bool
     {
-        return $this->users()->exists()
-            || $this->is_verified
-            || !empty($this->logo)
-            || !empty($this->about);
+        if ($this->hasPublicProfileMemo !== null) {
+            return $this->hasPublicProfileMemo;
+        }
+
+        // Ucuz şərtlərə əvvəlcə bax — DB sorğusuna ehtiyac qalmaya bilər.
+        if ($this->is_verified || ! empty($this->logo) || ! empty($this->about)) {
+            return $this->hasPublicProfileMemo = true;
+        }
+
+        return $this->hasPublicProfileMemo = $this->users()->exists();
     }
 
     public function scopePublicProfile(\Illuminate\Database\Eloquent\Builder $query): \Illuminate\Database\Eloquent\Builder

@@ -17,9 +17,24 @@ class MyApplicationsResource extends Resource
     protected static ?string $model = Application::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-document-text';
-    protected static ?string $navigationLabel = 'Başvurularım';
-    protected static ?string $modelLabel = 'Başvurum';
-    protected static ?string $pluralModelLabel = 'Başvurularım';
+    protected static ?string $navigationLabel = null;
+
+    public static function getNavigationLabel(): string
+    {
+        return __('My Applications');
+    }
+    protected static ?string $modelLabel = null;
+
+    public static function getModelLabel(): string
+    {
+        return __('My Application');
+    }
+    protected static ?string $pluralModelLabel = null;
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('My Applications');
+    }
     protected static ?int $navigationSort = 1;
 
     public static function canViewAny(): bool
@@ -51,18 +66,18 @@ class MyApplicationsResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('vacancy.title')
-                    ->label('Pozisyon')
+                    ->label(__('Position'))
                     ->searchable()
                     ->sortable()
                     ->weight('bold')
                     ->limit(40),
 
                 Tables\Columns\TextColumn::make('vacancy.company.name')
-                    ->label('Şirkət')
+                    ->label(__('Company'))
                     ->searchable(),
 
                 Tables\Columns\TextColumn::make('status')
-                    ->label('Durum')
+                    ->label(__('Status'))
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
                         'Beklemede' => 'gray',
@@ -75,7 +90,7 @@ class MyApplicationsResource extends Resource
 
                 // Şirkət cavabı varsa və hələ oxunmayıbsa "Yeni mesaj" göstər.
                 Tables\Columns\TextColumn::make('reply_marker')
-                    ->label('Cavab')
+                    ->label(__('Answer'))
                     ->state(fn (Application $record): string => $record->hasUnseenReply()
                         ? __('New message')
                         : '—')
@@ -84,7 +99,7 @@ class MyApplicationsResource extends Resource
                     ->icon(fn (string $state) => $state === '—' ? null : 'heroicon-o-chat-bubble-left-right'),
 
                 Tables\Columns\TextColumn::make('created_at')
-                    ->label('Başvuru Tarihi')
+                    ->label(__('Application Date'))
                     ->dateTime('d.m.Y')
                     ->sortable(),
             ])
@@ -103,47 +118,47 @@ class MyApplicationsResource extends Resource
     {
         return $infolist
             ->schema([
-                Section::make('Vakansiya Detalları')
+                Section::make(__('Vacancy Details'))
                     ->description(__('Information about the vacancy you applied to.'))
                     ->schema([
                         TextEntry::make('vacancy.company.name')
-                            ->label('Şirkət')
+                            ->label(__('Company'))
                             ->icon('heroicon-o-building-office-2'),
                         TextEntry::make('vacancy.title')
-                            ->label('Pozisyon')
+                            ->label(__('Position'))
                             ->weight('bold')
                             ->color('primary')
                             ->url(fn (Application $record): ?string => $record->vacancy
                                 ? route('jobs.show', $record->vacancy->slug)
                                 : null),
                         TextEntry::make('vacancy.workplace_type_name')
-                            ->label('İş Yeri')
+                            ->label(__('Workplace'))
                             ->placeholder('—'),
                         TextEntry::make('vacancy.job_type_name')
-                            ->label('İş Rejimi')
+                            ->label(__('Job Type'))
                             ->placeholder('—'),
                         TextEntry::make('vacancy.experience_level_name')
-                            ->label('Təcrübə')
+                            ->label(__('Experience'))
                             ->placeholder('—'),
                         TextEntry::make('vacancy.city_name')
-                            ->label('Şəhər')
+                            ->label(__('City'))
                             ->icon('heroicon-o-map-pin')
                             ->placeholder('—'),
                         TextEntry::make('vacancy.formatted_salary')
-                            ->label('Maaş')
+                            ->label(__('Salary'))
                             ->badge()
                             ->color('success'),
                         TextEntry::make('vacancy.deadline')
-                            ->label('Son Müraciət Tarixi')
+                            ->label(__('Last Application Date'))
                             ->date('d.m.Y')
                             ->placeholder('—'),
                     ])->columns(2),
 
-                Section::make('Müraciətim')
+                Section::make(__('My Application'))
                     ->description(__("The status of your application and the company's reply."))
                     ->schema([
                         TextEntry::make('status')
-                            ->label('Durum')
+                            ->label(__('Status'))
                             ->badge()
                             ->color(fn (string $state): string => match ($state) {
                                 'Beklemede' => 'gray',
@@ -154,27 +169,27 @@ class MyApplicationsResource extends Resource
                                 default => 'primary',
                             })
                             ->formatStateUsing(fn (string $state): string => match ($state) {
-                                'Beklemede' => 'Gözləmədə',
-                                'İncelendi' => 'Baxılıb',
-                                'Mülakat' => 'Müsahibəyə çağrıldı',
-                                'Teklif' => 'Təklif göndərildi',
-                                'Kabul' => 'Qəbul edildi',
-                                'Red' => 'Rədd edildi',
+                                'Beklemede' => __('Pending'),
+                                'İncelendi' => __('Viewed'),
+                                'Mülakat' => __('Invited to Interview'),
+                                'Teklif' => __('Offer Sent'),
+                                'Kabul' => __('Accepted'),
+                                'Red' => __('Rejected'),
                                 default => $state,
                             }),
                         TextEntry::make('created_at')
-                            ->label('Müraciət Tarixi')
+                            ->label(__('Application Date'))
                             ->dateTime('d.m.Y H:i'),
                         TextEntry::make('viewed_at')
-                            ->label('Şirkət Baxışı')
+                            ->label(__('Company Views'))
                             ->dateTime('d.m.Y H:i')
                             ->placeholder(__('The company has not viewed it yet')),
                         TextEntry::make('updated_at')
-                            ->label('Son Yenilənmə')
+                            ->label(__('Last Updated'))
                             ->dateTime('d.m.Y H:i')
                             ->placeholder('—'),
                         TextEntry::make('notes')
-                            ->label('Şirkətin Cavabı')
+                            ->label(__('Company Reply'))
                             ->placeholder(__('The company has not replied yet'))
                             ->html()
                             ->formatStateUsing(function (?string $state, ?Application $record): string {

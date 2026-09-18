@@ -93,9 +93,9 @@ class ResumeController extends Controller
             ->pluck('count', 'location')
             ->toArray();
 
-        $categories = \App\Modules\Category\Models\Category::parents()
+        $categories = \Illuminate\Support\Facades\Cache::remember('ref.categories.with_skills', 3600, fn () => \App\Modules\Category\Models\Category::parents()
             ->with(['skills' => fn ($q) => $q->active(), 'children.skills' => fn ($q) => $q->active()])
-            ->get();
+            ->get());
 
         // Build array of skills and resume count per category
         $categorySkillsMap = [];
@@ -137,7 +137,7 @@ class ResumeController extends Controller
             }
         }
 
-        $popularSkills = Skill::active()->orderBy('order')->take(25)->get();
+        $popularSkills = \Illuminate\Support\Facades\Cache::remember('ref.skills.popular', 3600, fn () => Skill::active()->orderBy('order')->take(25)->get());
 
         $isAjax = ($request->ajax() || $request->header('X-Partial') || $request->wantsJson()) && !$request->acceptsHtml();
 

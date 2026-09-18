@@ -13,12 +13,13 @@ class PageSeo extends Model
 
     protected $table = 'page_seos';
 
-    public array $translatable = ['title', 'description', 'keywords'];
+    public array $translatable = ['h1', 'title', 'description', 'keywords'];
 
     protected $fillable = [
         'page_key',
         'page_name',
         'route_name',
+        'h1',
         'title',
         'description',
         'keywords',
@@ -28,6 +29,7 @@ class PageSeo extends Model
     ];
 
     protected $casts = [
+        'h1' => 'array',
         'title' => 'array',
         'description' => 'array',
         'keywords' => 'array',
@@ -158,7 +160,7 @@ class PageSeo extends Model
             ],
             [
                 'page_key' => 'job_seekers',
-                'page_name' => 'İş Arıyorum',
+                'page_name' => __('Job Seeking'),
                 'route_name' => 'job-seekers.index',
                 'sort_order' => 4,
                 'title' => ['az' => 'İş Axtarıram — Jobing.az', 'tr' => 'İş Arıyorum — Jobing.az', 'en' => 'I Am Looking for Work — Jobing.az', 'ru' => 'Ищу работу — Jobing.az'],
@@ -174,7 +176,7 @@ class PageSeo extends Model
             ],
             [
                 'page_key' => 'faq',
-                'page_name' => 'Sıkça Sorulan Sorular',
+                'page_name' => __('Frequently Asked Questions'),
                 'route_name' => 'faq.index',
                 'sort_order' => 6,
                 'title' => ['az' => 'Tez-tez Verilən Suallar — Jobing.az', 'tr' => 'Sıkça Sorulan Sorular — Jobing.az', 'en' => 'FAQ — Jobing.az', 'ru' => 'Часто задаваемые вопросы — Jobing.az'],

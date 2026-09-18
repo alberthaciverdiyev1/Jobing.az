@@ -21,18 +21,18 @@ class UserStatsOverview extends BaseWidget
         $totalViews = (clone $seekerQuery)->sum('views_count');
 
         return [
-            Stat::make('Göndərilən Müraciətlər', $total)
-                ->description('Şirkətlərə göndərdiyiniz CV-lər')
+            Stat::make(__('Submitted Applications'), $total)
+                ->description(__('CVs you sent to companies'))
                 ->descriptionIcon('heroicon-m-document-text')
                 ->color('primary'),
 
-            Stat::make('Aktiv Elanlarım', $seekerCount)
-                ->description('Yayınlanan iş axtarış elanlarınız')
+            Stat::make(__('My Active Listings'), $seekerCount)
+                ->description(__('Your published job-seeking listings'))
                 ->descriptionIcon('heroicon-m-user-circle')
                 ->color('emerald'),
 
-            Stat::make('Elan Baxış Sayı', $totalViews)
-                ->description('İşəgötürənlərin baxış sayı')
+            Stat::make(__('Listing View Count'), $totalViews)
+                ->description(__('Employer view count'))
                 ->descriptionIcon('heroicon-m-eye')
                 ->color('info'),
         ];

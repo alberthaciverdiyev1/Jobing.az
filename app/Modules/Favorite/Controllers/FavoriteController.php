@@ -47,13 +47,13 @@ class FavoriteController extends Controller
                 'success' => false,
                 'auth_required' => true,
                 'redirect_url' => route('login'),
-                'message' => 'Seçilmişlərə əlavə etmək üçün daxil olmalısınız.',
+                'message' => __('You must sign in to add to favorites.'),
             ], 401);
         }
 
         $vacancyId = (int) $request->input('vacancy_id');
         if (! $vacancyId || ! Vacancy::where('id', $vacancyId)->exists()) {
-            return response()->json(['success' => false, 'message' => 'Vakansiya tapılmadı'], 404);
+            return response()->json(['success' => false, 'message' => __('Vacancy not found')], 404);
         }
 
         $existing = Favorite::where('user_id', $userId)

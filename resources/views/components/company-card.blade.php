@@ -9,7 +9,7 @@
                 <x-company-avatar :name="$company->name" :logo="$company->logo" size="lg" />
 
                 <div class="min-w-0">
-                    <h3 class="font-bold text-gray-900 group-hover:text-primary text-base transition flex items-center gap-1.5 leading-tight truncate">
+                    <h3 class="font-semibold text-gray-900 group-hover:text-primary text-base transition flex items-center gap-1.5 leading-tight truncate">
                         <a href="{{ route('companies.show', $company->slug) }}" class="focus:outline-hidden before:absolute before:inset-0 truncate">
                             {{ $company->name }}
                         </a>
@@ -18,7 +18,7 @@
                         @endif
                     </h3>
                     <span class="text-xs text-gray-500 flex items-center gap-1 mt-1 truncate">
-                        <i class="fas fa-map-marker-alt text-gray-400 text-[11px]"></i>
+                        <i class="fas fa-map-marker-alt text-gray-400 text-[12px]"></i>
                         <span>{{ $company->city_name ?: __('Baku, Azerbaijan') }}</span>
                     </span>
                 </div>
@@ -26,12 +26,12 @@
 
             <!-- Vacancy Count Pill -->
             @if($company->vacancies_count > 0)
-            <span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-orange-50 text-primary border border-orange-100 font-mono shrink-0 flex items-center gap-1.5 relative z-10">
+            <span class="px-2.5 py-1 rounded-full text-[12px] font-semibold bg-orange-50 text-primary border border-orange-100 font-mono shrink-0 flex items-center gap-1.5 relative z-10">
 {{--                <span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>--}}
                 <span>{{ $company->vacancies_count }} {{ __('listing') }}</span>
             </span>
             @else
-            <span class="px-2 py-0.5 rounded-full text-[10px] font-medium bg-gray-50 text-gray-400 border border-gray-100 shrink-0 relative z-10">
+            <span class="px-2 py-0.5 rounded-full text-[11px] font-medium bg-gray-50 text-gray-400 border border-gray-100 shrink-0 relative z-10">
                 {{ __('0 listings') }}
             </span>
             @endif
@@ -47,21 +47,21 @@
     <div class="pt-4 mt-4 border-t border-gray-100 flex items-center justify-between text-xs">
         @if($company->website)
         <a href="{{ $company->website }}" target="_blank" rel="noopener noreferrer"
-           class="text-gray-400 hover:text-gray-600 flex items-center gap-1 text-[11px] transition relative z-10"
+           class="text-gray-400 hover:text-gray-600 flex items-center gap-1 text-[12px] transition relative z-10"
            onclick="event.stopPropagation()">
-            <i class="fas fa-globe text-[10px]"></i>
+            <i class="fas fa-globe text-[11px]"></i>
             <span class="truncate max-w-[130px]">{{ preg_replace('#^https?://(www\.)?#', '', $company->website) }}</span>
         </a>
         @else
-        <span class="text-gray-400 text-[11px] flex items-center gap-1">
-            <i class="far fa-clock text-[10px]"></i>
+        <span class="text-gray-400 text-[12px] flex items-center gap-1">
+            <i class="far fa-clock text-[11px]"></i>
             <span>{{ $company->created_at ? $company->created_at->translatedFormat('M Y') : '' }}</span>
         </span>
         @endif
 
-        <span class="text-primary group-hover:text-primary-dark font-bold flex items-center gap-1 transition">
+        <span class="text-primary group-hover:text-primary-dark font-semibold flex items-center gap-1 transition">
             <span>{{ __('View company') }}</span>
-            <i class="fas fa-arrow-right text-[10px] group-hover:translate-x-1 transition duration-200"></i>
+            <i class="fas fa-arrow-right text-[11px] group-hover:translate-x-1 transition duration-200"></i>
         </span>
     </div>
 

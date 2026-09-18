@@ -10,25 +10,30 @@ class ApplicationsRelationManager extends RelationManager
 {
     protected static string $relationship = 'applications';
 
-    protected static ?string $title = 'Başvurular';
+    protected static ?string $title = null;
+
+    public static function getTitle(\Illuminate\Database\Eloquent\Model $ownerRecord, string $pageClass): string
+    {
+        return __('Applications');
+    }
 
     public function table(Table $table): Table
     {
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('applicant_name')
-                    ->label('Aday Adı')
+                    ->label(__('Candidate Name'))
                     ->searchable()
                     ->sortable()
                     ->weight('bold'),
 
                 Tables\Columns\TextColumn::make('applicant_email')
-                    ->label('E-Posta')
+                    ->label(__('Email'))
                     ->searchable()
                     ->copyable(),
 
                 Tables\Columns\TextColumn::make('status')
-                    ->label('Durum')
+                    ->label(__('Status'))
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
                         'Beklemede' => 'gray',
@@ -40,21 +45,21 @@ class ApplicationsRelationManager extends RelationManager
                     }),
 
                 Tables\Columns\TextColumn::make('created_at')
-                    ->label('Başvuru Tarihi')
+                    ->label(__('Application Date'))
                     ->dateTime('d.m.Y H:i')
                     ->sortable(),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('status')
                     ->options([
-                        'Beklemede' => 'Beklemede',
-                        'İncelendi' => 'İncelendi',
-                        'Mülakat' => 'Mülakata Çağrıldı',
-                        'Teklif' => 'Teklif Yapıldı',
-                        'Kabul' => 'İşe Alındı',
-                        'Red' => 'Reddedildi',
+                        'Beklemede' => __('Pending'),
+                        'İncelendi' => __('Under Review'),
+                        'Mülakat' => __('Invited to Interview'),
+                        'Teklif' => __('Offer Made'),
+                        'Kabul' => __('Hired'),
+                        'Red' => __('Rejected'),
                     ])
-                    ->label('Duruma Göre'),
+                    ->label(__('By Status')),
             ])
             ->actions([
                 Tables\Actions\EditAction::make()

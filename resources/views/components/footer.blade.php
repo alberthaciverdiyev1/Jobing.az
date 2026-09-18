@@ -1,86 +1,125 @@
 @php
     $siteSetting = \App\Modules\Setting\Models\SiteSetting::current();
+    $locales = config('app.available_locales');
+    $currentLocale = app()->getLocale();
+
+    // SiteSetting dəyəri varsa onu, yoxsa config fallback-ını istifadə et.
+    $socialUrl = fn (string $field) => $siteSetting->{$field} ?: config('site.social_fallbacks.' . $field);
+
+    $socialLinks = array_filter([
+        ['url' => $socialUrl('facebook_url'), 'icon' => 'fa-facebook-f', 'label' => 'Facebook'],
+        ['url' => $socialUrl('instagram_url'), 'icon' => 'fa-instagram', 'label' => 'Instagram'],
+        ['url' => $socialUrl('linkedin_url'), 'icon' => 'fa-linkedin-in', 'label' => 'LinkedIn'],
+        ['url' => $socialUrl('telegram_url'), 'icon' => 'fa-telegram-plane', 'label' => 'Telegram'],
+        ['url' => $socialUrl('twitter_url'), 'icon' => 'fa-x-twitter', 'label' => 'X'],
+        ['url' => $socialUrl('youtube_url'), 'icon' => 'fa-youtube', 'label' => 'YouTube'],
+    ], fn ($s) => ! empty($s['url']));
+
+    $cleanPhone = $siteSetting->phone ? preg_replace('/[^0-9+]/', '', $siteSetting->phone) : null;
+
+    $footerDesc = $siteSetting->getTrans('footer_description', null, __('The ideal platform for job seekers and employers in Azerbaijan. Start your career growth with us.'));
+
+    $linkClass = 'text-sm text-gray-500 hover:text-primary transition-colors';
+    $headingClass = 'text-sm font-semibold text-gray-900 mb-4';
 @endphp
 
-<footer {{ $attributes->merge(['class' => 'bg-white pt-16 pb-8 border-t border-gray-200 mt-auto']) }}>
+<footer {{ $attributes->merge(['class' => 'bg-white border-t border-gray-200 mt-auto']) }}>
     <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-12 mb-12">
-            <!-- Brand Col -->
-            <div class="lg:col-span-2">
-                <a href="{{ route('home') }}" class="flex items-center gap-2 mb-6">
-                    <div class="w-8 h-8 bg-primary text-white rounded flex items-center justify-center font-bold">J</div>
-                    <span class="font-bold text-xl text-dark tracking-tight">{{ config('app.brand_name') }}<span class="text-primary">{{ config('app.brand_suffix') }}</span></span>
+
+        {{-- Üst sıra: marka + təsvir + əlaqə (sol) / sosial + dil (sağ) --}}
+        <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-8 py-10 border-b border-gray-100">
+            <div class="max-w-xl">
+                <a href="{{ url('/') }}" class="inline-flex items-center mb-4">
+                    <span class="font-semibold text-2xl text-dark tracking-tight">{{ config('app.brand_name') }}<span class="text-primary">{{ config('app.brand_suffix') }}</span></span>
                 </a>
-                <p class="text-gray-500 mb-6 max-w-sm text-sm leading-relaxed">
-                    {{ $siteSetting->getTrans('footer_description', null, __('The ideal platform for job seekers and employers in Azerbaijan. Start your career growth with us.')) }}
-                </p>
-                <div class="flex space-x-3">
-                    @if($siteSetting->facebook_url)
-                    <a href="{{ $siteSetting->facebook_url }}" target="_blank" rel="noopener" class="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 hover:bg-primary hover:text-white transition-colors text-sm">
-                        <i class="fab fa-facebook-f"></i>
+
+                <p class="text-sm text-gray-500 leading-relaxed mb-5">{{ $footerDesc }}</p>
+
+                <div class="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6">
+                    @if($siteSetting->phone)
+                    <a href="tel:{{ $cleanPhone }}" class="inline-flex items-center gap-2 text-sm text-gray-600 hover:text-primary transition-colors">
+                        <i class="fas fa-phone text-xs text-primary"></i>
+                        <span>{{ $siteSetting->phone }}</span>
                     </a>
                     @endif
-                    @if($siteSetting->instagram_url)
-                    <a href="{{ $siteSetting->instagram_url }}" target="_blank" rel="noopener" class="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 hover:bg-primary hover:text-white transition-colors text-sm">
-                        <i class="fab fa-instagram"></i>
-                    </a>
-                    @endif
-                    @if($siteSetting->linkedin_url)
-                    <a href="{{ $siteSetting->linkedin_url }}" target="_blank" rel="noopener" class="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 hover:bg-primary hover:text-white transition-colors text-sm">
-                        <i class="fab fa-linkedin-in"></i>
-                    </a>
-                    @endif
-                    @if($siteSetting->telegram_url)
-                    <a href="{{ $siteSetting->telegram_url }}" target="_blank" rel="noopener" class="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 hover:bg-primary hover:text-white transition-colors text-sm">
-                        <i class="fab fa-telegram-plane"></i>
+
+                    @if($siteSetting->email)
+                    <a href="mailto:{{ $siteSetting->email }}" class="inline-flex items-center gap-2 text-sm text-gray-600 hover:text-primary transition-colors">
+                        <i class="far fa-envelope text-xs text-primary"></i>
+                        <span>{{ $siteSetting->email }}</span>
                     </a>
                     @endif
                 </div>
             </div>
 
-            <!-- Links Col 1 -->
+            <div class="flex flex-col gap-5 lg:items-end">
+                @if($socialLinks)
+                <div class="flex items-center gap-2">
+                    @foreach($socialLinks as $social)
+                    <a href="{{ $social['url'] }}" target="_blank" rel="noopener"
+                       aria-label="{{ $social['label'] }}"
+                       class="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 hover:bg-primary hover:text-white transition-colors text-sm">
+                        <i class="fab {{ $social['icon'] }}"></i>
+                    </a>
+                    @endforeach
+                </div>
+                @endif
+
+                @if(!empty($locales))
+                <div class="flex flex-wrap items-center gap-1">
+                    @foreach($locales as $code => $data)
+                    <a href="{{ route('lang.switch', $code) }}"
+                       class="text-sm px-2 py-1 rounded transition-colors {{ $currentLocale === $code ? 'text-primary font-semibold' : 'text-gray-500 hover:text-primary' }}">
+                        {{ $data['name'] }}
+                    </a>
+                    @endforeach
+                </div>
+                @endif
+            </div>
+        </div>
+
+        {{-- Orta sıra: link sütunları --}}
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-8 py-10 border-b border-gray-100">
             <div>
-                <h4 class="font-bold text-gray-900 mb-4 text-sm">{{ __('For Candidates') }}</h4>
-                <ul class="space-y-2.5 text-xs">
-                    <li><a href="{{ route('jobs.index') }}" class="text-gray-500 hover:text-primary transition-colors">{{ __('Vacancy search') }}</a></li>
-                    <li><a href="{{ route('jobs.index') }}" class="text-gray-500 hover:text-primary transition-colors">{{ __('Remote Position') }}</a></li>
-                    <li><a href="{{ route('jobs.index') }}" class="text-gray-500 hover:text-primary transition-colors">{{ __('Full-time') }}</a></li>
-                    <li><a href="{{ route('jobs.index', ['sort' => 'featured']) }}" class="text-gray-500 hover:text-primary transition-colors">{{ __('Featured Opportunities') }}</a></li>
+                <h4 class="{{ $headingClass }}">{{ __('For Candidates') }}</h4>
+                <ul class="space-y-3">
+                    <li><a href="{{ route('jobs.index') }}" class="{{ $linkClass }}">{{ __('Vacancies') }}</a></li>
+                    <li><a href="{{ route('job-seekers.index') }}" class="{{ $linkClass }}">{{ __("I'm Hiring Myself") }}</a></li>
+                    <li><a href="{{ route('resumes.index') }}" class="{{ $linkClass }}">{{ __('Resume Database') }}</a></li>
+                    <li><a href="{{ route('favorites.index') }}" class="{{ $linkClass }}">{{ __('Favorites') }}</a></li>
                 </ul>
             </div>
 
-            <!-- Links Col 2 -->
             <div>
-                <h4 class="font-bold text-gray-900 mb-4 text-sm">{{ __('For Companies') }}</h4>
-                <ul class="space-y-2.5 text-xs">
-                    <li><a href="{{ route('jobs.create') }}" class="text-gray-500 hover:text-primary transition-colors">{{ __('Post an ad') }}</a></li>
-                    <li><a href="{{ route('companies.index') }}" class="text-gray-500 hover:text-primary transition-colors">{{ __('Companies') }}</a></li>
-                    <li><a href="{{ route('resumes.index') }}" class="text-gray-500 hover:text-primary transition-colors">{{ __('Resume Database') }}</a></li>
-                    <li><a href="{{ config('site.panels.admin') }}" target="_blank" class="text-gray-500 hover:text-primary transition-colors">{{ __('Admin Panel') }}</a></li>
+                <h4 class="{{ $headingClass }}">{{ __('For Companies') }}</h4>
+                <ul class="space-y-3">
+                    <li><a href="{{ route('jobs.create') }}" class="{{ $linkClass }}">{{ __('Post an ad') }}</a></li>
+                    <li><a href="{{ route('companies.index') }}" class="{{ $linkClass }}">{{ __('Companies') }}</a></li>
+                    <li><a href="{{ route('resumes.index') }}" class="{{ $linkClass }}">{{ __('Resume Database') }}</a></li>
+                    <li><a href="{{ route('job-seekers.create') }}" class="{{ $linkClass }}">{{ __('Job seeking listing') }}</a></li>
                 </ul>
             </div>
 
-            <!-- Links Col 3 -->
             <div>
-                <h4 class="font-bold text-gray-900 mb-4 text-sm">{{ config('app.full_name') }}</h4>
-                <ul class="space-y-2.5 text-xs">
-                    <li><a href="{{ route('home') }}" class="text-gray-500 hover:text-primary transition-colors">{{ __('Home') }}</a></li>
-                    <li><a href="{{ route('about') }}" class="text-gray-500 hover:text-primary transition-colors">{{ __('About Us') }}</a></li>
-                    <li><a href="{{ route('jobs.index') }}" class="text-gray-500 hover:text-primary transition-colors">{{ __('Categories') }}</a></li>
-                    <li><a href="{{ route('blog.index') }}" class="text-gray-500 hover:text-primary transition-colors">{{ __('Career Blog') }}</a></li>
-                    <li><a href="{{ route('faq.index') }}" class="text-gray-500 hover:text-primary transition-colors">{{ __('Frequently Asked Questions') }}</a></li>
-                    <li><a href="{{ route('contact.index') }}" class="text-gray-500 hover:text-primary transition-colors">{{ __('Contact') }}</a></li>
-                    <li><a href="{{ config('site.panels.admin') }}" target="_blank" class="text-gray-500 hover:text-primary transition-colors">Admin Portal</a></li>
+                <h4 class="{{ $headingClass }}">{{ config('app.full_name') }}</h4>
+                <ul class="space-y-3">
+                    <li><a href="{{ route('about') }}" class="{{ $linkClass }}">{{ __('About Us') }}</a></li>
+                    <li><a href="{{ route('blog.index') }}" class="{{ $linkClass }}">{{ __('Career Blog') }}</a></li>
+                    <li><a href="{{ route('faq.index') }}" class="{{ $linkClass }}">{{ __('Frequently Asked Questions') }}</a></li>
+                    <li><a href="{{ route('contact.index') }}" class="{{ $linkClass }}">{{ __('Contact') }}</a></li>
                 </ul>
             </div>
         </div>
 
-        <div class="border-t border-gray-200 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-500">
+        {{-- Alt sıra: telif (sol) / linklər (sağ) --}}
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-3 py-6 text-xs text-gray-500">
             <p>
                 &copy; {{ date('Y') }} {{ $siteSetting->copyright_text ?: config('app.full_name') }}. {{ __('All Rights Reserved') }}.
             </p>
-            <div class="flex items-center gap-2">
-                Made with <i class="fas fa-heart text-red-500"></i> in Azerbaijan
+
+            <div class="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
+                <a href="{{ route('faq.index') }}" class="hover:text-primary transition-colors">{{ __('Frequently Asked Questions') }}</a>
+                <a href="{{ route('contact.index') }}" class="hover:text-primary transition-colors">{{ __('Contact') }}</a>
             </div>
         </div>
     </div>

@@ -7,12 +7,9 @@
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-10 max-w-4xl">
 
         <!-- Header -->
-        <div class="text-center mb-10">
-            <div class="w-14 h-14 bg-primary/10 text-primary rounded-2xl flex items-center justify-center mx-auto mb-4 border border-orange-100">
-                <i class="fas fa-question text-xl"></i>
-            </div>
-            <h1 class="text-3xl font-extrabold text-gray-900 tracking-tight">{{ __('Frequently Asked Questions') }}</h1>
-            <p class="text-sm text-gray-500 mt-2 max-w-lg mx-auto">{{ __('The most frequently asked questions about job search and hiring processes.') }}</p>
+        <div class="mb-10 pb-6 border-b border-gray-200">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 tracking-tight">{{ __('Frequently Asked Questions') }}</h2>
+            <p class="text-sm text-gray-500 mt-2 max-w-lg">{{ __('The most frequently asked questions about job search and hiring processes.') }}</p>
         </div>
 
         @if($faqGroups->isEmpty())
@@ -25,7 +22,7 @@
             @foreach($faqGroups as $category => $faqs)
             <div>
                 @if($faqGroups->count() > 1)
-                <h2 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">{{ $category }}</h2>
+                <h2 class="text-xs font-medium text-gray-400 mb-3">{{ $category }}</h2>
                 @endif
                 <div class="space-y-3">
                     @foreach($faqs as $faq)
@@ -34,7 +31,7 @@
                                 @click="open = !open"
                                 class="w-full flex items-center justify-between gap-4 p-5 text-left cursor-pointer hover:bg-gray-50 transition"
                                 :aria-expanded="open">
-                            <span class="font-bold text-gray-900 text-sm sm:text-base">{{ $faq->question }}</span>
+                            <span class="font-semibold text-gray-900 text-sm sm:text-base">{{ $faq->question }}</span>
                             <span class="w-7 h-7 rounded-lg bg-orange-50 text-primary flex items-center justify-center shrink-0 transition-transform duration-200"
                                   :class="open ? 'rotate-45' : ''">
                                 <i class="fas fa-plus text-xs"></i>
@@ -63,9 +60,9 @@
 
         <!-- Contact CTA -->
         <div class="mt-10 text-center bg-white rounded-2xl border border-gray-200 p-8 shadow-2xs">
-            <h3 class="text-base font-bold text-gray-900 mb-1">{{ __("Couldn't find your answer?") }}</h3>
+            <h3 class="text-base font-semibold text-gray-900 mb-1">{{ __("Couldn't find your answer?") }}</h3>
             <p class="text-xs text-gray-500 mb-5">{{ __("Contact us and we'll be happy to help.") }}</p>
-            <a href="{{ route('companies.index') }}" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary hover:bg-primary-dark text-white text-xs font-bold transition shadow-xs cursor-pointer">
+            <a href="{{ route('contact.index') }}" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary hover:bg-primary-dark text-white text-xs font-semibold transition shadow-xs cursor-pointer">
                 <i class="fas fa-paper-plane text-xs"></i>
                 <span>{{ __('Contact') }}</span>
             </a>

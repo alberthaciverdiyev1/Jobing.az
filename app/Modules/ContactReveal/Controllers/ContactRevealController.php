@@ -12,13 +12,34 @@ use Illuminate\Http\Request;
 class ContactRevealController extends Controller
 {
     /**
+     * Only authenticated employers (companies) or admins may reveal contact details.
+     */
+    protected function authorizeReveal(): ?JsonResponse
+    {
+        $user = auth()->user();
+
+        if (! $user || (! $user->isCompany() && ! $user->is_admin)) {
+            return response()->json([
+                'success' => false,
+                'message' => __('Permission denied'),
+            ], 403);
+        }
+
+        return null;
+    }
+
+    /**
      * Reveal a job-seeker's contact details and log the interaction.
      */
     public function revealJobSeeker(Request $request, int $id): JsonResponse
     {
+        if ($deny = $this->authorizeReveal()) {
+            return $deny;
+        }
+
         $jobSeeker = JobSeeker::find($id);
         if (! $jobSeeker) {
-            return response()->json(['success' => false, 'message' => 'Elan tapılmadı'], 404);
+            return response()->json(['success' => false, 'message' => __('Listing not found')], 404);
         }
 
         ContactReveal::log('job_seeker', $jobSeeker->id, $request);
@@ -38,9 +59,13 @@ class ContactRevealController extends Controller
      */
     public function revealVacancy(Request $request, int $id): JsonResponse
     {
+        if ($deny = $this->authorizeReveal()) {
+            return $deny;
+        }
+
         $vacancy = Vacancy::find($id);
         if (! $vacancy) {
-            return response()->json(['success' => false, 'message' => 'Vakansiya tapılmadı'], 404);
+            return response()->json(['success' => false, 'message' => __('Vacancy not found')], 404);
         }
 
         ContactReveal::log('vacancy', $vacancy->id, $request);

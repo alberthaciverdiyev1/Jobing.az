@@ -15,39 +15,54 @@ class ExperienceLevelResource extends Resource
     protected static ?string $model = ExperienceLevel::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-academic-cap';
-    protected static ?string $navigationGroup = 'İlan Parametrləri';
-    protected static ?string $modelLabel = 'Təcrübə Səviyyəsi';
-    protected static ?string $pluralModelLabel = 'Təcrübə Səviyyələri';
+    protected static ?string $navigationGroup = null;
+
+    public static function getNavigationGroup(): string
+    {
+        return __('Listing Parameters');
+    }
+    protected static ?string $modelLabel = null;
+
+    public static function getModelLabel(): string
+    {
+        return __('Experience Level');
+    }
+    protected static ?string $pluralModelLabel = null;
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('Experience Levels');
+    }
     protected static ?int $navigationSort = 3;
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\Section::make('Ümumi Parametrlər')
+                Forms\Components\Section::make(__('General Parameters'))
                     ->schema([
                         Forms\Components\TextInput::make('slug')
-                            ->label('Slug / Kod')
-                            ->helperText('Boş buraxılarsa avtomatik yaradılacaq')
+                            ->label(__('Slug / Code'))
+                            ->helperText(__('If left empty, it will be auto-generated'))
                             ->maxLength(255),
 
                         Forms\Components\TextInput::make('order')
-                            ->label('Sıralama')
+                            ->label(__('Ordering'))
                             ->numeric()
                             ->default(0),
 
                         Forms\Components\Toggle::make('is_active')
-                            ->label('Aktivdir')
+                            ->label(__('Active'))
                             ->default(true)
                             ->inline(false),
                     ])->columns(3),
 
                 Forms\Components\Tabs::make('Translations')
                     ->tabs([
-                        Forms\Components\Tabs\Tab::make('🇦🇿 Azərbaycan (Default)')
+                        Forms\Components\Tabs\Tab::make('🇦🇿 ' . __('languages.Azerbaijani') . ' (' . __('Default') . ')')
                             ->schema([
                                 Forms\Components\TextInput::make('name.az')
-                                    ->label('Təcrübə Səviyyəsi Adı (AZ)')
+                                    ->label(__('Experience Level Name (AZ)'))
                                     ->required()
                                     ->live(onBlur: true)
                                     ->afterStateUpdated(fn (string $operation, $state, Forms\Set $set, Forms\Get $get) => 
@@ -55,22 +70,22 @@ class ExperienceLevelResource extends Resource
                                     ),
                             ]),
 
-                        Forms\Components\Tabs\Tab::make('🇬🇧 English')
+                        Forms\Components\Tabs\Tab::make('🇬🇧 ' . __('languages.English'))
                             ->schema([
                                 Forms\Components\TextInput::make('name.en')
-                                    ->label('Experience Level Name (EN)'),
+                                    ->label(__('Experience Level Name (EN)')),
                             ]),
 
-                        Forms\Components\Tabs\Tab::make('🇹🇷 Türkçe')
+                        Forms\Components\Tabs\Tab::make('🇹🇷 ' . __('languages.Turkish'))
                             ->schema([
                                 Forms\Components\TextInput::make('name.tr')
-                                    ->label('Deneyim Seviyesi Adı (TR)'),
+                                    ->label(__('Experience Level Name (TR)')),
                             ]),
 
-                        Forms\Components\Tabs\Tab::make('🇷🇺 Русский')
+                        Forms\Components\Tabs\Tab::make('🇷🇺 ' . __('languages.Russian'))
                             ->schema([
                                 Forms\Components\TextInput::make('name.ru')
-                                    ->label('Опыт работы (RU)'),
+                                    ->label(__('Work Experience (RU)')),
                             ]),
                     ])->columnSpanFull(),
             ]);
@@ -81,26 +96,26 @@ class ExperienceLevelResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')
-                    ->label('Təcrübə Səviyyəsi (AZ)')
+                    ->label(__('Experience Level (AZ)'))
                     ->searchable()
                     ->sortable()
                     ->weight('bold'),
 
                 Tables\Columns\TextColumn::make('slug')
-                    ->label('Slug')
+                    ->label(__('Slug'))
                     ->badge()
                     ->color('gray'),
 
                 Tables\Columns\TextColumn::make('order')
-                    ->label('Sıra')
+                    ->label(__('Order'))
                     ->sortable(),
 
                 Tables\Columns\IconColumn::make('is_active')
-                    ->label('Aktiv')
+                    ->label(__('Active'))
                     ->boolean(),
 
                 Tables\Columns\TextColumn::make('vacancies_count')
-                    ->label('Vakansiya Sayı')
+                    ->label(__('Vacancy Count'))
                     ->counts('vacancies')
                     ->sortable(),
             ])

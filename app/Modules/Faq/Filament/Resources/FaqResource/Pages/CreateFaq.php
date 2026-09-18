@@ -3,7 +3,7 @@
 namespace App\Modules\Faq\Filament\Resources\FaqResource\Pages;
 
 use App\Modules\Faq\Filament\Resources\FaqResource;
-use Filament\Resources\Pages\CreateRecord;
+use App\Filament\Pages\CreateRecord;
 
 class CreateFaq extends CreateRecord
 {

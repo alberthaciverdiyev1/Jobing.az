@@ -24,9 +24,24 @@ class MyJobSeekerResource extends Resource
     protected static ?string $model = JobSeeker::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-user-circle';
-    protected static ?string $navigationLabel = 'İş Axtarış Elanlarım';
-    protected static ?string $modelLabel = 'İş Axtarış Elanı';
-    protected static ?string $pluralModelLabel = 'İş Axtarış Elanlarım';
+    protected static ?string $navigationLabel = null;
+
+    public static function getNavigationLabel(): string
+    {
+        return __('My Job Seeking Listings');
+    }
+    protected static ?string $modelLabel = null;
+
+    public static function getModelLabel(): string
+    {
+        return __('Job Seeking Listing');
+    }
+    protected static ?string $pluralModelLabel = null;
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('My Job Seeking Listings');
+    }
     protected static ?int $navigationSort = 2;
 
     public static function canViewAny(): bool
@@ -43,17 +58,17 @@ class MyJobSeekerResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Section::make('Əsas Məlumatlar')
+                Forms\Components\Section::make(__('Basic Information'))
                     ->schema([
                         Forms\Components\TextInput::make('title')
-                            ->label('Elan Başlığı')
-                            ->placeholder('Örn: Senior Full Stack PHP / Laravel Geliştirici')
+                            ->label(__('Listing Title'))
+                            ->placeholder(__('e.g.: Senior Full Stack PHP / Laravel Developer'))
                             ->required()
                             ->maxLength(255)
                             ->columnSpanFull(),
 
                         Forms\Components\Select::make('category_parent_id')
-                            ->label('Kateqoriya')
+                            ->label(__('Category'))
                             ->options(static::parentCategoryOptions())
                             ->searchable()
                             ->preload()
@@ -62,34 +77,34 @@ class MyJobSeekerResource extends Resource
                             ->default(fn (?Model $record): ?string => $record?->category?->parent_id ? (string) $record->category->parent_id : null)
                             ->afterStateUpdated(fn (Forms\Set $set) => $set('category_id', null))
                             ->dehydrated(false)
-                            ->placeholder('Kateqoriya seçin…'),
+                            ->placeholder(__('Select a category…')),
 
                         Forms\Components\Select::make('category_id')
-                            ->label('Vəzifə / Peşə')
+                            ->label(__('Position / Occupation'))
                             ->options(fn (Forms\Get $get): array => static::subcategoryOptions($get('category_parent_id') ? (int) $get('category_parent_id') : null))
                             ->searchable()
                             ->preload()
                             ->required()
-                            ->placeholder('Əvvəlcə Kateqoriya seçin…')
-                            ->helperText('Seçilən Kateqoriyanın alt mövqeləri (subcategory) burada göstərilir.'),
+                            ->placeholder(__('Select a category first…'))
+                            ->helperText(__('The subcategories of the selected category are shown here.')),
 
                         Forms\Components\Select::make('job_type_id')
-                            ->label('İş Rejimi')
+                            ->label(__('Job Type'))
                             ->options(static::jobTypeOptions())
                             ->searchable(),
 
                         Forms\Components\Select::make('workplace_type_id')
-                            ->label('İş Yeri')
+                            ->label(__('Workplace'))
                             ->options(static::workplaceTypeOptions())
                             ->searchable(),
 
                         Forms\Components\Select::make('experience_level_id')
-                            ->label('Təcrübə Səviyyəsi')
+                            ->label(__('Experience Level'))
                             ->options(static::experienceLevelOptions())
                             ->searchable(),
 
                         Forms\Components\Select::make('availability')
-                            ->label('İşə Başlama Tezliyi')
+                            ->label(__('Start Frequency'))
                             ->options([
                                 'immediate' => 'Dərhal başlaya bilər',
                                 'two_weeks' => '2 həftə içində',
@@ -99,31 +114,31 @@ class MyJobSeekerResource extends Resource
                             ->default('immediate'),
 
                         Forms\Components\Select::make('location')
-                            ->label('Şəhər / Region')
+                            ->label(__('City / Region'))
                             ->options(fn (): array => static::cityOptions())
                             ->searchable()
-                            ->placeholder('Şəhər seçin…'),
+                            ->placeholder(__('Select a city…')),
                     ])->columns(2),
 
-                Forms\Components\Section::make('Gözlənilən Maaş')
+                Forms\Components\Section::make(__('Expected Salary'))
                     ->schema([
                         Forms\Components\Toggle::make('salary_negotiable')
-                            ->label('Razılaşma yolu ilə')
+                            ->label(__('Negotiable'))
                             ->live()
                             ->columnSpanFull(),
 
                         Forms\Components\TextInput::make('salary_min')
-                            ->label('Minimum Maaş')
+                            ->label(__('Minimum Salary'))
                             ->numeric()
                             ->hidden(fn (Forms\Get $get) => (bool) $get('salary_negotiable')),
 
                         Forms\Components\TextInput::make('salary_max')
-                            ->label('Maksimum Maaş')
+                            ->label(__('Maximum Salary'))
                             ->numeric()
                             ->hidden(fn (Forms\Get $get) => (bool) $get('salary_negotiable')),
 
                         Forms\Components\Select::make('currency')
-                            ->label('Valyuta')
+                            ->label(__('Currency'))
                             ->options([
                                 'AZN' => 'AZN (₼)',
                                 'USD' => 'USD ($)',
@@ -134,42 +149,42 @@ class MyJobSeekerResource extends Resource
                             ->hidden(fn (Forms\Get $get) => (bool) $get('salary_negotiable')),
                     ])->columns(3),
 
-                Forms\Components\Section::make('Təcrübə və Bacarıqlar')
+                Forms\Components\Section::make(__('Experience & Skills'))
                     ->schema([
                         Forms\Components\Select::make('skills')
-                            ->label('Bacarıqlar (Admin kataloqu)')
+                            ->label(__('Skills (Admin catalog)'))
                             ->multiple()
                             ->searchable()
                             ->preload()
                             ->options(fn (Forms\Get $get): array => static::skillOptions($get('category_parent_id') ? (int) $get('category_parent_id') : null))
-                            ->helperText('Seçilən kateqoriyaya (alt kateqoriyalar daxil) aid admin bacarıqları göstərilir.')
+                            ->helperText(__('Admin skills belonging to the selected category (including subcategories) are shown.'))
                             ->columnSpanFull(),
 
                         Forms\Components\Textarea::make('description')
-                            ->label('Haqqınızda / Təcrübə Təsviri')
+                            ->label(__('About You / Experience Description'))
                             ->rows(5)
                             ->required()
                             ->columnSpanFull(),
                     ]),
 
-                Forms\Components\Section::make('Əlaqə və Yayın Statusu')
+                Forms\Components\Section::make(__('Contact & Publication Status'))
                     ->schema([
                         Forms\Components\TextInput::make('contact_name')
-                            ->label('Əlaqəli Şəxs / Ad Soyad')
+                            ->label(__('Contact Person / Full Name'))
                             ->default(fn () => auth()->user()?->name)
                             ->required(),
 
                         Forms\Components\TextInput::make('contact_email')
-                            ->label('Əlaqə E-poçtu')
+                            ->label(__('Contact Email'))
                             ->email()
                             ->default(fn () => auth()->user()?->email),
 
                         Forms\Components\TextInput::make('contact_phone')
-                            ->label('Əlaqə Telefonu')
+                            ->label(__('Contact Phone'))
                             ->tel(),
 
                         Forms\Components\Select::make('status')
-                            ->label('Status')
+                            ->label(__('Status'))
                             ->options([
                                 \App\Modules\JobSeeker\Models\JobSeeker::STATUS_PENDING => 'Gözləmədə (Admin onayı)',
                                 'draft' => 'Qaralama (Gizli)',
@@ -186,28 +201,28 @@ class MyJobSeekerResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('title')
-                    ->label('Elan Başlığı')
+                    ->label(__('Listing Title'))
                     ->searchable()
                     ->sortable()
                     ->weight('bold')
                     ->limit(35),
 
                 Tables\Columns\TextColumn::make('formatted_salary')
-                    ->label('Gözlənilən Maaş')
+                    ->label(__('Expected Salary'))
                     ->badge()
                     ->color('warning'),
 
                 Tables\Columns\TextColumn::make('availability_label')
-                    ->label('Çıxış'),
+                    ->label(__('Log out')),
 
                 Tables\Columns\TextColumn::make('views_count')
-                    ->label('Baxış')
+                    ->label(__('Views'))
                     ->badge()
                     ->color('info')
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('status')
-                    ->label('Status')
+                    ->label(__('Status'))
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
                         'published' => 'success',
@@ -221,12 +236,12 @@ class MyJobSeekerResource extends Resource
                     }),
 
                 Tables\Columns\IconColumn::make('is_featured')
-                    ->label('Premium')
+                    ->label(__('Premium'))
                     ->boolean()
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('created_at')
-                    ->label('Tarix')
+                    ->label(__('Date'))
                     ->dateTime('d.m.Y')
                     ->sortable(),
             ])
@@ -235,13 +250,13 @@ class MyJobSeekerResource extends Resource
 
                 // İrəli çək (WhatsApp siparişi — web modalı)
                 Tables\Actions\Action::make('promote_bump')
-                    ->label('İrəli Çək')
+                    ->label(__('Boost'))
                     ->icon('heroicon-o-arrow-up-circle')
                     ->color('success')
-                    ->modalHeading('Elanı İrəli Çək')
+                    ->modalHeading(__('Boost the Listing'))
                     ->modalWidth('md')
                     ->modalSubmitAction(fn () => false)
-                    ->modalCancelActionLabel('Bağla')
+                    ->modalCancelActionLabel(__('Close'))
                     ->modalContent(fn (JobSeeker $record) => view('components.promotion-whatsapp', [
                         'mode' => 'bump',
                         'itemLabel' => __('Job Seeking Listing'),
@@ -251,13 +266,13 @@ class MyJobSeekerResource extends Resource
 
                 // Premium (WhatsApp siparişi — web modalı)
                 Tables\Actions\Action::make('promote_premium')
-                    ->label('Premium Et')
+                    ->label(__('Make Premium'))
                     ->icon('heroicon-o-sparkles')
                     ->color('amber')
-                    ->modalHeading('Premium Status Qazan')
+                    ->modalHeading(__('Get Premium Status'))
                     ->modalWidth('md')
                     ->modalSubmitAction(fn () => false)
-                    ->modalCancelActionLabel('Bağla')
+                    ->modalCancelActionLabel(__('Close'))
                     ->modalContent(fn (JobSeeker $record) => view('components.promotion-whatsapp', [
                         'mode' => 'premium',
                         'itemLabel' => __('Job Seeking Listing'),

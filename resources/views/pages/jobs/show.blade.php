@@ -2,6 +2,7 @@
 
 @section('title', $job->title . ' - ' . ($job->company->name ?? config('app.full_name')))
 @section('meta_description', strip_tags(Str::limit($job->description, 150)))
+@section('og_image', $job->company?->logo ? asset('storage/' . $job->company->logo) : '')
 
 @section('content')
 @php
@@ -23,12 +24,12 @@
                         <i class="fas fa-clock text-base"></i>
                     </div>
                     <div>
-                        <h4 class="text-xs sm:text-sm font-bold text-amber-950">{{ __('Awaiting Admin Approval') }}</h4>
-                        <p class="text-[11px] sm:text-xs text-amber-800">{{ __('This vacancy has been submitted and will be published on the site and in general search after admin approval.') }}</p>
+                        <h4 class="text-xs sm:text-sm font-semibold text-amber-950">{{ __('Awaiting Admin Approval') }}</h4>
+                        <p class="text-[12px] sm:text-xs text-amber-800">{{ __('This vacancy has been submitted and will be published on the site and in general search after admin approval.') }}</p>
                     </div>
                 </div>
-                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-200/80 text-amber-900 font-bold text-xs shrink-0 self-start sm:self-auto">
-                    <i class="fas fa-shield-halved text-[10px]"></i>
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-200/80 text-amber-900 font-semibold text-xs shrink-0 self-start sm:self-auto">
+                    <i class="fas fa-shield-halved text-[11px]"></i>
                     {{ __('Under review') }}
                 </span>
             </div>
@@ -45,7 +46,7 @@
                 <!-- Left: Company Logo + Title + Meta -->
                 <div class="flex items-start sm:items-center gap-4 sm:gap-5">
                     @if($job->company && $job->company->hasPublicProfile())
-                    <a href="{{ route('companies.show', $job->company->slug) }}" class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-slate-900 border border-gray-200 shadow-2xs flex items-center justify-center font-bold text-white text-2xl sm:text-3xl shrink-0 overflow-hidden group/logo">
+                    <a href="{{ route('companies.show', $job->company->slug) }}" class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-slate-900 border border-gray-200 shadow-2xs flex items-center justify-center font-semibold text-white text-2xl sm:text-3xl shrink-0 overflow-hidden group/logo">
                         @if($job->company?->logo)
                         <img src="{{ asset('storage/' . $job->company->logo) }}" alt="{{ $job->company->name }}" class="w-full h-full object-cover group-hover/logo:scale-105 transition duration-200">
                         @else
@@ -53,7 +54,7 @@
                         @endif
                     </a>
                     @else
-                    <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-slate-900 border border-gray-200 shadow-2xs flex items-center justify-center font-bold text-white text-2xl sm:text-3xl shrink-0 overflow-hidden">
+                    <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-slate-900 border border-gray-200 shadow-2xs flex items-center justify-center font-semibold text-white text-2xl sm:text-3xl shrink-0 overflow-hidden">
                         {{ mb_substr($job->company->name ?? 'J', 0, 1) }}
                     </div>
                     @endif
@@ -61,31 +62,29 @@
                     <div class="space-y-1.5">
                         <div class="flex flex-wrap items-center gap-2 text-xs">
                             @if($job->company && $job->company->hasPublicProfile())
-                            <a href="{{ route('companies.show', $job->company->slug) }}" class="font-bold text-gray-900 hover:text-primary transition flex items-center gap-1">
+                            <a href="{{ route('companies.show', $job->company->slug) }}" class="font-semibold text-gray-900 hover:text-primary transition flex items-center gap-1">
                                 <span>{{ $job->company->name }}</span>
                                 @if($job->company?->is_verified)
                                 <i class="fas fa-check-circle text-sky-500 text-xs" title="{{ __('Verified Employer') }}"></i>
                                 @endif
                             </a>
                             @else
-                            <span class="font-bold text-gray-900 flex items-center gap-1">
+                            <span class="font-semibold text-gray-900 flex items-center gap-1">
                                 <span>{{ $job->company->name }}</span>
                             </span>
                             @endif
 
                             @if($job->is_featured)
-                            <span class="text-[10px] font-semibold px-2 py-0.5 rounded bg-amber-50 text-amber-700 border border-amber-200">
-                                {{ __('Premium') }}
-                            </span>
+                            <x-premium-badge />
                             @endif
 
                             <span class="text-gray-300">•</span>
-                            <span class="text-gray-400 text-[11px]">{{ $job->created_at->diffForHumans() }}</span>
+                            <span class="text-gray-400 text-[12px]">{{ $job->created_at->diffForHumans() }}</span>
                         </div>
 
-                        <h1 class="text-xl sm:text-2xl md:text-3xl font-extrabold text-gray-900 tracking-tight leading-tight">
+                        <h2 class="text-xl sm:text-2xl md:text-3xl font-semibold text-gray-900 tracking-tight leading-tight">
                             {{ $job->title }}
-                        </h1>
+                        </h2>
                     </div>
                 </div>
 
@@ -93,7 +92,7 @@
                 <div class="flex items-center gap-2.5 shrink-0 flex-wrap">
                     <!-- Favorite / Save Button -->
                     <button type="button"
-                            class="js-save-job px-4 py-3 rounded-xl border border-gray-200 hover:border-gray-300 hover:bg-gray-50 text-gray-700 font-bold text-xs transition duration-150 flex items-center gap-2 cursor-pointer shadow-2xs"
+                            class="js-save-job px-4 py-3 rounded-xl border border-gray-200 hover:border-gray-300 hover:bg-gray-50 text-gray-700 font-semibold text-xs transition duration-150 flex items-center gap-2 cursor-pointer shadow-2xs"
                             data-vacancy-id="{{ $job->id }}"
                             data-save-label="{{ __('Add to favorites') }}"
                             data-saved-label="{{ __('Remove from favorites') }}"
@@ -104,20 +103,20 @@
                     </button>
 
                     @if(isset($hasApplied) && $hasApplied)
-                    <div class="px-5 py-2.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold flex items-center gap-2 shadow-2xs">
+                    <div class="px-5 py-2.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-semibold flex items-center gap-2 shadow-2xs">
                         <i class="fas fa-check-circle text-emerald-600 text-sm"></i>
                         <span>{{ __('You have already applied to this vacancy') }}</span>
                     </div>
                     @else
                     @if($canInternal)
-                    <button @click="openModal()" type="button" class="px-6 py-3 rounded-xl bg-primary hover:bg-primary-dark text-white font-bold text-xs shadow-xs transition duration-150 flex items-center gap-2 cursor-pointer">
+                    <button @click="openModal()" type="button" class="px-6 py-3 rounded-xl bg-primary hover:bg-primary-dark text-white font-semibold text-xs shadow-xs transition duration-150 flex items-center gap-2 cursor-pointer">
                         <i class="fas fa-paper-plane text-xs"></i>
                         <span>{{ __('Apply with your CV') }}</span>
                     </button>
                     @endif
 
                     @if($canEmail && $applyEmail)
-                    <a href="{{ $mailtoHref }}" class="px-5 py-3 rounded-xl border border-gray-200 hover:border-gray-300 hover:bg-gray-50 text-gray-700 font-bold text-xs transition duration-150 flex items-center gap-2">
+                    <a href="{{ $mailtoHref }}" class="px-5 py-3 rounded-xl border border-gray-200 hover:border-gray-300 hover:bg-gray-50 text-gray-700 font-semibold text-xs transition duration-150 flex items-center gap-2">
                         <i class="far fa-envelope text-xs text-gray-500"></i>
                         <span>{{ __('Apply by email') }}</span>
                     </a>
@@ -142,16 +141,16 @@
                     <div class="grid grid-cols-2 sm:grid-cols-3 gap-6">
                         <!-- Row 1 -->
                         <div>
-                            <span class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider block">{{ __('Salary Offer') }}</span>
-                            <span class="text-sm sm:text-base font-extrabold text-primary font-mono mt-1 block">{{ $job->formatted_salary }}</span>
+                            <span class="text-[11px] font-medium text-gray-400 block">{{ __('Salary Offer') }}</span>
+                            <span class="text-sm sm:text-base font-semibold text-primary font-mono mt-1 block">{{ $job->formatted_salary }}</span>
                         </div>
                         <div>
-                            <span class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider block">{{ __('Experience') }}</span>
-                            <span class="text-xs sm:text-sm font-bold text-gray-900 mt-1 block">{{ $job->experience_level_name ?: '-' }}</span>
+                            <span class="text-[11px] font-medium text-gray-400 block">{{ __('Experience') }}</span>
+                            <span class="text-xs sm:text-sm font-semibold text-gray-900 mt-1 block">{{ $job->experience_level_name ?: '-' }}</span>
                         </div>
                         <div>
-                            <span class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider block">{{ __('Employment type') }}</span>
-                            <span class="text-xs sm:text-sm font-bold text-gray-900 mt-1 block">{{ $job->job_type_name ?: '-' }}</span>
+                            <span class="text-[11px] font-medium text-gray-400 block">{{ __('Employment type') }}</span>
+                            <span class="text-xs sm:text-sm font-semibold text-gray-900 mt-1 block">{{ $job->job_type_name ?: '-' }}</span>
                         </div>
 
                         <!-- Divider line between rows -->
@@ -159,16 +158,16 @@
 
                         <!-- Row 2 -->
                         <div>
-                            <span class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider block">{{ __('Workplace') }}</span>
-                            <span class="text-xs sm:text-sm font-bold text-gray-900 mt-1 block">{{ $job->workplace_type_name ?: '-' }}</span>
+                            <span class="text-[11px] font-medium text-gray-400 block">{{ __('Workplace') }}</span>
+                            <span class="text-xs sm:text-sm font-semibold text-gray-900 mt-1 block">{{ $job->workplace_type_name ?: '-' }}</span>
                         </div>
                         <div>
-                            <span class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider block">{{ __('City / Location') }}</span>
-                            <span class="text-xs sm:text-sm font-bold text-gray-900 mt-1 block">{{ $job->city_name ?: '-' }}</span>
+                            <span class="text-[11px] font-medium text-gray-400 block">{{ __('City / Location') }}</span>
+                            <span class="text-xs sm:text-sm font-semibold text-gray-900 mt-1 block">{{ $job->city_name ?: '-' }}</span>
                         </div>
                         <div>
-                            <span class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider block">{{ __('Latest Application') }}</span>
-                            <span class="text-xs sm:text-sm font-bold text-gray-900 font-mono mt-1 block">
+                            <span class="text-[11px] font-medium text-gray-400 block">{{ __('Latest Application') }}</span>
+                            <span class="text-xs sm:text-sm font-semibold text-gray-900 font-mono mt-1 block">
                                 {{ $job->deadline ? $job->deadline->format('d.m.Y') : __('Open-ended') }}
                             </span>
                         </div>
@@ -179,23 +178,23 @@
                 <div class="bg-white rounded-xl border border-gray-200 p-6 sm:p-8 shadow-2xs space-y-8">
 
                     <!-- 1. Job Description -->
-                    <div class="">
-                        <h2 class="text-sm font-bold text-gray-900 uppercase tracking-wider flex items-center gap-2 pb-3 border-b border-gray-100">
+                    <div>
+                        <h2 class="text-sm font-semibold text-gray-900 flex items-center gap-2 pb-3 border-b border-gray-100">
                             <span>{{ __('Job Responsibilities') }}</span>
                         </h2>
                         <div class="text-xs sm:text-sm text-gray-700 leading-relaxed whitespace-pre-line space-y-3">
-                            {!! $job->description !!}
+                            {!! sanitize_html($job->description) !!}
                         </div>
                     </div>
 
                     <!-- 2. Requirements -->
                     @if($job->requirements)
                     <div >
-                        <h2 class="text-sm font-bold text-gray-900 uppercase tracking-wider flex items-center gap-2 border-b border-gray-100">
+                        <h2 class="text-sm font-semibold text-gray-900 flex items-center gap-2 border-b border-gray-100">
                             <span>{{ __('Requirements & Experience') }}</span>
                         </h2>
                         <div class="text-xs sm:text-sm text-gray-700 leading-relaxed whitespace-pre-line space-y-3">
-                            {!! $job->requirements !!}
+                            {!! sanitize_html($job->requirements) !!}
                         </div>
                     </div>
                     @endif
@@ -207,7 +206,7 @@
                     @endphp
                     @if(!empty($skillsList) && count($skillsList) > 0)
                     <div class="space-y-3 pt-6 border-t border-gray-100">
-                        <h3 class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">{{ __('Required Technologies & Skills') }}</h3>
+                        <h3 class="text-[11px] font-medium text-gray-400">{{ __('Required Technologies & Skills') }}</h3>
                         <div class="flex flex-wrap gap-2">
                             @foreach($skillsList as $skill)
                             <span class="px-2.5 py-1 rounded-md bg-gray-100 text-gray-700 text-xs font-semibold font-mono border border-gray-200">
@@ -234,11 +233,11 @@
                             <i class="fas fa-check text-lg"></i>
                         </div>
                         <div>
-                            <h3 class="text-sm font-bold text-white">{{ __('Your Application Has Been Recorded') }}</h3>
+                            <h3 class="text-sm font-semibold text-white">{{ __('Your Application Has Been Recorded') }}</h3>
                             <p class="text-xs text-slate-300 mt-0.5">{{ __('Your application for this vacancy has already been delivered to the employer.') }}</p>
                         </div>
                     </div>
-                    <span class="px-4 py-2 rounded-lg bg-emerald-500/20 text-emerald-300 font-bold text-xs border border-emerald-500/30 shrink-0 flex items-center gap-1.5">
+                    <span class="px-4 py-2 rounded-lg bg-emerald-500/20 text-emerald-300 font-semibold text-xs border border-emerald-500/30 shrink-0 flex items-center gap-1.5">
                         <i class="fas fa-check-circle text-emerald-400"></i>
                         <span>{{ __('Applied') }}</span>
                     </span>
@@ -246,17 +245,17 @@
                 @else
                 <div class="p-6 rounded-xl bg-slate-900 text-white flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-xs">
                     <div>
-                        <h3 class="text-sm font-bold text-white">{{ __('Do you want to apply for this position?') }}</h3>
+                        <h3 class="text-sm font-semibold text-white">{{ __('Do you want to apply for this position?') }}</h3>
                         <p class="text-xs text-slate-300 mt-0.5">{{ __('Submit your CV to deliver your application directly to the employer.') }}</p>
                     </div>
                     <div class="shrink-0 flex items-center gap-2">
                         @if($canInternal)
-                        <button @click="openModal()" type="button" class="px-5 py-2.5 rounded-lg bg-primary hover:bg-primary-dark text-white font-bold text-xs shadow-xs transition duration-150 cursor-pointer">
+                        <button @click="openModal()" type="button" class="px-5 py-2.5 rounded-lg bg-primary hover:bg-primary-dark text-white font-semibold text-xs shadow-xs transition duration-150 cursor-pointer">
                             {{ __('Apply with CV') }}
                         </button>
                         @endif
                         @if($canEmail && $applyEmail)
-                        <a href="{{ $mailtoHref }}" class="px-4 py-2.5 rounded-lg border border-slate-700 hover:bg-slate-800 text-white font-bold text-xs transition duration-150">
+                        <a href="{{ $mailtoHref }}" class="px-4 py-2.5 rounded-lg border border-slate-700 hover:bg-slate-800 text-white font-semibold text-xs transition duration-150">
                             {{ __('By email') }}
                         </a>
                         @endif
@@ -264,10 +263,15 @@
                 </div>
                 @endif
 
+                <!-- Company Info (mobile: right after the apply section) -->
+                <div class="lg:hidden">
+                    @include('pages.jobs.partials.company-info', ['job' => $job])
+                </div>
+
                 <!-- Similar / Related Jobs Section (Below CTA Strip) -->
                 @if($relatedJobs->count() > 0)
                 <div class="space-y-4 pt-6 border-t border-gray-200">
-                    <h3 class="text-base font-bold text-gray-900 flex items-center gap-2">
+                    <h3 class="text-base font-semibold text-gray-900 flex items-center gap-2">
                         <span>{{ __('Similar Vacancies') }}</span>
                     </h3>
 
@@ -285,86 +289,26 @@
             <div class="space-y-6">
 
                 <!-- Company Profile Summary Card -->
-                <div class="bg-white rounded-xl border border-gray-200 p-5 shadow-2xs space-y-4">
-                    <h3 class="text-[10px] font-bold text-gray-400 uppercase tracking-wider pb-2 border-b border-gray-100">
-                        {{ __('Employer Company') }}
-                    </h3>
-
-                    <div class="flex items-center gap-3.5">
-                        @if($job->company && $job->company->hasPublicProfile())
-                        <a href="{{ route('companies.show', $job->company->slug) }}" class="w-12 h-12 rounded-xl bg-slate-900 border border-gray-200 shadow-2xs flex items-center justify-center font-bold text-white text-base shrink-0 overflow-hidden">
-                            @if($job->company?->logo)
-                            <img src="{{ asset('storage/' . $job->company->logo) }}" alt="{{ $job->company->name }}" class="w-full h-full object-cover">
-                            @else
-                            {{ mb_substr($job->company->name ?? 'J', 0, 1) }}
-                            @endif
-                        </a>
-                        @else
-                        <div class="w-12 h-12 rounded-xl bg-slate-900 border border-gray-200 shadow-2xs flex items-center justify-center font-bold text-white text-base shrink-0 overflow-hidden">
-                            {{ mb_substr($job->company->name ?? 'J', 0, 1) }}
-                        </div>
-                        @endif
-
-                        <div class="min-w-0">
-                            <h4 class="font-bold text-gray-900 text-sm truncate flex items-center gap-1">
-                                @if($job->company && $job->company->hasPublicProfile())
-                                <a href="{{ route('companies.show', $job->company->slug) }}" class="hover:text-primary transition truncate">
-                                    {{ $job->company->name }}
-                                </a>
-                                @if($job->company?->is_verified)
-                                <i class="fas fa-check-circle text-sky-500 text-xs shrink-0"></i>
-                                @endif
-                                @else
-                                <span class="truncate">{{ $job->company->name }}</span>
-                                @endif
-                            </h4>
-                            <span class="text-xs text-gray-500 truncate block">{{ $job->company->city_name ?: ($job->company?->location ?? __('Baku, Azerbaijan')) }}</span>
-                        </div>
-                    </div>
-
-                    @if($job->company->about)
-                    <p class="text-xs text-gray-600 leading-relaxed line-clamp-3">
-                        {{ $job->company->about }}
-                    </p>
-                    @endif
-
-                    @if(($job->company && $job->company->hasPublicProfile()) || $job->company->website)
-                    <div class="pt-3 border-t border-gray-100 space-y-2">
-                        @if($job->company && $job->company->hasPublicProfile())
-                        <a href="{{ route('companies.show', $job->company->slug) }}"
-                           class="w-full py-2 px-3 rounded-lg border border-gray-200 hover:border-orange-200 hover:bg-orange-50/50 text-gray-700 hover:text-primary font-semibold text-xs text-center block transition">
-                            {{ __('All vacancies of the company') }}
-                        </a>
-                        @endif
-
-                        @if($job->company->website)
-                        <a href="{{ $job->company->website }}" target="_blank" rel="noopener noreferrer"
-                           class="w-full py-1.5 text-xs text-gray-500 hover:text-primary flex items-center justify-center gap-1 transition">
-                            <i class="fas fa-globe text-[11px]"></i>
-                            <span>{{ preg_replace('#^https?://(www\.)?#', '', $job->company->website) }}</span>
-                            <i class="fas fa-external-link-alt text-[9px]"></i>
-                        </a>
-                        @endif
-                    </div>
-                    @endif
+                <!-- Company Profile Summary Card (desktop sidebar) -->
+                <div class="hidden lg:block">
+                    @include('pages.jobs.partials.company-info', ['job' => $job])
                 </div>
-
                 <!-- Promote Vacancy Card (İrəli çək & Premium et) -->
                 <div class="bg-white rounded-xl border border-gray-200 p-5 shadow-2xs space-y-3">
                     <div>
-                        <h4 class="font-bold text-gray-900 text-xs uppercase tracking-wider">{{ __('Promote & Stand Out') }}</h4>
-                        <p class="text-[11px] text-gray-500 mt-0.5">{{ __('Promote your vacancy to reach more candidates.') }}</p>
+                        <h4 class="font-medium text-gray-900 text-xs">{{ __('Promote & Stand Out') }}</h4>
+                        <p class="text-[12px] text-gray-500 mt-0.5">{{ __('Promote your vacancy to reach more candidates.') }}</p>
                     </div>
 
                     <div class="grid grid-cols-2 gap-2.5 pt-1">
                         <button type="button" @click="bumpModalOpen = true"
-                                class="w-full py-2.5 px-3 rounded-xl border border-orange-200 bg-orange-50/70 hover:bg-orange-100 text-primary font-bold text-xs transition duration-150 flex items-center justify-center gap-1.5 cursor-pointer shadow-2xs">
-                            <i class="fas fa-rocket text-[11px]"></i>
+                                class="w-full py-2.5 px-3 rounded-xl border border-orange-200 bg-orange-50/70 hover:bg-orange-100 text-primary font-semibold text-xs transition duration-150 flex items-center justify-center gap-1.5 cursor-pointer shadow-2xs">
+                            <i class="fas fa-rocket text-[12px]"></i>
                             <span>{{ __('Boost') }}</span>
                         </button>
                         <button type="button" @click="premiumModalOpen = true"
-                                class="w-full py-2.5 px-3 rounded-xl border border-amber-300 bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs transition duration-150 flex items-center justify-center gap-1.5 cursor-pointer shadow-2xs">
-                            <i class="fas fa-crown text-[11px]"></i>
+                                class="w-full py-2.5 px-3 rounded-xl border border-amber-300 bg-amber-500 hover:bg-amber-600 text-white font-semibold text-xs transition duration-150 flex items-center justify-center gap-1.5 cursor-pointer shadow-2xs">
+                            <i class="fas fa-crown text-[12px]"></i>
                             <span>{{ __('Make Premium') }}</span>
                         </button>
                     </div>
@@ -406,8 +350,8 @@
                 <!-- Modal Header -->
                 <div class="bg-gray-50 px-6 py-4 border-b border-gray-100 flex items-center justify-between">
                     <div>
-                        <div class="text-[10px] font-bold text-primary uppercase tracking-wider">{{ __('Job Application') }}</div>
-                        <h3 class="text-sm font-bold text-gray-900 truncate max-w-xs">{{ $job->title }}</h3>
+                        <div class="text-[11px] font-medium text-primary">{{ __('Job Application') }}</div>
+                        <h3 class="text-sm font-semibold text-gray-900 truncate max-w-xs">{{ $job->title }}</h3>
                     </div>
                     <button @click="closeModal()" type="button" class="text-gray-400 hover:text-gray-700 p-1 cursor-pointer">
                         <i class="fas fa-times text-sm"></i>
@@ -420,9 +364,9 @@
 
                     @if(isset($userResumes) && $userResumes->count() > 0)
                     <div class="p-3.5 rounded-xl bg-orange-50/70 border border-orange-200/60 space-y-2">
-                        <label class="block text-xs font-bold text-gray-900 flex items-center justify-between">
+                        <label class="block text-xs font-semibold text-gray-900 flex items-center justify-between">
                             <span>{{ __('Apply with a System-Created CV') }}</span>
-                            <span class="text-[10px] text-primary font-semibold">★ {{ __('Recommended') }}</span>
+                            <span class="text-[11px] text-primary font-semibold">★ {{ __('Recommended') }}</span>
                         </label>
                         <select x-model="formData.resume_id"
                                 class="w-full px-3 py-2 rounded-lg border border-gray-200 text-xs focus:ring-1 focus:ring-primary focus:border-primary focus:outline-hidden bg-white font-medium text-gray-800">
@@ -433,7 +377,7 @@
                             @endforeach
                             <option value="">-- {{ __('Upload a new CV as a file') }} --</option>
                         </select>
-                        <p class="text-[11px] text-gray-500" x-show="formData.resume_id">
+                        <p class="text-[12px] text-gray-500" x-show="formData.resume_id">
                             <i class="fas fa-info-circle text-primary mr-0.5"></i>
                             {{ __("Your selected CV profile will be sent directly to the employer's review panel.") }}
                         </p>
@@ -441,7 +385,7 @@
                     @else
                     <div class="p-3 rounded-xl bg-gray-50 border border-gray-100 flex items-center justify-between text-xs">
                         <span class="text-gray-600">{{ __("Don't have a CV created in the system yet?") }}</span>
-                        <a href="{{ route('filament.user.resources.my-resumes.create') }}" target="_blank" class="text-primary hover:underline font-bold">
+                        <a href="{{ route('filament.user.resources.my-resumes.create') }}" target="_blank" class="text-primary hover:underline font-semibold">
                             + {{ __('Create CV') }}
                         </a>
                     </div>
@@ -450,20 +394,20 @@
                     <!-- Manual details (Only shown when not using a created CV) -->
                     <div x-show="!formData.resume_id" class="space-y-4">
                         <div>
-                            <label class="block text-xs font-bold text-gray-700 mb-1">{{ __('Your Full Name') }} *</label>
+                            <label class="block text-xs font-semibold text-gray-700 mb-1">{{ __('Your Full Name') }} *</label>
                             <input type="text" x-model="formData.applicant_name" :required="!formData.resume_id"
                                    class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs focus:ring-1 focus:ring-primary focus:border-primary focus:outline-hidden">
                         </div>
 
                         <div class="grid grid-cols-1 {{ $job->hasApplicationField('phone') ? 'sm:grid-cols-2' : '' }} gap-3">
                             <div>
-                                <label class="block text-xs font-bold text-gray-700 mb-1">{{ __('Email Address') }} *</label>
+                                <label class="block text-xs font-semibold text-gray-700 mb-1">{{ __('Email Address') }} *</label>
                                 <input type="email" x-model="formData.applicant_email" :required="!formData.resume_id"
                                        class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs focus:ring-1 focus:ring-primary focus:border-primary focus:outline-hidden">
                             </div>
                             @if($job->hasApplicationField('phone'))
                             <div>
-                                <label class="block text-xs font-bold text-gray-700 mb-1">{{ __('Phone Number') }}</label>
+                                <label class="block text-xs font-semibold text-gray-700 mb-1">{{ __('Phone Number') }}</label>
                                 <input type="tel" x-model="formData.applicant_phone"
                                        class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs focus:ring-1 focus:ring-primary focus:border-primary focus:outline-hidden">
                             </div>
@@ -471,7 +415,7 @@
                         </div>
 
                         <div>
-                            <label class="block text-xs font-bold text-gray-700 mb-1">
+                            <label class="block text-xs font-semibold text-gray-700 mb-1">
                                 <span>{{ __('CV / Resume File (PDF, DOC)') }}</span> *
                             </label>
                             <div class="relative border-2 border-dashed border-gray-200 hover:border-primary rounded-xl p-4 text-center cursor-pointer transition bg-gray-50/50">
@@ -480,7 +424,7 @@
                                 <div class="space-y-1">
                                     <i class="fas fa-cloud-arrow-up text-xl text-primary"></i>
                                     <div class="text-xs text-gray-600" x-text="fileName ? fileName : '{{ __('Select a file or drag it here') }}'"></div>
-                                    <div class="text-[10px] text-gray-400 font-mono">PDF, DOC, DOCX (Maks 10MB)</div>
+                                    <div class="text-[11px] text-gray-400 font-mono">{{ __('PDF, DOC, DOCX (Max 10MB)') }}</div>
                                 </div>
                             </div>
                         </div>
@@ -489,14 +433,14 @@
                         <div class="grid grid-cols-1 {{ ($job->hasApplicationField('linkedin') && $job->hasApplicationField('portfolio')) ? 'sm:grid-cols-2' : '' }} gap-3">
                             @if($job->hasApplicationField('linkedin'))
                             <div>
-                                <label class="block text-xs font-bold text-gray-700 mb-1">LinkedIn URL</label>
+                                <label class="block text-xs font-semibold text-gray-700 mb-1">{{ __('LinkedIn URL') }}</label>
                                 <input type="url" x-model="formData.linkedin_url" placeholder="https://linkedin.com/in/..."
                                        class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs focus:ring-1 focus:ring-primary focus:border-primary focus:outline-hidden">
                             </div>
                             @endif
                             @if($job->hasApplicationField('portfolio'))
                             <div>
-                                <label class="block text-xs font-bold text-gray-700 mb-1">Portfolyo / GitHub</label>
+                                <label class="block text-xs font-semibold text-gray-700 mb-1">{{ __('Portfolio / GitHub') }}</label>
                                 <input type="url" x-model="formData.portfolio_url" placeholder="https://github.com/..."
                                        class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs focus:ring-1 focus:ring-primary focus:border-primary focus:outline-hidden">
                             </div>
@@ -507,7 +451,7 @@
 
                     @if($job->hasApplicationField('cover_letter'))
                     <div>
-                        <label class="block text-xs font-bold text-gray-700 mb-1">{{ __('Cover Letter / Notes') }}</label>
+                        <label class="block text-xs font-semibold text-gray-700 mb-1">{{ __('Cover Letter / Notes') }}</label>
                         <textarea x-model="formData.cover_letter" rows="3" placeholder="{{ __('Tell us briefly about yourself...') }}"
                                   class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs focus:ring-1 focus:ring-primary focus:border-primary focus:outline-hidden"></textarea>
                     </div>
@@ -526,7 +470,7 @@
                         <button @click="closeModal()" type="button" class="px-4 py-2 rounded-xl text-xs font-semibold text-gray-500 hover:bg-gray-100 transition cursor-pointer">
                             {{ __('Cancel') }}
                         </button>
-                        <button type="submit" :disabled="isLoading" class="px-6 py-2.5 rounded-xl bg-primary hover:bg-primary-dark text-white text-xs font-bold shadow-xs flex items-center gap-2 disabled:opacity-50 transition cursor-pointer">
+                        <button type="submit" :disabled="isLoading" class="px-6 py-2.5 rounded-xl bg-primary hover:bg-primary-dark text-white text-xs font-semibold shadow-xs flex items-center gap-2 disabled:opacity-50 transition cursor-pointer">
                             <span x-show="!isLoading">{{ __('Submit Application') }}</span>
                             <span x-show="isLoading" x-cloak>{{ __('Sending...') }}</span>
                         </button>
@@ -623,4 +567,52 @@ function jobApplicationModal(actionUrl) {
     }
 }
 </script>
+@endpush
+
+{{-- Google Jobs (JobPosting) yapısal verisi --}}
+@push('structured_data')
+@php
+    $salaryValue = array_filter([
+        '@type' => 'QuantitativeValue',
+        'minValue' => $job->salary_min,
+        'maxValue' => $job->salary_max,
+        'unitText' => 'MONTH',
+    ], fn ($v) => $v !== null);
+
+    $jobSchema = array_filter([
+        '@context' => 'https://schema.org',
+        '@type' => 'JobPosting',
+        'title' => $job->title,
+        'description' => sanitize_html($job->description),
+        'datePosted' => optional($job->created_at)->toIso8601String(),
+        'validThrough' => optional($job->deadline)->toIso8601String(),
+        'employmentType' => $job->job_type_name ?: null,
+        'hiringOrganization' => array_filter([
+            '@type' => 'Organization',
+            'name' => $job->company?->name,
+            'sameAs' => $job->company?->website,
+            'logo' => $job->company?->logo ? asset('storage/' . $job->company->logo) : null,
+        ]),
+        'jobLocation' => [
+            '@type' => 'Place',
+            'address' => array_filter([
+                '@type' => 'PostalAddress',
+                'addressLocality' => $job->city_name ?: $job->company?->location,
+                'addressCountry' => 'AZ',
+            ]),
+        ],
+        'baseSalary' => ($job->salary_min || $job->salary_max) ? [
+            '@type' => 'MonetaryAmount',
+            'currency' => 'AZN',
+            'value' => $salaryValue,
+        ] : null,
+        'identifier' => [
+            '@type' => 'PropertyValue',
+            'name' => config('app.full_name'),
+            'value' => (string) $job->id,
+        ],
+        'url' => route('jobs.show', $job->slug),
+    ], fn ($v) => $v !== null && $v !== '' && $v !== []);
+@endphp
+<script type="application/ld+json">{!! json_encode($jobSchema, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG) !!}</script>
 @endpush

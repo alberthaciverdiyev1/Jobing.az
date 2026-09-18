@@ -18,10 +18,7 @@
       <!-- Drawer Header -->
       <div class="flex items-center justify-between pb-3 border-b border-gray-100">
         <div class="flex items-center space-x-2">
-          <div class="w-8 h-8 bg-primary text-white rounded-lg flex items-center justify-center font-bold text-lg shadow-xs">
-              J
-          </div>
-          <span class="font-bold text-base text-gray-800">{{ config('app.brand_name', 'Jobing') }}<span class="text-primary">{{ config('app.brand_suffix', '.az') }}</span></span>
+          <span class="font-semibold text-lg text-gray-800">{{ config('app.brand_name', 'Jobing') }}<span class="text-primary">{{ config('app.brand_suffix', '.az') }}</span></span>
         </div>
         <button type="button" @click="mobileDrawerOpen = false" class="w-9 h-9 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-500 flex items-center justify-center transition cursor-pointer">
           <i class="fa-solid fa-xmark text-sm"></i>
@@ -30,13 +27,13 @@
 
       <!-- Quick Action Buttons -->
       <div class="grid {{ (auth()->check() && auth()->user()->isCompany()) ? 'grid-cols-1' : 'grid-cols-2' }} gap-2.5">
-        <a href="{{ route('jobs.create') }}" class="flex items-center justify-center gap-2 py-3 px-4 bg-primary hover:bg-primary-dark text-white rounded-2xl font-bold text-xs shadow-sm active:scale-95 transition-all">
+        <a href="{{ route('jobs.create') }}" class="flex items-center justify-center gap-2 py-3 px-4 bg-primary hover:bg-primary-dark text-white rounded-2xl font-semibold text-sm shadow-sm active:scale-95 transition-all">
           <i class="fa-solid fa-plus text-sm"></i>
           <span>{{ __('Post a Vacancy') }}</span>
         </a>
         @if(!auth()->check() || !auth()->user()->isCompany())
-        <a href="{{ route('job-seekers.create') }}" class="flex items-center justify-center gap-2 py-3 px-4 bg-orange-50 hover:bg-orange-100 text-primary border border-orange-200 rounded-2xl font-bold text-xs shadow-xs active:scale-95 transition-all">
-          <i class="fa-solid fa-user-plus text-xs"></i>
+        <a href="{{ route('job-seekers.create') }}" class="flex items-center justify-center gap-2 py-3 px-4 bg-orange-50 hover:bg-orange-100 text-primary border border-orange-200 rounded-2xl font-semibold text-sm shadow-xs active:scale-95 transition-all">
+          <i class="fa-solid fa-user-plus text-sm"></i>
           <span>{{ __('Job seeking listing') }}</span>
         </a>
         @endif
@@ -44,52 +41,51 @@
 
       <!-- Navigation Links List -->
       <div class="space-y-1 py-1">
-        <a href="{{ route('home') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl {{ request()->routeIs('home') ? 'text-primary bg-orange-50 font-semibold' : 'text-gray-700 hover:bg-gray-50 font-medium' }} text-sm">
+        <a href="{{ route('jobs.index') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl {{ request()->routeIs('jobs.index') ? 'text-primary bg-orange-50 font-semibold' : 'text-gray-700 hover:bg-gray-50 font-medium' }} text-sm">
           <span class="flex items-center gap-3"><i class="fa-solid fa-house text-gray-400 w-5 text-center"></i> {{ __('Home') }}</span>
-          <i class="fa-solid fa-chevron-right text-xs text-gray-300"></i>
+          <i class="fa-solid fa-chevron-right text-sm text-gray-300"></i>
         </a>
         <a href="{{ route('jobs.index') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl {{ request()->routeIs('jobs.*') && !request()->routeIs('jobs.create') ? 'text-primary bg-orange-50 font-semibold' : 'text-gray-700 hover:bg-gray-50 font-medium' }} text-sm">
           <span class="flex items-center gap-3"><i class="fa-solid fa-briefcase text-gray-400 w-5 text-center"></i> {{ __('Vacancies') }}</span>
-          <i class="fa-solid fa-chevron-right text-xs text-gray-300"></i>
+          <i class="fa-solid fa-chevron-right text-sm text-gray-300"></i>
         </a>
         <a href="{{ route('companies.index') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl {{ request()->routeIs('companies.*') ? 'text-primary bg-orange-50 font-semibold' : 'text-gray-700 hover:bg-gray-50 font-medium' }} text-sm">
           <span class="flex items-center gap-3"><i class="fa-solid fa-building text-gray-400 w-5 text-center"></i> {{ __('Companies') }}</span>
-          <i class="fa-solid fa-chevron-right text-xs text-gray-300"></i>
+          <i class="fa-solid fa-chevron-right text-sm text-gray-300"></i>
         </a>
         <a href="{{ route('job-seekers.index') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl {{ request()->routeIs('job-seekers.*') && !request()->routeIs('job-seekers.create') ? 'text-primary bg-orange-50 font-semibold' : 'text-gray-700 hover:bg-gray-50 font-medium' }} text-sm">
           <span class="flex items-center gap-3"><i class="fa-solid fa-user-tie text-gray-400 w-5 text-center"></i> {{ __('Job Seekers') }}</span>
-          <i class="fa-solid fa-chevron-right text-xs text-gray-300"></i>
+          <i class="fa-solid fa-chevron-right text-sm text-gray-300"></i>
         </a>
         <a href="{{ route('resumes.index') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl {{ request()->routeIs('resumes.*') ? 'text-primary bg-orange-50 font-semibold' : 'text-gray-700 hover:bg-gray-50 font-medium' }} text-sm">
           <span class="flex items-center gap-3"><i class="fa-solid fa-file-lines text-gray-400 w-5 text-center"></i> {{ __('Resume Database') }}</span>
-          <i class="fa-solid fa-chevron-right text-xs text-gray-300"></i>
+          <i class="fa-solid fa-chevron-right text-sm text-gray-300"></i>
         </a>
         <a href="{{ route('favorites.index') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl {{ request()->routeIs('favorites.*') ? 'text-primary bg-orange-50 font-semibold' : 'text-gray-700 hover:bg-gray-50 font-medium' }} text-sm">
           <span class="flex items-center gap-3"><i class="fa-solid fa-heart text-gray-400 w-5 text-center"></i> {{ __('Favorites') }}</span>
-          <i class="fa-solid fa-chevron-right text-xs text-gray-300"></i>
+          <i class="fa-solid fa-chevron-right text-sm text-gray-300"></i>
         </a>
         <a href="{{ route('blog.index') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl {{ request()->routeIs('blog.*') ? 'text-primary bg-orange-50 font-semibold' : 'text-gray-700 hover:bg-gray-50 font-medium' }} text-sm">
           <span class="flex items-center gap-3"><i class="fa-solid fa-newspaper text-gray-400 w-5 text-center"></i> {{ __('Blog & Articles') }}</span>
-          <i class="fa-solid fa-chevron-right text-xs text-gray-300"></i>
+          <i class="fa-solid fa-chevron-right text-sm text-gray-300"></i>
         </a>
         <a href="{{ route('about') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl {{ request()->routeIs('about') ? 'text-primary bg-orange-50 font-semibold' : 'text-gray-700 hover:bg-gray-50 font-medium' }} text-sm">
           <span class="flex items-center gap-3"><i class="fa-solid fa-circle-info text-gray-400 w-5 text-center"></i> {{ __('About Us') }}</span>
-          <i class="fa-solid fa-chevron-right text-xs text-gray-300"></i>
+          <i class="fa-solid fa-chevron-right text-sm text-gray-300"></i>
         </a>
         <a href="{{ route('contact.index') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl {{ request()->routeIs('contact.*') ? 'text-primary bg-orange-50 font-semibold' : 'text-gray-700 hover:bg-gray-50 font-medium' }} text-sm">
           <span class="flex items-center gap-3"><i class="fa-solid fa-envelope text-gray-400 w-5 text-center"></i> {{ __('Contact') }}</span>
-          <i class="fa-solid fa-chevron-right text-xs text-gray-300"></i>
+          <i class="fa-solid fa-chevron-right text-sm text-gray-300"></i>
         </a>
       </div>
 
       <!-- Language Selector with Flags -->
       <div class="pt-3 border-t border-gray-100">
-        <div class="text-[11px] font-semibold uppercase tracking-wider text-gray-400 mb-2">{{ __('Language selection') }}</div>
+        <div class="text-xs font-medium text-gray-400 mb-2">{{ __('Language selection') }}</div>
         <div class="grid grid-cols-4 gap-1.5">
           @foreach($locales as $lKey => $lData)
             <a href="{{ route('lang.switch', $lKey) }}"
-               class="flex items-center justify-center gap-1.5 py-2 px-2 rounded-2xl text-xs font-semibold border transition {{ $currentLocale === $lKey ? 'border-primary bg-orange-50 text-primary shadow-2xs font-bold' : 'border-gray-200 text-gray-700 hover:bg-gray-50' }}">
-              <span class="text-sm">{{ $lData['flag'] }}</span>
+               class="flex items-center justify-center gap-1.5 py-2 px-2 rounded-2xl text-sm font-semibold border transition {{ $currentLocale === $lKey ? 'border-primary bg-orange-50 text-primary shadow-2xs font-semibold' : 'border-gray-200 text-gray-700 hover:bg-gray-50' }}">
               <span class="uppercase">{{ $lData['code'] ?? $lKey }}</span>
             </a>
           @endforeach
@@ -101,8 +97,8 @@
         @auth
           <div class="space-y-1">
             <div class="px-3.5 py-2 mb-1 bg-gray-50 rounded-xl">
-              <p class="text-xs font-bold text-gray-900 truncate">{{ auth()->user()->name }}</p>
-              <p class="text-[11px] text-gray-400 truncate">{{ auth()->user()->email }}</p>
+              <p class="text-sm font-semibold text-gray-900 truncate">{{ auth()->user()->name }}</p>
+              <p class="text-xs text-gray-400 truncate">{{ auth()->user()->email }}</p>
             </div>
             @php
                 $panelUrl = auth()->user()->panelPath();
@@ -117,7 +113,7 @@
                 <span>{{ $panelLabel }}</span>
               </span>
               @if($unreadCount > 0)
-              <span class="px-1.5 py-0.5 rounded-full bg-rose-500 text-white text-[10px] font-bold">
+              <span class="px-1.5 py-0.5 rounded-full bg-rose-500 text-white text-[11px] font-semibold">
                 {{ $unreadCount }}
               </span>
               @endif
@@ -138,7 +134,7 @@
             </form>
           </div>
         @else
-          <a href="{{ route('login') }}" class="w-full flex items-center justify-center gap-2 py-3 px-4 bg-gray-900 hover:bg-gray-800 text-white rounded-2xl font-semibold text-xs shadow-sm transition active:scale-95">
+          <a href="{{ route('login') }}" class="w-full flex items-center justify-center gap-2 py-3 px-4 bg-gray-900 hover:bg-gray-800 text-white rounded-2xl font-semibold text-sm shadow-sm transition active:scale-95">
             <i class="fa-solid fa-user text-sm"></i>
             <span>{{ __('Sign in / Register') }}</span>
           </a>

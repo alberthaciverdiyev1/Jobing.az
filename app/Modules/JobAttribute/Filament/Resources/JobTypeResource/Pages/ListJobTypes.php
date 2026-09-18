@@ -13,7 +13,7 @@ class ListJobTypes extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make()->label('Yeni İş Rejimi Əlavə Et'),
+            Actions\CreateAction::make()->label(__('Add New Job Type')),
         ];
     }
 }

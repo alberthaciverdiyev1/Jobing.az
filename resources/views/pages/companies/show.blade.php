@@ -25,11 +25,11 @@
 
                 <!-- Left: Logo + Details -->
                 <div class="flex items-start sm:items-center gap-4 sm:gap-5">
-                    <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-slate-900 {{ $company->banner ? 'border-4 border-white shadow-md' : 'border border-gray-200 shadow-2xs' }} flex items-center justify-center font-bold text-white text-2xl sm:text-3xl shrink-0 overflow-hidden bg-white">
+                    <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-slate-900 {{ $company->banner ? 'border-4 border-white shadow-md' : 'border border-gray-200 shadow-2xs' }} flex items-center justify-center font-semibold text-white text-2xl sm:text-3xl shrink-0 overflow-hidden bg-white">
                         @if($company->logo)
                         <img src="{{ asset('storage/' . $company->logo) }}" alt="{{ $company->name }}" class="w-full h-full object-cover">
                         @else
-                        <span class="w-full h-full bg-slate-900 text-white flex items-center justify-center font-bold">
+                        <span class="w-full h-full bg-slate-900 text-white flex items-center justify-center font-semibold">
                             {{ mb_substr($company->name, 0, 1) }}
                         </span>
                         @endif
@@ -37,10 +37,10 @@
 
                     <div class="space-y-1">
                         <div class="flex items-center gap-2.5 flex-wrap">
-                            <h1 class="text-xl sm:text-2xl md:text-3xl font-extrabold text-gray-900 tracking-tight">{{ $company->name }}</h1>
+                            <h2 class="text-xl sm:text-2xl md:text-3xl font-semibold text-gray-900 tracking-tight">{{ $company->name }}</h2>
                             @if($company->is_verified)
-                            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-semibold bg-sky-50 text-sky-700 border border-sky-100">
-                                <i class="fas fa-check-circle text-sky-500 text-[11px]"></i>
+                            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[12px] font-semibold bg-sky-50 text-sky-700 border border-sky-100">
+                                <i class="fas fa-check-circle text-sky-500 text-[12px]"></i>
                                 <span>{{ __('Verified') }}</span>
                             </span>
                             @endif
@@ -71,8 +71,8 @@
                 <!-- Right: Active Vacancies Counter Pill -->
                 <div class="shrink-0 self-start md:self-center">
                     <div class="px-5 py-2.5 rounded-xl bg-orange-50/80 border border-orange-100 text-center min-w-[120px] shadow-2xs">
-                        <span class="text-xl sm:text-2xl font-black text-primary font-mono block leading-tight">{{ $company->vacancies->count() }}</span>
-                        <span class="text-[11px] font-bold text-orange-950 uppercase tracking-wider block mt-0.5">{{ __('Active Vacancy') }}</span>
+                        <span class="text-xl sm:text-2xl font-semibold text-primary font-mono block leading-tight">{{ $company->vacancies->count() }}</span>
+                        <span class="text-[12px] font-medium text-orange-950 block mt-0.5">{{ __('Active Vacancy') }}</span>
                     </div>
                 </div>
 
@@ -90,7 +90,7 @@
 
                 <!-- 1. Şirkət Haqqında (About) -->
                 <div class="bg-white rounded-xl border border-gray-200 p-6 shadow-2xs space-y-3">
-                    <h2 class="text-sm font-bold text-gray-900 uppercase tracking-wider flex items-center gap-2 pb-3 border-b border-gray-100">
+                    <h2 class="text-sm font-semibold text-gray-900 flex items-center gap-2 pb-3 border-b border-gray-100">
                         <span>{{ __('About Company') }}</span>
                     </h2>
                     <div class="text-xs sm:text-sm text-gray-600 leading-relaxed whitespace-pre-line">
@@ -101,9 +101,9 @@
                 <!-- 2. Şirkətin Açık Vakansiyaları (Open Vacancies) -->
                 <div class="space-y-4">
                     <div class="flex items-center justify-between pb-2 border-b border-gray-200">
-                        <h2 class="text-sm font-bold text-gray-900 uppercase tracking-wider flex items-center gap-2 pl-5">
+                        <h2 class="text-sm font-semibold text-gray-900 flex items-center gap-2 pl-5">
                             <span>{{ __('Active Vacancies') }}</span>
-                            <span class="text-xs font-bold text-primary font-mono lowercase">({{ $company->vacancies->count() }})</span>
+                            <span class="text-xs font-semibold text-primary font-mono lowercase">({{ $company->vacancies->count() }})</span>
                         </h2>
                     </div>
 
@@ -118,7 +118,7 @@
                         <div class="w-12 h-12 rounded-xl bg-orange-50 text-primary flex items-center justify-center mx-auto mb-3 border border-orange-100">
                             <i class="fas fa-briefcase text-base"></i>
                         </div>
-                        <p class="font-bold text-gray-800 text-sm mb-1">{{ __('No active vacancies at the moment') }}</p>
+                        <p class="font-semibold text-gray-800 text-sm mb-1">{{ __('No active vacancies at the moment') }}</p>
                         <p class="text-gray-500 max-w-sm mx-auto">{{ __('New vacancies posted by this company will appear here.') }}</p>
                     </div>
                     @endif
@@ -129,7 +129,7 @@
             <!-- Right: Contact Info Sidebar -->
             <div class="space-y-6">
                 <div class="bg-white rounded-xl border border-gray-200 p-5 shadow-2xs space-y-4 sticky top-24">
-                    <h3 class="text-xs font-bold text-gray-900 uppercase tracking-wider pb-3 border-b border-gray-100 flex items-center gap-2">
+                    <h3 class="text-xs font-medium text-gray-900 pb-3 border-b border-gray-100 flex items-center gap-2">
                         <i class="fas fa-address-card text-primary text-xs"></i>
                         <span>{{ __('Contact Information') }}</span>
                     </h3>
@@ -139,7 +139,7 @@
                         <div class="flex items-start gap-3">
                             <i class="far fa-envelope text-gray-400 text-xs mt-0.5"></i>
                             <div class="min-w-0 flex-1">
-                                <span class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider block">{{ __('Email') }}</span>
+                                <span class="text-[11px] font-medium text-gray-400 block">{{ __('Email') }}</span>
                                 <a href="mailto:{{ $company->email }}" class="text-gray-800 hover:text-primary font-medium truncate block transition">
                                     {{ $company->email }}
                                 </a>
@@ -151,7 +151,7 @@
                         <div class="flex items-start gap-3">
                             <i class="fas fa-phone text-gray-400 text-xs mt-0.5"></i>
                             <div class="min-w-0 flex-1">
-                                <span class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider block">{{ __('Phone') }}</span>
+                                <span class="text-[11px] font-medium text-gray-400 block">{{ __('Phone') }}</span>
                                 <a href="tel:{{ $company->phone }}" class="text-gray-800 hover:text-primary font-medium block transition">
                                     {{ $company->phone }}
                                 </a>
@@ -163,7 +163,7 @@
                         <div class="flex items-start gap-3">
                             <i class="fas fa-map-marker-alt text-gray-400 text-xs mt-0.5"></i>
                             <div class="min-w-0 flex-1">
-                                <span class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider block">{{ __('Address') }}</span>
+                                <span class="text-[11px] font-medium text-gray-400 block">{{ __('Address') }}</span>
                                 <span class="text-gray-800 font-medium block">
                                     {{ $company->city_name }}
                                 </span>
@@ -175,7 +175,7 @@
                         <div class="flex items-start gap-3">
                             <i class="fas fa-globe text-gray-400 text-xs mt-0.5"></i>
                             <div class="min-w-0 flex-1">
-                                <span class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider block">{{ __('Official Website') }}</span>
+                                <span class="text-[11px] font-medium text-gray-400 block">{{ __('Official Website') }}</span>
                                 <a href="{{ $company->website }}" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline font-semibold truncate block transition">
                                     {{ preg_replace('#^https?://(www\.)?#', '', $company->website) }}
                                 </a>

@@ -3,7 +3,7 @@
 namespace App\Modules\Resume\Filament\Resources\MyResumeResource\Pages;
 
 use App\Modules\Resume\Filament\Resources\MyResumeResource;
-use Filament\Resources\Pages\CreateRecord;
+use App\Filament\Pages\CreateRecord;
 
 class CreateMyResume extends CreateRecord
 {

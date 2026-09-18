@@ -18,8 +18,18 @@ class CompanyMessageTemplateResource extends Resource
     protected static ?string $model = MessageTemplate::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-chat-bubble-left-right';
-    protected static ?string $navigationLabel = 'Mesaj Şablonları';
-    protected static ?string $pluralModelLabel = 'Mesaj Şablonları';
+    protected static ?string $navigationLabel = null;
+
+    public static function getNavigationLabel(): string
+    {
+        return __('Message Templates');
+    }
+    protected static ?string $pluralModelLabel = null;
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('Message Templates');
+    }
     protected static ?int $navigationSort = 5;
 
     public static function canViewAny(): bool

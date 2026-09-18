@@ -14,7 +14,7 @@ class Blog extends Model
 
     protected string $slugSource = 'title';
 
-    public array $translatable = ['title', 'excerpt', 'content'];
+    public array $translatable = ['title', 'excerpt', 'content', 'meta_title', 'meta_description'];
 
     protected $fillable = [
         'title',
@@ -23,6 +23,8 @@ class Blog extends Model
         'cover_image',
         'excerpt',
         'content',
+        'meta_title',
+        'meta_description',
         'views_count',
         'is_active',
         'published_at',
@@ -32,6 +34,8 @@ class Blog extends Model
         'title' => 'array',
         'excerpt' => 'array',
         'content' => 'array',
+        'meta_title' => 'array',
+        'meta_description' => 'array',
         'views_count' => 'integer',
         'is_active' => 'boolean',
         'published_at' => 'datetime',

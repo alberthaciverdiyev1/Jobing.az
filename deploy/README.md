@@ -1,0 +1,52 @@
+# Deploy
+
+İki script:
+
+## 1) `install-server.sh` — sıfırdan sunucu kurulumu (Ubuntu 22.04/24.04)
+
+```bash
+sudo DOMAIN=jobing.az \
+     APP_DIR=/var/www/jobing \
+     DB_PASS='guclu-bir-sifre' \
+     REPO_URL=git@github.com:alberthacirverdiyev1/Jobing.az.git \
+     LE_EMAIL=admin@jobing.az \
+     bash deploy/install-server.sh
+```
+
+Kurduğu ve ayarladığı şeyler:
+- Nginx, PHP-FPM + eklentiler, PostgreSQL, Redis, Node.js, Composer
+- Sistem kullanıcısı + proje dizini + `.env` (production, Redis cache/session/queue)
+- `composer install`, `npm ci && npm run build`, `migrate`, `storage:link`, `optimize`
+- Nginx site + SSL (certbot, opsiyonel)
+- **PHP-FPM `pm = dynamic`** → sürekli ayakta, **ondemand değil**
+- **systemd `jobing-queue`** servisi → queue worker her zaman çalışır
+- **cron** → her dakika `schedule:run` (premium süresi dolanlar vb.)
+- UFW (22/80/443)
+
+## 2) `deploy.sh` — push sonrası derle + yayına al
+
+Sunucuda çalışır; `.github/workflows/deploy.yml` bunu SSH ile tetikler:
+
+```bash
+cd /var/www/jobing && bash deploy/deploy.sh
+```
+
+Yaptığı: `git reset --hard origin/main` → `composer install --no-dev` → `npm ci && npm run build` → `migrate --force` → `storage:link` → `optimize` → izinler → `systemctl reload php-fpm` → `queue:restart` → `/up` sağlık kontrolü.
+
+**Uygulama hiç düşmez** (`artisan down` yok); yeni sürüm derlenip biter, php-fpm kesintisiz reload olur.
+
+## GitHub Secrets (repo → Settings → Secrets → Actions)
+
+| Secret | Örnek |
+|---|---|
+| `SSH_HOST` | `123.123.123.123` |
+| `SSH_USER` | `deploy` |
+| `SSH_PRIVATE_KEY` | deploy kullanıcısının özel anahtarı (deploy key) |
+| `SSH_PORT` | `22` |
+| `APP_DIR` | `/var/www/jobing` |
+| `HEALTH_URL` | `https://jobing.az` |
+
+## Notlar
+- Sunucuda `deploy` kullanıcısına `sudo systemctl reload php8.3-fpm` için yetki ver (veya `deploy.sh`'ı root/systemd ile çalıştır).
+- `main` dışında deploy etmek istersen workflow'daki `branches` ve `deploy.sh` içindeki `BRANCH`'i güncelle.
+- Lokal geliştirmede cache/session `file`; production'da `install-server.sh` bunları **Redis**'e çevirir.

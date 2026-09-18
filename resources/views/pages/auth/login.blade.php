@@ -8,9 +8,9 @@
 
         <!-- Top Title / Logo -->
         <div class="text-center mb-8">
-            <h1 class="text-2xl sm:text-3xl font-extrabold text-gray-900 tracking-tight">
+            <h2 class="text-2xl sm:text-3xl font-semibold text-gray-900 tracking-tight">
                 {{ __('Sign in to your account') }}
-            </h1>
+            </h2>
             <p class="text-xs sm:text-sm text-gray-500 mt-1.5">
                 {{ __('Welcome to Jobing.az. Please enter your details.') }}
             </p>
@@ -18,11 +18,11 @@
 
         @if ($errors->any())
         <div class="mb-6 p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs">
-            <div class="font-bold mb-1 flex items-center gap-1.5">
+            <div class="font-semibold mb-1 flex items-center gap-1.5">
                 <i class="fas fa-exclamation-circle text-rose-600"></i>
                 <span>{{ __('An error occurred while signing in:') }}</span>
             </div>
-            <ul class="list-disc pl-5 space-y-1 mt-1 text-[11px]">
+            <ul class="list-disc pl-5 space-y-1 mt-1 text-[12px]">
                 @foreach ($errors->all() as $error)
                     <li>{{ $error }}</li>
                 @endforeach
@@ -36,7 +36,7 @@
                 @csrf
 
                 <div>
-                    <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">
+                    <label class="block text-xs font-medium text-gray-700 mb-2">
                         {{ __('Email Address') }} <span class="text-rose-500">*</span>
                     </label>
                     <div class="relative">
@@ -49,15 +49,20 @@
 
                 <div>
                     <div class="flex items-center justify-between mb-2">
-                        <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider">
+                        <label class="block text-xs font-medium text-gray-700">
                             {{ __('Password') }} <span class="text-rose-500">*</span>
                         </label>
                     </div>
-                    <div class="relative">
+                    <div class="relative" x-data="{ showPw: false }">
                         <i class="fas fa-lock absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
-                        <input type="password" name="password" required
+                        <input type="password" :type="showPw ? 'text' : 'password'" name="password" required
                                placeholder="••••••••"
-                               class="w-full pl-10 pr-4 py-3 bg-gray-50/50 hover:bg-white focus:bg-white border border-gray-200 rounded-xl text-xs sm:text-sm focus:ring-1 focus:ring-primary focus:border-primary focus:outline-hidden transition shadow-2xs">
+                               class="w-full pl-10 pr-11 py-3 bg-gray-50/50 hover:bg-white focus:bg-white border border-gray-200 rounded-xl text-xs sm:text-sm focus:ring-1 focus:ring-primary focus:border-primary focus:outline-hidden transition shadow-2xs">
+                        <button type="button" @click="showPw = !showPw" tabindex="-1"
+                                :aria-label="showPw ? 'Hide password' : 'Show password'"
+                                class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors cursor-pointer">
+                            <i class="fas text-xs" :class="showPw ? 'fa-eye-slash' : 'fa-eye'"></i>
+                        </button>
                     </div>
                 </div>
 
@@ -69,7 +74,7 @@
                 </div>
 
                 <button type="submit"
-                        class="w-full py-3.5 rounded-xl bg-primary hover:bg-primary-dark text-white font-bold text-sm shadow-sm hover:shadow-md transition duration-150 flex items-center justify-center gap-2 cursor-pointer mt-2">
+                        class="w-full py-3.5 rounded-xl bg-primary hover:bg-primary-dark text-white font-semibold text-sm shadow-sm hover:shadow-md transition duration-150 flex items-center justify-center gap-2 cursor-pointer mt-2">
                     <i class="fas fa-sign-in-alt text-xs"></i>
                     <span>{{ __('Sign in') }}</span>
                 </button>
@@ -81,7 +86,7 @@
                     {{ __("Don't have an account?") }}
                 </p>
                 <a href="{{ route('register') }}"
-                   class="inline-flex items-center justify-center gap-2 w-full mt-3 py-3 rounded-xl border border-gray-200 hover:border-primary hover:bg-orange-50/50 text-gray-800 hover:text-primary font-bold text-xs transition duration-150 shadow-2xs">
+                   class="inline-flex items-center justify-center gap-2 w-full mt-3 py-3 rounded-xl border border-gray-200 hover:border-primary hover:bg-orange-50/50 text-gray-800 hover:text-primary font-semibold text-xs transition duration-150 shadow-2xs">
                     <i class="fas fa-user-plus text-primary text-xs"></i>
                     <span>{{ __('Create a new account') }}</span>
                 </a>

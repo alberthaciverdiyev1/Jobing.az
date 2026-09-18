@@ -15,9 +15,24 @@ class InquiryResource extends Resource
     protected static ?string $model = Inquiry::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-chat-bubble-left-right';
-    protected static ?string $navigationGroup = 'Aday & Başvuru Yönetimi';
-    protected static ?string $modelLabel = 'Müraciət / Lead';
-    protected static ?string $pluralModelLabel = 'İletişim Müraciətləri';
+    protected static ?string $navigationGroup = null;
+
+    public static function getNavigationGroup(): string
+    {
+        return __('Candidate & Application Management');
+    }
+    protected static ?string $modelLabel = null;
+
+    public static function getModelLabel(): string
+    {
+        return __('Application / Lead');
+    }
+    protected static ?string $pluralModelLabel = null;
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('Contact Inquiries');
+    }
     protected static ?int $navigationSort = 4;
 
     public static function getNavigationBadge(): ?string
@@ -35,69 +50,69 @@ class InquiryResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Section::make('Lead Bilgileri')
+                Forms\Components\Section::make(__('Lead Information'))
                     ->schema([
                         Forms\Components\Select::make('user_id')
-                            ->label('Kullanıcı')
+                            ->label(__('User'))
                             ->relationship('user', 'name')
                             ->searchable()
                             ->preload()
                             ->nullable(),
 
                         Forms\Components\TextInput::make('name')
-                            ->label('Ad Soyad')
+                            ->label(__('Full Name'))
                             ->required()
                             ->maxLength(255),
 
                         Forms\Components\TextInput::make('email')
-                            ->label('E-Posta')
+                            ->label(__('Email'))
                             ->email()
                             ->maxLength(255),
 
                         Forms\Components\TextInput::make('phone')
-                            ->label('Telefon')
+                            ->label(__('Phone'))
                             ->tel()
                             ->maxLength(50),
 
                         Forms\Components\TextInput::make('subject')
-                            ->label('Konu')
+                            ->label(__('Subject'))
                             ->maxLength(255)
                             ->columnSpanFull(),
 
                         Forms\Components\Textarea::make('message')
-                            ->label('Mesaj')
+                            ->label(__('Message'))
                             ->rows(4)
                             ->columnSpanFull(),
                     ])->columns(2),
 
-                Forms\Components\Section::make('Değerlendirme')
+                Forms\Components\Section::make(__('Evaluation'))
                     ->schema([
                         Forms\Components\Select::make('type')
-                            ->label('Tür')
+                            ->label(__('Type'))
                             ->options([
-                                'contact' => 'Genel İletişim',
-                                'company' => 'Şirket / İşveren',
+                                'contact' => __('General Inquiry'),
+                                'company' => __('Company / Employer'),
                                 'candidate' => 'Aday',
-                                'bug_report' => 'Hata Bildirimi',
-                                'other' => 'Diğer',
+                                'bug_report' => __('Bug Report'),
+                                'other' => __('Other'),
                             ])
                             ->required()
                             ->default('contact'),
 
                         Forms\Components\Select::make('status')
-                            ->label('Durum')
+                            ->label(__('Status'))
                             ->options([
-                                'new' => 'Yeni',
-                                'contacted' => 'İletişime Geçildi',
-                                'in_progress' => 'İşlemde',
-                                'closed' => 'Kapatıldı',
-                                'cancelled' => 'İptal',
+                                'new' => __('New'),
+                                'contacted' => __('Contacted'),
+                                'in_progress' => __('In Progress'),
+                                'closed' => __('Closed'),
+                                'cancelled' => __('Cancelled'),
                             ])
                             ->required()
                             ->default('new'),
 
                         Forms\Components\Textarea::make('notes')
-                            ->label('Dahili Notlar')
+                            ->label(__('Internal Notes'))
                             ->rows(3)
                             ->columnSpanFull(),
                     ])->columns(2),
@@ -110,34 +125,34 @@ class InquiryResource extends Resource
             ->defaultSort('id', 'desc')
             ->columns([
                 Tables\Columns\TextColumn::make('name')
-                    ->label('Ad Soyad')
+                    ->label(__('Full Name'))
                     ->searchable()
                     ->sortable()
                     ->weight('bold'),
 
                 Tables\Columns\TextColumn::make('email')
-                    ->label('E-Posta')
+                    ->label(__('Email'))
                     ->searchable()
                     ->copyable()
                     ->toggleable(),
 
                 Tables\Columns\TextColumn::make('phone')
-                    ->label('Telefon')
+                    ->label(__('Phone'))
                     ->searchable()
                     ->toggleable(),
 
                 Tables\Columns\TextColumn::make('subject')
-                    ->label('Konu')
+                    ->label(__('Subject'))
                     ->limit(30)
                     ->toggleable(),
 
                 Tables\Columns\TextColumn::make('type')
-                    ->label('Tür')
+                    ->label(__('Type'))
                     ->badge()
                     ->color('gray'),
 
                 Tables\Columns\TextColumn::make('status')
-                    ->label('Durum')
+                    ->label(__('Status'))
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
                         'new' => 'danger',
@@ -149,28 +164,28 @@ class InquiryResource extends Resource
                     }),
 
                 Tables\Columns\TextColumn::make('created_at')
-                    ->label('Tarih')
+                    ->label(__('Date'))
                     ->dateTime('d.m.Y H:i')
                     ->sortable(),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('status')
-                    ->label('Duruma Göre')
+                    ->label(__('By Status'))
                     ->options([
-                        'new' => 'Yeni',
-                        'contacted' => 'İletişime Geçildi',
-                        'in_progress' => 'İşlemde',
-                        'closed' => 'Kapatıldı',
-                        'cancelled' => 'İptal',
+                        'new' => __('New'),
+                        'contacted' => __('Contacted'),
+                        'in_progress' => __('In Progress'),
+                        'closed' => __('Closed'),
+                        'cancelled' => __('Cancelled'),
                     ]),
                 Tables\Filters\SelectFilter::make('type')
-                    ->label('Türe Göre')
+                    ->label(__('By Type'))
                     ->options([
-                        'contact' => 'Genel İletişim',
-                        'company' => 'Şirket / İşveren',
+                        'contact' => __('General Inquiry'),
+                        'company' => __('Company / Employer'),
                         'candidate' => 'Aday',
-                        'bug_report' => 'Hata Bildirimi',
-                        'other' => 'Diğer',
+                        'bug_report' => __('Bug Report'),
+                        'other' => __('Other'),
                     ]),
             ])
             ->actions([

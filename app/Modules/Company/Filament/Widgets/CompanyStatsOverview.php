@@ -22,17 +22,17 @@ class CompanyStatsOverview extends BaseWidget
         $pendingCount = (clone $applicationsQuery)->where('status', \App\Modules\Application\Models\Application::STATUS_PENDING)->count();
 
         return [
-            Stat::make('Toplam İlan', $vacancyCount)
-                ->description($activeCount . ' aktiv yayında')
+            Stat::make(__('Total Listings'), $vacancyCount)
+                ->description(__(':count active', ['count' => $activeCount]))
                 ->descriptionIcon('heroicon-m-briefcase')
                 ->color('primary'),
 
-            Stat::make('Toplam Başvuru', $applicationCount)
+            Stat::make(__('Total Applications'), $applicationCount)
                 ->descriptionIcon('heroicon-m-document-text')
                 ->color('info'),
 
-            Stat::make('Bekleyen Başvuru', $pendingCount)
-                ->description('İncelenmeyi bekliyor')
+            Stat::make(__('Pending Applications'), $pendingCount)
+                ->description(__('Pending review'))
                 ->descriptionIcon('heroicon-m-clock')
                 ->color('warning'),
         ];

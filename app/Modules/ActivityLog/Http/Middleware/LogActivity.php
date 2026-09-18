@@ -11,21 +11,32 @@ class LogActivity
 {
     public function handle(Request $request, Closure $next): Response
     {
-        $response = $next($request);
+        // Heç bir iş görmürük — qeydiyyat yanıt göndərildikdən sonra (terminate) aparılır.
+        return $next($request);
+    }
 
-        // Only log meaningful GET/HEAD pages, skip static assets and health checks.
-        if (in_array($request->method(), ['GET', 'HEAD'], true)
-            && ! $request->is('build/*', 'storage/*', 'up', 'livewire/upload*')
-            && $request->path() !== 'up'
-            && ! $request->expectsJson()
-        ) {
-            ActivityLog::record(
-                action: 'page_view',
-                request: $request,
-                statusCode: $response->getStatusCode(),
-            );
+    /**
+     * Cavab istifadəçiyə göndərildikdən SONRA işləyir → sorğu gecikməsinə təsir etmir.
+     */
+    public function terminate(Request $request, Response $response): void
+    {
+        // Yalnız mənalı GET/HEAD səhifələri; statik fayllar, health-check və botlar istisna.
+        if (! in_array($request->method(), ['GET', 'HEAD'], true)) {
+            return;
         }
 
-        return $response;
+        if ($request->is('build/*', 'storage/*', 'up', 'livewire/upload*') || $request->path() === 'up') {
+            return;
+        }
+
+        if ($request->expectsJson() || is_bot_request()) {
+            return;
+        }
+
+        ActivityLog::record(
+            action: 'page_view',
+            request: $request,
+            statusCode: $response->getStatusCode(),
+        );
     }
 }

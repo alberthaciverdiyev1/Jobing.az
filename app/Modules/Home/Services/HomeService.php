@@ -33,13 +33,13 @@ class HomeService
         $featuredJobs = Vacancy::with(['company', 'category', 'jobType', 'workplaceType', 'experienceLevel'])
             ->active()
             ->where('is_featured', true)
-            ->orderByRaw('COALESCE(bumped_at, created_at) DESC')
+            ->orderByDesc('updated_at')
             ->take(6)
             ->get();
 
         $latestJobs = Vacancy::with(['company', 'category', 'jobType', 'workplaceType', 'experienceLevel'])
             ->active()
-            ->orderByRaw('COALESCE(bumped_at, created_at) DESC')
+            ->orderByDesc('updated_at')
             ->take(8)
             ->get();
 

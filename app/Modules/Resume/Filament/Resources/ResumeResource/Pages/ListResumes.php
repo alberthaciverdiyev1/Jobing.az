@@ -13,7 +13,7 @@ class ListResumes extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make()->label('Yeni CV Əlavə Et'),
+            Actions\CreateAction::make()->label(__('Add New CV')),
         ];
     }
 }

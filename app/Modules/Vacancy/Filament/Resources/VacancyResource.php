@@ -20,9 +20,24 @@ class VacancyResource extends Resource
     protected static ?string $model = Vacancy::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-briefcase';
-    protected static ?string $navigationGroup = 'İlan & Şirket Yönetimi';
-    protected static ?string $modelLabel = 'İş İlanı';
-    protected static ?string $pluralModelLabel = 'İş İlanları';
+    protected static ?string $navigationGroup = null;
+
+    public static function getNavigationGroup(): string
+    {
+        return __('Listing & Company Management');
+    }
+    protected static ?string $modelLabel = null;
+
+    public static function getModelLabel(): string
+    {
+        return __('Job Listing');
+    }
+    protected static ?string $pluralModelLabel = null;
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('Job Listings');
+    }
     protected static ?int $navigationSort = 1;
 
     public static function getEloquentQuery(): Builder
@@ -43,16 +58,16 @@ class VacancyResource extends Resource
             ->schema([
                 Forms\Components\Group::make()
                     ->schema([
-                        Forms\Components\Section::make('Pozisyon & Şirket Bilgisi')
+                        Forms\Components\Section::make(__('Position & Company Information'))
                             ->schema([
                                 Forms\Components\TextInput::make('title')
-                                    ->label('İlan Başlığı')
+                                    ->label(__('Listing Title'))
                                     ->required()
                                     ->maxLength(255)
                                     ->columnSpanFull(),
 
                                 Forms\Components\Select::make('company_id')
-                                    ->label('Şirket')
+                                    ->label(__('Company'))
                                     ->relationship('company', 'name')
                                     ->searchable()
                                     ->preload()
@@ -67,12 +82,15 @@ class VacancyResource extends Resource
                                     ]),
 
                                 Forms\Components\Select::make('parent_category_id')
-                                    ->label('Ana Kateqoriya')
+                                    ->label(__('Main Category'))
                                     ->options(fn () => Category::parents()->get()->pluck('name', 'id'))
                                     ->searchable()
                                     ->preload()
                                     ->live()
-                                    ->afterStateUpdated(fn (Forms\Set $set) => $set('category_id', null))
+                                    ->afterStateUpdated(function (Forms\Set $set) {
+                                        $set('category_id', null);
+                                        $set('skills', []);
+                                    })
                                     ->dehydrated(false)
                                     ->default(function ($record) {
                                         if (!$record || !$record->category_id) return null;
@@ -81,7 +99,7 @@ class VacancyResource extends Resource
                                     }),
 
                                 Forms\Components\Select::make('category_id')
-                                    ->label('Alt Kateqoriya')
+                                    ->label(__('Subcategory'))
                                     ->options(function (Forms\Get $get) {
                                         $parentId = $get('parent_category_id');
                                         if (!$parentId) {
@@ -95,28 +113,30 @@ class VacancyResource extends Resource
                                     })
                                     ->searchable()
                                     ->preload()
-                                    ->required(),
+                                    ->required()
+                                    ->live()
+                                    ->afterStateUpdated(fn (Forms\Set $set) => $set('skills', [])),
                             ])->columns(2),
 
-                        Forms\Components\Section::make('İş Tanımı & Detaylar')
+                        Forms\Components\Section::make(__('Job Description & Details'))
                             ->schema([
                                 Forms\Components\RichEditor::make('description')
-                                    ->label('Detaylı İş Tanımı')
+                                    ->label(__('Detailed Job Description'))
                                     ->required()
                                     ->columnSpanFull(),
 
                                 Forms\Components\RichEditor::make('requirements')
-                                    ->label('Aranan Nitelikler & Gereksinimler')
+                                    ->label(__('Requirements & Qualifications'))
                                     ->columnSpanFull(),
                             ]),
                     ])->columnSpan(['lg' => 2]),
 
                 Forms\Components\Group::make()
                     ->schema([
-                        Forms\Components\Section::make('Çalışma Şartları & Maaş')
+                        Forms\Components\Section::make(__('Working Conditions & Salary'))
                             ->schema([
                                 Forms\Components\Select::make('job_type_id')
-                                    ->label('İş Rejimi')
+                                    ->label(__('Job Type'))
                                     ->options(fn () => \App\Modules\JobAttribute\Models\JobType::all()
                                         ->sortBy(fn ($m) => (string) $m->name)
                                         ->mapWithKeys(fn ($m) => [(string) $m->id => (string) $m->name])
@@ -126,7 +146,7 @@ class VacancyResource extends Resource
                                     ->required(),
 
                                 Forms\Components\Select::make('workplace_type_id')
-                                    ->label('Çalışma Yeri')
+                                    ->label(__('Workplace'))
                                     ->options(fn () => \App\Modules\JobAttribute\Models\WorkplaceType::all()
                                         ->sortBy(fn ($m) => (string) $m->name)
                                         ->mapWithKeys(fn ($m) => [(string) $m->id => (string) $m->name])
@@ -136,7 +156,7 @@ class VacancyResource extends Resource
                                     ->required(),
 
                                 Forms\Components\Select::make('experience_level_id')
-                                    ->label('Təcrübə Səviyyəsi')
+                                    ->label(__('Experience Level'))
                                     ->options(fn () => \App\Modules\JobAttribute\Models\ExperienceLevel::all()
                                         ->sortBy(fn ($m) => (string) $m->name)
                                         ->mapWithKeys(fn ($m) => [(string) $m->id => (string) $m->name])
@@ -146,7 +166,7 @@ class VacancyResource extends Resource
                                     ->required(),
 
                                 Forms\Components\Select::make('city_id')
-                                    ->label('Şəhər / Lokasiya')
+                                    ->label(__('City / Location'))
                                     ->options(fn () => \App\Modules\JobAttribute\Models\City::all()->pluck('name', 'id'))
                                     ->searchable()
                                     ->preload()
@@ -155,15 +175,15 @@ class VacancyResource extends Resource
                                 Forms\Components\Grid::make(3)
                                     ->schema([
                                         Forms\Components\TextInput::make('salary_min')
-                                            ->label('Min. Maaş')
+                                            ->label(__('Min. Salary'))
                                             ->numeric(),
 
                                         Forms\Components\TextInput::make('salary_max')
-                                            ->label('Maks. Maaş')
+                                            ->label(__('Max. Salary'))
                                             ->numeric(),
 
                                         Forms\Components\Select::make('currency')
-                                            ->label('Birim')
+                                            ->label(__('Unit'))
                                             ->options([
                                                 'AZN' => 'AZN (₼)',
                                                 'TRY' => 'TRY (₺)',
@@ -174,26 +194,46 @@ class VacancyResource extends Resource
                                     ]),
 
                                 Forms\Components\Toggle::make('salary_negotiable')
-                                    ->label('Maaş razılaşma yolu ilə')
-                                    ->helperText('Seçilərsə, maaş namizədlə razılaşma əsasında müəyyən edilir.')
+                                    ->label(__('Salary negotiable'))
                                     ->live(),
 
                                 Forms\Components\Select::make('skills')
-                                    ->label('Tələb olunan Bacarıqlar (Teqlər)')
-                                    ->options(fn () => \App\Modules\JobAttribute\Models\Skill::active()->pluck('name', 'name'))
+                                    ->label(__('Required Skills (Tags)'))
+                                    ->options(function (Forms\Get $get) {
+                                        // Seçilen kategoriye (ana + alt) bağlı etiketleri göster.
+                                        $ids = array_filter([
+                                            $get('parent_category_id'),
+                                            $get('category_id'),
+                                        ]);
+
+                                        $query = \App\Modules\JobAttribute\Models\Skill::active();
+
+                                        $options = $ids
+                                            ? $query->whereIn('category_id', $ids)->pluck('name', 'name')->all()
+                                            : $query->pluck('name', 'name')->all();
+
+                                        // Düzenlemede mevcut seçimler kaybolmasın diye koru.
+                                        foreach ((array) $get('skills') as $selected) {
+                                            if ($selected && ! array_key_exists($selected, $options)) {
+                                                $options[$selected] = $selected;
+                                            }
+                                        }
+
+                                        return $options;
+                                    })
                                     ->multiple()
                                     ->searchable()
                                     ->preload(),
 
                                 Forms\Components\DatePicker::make('deadline')
-                                    ->label('Son Başvuru Tarihi')
+                                    ->label(__('Application Deadline'))
                                     ->native(false),
                             ]),
 
-                        Forms\Components\Section::make('Müraciət Növü')
+                        Forms\Components\Section::make(__('Application Type'))
                             ->schema([
                                 Forms\Components\Select::make('application_type')
-                                    ->label('Müraciət Növü')
+                                    ->label(__('Application Type'))
                                     ->options([
                                         'internal' => 'CV ilə (Daxili)',
                                         'email' => 'E-Posta ilə',
@@ -204,16 +244,16 @@ class VacancyResource extends Resource
                                     ->live(),
 
                                 Forms\Components\TextInput::make('application_email')
-                                    ->label('Müraciət E-Postası')
+                                    ->label(__('Application Email'))
                                     ->email()
                                     ->placeholder('hr@company.com')
-                                    ->helperText('E-posta / hər ikisi seçildiyində tələb olunur.')
+                                    ->helperText(__('Required when email / both is selected.'))
                                     ->visible(fn (Forms\Get $get): bool => in_array($get('application_type'), ['email', 'both'], true))
                                     ->required(fn (Forms\Get $get): bool => in_array($get('application_type'), ['email', 'both'], true)),
 
                                 Forms\Components\CheckboxList::make('application_fields')
-                                    ->label('Müraciət Formu Sahələri')
-                                    ->helperText('Namizəd platforma daxili müraciət edərkən hansı sahələrin görünəcəyini seçin.')
+                                    ->label(__('Application Form Fields'))
+                                    ->helperText(__('Choose which fields appear when a candidate applies internally.'))
                                     ->options([
                                         'phone' => 'Telefon nömrəsi',
                                         'linkedin' => 'LinkedIn profili',
@@ -224,15 +264,15 @@ class VacancyResource extends Resource
                                     ->visible(fn (Forms\Get $get): bool => in_array($get('application_type'), ['internal', 'both'], true)),
                             ]),
 
-                        Forms\Components\Section::make('Yayın Durumu')
+                        Forms\Components\Section::make(__('Publication Status'))
                             ->visible(fn (): bool => Filament::getCurrentPanel()?->getId() !== 'company')
                             ->schema([
                                 Forms\Components\Toggle::make('is_active')
-                                    ->label('Yayında / Aktif')
+                                    ->label(__('Published / Active'))
                                     ->default(true),
 
                                 Forms\Components\Toggle::make('is_featured')
-                                    ->label('Vitrin / Öne Çıkarılan İlan')
+                                    ->label(__('Featured / Promoted Listing'))
                                     ->default(false),
                             ]),
                     ])->columnSpan(['lg' => 1]),
@@ -242,32 +282,34 @@ class VacancyResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->defaultSort('updated_at', 'desc')
             ->columns([
                 Tables\Columns\TextColumn::make('title')
-                    ->label('Pozisyon')
+                    ->label(__('Position'))
                     ->searchable()
                     ->sortable()
                     ->weight('bold')
                     ->description(fn (Vacancy $record): string => $record->company->name ?? ''),
 
                 Tables\Columns\TextColumn::make('category.name')
-                    ->label('Kategori')
+                    ->label(__('Category'))
                     ->badge()
                     ->color('primary')
-                    ->sortable(),
+                    ->sortable()
+                    ->visible(fn (): bool => Filament::getCurrentPanel()?->getId() !== 'company'),
 
                 Tables\Columns\TextColumn::make('formatted_salary')
-                    ->label('Maaş'),
+                    ->label(__('Salary')),
 
                 Tables\Columns\TextColumn::make('applications_count')
-                    ->label('Başvuru')
+                    ->label(__('Application'))
                     ->counts('applications')
                     ->badge()
                     ->color('info')
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('application_type')
-                    ->label('Müraciət')
+                    ->label(__('Application'))
                     ->badge()
                     ->formatStateUsing(fn (string $state): string => match ($state) {
                         'internal' => 'CV (Daxili)',
@@ -284,26 +326,26 @@ class VacancyResource extends Resource
                     ->sortable(),
 
                 Tables\Columns\IconColumn::make('is_featured')
-                    ->label('Vitrin')
+                    ->label(__('Featured'))
                     ->boolean()
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('is_active')
-                    ->label('Status')
+                    ->label(__('Status'))
                     ->badge()
                     ->formatStateUsing(fn (bool $state): string => $state ? 'Yayında' : 'Təsdiq Gözləyir')
                     ->color(fn (bool $state): string => $state ? 'success' : 'warning')
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('created_at')
-                    ->label('Yayın')
+                    ->label(__('Publication'))
                     ->dateTime('d.m.Y')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('category')
-                    ->label('Kategoriye Göre')
+                    ->label(__('By Category'))
                     ->attribute('category_id')
                     ->options(fn (): array => collect(\App\Modules\Category\Models\Category::all())
                         ->sortBy(fn ($c) => (string) $c->name)
@@ -316,34 +358,47 @@ class VacancyResource extends Resource
                         'Hibrit' => 'Hibrit',
                         'Ofis' => 'Ofis',
                     ])
-                    ->label('Çalışma Şekli'),
+                    ->label(__('Work Mode')),
 
                 Tables\Filters\TernaryFilter::make('is_active')
-                    ->label('Status')
-                    ->placeholder('Bütün Vakansiyalar')
+                    ->label(__('Status'))
+                    ->placeholder(__('All Vacancies'))
                     ->trueLabel('Yayında Olanlar')
                     ->falseLabel('Təsdiq Gözləyənlər'),
 
                 Tables\Filters\TernaryFilter::make('is_featured')
-                    ->label('Vitrin Durumu'),
+                    ->label(__('Featured Status')),
             ])
             ->actions([
                 Tables\Actions\Action::make('bump')
-                    ->label('İrəli Çək')
+                    ->label(__('Boost'))
                     ->icon('heroicon-o-arrow-up-circle')
                     ->color('warning')
                     ->requiresConfirmation()
-                    ->modalHeading('Vakansiyanı İrəli Çək')
-                    ->modalDescription('Bu vakansiya dərhal ən birinci sıraya yüksələcək və tarixi yenilənəcək.')
-                    ->modalSubmitActionLabel('İrəli Çək')
+                    ->modalHeading(__('Boost the Vacancy'))
+                    ->modalDescription(__('This vacancy will immediately rise to the very first position and its date will be refreshed.'))
+                    ->modalSubmitActionLabel(__('Boost'))
                     ->action(function (Vacancy $record) {
                         $record->bumped_at = now();
                         $record->save();
                         \Filament\Notifications\Notification::make()
-                            ->title('Vakansiya uğurla irəli çəkildi!')
+                            ->title(__('Vacancy boosted successfully!'))
                             ->success()
                             ->send();
-                    }),
+                    })
+                    ->visible(fn (): bool => Filament::getCurrentPanel()?->getId() !== 'company'),
+
+                // Company panel: choose a package and send the request to the admin via WhatsApp.
+                Tables\Actions\Action::make('bump_request')
+                    ->label(__('Boost'))
+                    ->icon('heroicon-o-arrow-up-circle')
+                    ->color('warning')
+                    ->modalHeading(__('Boost Request'))
+                    ->modalDescription(__('Choose a package and send it to the admin via WhatsApp.'))
+                    ->modalContent(fn (Vacancy $record) => view('filament.components.promotion-request', ['mode' => 'bump', 'record' => $record]))
+                    ->modalSubmitAction(false)
+                    ->modalCancelActionLabel(__('Close'))
+                    ->visible(fn (): bool => Filament::getCurrentPanel()?->getId() === 'company'),
 
                 Tables\Actions\Action::make('toggle_featured')
                     ->label(fn (Vacancy $record): string => $record->is_featured ? 'Premiumu Ləğv Et' : 'Premium Et')
@@ -363,7 +418,20 @@ class VacancyResource extends Resource
                             ->title($record->is_featured ? 'Vakansiyaya Premium statusu verildi!' : 'Premium statusu ləğv edildi.')
                             ->success()
                             ->send();
-                    }),
+                    })
+                    ->visible(fn (): bool => Filament::getCurrentPanel()?->getId() !== 'company'),
+
+                // Company panel: choose a package and send the premium request via WhatsApp.
+                Tables\Actions\Action::make('premium_request')
+                    ->label(__('Make Premium'))
+                    ->icon('heroicon-o-sparkles')
+                    ->color('amber')
+                    ->modalHeading(__('Premium Request'))
+                    ->modalDescription(__('Choose a package and send it to the admin via WhatsApp.'))
+                    ->modalContent(fn (Vacancy $record) => view('filament.components.promotion-request', ['mode' => 'premium', 'record' => $record]))
+                    ->modalSubmitAction(false)
+                    ->modalCancelActionLabel(__('Close'))
+                    ->visible(fn (): bool => Filament::getCurrentPanel()?->getId() === 'company'),
 
                 Tables\Actions\Action::make('toggle_approve')
                     ->label(fn (Vacancy $record): string => $record->is_active ? 'Təsdiqi Ləğv Et' : 'Təsdiqlə')

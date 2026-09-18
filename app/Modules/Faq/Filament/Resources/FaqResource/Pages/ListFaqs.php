@@ -13,7 +13,7 @@ class ListFaqs extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make()->label('Yeni SSS Əlavə Et'),
+            Actions\CreateAction::make()->label(__('Add New FAQ')),
         ];
     }
 }

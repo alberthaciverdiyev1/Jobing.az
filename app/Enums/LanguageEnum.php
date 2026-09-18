@@ -37,38 +37,7 @@ enum LanguageEnum: string
 
     public function label(): string
     {
-        return match ($this) {
-            self::AZERBAIJANI => 'Azərbaycan dili',
-            self::TURKISH => 'Türk dili',
-            self::ENGLISH => 'İngilis dili',
-            self::RUSSIAN => 'Rus dili',
-            self::GERMAN => 'Alman dili',
-            self::FRENCH => 'Fransız dili',
-            self::SPANISH => 'Ispan dili',
-            self::ITALIAN => 'İtalyan dili',
-            self::CHINESE => 'Çin dili',
-            self::JAPANESE => 'Yapon dili',
-            self::ARABIC => 'Ərəb dili',
-            self::PERSIAN => 'Fars dili',
-            self::GEORGIAN => 'Gürcü dili',
-            self::UKRAINIAN => 'Ukrayna dili',
-            self::POLISH => 'Polyak dili',
-            self::PORTUGUESE => 'Portuqal dili',
-            self::DUTCH => 'Niderland (Holland) dili',
-            self::SWEDISH => 'İsveç dili',
-            self::NORWEGIAN => 'Norveç dili',
-            self::DANISH => 'Danimarka dili',
-            self::FINNISH => 'Fin dili',
-            self::CZECH => 'Çex dili',
-            self::HUNGARIAN => 'Macar dili',
-            self::ROMANIAN => 'Rumın dili',
-            self::GREEK => 'Yunan dili',
-            self::HINDI => 'Hindi dili',
-            self::KOREAN => 'Koreya dili',
-            self::VIETNAMESE => 'Vyetnam dili',
-            self::INDONESIAN => 'İndoneziya dili',
-            self::URDU => 'Urdu dili',
-        };
+        return __('languages.' . $this->value);
     }
 
     public static function options(): array

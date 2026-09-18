@@ -19,9 +19,24 @@ class CompanyVacancyResource extends Resource
     protected static ?string $model = Vacancy::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-briefcase';
-    protected static ?string $navigationLabel = 'Vakansiyalarım';
-    protected static ?string $modelLabel = 'Vakansiya';
-    protected static ?string $pluralModelLabel = 'Vakansiyalarım';
+    protected static ?string $navigationLabel = null;
+
+    public static function getNavigationLabel(): string
+    {
+        return __('My Vacancies');
+    }
+    protected static ?string $modelLabel = null;
+
+    public static function getModelLabel(): string
+    {
+        return __('Vacancy');
+    }
+    protected static ?string $pluralModelLabel = null;
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('My Vacancies');
+    }
     protected static ?int $navigationSort = 1;
 
     public static function canViewAny(): bool

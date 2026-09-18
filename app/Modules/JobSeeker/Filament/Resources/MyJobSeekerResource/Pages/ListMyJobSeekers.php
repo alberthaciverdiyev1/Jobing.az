@@ -13,7 +13,7 @@ class ListMyJobSeekers extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make()->label('Yeni Elan Yaradın'),
+            Actions\CreateAction::make()->label(__('Create New Listing')),
         ];
     }
 }

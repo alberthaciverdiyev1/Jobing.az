@@ -19,21 +19,24 @@ window.__RESUMES_CONFIG__ = {
 };
 </script>
 
-<div class="bg-gray-50 min-h-screen pb-16">
+<div class="bg-gray-50 min-h-screen pb-16" x-data="resumesManager()">
+
+    <!-- Hero -->
+    <x-list-hero :title="__('Resume Database')" :placeholder="__('Position, name, skill...')" />
 
     <!-- Main Content Container -->
-    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8" x-data="resumesManager()">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
         <!-- Mobile Filter Trigger -->
         <div class="lg:hidden mb-4">
             <button type="button"
                     @click="mobileFiltersOpen = !mobileFiltersOpen"
-                    class="w-full flex items-center justify-between px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-xs font-bold text-gray-700 shadow-2xs cursor-pointer">
+                    class="w-full flex items-center justify-between px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-xs font-semibold text-gray-700 shadow-2xs cursor-pointer">
                 <span class="flex items-center gap-2">
                     <i class="fas fa-sliders-h text-primary"></i>
                     <span>{{ __('Filters') }}</span>
                 </span>
-                <i class="fas fa-chevron-down text-[10px] text-gray-400 transition-transform" :class="mobileFiltersOpen ? 'rotate-180' : ''"></i>
+                <i class="fas fa-chevron-down text-[11px] text-gray-400 transition-transform" :class="mobileFiltersOpen ? 'rotate-180' : ''"></i>
             </button>
         </div>
 
@@ -46,7 +49,7 @@ window.__RESUMES_CONFIG__ = {
 
                         <!-- Filter Top Header -->
                         <div class="flex justify-between items-center pb-3 border-b border-gray-100">
-                            <h3 class="font-bold text-gray-900 text-sm flex items-center gap-2">
+                            <h3 class="font-semibold text-gray-900 text-sm flex items-center gap-2">
                                 <i class="fas fa-filter text-xs text-primary"></i>
                                 <span>{{ __('Filters') }}</span>
                             </h3>
@@ -59,36 +62,15 @@ window.__RESUMES_CONFIG__ = {
                             </button>
                         </div>
 
-                        <!-- Search Input in Sidebar -->
-                        <div>
-                            <h4 class="text-xs font-bold text-gray-800 uppercase tracking-wider mb-2">{{ __('Search') }}</h4>
-                            <div class="relative">
-                                <input type="text"
-                                       x-model="q"
-                                       @input.debounce.400ms="applyFilters()"
-                                       @keydown.enter.prevent="applyFilters()"
-                                       placeholder="{{ __('Position, name, skill...') }}"
-                                       class="w-full pl-8 pr-7 py-2 bg-gray-50 hover:bg-white focus:bg-white border border-gray-200 rounded-lg focus:outline-hidden focus:border-primary focus:ring-1 focus:ring-primary text-xs transition">
-                                <i class="fas fa-search absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400 text-[11px]"></i>
-                                <button type="button"
-                                        x-show="q"
-                                        x-cloak
-                                        @click="q = ''; applyFilters()"
-                                        class="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 text-xs cursor-pointer">
-                                    <i class="fas fa-times"></i>
-                                </button>
-                            </div>
-                        </div>
-
                         <!-- Category Selection (Dynamically switches skills below) -->
                         <div class="pt-3 border-t border-gray-100">
                             <div class="flex items-center justify-between mb-2">
-                                <h4 class="text-xs font-bold text-gray-800 uppercase tracking-wider">{{ __('Category') }}</h4>
+                                <h4 class="text-xs font-medium text-gray-800">{{ __('Category') }}</h4>
                                 <button type="button"
                                         x-show="category !== ''"
                                         x-cloak
                                         @click="selectCategory('')"
-                                        class="text-[10px] text-primary font-bold hover:underline cursor-pointer">
+                                        class="text-[11px] text-primary font-semibold hover:underline cursor-pointer">
                                     {{ __('All categories') }}
                                 </button>
                             </div>
@@ -97,7 +79,7 @@ window.__RESUMES_CONFIG__ = {
                                 <button type="button"
                                         @click="selectCategory('')"
                                         class="w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg transition text-left cursor-pointer"
-                                        :class="category === '' ? 'bg-orange-50 text-primary font-bold border border-orange-200 shadow-2xs' : 'text-gray-600 hover:bg-gray-50 border border-transparent'">
+                                        :class="category === '' ? 'bg-orange-50 text-primary font-semibold border border-orange-200 shadow-2xs' : 'text-gray-600 hover:bg-gray-50 border border-transparent'">
                                     <span class="flex items-center gap-2">
                                         <span>{{ __('All Fields') }}</span>
                                     </span>
@@ -107,11 +89,11 @@ window.__RESUMES_CONFIG__ = {
                                 <button type="button"
                                         @click="selectCategory('{{ $cat->slug }}')"
                                         class="w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg transition text-left cursor-pointer"
-                                        :class="isCategoryActive('{{ $cat->slug }}') ? 'bg-orange-50 text-primary font-bold border border-orange-200 shadow-2xs' : 'text-gray-600 hover:bg-gray-50 border border-transparent'">
+                                        :class="isCategoryActive('{{ $cat->slug }}') ? 'bg-orange-50 text-primary font-semibold border border-orange-200 shadow-2xs' : 'text-gray-600 hover:bg-gray-50 border border-transparent'">
                                     <span class="flex items-center gap-2">
                                         <span class="truncate">{{ $cat->name }}</span>
                                     </span>
-                                    <span class="text-[10px] text-gray-400 font-mono"
+                                    <span class="text-[11px] text-gray-400 font-mono"
                                           x-show="getCategoryCount('{{ $cat->slug }}', {{ $categoryCounts[$cat->slug] ?? 0 }}) > 0"
                                           x-text="'(' + getCategoryCount('{{ $cat->slug }}', {{ $categoryCounts[$cat->slug] ?? 0 }}) + ')'">
                                         ({{ $categoryCounts[$cat->slug] ?? 0 }})
@@ -124,22 +106,22 @@ window.__RESUMES_CONFIG__ = {
                         <!-- Skills Filter (Dynamically changes based on selected category) -->
                         <div class="pt-3 border-t border-gray-100">
                             <div class="flex items-center justify-between mb-2">
-                                <h4 class="text-xs font-bold text-gray-800 uppercase tracking-wider">{{ __('Skills') }}</h4>
-                                <span class="text-[10px] text-gray-400 font-medium" x-text="filteredSkills.length + ' {{ __('skill') }}'"></span>
+                                <h4 class="text-xs font-medium text-gray-800">{{ __('Skills') }}</h4>
+                                <span class="text-[11px] text-gray-400 font-medium" x-text="filteredSkills.length + ' {{ __('skill') }}'"></span>
                             </div>
 
                             <!-- Skills list -->
                             <div class="space-y-1 text-xs max-h-60 overflow-y-auto pr-1">
                                 <template x-for="sk in filteredSkills" :key="sk.name">
                                     <label class="w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg transition text-left cursor-pointer select-none"
-                                           :class="isSkillSelected(sk.name) ? 'bg-orange-50 text-primary font-bold' : 'text-gray-600 hover:bg-gray-50'">
+                                           :class="isSkillSelected(sk.name) ? 'bg-orange-50 text-primary font-semibold' : 'text-gray-600 hover:bg-gray-50'">
                                         <input type="checkbox"
                                                :value="sk.name"
                                                :checked="isSkillSelected(sk.name)"
                                                @change="toggleSkill(sk.name)"
                                                class="sr-only">
                                         <span class="flex items-center gap-2">
-                                            <span class="w-3.5 h-3.5 rounded border flex items-center justify-center text-[8px]"
+                                            <span class="w-3.5 h-3.5 rounded border flex items-center justify-center text-[9px]"
                                                   :class="isSkillSelected(sk.name) ? 'bg-primary border-primary text-white' : 'border-gray-300'">
                                                 <i class="fas fa-check" x-show="isSkillSelected(sk.name)"></i>
                                             </span>
@@ -156,25 +138,25 @@ window.__RESUMES_CONFIG__ = {
 
                         <!-- City Filter -->
                         <div class="pt-3 border-t border-gray-100">
-                            <h4 class="text-xs font-bold text-gray-800 uppercase tracking-wider mb-2.5">{{ __('City') }}</h4>
+                            <h4 class="text-xs font-medium text-gray-800 mb-2.5">{{ __('City') }}</h4>
                             <div class="space-y-1 text-xs" x-data="{ showAll: false }">
                                 @foreach($cities as $c)
                                 <label x-show="showAll || {{ $loop->index }} < 5"
                                        class="w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg transition text-left cursor-pointer select-none"
-                                       :class="city.includes('{{ addslashes($c) }}') ? 'bg-orange-50 text-primary font-bold' : 'text-gray-600 hover:bg-gray-50'">
+                                       :class="city.includes('{{ addslashes($c) }}') ? 'bg-orange-50 text-primary font-semibold' : 'text-gray-600 hover:bg-gray-50'">
                                     <input type="checkbox"
                                            value="{{ $c }}"
                                            :checked="city.includes('{{ addslashes($c) }}')"
                                            @change="toggleCity('{{ addslashes($c) }}')"
                                            class="sr-only">
                                     <span class="flex items-center gap-2">
-                                        <span class="w-3.5 h-3.5 rounded border flex items-center justify-center text-[8px]"
+                                        <span class="w-3.5 h-3.5 rounded border flex items-center justify-center text-[9px]"
                                               :class="city.includes('{{ addslashes($c) }}') ? 'bg-primary border-primary text-white' : 'border-gray-300'">
                                             <i class="fas fa-check" x-show="city.includes('{{ addslashes($c) }}')"></i>
                                         </span>
                                         <span>{{ $c }}</span>
                                     </span>
-                                    <span class="text-[10px] text-gray-400 font-mono"
+                                    <span class="text-[11px] text-gray-400 font-mono"
                                           x-show="getCityCount('{{ addslashes($c) }}', {{ $cityCounts[$c] ?? 0 }}) > 0"
                                           x-text="'(' + getCityCount('{{ addslashes($c) }}', {{ $cityCounts[$c] ?? 0 }}) + ')'"></span>
                                 </label>
@@ -182,8 +164,8 @@ window.__RESUMES_CONFIG__ = {
 
                                 @if(count($cities) > 5)
                                 <button type="button" @click="showAll = !showAll"
-                                        class="w-full text-left px-2.5 py-1.5 text-[11px] font-semibold text-primary hover:text-primary-dark cursor-pointer">
-                                    <i class="fas fa-chevron-down text-[8px] mr-1 transition-transform" :class="showAll ? 'rotate-180' : ''"></i>
+                                        class="w-full text-left px-2.5 py-1.5 text-[12px] font-semibold text-primary hover:text-primary-dark cursor-pointer">
+                                    <i class="fas fa-chevron-down text-[9px] mr-1 transition-transform" :class="showAll ? 'rotate-180' : ''"></i>
                                     <span x-text="showAll ? '{{ __('Show less') }}' : '{{ __('Show more') }} (' + ({{ count($cities) }} - 5) + ')'"></span>
                                 </button>
                                 @endif
@@ -197,16 +179,11 @@ window.__RESUMES_CONFIG__ = {
             <!-- List Area -->
             <div class="lg:w-3/4 w-full">
 
-                <!-- List Header (Title + Count + Sorting) -->
+                <!-- List Header (Count + Sorting) -->
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-5 pb-3 border-b border-gray-200">
-                    <div>
-                        <h2 class="text-lg md:text-xl font-bold text-gray-900 leading-tight flex items-center gap-2">
-                            <span>{{ __('Resume Database') }}</span>
-                        </h2>
-                        <p class="text-xs text-gray-500 mt-0.5">
-                            <span class="font-bold text-primary" x-text="totalCount">{{ $resumes->total() }}</span> {{ __('candidate resumes found') }}
-                        </p>
-                    </div>
+                    <p class="text-sm text-gray-500">
+                        <span class="font-semibold text-primary" x-text="totalCount">{{ $resumes->total() }}</span> {{ __('candidate resumes found') }}
+                    </p>
 
                     <div class="flex items-center gap-2 text-xs">
                         <span class="text-gray-500 hidden sm:inline">{{ __('Sort by:') }}</span>

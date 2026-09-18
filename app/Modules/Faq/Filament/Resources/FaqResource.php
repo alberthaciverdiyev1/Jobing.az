@@ -15,68 +15,83 @@ class FaqResource extends Resource
     protected static ?string $model = Faq::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-question-mark-circle';
-    protected static ?string $navigationGroup = 'İçerik';
-    protected static ?string $modelLabel = 'SSS';
-    protected static ?string $pluralModelLabel = 'Sıkça Sorulan Sorular';
+    protected static ?string $navigationGroup = null;
+
+    public static function getNavigationGroup(): string
+    {
+        return __('Content');
+    }
+    protected static ?string $modelLabel = null;
+
+    public static function getModelLabel(): string
+    {
+        return __('FAQ');
+    }
+    protected static ?string $pluralModelLabel = null;
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('Frequently Asked Questions');
+    }
     protected static ?int $navigationSort = 1;
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\Section::make('Genel Ayarlar')
+                Forms\Components\Section::make(__('General Settings'))
                     ->schema([
                         Forms\Components\TextInput::make('category')
-                            ->label('Kategori')
+                            ->label(__('Category'))
                             ->default('general')
                             ->maxLength(50)
                             ->required(),
 
                         Forms\Components\TextInput::make('sort_order')
-                            ->label('Sıralama')
+                            ->label(__('Ordering'))
                             ->numeric()
                             ->default(0),
 
                         Forms\Components\Toggle::make('is_active')
-                            ->label('Aktif')
+                            ->label(__('Active'))
                             ->default(true)
                             ->inline(false),
                     ])->columns(3),
 
                 Forms\Components\Tabs::make('Translations')
                     ->tabs([
-                        Forms\Components\Tabs\Tab::make('🇦🇿 Azərbaycan (Default)')
+                        Forms\Components\Tabs\Tab::make('🇦🇿 ' . __('languages.Azerbaijani') . ' (' . __('Default') . ')')
                             ->schema([
                                 Forms\Components\TextInput::make('question.az')
-                                    ->label('Sual (AZ)')
+                                    ->label(__('Question (AZ)'))
                                     ->required(),
                                 Forms\Components\Textarea::make('answer.az')
-                                    ->label('Cavab (AZ)')
+                                    ->label(__('Answer (AZ)'))
                                     ->rows(4)
                                     ->required(),
                             ]),
-                        Forms\Components\Tabs\Tab::make('🇬🇧 English')
+                        Forms\Components\Tabs\Tab::make('🇬🇧 ' . __('languages.English'))
                             ->schema([
                                 Forms\Components\TextInput::make('question.en')
-                                    ->label('Question (EN)'),
+                                    ->label(__('Question (EN)')),
                                 Forms\Components\Textarea::make('answer.en')
-                                    ->label('Answer (EN)')
+                                    ->label(__('Answer (EN)'))
                                     ->rows(4),
                             ]),
-                        Forms\Components\Tabs\Tab::make('🇹🇷 Türkçe')
+                        Forms\Components\Tabs\Tab::make('🇹🇷 ' . __('languages.Turkish'))
                             ->schema([
                                 Forms\Components\TextInput::make('question.tr')
-                                    ->label('Soru (TR)'),
+                                    ->label(__('Question (TR)')),
                                 Forms\Components\Textarea::make('answer.tr')
-                                    ->label('Cevap (TR)')
+                                    ->label(__('Answer (TR)'))
                                     ->rows(4),
                             ]),
-                        Forms\Components\Tabs\Tab::make('🇷🇺 Русский')
+                        Forms\Components\Tabs\Tab::make('🇷🇺 ' . __('languages.Russian'))
                             ->schema([
                                 Forms\Components\TextInput::make('question.ru')
-                                    ->label('Вопрос (RU)'),
+                                    ->label(__('Question (RU)')),
                                 Forms\Components\Textarea::make('answer.ru')
-                                    ->label('Ответ (RU)')
+                                    ->label(__('Answer (RU)'))
                                     ->rows(4),
                             ]),
                     ])->columnSpanFull(),
@@ -88,22 +103,22 @@ class FaqResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('question')
-                    ->label('Sual (AZ)')
+                    ->label(__('Question (AZ)'))
                     ->limit(50)
                     ->searchable()
                     ->weight('bold'),
 
                 Tables\Columns\TextColumn::make('category')
-                    ->label('Kategori')
+                    ->label(__('Category'))
                     ->badge()
                     ->color('gray'),
 
                 Tables\Columns\TextColumn::make('sort_order')
-                    ->label('Sıra')
+                    ->label(__('Order'))
                     ->sortable(),
 
                 Tables\Columns\IconColumn::make('is_active')
-                    ->label('Aktif')
+                    ->label(__('Active'))
                     ->boolean(),
             ])
             ->defaultSort('sort_order')

@@ -45,7 +45,7 @@ class AdminPanelProvider extends PanelProvider
             )
             ->userMenuItems([
                 MenuItem::make()
-                    ->label('Sayta bax')
+                    ->label(__('View site'))
                     ->url(fn (): string => url('/'))
                     ->icon('heroicon-o-globe-alt')
                     ->openUrlInNewTab(),
@@ -67,15 +67,17 @@ class AdminPanelProvider extends PanelProvider
                 \App\Modules\Company\Filament\Resources\MessageTemplateResource::class,
                 \App\Modules\JobSeeker\Filament\Resources\JobSeekerResource::class,
                 \App\Modules\Resume\Filament\Resources\ResumeResource::class,
-                \App\Modules\Seo\Filament\Resources\PageSeoResource::class,
                 \App\Modules\User\Filament\Resources\UserResource::class,
             ])
             ->pages([
                 Pages\Dashboard::class,
                 \App\Modules\Setting\Filament\Pages\ManageSiteSettings::class,
+                \App\Modules\Seo\Filament\Pages\ManageSeoSettings::class,
+                \App\Modules\Seo\Filament\Pages\ManageSitemap::class,
             ])
             ->widgets([
                 \App\Modules\Home\Filament\Widgets\StatsOverview::class,
+                \App\Modules\Company\Filament\Widgets\PendingVerifications::class,
             ])
             ->middleware([
                 EncryptCookies::class,

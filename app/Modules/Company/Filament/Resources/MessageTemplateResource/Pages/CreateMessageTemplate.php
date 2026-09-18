@@ -3,7 +3,7 @@
 namespace App\Modules\Company\Filament\Resources\MessageTemplateResource\Pages;
 
 use App\Modules\Company\Filament\Resources\MessageTemplateResource;
-use Filament\Resources\Pages\CreateRecord;
+use App\Filament\Pages\CreateRecord;
 use Illuminate\Support\Facades\Auth;
 
 class CreateMessageTemplate extends CreateRecord

@@ -18,9 +18,24 @@ class ManageSiteSettings extends Page implements HasForms
     use InteractsWithForms;
 
     protected static ?string $navigationIcon = 'heroicon-o-cog-6-tooth';
-    protected static ?string $navigationLabel = 'Sayt Ayarları';
-    protected static ?string $navigationGroup = 'Sistem';
-    protected static ?string $title = 'Sayt Ayarları';
+    protected static ?string $navigationLabel = null;
+
+    public static function getNavigationLabel(): string
+    {
+        return __('Site Settings');
+    }
+    protected static ?string $navigationGroup = null;
+
+    public static function getNavigationGroup(): string
+    {
+        return __('System');
+    }
+    protected static ?string $title = null;
+
+    public function getTitle(): string
+    {
+        return __('Site Settings');
+    }
     protected static ?string $slug = 'site-settings';
     protected static string $view = 'filament.pages.manage-site-settings';
     protected static ?int $navigationSort = 90;
@@ -38,51 +53,51 @@ class ManageSiteSettings extends Page implements HasForms
             ->schema([
                 Tabs::make('settings')
                     ->tabs([
-                        Tabs\Tab::make('İletişim')
+                        Tabs\Tab::make(__('Contact'))
                             ->schema([
-                                Section::make('İletişim Məlumatları')
+                                Section::make(__('Contact Information'))
                                     ->schema([
-                                        TextInput::make('email')->label('E-Posta')->email(),
-                                        TextInput::make('support_email')->label('Dəstək E-Postası')->email(),
-                                        TextInput::make('phone')->label('Telefon'),
-                                        TextInput::make('phone_secondary')->label('İkinci Telefon'),
-                                        TextInput::make('whatsapp')->label('WhatsApp Nömrəsi'),
-                                        TextInput::make('working_hours')->label('İş Saatları'),
-                                        TextInput::make('address.az')->label('Ünvan (AZ)'),
-                                        TextInput::make('address.tr')->label('Ünvan (TR)'),
-                                        TextInput::make('address.en')->label('Ünvan (EN)'),
-                                        TextInput::make('address.ru')->label('Ünvan (RU)'),
+                                        TextInput::make('email')->label(__('Email'))->email(),
+                                        TextInput::make('support_email')->label(__('Support Email'))->email(),
+                                        TextInput::make('phone')->label(__('Phone')),
+                                        TextInput::make('phone_secondary')->label(__('Second Phone')),
+                                        TextInput::make('whatsapp')->label(__('WhatsApp Number')),
+                                        TextInput::make('working_hours')->label(__('Working Hours')),
+                                        TextInput::make('address.az')->label(__('Address (AZ)')),
+                                        TextInput::make('address.tr')->label(__('Address (TR)')),
+                                        TextInput::make('address.en')->label(__('Address (EN)')),
+                                        TextInput::make('address.ru')->label(__('Address (RU)')),
                                     ])->columns(2),
                             ]),
-                        Tabs\Tab::make('Sosial')
+                        Tabs\Tab::make(__('Social'))
                             ->schema([
-                                Section::make('Sosial Linklər')
+                                Section::make(__('Social Links'))
                                     ->schema([
-                                        TextInput::make('facebook_url')->label('Facebook')->url(),
-                                        TextInput::make('instagram_url')->label('Instagram')->url(),
-                                        TextInput::make('linkedin_url')->label('LinkedIn')->url(),
-                                        TextInput::make('telegram_url')->label('Telegram')->url(),
-                                        TextInput::make('twitter_url')->label('Twitter / X')->url(),
-                                        TextInput::make('youtube_url')->label('YouTube')->url(),
+                                        TextInput::make('facebook_url')->label(__('Facebook'))->url(),
+                                        TextInput::make('instagram_url')->label(__('Instagram'))->url(),
+                                        TextInput::make('linkedin_url')->label(__('LinkedIn'))->url(),
+                                        TextInput::make('telegram_url')->label(__('Telegram'))->url(),
+                                        TextInput::make('twitter_url')->label(__('Twitter / X'))->url(),
+                                        TextInput::make('youtube_url')->label(__('YouTube'))->url(),
                                     ])->columns(2),
                             ]),
-                        Tabs\Tab::make('İçerik')
+                        Tabs\Tab::make(__('Content'))
                             ->schema([
-                                Section::make('Tagline (Başlıq)')
+                                Section::make(__('Tagline'))
                                     ->schema([
-                                        TextInput::make('tagline.az')->label('Tagline (AZ)'),
-                                        TextInput::make('tagline.tr')->label('Tagline (TR)'),
-                                        TextInput::make('tagline.en')->label('Tagline (EN)'),
-                                        TextInput::make('tagline.ru')->label('Tagline (RU)'),
+                                        TextInput::make('tagline.az')->label(__('Tagline (AZ)')),
+                                        TextInput::make('tagline.tr')->label(__('Tagline (TR)')),
+                                        TextInput::make('tagline.en')->label(__('Tagline (EN)')),
+                                        TextInput::make('tagline.ru')->label(__('Tagline (RU)')),
                                     ])->columns(2),
-                                Section::make('Footer Açıklaması')
+                                Section::make(__('Footer Description'))
                                     ->schema([
-                                        Textarea::make('footer_description.az')->label('Footer (AZ)')->rows(2),
-                                        Textarea::make('footer_description.tr')->label('Footer (TR)')->rows(2),
-                                        Textarea::make('footer_description.en')->label('Footer (EN)')->rows(2),
-                                        Textarea::make('footer_description.ru')->label('Footer (RU)')->rows(2),
+                                        Textarea::make('footer_description.az')->label(__('Footer (AZ)'))->rows(2),
+                                        Textarea::make('footer_description.tr')->label(__('Footer (TR)'))->rows(2),
+                                        Textarea::make('footer_description.en')->label(__('Footer (EN)'))->rows(2),
+                                        Textarea::make('footer_description.ru')->label(__('Footer (RU)'))->rows(2),
                                     ])->columns(2),
-                                TextInput::make('copyright_text')->label('Telif Metni (Copyright)')->columnSpanFull(),
+                                TextInput::make('copyright_text')->label(__('Copyright Text'))->columnSpanFull(),
                             ]),
                     ])->columnSpanFull(),
             ])
@@ -95,7 +110,7 @@ class ManageSiteSettings extends Page implements HasForms
         $setting->update($this->form->getState());
 
         Notification::make()
-            ->title('Sayt ayarları yeniləndi')
+            ->title(__('Site settings updated'))
             ->success()
             ->send();
     }

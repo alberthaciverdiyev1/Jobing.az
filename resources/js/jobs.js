@@ -265,20 +265,21 @@ export default function jobsManager(config = null) {
                 }
             }
 
-            // 3. Build pathname
-            let pathname = '/jobs';
+            // 3. Şəhər və kateqoriya yol (path) üzərində göstərilir:
+            //    /{category}  |  /{city}  |  /{city}/{category}
+            let pathname = '/';
             if (citySlug && categorySlug) {
-                pathname = `/jobs/${encodeURIComponent(citySlug)}/${encodeURIComponent(categorySlug)}`;
-            } else if (citySlug && !categorySlug) {
-                pathname = `/jobs/${encodeURIComponent(citySlug)}`;
-            } else if (!citySlug && categorySlug) {
-                pathname = `/jobs/${encodeURIComponent(categorySlug)}`;
+                pathname = `/${encodeURIComponent(citySlug)}/${encodeURIComponent(categorySlug)}`;
+            } else if (citySlug) {
+                pathname = `/${encodeURIComponent(citySlug)}`;
+            } else if (categorySlug) {
+                pathname = `/${encodeURIComponent(categorySlug)}`;
             }
 
-            // 4. Build query parameters
+            // 4. Qalan filtrlər query string ilə
             const params = new URLSearchParams();
 
-            // If subcategory exists, set ?subcategory={subcategorySlug}
+            // Alt kateqoriya → ?subcategory=...
             if (subcategorySlug) {
                 params.set('subcategory', subcategorySlug);
             }

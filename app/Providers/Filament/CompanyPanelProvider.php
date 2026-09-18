@@ -33,6 +33,7 @@ class CompanyPanelProvider extends PanelProvider
                 'primary' => Color::Sky,
             ])
             ->font('Inter')
+            ->maxContentWidth('full')
             ->databaseNotifications()
             ->breadcrumbs(false)
             ->renderHook(
@@ -41,7 +42,7 @@ class CompanyPanelProvider extends PanelProvider
             )
             ->userMenuItems([
                 MenuItem::make()
-                    ->label('Sayta bax')
+                    ->label(__('View site'))
                     ->url(fn (): string => url('/'))
                     ->icon('heroicon-o-globe-alt')
                     ->openUrlInNewTab(),

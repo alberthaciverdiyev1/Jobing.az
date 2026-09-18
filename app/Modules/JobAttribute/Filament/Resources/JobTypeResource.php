@@ -15,39 +15,54 @@ class JobTypeResource extends Resource
     protected static ?string $model = JobType::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-briefcase';
-    protected static ?string $navigationGroup = 'İlan Parametrləri';
-    protected static ?string $modelLabel = 'İş Rejimi';
-    protected static ?string $pluralModelLabel = 'İş Rejimləri';
+    protected static ?string $navigationGroup = null;
+
+    public static function getNavigationGroup(): string
+    {
+        return __('Listing Parameters');
+    }
+    protected static ?string $modelLabel = null;
+
+    public static function getModelLabel(): string
+    {
+        return __('Job Type');
+    }
+    protected static ?string $pluralModelLabel = null;
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('Job Types');
+    }
     protected static ?int $navigationSort = 1;
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\Section::make('Ümumi Parametrlər')
+                Forms\Components\Section::make(__('General Parameters'))
                     ->schema([
                         Forms\Components\TextInput::make('slug')
-                            ->label('Slug / Kod')
-                            ->helperText('Boş buraxılarsa avtomatik yaradılacaq')
+                            ->label(__('Slug / Code'))
+                            ->helperText(__('If left empty, it will be auto-generated'))
                             ->maxLength(255),
 
                         Forms\Components\TextInput::make('order')
-                            ->label('Sıralama')
+                            ->label(__('Ordering'))
                             ->numeric()
                             ->default(0),
 
                         Forms\Components\Toggle::make('is_active')
-                            ->label('Aktivdir')
+                            ->label(__('Active'))
                             ->default(true)
                             ->inline(false),
                     ])->columns(3),
 
                 Forms\Components\Tabs::make('Translations')
                     ->tabs([
-                        Forms\Components\Tabs\Tab::make('🇦🇿 Azərbaycan (Default)')
+                        Forms\Components\Tabs\Tab::make('🇦🇿 ' . __('languages.Azerbaijani') . ' (' . __('Default') . ')')
                             ->schema([
                                 Forms\Components\TextInput::make('name.az')
-                                    ->label('İş Rejimi Adı (AZ)')
+                                    ->label(__('Job Type Name (AZ)'))
                                     ->required()
                                     ->live(onBlur: true)
                                     ->afterStateUpdated(fn (string $operation, $state, Forms\Set $set, Forms\Get $get) => 
@@ -55,22 +70,22 @@ class JobTypeResource extends Resource
                                     ),
                             ]),
 
-                        Forms\Components\Tabs\Tab::make('🇬🇧 English')
+                        Forms\Components\Tabs\Tab::make('🇬🇧 ' . __('languages.English'))
                             ->schema([
                                 Forms\Components\TextInput::make('name.en')
-                                    ->label('Job Type Name (EN)'),
+                                    ->label(__('Job Type Name (EN)')),
                             ]),
 
-                        Forms\Components\Tabs\Tab::make('🇹🇷 Türkçe')
+                        Forms\Components\Tabs\Tab::make('🇹🇷 ' . __('languages.Turkish'))
                             ->schema([
                                 Forms\Components\TextInput::make('name.tr')
-                                    ->label('Çalışma Şekli Adı (TR)'),
+                                    ->label(__('Work Mode Name (TR)')),
                             ]),
 
-                        Forms\Components\Tabs\Tab::make('🇷🇺 Русский')
+                        Forms\Components\Tabs\Tab::make('🇷🇺 ' . __('languages.Russian'))
                             ->schema([
                                 Forms\Components\TextInput::make('name.ru')
-                                    ->label('Тип занятости (RU)'),
+                                    ->label(__('Job Type (RU)')),
                             ]),
                     ])->columnSpanFull(),
             ]);
@@ -81,26 +96,26 @@ class JobTypeResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')
-                    ->label('İş Rejimi (AZ)')
+                    ->label(__('Job Type (AZ)'))
                     ->searchable()
                     ->sortable()
                     ->weight('bold'),
 
                 Tables\Columns\TextColumn::make('slug')
-                    ->label('Slug')
+                    ->label(__('Slug'))
                     ->badge()
                     ->color('gray'),
 
                 Tables\Columns\TextColumn::make('order')
-                    ->label('Sıra')
+                    ->label(__('Order'))
                     ->sortable(),
 
                 Tables\Columns\IconColumn::make('is_active')
-                    ->label('Aktiv')
+                    ->label(__('Active'))
                     ->boolean(),
 
                 Tables\Columns\TextColumn::make('vacancies_count')
-                    ->label('Vakansiya Sayı')
+                    ->label(__('Vacancy Count'))
                     ->counts('vacancies')
                     ->sortable(),
             ])

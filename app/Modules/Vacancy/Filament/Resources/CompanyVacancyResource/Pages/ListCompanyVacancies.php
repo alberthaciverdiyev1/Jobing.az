@@ -14,7 +14,7 @@ class ListCompanyVacancies extends ListRecords
     {
         return [
             Actions\CreateAction::make()
-                ->label('Yeni Vakansiya'),
+                ->label(__('New Vacancy')),
         ];
     }
 }

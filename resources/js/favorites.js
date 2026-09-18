@@ -57,7 +57,7 @@ const Favorites = {
             });
             const data = await res.json();
             if (res.status === 401 || data.auth_required) {
-                window.location.href = data.redirect_url || '/login';
+                window.location.href = data.redirect_url || '/daxil-ol';
                 return;
             }
             if (data.success) {

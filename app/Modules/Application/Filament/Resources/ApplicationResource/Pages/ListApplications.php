@@ -14,7 +14,7 @@ class ListApplications extends ListRecords
     {
         return [
             Actions\CreateAction::make()
-                ->label('Manuel Başvuru Ekle'),
+                ->label(__('Add Manual Application')),
         ];
     }
 }

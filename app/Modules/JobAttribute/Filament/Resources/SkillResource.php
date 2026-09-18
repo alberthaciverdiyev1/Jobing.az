@@ -14,23 +14,38 @@ class SkillResource extends Resource
     protected static ?string $model = Skill::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-hashtag';
-    protected static ?string $navigationGroup = 'İlan & Şirket Yönetimi';
-    protected static ?string $modelLabel = 'Bacarıq Teqi';
-    protected static ?string $pluralModelLabel = 'Bacarıq Teqləri';
+    protected static ?string $navigationGroup = null;
+
+    public static function getNavigationGroup(): string
+    {
+        return __('Listing & Company Management');
+    }
+    protected static ?string $modelLabel = null;
+
+    public static function getModelLabel(): string
+    {
+        return __('Skill Tag');
+    }
+    protected static ?string $pluralModelLabel = null;
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('Skill Tags');
+    }
     protected static ?int $navigationSort = 7;
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\Section::make('Teq Məlumatları & Çoxdilli Tərcümə')
+                Forms\Components\Section::make(__('Tag Information & Multilingual Translation'))
                     ->schema([
                         Forms\Components\Tabs::make('NameTranslations')
                             ->tabs([
-                                Forms\Components\Tabs\Tab::make('🇦🇿 Azərbaycan')
+                                Forms\Components\Tabs\Tab::make('🇦🇿 ' . __('languages.Azerbaijani'))
                                     ->schema([
                                         Forms\Components\TextInput::make('name.az')
-                                            ->label('Bacarıq Adı (AZ)')
+                                            ->label(__('Skill Name (AZ)'))
                                             ->required()
                                             ->maxLength(255)
                                             ->live(onBlur: true)
@@ -38,29 +53,29 @@ class SkillResource extends Resource
                                                 $operation === 'create' ? $set('slug', \Illuminate\Support\Str::slug($state)) : null
                                             ),
                                     ]),
-                                Forms\Components\Tabs\Tab::make('🇬🇧 English')
+                                Forms\Components\Tabs\Tab::make('🇬🇧 ' . __('languages.English'))
                                     ->schema([
                                         Forms\Components\TextInput::make('name.en')
-                                            ->label('Skill Name (EN)')
+                                            ->label(__('Skill Name (EN)'))
                                             ->maxLength(255),
                                     ]),
-                                Forms\Components\Tabs\Tab::make('🇹🇷 Türkçe')
+                                Forms\Components\Tabs\Tab::make('🇹🇷 ' . __('languages.Turkish'))
                                     ->schema([
                                         Forms\Components\TextInput::make('name.tr')
-                                            ->label('Becerik Adı (TR)')
+                                            ->label(__('Skill Name (TR)'))
                                             ->maxLength(255),
                                     ]),
-                                Forms\Components\Tabs\Tab::make('🇷🇺 Русский')
+                                Forms\Components\Tabs\Tab::make('🇷🇺 ' . __('languages.Russian'))
                                     ->schema([
                                         Forms\Components\TextInput::make('name.ru')
-                                            ->label('Название навыка (RU)')
+                                            ->label(__('Skill Name (RU)'))
                                             ->maxLength(255),
                                     ]),
                             ])
                             ->columnSpanFull(),
 
                         Forms\Components\Select::make('category_id')
-                            ->label('Kateqoriya')
+                            ->label(__('Category'))
                             ->options(fn (): array => collect(\App\Modules\Category\Models\Category::parents()->get())
                                 ->sortBy(fn ($c) => (string) $c->name)
                                 ->mapWithKeys(fn ($c) => [(string) $c->id => (string) $c->name])
@@ -68,21 +83,21 @@ class SkillResource extends Resource
                             ->searchable()
                             ->preload()
                             ->nullable()
-                            ->helperText('Bacarığın aid olduğu əsas kateqoriyanı seçin.'),
+                            ->helperText(__('Select the main category this skill belongs to.')),
 
                         Forms\Components\TextInput::make('slug')
-                            ->label('Slug / URL')
+                            ->label(__('Slug / URL'))
                             ->required()
                             ->unique(Skill::class, 'slug', ignoreRecord: true)
                             ->maxLength(255),
 
                         Forms\Components\TextInput::make('order')
-                            ->label('Sıralama Sırası')
+                            ->label(__('Sort Order'))
                             ->numeric()
                             ->default(0),
 
                         Forms\Components\Toggle::make('is_active')
-                            ->label('Aktivlik Durumu')
+                            ->label(__('Activity Status'))
                             ->default(true),
                     ])->columns(2),
             ]);
@@ -93,47 +108,47 @@ class SkillResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')
-                    ->label('Teq Adı')
+                    ->label(__('Tag Name'))
                     ->searchable()
                     ->sortable()
                     ->weight('bold'),
 
                 Tables\Columns\TextColumn::make('category.name')
-                    ->label('Kateqoriya')
+                    ->label(__('Category'))
                     ->badge()
                     ->color('warning')
                     ->placeholder('—')
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('slug')
-                    ->label('Slug')
+                    ->label(__('Slug'))
                     ->badge()
                     ->color('gray'),
 
                 Tables\Columns\TextColumn::make('order')
-                    ->label('Sıra')
+                    ->label(__('Order'))
                     ->sortable(),
 
                 Tables\Columns\IconColumn::make('is_active')
-                    ->label('Aktiv')
+                    ->label(__('Active'))
                     ->boolean()
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('created_at')
-                    ->label('Tarix')
+                    ->label(__('Date'))
                     ->dateTime('d.m.Y')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('category_id')
-                    ->label('Kateqoriya')
+                    ->label(__('Category'))
                     ->options(fn (): array => collect(\App\Modules\Category\Models\Category::parents()->get())
                         ->sortBy(fn ($c) => (string) $c->name)
                         ->mapWithKeys(fn ($c) => [(string) $c->id => (string) $c->name])
                         ->all()),
                 Tables\Filters\TernaryFilter::make('is_active')
-                    ->label('Aktivlik Durumu'),
+                    ->label(__('Activity Status')),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

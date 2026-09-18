@@ -13,9 +13,9 @@
     <!-- Page Header -->
     <div class="bg-white border-b border-gray-200 py-10">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h1 class="text-2xl sm:text-3xl font-extrabold text-gray-900 tracking-tight">
+            <h2 class="text-2xl sm:text-3xl font-semibold text-gray-900 tracking-tight">
                 {{ __('Post a New Vacancy') }}
-            </h1>
+            </h2>
             <p class="text-gray-500 text-xs sm:text-sm mt-2 max-w-xl mx-auto">
                 {{ __('Reach thousands of talented candidates with your listing and strengthen your team with professionals.') }}
             </p>
@@ -25,7 +25,7 @@
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         @if ($errors->any())
         <div class="mb-6 p-4 rounded-2xl bg-rose-50 border border-rose-200 text-rose-800 text-sm">
-            <div class="font-bold mb-1">Xəta baş verdi:</div>
+            <div class="font-semibold mb-1">{{ __('An error occurred:') }}</div>
             <ul class="list-disc pl-5 space-y-1 text-xs">
                 @foreach ($errors->all() as $error)
                     <li>{{ $error }}</li>
@@ -123,8 +123,8 @@
             <!-- Section 1: Company Info -->
             <div class="bg-white p-6 sm:p-8 rounded-2xl border border-gray-200 shadow-2xs space-y-5">
                 <div class="pb-3 border-b border-gray-100 flex items-center gap-2.5">
-                    <div class="w-8 h-8 rounded-xl bg-orange-50 text-primary flex items-center justify-center font-bold text-sm">1</div>
-                    <h2 class="font-bold text-gray-900 text-base">{{ __('Company Information') }}</h2>
+                    <div class="w-8 h-8 rounded-xl bg-orange-50 text-primary flex items-center justify-center font-semibold text-sm">1</div>
+                    <h2 class="font-semibold text-gray-900 text-base">{{ __('Company Information') }}</h2>
                 </div>
 
                 @if($authCompany)
@@ -136,14 +136,14 @@
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-xs font-bold text-gray-700 mb-1">{{ __('Company Name') }} *</label>
+                        <label class="block text-xs font-semibold text-gray-700 mb-1">{{ __('Company Name') }} *</label>
                         <input type="text" name="company_name" value="{{ old('company_name', $authCompany->name ?? '') }}" required placeholder="FoxSoft Technology"
                                @if($authCompany) disabled @endif
                                class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs focus:ring-1 focus:ring-primary focus:border-primary focus:outline-hidden disabled:bg-gray-50 disabled:text-gray-500 disabled:cursor-not-allowed">
                     </div>
 
                     <div>
-                        <label class="block text-xs font-bold text-gray-700 mb-1">{{ __('City / Location') }}</label>
+                        <label class="block text-xs font-semibold text-gray-700 mb-1">{{ __('City / Location') }}</label>
                         <select name="company_location"
                                 class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs focus:ring-1 focus:ring-primary focus:border-primary focus:outline-hidden bg-white">
                             <option value="">{{ __('Select a city') }}</option>
@@ -164,13 +164,13 @@
             <!-- Section 2: Vacancy Details -->
             <div class="bg-white p-6 sm:p-8 rounded-2xl border border-gray-200 shadow-2xs space-y-5">
                 <div class="pb-3 border-b border-gray-100 flex items-center gap-2.5">
-                    <div class="w-8 h-8 rounded-xl bg-orange-50 text-primary flex items-center justify-center font-bold text-sm">2</div>
-                    <h2 class="font-bold text-gray-900 text-base">{{ __('Vacancy Details') }}</h2>
+                    <div class="w-8 h-8 rounded-xl bg-orange-50 text-primary flex items-center justify-center font-semibold text-sm">2</div>
+                    <h2 class="font-semibold text-gray-900 text-base">{{ __('Vacancy Details') }}</h2>
                 </div>
 
                 <div class="space-y-4">
                     <div>
-                        <label class="block text-xs font-bold text-gray-700 mb-1">{{ __('Position / Job Title') }} *</label>
+                        <label class="block text-xs font-semibold text-gray-700 mb-1">{{ __('Position / Job Title') }} *</label>
                         <input type="text" name="title" x-model="jobTitle" required placeholder="Məsələn: Senior Laravel Developer"
                                class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs focus:ring-1 focus:ring-primary focus:border-primary focus:outline-hidden">
                     </div>
@@ -178,7 +178,7 @@
                     <!-- Category & Subcategory Row (Side by Side) -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div :class="subcategories.length > 0 ? '' : 'sm:col-span-2'">
-                            <label class="block text-xs font-bold text-gray-700 mb-1">{{ __('Category') }} *</label>
+                            <label class="block text-xs font-semibold text-gray-700 mb-1">{{ __('Category') }} *</label>
                             <select x-model="parentCat" @change="updateParent()" required
                                     class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs focus:ring-1 focus:ring-primary focus:border-primary focus:outline-hidden bg-white">
                                 <option value="">{{ __('Select category') }}</option>
@@ -190,7 +190,7 @@
 
                         {{-- Subcategory: sits right next to Kateqoriya in the 2nd column --}}
                         <div x-show="subcategories.length > 0" x-cloak x-transition>
-                            <label class="block text-xs font-bold text-gray-700 mb-1">{{ __('Subcategory') }}</label>
+                            <label class="block text-xs font-semibold text-gray-700 mb-1">{{ __('Subcategory') }}</label>
                             <select x-model="subCat" @change="updateSubCat()"
                                     class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs focus:ring-1 focus:ring-primary focus:border-primary focus:outline-hidden bg-white">
                                 <option value="">{{ __('Select a subcategory') }}</option>
@@ -207,7 +207,7 @@
                     <!-- Work Attributes Row -->
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <div>
-                            <label class="block text-xs font-bold text-gray-700 mb-1">{{ __('Workplace') }} *</label>
+                            <label class="block text-xs font-semibold text-gray-700 mb-1">{{ __('Workplace') }} *</label>
                             <select name="workplace_type_id" required class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs focus:ring-1 focus:ring-primary focus:border-primary focus:outline-hidden bg-white">
                                 <option value="">{{ __('Select workplace') }}</option>
                                 @foreach($workplaceTypes as $wt)
@@ -219,7 +219,7 @@
                         </div>
 
                         <div>
-                            <label class="block text-xs font-bold text-gray-700 mb-1">{{ __('Employment type') }} *</label>
+                            <label class="block text-xs font-semibold text-gray-700 mb-1">{{ __('Employment type') }} *</label>
                             <select name="job_type_id" required class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs focus:ring-1 focus:ring-primary focus:border-primary focus:outline-hidden bg-white">
                                 <option value="">{{ __('Select employment type') }}</option>
                                 @foreach($jobTypes as $jt)
@@ -231,7 +231,7 @@
                         </div>
 
                         <div>
-                            <label class="block text-xs font-bold text-gray-700 mb-1">{{ __('Experience Level') }} *</label>
+                            <label class="block text-xs font-semibold text-gray-700 mb-1">{{ __('Experience Level') }} *</label>
                             <select name="experience_level_id" required class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs focus:ring-1 focus:ring-primary focus:border-primary focus:outline-hidden bg-white">
                                 <option value="">{{ __('Select experience level') }}</option>
                                 @foreach($experienceLevels as $el)
@@ -248,23 +248,23 @@
                            :class="salaryNegotiable ? 'border-primary bg-orange-50/60' : 'border-gray-200 hover:border-gray-300'">
                         <input type="checkbox" name="salary_negotiable" value="1" x-model="salaryNegotiable" class="mt-0.5 rounded border-gray-300 text-primary focus:ring-primary">
                         <span class="flex flex-col gap-0.5">
-                            <span class="text-xs font-bold text-gray-900">{{ __('Salary negotiable') }}</span>
+                            <span class="text-xs font-semibold text-gray-900">{{ __('Salary negotiable') }}</span>
                         </span>
                     </label>
 
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <div>
-                            <label class="block text-xs font-bold text-gray-700 mb-1">{{ __('Minimum Salary') }}</label>
+                            <label class="block text-xs font-semibold text-gray-700 mb-1">{{ __('Minimum Salary') }}</label>
                             <input type="number" name="salary_min" value="{{ old('salary_min') }}" placeholder="1500" :disabled="salaryNegotiable"
                                    class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs focus:ring-1 focus:ring-primary focus:border-primary focus:outline-hidden disabled:bg-gray-50 disabled:text-gray-400 disabled:cursor-not-allowed">
                         </div>
                         <div>
-                            <label class="block text-xs font-bold text-gray-700 mb-1">{{ __('Maximum Salary') }}</label>
+                            <label class="block text-xs font-semibold text-gray-700 mb-1">{{ __('Maximum Salary') }}</label>
                             <input type="number" name="salary_max" value="{{ old('salary_max') }}" placeholder="3000" :disabled="salaryNegotiable"
                                    class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs focus:ring-1 focus:ring-primary focus:border-primary focus:outline-hidden disabled:bg-gray-50 disabled:text-gray-400 disabled:cursor-not-allowed">
                         </div>
                         <div>
-                            <label class="block text-xs font-bold text-gray-700 mb-1">{{ __('Currency') }}</label>
+                            <label class="block text-xs font-semibold text-gray-700 mb-1">{{ __('Currency') }}</label>
                             <select name="currency" :disabled="salaryNegotiable" class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs focus:ring-1 focus:ring-primary focus:border-primary focus:outline-hidden bg-white disabled:bg-gray-50 disabled:text-gray-400 disabled:cursor-not-allowed">
                                 <option value="AZN" {{ old('currency') == 'AZN' ? 'selected' : '' }}>AZN (₼)</option>
                                 <option value="USD" {{ old('currency') == 'USD' ? 'selected' : '' }}>USD ($)</option>
@@ -279,11 +279,11 @@
 
                     <div>
                         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-2">
-                            <label class="block text-xs font-bold text-gray-700">
+                            <label class="block text-xs font-semibold text-gray-700">
                                 {{ __('Required Skills') }}
                             </label>
-                            <span class="text-[11px] text-gray-400">
-                                <span x-text="selectedSkills.length" class="font-bold text-primary"></span> {{ __('skill selected') }}
+                            <span class="text-[12px] text-gray-400">
+                                <span x-text="selectedSkills.length" class="font-semibold text-primary"></span> {{ __('skill selected') }}
                             </span>
                         </div>
 
@@ -295,14 +295,14 @@
                         <!-- Selected Skills Badges (Shown Above) -->
                         <div x-show="selectedSkills.length > 0" x-cloak x-transition class="mb-3 p-3 rounded-xl bg-orange-50/70 border border-orange-200">
                             <div class="flex items-center justify-between mb-2">
-                                <span class="text-[11px] font-bold text-orange-950 uppercase tracking-wider flex items-center gap-1.5">
+                                <span class="text-[12px] font-medium text-orange-950 flex items-center gap-1.5">
                                     <i class="fas fa-check-circle text-primary text-xs"></i>
                                     <span>{{ __('Selected Skills') }}</span>
-                                    <span class="px-1.5 py-0.2 rounded-full bg-primary text-white text-[10px] font-bold" x-text="selectedSkills.length"></span>
+                                    <span class="px-1.5 py-0.2 rounded-full bg-primary text-white text-[11px] font-semibold" x-text="selectedSkills.length"></span>
                                 </span>
                                 <button type="button"
                                         @click="selectedSkills = []"
-                                        class="text-[11px] text-gray-500 hover:text-rose-600 transition font-medium hover:underline cursor-pointer">
+                                        class="text-[12px] text-gray-500 hover:text-rose-600 transition font-medium hover:underline cursor-pointer">
                                     {{ __('Clear all') }}
                                 </button>
                             </div>
@@ -314,7 +314,7 @@
                                                 @click="selectedSkills = selectedSkills.filter(s => s !== skill)"
                                                 class="w-4 h-4 rounded-full hover:bg-orange-100 text-gray-400 hover:text-rose-600 flex items-center justify-center transition cursor-pointer"
                                                 title="{{ __('Delete') }}">
-                                            <i class="fas fa-times text-[9px]"></i>
+                                            <i class="fas fa-times text-[10px]"></i>
                                         </button>
                                     </span>
                                 </template>
@@ -342,7 +342,7 @@
                         <div x-show="parentCat && filteredSkills.length > 0"
                              class="flex flex-wrap items-center gap-2 max-h-56 overflow-y-auto p-2 border border-gray-200 rounded-xl bg-gray-50/40">
                             <template x-for="sk in filteredSkills" :key="sk.id">
-                                <label :class="selectedSkills.includes(sk.name) ? 'bg-orange-50 border-primary text-primary font-bold ring-1 ring-primary' : 'bg-white border-gray-200 hover:border-gray-300 text-gray-700'"
+                                <label :class="selectedSkills.includes(sk.name) ? 'bg-orange-50 border-primary text-primary font-semibold ring-1 ring-primary' : 'bg-white border-gray-200 hover:border-gray-300 text-gray-700'"
                                        class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border transition duration-150 cursor-pointer text-xs select-none shadow-2xs">
                                     <input type="checkbox"
                                            :value="sk.name"
@@ -363,26 +363,26 @@
                             <p class="text-xs text-gray-400">{{ __('No skills have been added for this category.') }}</p>
                         </div>
 
-                        <span class="text-[11px] text-gray-400 mt-1.5 block">
+                        <span class="text-[12px] text-gray-400 mt-1.5 block">
                             {{ __('Select the relevant skills. The selected skills will be shown as tags on the vacancy card.') }}
                         </span>
                     </div>
 
                     <div>
-                        <label class="block text-xs font-bold text-gray-700 mb-1">{{ __('Job Description & Responsibilities') }} *</label>
+                        <label class="block text-xs font-semibold text-gray-700 mb-1">{{ __('Job Description & Responsibilities') }} *</label>
                         <div id="editor-description" class="quill-editor bg-white rounded-xl border border-gray-200" data-initial="{{ old('description', '') }}"></div>
                         <input type="hidden" name="description" id="description" value="{{ old('description') }}">
                     </div>
 
                     <div>
-                        <label class="block text-xs font-bold text-gray-700 mb-1">{{ __('Requirements & Experience') }}</label>
+                        <label class="block text-xs font-semibold text-gray-700 mb-1">{{ __('Requirements & Experience') }}</label>
                         <div id="editor-requirements" class="quill-editor bg-white rounded-xl border border-gray-200" data-initial="{{ old('requirements', '') }}"></div>
                         <input type="hidden" name="requirements" id="requirements" value="{{ old('requirements') }}">
                     </div>
 
 
                     <div>
-                        <label class="block text-xs font-bold text-gray-700 mb-1">{{ __('Application Deadline') }}</label>
+                        <label class="block text-xs font-semibold text-gray-700 mb-1">{{ __('Application Deadline') }}</label>
                         <input type="date" name="deadline"
                                value="{{ old('deadline', now()->addMonth()->format('Y-m-d')) }}"
                                min="{{ now()->addDay()->format('Y-m-d') }}"
@@ -394,8 +394,8 @@
             <!-- Section 3: Application Type -->
             <div class="bg-white p-6 sm:p-8 rounded-2xl border border-gray-200 shadow-2xs space-y-5">
                 <div class="pb-3 border-b border-gray-100 flex items-center gap-2.5">
-                    <div class="w-8 h-8 rounded-xl bg-orange-50 text-primary flex items-center justify-center font-bold text-sm">3</div>
-                    <h2 class="font-bold text-gray-900 text-base">{{ __('Application Type') }}</h2>
+                    <div class="w-8 h-8 rounded-xl bg-orange-50 text-primary flex items-center justify-center font-semibold text-sm">3</div>
+                    <h2 class="font-semibold text-gray-900 text-base">{{ __('Application Type') }}</h2>
                 </div>
 
                 <p class="text-xs text-gray-500 -mt-1">{{ __("Choose how you want to receive candidates' applications.") }}</p>
@@ -409,24 +409,24 @@
                         <div class="flex items-center justify-between">
                             <i class="fas fa-cloud-arrow-up text-primary text-lg"></i>
                             <span :class="applicationType === 'internal' ? 'bg-primary text-white' : 'bg-gray-100 text-gray-400'"
-                                  class="w-4 h-4 rounded-full border border-gray-200 flex items-center justify-center text-[8px]">
+                                  class="w-4 h-4 rounded-full border border-gray-200 flex items-center justify-center text-[9px]">
                                 <i class="fas fa-check" x-show="applicationType === 'internal'"></i>
                             </span>
                         </div>
-                        <span class="font-bold text-gray-900 text-xs mt-1">{{ __('With CV (Internal)') }}</span>
-                        <span class="text-[11px] text-gray-500 leading-relaxed">{{ __('Candidates upload their CVs on the platform. Applications appear in your panel.') }}</span>
+                        <span class="font-semibold text-gray-900 text-xs mt-1">{{ __('With CV (Internal)') }}</span>
+                        <span class="text-[12px] text-gray-500 leading-relaxed">{{ __('Candidates upload their CVs on the platform. Applications appear in your panel.') }}</span>
                     </label>
                     @else
                     <div class="rounded-2xl border border-dashed border-gray-200 bg-gray-50/80 p-4 flex flex-col gap-1.5 opacity-60 cursor-not-allowed select-none relative">
                         <div class="flex items-center justify-between">
                             <i class="fas fa-cloud-arrow-up text-gray-400 text-lg"></i>
-                            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200 flex items-center gap-1">
-                                <i class="fas fa-lock text-[8px]"></i>
+                            <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200 flex items-center gap-1">
+                                <i class="fas fa-lock text-[9px]"></i>
                                 {{ __('Company account required') }}
                             </span>
                         </div>
-                        <span class="font-bold text-gray-500 text-xs mt-1">{{ __('With CV (Internal)') }}</span>
-                        <span class="text-[11px] text-gray-400 leading-relaxed">{{ __('In-platform CV collection and management is available only to registered company accounts.') }}</span>
+                        <span class="font-semibold text-gray-500 text-xs mt-1">{{ __('With CV (Internal)') }}</span>
+                        <span class="text-[12px] text-gray-400 leading-relaxed">{{ __('In-platform CV collection and management is available only to registered company accounts.') }}</span>
                     </div>
                     @endif
 
@@ -437,12 +437,12 @@
                         <div class="flex items-center justify-between">
                             <i class="fas fa-envelope text-primary text-lg"></i>
                             <span :class="applicationType === 'email' ? 'bg-primary text-white' : 'bg-gray-100 text-gray-400'"
-                                  class="w-4 h-4 rounded-full border border-gray-200 flex items-center justify-center text-[8px]">
+                                  class="w-4 h-4 rounded-full border border-gray-200 flex items-center justify-center text-[9px]">
                                 <i class="fas fa-check" x-show="applicationType === 'email'"></i>
                             </span>
                         </div>
-                        <span class="font-bold text-gray-900 text-xs mt-1">{{ __('By Email') }}</span>
-                        <span class="text-[11px] text-gray-500 leading-relaxed">{{ __('Candidates send applications directly to your email address.') }}</span>
+                        <span class="font-semibold text-gray-900 text-xs mt-1">{{ __('By Email') }}</span>
+                        <span class="text-[12px] text-gray-500 leading-relaxed">{{ __('Candidates send applications directly to your email address.') }}</span>
                     </label>
 
                     {{-- Both --}}
@@ -453,24 +453,24 @@
                         <div class="flex items-center justify-between">
                             <i class="fas fa-layer-group text-primary text-lg"></i>
                             <span :class="applicationType === 'both' ? 'bg-primary text-white' : 'bg-gray-100 text-gray-400'"
-                                  class="w-4 h-4 rounded-full border border-gray-200 flex items-center justify-center text-[8px]">
+                                  class="w-4 h-4 rounded-full border border-gray-200 flex items-center justify-center text-[9px]">
                                 <i class="fas fa-check" x-show="applicationType === 'both'"></i>
                             </span>
                         </div>
-                        <span class="font-bold text-gray-900 text-xs mt-1">{{ __('Both') }}</span>
-                        <span class="text-[11px] text-gray-500 leading-relaxed">{{ __('Candidates can either upload a CV or apply by email.') }}</span>
+                        <span class="font-semibold text-gray-900 text-xs mt-1">{{ __('Both') }}</span>
+                        <span class="text-[12px] text-gray-500 leading-relaxed">{{ __('Candidates can either upload a CV or apply by email.') }}</span>
                     </label>
                     @else
                     <div class="rounded-2xl border border-dashed border-gray-200 bg-gray-50/80 p-4 flex flex-col gap-1.5 opacity-60 cursor-not-allowed select-none relative">
                         <div class="flex items-center justify-between">
                             <i class="fas fa-layer-group text-gray-400 text-lg"></i>
-                            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200 flex items-center gap-1">
-                                <i class="fas fa-lock text-[8px]"></i>
+                            <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200 flex items-center gap-1">
+                                <i class="fas fa-lock text-[9px]"></i>
                                 {{ __('Company account required') }}
                             </span>
                         </div>
-                        <span class="font-bold text-gray-500 text-xs mt-1">{{ __('Both') }}</span>
-                        <span class="text-[11px] text-gray-400 leading-relaxed">{{ __('In-platform CV collection and management is available only to registered company accounts.') }}</span>
+                        <span class="font-semibold text-gray-500 text-xs mt-1">{{ __('Both') }}</span>
+                        <span class="text-[12px] text-gray-400 leading-relaxed">{{ __('In-platform CV collection and management is available only to registered company accounts.') }}</span>
                     </div>
                     @endif
                 </div>
@@ -488,9 +488,9 @@
                         <i class="fas fa-info-circle text-blue-500 text-sm shrink-0"></i>
                         <span>{{ __('Because you are not signed in, applications will be accepted only by email. You can sign in to your company account to manage applications in your panel.') }}</span>
                     </div>
-                    <a href="{{ route('login') }}" class="shrink-0 font-bold text-primary hover:underline flex items-center gap-1 text-xs">
+                    <a href="{{ route('login') }}" class="shrink-0 font-semibold text-primary hover:underline flex items-center gap-1 text-xs">
                         <span>{{ __('Sign in') }}</span>
-                        <i class="fas fa-arrow-right text-[10px]"></i>
+                        <i class="fas fa-arrow-right text-[11px]"></i>
                     </a>
                 </div>
                 @endguest
@@ -501,7 +501,7 @@
                      x-transition:enter-start="opacity-0 translate-y-1"
                      x-transition:enter-end="opacity-100 translate-y-0"
                      class="pt-2">
-                    <label class="block text-xs font-bold text-gray-700 mb-1">
+                    <label class="block text-xs font-semibold text-gray-700 mb-1">
                         {{ __('Email Address for Receiving Applications') }}
                         @if(!$canUseInternal) * @endif
                     </label>
@@ -510,7 +510,7 @@
                            placeholder="hr@company.com"
                            {{ !$canUseInternal ? 'required' : '' }}
                            class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs focus:ring-1 focus:ring-primary focus:border-primary focus:outline-hidden">
-                    <p class="text-[11px] text-gray-400 mt-1">
+                    <p class="text-[12px] text-gray-400 mt-1">
                         @if($canUseInternal)
                             {{ __('If left empty, the official email on your company profile will be used.') }}
                         @else
@@ -525,10 +525,10 @@
                 @endphp
                 <div x-show="applicationType === 'internal' || applicationType === 'both'" x-cloak
                      class="pt-3 border-t border-gray-100">
-                    <label class="block text-xs font-bold text-gray-700 mb-1">
+                    <label class="block text-xs font-semibold text-gray-700 mb-1">
                         {{ __('Application Form Fields') }}
                     </label>
-                    <p class="text-[11px] text-gray-400 mb-3">
+                    <p class="text-[12px] text-gray-400 mb-3">
                         {{ __('Choose which additional details candidates must provide when applying on the site:') }}
                     </p>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
@@ -537,8 +537,8 @@
                                    {{ in_array('phone', $selectedAppFields) ? 'checked' : '' }}
                                    class="rounded text-primary focus:ring-primary h-4 w-4 border-gray-300">
                             <div class="text-xs">
-                                <span class="font-bold text-gray-800 block">{{ __('Phone number') }}</span>
-                                <span class="text-[10px] text-gray-400">{{ __("The candidate's contact number") }}</span>
+                                <span class="font-semibold text-gray-800 block">{{ __('Phone number') }}</span>
+                                <span class="text-[11px] text-gray-400">{{ __("The candidate's contact number") }}</span>
                             </div>
                         </label>
                         <label class="flex items-center gap-2.5 p-3 rounded-xl border border-gray-200 bg-white hover:border-gray-300 cursor-pointer transition">
@@ -546,8 +546,8 @@
                                    {{ in_array('linkedin', $selectedAppFields) ? 'checked' : '' }}
                                    class="rounded text-primary focus:ring-primary h-4 w-4 border-gray-300">
                             <div class="text-xs">
-                                <span class="font-bold text-gray-800 block">{{ __('LinkedIn Profile') }}</span>
-                                <span class="text-[10px] text-gray-400">{{ __("The candidate's LinkedIn profile link") }}</span>
+                                <span class="font-semibold text-gray-800 block">{{ __('LinkedIn Profile') }}</span>
+                                <span class="text-[11px] text-gray-400">{{ __("The candidate's LinkedIn profile link") }}</span>
                             </div>
                         </label>
                         <label class="flex items-center gap-2.5 p-3 rounded-xl border border-gray-200 bg-white hover:border-gray-300 cursor-pointer transition">
@@ -555,8 +555,8 @@
                                    {{ in_array('portfolio', $selectedAppFields) ? 'checked' : '' }}
                                    class="rounded text-primary focus:ring-primary h-4 w-4 border-gray-300">
                             <div class="text-xs">
-                                <span class="font-bold text-gray-800 block">{{ __('Portfolio / GitHub') }}</span>
-                                <span class="text-[10px] text-gray-400">{{ __('Work samples and project link') }}</span>
+                                <span class="font-semibold text-gray-800 block">{{ __('Portfolio / GitHub') }}</span>
+                                <span class="text-[11px] text-gray-400">{{ __('Work samples and project link') }}</span>
                             </div>
                         </label>
                         <label class="flex items-center gap-2.5 p-3 rounded-xl border border-gray-200 bg-white hover:border-gray-300 cursor-pointer transition">
@@ -564,8 +564,8 @@
                                    {{ in_array('cover_letter', $selectedAppFields) ? 'checked' : '' }}
                                    class="rounded text-primary focus:ring-primary h-4 w-4 border-gray-300">
                             <div class="text-xs">
-                                <span class="font-bold text-gray-800 block">{{ __('Cover Letter / Notes') }}</span>
-                                <span class="text-[10px] text-gray-400">{{ __('Short info or notes about the candidate') }}</span>
+                                <span class="font-semibold text-gray-800 block">{{ __('Cover Letter / Notes') }}</span>
+                                <span class="text-[11px] text-gray-400">{{ __('Short info or notes about the candidate') }}</span>
                             </div>
                         </label>
                     </div>
@@ -574,7 +574,7 @@
 
             <!-- Submit Button -->
             <div class="flex justify-end pt-4">
-                <button type="submit" class="px-8 py-3.5 rounded-xl bg-primary hover:bg-primary-dark text-white font-bold text-sm shadow-md hover:shadow-lg hover:shadow-orange-500/30 transition duration-200 cursor-pointer">
+                <button type="submit" class="px-8 py-3.5 rounded-xl bg-primary hover:bg-primary-dark text-white font-semibold text-sm shadow-md hover:shadow-lg hover:shadow-orange-500/30 transition duration-200 cursor-pointer">
                     {{ __('Publish Vacancy') }}
                 </button>
             </div>

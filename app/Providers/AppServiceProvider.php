@@ -25,6 +25,23 @@ class AppServiceProvider extends ServiceProvider
         // Navbar bildirim verisini blade dışında (composer) hazırla.
         View::composer(['components.navbar', 'layouts.partials.*'], NavbarComposer::class);
 
+        // "Yarat & yenisini yarat" düğmesini tüm Filament create sayfalarında kapat.
+        \Filament\Resources\Pages\CreateRecord::disableCreateAnother();
+
+        // İş elanı facet keşi: vakansiya və ya referans məlumat dəyişdikdə versiyanı artır
+        // (admin paneldən əlavə/redaktə/silmə daxil) → köhnə keş avtomatik etibarsız olur.
+        foreach ([
+            \App\Modules\Vacancy\Models\Vacancy::class,
+            \App\Modules\Category\Models\Category::class,
+            \App\Modules\JobAttribute\Models\City::class,
+            \App\Modules\JobAttribute\Models\JobType::class,
+            \App\Modules\JobAttribute\Models\WorkplaceType::class,
+            \App\Modules\JobAttribute\Models\ExperienceLevel::class,
+        ] as $model) {
+            $model::saved(fn () => \App\Modules\Vacancy\Support\FacetCache::bump());
+            $model::deleted(fn () => \App\Modules\Vacancy\Support\FacetCache::bump());
+        }
+
         \Filament\Support\Facades\FilamentView::registerRenderHook(
             \Filament\View\PanelsRenderHook::HEAD_END,
             fn (): \Illuminate\Support\HtmlString => new \Illuminate\Support\HtmlString('

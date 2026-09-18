@@ -42,7 +42,7 @@ class UserPanelProvider extends PanelProvider
             )
             ->userMenuItems([
                 MenuItem::make()
-                    ->label('Sayta bax')
+                    ->label(__('View site'))
                     ->url(fn (): string => url('/'))
                     ->icon('heroicon-o-globe-alt')
                     ->openUrlInNewTab(),

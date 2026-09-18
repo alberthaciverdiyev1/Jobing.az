@@ -18,9 +18,24 @@ class MyResumeResource extends Resource
     protected static ?string $model = Resume::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-identification';
-    protected static ?string $navigationLabel = 'CV & Rezümələrim';
-    protected static ?string $modelLabel = 'CV / Rezüme';
-    protected static ?string $pluralModelLabel = 'CV & Rezümələrim';
+    protected static ?string $navigationLabel = null;
+
+    public static function getNavigationLabel(): string
+    {
+        return __('My CVs & Resumes');
+    }
+    protected static ?string $modelLabel = null;
+
+    public static function getModelLabel(): string
+    {
+        return __('CV / Resume');
+    }
+    protected static ?string $pluralModelLabel = null;
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('My CVs & Resumes');
+    }
     protected static ?int $navigationSort = 3;
 
     public static function canViewAny(): bool

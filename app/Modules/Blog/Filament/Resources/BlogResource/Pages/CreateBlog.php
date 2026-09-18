@@ -3,7 +3,7 @@
 namespace App\Modules\Blog\Filament\Resources\BlogResource\Pages;
 
 use App\Modules\Blog\Filament\Resources\BlogResource;
-use Filament\Resources\Pages\CreateRecord;
+use App\Filament\Pages\CreateRecord;
 
 class CreateBlog extends CreateRecord
 {

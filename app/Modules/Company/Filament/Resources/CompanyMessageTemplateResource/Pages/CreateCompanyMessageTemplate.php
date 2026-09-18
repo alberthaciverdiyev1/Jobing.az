@@ -3,7 +3,7 @@
 namespace App\Modules\Company\Filament\Resources\CompanyMessageTemplateResource\Pages;
 
 use App\Modules\Company\Filament\Resources\CompanyMessageTemplateResource;
-use Filament\Resources\Pages\CreateRecord;
+use App\Filament\Pages\CreateRecord;
 
 class CreateCompanyMessageTemplate extends CreateRecord
 {

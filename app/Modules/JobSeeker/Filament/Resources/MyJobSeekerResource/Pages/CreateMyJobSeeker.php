@@ -3,7 +3,7 @@
 namespace App\Modules\JobSeeker\Filament\Resources\MyJobSeekerResource\Pages;
 
 use App\Modules\JobSeeker\Filament\Resources\MyJobSeekerResource;
-use Filament\Resources\Pages\CreateRecord;
+use App\Filament\Pages\CreateRecord;
 
 class CreateMyJobSeeker extends CreateRecord
 {

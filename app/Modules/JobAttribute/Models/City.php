@@ -7,12 +7,13 @@ use App\Modules\Localization\Traits\HasTranslations;
 use App\Modules\Vacancy\Models\Vacancy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Modules\Core\Traits\ClearsCache;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class City extends Model
 {
-    use HasFactory, HasSlug, HasTranslations;
+    use HasFactory, HasSlug, HasTranslations, ClearsCache;
 
     protected string $slugSource = 'name';
 
@@ -39,5 +40,17 @@ class City extends Model
     public function scopeActive(Builder $query): Builder
     {
         return $query->where('is_active', true)->orderBy('order')->orderBy('id');
+    }
+    public const CACHE_KEY = 'ref.cities.active';
+
+    public static function cacheKeys(): array
+    {
+        return [self::CACHE_KEY];
+    }
+
+    /** Aktiv siyahı (keşlənmiş). Admin əlavə/redaktə etdikdə avtomatik sıfırlanır. */
+    public static function cachedActive(): \Illuminate\Database\Eloquent\Collection
+    {
+        return static::remember(self::CACHE_KEY, fn () => static::active()->get());
     }
 }

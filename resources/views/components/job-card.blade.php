@@ -11,20 +11,20 @@
         <div class="flex items-start gap-4 flex-1 min-w-0">
             <x-company-avatar :name="$job->company?->name" :logo="$job->company?->logo" :featured="$isFeatured" size="md" />
             <div class="space-y-1 flex-1 min-w-0">
-                <div class="flex items-center gap-2">
+                <div class="flex items-center justify-between">
                     <span class="text-xs font-medium text-gray-500">{{ $job->company->name ?? '' }}</span>
                     @if($isFeatured)
                     <x-premium-badge />
                     @endif
 
                     @if(auth()->check() && in_array($job->id, auth()->user()->appliedVacancyIds(), true))
-                    <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center gap-1">
-                        <i class="fas fa-check text-[9px]"></i>
+                    <span class="text-[11px] font-semibold px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center gap-1">
+                        <i class="fas fa-check text-[10px]"></i>
                         <span>{{ __('Applied') }}</span>
                     </span>
                     @endif
                 </div>
-                <h3 class="text-base font-bold text-gray-900 group-hover:text-primary transition leading-tight">
+                <h3 class="text-base font-semibold text-gray-900 group-hover:text-primary transition leading-tight">
                     <a href="{{ route('jobs.show', $job->slug) }}" class="focus:outline-hidden before:absolute before:inset-0">
                         {{ $job->title }}
                     </a>
@@ -41,7 +41,7 @@
                         <span>{{ $job->job_type_name }}</span>
                         @endif
                     </div>
-                    <span class="sm:hidden text-gray-400 text-[11px] shrink-0">{{ $job->created_at?->diffForHumans() }}</span>
+                    <span class="sm:hidden text-gray-400 text-[12px] shrink-0">{{ $job->created_at?->diffForHumans() }}</span>
                 </div>
             </div>
         </div>
@@ -53,9 +53,9 @@
                     <i class="fas fa-map-marker-alt text-primary text-xs"></i>
                     <span>{{ $job->city_name ?: ($job->company?->location ?? '') }}</span>
                 </div>
-                <span class="sm:hidden text-sm font-bold text-gray-900 font-mono">{{ $job->formatted_salary }}</span>
+                <span class="sm:hidden text-sm font-semibold text-gray-900 font-mono">{{ $job->formatted_salary }}</span>
             </div>
-            <div class="hidden sm:block text-gray-400 text-[11px] mt-0.5 sm:mt-0">{{ $job->created_at?->diffForHumans() }}</div>
+            <div class="hidden sm:block text-gray-400 text-[12px] mt-0.5 sm:mt-0">{{ $job->created_at?->diffForHumans() }}</div>
         </div>
 
     </div>
@@ -63,6 +63,6 @@
     <!-- Footer: Skills & Salary (desktop only, so tags are hidden on mobile) -->
     <div class="hidden sm:flex mt-3 pt-3 border-t border-gray-100 items-center justify-between gap-2">
         <x-skill-tags :skills="$job->skills" />
-        <span class="text-sm font-bold text-gray-900 font-mono sm:ml-auto">{{ $job->formatted_salary }}</span>
+        <span class="text-sm font-semibold text-gray-900 font-mono sm:ml-auto">{{ $job->formatted_salary }}</span>
     </div>
 </div>

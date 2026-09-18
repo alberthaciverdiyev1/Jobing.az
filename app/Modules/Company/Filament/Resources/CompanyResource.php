@@ -15,97 +15,112 @@ class CompanyResource extends Resource
     protected static ?string $model = Company::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-building-office-2';
-    protected static ?string $navigationGroup = 'İlan & Şirket Yönetimi';
-    protected static ?string $modelLabel = 'Şirket';
-    protected static ?string $pluralModelLabel = 'Şirketler';
+    protected static ?string $navigationGroup = null;
+
+    public static function getNavigationGroup(): string
+    {
+        return __('Listing & Company Management');
+    }
+    protected static ?string $modelLabel = null;
+
+    public static function getModelLabel(): string
+    {
+        return __('Company');
+    }
+    protected static ?string $pluralModelLabel = null;
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('Companies');
+    }
     protected static ?int $navigationSort = 2;
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\Section::make('Şirkət Məlumatları')
+                Forms\Components\Section::make(__('Company Information'))
                     ->schema([
                         Forms\Components\TextInput::make('name')
-                            ->label('Şirkət Adı')
+                            ->label(__('Company Name'))
                             ->required()
                             ->maxLength(255)
                             ->live(onBlur: true)
                             ->afterStateUpdated(fn (string $operation, $state, Forms\Set $set) => $operation === 'create' ? $set('slug', \Illuminate\Support\Str::slug($state)) : null),
 
                         Forms\Components\TextInput::make('slug')
-                            ->label('Slug / URL')
+                            ->label(__('Slug / URL'))
                             ->required()
                             ->unique(Company::class, 'slug', ignoreRecord: true)
                             ->maxLength(255),
 
                         Forms\Components\TextInput::make('email')
-                            ->label('E-Posta Adresi')
+                            ->label(__('Email Address'))
                             ->email()
                             ->required()
                             ->maxLength(255),
 
                         Forms\Components\TextInput::make('phone')
-                            ->label('Telefon Numarası')
+                            ->label(__('Phone Number'))
                             ->tel()
                             ->maxLength(255),
 
                         Forms\Components\TextInput::make('website')
-                            ->label('Web Sitesi URL')
+                            ->label(__('Website URL'))
                             ->url()
                             ->placeholder('https://...')
                             ->maxLength(255),
 
                         Forms\Components\Select::make('city_id')
-                            ->label('Şəhər / Lokasiya')
+                            ->label(__('City / Location'))
                             ->options(fn () => \App\Modules\JobAttribute\Models\City::all()->pluck('name', 'id'))
                             ->searchable()
                             ->preload()
                             ->required(),
 
                         Forms\Components\FileUpload::make('logo')
-                            ->label('Şirkət Logosu')
+                            ->label(__('Company Logo'))
                             ->image()
                             ->directory('company-logos')
                             ->imageEditor(),
 
                         Forms\Components\FileUpload::make('banner')
-                            ->label('Şirkət Banner / Kapak Görseli')
+                            ->label(__('Company Banner / Cover Image'))
                             ->image()
                             ->directory('company-banners')
                             ->imageEditor(),
 
                         Forms\Components\Tabs::make('AboutTranslations')
                             ->tabs([
-                                Forms\Components\Tabs\Tab::make('🇦🇿 Azərbaycan')
+                                Forms\Components\Tabs\Tab::make('🇦🇿 ' . __('languages.Azerbaijani'))
                                     ->schema([
                                         Forms\Components\Textarea::make('about.az')
-                                            ->label('Şirkət Hakkında (AZ)')
+                                            ->label(__('About Company (AZ)'))
                                             ->rows(4),
                                     ]),
-                                Forms\Components\Tabs\Tab::make('🇬🇧 English')
+                                Forms\Components\Tabs\Tab::make('🇬🇧 ' . __('languages.English'))
                                     ->schema([
                                         Forms\Components\Textarea::make('about.en')
-                                            ->label('About Company (EN)')
+                                            ->label(__('About Company (EN)'))
                                             ->rows(4),
                                     ]),
-                                Forms\Components\Tabs\Tab::make('🇹🇷 Türkçe')
+                                Forms\Components\Tabs\Tab::make('🇹🇷 ' . __('languages.Turkish'))
                                     ->schema([
                                         Forms\Components\Textarea::make('about.tr')
-                                            ->label('Şirket Hakkında (TR)')
+                                            ->label(__('About Company (TR)'))
                                             ->rows(4),
                                     ]),
-                                Forms\Components\Tabs\Tab::make('🇷🇺 Русский')
+                                Forms\Components\Tabs\Tab::make('🇷🇺 ' . __('languages.Russian'))
                                     ->schema([
                                         Forms\Components\Textarea::make('about.ru')
-                                            ->label('О Компании (RU)')
+                                            ->label(__('About Company (RU)'))
                                             ->rows(4),
                                     ]),
                             ])
                             ->columnSpanFull(),
 
                         Forms\Components\Toggle::make('is_verified')
-                            ->label('Onaylı Şirket (Verified Badge)')
+                            ->label(__('Verified Company (Badge)'))
                             ->default(true),
                     ])->columns(2),
             ]);
@@ -116,66 +131,66 @@ class CompanyResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\ImageColumn::make('logo')
-                    ->label('Logo')
+                    ->label(__('Logo'))
                     ->circular()
                     ->defaultImageUrl('https://img.icons8.com/isometric-line/64/4a90e2/briefcase.png'),
 
                 Tables\Columns\TextColumn::make('name')
-                    ->label('Şirket Adı')
+                    ->label(__('Company Name'))
                     ->searchable()
                     ->sortable()
                     ->weight('bold'),
 
                 Tables\Columns\TextColumn::make('email')
-                    ->label('E-Posta')
+                    ->label(__('Email'))
                     ->searchable()
                     ->copyable(),
 
                 Tables\Columns\TextColumn::make('city.name')
-                    ->label('Şəhər')
+                    ->label(__('City'))
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('vacancies_count')
-                    ->label('İlan Sayısı')
+                    ->label(__('Listing Count'))
                     ->counts('vacancies')
                     ->badge()
                     ->color('primary')
                     ->sortable(),
 
                 Tables\Columns\IconColumn::make('is_verified')
-                    ->label('Onaylı')
+                    ->label(__('Verified'))
                     ->boolean()
                     ->sortable(),
 
                 Tables\Columns\IconColumn::make('verification_requested')
-                    ->label('Doğrulama İstəyi')
+                    ->label(__('Verification Request'))
                     ->trueIcon('heroicon-o-hand-raised')
                     ->falseIcon('heroicon-o-minus')
                     ->trueColor('warning')
                     ->falseColor('gray')
                     ->sortable()
-                    ->tooltip('Şirkət doğrulama istəmişdir'),
+                    ->tooltip(__('The company requested verification')),
 
                 Tables\Columns\TextColumn::make('created_at')
-                    ->label('Kayıt Tarihi')
+                    ->label(__('Registration Date'))
                     ->dateTime('d.m.Y')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 Tables\Filters\TernaryFilter::make('is_verified')
-                    ->label('Onay Durumu'),
+                    ->label(__('Approval Status')),
                 Tables\Filters\TernaryFilter::make('verification_requested')
-                    ->label('Doğrulama İsteği Olanlar'),
+                    ->label(__('With Verification Request')),
             ])
             ->actions([
                 Tables\Actions\Action::make('verify')
-                    ->label('Doğrula')
+                    ->label(__('Verify'))
                     ->icon('heroicon-m-check-badge')
                     ->color('success')
                     ->requiresConfirmation()
-                    ->modalHeading('Şirketi doğrula')
-                    ->modalDescription('Bu şirket doğrulama istedi. Onaylıyor musunuz?')
+                    ->modalHeading(__('Verify Company'))
+                    ->modalDescription(__('This company requested verification. Do you confirm?'))
                     ->visible(fn (Company $record): bool => $record->verification_requested && !$record->is_verified)
                     ->action(fn (Company $record) => $record->update([
                         'is_verified' => true,

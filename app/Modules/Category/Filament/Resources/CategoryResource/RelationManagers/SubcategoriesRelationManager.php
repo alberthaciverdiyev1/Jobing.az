@@ -13,9 +13,24 @@ class SubcategoriesRelationManager extends RelationManager
 {
     protected static string $relationship = 'children';
 
-    protected static ?string $title = 'Alt Kateqoriyalar (Subcategories)';
-    protected static ?string $modelLabel = 'Alt Kateqoriya';
-    protected static ?string $pluralModelLabel = 'Alt Kateqoriyalar';
+    protected static ?string $title = null;
+
+    public static function getTitle(\Illuminate\Database\Eloquent\Model $ownerRecord, string $pageClass): string
+    {
+        return __('Subcategories');
+    }
+    protected static ?string $modelLabel = null;
+
+    public static function getModelLabel(): string
+    {
+        return __('Subcategory');
+    }
+    protected static ?string $pluralModelLabel = null;
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('Subcategories');
+    }
     protected static ?string $icon = 'heroicon-o-arrow-turn-down-right';
 
     public function form(Form $form): Form
@@ -23,17 +38,17 @@ class SubcategoriesRelationManager extends RelationManager
         return $form
             ->schema([
                 Forms\Components\TextInput::make('slug')
-                    ->label('Slug / URL (Boş bırakılırsa avtomatik yaranacaq)')
-                    ->helperText('Unikal URL identifikatoru')
+                    ->label(__('Slug / URL (auto-generated if left empty)'))
+                    ->helperText(__('Unique URL identifier'))
                     ->maxLength(255)
                     ->columnSpanFull(),
 
                 Forms\Components\Tabs::make('Translations')
                     ->tabs([
-                        Forms\Components\Tabs\Tab::make('🇦🇿 Azərbaycan (Əsas)')
+                        Forms\Components\Tabs\Tab::make('🇦🇿 ' . __('languages.Azerbaijani') . ' (' . __('Default') . ')')
                             ->schema([
                                 Forms\Components\TextInput::make('name.az')
-                                    ->label('Alt Kateqoriya Adı (AZ)')
+                                    ->label(__('Subcategory Name (AZ)'))
                                     ->required()
                                     ->live(onBlur: true)
                                     ->afterStateUpdated(fn (string $operation, $state, Forms\Set $set, Forms\Get $get) => 
@@ -41,22 +56,22 @@ class SubcategoriesRelationManager extends RelationManager
                                     ),
                             ]),
 
-                        Forms\Components\Tabs\Tab::make('🇬🇧 English')
+                        Forms\Components\Tabs\Tab::make('🇬🇧 ' . __('languages.English'))
                             ->schema([
                                 Forms\Components\TextInput::make('name.en')
-                                    ->label('Subcategory Name (EN)'),
+                                    ->label(__('Subcategory Name (EN)')),
                             ]),
 
-                        Forms\Components\Tabs\Tab::make('🇹🇷 Türkçe')
+                        Forms\Components\Tabs\Tab::make('🇹🇷 ' . __('languages.Turkish'))
                             ->schema([
                                 Forms\Components\TextInput::make('name.tr')
-                                    ->label('Alt Kategori Adı (TR)'),
+                                    ->label(__('Subcategory Name (TR)')),
                             ]),
 
-                        Forms\Components\Tabs\Tab::make('🇷🇺 Русский')
+                        Forms\Components\Tabs\Tab::make('🇷🇺 ' . __('languages.Russian'))
                             ->schema([
                                 Forms\Components\TextInput::make('name.ru')
-                                    ->label('Название Подкатегории (RU)'),
+                                    ->label(__('Subcategory Name (RU)')),
                             ]),
                     ])->columnSpanFull(),
             ]);
@@ -68,25 +83,25 @@ class SubcategoriesRelationManager extends RelationManager
             ->recordTitleAttribute('name')
             ->columns([
                 Tables\Columns\TextColumn::make('name')
-                    ->label('Alt Kateqoriya')
+                    ->label(__('Subcategory'))
                     ->searchable()
                     ->sortable()
                     ->weight('bold'),
 
                 Tables\Columns\TextColumn::make('slug')
-                    ->label('Slug')
+                    ->label(__('Slug'))
                     ->badge()
                     ->color('gray'),
 
                 Tables\Columns\TextColumn::make('vacancies_count')
-                    ->label('İlan Sayı')
+                    ->label(__('Listing Count'))
                     ->counts('vacancies')
                     ->badge()
                     ->color('info')
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('created_at')
-                    ->label('Tarix')
+                    ->label(__('Date'))
                     ->dateTime('d.m.Y H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -96,8 +111,8 @@ class SubcategoriesRelationManager extends RelationManager
             ])
             ->headerActions([
                 Tables\Actions\CreateAction::make()
-                    ->label('Yeni Alt Kateqoriya Əlavə Et')
-                    ->modalHeading('Bu Kateqoriya Altına Yeni Alt Kateqoriya Əlavə Et')
+                    ->label(__('Add New Subcategory'))
+                    ->modalHeading(__('Add a New Subcategory Under This Category'))
                     ->icon('heroicon-o-plus-circle'),
             ])
             ->actions([

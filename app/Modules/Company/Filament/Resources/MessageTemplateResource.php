@@ -18,9 +18,24 @@ class MessageTemplateResource extends Resource
     protected static ?string $model = MessageTemplate::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-chat-bubble-bottom-center-text';
-    protected static ?string $navigationGroup = 'Şirkət Ayarları';
-    protected static ?string $modelLabel = 'Mesaj Şablonu';
-    protected static ?string $pluralModelLabel = 'Mesaj Şablonları';
+    protected static ?string $navigationGroup = null;
+
+    public static function getNavigationGroup(): string
+    {
+        return __('Company Settings');
+    }
+    protected static ?string $modelLabel = null;
+
+    public static function getModelLabel(): string
+    {
+        return __('Message Template');
+    }
+    protected static ?string $pluralModelLabel = null;
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('Message Templates');
+    }
     protected static ?int $navigationSort = 3;
 
     public static function getEloquentQuery(): Builder
@@ -44,66 +59,66 @@ class MessageTemplateResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Section::make('Şablon Məlumatları')
+                Forms\Components\Section::make(__('Template Information'))
                     ->description('Mesaj şablonunu 4 dildə tənzimləyin. Göndərmə zamanı { } içindəki parametrlər avtomatik dolur: '
                         . \App\Modules\Company\Support\MessagePlaceholders::tokensText())
                     ->schema([
                         Forms\Components\Select::make('type')
-                            ->label('Şablon Növü')
+                            ->label(__('Template Type'))
                             ->options([
                                 'rejected' => 'İmtina Məktubu (Reject)',
                                 'interview' => 'Müsahibə Dəvəti (Interview)',
-                                'accepted' => 'İş Təklifi (Job Offer / Accept)',
+                                'accepted' => __('Job Offer (Accept)'),
                                 'custom' => 'Xüsusi Şablon (Custom)',
                             ])
                             ->required()
                             ->default('custom'),
 
                         Forms\Components\Toggle::make('is_active')
-                            ->label('Aktiv')
+                            ->label(__('Active'))
                             ->default(true),
 
                         Forms\Components\Tabs::make('Translations')
                             ->tabs([
-                                Forms\Components\Tabs\Tab::make('🇦🇿 Azərbaycan')
+                                Forms\Components\Tabs\Tab::make('🇦🇿 ' . __('languages.Azerbaijani'))
                                     ->schema([
                                         Forms\Components\TextInput::make('title.az')
-                                            ->label('Şablon Başlığı (AZ)')
+                                            ->label(__('Template Title (AZ)'))
                                             ->required()
                                             ->maxLength(255),
                                         Forms\Components\Textarea::make('content.az')
-                                            ->label('Mesaj Mətni (AZ)')
+                                            ->label(__('Message Text (AZ)'))
                                             ->required()
                                             ->rows(6),
                                     ]),
 
-                                Forms\Components\Tabs\Tab::make('🇬🇧 English')
+                                Forms\Components\Tabs\Tab::make('🇬🇧 ' . __('languages.English'))
                                     ->schema([
                                         Forms\Components\TextInput::make('title.en')
-                                            ->label('Template Title (EN)')
+                                            ->label(__('Template Title (EN)'))
                                             ->maxLength(255),
                                         Forms\Components\Textarea::make('content.en')
-                                            ->label('Message Content (EN)')
+                                            ->label(__('Message Content (EN)'))
                                             ->rows(6),
                                     ]),
 
-                                Forms\Components\Tabs\Tab::make('🇹🇷 Türkçe')
+                                Forms\Components\Tabs\Tab::make('🇹🇷 ' . __('languages.Turkish'))
                                     ->schema([
                                         Forms\Components\TextInput::make('title.tr')
-                                            ->label('Şablon Başlığı (TR)')
+                                            ->label(__('Template Title (TR)'))
                                             ->maxLength(255),
                                         Forms\Components\Textarea::make('content.tr')
-                                            ->label('Mesaj İçeriği (TR)')
+                                            ->label(__('Message Content (TR)'))
                                             ->rows(6),
                                     ]),
 
-                                Forms\Components\Tabs\Tab::make('🇷🇺 Русский')
+                                Forms\Components\Tabs\Tab::make('🇷🇺 ' . __('languages.Russian'))
                                     ->schema([
                                         Forms\Components\TextInput::make('title.ru')
-                                            ->label('Заголовок шаблона (RU)')
+                                            ->label(__('Template Title (RU)'))
                                             ->maxLength(255),
                                         Forms\Components\Textarea::make('content.ru')
-                                            ->label('Текст сообщения (RU)')
+                                            ->label(__('Message Text (RU)'))
                                             ->rows(6),
                                     ]),
                             ])
@@ -117,14 +132,14 @@ class MessageTemplateResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('title')
-                    ->label('Şablon Başlığı')
+                    ->label(__('Template Title'))
                     ->formatStateUsing(fn ($state) => is_array($state) ? ($state['az'] ?? reset($state)) : (string) $state)
                     ->searchable()
                     ->sortable()
                     ->weight('bold'),
 
                 Tables\Columns\TextColumn::make('type')
-                    ->label('Növü')
+                    ->label(__('Type'))
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
                         'rejected' => 'danger',
@@ -135,22 +150,22 @@ class MessageTemplateResource extends Resource
                     ->formatStateUsing(fn (string $state): string => match ($state) {
                         'rejected' => 'İmtina',
                         'interview' => 'Müsahibə',
-                        'accepted' => 'İş Təklifi',
+                        'accepted' => __('Job Offer'),
                         default => 'Xüsusi',
                     }),
 
                 Tables\Columns\TextColumn::make('company_id')
-                    ->label('Mənşəyi')
+                    ->label(__('Source'))
                     ->formatStateUsing(fn ($state) => $state ? 'Şirkətinizə Özəl' : 'Sistem Standartı')
                     ->badge()
                     ->color(fn ($state) => $state ? 'primary' : 'gray'),
 
                 Tables\Columns\IconColumn::make('is_active')
-                    ->label('Status')
+                    ->label(__('Status'))
                     ->boolean(),
 
                 Tables\Columns\TextColumn::make('created_at')
-                    ->label('Yaradılma Tarixi')
+                    ->label(__('Creation Date'))
                     ->dateTime('d.m.Y H:i')
                     ->sortable(),
             ])
@@ -159,10 +174,10 @@ class MessageTemplateResource extends Resource
                     ->options([
                         'rejected' => 'İmtina Məktubu',
                         'interview' => 'Müsahibə Dəvəti',
-                        'accepted' => 'İş Təklifi',
+                        'accepted' => __('Job Offer'),
                         'custom' => 'Xüsusi',
                     ])
-                    ->label('Növə Göre'),
+                    ->label(__('By Type')),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

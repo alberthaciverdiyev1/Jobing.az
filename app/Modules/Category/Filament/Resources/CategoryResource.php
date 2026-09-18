@@ -17,19 +17,34 @@ class CategoryResource extends Resource
     protected static ?string $model = Category::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-tag';
-    protected static ?string $navigationGroup = 'İlan & Şirket Yönetimi';
-    protected static ?string $modelLabel = 'Kategori';
-    protected static ?string $pluralModelLabel = 'Kategoriler';
+    protected static ?string $navigationGroup = null;
+
+    public static function getNavigationGroup(): string
+    {
+        return __('Listing & Company Management');
+    }
+    protected static ?string $modelLabel = null;
+
+    public static function getModelLabel(): string
+    {
+        return __('Category');
+    }
+    protected static ?string $pluralModelLabel = null;
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('Categories');
+    }
     protected static ?int $navigationSort = 3;
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\Section::make('Kategori Yapısı & İkon')
+                Forms\Components\Section::make(__('Category Structure & Icon'))
                     ->schema([
                         Forms\Components\Select::make('parent_id')
-                            ->label('Üst Kategori (Alt Kategori için seçin)')
+                            ->label(__('Parent Category (select for subcategory)'))
                             ->options(function (?Category $record) {
                                 $query = Category::parents();
                                 if ($record) {
@@ -39,26 +54,26 @@ class CategoryResource extends Resource
                             })
                             ->searchable()
                             ->preload()
-                            ->placeholder('— Ana Kategori (Üst kategorisi yok) —'),
+                            ->placeholder(__('— Main Category (no parent) —')),
 
                         Forms\Components\TextInput::make('icon')
-                            ->label('İkon (Lucide icon adı)')
+                            ->label(__('Icon (Lucide icon name)'))
                             ->placeholder('Örn: code-2, palette, layout-grid, database, users, headset, line-chart')
                             ->maxLength(255),
 
                         Forms\Components\TextInput::make('slug')
-                            ->label('Slug / URL (Benzersiz Kod)')
-                            ->helperText('Boş bırakılırsa Azərbaycan adından avtomatik yaradılacaq')
+                            ->label(__('Slug / URL (Unique Code)'))
+                            ->helperText(__('If left empty, it will be auto-generated from the Azerbaijani name'))
                             ->maxLength(255)
                             ->columnSpanFull(),
                     ])->columns(2),
 
                 Forms\Components\Tabs::make('Translations')
                     ->tabs([
-                        Forms\Components\Tabs\Tab::make('🇦🇿 Azərbaycan (Default)')
+                        Forms\Components\Tabs\Tab::make('🇦🇿 ' . __('languages.Azerbaijani') . ' (' . __('Default') . ')')
                             ->schema([
                                 Forms\Components\TextInput::make('name.az')
-                                    ->label('Kateqoriya Adı (AZ)')
+                                    ->label(__('Category Name (AZ)'))
                                     ->required()
                                     ->live(onBlur: true)
                                     ->afterStateUpdated(fn (string $operation, $state, Forms\Set $set, Forms\Get $get) => 
@@ -66,22 +81,22 @@ class CategoryResource extends Resource
                                     ),
                             ]),
 
-                        Forms\Components\Tabs\Tab::make('🇬🇧 English')
+                        Forms\Components\Tabs\Tab::make('🇬🇧 ' . __('languages.English'))
                             ->schema([
                                 Forms\Components\TextInput::make('name.en')
-                                    ->label('Category Name (EN)'),
+                                    ->label(__('Category Name (EN)')),
                             ]),
 
-                        Forms\Components\Tabs\Tab::make('🇹🇷 Türkçe')
+                        Forms\Components\Tabs\Tab::make('🇹🇷 ' . __('languages.Turkish'))
                             ->schema([
                                 Forms\Components\TextInput::make('name.tr')
-                                    ->label('Kategori Adı (TR)'),
+                                    ->label(__('Category Name (TR)')),
                             ]),
 
-                        Forms\Components\Tabs\Tab::make('🇷🇺 Русский')
+                        Forms\Components\Tabs\Tab::make('🇷🇺 ' . __('languages.Russian'))
                             ->schema([
                                 Forms\Components\TextInput::make('name.ru')
-                                    ->label('Название Категории (RU)'),
+                                    ->label(__('Category Name (RU)')),
                             ]),
                     ])->columnSpanFull(),
             ]);
@@ -92,47 +107,47 @@ class CategoryResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')
-                    ->label('Kategori Adı')
+                    ->label(__('Category Name'))
                     ->searchable()
                     ->sortable()
                     ->weight('bold')
                     ->icon(fn (Category $record): ?string => $record->parent_id ? 'heroicon-m-arrow-turn-down-right' : null),
 
                 Tables\Columns\TextColumn::make('parent.name')
-                    ->label('Üst Kategori')
+                    ->label(__('Parent Category'))
                     ->badge()
                     ->color('primary')
-                    ->placeholder('— Ana Kategori —')
+                    ->placeholder(__('— Main Category —'))
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('slug')
-                    ->label('Slug')
+                    ->label(__('Slug'))
                     ->badge()
                     ->color('gray'),
 
                 Tables\Columns\TextColumn::make('children_count')
-                    ->label('Alt Kategori')
+                    ->label(__('Subcategory'))
                     ->counts('children')
                     ->badge()
                     ->color('warning')
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('vacancies_count')
-                    ->label('İlan Sayısı')
+                    ->label(__('Listing Count'))
                     ->counts('vacancies')
                     ->badge()
                     ->color('info')
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('created_at')
-                    ->label('Oluşturulma')
+                    ->label(__('Created'))
                     ->dateTime('d.m.Y')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('parent')
-                    ->label('Üst Kategoriye Göre')
+                    ->label(__('By Parent Category'))
                     ->attribute('parent_id')
                     ->options(fn (): array => collect(\App\Modules\Category\Models\Category::parents()->get())
                         ->sortBy(fn ($c) => (string) $c->name)
@@ -140,42 +155,42 @@ class CategoryResource extends Resource
                         ->all()),
 
                 Tables\Filters\Filter::make('only_parents')
-                    ->label('Sadece Ana Kategoriler')
+                    ->label(__('Main Categories Only'))
                     ->query(fn (Builder $query): Builder => $query->whereNull('parent_id')),
 
                 Tables\Filters\Filter::make('only_children')
-                    ->label('Sadece Alt Kategoriler')
+                    ->label(__('Subcategories Only'))
                     ->query(fn (Builder $query): Builder => $query->whereNotNull('parent_id')),
             ])
             ->actions([
                 Tables\Actions\Action::make('addSubcategory')
-                    ->label('Alt Kateqoriya Əlavə Et')
+                    ->label(__('Add Subcategory'))
                     ->icon('heroicon-o-plus-circle')
                     ->color('success')
                     ->visible(fn (Category $record): bool => is_null($record->parent_id))
                     ->form([
                         Forms\Components\Tabs::make('Translations')
                             ->tabs([
-                                Forms\Components\Tabs\Tab::make('🇦🇿 Azərbaycan')
+                                Forms\Components\Tabs\Tab::make('🇦🇿 ' . __('languages.Azerbaijani'))
                                     ->schema([
                                         Forms\Components\TextInput::make('name.az')
-                                            ->label('Alt Kateqoriya Adı (AZ)')
+                                            ->label(__('Subcategory Name (AZ)'))
                                             ->required(),
                                     ]),
-                                Forms\Components\Tabs\Tab::make('🇬🇧 English')
+                                Forms\Components\Tabs\Tab::make('🇬🇧 ' . __('languages.English'))
                                     ->schema([
                                         Forms\Components\TextInput::make('name.en')
-                                            ->label('Subcategory Name (EN)'),
+                                            ->label(__('Subcategory Name (EN)')),
                                     ]),
-                                Forms\Components\Tabs\Tab::make('🇹🇷 Türkçe')
+                                Forms\Components\Tabs\Tab::make('🇹🇷 ' . __('languages.Turkish'))
                                     ->schema([
                                         Forms\Components\TextInput::make('name.tr')
-                                            ->label('Alt Kategori Adı (TR)'),
+                                            ->label(__('Subcategory Name (TR)')),
                                     ]),
-                                Forms\Components\Tabs\Tab::make('🇷🇺 Русский')
+                                Forms\Components\Tabs\Tab::make('🇷🇺 ' . __('languages.Russian'))
                                     ->schema([
                                         Forms\Components\TextInput::make('name.ru')
-                                            ->label('Название Подкатегории (RU)'),
+                                            ->label(__('Subcategory Name (RU)')),
                                     ]),
                             ])->columnSpanFull(),
                     ])
@@ -186,7 +201,7 @@ class CategoryResource extends Resource
                         ]);
 
                         \Filament\Notifications\Notification::make()
-                            ->title('Alt Kateqoriya Uğurla Əlavə Edildi')
+                            ->title(__('Subcategory Added Successfully'))
                             ->success()
                             ->send();
                     }),

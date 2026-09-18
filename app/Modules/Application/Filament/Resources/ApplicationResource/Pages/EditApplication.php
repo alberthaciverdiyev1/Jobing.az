@@ -14,21 +14,21 @@ class EditApplication extends EditRecord
     {
         return [
             Actions\Action::make('view_resume')
-                ->label('CV-yə Bax')
+                ->label(__('View CV'))
                 ->icon('heroicon-o-eye')
                 ->color('warning')
                 ->visible(fn (): bool => (bool) $this->record->resume_id)
                 ->url(fn (): string => route('resumes.show', $this->record->resume_id), shouldOpenInNewTab: true),
 
             Actions\Action::make('download_pdf')
-                ->label('PDF Endir')
+                ->label(__('Download PDF'))
                 ->icon('heroicon-o-arrow-down-tray')
                 ->color('success')
                 ->visible(fn (): bool => (bool) $this->record->resume_id)
                 ->url(fn (): string => route('resumes.show', ['resume' => $this->record->resume_id, 'print' => 1]), shouldOpenInNewTab: true),
 
             Actions\Action::make('download_file')
-                ->label('CV Faylını Endir')
+                ->label(__('Download CV File'))
                 ->icon('heroicon-o-arrow-down-tray')
                 ->color('info')
                 ->visible(fn (): bool => (bool) ($this->record->resume_path && ! $this->record->resume_id))
@@ -51,17 +51,17 @@ class EditApplication extends EditRecord
             ]);
 
             if ($candidate = ($appRecord->user ?? \App\Models\User::where('email', $appRecord->applicant_email)->first())) {
-                $companyName = $appRecord->vacancy?->company?->name ?? 'İşəgötürən';
-                $vacancyTitle = $appRecord->vacancy?->title ?? 'Vakansiya';
+                $companyName = $appRecord->vacancy?->company?->name ?? __('Employer');
+                $vacancyTitle = $appRecord->vacancy?->title ?? __('Vacancy');
 
                 \App\Modules\Application\Observers\ApplicationObserver::notifyUser(
                     $candidate,
-                    'CV-nizə Baxıldı',
-                    "{$companyName} şirkəti '{$vacancyTitle}' vakansiyası üzrə göndərdiyiniz CV-yə baxdı.",
+                    __('Your CV has been viewed'),
+                    __(":company viewed the CV you submitted for the ':vacancy' vacancy.", ['company' => $companyName, 'vacancy' => $vacancyTitle]),
                     'heroicon-o-eye',
                     'info',
                     '/user/my-applications',
-                    'Müraciətlərim'
+                    __('My Applications')
                 );
             }
         }

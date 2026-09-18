@@ -44,14 +44,14 @@
 
     <!-- Top Action Bar (Hidden when Printing) -->
     <div class="no-print max-w-4xl mx-auto mb-6 flex items-center justify-between bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-        <button onclick="window.history.back()" class="inline-flex items-center gap-2 text-xs font-bold text-slate-700 hover:text-slate-900 cursor-pointer">
+        <button onclick="window.history.back()" class="inline-flex items-center gap-2 text-xs font-semibold text-slate-700 hover:text-slate-900 cursor-pointer">
             <i class="fas fa-arrow-left text-xs"></i>
-            <span>Geriyə Qayıt</span>
+            <span>{{ __('Go Back') }}</span>
         </button>
 
-        <button onclick="window.print()" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs shadow-sm transition cursor-pointer">
+        <button onclick="window.print()" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs shadow-sm transition cursor-pointer">
             <i class="fas fa-print text-xs"></i>
-            <span>Çap Et / PDF Olaraq Saxla</span>
+            <span>{{ __('Print / Save as PDF') }}</span>
         </button>
     </div>
 
@@ -69,12 +69,12 @@
             @endif
 
             <div class="flex-1 space-y-2 text-center sm:text-left">
-                <h1 class="text-3xl sm:text-4xl font-black text-slate-900 tracking-wider uppercase leading-none">
+                <h1 class="text-3xl sm:text-4xl font-semibold text-slate-900 tracking-wider uppercase leading-none">
                     {{ $resume->full_name }}
                 </h1>
                 
                 @if($resume->title)
-                <p class="text-lg font-bold text-slate-800">
+                <p class="text-lg font-semibold text-slate-800">
                     {{ $resume->title }}
                 </p>
                 @endif
@@ -112,7 +112,7 @@
                     @if($resume->linkedin_url)
                     <div class="flex items-center justify-center sm:justify-start gap-2">
                         <i class="fab fa-linkedin text-blue-700 text-xs"></i>
-                        <a href="{{ $resume->linkedin_url }}" target="_blank" class="text-blue-700 hover:underline font-semibold">LinkedIn Profil</a>
+                        <a href="{{ $resume->linkedin_url }}" target="_blank" class="text-blue-700 hover:underline font-semibold">{{ __('LinkedIn Profile') }}</a>
                     </div>
                     @endif
 
@@ -129,7 +129,7 @@
         <!-- Profile Section -->
         @if($resume->summary)
         <div class="space-y-2">
-            <h2 class="text-xl sm:text-2xl font-bold text-slate-900 text-center tracking-wide uppercase pt-2">
+            <h2 class="text-xl sm:text-2xl font-semibold text-slate-900 text-center tracking-wide uppercase pt-2">
                 Profile
             </h2>
             <p class="text-xs text-slate-800 leading-relaxed text-justify">
@@ -141,7 +141,7 @@
         <!-- Skills Section -->
         @if(!empty($resume->skills) && count($resume->skills) > 0)
         <div class="space-y-2 pt-2">
-            <h2 class="text-xl sm:text-2xl font-bold text-slate-900 text-center tracking-wide uppercase">
+            <h2 class="text-xl sm:text-2xl font-semibold text-slate-900 text-center tracking-wide uppercase">
                 Skills
             </h2>
             <ul class="list-disc list-inside space-y-1 text-xs text-slate-900 font-medium">
@@ -160,7 +160,7 @@
         <!-- Work Experience Section -->
         @if(!empty($resume->work_experiences) && count($resume->work_experiences) > 0)
         <div class="space-y-4 pt-2">
-            <h2 class="text-xl sm:text-2xl font-bold text-slate-900 text-center tracking-wide uppercase">
+            <h2 class="text-xl sm:text-2xl font-semibold text-slate-900 text-center tracking-wide uppercase">
                 Work Experience
             </h2>
 
@@ -168,14 +168,14 @@
                 @foreach($resume->work_experiences as $exp)
                 <div class="space-y-2 page-break-inside-avoid">
                     <!-- Underlined Header Line -->
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-900 pb-1 text-xs font-bold text-slate-900">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-900 pb-1 text-xs font-semibold text-slate-900">
                         <div class="text-sm">
-                            <span class="font-extrabold uppercase">{{ $exp['company'] ?? '' }}</span>
+                            <span class="font-semibold uppercase">{{ $exp['company'] ?? '' }}</span>
                             @if(!empty($exp['position']))
                             <span> • {{ $exp['position'] }}</span>
                             @endif
                         </div>
-                        <div class="font-mono text-slate-900 shrink-0 font-bold">
+                        <div class="font-mono text-slate-900 shrink-0 font-semibold">
                             {{ !empty($exp['start_date']) ? \Carbon\Carbon::parse($exp['start_date'])->format('F Y') : '' }} — 
                             {{ !empty($exp['is_current']) ? 'Present' : (!empty($exp['end_date']) ? \Carbon\Carbon::parse($exp['end_date'])->format('F Y') : '') }}
                         </div>
@@ -199,7 +199,7 @@
         <!-- Education Section -->
         @if(!empty($resume->education) && count($resume->education) > 0)
         <div class="space-y-3 pt-2">
-            <h2 class="text-xl sm:text-2xl font-bold text-slate-900 text-center tracking-wide uppercase">
+            <h2 class="text-xl sm:text-2xl font-semibold text-slate-900 text-center tracking-wide uppercase">
                 Education
             </h2>
 
@@ -207,7 +207,7 @@
                 @foreach($resume->education as $edu)
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-400 pb-1 text-xs text-slate-900 page-break-inside-avoid">
                     <div>
-                        <strong class="text-slate-900 font-extrabold">{{ $edu['field_of_study'] ?? ($edu['institution'] ?? '') }}</strong>
+                        <strong class="text-slate-900 font-semibold">{{ $edu['field_of_study'] ?? ($edu['institution'] ?? '') }}</strong>
                         @if(!empty($edu['institution']) && !empty($edu['field_of_study']))
                         <span> • {{ $edu['institution'] }}</span>
                         @endif
@@ -215,7 +215,7 @@
                         <span class="text-slate-700"> ({{ match($edu['degree']) { 'bachelor' => 'Bakalavr', 'master' => 'Magistr', 'phd' => 'Doktora (PhD)', default => $edu['degree'] } }})</span>
                         @endif
                     </div>
-                    <div class="font-mono text-slate-700 text-[11px] font-semibold shrink-0">
+                    <div class="font-mono text-slate-700 text-[12px] font-semibold shrink-0">
                         {{ !empty($edu['start_date']) ? \Carbon\Carbon::parse($edu['start_date'])->format('m/Y') : '' }} — 
                         {{ !empty($edu['is_current']) ? 'Present' : (!empty($edu['end_date']) ? \Carbon\Carbon::parse($edu['end_date'])->format('m/Y') : '') }}
                     </div>
@@ -228,7 +228,7 @@
         <!-- Languages Section -->
         @if(!empty($resume->languages) && count($resume->languages) > 0)
         <div class="space-y-3 pt-2">
-            <h2 class="text-xl sm:text-2xl font-bold text-slate-900 text-center tracking-wide uppercase">
+            <h2 class="text-xl sm:text-2xl font-semibold text-slate-900 text-center tracking-wide uppercase">
                 Languages
             </h2>
 
@@ -257,7 +257,7 @@
         <!-- Projects Section -->
         @if(!empty($resume->projects) && count($resume->projects) > 0)
         <div class="space-y-3 pt-2">
-            <h2 class="text-xl sm:text-2xl font-bold text-slate-900 text-center tracking-wide uppercase">
+            <h2 class="text-xl sm:text-2xl font-semibold text-slate-900 text-center tracking-wide uppercase">
                 Projects
             </h2>
 
@@ -265,13 +265,13 @@
                 @foreach($resume->projects as $proj)
                 <div class="space-y-1 page-break-inside-avoid">
                     <div class="flex items-center justify-between border-b border-slate-400 pb-1 text-xs">
-                        <strong class="text-slate-900 text-sm font-extrabold">{{ $proj['name'] ?? '' }} @if(!empty($proj['role'])) • {{ $proj['role'] }}@endif</strong>
+                        <strong class="text-slate-900 text-sm font-semibold">{{ $proj['name'] ?? '' }} @if(!empty($proj['role'])) • {{ $proj['role'] }}@endif</strong>
                         <div class="space-x-3 text-xs font-semibold">
                             @if(!empty($proj['github_url']))
-                            <a href="{{ $proj['github_url'] }}" target="_blank" class="text-blue-700 hover:underline">GitHub</a>
+                            <a href="{{ $proj['github_url'] }}" target="_blank" class="text-blue-700 hover:underline">{{ __('GitHub') }}</a>
                             @endif
                             @if(!empty($proj['demo_url']))
-                            <a href="{{ $proj['demo_url'] }}" target="_blank" class="text-blue-700 hover:underline">Live Demo</a>
+                            <a href="{{ $proj['demo_url'] }}" target="_blank" class="text-blue-700 hover:underline">{{ __('Live Demo') }}</a>
                             @endif
                         </div>
                     </div>
@@ -286,7 +286,7 @@
         <!-- Certificates & Awards Section -->
         @if((!empty($resume->certificates) && count($resume->certificates) > 0) || (!empty($resume->awards) && count($resume->awards) > 0))
         <div class="space-y-3 pt-2">
-            <h2 class="text-xl sm:text-2xl font-bold text-slate-900 text-center tracking-wide uppercase">
+            <h2 class="text-xl sm:text-2xl font-semibold text-slate-900 text-center tracking-wide uppercase">
                 Certificates & Awards
             </h2>
 
@@ -298,9 +298,9 @@
                         <strong class="text-slate-900">{{ $cert['name'] ?? '' }}</strong>
                         @if(!empty($cert['issuer']))<span class="text-slate-700"> — {{ $cert['issuer'] }}</span>@endif
                     </div>
-                    <div class="font-mono text-slate-700 text-[11px] font-medium">
+                    <div class="font-mono text-slate-700 text-[12px] font-medium">
                         @if(!empty($cert['date'])){{ \Carbon\Carbon::parse($cert['date'])->format('m/Y') }}@endif
-                        @if(!empty($cert['url'])) • <a href="{{ $cert['url'] }}" target="_blank" class="text-blue-700 underline font-semibold">Təsdiq</a>@endif
+                        @if(!empty($cert['url'])) • <a href="{{ $cert['url'] }}" target="_blank" class="text-blue-700 underline font-semibold">{{ __('Confirmation') }}</a>@endif
                     </div>
                 </div>
                 @endforeach
@@ -314,7 +314,7 @@
                         @if(!empty($aw['issuer']))<span class="text-slate-700"> — {{ $aw['issuer'] }}</span>@endif
                     </div>
                     @if(!empty($aw['date']))
-                    <span class="font-mono text-slate-700 text-[11px] font-medium">{{ \Carbon\Carbon::parse($aw['date'])->format('m/Y') }}</span>
+                    <span class="font-mono text-slate-700 text-[12px] font-medium">{{ \Carbon\Carbon::parse($aw['date'])->format('m/Y') }}</span>
                     @endif
                 </div>
                 @endforeach

@@ -14,7 +14,7 @@ class ListVacancies extends ListRecords
     {
         return [
             Actions\CreateAction::make()
-                ->label('Yeni İş İlanı Yayınla'),
+                ->label(__('Post New Job Listing')),
         ];
     }
 }

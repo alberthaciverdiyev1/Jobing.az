@@ -5,7 +5,7 @@ namespace App\Modules\Vacancy\Filament\Resources\VacancyResource\Pages;
 use App\Modules\Company\Models\Company;
 use App\Modules\Vacancy\Filament\Resources\VacancyResource;
 use Filament\Facades\Filament;
-use Filament\Resources\Pages\CreateRecord;
+use App\Filament\Pages\CreateRecord;
 use Illuminate\Support\Str;
 
 class CreateVacancy extends CreateRecord
@@ -42,10 +42,10 @@ class CreateVacancy extends CreateRecord
     protected function getCreatedNotificationTitle(): ?string
     {
         if (Filament::getCurrentPanel()?->getId() === 'company') {
-            return 'Vakansiya uğurla yaradıldı və Admin təsdiqinə göndərildi. Təsdiqləndikdən sonra saytda görünəcək.';
+            return __('The vacancy was created successfully and sent for admin approval. It will appear on the site once approved.');
         }
 
-        return 'Vakansiya yaradıldı';
+        return __('Vacancy created');
     }
 
     protected function getRedirectUrl(): string

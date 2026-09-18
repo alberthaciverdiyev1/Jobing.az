@@ -13,9 +13,24 @@ class ActivityLogResource extends Resource
     protected static ?string $model = ActivityLog::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-list-bullet';
-    protected static ?string $navigationGroup = 'Analitika';
-    protected static ?string $modelLabel = 'Fəaliyyət Qeydi';
-    protected static ?string $pluralModelLabel = 'Fəaliyyət Qeydləri';
+    protected static ?string $navigationGroup = null;
+
+    public static function getNavigationGroup(): string
+    {
+        return __('Analytics');
+    }
+    protected static ?string $modelLabel = null;
+
+    public static function getModelLabel(): string
+    {
+        return __('Activity Log');
+    }
+    protected static ?string $pluralModelLabel = null;
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('Activity Logs');
+    }
     protected static ?int $navigationSort = 11;
 
     public static function canCreate(): bool
@@ -29,28 +44,28 @@ class ActivityLogResource extends Resource
             ->defaultSort('id', 'desc')
             ->columns([
                 Tables\Columns\TextColumn::make('user.name')
-                    ->label('İstifadəçi')
-                    ->placeholder('Misafir')
+                    ->label(__('User'))
+                    ->placeholder(__('Guest'))
                     ->searchable(),
 
                 Tables\Columns\TextColumn::make('action')
-                    ->label('Əməliyyat')
+                    ->label(__('Action'))
                     ->badge()
                     ->searchable(),
 
                 Tables\Columns\TextColumn::make('method')
-                    ->label('Metod')
+                    ->label(__('Method'))
                     ->color('gray')
                     ->toggleable(),
 
                 Tables\Columns\TextColumn::make('url')
-                    ->label('URL')
+                    ->label(__('URL'))
                     ->limit(40)
                     ->searchable()
                     ->toggleable(),
 
                 Tables\Columns\TextColumn::make('device_type')
-                    ->label('Cihaz')
+                    ->label(__('Device'))
                     ->icon(fn ($state) => match ($state) {
                         'mobile' => 'heroicon-o-device-phone-mobile',
                         'tablet' => 'heroicon-o-device-tablet',
@@ -58,37 +73,37 @@ class ActivityLogResource extends Resource
                     }),
 
                 Tables\Columns\TextColumn::make('browser')
-                    ->label('Brauzer')
+                    ->label(__('Browser'))
                     ->toggleable(),
 
                 Tables\Columns\TextColumn::make('os')
-                    ->label('OS')
+                    ->label(__('OS'))
                     ->toggleable(),
 
                 Tables\Columns\TextColumn::make('ip_address')
-                    ->label('IP')
+                    ->label(__('IP'))
                     ->copyable()
                     ->toggleable(),
 
                 Tables\Columns\TextColumn::make('status_code')
-                    ->label('Status')
+                    ->label(__('Status'))
                     ->color(fn ($state) => (int) $state >= 400 ? 'danger' : 'success')
                     ->toggleable(),
 
                 Tables\Columns\TextColumn::make('created_at')
-                    ->label('Tarix')
+                    ->label(__('Date'))
                     ->dateTime('d.m.Y H:i')
                     ->sortable(),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('action')
-                    ->label('Əməliyyat')
+                    ->label(__('Action'))
                     ->options(fn () => ActivityLog::query()->whereNotNull('action')->distinct()->pluck('action', 'action')->all()),
                 Tables\Filters\SelectFilter::make('device_type')
-                    ->label('Cihaz')
+                    ->label(__('Device'))
                     ->options(['desktop' => 'Desktop', 'mobile' => 'Mobile', 'tablet' => 'Tablet']),
                 Tables\Filters\SelectFilter::make('user_id')
-                    ->label('İstifadəçi')
+                    ->label(__('User'))
                     ->relationship('user', 'name'),
             ])
             ->bulkActions([

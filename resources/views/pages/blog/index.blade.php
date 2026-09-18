@@ -11,35 +11,12 @@ window.__BLOG_CONFIG__ = {
 };
 </script>
 
-<div class="bg-gray-50 min-h-screen pb-16">
-    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-10" x-data="blogManager()">
+<div class="bg-gray-50 min-h-screen pb-16" x-data="blogManager()">
 
-        <!-- Header -->
-        <div class="text-center mb-8">
-            <div class="w-14 h-14 bg-primary/10 text-primary rounded-2xl flex items-center justify-center mx-auto mb-4 border border-orange-100 shadow-2xs">
-                <i class="fas fa-blog text-xl"></i>
-            </div>
-            <h1 class="text-3xl font-extrabold text-gray-900 tracking-tight">{{ __('Career Blog') }}</h1>
-            <p class="text-sm text-gray-500 mt-2 max-w-lg mx-auto">{{ __('Job search, CV writing and career tips.') }}</p>
+    <!-- Hero -->
+    <x-list-hero :title="__('Career Blog')" :placeholder="__('Search in articles...')" />
 
-            <!-- Search bar -->
-            <div class="max-w-md mx-auto mt-6 relative">
-                <input type="text"
-                       x-model="q"
-                       @input.debounce.400ms="applyFilters()"
-                       @keydown.enter.prevent="applyFilters()"
-                       placeholder="{{ __('Search in articles...') }}"
-                       class="w-full pl-10 pr-10 py-2.5 bg-white border border-gray-200 rounded-xl text-xs text-gray-800 placeholder-gray-400 focus:ring-1 focus:ring-primary focus:border-primary focus:outline-hidden transition shadow-2xs">
-                <i class="fas fa-search absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs pointer-events-none"></i>
-                <button type="button"
-                        x-show="q"
-                        x-cloak
-                        @click="q = ''; applyFilters()"
-                        class="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 text-xs cursor-pointer">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-        </div>
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-10">
 
         <!-- Category filter -->
         @if($categories->isNotEmpty())

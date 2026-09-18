@@ -16,9 +16,24 @@ class ResumeResource extends Resource
     protected static ?string $model = Resume::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-identification';
-    protected static ?string $navigationLabel = 'CV & Rezümələrim';
-    protected static ?string $modelLabel = 'CV / Rezüme';
-    protected static ?string $pluralModelLabel = 'CV & Rezümələrim';
+    protected static ?string $navigationLabel = null;
+
+    public static function getNavigationLabel(): string
+    {
+        return __('My CVs & Resumes');
+    }
+    protected static ?string $modelLabel = null;
+
+    public static function getModelLabel(): string
+    {
+        return __('CV / Resume');
+    }
+    protected static ?string $pluralModelLabel = null;
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('My CVs & Resumes');
+    }
     protected static ?int $navigationSort = 3;
 
     /**
@@ -34,81 +49,81 @@ class ResumeResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Section::make('CV Başlığı və Əsas Ayarlar')
-                    ->description('CV-nin adı və kimlər tərəfindən görünəcəyi')
+                Forms\Components\Section::make(__('CV Title & Main Settings'))
+                    ->description(__('The CV name and who can see it'))
                     ->schema([
                         Forms\Components\TextInput::make('title')
-                            ->label('CV Başlığı')
-                            ->placeholder('Örn: Senior Full Stack Developer CV')
+                            ->label(__('CV Title'))
+                            ->placeholder(__('e.g.: Senior Full Stack Developer CV'))
                             ->required()
                             ->maxLength(255)
                             ->columnSpanFull(),
 
                         Forms\Components\Toggle::make('is_default')
-                            ->label('Əsas (Default) CV kimi təyin et')
-                            ->helperText('Müraciətlər zamanı avtomatik bu CV istifadə ediləcək')
+                            ->label(__('Set as Default CV'))
+                            ->helperText(__('This CV will be used automatically during applications'))
                             ->default(false),
 
                         Forms\Components\Toggle::make('is_public')
-                            ->label('Sadece daxili portalda görünsün')
-                            ->helperText('Aktiv olduqda CV-niz yalnız daxili portalda şirkət (işəgötürən) hesablarına görünəcək. İctimai saytda görünməyəcək.')
+                            ->label(__('Visible only in the internal portal'))
+                            ->helperText(__('When active, your CV is visible only to company (employer) accounts in the internal portal, not on the public site.'))
                             ->default(true),
                     ])->columns(2),
 
-                Forms\Components\Section::make('1. Şəxsi Məlumatlar & Əlaqə')
+                Forms\Components\Section::make(__('1. Personal Information & Contact'))
                     ->collapsible()
                     ->schema([
                         Forms\Components\FileUpload::make('photo')
-                            ->label('Profil Fotoğrafı')
+                            ->label(__('Profile Photo'))
                             ->image()
                             ->avatar()
                             ->directory('resumes/photos')
                             ->columnSpanFull(),
 
-                        Forms\Components\TextInput::make('first_name')->label('Ad')->required()->default(fn () => explode(' ', auth()->user()?->name ?? '')[0] ?? ''),
-                        Forms\Components\TextInput::make('last_name')->label('Soyad')->required()->default(fn () => implode(' ', array_slice(explode(' ', auth()->user()?->name ?? ''), 1)) ?? ''),
+                        Forms\Components\TextInput::make('first_name')->label(__('Name'))->required()->default(fn () => explode(' ', auth()->user()?->name ?? '')[0] ?? ''),
+                        Forms\Components\TextInput::make('last_name')->label(__('Surname'))->required()->default(fn () => implode(' ', array_slice(explode(' ', auth()->user()?->name ?? ''), 1)) ?? ''),
 
                         Forms\Components\TextInput::make('phone')
-                            ->label('Telefon')
+                            ->label(__('Phone'))
                             ->tel()
                             ->prefixIcon('heroicon-o-phone')
                             ->placeholder('+994 50 123 45 67'),
 
                         Forms\Components\TextInput::make('whatsapp')
-                            ->label('WhatsApp Nömrəsi')
+                            ->label(__('WhatsApp Number'))
                             ->tel()
                             ->prefixIcon('heroicon-o-chat-bubble-left-right')
                             ->placeholder('+994 50 123 45 67')
-                            ->helperText('Şirkətlər sizinlə WhatsApp vasitəsilə birbaşa əlaqə saxlaya bilərlər'),
+                            ->helperText(__('Companies can contact you directly via WhatsApp')),
 
                         Forms\Components\TextInput::make('email')
-                            ->label('E-poçt')
+                            ->label(__('Email'))
                             ->email()
                             ->prefixIcon('heroicon-o-envelope')
                             ->default(fn () => auth()->user()?->email),
 
                         Forms\Components\Select::make('location')
-                            ->label('Şəhər / Lokasiya')
+                            ->label(__('City / Location'))
                             ->options(\App\Enums\CityEnum::options())
                             ->searchable()
                             ->default('Bakı'),
-                        Forms\Components\TextInput::make('linkedin_url')->label('LinkedIn URL')->url()->placeholder('https://linkedin.com/in/...'),
+                        Forms\Components\TextInput::make('linkedin_url')->label(__('LinkedIn URL'))->url()->placeholder('https://linkedin.com/in/...'),
 
-                        Forms\Components\TextInput::make('github_url')->label('GitHub URL')->url()->placeholder('https://github.com/...'),
-                        Forms\Components\TextInput::make('portfolio_url')->label('Portfolio / Web Sitem')->url()->placeholder('https://myportfolio.com'),
+                        Forms\Components\TextInput::make('github_url')->label(__('GitHub URL'))->url()->placeholder('https://github.com/...'),
+                        Forms\Components\TextInput::make('portfolio_url')->label(__('Portfolio / Website'))->url()->placeholder('https://myportfolio.com'),
                     ])->columns(2),
 
-                Forms\Components\Section::make('2. Profesyonel Özet')
+                Forms\Components\Section::make(__('2. Professional Summary'))
                     ->collapsible()
                     ->schema([
                         Forms\Components\Textarea::make('summary')
-                            ->label('Haqqınızda Qısa Xülasə (Summary)')
-                            ->placeholder('Təcrübəniz, əsas bacarıqlarınız və hədəfləriniz haqqında 2-3 cümləlik qısa xülasə...')
+                            ->label(__('Short Summary About You'))
+                            ->placeholder(__('A 2-3 sentence summary about your experience, key skills and goals...'))
                             ->rows(3)
                             ->columnSpanFull(),
                     ]),
 
-                Forms\Components\Section::make('3. İş Təcrübəsi')
+                Forms\Components\Section::make(__('3. Work Experience'))
                     ->collapsible()
                     ->schema([
                         Forms\Components\ViewField::make('work_experiences')
@@ -116,7 +131,7 @@ class ResumeResource extends Resource
                             ->columnSpanFull(),
                     ]),
 
-                Forms\Components\Section::make('4. Təhsil Məlumatları')
+                Forms\Components\Section::make(__('4. Education'))
                     ->collapsible()
                     ->schema([
                         Forms\Components\ViewField::make('education')
@@ -124,7 +139,7 @@ class ResumeResource extends Resource
                             ->columnSpanFull(),
                     ]),
 
-                Forms\Components\Section::make('5. Bacarıqlar & Dillər')
+                Forms\Components\Section::make(__('5. Skills & Languages'))
                     ->collapsible()
                     ->schema([
                         Forms\Components\Grid::make(2)->schema([
@@ -137,7 +152,7 @@ class ResumeResource extends Resource
                         ]),
                     ]),
 
-                Forms\Components\Section::make('6. Layihələr')
+                Forms\Components\Section::make(__('6. Projects'))
                     ->collapsible()
                     ->schema([
                         Forms\Components\ViewField::make('projects')
@@ -145,7 +160,7 @@ class ResumeResource extends Resource
                             ->columnSpanFull(),
                     ]),
 
-                Forms\Components\Section::make('7. Sertifikatlar & Ödüllər')
+                Forms\Components\Section::make(__('7. Certificates & Awards'))
                     ->collapsible()
                     ->schema([
                         Forms\Components\Grid::make(2)->schema([
@@ -164,49 +179,49 @@ class ResumeResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\ImageColumn::make('photo')
-                    ->label('Foto')
+                    ->label(__('Photo'))
                     ->circular(),
 
                 Tables\Columns\TextColumn::make('title')
-                    ->label('CV Başlığı')
+                    ->label(__('CV Title'))
                     ->searchable()
                     ->sortable()
                     ->weight('bold'),
 
                 Tables\Columns\TextColumn::make('full_name')
-                    ->label('Ad Soyad')
+                    ->label(__('Full Name'))
                     ->searchable(['first_name', 'last_name']),
 
                 Tables\Columns\TextColumn::make('email')
-                    ->label('E-poçt')
+                    ->label(__('Email'))
                     ->searchable(),
 
                 Tables\Columns\IconColumn::make('is_default')
-                    ->label('Varsayılan')
+                    ->label(__('Default'))
                     ->boolean(),
 
                 Tables\Columns\IconColumn::make('is_public')
-                    ->label('Açıq')
+                    ->label(__('Active'))
                     ->boolean(),
 
                 Tables\Columns\TextColumn::make('updated_at')
-                    ->label('Yenilənmə')
+                    ->label(__('Update'))
                     ->dateTime('d.m.Y H:i')
                     ->sortable(),
             ])
             ->defaultSort('updated_at', 'desc')
             ->emptyStateActions([
-                Tables\Actions\CreateAction::make()->label('Yeni CV Əlavə Et'),
+                Tables\Actions\CreateAction::make()->label(__('Add New CV')),
             ])
             ->actions([
                 Tables\Actions\Action::make('preview')
-                    ->label('CV-yə Bax')
+                    ->label(__('View CV'))
                     ->icon('heroicon-o-eye')
                     ->color('info')
                     ->url(fn (Resume $record): string => route('resumes.show', $record->id), shouldOpenInNewTab: true),
 
                 Tables\Actions\Action::make('download')
-                    ->label('PDF Endir')
+                    ->label(__('Download PDF'))
                     ->icon('heroicon-o-arrow-down-tray')
                     ->color('success')
                     ->url(fn (Resume $record): string => route('resumes.show', ['resume' => $record->id, 'print' => 1]), shouldOpenInNewTab: true),
