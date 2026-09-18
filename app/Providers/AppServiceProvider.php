@@ -22,6 +22,11 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        // Production-da bütün URL-lər https olsun (Cloudflare/proxy arxasında mixed content-in qarşısı).
+        if ($this->app->environment('production')) {
+            \Illuminate\Support\Facades\URL::forceScheme('https');
+        }
+
         // Navbar bildirim verisini blade dışında (composer) hazırla.
         View::composer(['components.navbar', 'layouts.partials.*'], NavbarComposer::class);
 

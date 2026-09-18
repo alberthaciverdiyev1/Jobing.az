@@ -17,6 +17,9 @@ return Application::configure(basePath: dirname(__DIR__))
         \App\Modules\Telegram\Console\SetWebhookCommand::class,
     ])
     ->withMiddleware(function (Middleware $middleware): void {
+        // Cloudflare/reverse proxy arxasında düzgün https URL-ləri üçün.
+        $middleware->trustProxies(at: '*');
+
         $middleware->web(append: [
             SetLocale::class,
             LogActivity::class,
