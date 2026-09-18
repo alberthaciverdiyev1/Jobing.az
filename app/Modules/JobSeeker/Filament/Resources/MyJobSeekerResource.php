@@ -245,7 +245,7 @@ class MyJobSeekerResource extends Resource
                     ->dateTime('d.m.Y')
                     ->sortable(),
             ])
-            ->defaultSort('created_at', 'desc')
+            ->defaultSort('updated_at', 'desc')
             ->actions([
 
                 // İrəli çək (WhatsApp siparişi — web modalı)

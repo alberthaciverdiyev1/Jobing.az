@@ -117,7 +117,7 @@ class JobSeekerResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->defaultSort('id', 'desc')
+            ->defaultSort('updated_at', 'desc')
             ->columns([
                 Tables\Columns\TextColumn::make('title')->label(__('Title'))->searchable()->sortable()->weight('bold')->limit(40),
                 Tables\Columns\TextColumn::make('position')->label(__('Position'))->searchable()->toggleable(),

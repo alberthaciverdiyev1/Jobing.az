@@ -74,7 +74,7 @@ class CompanyJobSeekerResource extends Resource
                 Tables\Columns\IconColumn::make('is_featured')->label(__('Premium'))->boolean(),
                 Tables\Columns\TextColumn::make('created_at')->label(__('Date'))->dateTime('d.m.Y')->sortable(),
             ])
-            ->defaultSort('created_at', 'desc')
+            ->defaultSort('updated_at', 'desc')
             ->actions([
                 Tables\Actions\Action::make('view_public')
                     ->label(__('Open Listing'))
