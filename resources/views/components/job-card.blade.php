@@ -13,7 +13,14 @@
             <div class="space-y-1 flex-1 min-w-0">
                 <div class="flex items-center justify-between">
                     <span class="text-xs font-medium text-gray-500">{{ $job->company->name ?? '' }}</span>
-                    @if($isFeatured)
+                    @if($job->match_percentage !== null)
+                    <span class="relative z-10 group/match inline-flex min-w-11 h-7 items-center justify-center rounded-lg px-2 text-[11px] font-bold font-mono cursor-help {{ $job->match_percentage >= 70 ? 'bg-emerald-500 text-white' : ($job->match_percentage >= 40 ? 'bg-amber-500 text-white' : 'bg-slate-600 text-white') }}">
+                        {{ $job->matched_skill_count }}/{{ $job->required_skill_count }}
+                        <span class="pointer-events-none absolute right-0 bottom-full mb-2 hidden group-hover/match:block whitespace-nowrap rounded-lg bg-gray-900 px-2.5 py-1.5 text-[11px] font-semibold font-sans text-white shadow-lg">
+                            {{ __(':percent% match', ['percent' => $job->match_percentage]) }}
+                        </span>
+                    </span>
+                    @elseif($isFeatured)
                     <x-premium-badge />
                     @endif
 
@@ -29,15 +36,6 @@
                         {{ $job->title }}
                     </a>
                 </h3>
-                @if($job->match_percentage !== null)
-                <div class="flex items-center gap-2 pt-0.5">
-                    <span class="inline-flex items-center gap-1.5 rounded-full px-2 py-1 text-[11px] font-semibold {{ $job->match_percentage >= 70 ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : ($job->match_percentage >= 40 ? 'bg-amber-50 text-amber-700 border border-amber-200' : 'bg-slate-50 text-slate-600 border border-slate-200') }}"
-                          title="{{ __(':matched of :required skills match', ['matched' => $job->matched_skill_count, 'required' => $job->required_skill_count]) }}">
-                        <i class="fas fa-bullseye text-[10px]"></i>
-                        <span>{{ __(':percent% match', ['percent' => $job->match_percentage]) }}</span>
-                    </span>
-                </div>
-                @endif
                 <div class="flex items-center justify-between gap-2 text-xs text-gray-500 pt-0.5">
                     <div class="flex flex-wrap items-center gap-2">
                         @if($job->workplace_type_name)
