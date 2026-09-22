@@ -39,7 +39,13 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           script_stop: true
           script: |
-            cd ${{ secrets.APP_DIR }}
+            # deploy.sh bu değerleri env'den okur; verilmezse /var/www/jobing + deploy kullanıcısına düşer.
+            export APP_DIR="${{ secrets.APP_DIR }}"
+            export APP_USER="root"
+            export PHP_VER="8.4"
+            export PHP_BIN="/usr/bin/php"
+            export BRANCH="main"
+            cd "$APP_DIR"
             bash deploy/deploy.sh
 
       - name: Health check
