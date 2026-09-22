@@ -88,7 +88,7 @@ window.__JOBS_CONFIG__ = {
             <!-- White Search & Filter Card -->
             <div class="max-w-5xl mx-auto bg-white/95 backdrop-blur-sm rounded-2xl md:rounded-3xl shadow-[0_18px_45px_-28px_rgba(15,23,42,0.45)] border border-orange-100 p-3.5 sm:p-5 text-left relative z-20">
 
-                <!-- Row 1: Search Keyword, City Selector, Action Button -->
+                <!-- Row 1: Search Keyword, City Selector, Desktop Action Button -->
                 <div class="grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_14rem_auto] lg:grid-cols-[minmax(0,1fr)_16rem_auto] items-stretch gap-2.5">
 
                     <!-- Search Input -->
@@ -156,7 +156,7 @@ window.__JOBS_CONFIG__ = {
                     <!-- Search Button -->
                     <button type="button"
                             @click="applyFilters()"
-                            class="h-12 bg-primary hover:bg-primary-dark text-white font-semibold px-7 rounded-xl transition-all flex items-center justify-center gap-2 text-sm shadow-sm hover:shadow-md active:scale-[0.98] cursor-pointer whitespace-nowrap">
+                            class="hidden md:flex h-12 bg-primary hover:bg-primary-dark text-white font-semibold px-7 rounded-xl transition-all items-center justify-center gap-2 text-sm shadow-sm hover:shadow-md active:scale-[0.98] cursor-pointer whitespace-nowrap">
                         <i class="fas fa-search text-xs"></i>
                         <span>{{ __('Search') }}</span>
                     </button>
@@ -164,13 +164,13 @@ window.__JOBS_CONFIG__ = {
                 </div>
 
                 <!-- Row 2: Filter Pills & Reset Button -->
-                <div class="flex flex-wrap xl:flex-nowrap items-center gap-2 xl:gap-1.5 p-2.5 mt-3 rounded-xl bg-slate-50/80 border border-slate-100 relative" :class="activeDropdown ? 'z-40' : 'z-10'">
+                <div class="grid grid-cols-2 md:flex md:flex-wrap xl:flex-nowrap items-center gap-2 xl:gap-1.5 p-2.5 mt-3 rounded-xl bg-slate-50/80 border border-slate-100 relative" :class="activeDropdown ? 'z-40' : 'z-10'">
 
                     <!-- 1. Category Filter Dropdown -->
                     <div class="relative" :class="activeDropdown === 'category' ? 'z-50' : 'z-auto'" @click.outside="closeDropdown('category')">
                         <button type="button"
                                 @click="toggleDropdown('category')"
-                                class="inline-flex items-center gap-1.5 px-3.5 xl:px-2.5 py-2 rounded-xl border text-xs sm:text-sm font-medium transition cursor-pointer"
+                                class="w-full md:w-auto inline-flex items-center justify-between md:justify-start gap-1.5 px-3.5 xl:px-2.5 py-2 rounded-xl border text-xs sm:text-sm font-medium transition cursor-pointer"
                                 :class="selectedParentCategorySlug ? 'bg-orange-50 border-orange-200 text-primary font-semibold shadow-2xs' : 'bg-gray-50/80 border-gray-200/80 text-gray-700 hover:bg-white hover:border-gray-300'">
                             <span class="text-gray-400 font-normal">{{ __('Category') }}:</span>
                             <span class="truncate max-w-[140px]" :class="selectedParentCategorySlug ? 'text-primary font-semibold' : 'text-gray-800 font-medium'" x-text="selectedParentCategoryLabel || '{{ __('All') }}'"></span>
@@ -211,7 +211,7 @@ window.__JOBS_CONFIG__ = {
                         <button type="button"
                                 @click="if (availableSubcategories.length) { toggleDropdown('subcategory'); }"
                                 :disabled="!availableSubcategories.length"
-                                class="inline-flex items-center gap-1.5 px-3.5 xl:px-2.5 py-2 rounded-xl border text-xs sm:text-sm font-medium transition"
+                                class="w-full md:w-auto inline-flex items-center justify-between md:justify-start gap-1.5 px-3.5 xl:px-2.5 py-2 rounded-xl border text-xs sm:text-sm font-medium transition"
                                 :class="{
                                     'opacity-40 cursor-not-allowed bg-gray-50 border-gray-200 text-gray-400': !availableSubcategories.length,
                                     'cursor-pointer bg-orange-50 border-orange-200 text-primary font-semibold shadow-2xs': availableSubcategories.length && selectedSubcategorySlugs.length > 0,
@@ -266,7 +266,7 @@ window.__JOBS_CONFIG__ = {
                     <div class="relative" :class="activeDropdown === 'workplace' ? 'z-50' : 'z-auto'" @click.outside="closeDropdown('workplace')">
                         <button type="button"
                                 @click="toggleDropdown('workplace')"
-                                class="inline-flex items-center gap-1.5 px-3.5 xl:px-2.5 py-2 rounded-xl border text-xs sm:text-sm font-medium transition cursor-pointer"
+                                class="w-full md:w-auto inline-flex items-center justify-between md:justify-start gap-1.5 px-3.5 xl:px-2.5 py-2 rounded-xl border text-xs sm:text-sm font-medium transition cursor-pointer"
                                 :class="workplace.length > 0 ? 'bg-orange-50 border-orange-200 text-primary font-semibold shadow-2xs' : 'bg-gray-50/80 border-gray-200/80 text-gray-700 hover:bg-white hover:border-gray-300'">
                             <span class="text-gray-400 font-normal">{{ __('Workplace') }}:</span>
                             <span class="truncate max-w-[130px]" :class="workplace.length > 0 ? 'text-primary font-semibold' : 'text-gray-800 font-medium'" x-text="selectedWorkplaceLabel || '{{ __('All') }}'"></span>
@@ -313,7 +313,7 @@ window.__JOBS_CONFIG__ = {
                     <div class="relative" :class="activeDropdown === 'experience' ? 'z-50' : 'z-auto'" @click.outside="closeDropdown('experience')">
                         <button type="button"
                                 @click="toggleDropdown('experience')"
-                                class="inline-flex items-center gap-1.5 px-3.5 xl:px-2.5 py-2 rounded-xl border text-xs sm:text-sm font-medium transition cursor-pointer"
+                                class="w-full md:w-auto inline-flex items-center justify-between md:justify-start gap-1.5 px-3.5 xl:px-2.5 py-2 rounded-xl border text-xs sm:text-sm font-medium transition cursor-pointer"
                                 :class="experience.length > 0 ? 'bg-orange-50 border-orange-200 text-primary font-semibold shadow-2xs' : 'bg-gray-50/80 border-gray-200/80 text-gray-700 hover:bg-white hover:border-gray-300'">
                             <span class="text-gray-400 font-normal">{{ __('Experience') }}:</span>
                             <span class="truncate max-w-[130px]" :class="experience.length > 0 ? 'text-primary font-semibold' : 'text-gray-800 font-medium'" x-text="selectedExperienceLabel || '{{ __('All') }}'"></span>
@@ -359,7 +359,7 @@ window.__JOBS_CONFIG__ = {
                     <div class="relative" :class="activeDropdown === 'salary' ? 'z-50' : 'z-auto'" @click.outside="closeDropdown('salary')">
                         <button type="button"
                                 @click="toggleDropdown('salary')"
-                                class="inline-flex items-center gap-1.5 px-3.5 xl:px-2.5 py-2 rounded-xl border text-xs sm:text-sm font-medium transition cursor-pointer"
+                                class="w-full md:w-auto inline-flex items-center justify-between md:justify-start gap-1.5 px-3.5 xl:px-2.5 py-2 rounded-xl border text-xs sm:text-sm font-medium transition cursor-pointer"
                                 :class="(min_salary || max_salary) ? 'bg-orange-50 border-orange-200 text-primary font-semibold shadow-2xs' : 'bg-gray-50/80 border-gray-200/80 text-gray-700 hover:bg-white hover:border-gray-300'">
                             <span class="text-gray-400 font-normal">{{ __('Salary') }}:</span>
                             <span class="truncate max-w-[140px]" :class="(min_salary || max_salary) ? 'text-primary font-semibold' : 'text-gray-800 font-medium'" x-text="salaryLabel || '{{ __('All') }}'"></span>
@@ -426,7 +426,7 @@ window.__JOBS_CONFIG__ = {
                     <!-- 6. More Filters (Daha çox filtr) -->
                     <button type="button"
                             @click="moreFiltersOpen = true"
-                            class="inline-flex shrink-0 items-center gap-1.5 px-3.5 xl:px-2.5 py-2 rounded-xl border border-gray-200/80 bg-gray-50/80 text-gray-700 hover:bg-white hover:border-gray-300 text-xs sm:text-sm font-medium whitespace-nowrap transition cursor-pointer"
+                            class="w-full md:w-auto inline-flex shrink-0 items-center justify-center md:justify-start gap-1.5 px-3.5 xl:px-2.5 py-2 rounded-xl border border-gray-200/80 bg-gray-50/80 text-gray-700 hover:bg-white hover:border-gray-300 text-xs sm:text-sm font-medium whitespace-nowrap transition cursor-pointer"
                             :class="moreFiltersCount > 0 ? 'bg-orange-50 border-orange-200 text-primary font-semibold shadow-2xs' : ''">
                         <i class="fas fa-sliders-h text-xs" :class="moreFiltersCount > 0 ? 'text-primary' : 'text-gray-400'"></i>
                         <span>{{ __('More filters') }}</span>
@@ -438,12 +438,20 @@ window.__JOBS_CONFIG__ = {
                             x-show="hasActiveFilters"
                             x-cloak
                             @click="resetAllFilters()"
-                            class="text-xs text-gray-400 hover:text-primary flex items-center gap-1.5 font-medium transition cursor-pointer sm:ml-auto py-1.5 px-2 rounded-lg hover:bg-gray-50">
+                            class="col-span-2 md:col-span-1 text-xs text-gray-400 hover:text-primary flex items-center justify-center gap-1.5 font-medium transition cursor-pointer md:ml-auto py-1.5 px-2 rounded-lg hover:bg-gray-50">
                         <i class="fas fa-rotate-left text-[11px]"></i>
                         <span>{{ __('Reset filters') }}</span>
                     </button>
 
                 </div>
+
+                <!-- Mobile Action Button -->
+                <button type="button"
+                        @click="applyFilters()"
+                        class="md:hidden mt-3 w-full h-12 bg-primary hover:bg-primary-dark text-white font-semibold px-7 rounded-xl transition-all flex items-center justify-center gap-2 text-sm shadow-sm active:scale-[0.98] cursor-pointer">
+                    <i class="fas fa-search text-xs"></i>
+                    <span>{{ __('Search') }}</span>
+                </button>
 
             </div>
 
