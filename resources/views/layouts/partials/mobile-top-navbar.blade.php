@@ -18,7 +18,7 @@
         <div class="relative" x-data="{ mobileLangOpen: false }" @click.outside="mobileLangOpen = false">
             <button type="button"
                     @click="mobileLangOpen = !mobileLangOpen"
-                    class="w-9 h-9 flex items-center justify-center gap-1 bg-gray-50 hover:bg-gray-100 active:bg-gray-200/70 border border-gray-200/80 rounded-xl transition-all shadow-2xs cursor-pointer select-none">
+                    class="w-11 h-9 flex items-center justify-center gap-1 bg-gray-50 hover:bg-gray-100 active:bg-gray-200/70 border border-gray-200/80 rounded-xl transition-all shadow-2xs cursor-pointer select-none">
                 <span class="text-xs font-medium text-gray-800 leading-none">
                     {{ $activeLocaleInfo['code'] ?? strtoupper($currentLocale) }}
                 </span>
