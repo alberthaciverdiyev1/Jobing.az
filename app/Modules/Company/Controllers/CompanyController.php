@@ -4,6 +4,7 @@ namespace App\Modules\Company\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Modules\Company\Services\CompanyService;
+use App\Modules\JobAttribute\Models\City;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -28,7 +29,10 @@ class CompanyController extends Controller
             ->header('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0, private');
         }
 
-        return view('pages.companies.index', $data);
+        return view('pages.companies.index', [
+            ...$data,
+            'cities' => City::cachedActive(),
+        ]);
     }
 
     public function show(string $slug): View

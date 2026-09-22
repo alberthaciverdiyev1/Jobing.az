@@ -51,7 +51,7 @@ class Blog extends Model
 
     public function getFormattedDateAttribute(): string
     {
-        return $this->published_at?->format('d M Y') ?? '';
+        return $this->published_at?->translatedFormat('d M Y') ?? '';
     }
 
     public function getReadingTimeAttribute(): int

@@ -33,23 +33,21 @@ class ResumeController extends Controller
         $selectedSkills = (array) $request->input('skills', []);
         $selectedSkills = array_filter($selectedSkills);
         if ($categorySlug = $request->input('category')) {
-            if (empty($selectedSkills)) {
-                $categoryModel = \App\Modules\Category\Models\Category::where('slug', $categorySlug)
-                    ->with(['skills' => fn ($q) => $q->active(), 'children.skills' => fn ($q) => $q->active()])
-                    ->first();
-                if ($categoryModel) {
-                    $allSkills = $categoryModel->skills->merge($categoryModel->children->flatMap->skills);
-                    $catSkillNames = $allSkills->map(function ($s) {
-                        return is_array($s->name) ? ($s->name['az'] ?? reset($s->name)) : $s->name;
-                    })->filter()->unique()->values()->all();
+            $categoryModel = \App\Modules\Category\Models\Category::where('slug', $categorySlug)
+                ->with(['skills' => fn ($q) => $q->active(), 'children.skills' => fn ($q) => $q->active()])
+                ->first();
+            if ($categoryModel) {
+                $allSkills = $categoryModel->skills->merge($categoryModel->children->flatMap->skills);
+                $catSkillNames = $allSkills->map(function ($s) {
+                    return is_array($s->name) ? ($s->name['az'] ?? reset($s->name)) : $s->name;
+                })->filter()->unique()->values()->all();
 
-                    if (!empty($catSkillNames)) {
-                        $query->where(function ($q) use ($catSkillNames) {
-                            foreach ($catSkillNames as $s) {
-                                $q->orWhereRaw("CAST(skills AS text) ILIKE ?", ["%{$s}%"]);
-                            }
-                        });
-                    }
+                if (!empty($catSkillNames)) {
+                    $query->where(function ($q) use ($catSkillNames) {
+                        foreach ($catSkillNames as $s) {
+                            $q->orWhereJsonContains('skills', $s);
+                        }
+                    });
                 }
             }
         }
@@ -58,7 +56,7 @@ class ResumeController extends Controller
         if (!empty($selectedSkills)) {
             $query->where(function ($q) use ($selectedSkills) {
                 foreach ($selectedSkills as $s) {
-                    $q->orWhereRaw("CAST(skills AS text) ILIKE ?", ["%{$s}%"]);
+                    $q->orWhereJsonContains('skills', $s);
                 }
             });
         }
@@ -106,7 +104,7 @@ class ResumeController extends Controller
             $catSkills = [];
             $allSkills = $cat->skills->merge($cat->children->flatMap->skills);
 
-            foreach ($cat->skills as $sk) {
+            foreach ($allSkills->unique('id') as $sk) {
                 $skillName = is_array($sk->name) ? ($sk->name['az'] ?? reset($sk->name)) : $sk->name;
                 $catSkills[] = [
                     'id' => $sk->id,

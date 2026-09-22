@@ -104,6 +104,16 @@ class VacancyService
             $query->whereHas('city', fn ($cq) => $cq->whereIn('slug', $selectedCities));
         }
 
+        // 5.6 Skills Filter (multi-select)
+        $selectedSkills = array_filter((array) ($filters['skills'] ?? []));
+        if (!empty($selectedSkills)) {
+            $query->where(function ($q) use ($selectedSkills) {
+                foreach ($selectedSkills as $s) {
+                    $q->orWhereJsonContains('skills', $s);
+                }
+            });
+        }
+
         // 6. Salary Filter (Min & Max)
         if (!empty($filters['min_salary'])) {
             $minSalary = (float)$filters['min_salary'];
@@ -150,8 +160,8 @@ class VacancyService
         // Count scopes based on currently applied filters.
         // $attributeScope includes the selected category; $categoryCountScope does not
         // (so category counts reflect search/other filters but aren't narrowed by the category itself).
-        $makeScope = function (bool $includeCategory) use ($selectedCategories, $selectedWorkplaces, $selectedTypes, $selectedExperiences, $selectedCities, $filters, $resolveCategoryIds) {
-            return function ($q) use ($includeCategory, $selectedCategories, $selectedWorkplaces, $selectedTypes, $selectedExperiences, $selectedCities, $filters, $resolveCategoryIds) {
+        $makeScope = function (bool $includeCategory) use ($selectedCategories, $selectedWorkplaces, $selectedTypes, $selectedExperiences, $selectedCities, $selectedSkills, $filters, $resolveCategoryIds) {
+            return function ($q) use ($includeCategory, $selectedCategories, $selectedWorkplaces, $selectedTypes, $selectedExperiences, $selectedCities, $selectedSkills, $filters, $resolveCategoryIds) {
                 $q->active();
                 if ($includeCategory && !empty($selectedCategories)) {
                     $categoryIds = $resolveCategoryIds($selectedCategories);
@@ -179,6 +189,13 @@ class VacancyService
                 if (!empty($selectedCities)) {
                     $q->whereHas('city', fn ($cq) => $cq->whereIn('slug', $selectedCities));
                 }
+                if (!empty($selectedSkills)) {
+                    $q->where(function ($sub) use ($selectedSkills) {
+                        foreach ($selectedSkills as $s) {
+                            $sub->orWhereJsonContains('skills', $s);
+                        }
+                    });
+                }
                 if (!empty($filters['min_salary'])) {
                     $minSalary = (float) $filters['min_salary'];
                     $q->where(function ($sub) use ($minSalary) {
@@ -201,7 +218,7 @@ class VacancyService
         // Facet (say) sorğuları filtr imzasına görə keşlənir — ağır withCount subquery-ləri təkrarlanmasın.
         $facetSignature = serialize([
             $selectedCategories, $selectedWorkplaces, $selectedTypes,
-            $selectedExperiences, $selectedCities,
+            $selectedExperiences, $selectedCities, $selectedSkills,
             $filters['q'] ?? '', $filters['min_salary'] ?? '', $filters['max_salary'] ?? '',
         ]);
 
@@ -261,6 +278,7 @@ class VacancyService
             'companies' => $companies,
             'selectedCategories' => $selectedCategoryModels,
             'selectedCategory' => $selectedCategoryModels->first(),
+            'selectedSkills' => $selectedSkills,
         ];
     }
 

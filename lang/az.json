@@ -1,5 +1,16 @@
 {
     "Negotiable": "Razılaşma yolu ilə",
+    "More filters": "Daha çox filtr",
+    "Subcategory": "Alt kateqoriya",
+    "All subcategories": "Bütün alt kateqoriyalar",
+    "Detailed filters and skills": "Ətraflı filtrlər və bacarıqlar",
+    "Detailed candidate filters and skills": "Ətraflı namizəd filtrləri və bacarıqlar",
+    "Skills (Tags)": "Bacarıqlar (Teqlər)",
+    "Search skills in this category...": "Bu kateqoriyada bacarıq axtar...",
+    "Loading skills...": "Bacarıqlar yüklənir...",
+    "Select a category above to view and filter by relevant skills.": "Müvafiq bacarıqları görmək və filtrləmək üçün yuxarıdan kateqoriya seçin.",
+    "Clear skills": "Bacarıqları təmizlə",
+    "No skills match your search.": "Axtarışa uyğun bacarıq tapılmadı.",
     "Salary not specified": "Maaş göstərilməyib",
     "up to": "qədər",
     "You have already applied to this vacancy.": "Siz artıq bu vakansiyaya müraciət etmisiniz.",
@@ -1121,5 +1132,9 @@
     "Visitors": "Ziyarətçilər",
     "Visits": "Ziyarətlər",
     "New vacancy awaiting approval": "Təsdiq gözləyən yeni vakansiya",
-    "Rejection Reason": "Rədd səbəbi"
+    "Rejection Reason": "Rədd səbəbi",
+    "City (Baku...)": "Şəhər (Bakı...)",
+    "Verified companies only": "Yalnız təsdiqlənmiş şirkətlər",
+    "Companies with active vacancies": "Aktiv vakansiyası olan şirkətlər",
+    "Remote": "Uzaqdan"
 }

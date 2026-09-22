@@ -23,6 +23,33 @@ window.__COMPANIES_CONFIG__ = {
     <!-- Main Content -->
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
+        <div class="mb-6 grid grid-cols-1 sm:grid-cols-3 gap-3 rounded-2xl border border-gray-200 bg-white p-4 shadow-2xs">
+            <label class="space-y-1.5 text-xs font-medium text-gray-700">
+                <span>{{ __('City') }}</span>
+                <select x-model="location" @change="applyFilters()"
+                        class="w-full rounded-xl border border-gray-200 bg-gray-50 px-3 py-2.5 text-xs focus:border-primary focus:bg-white focus:outline-hidden">
+                    <option value="">{{ __('All cities') }}</option>
+                    @foreach($cities as $city)
+                    <option value="{{ $city->slug }}">{{ $city->name }}</option>
+                    @endforeach
+                </select>
+            </label>
+
+            <label class="flex items-center gap-2 self-end rounded-xl border border-gray-200 px-3 py-2.5 text-xs text-gray-700 cursor-pointer"
+                   :class="verified ? 'border-orange-200 bg-orange-50 text-primary font-semibold' : 'bg-gray-50'">
+                <input type="checkbox" x-model="verified" true-value="1" false-value="" @change="applyFilters()"
+                       class="rounded border-gray-300 text-primary focus:ring-primary">
+                <span>{{ __('Verified companies only') }}</span>
+            </label>
+
+            <label class="flex items-center gap-2 self-end rounded-xl border border-gray-200 px-3 py-2.5 text-xs text-gray-700 cursor-pointer"
+                   :class="hasJobs ? 'border-orange-200 bg-orange-50 text-primary font-semibold' : 'bg-gray-50'">
+                <input type="checkbox" x-model="hasJobs" true-value="1" false-value="" @change="applyFilters()"
+                       class="rounded border-gray-300 text-primary focus:ring-primary">
+                <span>{{ __('Companies with active vacancies') }}</span>
+            </label>
+        </div>
+
         <!-- List Header (Count + Sorting) -->
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 pb-4 border-b border-gray-200">
             <p class="text-sm text-gray-500">

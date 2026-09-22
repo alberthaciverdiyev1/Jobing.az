@@ -32,8 +32,11 @@ class JobSeekerController extends Controller
             });
         }
 
-        // Category filter (array or single string)
+        // Category filter (array or single string, plus subcategory)
         $selectedCategories = (array) $request->input('category', []);
+        if ($request->filled('subcategory')) {
+            $selectedCategories = array_merge($selectedCategories, (array) $request->input('subcategory'));
+        }
         $selectedCategories = array_filter($selectedCategories);
         if (!empty($selectedCategories)) {
             $catIds = Category::whereIn('slug', $selectedCategories)
@@ -68,6 +71,17 @@ class JobSeekerController extends Controller
         $selectedCities = array_filter($selectedCities);
         if (!empty($selectedCities)) {
             $query->whereIn('location', $selectedCities);
+        }
+
+        // Skills filter
+        $selectedSkills = (array) $request->input('skills', []);
+        $selectedSkills = array_filter($selectedSkills);
+        if (!empty($selectedSkills)) {
+            $query->where(function ($q) use ($selectedSkills) {
+                foreach ($selectedSkills as $s) {
+                    $q->orWhereJsonContains('skills', $s);
+                }
+            });
         }
 
         // Min Salary filter
@@ -120,11 +134,18 @@ class JobSeekerController extends Controller
             ->pluck('count', 'location')
             ->toArray();
 
-        $categories = Category::parents()->with('children')->withCount(['jobSeekers' => fn ($q) => $q->published()])->get();
+        $categories = Category::parents()->with(['children' => fn ($q) => $q->withCount(['jobSeekers' => fn ($jq) => $jq->published()])])->withCount(['jobSeekers' => fn ($q) => $q->published()])->get();
 
+        $categoryCounts = [];
         $categoryChildrenMap = [];
+        $categoryParentMap = [];
         foreach ($categories as $cat) {
+            $categoryCounts[$cat->slug] = ($cat->job_seekers_count ?? 0) + $cat->children->sum('job_seekers_count');
             $categoryChildrenMap[$cat->slug] = $cat->children->pluck('slug')->values()->all();
+            foreach ($cat->children as $child) {
+                $categoryParentMap[$child->slug] = $cat->slug;
+                $categoryCounts[$child->slug] = $child->job_seekers_count ?? 0;
+            }
         }
 
         $isAjax = ($request->ajax() || $request->header('X-Partial') || $request->wantsJson()) && !$request->acceptsHtml();
@@ -136,6 +157,7 @@ class JobSeekerController extends Controller
                 ])->render(),
                 'total' => $jobSeekers->total(),
                 'cityCounts' => $cityCounts,
+                'categoryCounts' => $categoryCounts,
             ])
             ->header('Vary', 'X-Requested-With, Accept')
             ->header('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0, private');
@@ -156,12 +178,15 @@ class JobSeekerController extends Controller
             'jobSeekers' => $jobSeekers,
             'categories' => $categories,
             'categoryChildrenMap' => $categoryChildrenMap,
+            'categoryParentMap' => $categoryParentMap,
+            'categoryCounts' => $categoryCounts,
             'activeParentCategories' => $activeParentCategories,
             'jobTypes' => JobType::active()->withCount(['jobSeekers' => fn ($q) => $q->published()])->get(),
             'workplaceTypes' => WorkplaceType::active()->withCount(['jobSeekers' => fn ($q) => $q->published()])->get(),
             'experienceLevels' => ExperienceLevel::active()->withCount(['jobSeekers' => fn ($q) => $q->published()])->get(),
             'cities' => VacancyService::cityOptions(),
             'cityCounts' => $cityCounts,
+            'selectedSkills' => $selectedSkills,
         ]);
     }
 
