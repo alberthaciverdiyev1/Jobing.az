@@ -4,7 +4,7 @@
     $activeLocaleInfo = $locales[$currentLocale] ?? reset($locales);
 @endphp
 
-<header class="hidden md:block bg-white sticky top-0 z-50 border-b border-gray-200">
+<header class="hidden xl:block bg-white sticky top-0 z-50 border-b border-gray-200">
     <div class="mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center h-16 relative">
             <!-- Left: Logo -->

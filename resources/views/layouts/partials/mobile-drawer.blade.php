@@ -3,7 +3,7 @@
     $locales = config('app.available_locales');
 @endphp
 
-<div x-show="mobileDrawerOpen" x-cloak class="md:hidden fixed inset-0 z-50">
+<div x-show="mobileDrawerOpen" x-cloak class="xl:hidden fixed inset-0 z-50">
   <!-- Backdrop Blur Layer -->
   <div class="w-full h-full flex flex-col justify-end bg-black/60 backdrop-blur-xs transition-opacity duration-300"
        @click="mobileDrawerOpen = false">

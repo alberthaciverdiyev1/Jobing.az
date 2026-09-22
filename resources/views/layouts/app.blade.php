@@ -114,7 +114,7 @@
     <x-navbar />
 
     <!-- Main Content Body -->
-    <main class="flex-grow pb-16 md:pb-0">
+    <main class="flex-grow pb-16 xl:pb-0">
         @if(!empty($resolvedH1))
         <h1 class="sr-only">{{ $resolvedH1 }}</h1>
         @endif

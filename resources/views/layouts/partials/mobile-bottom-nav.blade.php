@@ -1,4 +1,4 @@
-<nav id="mobileBottomNav" class="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-gray-200/90 px-2 flex items-center justify-around select-none h-16 shadow-lg">
+<nav id="mobileBottomNav" class="xl:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-gray-200/90 px-2 flex items-center justify-around select-none h-16 shadow-lg">
 
   <!-- 1. VAKANSİYALAR -->
   <a href="{{ route('jobs.index') }}" class="flex flex-col items-center justify-center flex-1 py-1 text-center transition {{ request()->routeIs('jobs.index') || request()->routeIs('jobs.index') ? 'text-primary font-semibold' : 'text-gray-400 hover:text-gray-700' }}">
