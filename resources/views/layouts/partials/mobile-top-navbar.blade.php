@@ -5,7 +5,7 @@
 @endphp
 
 {{-- Mobile Top Navbar: Brand on Left, Language Dropdown & Notifications on Right --}}
-<header class="xl:hidden bg-white border-b border-gray-200/80 sticky top-0 z-30 px-3.5 flex items-center justify-between shadow-2xs select-none"
+<header class="xl:hidden bg-white border-b border-gray-200/80 sticky top-0 z-[60] px-3.5 flex items-center justify-between shadow-2xs select-none"
         style="height: 56px; min-height: 56px;">
     {{-- Left: Brand Logo --}}
     <a href="{{ route('jobs.index') }}" class="shrink-0 flex items-center">
@@ -33,7 +33,7 @@
                  x-transition:leave="transition ease-in duration-75"
                  x-transition:leave-start="transform opacity-100 scale-100"
                  x-transition:leave-end="transform opacity-0 scale-95"
-                 class="absolute right-0 mt-2 w-44 bg-white rounded-2xl shadow-2xl border border-gray-100 py-1.5 z-50 overflow-hidden">
+                 class="absolute right-0 mt-2 w-44 bg-white rounded-2xl shadow-2xl border border-gray-100 py-1.5 z-[70] overflow-hidden">
                 <div class="px-3 py-1 text-[12px] font-medium text-gray-400 border-b border-gray-100 mb-1">
                     {{ __('Language selection') }}
                 </div>
