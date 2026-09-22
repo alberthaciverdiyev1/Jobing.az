@@ -5,10 +5,11 @@
 @endphp
 
 {{-- Mobile Top Navbar: Brand on Left, Language Dropdown & Notifications on Right --}}
-<header class="xl:hidden bg-white border-b border-gray-200/80 sticky top-0 z-30 px-3.5 h-16 flex items-center justify-between shadow-2xs select-none">
+<header class="xl:hidden bg-white border-b border-gray-200/80 sticky top-0 z-30 px-3.5 flex items-center justify-between shadow-2xs select-none"
+        style="height: 72px; min-height: 72px;">
     {{-- Left: Brand Logo --}}
     <a href="{{ route('jobs.index') }}" class="shrink-0 flex items-center">
-        <img src="{{ asset('images/logo/jobing-wordmark.png') }}" alt="{{ config('app.full_name') }}" class="h-6 sm:h-9 w-auto">
+        <img src="{{ asset('images/logo/jobing-wordmark.png') }}" alt="{{ config('app.full_name') }}" class="h-8 sm:h-10 w-auto">
     </a>
 
     {{-- Right: Language Dropdown + Notification / User Icon --}}
