@@ -41,10 +41,6 @@
 
       <!-- Navigation Links List -->
       <div class="space-y-1 py-1">
-        <a href="{{ route('jobs.index') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl {{ request()->routeIs('jobs.index') ? 'text-primary bg-orange-50 font-semibold' : 'text-gray-700 hover:bg-gray-50 font-medium' }} text-sm">
-          <span class="flex items-center gap-3"><i class="fa-solid fa-house text-gray-400 w-5 text-center"></i> {{ __('Home') }}</span>
-          <i class="fa-solid fa-chevron-right text-sm text-gray-300"></i>
-        </a>
         <a href="{{ route('jobs.index') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl {{ request()->routeIs('jobs.*') && !request()->routeIs('jobs.create') ? 'text-primary bg-orange-50 font-semibold' : 'text-gray-700 hover:bg-gray-50 font-medium' }} text-sm">
           <span class="flex items-center gap-3"><i class="fa-solid fa-briefcase text-gray-400 w-5 text-center"></i> {{ __('Vacancies') }}</span>
           <i class="fa-solid fa-chevron-right text-sm text-gray-300"></i>
