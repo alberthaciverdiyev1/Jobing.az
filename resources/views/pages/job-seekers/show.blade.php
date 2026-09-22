@@ -27,7 +27,7 @@
                             <span class="text-gray-500 font-medium">{{ $jobSeeker->position }}</span>
                             @endif
                             @if($jobSeeker->category)
-                            <span class="text-[11px] font-semibold px-2 py-0.5 rounded bg-orange-50 text-orange-700 border border-orange-200">
+                            <span class="text-[11px] font-semibold px-2 py-0.5 rounded bg-orange-50 text-gray-700 border border-orange-200">
                                 {{ $jobSeeker->category->name }}
                             </span>
                             @endif
@@ -60,7 +60,7 @@
                 <div class="shrink-0 self-start md:self-center">
                     <div class="px-5 py-2.5 rounded-xl bg-orange-50/80 border border-orange-100 text-center min-w-[130px] shadow-2xs">
                         <span class="text-lg sm:text-xl font-semibold text-primary font-mono block leading-tight">{{ $jobSeeker->formatted_salary }}</span>
-                        <span class="text-[12px] font-medium text-orange-950 block mt-0.5">{{ __('Expected Salary') }}</span>
+                        <span class="text-[12px] font-medium text-gray-700 block mt-0.5">{{ __('Expected Salary') }}</span>
                     </div>
                 </div>
 

@@ -183,7 +183,7 @@
             <div class="p-6 space-y-5">
                 <!-- Target Item Card -->
                 <div class="p-3.5 rounded-xl bg-amber-50 border border-amber-200">
-                    <span class="text-[11px] font-medium text-amber-800 block">{{ $itemTypeLabel }}:</span>
+                    <span class="text-[11px] font-medium text-gray-700 block">{{ $itemTypeLabel }}:</span>
                     <p class="text-xs font-semibold text-gray-900 truncate mt-0.5">{{ $title }}</p>
                 </div>
 
@@ -212,7 +212,7 @@
                                 class="p-3 rounded-xl border text-center transition cursor-pointer"
                                 :class="selectedPremium === '1' ? 'border-amber-500 bg-amber-50 ring-1 ring-amber-500 shadow-xs' : 'border-gray-200 hover:border-amber-300 bg-white'">
                             <span class="text-xs font-semibold text-gray-800 block">{{ __('1 time') }}</span>
-                            <span class="text-base sm:text-lg font-semibold text-amber-600 font-mono block mt-1">{{ $premiumPrices[1] }} ₼</span>
+                            <span class="text-base sm:text-lg font-semibold text-gray-900 font-mono block mt-1">{{ $premiumPrices[1] }} ₼</span>
                             <span class="text-[11px] text-gray-400 block mt-0.5">{{ __('Trial') }}</span>
                         </button>
 
@@ -222,8 +222,8 @@
                                 :class="selectedPremium === '3' ? 'border-amber-500 bg-amber-50 ring-1 ring-amber-500 shadow-xs' : 'border-gray-200 hover:border-amber-300 bg-white'">
                             <span class="absolute -top-2 left-1/2 -translate-x-1/2 px-1.5 py-0.2 rounded-full bg-amber-500 text-[9px] font-semibold text-white">{{ __('Popular') }}</span>
                             <span class="text-xs font-semibold text-gray-800 block">{{ __('3 times') }}</span>
-                            <span class="text-base sm:text-lg font-semibold text-amber-600 font-mono block mt-1">{{ $premiumPrices[3] }} ₼</span>
-                            <span class="text-[11px] text-amber-800 font-semibold block mt-0.5">{{ __('Recommendation') }}</span>
+                            <span class="text-base sm:text-lg font-semibold text-gray-900 font-mono block mt-1">{{ $premiumPrices[3] }} ₼</span>
+                            <span class="text-[11px] text-gray-700 font-semibold block mt-0.5">{{ __('Recommendation') }}</span>
                         </button>
 
                         <!-- Option 3: 7 dəfə -->
@@ -231,7 +231,7 @@
                                 class="p-3 rounded-xl border text-center transition cursor-pointer"
                                 :class="selectedPremium === '7' ? 'border-amber-500 bg-amber-50 ring-1 ring-amber-500 shadow-xs' : 'border-gray-200 hover:border-amber-300 bg-white'">
                             <span class="text-xs font-semibold text-gray-800 block">{{ __('7 times') }}</span>
-                            <span class="text-base sm:text-lg font-semibold text-amber-600 font-mono block mt-1">{{ $premiumPrices[7] }} ₼</span>
+                            <span class="text-base sm:text-lg font-semibold text-gray-900 font-mono block mt-1">{{ $premiumPrices[7] }} ₼</span>
                             <span class="text-[11px] text-emerald-600 font-semibold block mt-0.5">{{ __('VIP') }}</span>
                         </button>
                     </div>

@@ -24,11 +24,11 @@
                         <i class="fas fa-clock text-base"></i>
                     </div>
                     <div>
-                        <h4 class="text-xs sm:text-sm font-semibold text-amber-950">{{ __('Awaiting Admin Approval') }}</h4>
-                        <p class="text-[12px] sm:text-xs text-amber-800">{{ __('This vacancy has been submitted and will be published on the site and in general search after admin approval.') }}</p>
+                        <h4 class="text-xs sm:text-sm font-semibold text-gray-900">{{ __('Awaiting Admin Approval') }}</h4>
+                        <p class="text-[12px] sm:text-xs text-gray-700">{{ __('This vacancy has been submitted and will be published on the site and in general search after admin approval.') }}</p>
                     </div>
                 </div>
-                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-200/80 text-amber-900 font-semibold text-xs shrink-0 self-start sm:self-auto">
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-200/80 text-gray-800 font-semibold text-xs shrink-0 self-start sm:self-auto">
                     <i class="fas fa-shield-halved text-[11px]"></i>
                     {{ __('Under review') }}
                 </span>

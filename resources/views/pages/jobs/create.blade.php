@@ -295,7 +295,7 @@
                         <!-- Selected Skills Badges (Shown Above) -->
                         <div x-show="selectedSkills.length > 0" x-cloak x-transition class="mb-3 p-3 rounded-xl bg-orange-50/70 border border-orange-200">
                             <div class="flex items-center justify-between mb-2">
-                                <span class="text-[12px] font-medium text-orange-950 flex items-center gap-1.5">
+                                <span class="text-[12px] font-medium text-gray-800 flex items-center gap-1.5">
                                     <i class="fas fa-check-circle text-primary text-xs"></i>
                                     <span>{{ __('Selected Skills') }}</span>
                                     <span class="px-1.5 py-0.2 rounded-full bg-primary text-white text-[11px] font-semibold" x-text="selectedSkills.length"></span>
@@ -308,7 +308,7 @@
                             </div>
                             <div class="flex flex-wrap gap-1.5">
                                 <template x-for="skill in selectedSkills" :key="skill">
-                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white border border-orange-200 text-orange-950 text-xs font-semibold shadow-2xs">
+                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white border border-orange-200 text-gray-800 text-xs font-semibold shadow-2xs">
                                         <span x-text="skill"></span>
                                         <button type="button"
                                                 @click="selectedSkills = selectedSkills.filter(s => s !== skill)"
@@ -420,7 +420,7 @@
                     <div class="rounded-2xl border border-dashed border-gray-200 bg-gray-50/80 p-4 flex flex-col gap-1.5 opacity-60 cursor-not-allowed select-none relative">
                         <div class="flex items-center justify-between">
                             <i class="fas fa-cloud-arrow-up text-gray-400 text-lg"></i>
-                            <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200 flex items-center gap-1">
+                            <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-amber-50 text-gray-700 border border-amber-200 flex items-center gap-1">
                                 <i class="fas fa-lock text-[9px]"></i>
                                 {{ __('Company account required') }}
                             </span>
@@ -464,7 +464,7 @@
                     <div class="rounded-2xl border border-dashed border-gray-200 bg-gray-50/80 p-4 flex flex-col gap-1.5 opacity-60 cursor-not-allowed select-none relative">
                         <div class="flex items-center justify-between">
                             <i class="fas fa-layer-group text-gray-400 text-lg"></i>
-                            <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200 flex items-center gap-1">
+                            <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-amber-50 text-gray-700 border border-amber-200 flex items-center gap-1">
                                 <i class="fas fa-lock text-[9px]"></i>
                                 {{ __('Company account required') }}
                             </span>
@@ -476,7 +476,7 @@
                 </div>
 
                 @if(auth()->check() && auth()->user()->isUser())
-                <div class="p-3.5 rounded-xl bg-orange-50/70 border border-orange-100 text-orange-900 text-xs flex items-center gap-2.5">
+                <div class="p-3.5 rounded-xl bg-orange-50/70 border border-orange-100 text-gray-800 text-xs flex items-center gap-2.5">
                     <i class="fas fa-info-circle text-orange-500 text-sm shrink-0"></i>
                     <span>{{ __('On vacancies posted with a personal user account, applications are accepted only by email.') }}</span>
                 </div>

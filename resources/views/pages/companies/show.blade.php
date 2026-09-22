@@ -72,7 +72,7 @@
                 <div class="shrink-0">
                     <div class="px-2.5 sm:px-5 py-2 rounded-xl bg-orange-50/80 border border-orange-100 text-center min-w-[72px] sm:min-w-[120px] shadow-2xs">
                         <span class="text-lg sm:text-2xl font-semibold text-primary font-mono block leading-none">{{ $company->vacancies->count() }}</span>
-                        <span class="text-[10px] sm:text-[12px] font-medium text-orange-950 block mt-1 whitespace-nowrap">{{ __('Active Vacancy') }}</span>
+                        <span class="text-[10px] sm:text-[12px] font-medium text-gray-700 block mt-1 whitespace-nowrap">{{ __('Active Vacancy') }}</span>
                     </div>
                 </div>
 

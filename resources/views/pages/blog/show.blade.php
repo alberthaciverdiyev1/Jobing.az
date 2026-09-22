@@ -30,7 +30,7 @@
         <!-- Meta -->
         <div class="flex flex-wrap items-center gap-3 text-xs text-gray-400 mb-4">
             @if($blog->category)
-            <span class="px-2.5 py-1 bg-orange-50 text-orange-700 font-semibold rounded-full border border-orange-100">{{ $blog->category }}</span>
+            <span class="px-2.5 py-1 bg-orange-50 text-gray-700 font-semibold rounded-full border border-orange-100">{{ $blog->category }}</span>
             @endif
             <span>{{ $blog->formatted_date }}</span>
             <span>•</span>

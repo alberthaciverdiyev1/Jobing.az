@@ -54,7 +54,7 @@
                          class="absolute right-0 mt-2 w-44 rounded-xl bg-white border border-gray-100 shadow-xl py-1.5 z-50">
                         @foreach($locales as $code => $data)
                         <a href="{{ route('lang.switch', $code) }}"
-                           class="flex items-center justify-between px-3.5 py-2 text-sm font-semibold {{ $currentLocale === $code ? 'bg-orange-50 text-orange-700 font-semibold' : 'text-gray-700 hover:bg-gray-50' }} transition">
+                           class="flex items-center justify-between px-3.5 py-2 text-sm font-semibold {{ $currentLocale === $code ? 'bg-orange-50 text-gray-800 font-semibold' : 'text-gray-700 hover:bg-gray-50' }} transition">
                             <span class="flex items-center gap-2">
                                 <span>{{ $data['name'] }}</span>
                             </span>
@@ -100,7 +100,7 @@
                                 <span>{{ __('My Notifications') }}</span>
                             </h4>
                             @if($unreadCount > 0)
-                            <span class="px-2 py-0.5 rounded-full bg-orange-50 text-orange-700 text-[11px] font-semibold">
+                            <span class="px-2 py-0.5 rounded-full bg-orange-50 text-gray-700 text-[11px] font-semibold">
                                 {{ $unreadCount }} {{ __('new') }}
                             </span>
                             @endif

@@ -5,12 +5,12 @@
 @if(!empty($activeSkills))
 <div class="bg-orange-50/70 border border-orange-100 rounded-xl p-3.5 mb-5 flex items-center justify-between gap-3">
     <div>
-        <span class="text-xs text-orange-950 font-medium block mb-1">{{ __('Selected skills:') }}</span>
+        <span class="text-xs text-gray-700 font-medium block mb-1">{{ __('Selected skills:') }}</span>
         <div class="flex flex-wrap gap-1.5">
             @foreach($activeSkills as $ask)
-            <span class="text-xs font-semibold text-orange-900 bg-white/80 px-2 py-0.5 rounded border border-orange-200/60 inline-flex items-center gap-1.5">
+            <span class="text-xs font-semibold text-gray-800 bg-white/80 px-2 py-0.5 rounded border border-orange-200/60 inline-flex items-center gap-1.5">
                 <span>{{ $ask }}</span>
-                <button type="button" @click="toggleSkill('{{ addslashes($ask) }}')" class="text-orange-400 hover:text-orange-700 cursor-pointer text-[11px]">✕</button>
+                <button type="button" @click="toggleSkill('{{ addslashes($ask) }}')" class="text-gray-400 hover:text-gray-700 cursor-pointer text-[11px]">✕</button>
             </span>
             @endforeach
         </div>

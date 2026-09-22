@@ -39,7 +39,7 @@
                 </div>
                 @foreach($locales as $lCode => $lData)
                     <a href="{{ route('lang.switch', $lCode) }}"
-                       class="flex items-center justify-between px-3 py-2 text-sm transition {{ $currentLocale === $lCode ? 'bg-orange-50 text-orange-600 font-semibold' : 'text-gray-700 hover:bg-gray-50' }}">
+                       class="flex items-center justify-between px-3 py-2 text-sm transition {{ $currentLocale === $lCode ? 'bg-orange-50 text-gray-800 font-semibold' : 'text-gray-700 hover:bg-gray-50' }}">
                         <div class="flex items-center gap-2.5">
                             <span>{{ $lData['name'] }}</span>
                         </div>

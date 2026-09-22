@@ -97,7 +97,7 @@
                 </h2>
             </div>
             <a href="{{ route('jobs.index', ['sort' => 'featured']) }}"
-               class="inline-flex items-center gap-1.5 text-xs font-semibold text-amber-700 hover:text-amber-900 transition-colors self-start sm:self-auto group">
+               class="inline-flex items-center gap-1.5 text-xs font-semibold text-gray-700 hover:text-gray-900 transition-colors self-start sm:self-auto group">
                 <span>{{ __('All premium vacancies') }}</span>
                 <i class="fas fa-arrow-right text-[11px] group-hover:translate-x-0.5 transition-transform"></i>
             </a>

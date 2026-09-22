@@ -385,7 +385,7 @@
                             $sLevel = is_array($sk) ? ($sk['level'] ?? '') : null;
                         @endphp
                         @if($sName)
-                        <div class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-orange-50/70 border border-orange-100 text-xs font-semibold text-orange-950">
+                        <div class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-orange-50/70 border border-orange-100 text-xs font-semibold text-gray-800">
                             <span>{{ $sName }}</span>
                             @if($sLevel)
                             <span class="text-[11px] text-primary font-normal">({{ $sLevel }})</span>

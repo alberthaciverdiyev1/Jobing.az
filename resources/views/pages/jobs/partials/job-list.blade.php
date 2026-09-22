@@ -2,10 +2,10 @@
 @if(!empty($selectedCategories) && $selectedCategories->isNotEmpty())
 <div class="bg-orange-50/70 border border-orange-100 rounded-xl p-4 mb-4 flex items-center justify-between gap-3">
     <div>
-        <span class="text-xs text-orange-950 font-medium block mb-1.5">{{ __('Categories:') }}</span>
+        <span class="text-xs text-gray-700 font-medium block mb-1.5">{{ __('Categories:') }}</span>
         <div class="flex flex-wrap gap-1.5">
             @foreach($selectedCategories as $sc)
-            <span class="text-xs font-semibold text-orange-900 bg-white/70 px-2 py-0.5 rounded border border-orange-100">{{ $sc->name }}</span>
+            <span class="text-xs font-semibold text-gray-800 bg-white/70 px-2 py-0.5 rounded border border-orange-100">{{ $sc->name }}</span>
             @endforeach
         </div>
     </div>
