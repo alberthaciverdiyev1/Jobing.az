@@ -139,75 +139,28 @@ window.__RESUMES_CONFIG__ = {
                             </div>
                         </div>
 
-                        <!-- Category Selection (Dynamically switches skills below) -->
-                        <div class="pt-3 border-t border-gray-100">
-                            <div class="flex items-center justify-between mb-2">
-                                <h4 class="text-xs font-medium text-gray-800">{{ __('Category') }}</h4>
-                                <button type="button"
-                                        x-show="category !== ''"
-                                        x-cloak
-                                        @click="selectCategory('')"
-                                        class="text-[11px] text-primary font-semibold hover:underline cursor-pointer">
-                                    {{ __('All categories') }}
-                                </button>
-                            </div>
-
-                            <div class="space-y-1 text-xs">
-                                <button type="button"
-                                        @click="selectCategory('')"
-                                        class="w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg transition text-left cursor-pointer"
-                                        :class="category === '' ? 'bg-orange-50 text-primary font-semibold border border-orange-200 shadow-2xs' : 'text-gray-600 hover:bg-gray-50 border border-transparent'">
-                                    <span class="flex items-center gap-2">
-                                        <span>{{ __('All Fields') }}</span>
-                                    </span>
-                                </button>
-
-                                @foreach($categories as $cat)
-                                <button type="button"
-                                        @click="selectCategory('{{ $cat->slug }}')"
-                                        class="w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg transition text-left cursor-pointer"
-                                        :class="isCategoryActive('{{ $cat->slug }}') ? 'bg-orange-50 text-primary font-semibold border border-orange-200 shadow-2xs' : 'text-gray-600 hover:bg-gray-50 border border-transparent'">
-                                    <span class="flex items-center gap-2">
-                                        <span class="truncate">{{ $cat->name }}</span>
-                                    </span>
-                                    <span class="text-[11px] text-gray-400 font-mono"
-                                          x-show="getCategoryCount('{{ $cat->slug }}', {{ $categoryCounts[$cat->slug] ?? 0 }}) > 0"
-                                          x-text="'(' + getCategoryCount('{{ $cat->slug }}', {{ $categoryCounts[$cat->slug] ?? 0 }}) + ')'">
-                                        ({{ $categoryCounts[$cat->slug] ?? 0 }})
-                                    </span>
-                                </button>
-                                @endforeach
-                            </div>
-                        </div>
-
                         <!-- Skills Filter (Dynamically changes based on selected category) -->
                         <div class="pt-3 border-t border-gray-100">
                             <div class="flex items-center justify-between mb-2">
-                                <h4 class="text-xs font-medium text-gray-800">{{ __('Skills') }}</h4>
-                                <span class="text-[11px] text-gray-400 font-medium" x-text="filteredSkills.length + ' {{ __('skill') }}'"></span>
+                                <h4 class="text-xs font-semibold text-gray-800">{{ __('Skills (Tags)') }}</h4>
+                                <button type="button" x-show="skills.length" x-cloak @click="clearSkills()"
+                                        class="text-[11px] text-primary hover:underline font-medium cursor-pointer">
+                                    {{ __('Clear skills') }}
+                                </button>
                             </div>
 
-                            <!-- Skills list -->
-                            <div class="space-y-1 text-xs max-h-60 overflow-y-auto pr-1">
+                            <!-- Skills Tags -->
+                            <div class="flex flex-wrap gap-1.5 text-xs max-h-60 overflow-y-auto p-2 bg-gray-50/70 rounded-xl border border-gray-100">
                                 <template x-for="sk in filteredSkills" :key="sk.name">
-                                    <label class="w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg transition text-left cursor-pointer select-none"
-                                           :class="isSkillSelected(sk.name) ? 'bg-orange-50 text-primary font-semibold' : 'text-gray-600 hover:bg-gray-50'">
-                                        <input type="checkbox"
-                                               :value="sk.name"
-                                               :checked="isSkillSelected(sk.name)"
-                                               @change="toggleSkill(sk.name)"
-                                               class="sr-only">
-                                        <span class="flex items-center gap-2">
-                                            <span class="w-3.5 h-3.5 rounded border flex items-center justify-center text-[9px]"
-                                                  :class="isSkillSelected(sk.name) ? 'bg-primary border-primary text-white' : 'border-gray-300'">
-                                                <i class="fas fa-check" x-show="isSkillSelected(sk.name)"></i>
-                                            </span>
-                                            <span x-text="sk.name"></span>
-                                        </span>
-                                    </label>
+                                    <button type="button" @click="toggleSkill(sk.name)"
+                                            class="px-2.5 py-1.5 rounded-lg text-xs font-medium border transition cursor-pointer inline-flex items-center gap-1.5 select-none"
+                                            :class="isSkillSelected(sk.name) ? 'bg-primary border-primary text-white font-semibold' : 'bg-white hover:bg-gray-100 text-gray-700 border-gray-200'">
+                                        <span x-text="sk.name"></span>
+                                        <i class="fas fa-check text-[10px]" x-show="isSkillSelected(sk.name)"></i>
+                                    </button>
                                 </template>
 
-                                <div x-show="filteredSkills.length === 0" x-cloak class="py-3 text-center text-xs text-gray-400">
+                                <div x-show="filteredSkills.length === 0" x-cloak class="w-full py-3 text-center text-xs text-gray-400">
                                     {{ __('No skills found for this category') }}
                                 </div>
                             </div>
