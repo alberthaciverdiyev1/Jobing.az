@@ -11,9 +11,11 @@ use App\Modules\JobAttribute\Models\JobType;
 use App\Modules\JobAttribute\Models\Skill;
 use App\Modules\JobAttribute\Models\WorkplaceType;
 use App\Modules\Vacancy\Models\Vacancy;
+use App\Modules\Vacancy\Models\ScrapedVacancy;
 use App\Modules\Vacancy\Support\ResumeSkillMatcher;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Builder;
 
 class VacancyService
 {
@@ -153,7 +155,81 @@ class VacancyService
             $query->orderBy('is_featured', 'desc')->orderByRaw('vacancies.updated_at DESC');
         }
 
-        $jobs = $query->paginate($perPage)->withQueryString();
+        $scrapedQuery = ScrapedVacancy::with(['category', 'city', 'jobType', 'workplaceType', 'experienceLevel'])->active();
+
+        if (!empty($filters['q'])) {
+            $search = $filters['q'];
+            $scrapedQuery->where(function ($q) use ($search) {
+                $q->where('title', 'ilike', "%{$search}%")
+                    ->orWhere('company_name', 'ilike', "%{$search}%")
+                    ->orWhereHas('city', fn ($cityQuery) => $cityQuery->where('slug', 'ilike', "%{$search}%"));
+            });
+        }
+        if (!empty($selectedCategories)) {
+            $categoryIds = $resolveCategoryIds($selectedCategories);
+            $scrapedQuery->whereIn('category_id', $categoryIds ?: [-1]);
+        }
+        if (!empty($selectedWorkplaces)) {
+            $scrapedQuery->whereHas('workplaceType', fn ($q) => $q->whereIn('slug', $selectedWorkplaces));
+        }
+        if (!empty($selectedTypes)) {
+            $scrapedQuery->whereHas('jobType', fn ($q) => $q->whereIn('slug', $selectedTypes));
+        }
+        if (!empty($selectedExperiences)) {
+            $scrapedQuery->whereHas('experienceLevel', fn ($q) => $q->whereIn('slug', $selectedExperiences));
+        }
+        if (!empty($selectedCities)) {
+            $scrapedQuery->whereHas('city', fn ($q) => $q->whereIn('slug', $selectedCities));
+        }
+        if (!empty($selectedSkills)) {
+            $scrapedQuery->where(function ($q) use ($selectedSkills) {
+                foreach ($selectedSkills as $skill) {
+                    $q->orWhereJsonContains('skills', $skill);
+                }
+            });
+        }
+        if (!empty($filters['min_salary'])) {
+            $minSalary = (float) $filters['min_salary'];
+            $scrapedQuery->where(fn ($q) => $q->where('salary_max', '>=', $minSalary)->orWhere('salary_min', '>=', $minSalary));
+        }
+        if (!empty($filters['max_salary'])) {
+            $maxSalary = (float) $filters['max_salary'];
+            $scrapedQuery->where(function ($q) use ($maxSalary) {
+                $q->where('salary_min', '<=', $maxSalary)
+                    ->orWhere(fn ($sub) => $sub->whereNull('salary_min')->where('salary_max', '<=', $maxSalary));
+            });
+        }
+
+        $this->applyListingSort($scrapedQuery, $sort, 'scraped_vacancies');
+
+        // First exhaust native vacancies, then fill the page with scraped items.
+        // This keeps platform listings ahead of external listings on every query.
+        $page = LengthAwarePaginator::resolveCurrentPage();
+        $offset = ($page - 1) * $perPage;
+        $nativeTotal = (clone $query)->reorder()->count();
+        $scrapedTotal = (clone $scrapedQuery)->reorder()->count();
+        $items = collect();
+
+        if ($offset < $nativeTotal) {
+            $nativeItems = (clone $query)->skip($offset)->take($perPage)->get();
+            $items = $items->concat($nativeItems);
+            $scrapedOffset = 0;
+        } else {
+            $scrapedOffset = $offset - $nativeTotal;
+        }
+
+        $remaining = $perPage - $items->count();
+        if ($remaining > 0) {
+            $items = $items->concat((clone $scrapedQuery)->skip($scrapedOffset)->take($remaining)->get());
+        }
+
+        $jobs = new LengthAwarePaginator(
+            $items,
+            $nativeTotal + $scrapedTotal,
+            $perPage,
+            $page,
+            ['path' => request()->url(), 'query' => request()->query()]
+        );
 
         $mainResume = null;
         if (auth()->check() && auth()->user()->isUser()) {
@@ -164,7 +240,7 @@ class VacancyService
         }
 
         if ($mainResume?->skillRecords->isNotEmpty()) {
-            $jobs->getCollection()->each(function (Vacancy $job) use ($mainResume): void {
+            $jobs->getCollection()->each(function ($job) use ($mainResume): void {
                 $match = ResumeSkillMatcher::compare($mainResume->skillRecords, $job->skills);
                 if ($match !== null) {
                     $job->setAttribute('match_percentage', $match['percentage']);
@@ -520,6 +596,29 @@ class VacancyService
             ->map(fn ($id) => (int) $id)
             ->values()
             ->all();
+    }
+
+    private function applyListingSort(Builder $query, string $sort, string $table): void
+    {
+        if ($sort === 'oldest') {
+            $query->orderBy('is_featured', 'desc')->orderBy("{$table}.updated_at");
+        } elseif ($sort === 'salary_desc' || $sort === 'salary_high') {
+            $query->orderBy('is_featured', 'desc')->orderByRaw('COALESCE(salary_max, salary_min) DESC NULLS LAST')->orderByDesc("{$table}.updated_at");
+        } elseif ($sort === 'salary_asc') {
+            $query->orderBy('is_featured', 'desc')->orderByRaw('COALESCE(salary_min, salary_max) ASC NULLS LAST')->orderByDesc("{$table}.updated_at");
+        } elseif ($sort === 'views') {
+            $query->orderBy('is_featured', 'desc')->orderByDesc('views_count')->orderByDesc("{$table}.updated_at");
+        } elseif ($sort === 'deadline') {
+            $query->orderBy('is_featured', 'desc')->orderByRaw('deadline ASC NULLS LAST')->orderByDesc("{$table}.updated_at");
+        } elseif ($sort === 'featured') {
+            $query->orderByDesc('is_featured')->orderByDesc("{$table}.updated_at");
+        } elseif ($sort === 'title_asc' || $sort === 'alphabetical') {
+            $query->orderBy('title');
+        } elseif ($sort === 'title_desc') {
+            $query->orderByDesc('title');
+        } else {
+            $query->orderByDesc('is_featured')->orderByDesc("{$table}.updated_at");
+        }
     }
 
     /**
