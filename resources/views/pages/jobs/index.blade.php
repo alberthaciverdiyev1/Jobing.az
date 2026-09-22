@@ -86,10 +86,10 @@ window.__JOBS_CONFIG__ = {
             </div>
 
             <!-- White Search & Filter Card -->
-            <div class="max-w-5xl mx-auto bg-white rounded-2xl md:rounded-3xl shadow-sm border border-gray-200/90 p-3 sm:p-4 text-left relative z-20">
+            <div class="max-w-5xl mx-auto bg-white/95 backdrop-blur-sm rounded-2xl md:rounded-3xl shadow-[0_18px_45px_-28px_rgba(15,23,42,0.45)] border border-orange-100 p-3.5 sm:p-5 text-left relative z-20">
 
                 <!-- Row 1: Search Keyword, City Selector, Action Button -->
-                <div class="flex flex-col md:flex-row items-stretch md:items-center gap-2.5">
+                <div class="grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_14rem_auto] lg:grid-cols-[minmax(0,1fr)_16rem_auto] items-stretch gap-2.5">
 
                     <!-- Search Input -->
                     <div class="relative flex-1">
@@ -99,7 +99,7 @@ window.__JOBS_CONFIG__ = {
                                @input.debounce.400ms="applyFilters()"
                                @keydown.enter.prevent="applyFilters()"
                                placeholder="{{ __('Profession, role or company') }}..."
-                               class="w-full pl-11 pr-10 py-3 bg-gray-50/70 hover:bg-white focus:bg-white border border-gray-200 rounded-xl text-sm text-gray-800 placeholder-gray-400 focus:outline-hidden focus:border-primary focus:ring-1 focus:ring-primary transition">
+                               class="w-full h-12 pl-11 pr-10 bg-gray-50/70 hover:bg-white focus:bg-white border border-gray-200 rounded-xl text-sm text-gray-800 placeholder-gray-400 focus:outline-hidden focus:border-primary focus:ring-2 focus:ring-orange-100 transition">
                         <button type="button"
                                 x-show="q"
                                 x-cloak
@@ -110,10 +110,10 @@ window.__JOBS_CONFIG__ = {
                     </div>
 
                     <!-- City Selector -->
-                    <div class="relative w-full md:w-56 lg:w-64" :class="cityOpen ? 'z-50' : 'z-auto'" x-data="{ cityOpen: false }" @click.outside="cityOpen = false">
+                    <div class="relative w-full" :class="cityOpen ? 'z-50' : 'z-auto'" x-data="{ cityOpen: false }" @click.outside="cityOpen = false">
                         <button type="button"
                                 @click="cityOpen = !cityOpen"
-                                class="w-full flex items-center justify-between pl-10 pr-3.5 py-3 bg-gray-50/70 hover:bg-white border border-gray-200 rounded-xl text-sm transition cursor-pointer text-left focus:outline-hidden focus:border-primary focus:ring-1 focus:ring-primary">
+                                class="w-full h-12 flex items-center justify-between pl-10 pr-3.5 bg-gray-50/70 hover:bg-white border border-gray-200 rounded-xl text-sm transition cursor-pointer text-left focus:outline-hidden focus:border-primary focus:ring-2 focus:ring-orange-100">
                             <i class="fas fa-map-marker-alt absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm pointer-events-none"></i>
                             <span class="truncate" :class="city.length ? 'text-gray-900 font-medium' : 'text-gray-400'"
                                   x-text="selectedCityLabel || '{{ __('City (Baku...)') }}'"></span>
@@ -156,7 +156,7 @@ window.__JOBS_CONFIG__ = {
                     <!-- Search Button -->
                     <button type="button"
                             @click="applyFilters()"
-                            class="bg-primary hover:bg-primary-dark text-white font-semibold px-7 py-3 rounded-xl transition-colors flex items-center justify-center gap-2 text-sm shadow-xs cursor-pointer whitespace-nowrap">
+                            class="h-12 bg-primary hover:bg-primary-dark text-white font-semibold px-7 rounded-xl transition-all flex items-center justify-center gap-2 text-sm shadow-sm hover:shadow-md active:scale-[0.98] cursor-pointer whitespace-nowrap">
                         <i class="fas fa-search text-xs"></i>
                         <span>{{ __('Search') }}</span>
                     </button>
@@ -164,7 +164,7 @@ window.__JOBS_CONFIG__ = {
                 </div>
 
                 <!-- Row 2: Filter Pills & Reset Button -->
-                <div class="flex flex-wrap xl:flex-nowrap items-center gap-2 xl:gap-1.5 pt-3 mt-3 border-t border-gray-100 relative" :class="activeDropdown ? 'z-40' : 'z-10'">
+                <div class="flex flex-wrap xl:flex-nowrap items-center gap-2 xl:gap-1.5 p-2.5 mt-3 rounded-xl bg-slate-50/80 border border-slate-100 relative" :class="activeDropdown ? 'z-40' : 'z-10'">
 
                     <!-- 1. Category Filter Dropdown -->
                     <div class="relative" :class="activeDropdown === 'category' ? 'z-50' : 'z-auto'" @click.outside="closeDropdown('category')">
