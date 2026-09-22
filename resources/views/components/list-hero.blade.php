@@ -61,7 +61,7 @@
                        x-model="q"
                        @input.debounce.400ms="applyFilters()"
                        placeholder="{{ $placeholder }}"
-                       class="w-full pl-11 pr-11 lg:pl-14 lg:pr-14 py-3 lg:py-4 bg-white text-gray-900 placeholder-gray-400 border border-gray-200 rounded-xl lg:rounded-2xl text-base lg:text-lg focus:outline-hidden focus:border-primary transition">
+                       class="w-full h-12 lg:h-16 pl-11 pr-11 lg:pl-14 lg:pr-14 bg-white text-gray-900 placeholder-gray-400 border border-gray-200 rounded-xl lg:rounded-2xl text-base lg:text-lg focus:outline-hidden focus:border-primary transition">
                 <button type="button"
                         x-show="q"
                         x-cloak
@@ -71,7 +71,7 @@
                 </button>
             </div>
             <button type="submit"
-                    class="hidden lg:inline-flex bg-primary hover:bg-primary-dark text-white font-semibold px-6 lg:px-10 py-3 lg:py-4 rounded-xl lg:rounded-2xl text-base lg:text-lg transition-colors items-center justify-center whitespace-nowrap cursor-pointer">
+                    class="hidden lg:inline-flex h-16 bg-primary hover:bg-primary-dark text-white font-semibold px-10 rounded-2xl text-lg transition-colors items-center justify-center whitespace-nowrap cursor-pointer">
                 {{ __('Search') }}
             </button>
         </form>
