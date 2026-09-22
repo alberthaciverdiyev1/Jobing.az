@@ -139,6 +139,22 @@ window.__RESUMES_CONFIG__ = {
                             </div>
                         </div>
 
+                        <!-- Category Select -->
+                        <div class="space-y-2">
+                            <label for="resume-modal-category" class="block text-xs font-semibold text-gray-800">
+                                {{ __('Category') }}
+                            </label>
+                            <select id="resume-modal-category"
+                                    x-model="category"
+                                    @change="applyFilters()"
+                                    class="w-full h-11 bg-gray-50 border border-gray-200 rounded-xl px-3 text-sm font-medium text-gray-800 focus:bg-white focus:outline-hidden focus:border-primary cursor-pointer">
+                                <option value="">{{ __('All categories') }}</option>
+                                @foreach($categories as $cat)
+                                    <option value="{{ $cat->slug }}">{{ $cat->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
                         <!-- Skills Filter (Dynamically changes based on selected category) -->
                         <div class="pt-3 border-t border-gray-100">
                             <div class="flex items-center justify-between mb-2">
