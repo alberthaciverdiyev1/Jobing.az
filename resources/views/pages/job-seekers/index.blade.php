@@ -433,49 +433,6 @@ window.__JOB_SEEKERS_CONFIG__ = {
 
             </div>
 
-            <!-- Popular Tags Below Card -->
-            <div class="flex flex-wrap items-center justify-center gap-2 mt-4 text-xs">
-                <span class="flex items-center gap-1.5 text-gray-500 font-medium">
-                    <i class="fas fa-arrow-trend-up text-primary"></i>
-                    <span>{{ __('Popular') }}:</span>
-                </span>
-
-                <button type="button"
-                        @click="setPopularSearch('Frontend')"
-                        :class="q === 'Frontend' ? 'bg-orange-50 border-orange-200 text-primary font-semibold shadow-xs' : 'bg-white border-gray-200 text-gray-700 hover:border-primary hover:text-primary'"
-                        class="px-3 py-1 rounded-full border transition cursor-pointer shadow-2xs">
-                    Frontend
-                </button>
-
-                <button type="button"
-                        @click="setPopularSearch('Mühasib')"
-                        :class="q === 'Mühasib' ? 'bg-orange-50 border-orange-200 text-primary font-semibold shadow-xs' : 'bg-white border-gray-200 text-gray-700 hover:border-primary hover:text-primary'"
-                        class="px-3 py-1 rounded-full border transition cursor-pointer shadow-2xs">
-                    Mühasib
-                </button>
-
-                <button type="button"
-                        @click="setPopularSearch('Qrafik Dizayner')"
-                        :class="q === 'Qrafik Dizayner' ? 'bg-orange-50 border-orange-200 text-primary font-semibold shadow-xs' : 'bg-white border-gray-200 text-gray-700 hover:border-primary hover:text-primary'"
-                        class="px-3 py-1 rounded-full border transition cursor-pointer shadow-2xs">
-                    Qrafik Dizayner
-                </button>
-
-                <button type="button"
-                        @click="setPopularSearch('Satış Meneceri')"
-                        :class="q === 'Satış Meneceri' ? 'bg-orange-50 border-orange-200 text-primary font-semibold shadow-xs' : 'bg-white border-gray-200 text-gray-700 hover:border-primary hover:text-primary'"
-                        class="px-3 py-1 rounded-full border transition cursor-pointer shadow-2xs">
-                    Satış Meneceri
-                </button>
-
-                <button type="button"
-                        @click="togglePopularWorkplace('uzaktan')"
-                        :class="isFilterSelected('workplaceType', 'uzaktan') ? 'bg-orange-100 border-orange-300 text-primary font-semibold shadow-xs' : 'bg-orange-50/80 border-orange-200 text-orange-700 hover:bg-orange-100 hover:border-orange-300'"
-                        class="px-3 py-1 rounded-full border transition cursor-pointer shadow-2xs flex items-center gap-1 font-medium">
-                    <span>{{ __('Remote') }}</span>
-                </button>
-            </div>
-
         </div>
     </section>
 
