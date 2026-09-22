@@ -58,10 +58,10 @@
                         <input type="password" :type="showPw ? 'text' : 'password'" name="password" required
                                placeholder="••••••••"
                                class="w-full pl-10 pr-11 py-3 bg-gray-50/50 hover:bg-white focus:bg-white border border-gray-200 rounded-xl text-xs sm:text-sm focus:ring-1 focus:ring-primary focus:border-primary focus:outline-hidden transition shadow-2xs">
-                        <button type="button" @click="showPw = !showPw" tabindex="-1"
+                        <button type="button" @click="showPw = !showPw"
                                 :aria-label="showPw ? 'Hide password' : 'Show password'"
-                                class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors cursor-pointer">
-                            <i class="fas text-xs" :class="showPw ? 'fa-eye-slash' : 'fa-eye'"></i>
+                                class="absolute right-1.5 top-1/2 -translate-y-1/2 w-9 h-9 inline-flex items-center justify-center rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors cursor-pointer">
+                            <i class="fas text-sm" :class="showPw ? 'fa-eye-slash' : 'fa-eye'"></i>
                         </button>
                     </div>
                 </div>
