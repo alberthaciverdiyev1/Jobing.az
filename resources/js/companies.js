@@ -13,9 +13,6 @@ export default function companiesManager(config = null) {
         filterErrorMessage: config.filterErrorMessage || '',
         q: config.initialQuery || '',
         sort: config.initialSort || 'latest',
-        verified: config.initialVerified || '',
-        hasJobs: config.initialHasJobs || '',
-        location: config.initialLocation || '',
         totalCount: config.initialTotal || 0,
 
         init() {
@@ -24,9 +21,6 @@ export default function companiesManager(config = null) {
                 const params = new URLSearchParams(window.location.search);
                 this.q = params.get('q') || '';
                 this.sort = params.get('sort') || 'latest';
-                this.verified = params.get('verified') || '';
-                this.hasJobs = params.get('has_jobs') || '';
-                this.location = params.get('location') || '';
                 this.fetchCompanies(false);
             });
 
@@ -43,19 +37,13 @@ export default function companiesManager(config = null) {
         get hasActiveFilters() {
             return !!(
                 this.q ||
-                (this.sort && this.sort !== 'latest') ||
-                this.verified ||
-                this.hasJobs ||
-                this.location
+                (this.sort && this.sort !== 'latest')
             );
         },
 
         resetAllFilters() {
             this.q = '';
             this.sort = 'latest';
-            this.verified = '';
-            this.hasJobs = '';
-            this.location = '';
             this.applyFilters();
         },
 
@@ -63,9 +51,6 @@ export default function companiesManager(config = null) {
             const params = new URLSearchParams();
             if (this.q) params.set('q', this.q);
             if (this.sort && this.sort !== 'latest') params.set('sort', this.sort);
-            if (this.verified) params.set('verified', this.verified);
-            if (this.hasJobs) params.set('has_jobs', this.hasJobs);
-            if (this.location) params.set('location', this.location);
 
             const qs = params.toString();
             return qs ? `${baseUrl}?${qs}` : baseUrl;

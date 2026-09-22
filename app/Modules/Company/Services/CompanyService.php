@@ -32,30 +32,17 @@ class CompanyService
             });
         }
 
-        // Verified filter
-        if (!empty($filters['verified']) && ($filters['verified'] === '1' || $filters['verified'] === 'true')) {
-            $query->where('is_verified', true);
-        }
-
-        // Only with active jobs filter
-        if (!empty($filters['has_jobs']) && ($filters['has_jobs'] === '1' || $filters['has_jobs'] === 'true')) {
-            $query->has('vacancies', '>=', 1, 'and', fn ($q) => $q->active());
-        }
-
-        // Location filter
-        if (!empty($filters['location'])) {
-            $loc = trim($filters['location']);
-            $query->whereHas('city', fn ($cq) => $cq->where('slug', 'ilike', "%{$loc}%"));
-        }
-
         // Sorting (Default: created_at desc)
         $sort = $filters['sort'] ?? 'latest';
-        if ($sort === 'popular') {
+        if ($sort === 'active_jobs') {
+            $query->has('vacancies', '>=', 1, 'and', fn ($q) => $q->active())
+                ->orderByDesc('vacancies_count')->latest('created_at');
+        } elseif ($sort === 'verified_only') {
+            $query->where('is_verified', true)->latest('created_at');
+        } elseif ($sort === 'popular') {
             $query->orderByDesc('vacancies_count')->latest('created_at');
         } elseif ($sort === 'alphabetical') {
             $query->orderBy('name', 'asc');
-        } elseif ($sort === 'verified') {
-            $query->orderByDesc('is_verified')->latest('created_at');
         } else {
             $query->latest('created_at');
         }
