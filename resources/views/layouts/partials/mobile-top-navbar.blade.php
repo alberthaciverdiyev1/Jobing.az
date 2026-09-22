@@ -6,7 +6,7 @@
 
 {{-- Mobile Top Navbar: Brand on Left, Language Dropdown & Notifications on Right --}}
 <header class="xl:hidden bg-white border-b border-gray-200/80 sticky top-0 z-30 px-3.5 flex items-center justify-between shadow-2xs select-none"
-        style="height: 60px; min-height: 60px;">
+        style="height: 56px; min-height: 56px;">
     {{-- Left: Brand Logo --}}
     <a href="{{ route('jobs.index') }}" class="shrink-0 flex items-center">
         <img src="{{ asset('images/logo/jobing-wordmark.png') }}" alt="{{ config('app.full_name') }}" class="h-7 sm:h-9 w-auto">
