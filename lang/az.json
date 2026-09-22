@@ -1137,5 +1137,7 @@
     "Verified companies only": "Yalnız təsdiqlənmiş şirkətlər",
     "Companies with active vacancies": "Aktiv vakansiyası olan şirkətlər",
     "Remote": "Uzaqdan",
-    "Filters could not be loaded. Please try again.": "Filtrlər yüklənə bilmədi. Yenidən cəhd edin."
+    "Filters could not be loaded. Please try again.": "Filtrlər yüklənə bilmədi. Yenidən cəhd edin.",
+    ":percent% match": ":percent% uyğunluq",
+    ":matched of :required skills match": ":required bacarıqdan :matched uyğun gəlir"
 }

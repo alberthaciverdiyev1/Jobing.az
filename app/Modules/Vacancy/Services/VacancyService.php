@@ -11,6 +11,7 @@ use App\Modules\JobAttribute\Models\JobType;
 use App\Modules\JobAttribute\Models\Skill;
 use App\Modules\JobAttribute\Models\WorkplaceType;
 use App\Modules\Vacancy\Models\Vacancy;
+use App\Modules\Vacancy\Support\ResumeSkillMatcher;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\UploadedFile;
 
@@ -156,6 +157,25 @@ class VacancyService
         }
 
         $jobs = $query->paginate($perPage)->withQueryString();
+
+        $mainResume = null;
+        if (auth()->check() && auth()->user()->isUser()) {
+            $mainResume = auth()->user()->resumes()
+                ->with('skillRecords:id,name,slug')
+                ->where('is_default', true)
+                ->first(['id', 'user_id']);
+        }
+
+        if ($mainResume?->skillRecords->isNotEmpty()) {
+            $jobs->getCollection()->each(function (Vacancy $job) use ($mainResume): void {
+                $match = ResumeSkillMatcher::compare($mainResume->skillRecords, $job->skills);
+                if ($match !== null) {
+                    $job->setAttribute('match_percentage', $match['percentage']);
+                    $job->setAttribute('matched_skill_count', $match['matched']);
+                    $job->setAttribute('required_skill_count', $match['required']);
+                }
+            });
+        }
 
         // Count scopes based on currently applied filters.
         // $attributeScope includes the selected category; $categoryCountScope does not

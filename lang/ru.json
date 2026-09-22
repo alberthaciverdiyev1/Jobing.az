@@ -1135,5 +1135,7 @@
     "Remote": "Удалённо",
     "Select a category above to view and filter by relevant skills.": "Выберите категорию выше, чтобы просматривать и фильтровать соответствующие навыки.",
     "Skills (Tags)": "Навыки (теги)",
-    "Verified companies only": "Только подтверждённые компании"
+    "Verified companies only": "Только подтверждённые компании",
+    ":percent% match": "Совпадение :percent%",
+    ":matched of :required skills match": "Совпадает :matched из :required навыков"
 }

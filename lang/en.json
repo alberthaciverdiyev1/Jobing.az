@@ -1135,5 +1135,7 @@
     "Remote": "Remote",
     "Select a category above to view and filter by relevant skills.": "Select a category above to view and filter by relevant skills.",
     "Skills (Tags)": "Skills (Tags)",
-    "Verified companies only": "Verified companies only"
+    "Verified companies only": "Verified companies only",
+    ":percent% match": ":percent% match",
+    ":matched of :required skills match": ":matched of :required skills match"
 }

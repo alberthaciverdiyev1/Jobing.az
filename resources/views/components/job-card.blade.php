@@ -29,6 +29,15 @@
                         {{ $job->title }}
                     </a>
                 </h3>
+                @if($job->match_percentage !== null)
+                <div class="flex items-center gap-2 pt-0.5">
+                    <span class="inline-flex items-center gap-1.5 rounded-full px-2 py-1 text-[11px] font-semibold {{ $job->match_percentage >= 70 ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : ($job->match_percentage >= 40 ? 'bg-amber-50 text-amber-700 border border-amber-200' : 'bg-slate-50 text-slate-600 border border-slate-200') }}"
+                          title="{{ __(':matched of :required skills match', ['matched' => $job->matched_skill_count, 'required' => $job->required_skill_count]) }}">
+                        <i class="fas fa-bullseye text-[10px]"></i>
+                        <span>{{ __(':percent% match', ['percent' => $job->match_percentage]) }}</span>
+                    </span>
+                </div>
+                @endif
                 <div class="flex items-center justify-between gap-2 text-xs text-gray-500 pt-0.5">
                     <div class="flex flex-wrap items-center gap-2">
                         @if($job->workplace_type_name)

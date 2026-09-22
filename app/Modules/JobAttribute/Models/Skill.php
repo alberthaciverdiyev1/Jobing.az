@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Modules\Core\Traits\ClearsCache;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Skill extends Model
 {
@@ -37,6 +38,13 @@ class Skill extends Model
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class, 'category_id');
+    }
+
+    public function resumes(): BelongsToMany
+    {
+        return $this->belongsToMany(\App\Modules\Resume\Models\Resume::class, 'resume_skill')
+            ->withPivot('level')
+            ->withTimestamps();
     }
 
     public function scopeActive(Builder $query): Builder

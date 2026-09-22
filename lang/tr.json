@@ -1135,5 +1135,7 @@
     "Remote": "Uzaktan",
     "Select a category above to view and filter by relevant skills.": "İlgili becerileri görüntülemek ve filtrelemek için yukarıdan bir kategori seçin.",
     "Skills (Tags)": "Beceriler (Etiketler)",
-    "Verified companies only": "Yalnızca doğrulanmış şirketler"
+    "Verified companies only": "Yalnızca doğrulanmış şirketler",
+    ":percent% match": ":percent% eşleşme",
+    ":matched of :required skills match": ":required beceriden :matched tanesi eşleşiyor"
 }

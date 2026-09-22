@@ -25,7 +25,9 @@ class ResumeController extends Controller
                     ->orWhere('last_name', 'ilike', "%{$search}%")
                     ->orWhere('summary', 'ilike', "%{$search}%")
                     ->orWhere('location', 'ilike', "%{$search}%")
-                    ->orWhereRaw("CAST(skills AS text) ILIKE ?", ["%{$search}%"])
+                    ->orWhereHas('skillRecords', fn ($skillQuery) => $skillQuery
+                        ->whereRaw('CAST(skills.name AS text) ILIKE ?', ["%{$search}%"])
+                        ->orWhere('skills.slug', 'ilike', "%{$search}%"))
                     ->orWhereRaw("CAST(work_experiences AS text) ILIKE ?", ["%{$search}%"]);
             });
         }
@@ -39,27 +41,27 @@ class ResumeController extends Controller
                 ->first();
             if ($categoryModel) {
                 $allSkills = $categoryModel->skills->merge($categoryModel->children->flatMap->skills);
-                $catSkillNames = $allSkills->map(function ($s) {
-                    return is_array($s->name) ? ($s->name['az'] ?? reset($s->name)) : $s->name;
-                })->filter()->unique()->values()->all();
+                $catSkillIds = $allSkills->pluck('id')->unique()->values()->all();
 
-                if (!empty($catSkillNames)) {
-                    $query->where(function ($q) use ($catSkillNames) {
-                        foreach ($catSkillNames as $s) {
-                            $q->orWhereJsonContains('skills', $s);
-                        }
-                    });
+                if (!empty($catSkillIds)) {
+                    $query->whereHas('skillRecords', fn ($q) => $q->whereIn('skills.id', $catSkillIds));
                 }
             }
         }
 
         // Skill filter
         if (!empty($selectedSkills)) {
-            $query->where(function ($q) use ($selectedSkills) {
-                foreach ($selectedSkills as $s) {
-                    $q->orWhereJsonContains('skills', $s);
-                }
-            });
+            $selectedNormalized = collect($selectedSkills)->map(fn ($skill) => mb_strtolower(trim($skill)))->all();
+            $selectedSkillIds = Skill::cachedActive()->filter(function (Skill $skill) use ($selectedNormalized) {
+                $rawName = $skill->getRawOriginal('name');
+                $translations = is_string($rawName) ? (json_decode($rawName, true) ?: []) : (array) $rawName;
+                $names = array_values($translations);
+                return collect([...$names, $skill->slug])
+                    ->filter(fn ($name) => is_string($name))
+                    ->contains(fn ($name) => in_array(mb_strtolower(trim($name)), $selectedNormalized, true));
+            })->pluck('id');
+
+            $query->whereHas('skillRecords', fn ($q) => $q->whereIn('skills.id', $selectedSkillIds));
         }
 
         // City filter
@@ -99,7 +101,7 @@ class ResumeController extends Controller
 
         // Build array of skills and resume count per category
         $categorySkillsMap = [];
-        $categorySkillNames = [];
+        $categorySkillIds = [];
         foreach ($categories as $cat) {
             $catSkills = [];
             $allSkills = $cat->skills->merge($cat->children->flatMap->skills);
@@ -113,31 +115,23 @@ class ResumeController extends Controller
             }
             $categorySkillsMap[$cat->slug] = $catSkills;
 
-            $allSkillNames = $allSkills->map(function ($s) {
-                return is_array($s->name) ? ($s->name['az'] ?? reset($s->name)) : $s->name;
-            })->filter()->unique()->values()->all();
-
-            $categorySkillNames[$cat->slug] = $allSkillNames;
+            $categorySkillIds[$cat->slug] = $allSkills->pluck('id')->unique()->values()->all();
         }
 
         $filterSignature = md5(json_encode($request->except(['page', 'category']), JSON_UNESCAPED_UNICODE));
         $categoryResumeCounts = Cache::remember(
             'resumes.category-counts.' . $filterSignature,
             300,
-            function () use ($categorySkillNames, $facetQuery) {
+            function () use ($categorySkillIds, $facetQuery) {
                 $counts = [];
-                foreach ($categorySkillNames as $slug => $allSkillNames) {
-                    if (empty($allSkillNames)) {
+                foreach ($categorySkillIds as $slug => $skillIds) {
+                    if (empty($skillIds)) {
                         $counts[$slug] = 0;
                         continue;
                     }
 
                     $counts[$slug] = (clone $facetQuery)
-                        ->where(function ($query) use ($allSkillNames) {
-                            foreach ($allSkillNames as $skillName) {
-                                $query->orWhereJsonContains('skills', $skillName);
-                            }
-                        })
+                        ->whereHas('skillRecords', fn ($query) => $query->whereIn('skills.id', $skillIds))
                         ->count();
                 }
 
