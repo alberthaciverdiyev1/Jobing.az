@@ -64,7 +64,7 @@ window.__JOBS_CONFIG__ = {
     </div>
 
     <!-- Hero & Main Filter Section -->
-    <section class="relative z-30 bg-gradient-to-b from-orange-50/70 via-orange-50/40 to-gray-50 border-b border-gray-200/80 pt-10 pb-12">
+    <section class="relative z-30 bg-gradient-to-b from-orange-50/70 via-orange-50/40 to-gray-50 border-b border-gray-200/80 pt-10 pb-8 md:pb-10">
         <!-- Floating background decorative icons -->
         <div class="absolute inset-0 overflow-hidden pointer-events-none">
             @foreach($heroIcons as [$icon, $x, $y, $size, $rot])
@@ -87,7 +87,7 @@ window.__JOBS_CONFIG__ = {
             </div>
 
             <!-- White Search & Filter Card -->
-            <div class="max-w-5xl mx-auto bg-white/95 backdrop-blur-sm rounded-2xl md:rounded-3xl shadow-[0_18px_45px_-28px_rgba(15,23,42,0.45)] border border-orange-100 p-3.5 sm:p-5 text-left relative z-20">
+            <div class="max-w-5xl mx-auto bg-white/95 backdrop-blur-sm rounded-2xl md:rounded-3xl border border-orange-100 p-3.5 sm:p-5 text-left relative z-20">
 
                 <!-- Row 1: Search Keyword, City Selector, Desktop Action Button -->
                 <div class="grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_14rem_auto] lg:grid-cols-[minmax(0,1fr)_16rem_auto] items-stretch gap-2.5">
@@ -157,7 +157,7 @@ window.__JOBS_CONFIG__ = {
                     <!-- Search Button -->
                     <button type="button"
                             @click="applyFilters()"
-                            class="hidden md:flex h-12 bg-primary hover:bg-primary-dark text-white font-semibold px-7 rounded-xl transition-all items-center justify-center gap-2 text-sm shadow-sm hover:shadow-md active:scale-[0.98] cursor-pointer whitespace-nowrap">
+                            class="hidden md:flex h-12 bg-primary hover:bg-primary-dark text-white font-semibold px-7 rounded-xl transition-all items-center justify-center gap-2 text-sm active:scale-[0.98] cursor-pointer whitespace-nowrap">
                         <i class="fas fa-search text-xs"></i>
                         <span>{{ __('Search') }}</span>
                     </button>
@@ -173,7 +173,7 @@ window.__JOBS_CONFIG__ = {
                         <button type="button"
                                 @click="toggleDropdown('category')"
                                 class="w-full md:w-auto inline-flex items-center justify-between md:justify-start gap-1.5 px-3.5 xl:px-2.5 py-2 rounded-xl border text-xs sm:text-sm font-medium transition cursor-pointer"
-                                :class="selectedParentCategorySlug ? 'bg-orange-50 border-orange-200 text-primary font-semibold shadow-2xs' : 'bg-gray-50/80 border-gray-200/80 text-gray-700 hover:bg-white hover:border-gray-300'">
+                                :class="selectedParentCategorySlug ? 'bg-orange-50 border-orange-200 text-primary font-semibold' : 'bg-gray-50/80 border-gray-200/80 text-gray-700 hover:bg-white hover:border-gray-300'">
                             <span class="hidden md:inline text-gray-400 font-normal">{{ __('Category') }}:</span>
                             <span class="truncate max-w-[140px]" :class="selectedParentCategorySlug ? 'text-primary font-semibold' : 'text-gray-800 font-medium'" x-text="selectedParentCategoryLabel || '{{ __('All') }}'"></span>
                             <i class="fas fa-chevron-down text-[10px] transition-transform ml-0.5" :class="activeDropdown === 'category' ? 'rotate-180 text-primary' : 'text-gray-400'"></i>
@@ -217,7 +217,7 @@ window.__JOBS_CONFIG__ = {
                                 class="w-full md:w-auto inline-flex items-center justify-between md:justify-start gap-1.5 px-3.5 xl:px-2.5 py-2 rounded-xl border text-xs sm:text-sm font-medium transition"
                                 :class="{
                                     'opacity-40 cursor-not-allowed bg-gray-50 border-gray-200 text-gray-400': !availableSubcategories.length,
-                                    'cursor-pointer bg-orange-50 border-orange-200 text-primary font-semibold shadow-2xs': availableSubcategories.length && selectedSubcategorySlugs.length > 0,
+                                    'cursor-pointer bg-orange-50 border-orange-200 text-primary font-semibold': availableSubcategories.length && selectedSubcategorySlugs.length > 0,
                                     'cursor-pointer bg-gray-50/80 border-gray-200/80 text-gray-700 hover:bg-white hover:border-gray-300': availableSubcategories.length && selectedSubcategorySlugs.length === 0
                                 }">
                             <span class="hidden md:inline text-gray-400 font-normal">{{ __('Subcategory') }}:</span>
@@ -266,12 +266,12 @@ window.__JOBS_CONFIG__ = {
 
                     <!-- 3. Workplace Type (İş rejimi) Dropdown -->
                     @if($workplaceTypes->count() > 0)
-                    <div class="relative" :class="activeDropdown === 'workplace' ? 'z-50' : 'z-auto'" @click.outside="closeDropdown('workplace')">
+                    <div class="hidden md:block relative" :class="activeDropdown === 'workplace' ? 'z-50' : 'z-auto'" @click.outside="closeDropdown('workplace')">
                         <span class="block md:hidden text-[11px] font-medium text-gray-500 mb-1.5 px-0.5">{{ __('Workplace') }}</span>
                         <button type="button"
                                 @click="toggleDropdown('workplace')"
                                 class="w-full md:w-auto inline-flex items-center justify-between md:justify-start gap-1.5 px-3.5 xl:px-2.5 py-2 rounded-xl border text-xs sm:text-sm font-medium transition cursor-pointer"
-                                :class="workplace.length > 0 ? 'bg-orange-50 border-orange-200 text-primary font-semibold shadow-2xs' : 'bg-gray-50/80 border-gray-200/80 text-gray-700 hover:bg-white hover:border-gray-300'">
+                                :class="workplace.length > 0 ? 'bg-orange-50 border-orange-200 text-primary font-semibold' : 'bg-gray-50/80 border-gray-200/80 text-gray-700 hover:bg-white hover:border-gray-300'">
                             <span class="hidden md:inline text-gray-400 font-normal">{{ __('Workplace') }}:</span>
                             <span class="truncate max-w-[130px]" :class="workplace.length > 0 ? 'text-primary font-semibold' : 'text-gray-800 font-medium'" x-text="selectedWorkplaceLabel || '{{ __('All') }}'"></span>
                             <i class="fas fa-chevron-down text-[10px] transition-transform" :class="activeDropdown === 'workplace' ? 'rotate-180 text-primary' : 'text-gray-400'"></i>
@@ -314,12 +314,12 @@ window.__JOBS_CONFIG__ = {
 
                     <!-- 4. Experience Level (Təcrübə) Dropdown -->
                     @if($experienceLevels->count() > 0)
-                    <div class="relative" :class="activeDropdown === 'experience' ? 'z-50' : 'z-auto'" @click.outside="closeDropdown('experience')">
+                    <div class="hidden md:block relative" :class="activeDropdown === 'experience' ? 'z-50' : 'z-auto'" @click.outside="closeDropdown('experience')">
                         <span class="block md:hidden text-[11px] font-medium text-gray-500 mb-1.5 px-0.5">{{ __('Experience') }}</span>
                         <button type="button"
                                 @click="toggleDropdown('experience')"
                                 class="w-full md:w-auto inline-flex items-center justify-between md:justify-start gap-1.5 px-3.5 xl:px-2.5 py-2 rounded-xl border text-xs sm:text-sm font-medium transition cursor-pointer"
-                                :class="experience.length > 0 ? 'bg-orange-50 border-orange-200 text-primary font-semibold shadow-2xs' : 'bg-gray-50/80 border-gray-200/80 text-gray-700 hover:bg-white hover:border-gray-300'">
+                                :class="experience.length > 0 ? 'bg-orange-50 border-orange-200 text-primary font-semibold' : 'bg-gray-50/80 border-gray-200/80 text-gray-700 hover:bg-white hover:border-gray-300'">
                             <span class="hidden md:inline text-gray-400 font-normal">{{ __('Experience') }}:</span>
                             <span class="truncate max-w-[130px]" :class="experience.length > 0 ? 'text-primary font-semibold' : 'text-gray-800 font-medium'" x-text="selectedExperienceLabel || '{{ __('All') }}'"></span>
                             <i class="fas fa-chevron-down text-[10px] transition-transform" :class="activeDropdown === 'experience' ? 'rotate-180 text-primary' : 'text-gray-400'"></i>
@@ -366,7 +366,7 @@ window.__JOBS_CONFIG__ = {
                         <button type="button"
                                 @click="toggleDropdown('salary')"
                                 class="w-full md:w-auto inline-flex items-center justify-between md:justify-start gap-1.5 px-3.5 xl:px-2.5 py-2 rounded-xl border text-xs sm:text-sm font-medium transition cursor-pointer"
-                                :class="(min_salary || max_salary) ? 'bg-orange-50 border-orange-200 text-primary font-semibold shadow-2xs' : 'bg-gray-50/80 border-gray-200/80 text-gray-700 hover:bg-white hover:border-gray-300'">
+                                :class="(min_salary || max_salary) ? 'bg-orange-50 border-orange-200 text-primary font-semibold' : 'bg-gray-50/80 border-gray-200/80 text-gray-700 hover:bg-white hover:border-gray-300'">
                             <span class="hidden md:inline text-gray-400 font-normal">{{ __('Salary') }}:</span>
                             <span class="truncate max-w-[140px]" :class="(min_salary || max_salary) ? 'text-primary font-semibold' : 'text-gray-800 font-medium'" x-text="salaryLabel || '{{ __('All') }}'"></span>
                             <i class="fas fa-chevron-down text-[10px] transition-transform" :class="activeDropdown === 'salary' ? 'rotate-180 text-primary' : 'text-gray-400'"></i>
@@ -435,7 +435,7 @@ window.__JOBS_CONFIG__ = {
                         <button type="button"
                                 @click="moreFiltersOpen = true"
                                 class="w-full md:w-auto inline-flex shrink-0 items-center justify-center md:justify-start gap-1.5 px-3.5 xl:px-2.5 py-2 rounded-xl border border-gray-200/80 bg-gray-50/80 text-gray-700 hover:bg-white hover:border-gray-300 text-xs sm:text-sm font-medium whitespace-nowrap transition cursor-pointer"
-                                :class="moreFiltersCount > 0 ? 'bg-orange-50 border-orange-200 text-primary font-semibold shadow-2xs' : ''">
+                                :class="moreFiltersCount > 0 ? 'bg-orange-50 border-orange-200 text-primary font-semibold' : ''">
                             <i class="fas fa-sliders-h text-xs" :class="moreFiltersCount > 0 ? 'text-primary' : 'text-gray-400'"></i>
                             <span>{{ __('More filters') }}</span>
                             <span x-show="moreFiltersCount > 0" x-cloak class="px-1.5 py-0.5 rounded-full bg-primary text-white text-[10px] font-bold leading-none" x-text="moreFiltersCount"></span>
@@ -457,7 +457,7 @@ window.__JOBS_CONFIG__ = {
                 <!-- Mobile Action Button -->
                 <button type="button"
                         @click="applyFilters()"
-                        class="md:hidden mt-3 w-full h-12 bg-primary hover:bg-primary-dark text-white font-semibold px-7 rounded-xl transition-all flex items-center justify-center gap-2 text-sm shadow-sm active:scale-[0.98] cursor-pointer">
+                        class="md:hidden mt-3 w-full h-12 bg-primary hover:bg-primary-dark text-white font-semibold px-7 rounded-xl transition-all flex items-center justify-center gap-2 text-sm active:scale-[0.98] cursor-pointer">
                     <i class="fas fa-search text-xs"></i>
                     <span>{{ __('Search') }}</span>
                 </button>
