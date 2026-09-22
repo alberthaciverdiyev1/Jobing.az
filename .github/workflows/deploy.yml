@@ -45,10 +45,13 @@ jobs:
             export PHP_VER="8.4"
             export PHP_BIN="/usr/bin/php"
             export BRANCH="main"
+            # deploy.sh sağlık kontrolü bu URL'e gider (şema dahil olmalı, yoksa 301 alır).
+            export HEALTH_URL="https://new.jobing.az"
             cd "$APP_DIR"
             bash deploy/deploy.sh
 
       - name: Health check
         run: |
           sleep 3
-          curl -fsS "${{ secrets.HEALTH_URL }}/up" && echo "Sağlık kontrolü OK"
+          # Şema (https://) dahil sabit URL kullanılıyor; aksi halde 301 döner.
+          curl -fsS "https://new.jobing.az/up" && echo "Sağlık kontrolü OK"

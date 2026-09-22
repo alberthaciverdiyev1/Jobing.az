@@ -7,6 +7,9 @@
 #
 set -euo pipefail
 
+# Kök kullanıcı olarak üretilen faylların qrup (www-data) tərəfindən yazıla bilməsi üçün.
+umask 002
+
 APP_DIR="${APP_DIR:-/var/www/jobing}"
 PHP_VER="${PHP_VER:-8.3}"
 BRANCH="${BRANCH:-main}"
@@ -54,6 +57,8 @@ sudo -u "$APP_USER" "$PHP_BIN" artisan optimize
 log "İzinler"
 chown -R "$APP_USER":www-data "$APP_DIR"
 chmod -R ug+rwX "$APP_DIR/storage" "$APP_DIR/bootstrap/cache"
+# setgid: yeni alt qovluqlar www-data qrupunu miras alsın (php-fpm yaza bilsin).
+find "$APP_DIR/storage" "$APP_DIR/bootstrap/cache" -type d -exec chmod g+s {} +
 
 log "PHP-FPM reload (kesintisiz)"
 sudo systemctl reload "php${PHP_VER}-fpm"
@@ -62,8 +67,8 @@ log "Queue worker grace restart"
 sudo -u "$APP_USER" "$PHP_BIN" artisan queue:restart || true
 
 log "Sağlık kontrolü"
-URL="${HEALTH_URL:-http://127.0.0.1}"
-CODE=$(curl -s -o /dev/null -w '%{http_code}' "$URL/up" || echo 000)
+URL="${HEALTH_URL:-https://127.0.0.1}"
+CODE=$(curl -sk -o /dev/null -w '%{http_code}' "$URL/up" || echo 000)
 if [[ "$CODE" != "200" ]]; then
   echo "UYARI: /up sağlık kontrolü başarısız (kod: $CODE)"; exit 1
 fi
