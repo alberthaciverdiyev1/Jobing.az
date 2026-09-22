@@ -18,7 +18,7 @@
         <div class="relative" x-data="{ mobileLangOpen: false }" @click.outside="mobileLangOpen = false">
             <button type="button"
                     @click="mobileLangOpen = !mobileLangOpen"
-                    class="flex items-center gap-1.5 bg-gray-50 hover:bg-gray-100 active:bg-gray-200/70 border border-gray-200/80 rounded-xl px-2.5 py-1.5 transition-all shadow-2xs cursor-pointer select-none">
+                    class="w-9 h-9 flex items-center justify-center gap-1 bg-gray-50 hover:bg-gray-100 active:bg-gray-200/70 border border-gray-200/80 rounded-xl transition-all shadow-2xs cursor-pointer select-none">
                 <span class="text-xs font-medium text-gray-800 leading-none">
                     {{ $activeLocaleInfo['code'] ?? strtoupper($currentLocale) }}
                 </span>
@@ -57,7 +57,7 @@
         {{-- Auth Notifications or Login --}}
         @auth
         <a href="{{ auth()->user()->panelPath() }}"
-           class="relative inline-flex items-center justify-center w-8 h-8 rounded-xl bg-gray-50 border border-gray-200/80 text-gray-600 hover:text-primary transition">
+           class="relative inline-flex items-center justify-center w-9 h-9 rounded-xl bg-gray-50 border border-gray-200/80 text-gray-600 hover:text-primary transition">
             <i class="fa-regular fa-bell text-sm"></i>
             @if($unreadCount > 0)
             <span class="absolute -top-1 -right-1 min-w-[14px] h-3.5 px-0.5 rounded-full bg-rose-500 text-white text-[9px] font-semibold flex items-center justify-center border-2 border-white shadow-2xs">
