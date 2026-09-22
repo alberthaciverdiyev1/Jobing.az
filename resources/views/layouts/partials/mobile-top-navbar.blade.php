@@ -6,6 +6,15 @@
 
 {{-- Mobile Top Navbar: Brand on Left, Language Dropdown & Notifications on Right --}}
 <header class="xl:hidden bg-white border-b border-gray-200/80 sticky top-0 z-[60] px-3.5 flex items-center justify-between shadow-2xs select-none"
+        x-data="{ hiddenByOverlay: false }"
+        x-show="!hiddenByOverlay"
+        @mobile-navbar-visibility.window="hiddenByOverlay = !$event.detail.visible"
+        x-transition:leave="transition ease-in duration-150"
+        x-transition:leave-start="opacity-100 -translate-y-0"
+        x-transition:leave-end="opacity-0 -translate-y-full"
+        x-transition:enter="transition ease-out duration-150"
+        x-transition:enter-start="opacity-0 -translate-y-full"
+        x-transition:enter-end="opacity-100 -translate-y-0"
         style="height: 56px; min-height: 56px;">
     {{-- Left: Brand Logo --}}
     <a href="{{ route('jobs.index') }}" class="shrink-0 flex items-center">

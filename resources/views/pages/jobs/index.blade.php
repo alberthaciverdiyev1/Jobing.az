@@ -511,6 +511,7 @@ window.__JOBS_CONFIG__ = {
     <!-- More Filters Modal -->
     <div x-show="moreFiltersOpen"
          x-cloak
+         @keydown.escape.window="moreFiltersOpen = false"
          class="fixed inset-0 z-50 overflow-y-auto"
          role="dialog"
          aria-modal="true">
