@@ -21,11 +21,11 @@
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
 
             <!-- Profile Header Info -->
-            <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 py-6 {{ $company->banner ? '-mt-12 sm:-mt-14 relative z-10' : '' }}">
+            <div class="flex items-center justify-between gap-3 sm:gap-6 py-4 sm:py-6 {{ $company->banner ? '-mt-12 sm:-mt-14 relative z-10' : '' }}">
 
                 <!-- Left: Logo + Details -->
-                <div class="flex items-start sm:items-center gap-4 sm:gap-5">
-                    <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-slate-900 {{ $company->banner ? 'border-4 border-white shadow-md' : 'border border-gray-200 shadow-2xs' }} flex items-center justify-center font-semibold text-white text-2xl sm:text-3xl shrink-0 overflow-hidden bg-white">
+                <div class="flex items-center gap-3 sm:gap-5 min-w-0">
+                    <div class="w-14 h-14 sm:w-20 sm:h-20 rounded-xl sm:rounded-2xl bg-slate-900 {{ $company->banner ? 'border-4 border-white shadow-md' : 'border border-gray-200 shadow-2xs' }} flex items-center justify-center font-semibold text-white text-xl sm:text-3xl shrink-0 overflow-hidden bg-white">
                         @if($company->logo)
                         <img src="{{ asset('storage/' . $company->logo) }}" alt="{{ $company->name }}" class="w-full h-full object-cover">
                         @else
@@ -35,9 +35,9 @@
                         @endif
                     </div>
 
-                    <div class="space-y-1">
-                        <div class="flex items-center gap-2.5 flex-wrap">
-                            <h2 class="text-xl sm:text-2xl md:text-3xl font-semibold text-gray-900 tracking-tight">{{ $company->name }}</h2>
+                    <div class="space-y-1 min-w-0">
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <h2 class="text-lg sm:text-2xl md:text-3xl font-semibold text-gray-900 tracking-tight truncate">{{ $company->name }}</h2>
                             @if($company->is_verified)
                             <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[12px] font-semibold bg-sky-50 text-sky-700 border border-sky-100">
                                 <i class="fas fa-check-circle text-sky-500 text-[12px]"></i>
@@ -69,10 +69,10 @@
                 </div>
 
                 <!-- Right: Active Vacancies Counter Pill -->
-                <div class="shrink-0 self-start md:self-center">
-                    <div class="px-5 py-2.5 rounded-xl bg-orange-50/80 border border-orange-100 text-center min-w-[120px] shadow-2xs">
-                        <span class="text-xl sm:text-2xl font-semibold text-primary font-mono block leading-tight">{{ $company->vacancies->count() }}</span>
-                        <span class="text-[12px] font-medium text-orange-950 block mt-0.5">{{ __('Active Vacancy') }}</span>
+                <div class="shrink-0">
+                    <div class="px-2.5 sm:px-5 py-2 rounded-xl bg-orange-50/80 border border-orange-100 text-center min-w-[72px] sm:min-w-[120px] shadow-2xs">
+                        <span class="text-lg sm:text-2xl font-semibold text-primary font-mono block leading-none">{{ $company->vacancies->count() }}</span>
+                        <span class="text-[10px] sm:text-[12px] font-medium text-orange-950 block mt-1 whitespace-nowrap">{{ __('Active Vacancy') }}</span>
                     </div>
                 </div>
 
@@ -82,14 +82,14 @@
     </div>
 
     <!-- Content Grid -->
-    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-8">
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
             <!-- Left 2 cols: About FIRST, then Open Vacancies -->
             <div class="lg:col-span-2 space-y-8">
 
                 <!-- 1. Şirkət Haqqında (About) -->
-                <div class="bg-white rounded-xl border border-gray-200 p-6 shadow-2xs space-y-3">
+                <div class="bg-white rounded-xl border border-gray-200 p-4 sm:p-6 shadow-2xs space-y-3">
                     <h2 class="text-sm font-semibold text-gray-900 flex items-center gap-2 pb-3 border-b border-gray-100">
                         <span>{{ __('About Company') }}</span>
                     </h2>
@@ -101,7 +101,7 @@
                 <!-- 2. Şirkətin Açık Vakansiyaları (Open Vacancies) -->
                 <div class="space-y-4">
                     <div class="flex items-center justify-between pb-2 border-b border-gray-200">
-                        <h2 class="text-sm font-semibold text-gray-900 flex items-center gap-2 pl-5">
+                        <h2 class="text-sm font-semibold text-gray-900 flex items-center gap-2">
                             <span>{{ __('Active Vacancies') }}</span>
                             <span class="text-xs font-semibold text-primary font-mono lowercase">({{ $company->vacancies->count() }})</span>
                         </h2>
@@ -114,7 +114,7 @@
                         @endforeach
                     </div>
                     @else
-                    <div class="p-12 text-center bg-white rounded-xl border border-gray-200 text-gray-500 text-xs shadow-2xs">
+                    <div class="p-8 sm:p-12 text-center bg-white rounded-xl border border-gray-200 text-gray-500 text-xs shadow-2xs">
                         <div class="w-12 h-12 rounded-xl bg-orange-50 text-primary flex items-center justify-center mx-auto mb-3 border border-orange-100">
                             <i class="fas fa-briefcase text-base"></i>
                         </div>
