@@ -81,7 +81,7 @@ class SiteSetting extends Model
                     'ru' => 'Современная платформа вакансий и карьеры',
                 ],
                 'footer_description' => [
-                    'az' => 'Yazılım, dizayn, məhsul, data və marketinq sahələrində aparıcı şirkətlərin açıq vəzifələrinə ani müraciət edin.',
+                    'az' => 'Proqramlaşdırma, dizayn, məhsul, data və marketinq sahələrində aparıcı şirkətlərin açıq vəzifələrinə ani müraciət edin.',
                     'tr' => 'Yazılım, tasarım, ürün, veri ve pazarlama alanlarında önde gelen şirketlerin açık pozisyonlarına anında başvurun.',
                     'en' => 'Apply instantly to open positions at leading companies across software, design, product, data and marketing.',
                     'ru' => 'Мгновенно откликайтесь на открытые вакансии ведущих компаний в сфере ПО, дизайна, продукта, данных и маркетинга.',

@@ -26,7 +26,8 @@ window.__JOB_SEEKERS_CONFIG__ = {
     categoryNameMap: @json($categories->pluck('name', 'slug')->union($categories->flatMap->children->pluck('name', 'slug'))),
     workplaceTypeNameMap: @json($workplaceTypes->pluck('name', 'slug')),
     experienceLevelNameMap: @json($experienceLevels->pluck('name', 'slug')),
-    jobTypeNameMap: @json($jobTypes->pluck('name', 'slug'))
+    jobTypeNameMap: @json($jobTypes->pluck('name', 'slug')),
+    filterErrorMessage: @json(__('Filters could not be loaded. Please try again.'))
 };
 </script>
 
@@ -44,6 +45,9 @@ window.__JOB_SEEKERS_CONFIG__ = {
 @endphp
 
 <div class="bg-gray-50 min-h-screen pb-16" x-data="jobSeekersManager()" @click.outside="closeAllDropdowns()">
+    <div x-show="errorMessage" x-cloak class="container mx-auto px-4 pt-3">
+        <div class="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700" x-text="errorMessage"></div>
+    </div>
 
     <!-- Hero & Main Filter Section -->
     <section class="relative z-30 bg-gradient-to-b from-orange-50/70 via-orange-50/40 to-gray-50 border-b border-gray-200/80 pt-10 pb-12">

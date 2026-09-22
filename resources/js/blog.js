@@ -1,3 +1,5 @@
+import { fetchFilterJson } from './filterRequest';
+
 export default function blogManager(config = null) {
     if (!config && typeof window !== 'undefined' && window.__BLOG_CONFIG__) {
         config = window.__BLOG_CONFIG__;
@@ -6,6 +8,9 @@ export default function blogManager(config = null) {
 
     return {
         isLoading: false,
+        errorMessage: '',
+        requestController: null,
+        filterErrorMessage: config.filterErrorMessage || '',
         category: config.initialCategory || '',
         q: config.initialQuery || '',
         totalCount: config.initialTotal || 0,
@@ -68,16 +73,8 @@ export default function blogManager(config = null) {
             this.isLoading = true;
 
             try {
-                const response = await fetch(url, {
-                    cache: 'no-store',
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest',
-                        'Accept': 'application/json'
-                    }
-                });
-
-                if (response.ok) {
-                    const data = await response.json();
+                const data = await fetchFilterJson(this, url);
+                if (data) {
                     const container = document.getElementById('blog-container');
                     if (container) {
                         container.innerHTML = data.html;
@@ -101,16 +98,8 @@ export default function blogManager(config = null) {
             this.isLoading = true;
 
             try {
-                const response = await fetch(url, {
-                    cache: 'no-store',
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest',
-                        'Accept': 'application/json'
-                    }
-                });
-
-                if (response.ok) {
-                    const data = await response.json();
+                const data = await fetchFilterJson(this, url);
+                if (data) {
                     const container = document.getElementById('blog-container');
                     if (container) {
                         container.innerHTML = data.html;

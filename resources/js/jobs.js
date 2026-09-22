@@ -1,3 +1,5 @@
+import { fetchFilterJson } from './filterRequest';
+
 export default function jobsManager(config = null) {
     if (!config && typeof window !== 'undefined' && window.__JOBS_CONFIG__) {
         config = window.__JOBS_CONFIG__;
@@ -7,6 +9,9 @@ export default function jobsManager(config = null) {
     return {
         mobileFiltersOpen: false,
         isLoading: false,
+        errorMessage: '',
+        requestController: null,
+        filterErrorMessage: config.filterErrorMessage || '',
         // Multi-select values are stored as arrays
         category: Array.isArray(config.initialCategory) ? config.initialCategory : (config.initialCategory ? [config.initialCategory] : []),
         categoryName: '',
@@ -562,16 +567,8 @@ export default function jobsManager(config = null) {
             this.isLoading = true;
 
             try {
-                const response = await fetch(url, {
-                    cache: 'no-store',
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest',
-                        'Accept': 'application/json'
-                    }
-                });
-
-                if (response.ok) {
-                    const data = await response.json();
+                const data = await fetchFilterJson(this, url);
+                if (data) {
                     const container = document.getElementById('jobs-container');
                     if (container) {
                         container.innerHTML = data.html;
@@ -602,16 +599,8 @@ export default function jobsManager(config = null) {
             this.isLoading = true;
 
             try {
-                const response = await fetch(url, {
-                    cache: 'no-store',
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest',
-                        'Accept': 'application/json'
-                    }
-                });
-
-                if (response.ok) {
-                    const data = await response.json();
+                const data = await fetchFilterJson(this, url);
+                if (data) {
                     const container = document.getElementById('jobs-container');
                     if (container) {
                         container.innerHTML = data.html;

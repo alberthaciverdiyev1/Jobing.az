@@ -5,6 +5,7 @@ namespace App\Modules\Blog\Controllers;
 use App\Http\Controllers\Controller;
 use App\Modules\Blog\Models\Blog;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\View\View;
 
 class BlogController extends Controller
@@ -29,13 +30,13 @@ class BlogController extends Controller
 
         $blogs = $query->paginate(9)->withQueryString();
 
-        $categories = Blog::where('is_active', true)
+        $categories = Cache::remember('blogs.published.categories.' . app()->getLocale(), 3600, fn () => Blog::where('is_active', true)
             ->whereNotNull('published_at')
             ->where('published_at', '<=', now())
             ->whereNotNull('category')
             ->distinct()
             ->orderBy('category')
-            ->pluck('category');
+            ->pluck('category'));
 
         $isAjax = ($request->ajax() || $request->header('X-Partial') || $request->wantsJson()) && !$request->acceptsHtml();
 

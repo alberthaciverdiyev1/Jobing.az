@@ -22,6 +22,7 @@ return Application::configure(basePath: dirname(__DIR__))
 
         $middleware->web(append: [
             SetLocale::class,
+            \App\Http\Middleware\CachePublicListings::class,
             LogActivity::class,
             \App\Modules\Visitor\Http\Middleware\LogVisitor::class,
             \App\Http\Middleware\RedirectCompanyFromUserPanel::class,

@@ -11,6 +11,7 @@ use App\Modules\JobSeeker\Models\JobSeeker;
 use App\Modules\JobSeeker\Requests\StoreJobSeekerRequest;
 use App\Modules\Vacancy\Services\VacancyService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\View\View;
 
 class JobSeekerController extends Controller
@@ -125,7 +126,8 @@ class JobSeekerController extends Controller
 
         $jobSeekers = $query->paginate(12)->withQueryString();
 
-        $cityCounts = JobSeeker::published()
+        $facetQuery = (clone $query)->reorder();
+        $cityCounts = (clone $facetQuery)
             ->reorder()
             ->whereNotNull('location')
             ->where('location', '!=', '')
@@ -134,17 +136,24 @@ class JobSeekerController extends Controller
             ->pluck('count', 'location')
             ->toArray();
 
-        $categories = Category::parents()->with(['children' => fn ($q) => $q->withCount(['jobSeekers' => fn ($jq) => $jq->published()])])->withCount(['jobSeekers' => fn ($q) => $q->published()])->get();
+        $categories = Cache::remember('ref.categories.job-seekers', 3600, fn () => Category::parents()->with('children')->get());
+
+        $countsByCategory = (clone $facetQuery)
+            ->whereNotNull('category_id')
+            ->selectRaw('category_id, count(*) as count')
+            ->groupBy('category_id')
+            ->pluck('count', 'category_id');
 
         $categoryCounts = [];
         $categoryChildrenMap = [];
         $categoryParentMap = [];
         foreach ($categories as $cat) {
-            $categoryCounts[$cat->slug] = ($cat->job_seekers_count ?? 0) + $cat->children->sum('job_seekers_count');
+            $familyIds = $cat->children->pluck('id')->push($cat->id);
+            $categoryCounts[$cat->slug] = $familyIds->sum(fn ($id) => (int) ($countsByCategory[$id] ?? 0));
             $categoryChildrenMap[$cat->slug] = $cat->children->pluck('slug')->values()->all();
             foreach ($cat->children as $child) {
                 $categoryParentMap[$child->slug] = $cat->slug;
-                $categoryCounts[$child->slug] = $child->job_seekers_count ?? 0;
+                $categoryCounts[$child->slug] = (int) ($countsByCategory[$child->id] ?? 0);
             }
         }
 
@@ -181,9 +190,9 @@ class JobSeekerController extends Controller
             'categoryParentMap' => $categoryParentMap,
             'categoryCounts' => $categoryCounts,
             'activeParentCategories' => $activeParentCategories,
-            'jobTypes' => JobType::active()->withCount(['jobSeekers' => fn ($q) => $q->published()])->get(),
-            'workplaceTypes' => WorkplaceType::active()->withCount(['jobSeekers' => fn ($q) => $q->published()])->get(),
-            'experienceLevels' => ExperienceLevel::active()->withCount(['jobSeekers' => fn ($q) => $q->published()])->get(),
+            'jobTypes' => Cache::remember('ref.job-types.job-seekers', 3600, fn () => JobType::active()->withCount(['jobSeekers' => fn ($q) => $q->published()])->get()),
+            'workplaceTypes' => Cache::remember('ref.workplace-types.job-seekers', 3600, fn () => WorkplaceType::active()->withCount(['jobSeekers' => fn ($q) => $q->published()])->get()),
+            'experienceLevels' => Cache::remember('ref.experience-levels.job-seekers', 3600, fn () => ExperienceLevel::active()->withCount(['jobSeekers' => fn ($q) => $q->published()])->get()),
             'cities' => VacancyService::cityOptions(),
             'cityCounts' => $cityCounts,
             'selectedSkills' => $selectedSkills,

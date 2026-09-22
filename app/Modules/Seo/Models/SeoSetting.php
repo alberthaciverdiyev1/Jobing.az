@@ -68,7 +68,7 @@ class SeoSetting extends Model
                     'ru' => config('app.full_name') . ' — Современная платформа вакансий и карьеры',
                 ],
                 'default_meta_description' => [
-                    'az' => 'Yazılım, dizayn, məhsul, data və marketinq sahələrində açıq vakansiyalara ani müraciət edin.',
+                    'az' => 'Proqramlaşdırma, dizayn, məhsul, data və marketinq sahələrində açıq vakansiyalara ani müraciət edin.',
                     'tr' => 'Yazılım, tasarım, ürün, veri ve pazarlama alanlarında açık pozisyonlara anında başvurun.',
                     'en' => 'Apply instantly to open positions across software, design, product, data and marketing.',
                     'ru' => 'Мгновенно откликайтесь на открытые вакансии в сфере ПО, дизайна и данных.',

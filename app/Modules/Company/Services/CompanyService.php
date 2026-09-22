@@ -5,6 +5,7 @@ namespace App\Modules\Company\Services;
 use App\Modules\Company\Models\Company;
 use App\Modules\Vacancy\Models\Vacancy;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Cache;
 
 class CompanyService
 {
@@ -61,11 +62,11 @@ class CompanyService
 
         $companies = $query->paginate($perPage)->withQueryString();
 
-        $stats = [
-            'total_companies' => Company::count(),
-            'verified_companies' => Company::where('is_verified', true)->count(),
+        $stats = Cache::remember('companies.public.stats', 300, fn () => [
+            'total_companies' => Company::publicProfile()->count(),
+            'verified_companies' => Company::publicProfile()->where('is_verified', true)->count(),
             'active_vacancies' => Vacancy::active()->count(),
-        ];
+        ]);
 
         return [
             'companies' => $companies,

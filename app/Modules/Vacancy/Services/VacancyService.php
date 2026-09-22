@@ -351,7 +351,7 @@ class VacancyService
             'experienceLevels' => $experienceLevels,
             'skills' => $skills,
             'authCompany' => $authCompany,
-            'cities' => City::all()->sortBy(fn ($c) => is_array($c->name) ? ($c->name['az'] ?? reset($c->name)) : $c->name)->values(),
+            'cities' => City::cachedActive()->sortBy(fn ($c) => is_array($c->name) ? ($c->name['az'] ?? reset($c->name)) : $c->name)->values(),
         ];
     }
 
@@ -360,7 +360,7 @@ class VacancyService
      */
     public static function cityOptions(): array
     {
-        $cities = City::all()->map(function ($c) {
+        $cities = City::cachedActive()->map(function ($c) {
             return is_array($c->name) ? ($c->name['az'] ?? reset($c->name)) : $c->name;
         })->filter()->unique()->values()->toArray();
 

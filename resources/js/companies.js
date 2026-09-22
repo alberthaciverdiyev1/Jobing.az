@@ -1,3 +1,5 @@
+import { fetchFilterJson } from './filterRequest';
+
 export default function companiesManager(config = null) {
     if (!config && typeof window !== 'undefined' && window.__COMPANIES_CONFIG__) {
         config = window.__COMPANIES_CONFIG__;
@@ -6,6 +8,9 @@ export default function companiesManager(config = null) {
 
     return {
         isLoading: false,
+        errorMessage: '',
+        requestController: null,
+        filterErrorMessage: config.filterErrorMessage || '',
         q: config.initialQuery || '',
         sort: config.initialSort || 'latest',
         verified: config.initialVerified || '',
@@ -77,16 +82,8 @@ export default function companiesManager(config = null) {
             this.isLoading = true;
 
             try {
-                const response = await fetch(url, {
-                    cache: 'no-store',
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest',
-                        'Accept': 'application/json'
-                    }
-                });
-
-                if (response.ok) {
-                    const data = await response.json();
+                const data = await fetchFilterJson(this, url);
+                if (data) {
                     const container = document.getElementById('companies-container');
                     if (container) {
                         container.innerHTML = data.html;
@@ -110,16 +107,8 @@ export default function companiesManager(config = null) {
             this.isLoading = true;
 
             try {
-                const response = await fetch(url, {
-                    cache: 'no-store',
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest',
-                        'Accept': 'application/json'
-                    }
-                });
-
-                if (response.ok) {
-                    const data = await response.json();
+                const data = await fetchFilterJson(this, url);
+                if (data) {
                     const container = document.getElementById('companies-container');
                     if (container) {
                         container.innerHTML = data.html;

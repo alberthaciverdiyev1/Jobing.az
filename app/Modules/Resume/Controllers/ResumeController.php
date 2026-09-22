@@ -7,6 +7,7 @@ use App\Modules\JobAttribute\Models\Skill;
 use App\Modules\Resume\Models\Resume;
 use App\Modules\Vacancy\Services\VacancyService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\View\View;
 
 class ResumeController extends Controller
@@ -82,7 +83,8 @@ class ResumeController extends Controller
 
         $resumes = $query->paginate(12)->withQueryString();
 
-        $cityCounts = Resume::where('is_public', true)
+        $facetQuery = (clone $query)->reorder();
+        $cityCounts = (clone $facetQuery)
             ->reorder()
             ->whereNotNull('location')
             ->where('location', '!=', '')
@@ -91,15 +93,13 @@ class ResumeController extends Controller
             ->pluck('count', 'location')
             ->toArray();
 
-        $categories = \Illuminate\Support\Facades\Cache::remember('ref.categories.with_skills', 3600, fn () => \App\Modules\Category\Models\Category::parents()
+        $categories = Cache::remember('ref.categories.with_skills', 3600, fn () => \App\Modules\Category\Models\Category::parents()
             ->with(['skills' => fn ($q) => $q->active(), 'children.skills' => fn ($q) => $q->active()])
             ->get());
 
         // Build array of skills and resume count per category
         $categorySkillsMap = [];
-        $categoryResumeCounts = [];
-        $publicResumes = Resume::where('is_public', true)->get(['id', 'skills']);
-
+        $categorySkillNames = [];
         foreach ($categories as $cat) {
             $catSkills = [];
             $allSkills = $cat->skills->merge($cat->children->flatMap->skills);
@@ -117,25 +117,35 @@ class ResumeController extends Controller
                 return is_array($s->name) ? ($s->name['az'] ?? reset($s->name)) : $s->name;
             })->filter()->unique()->values()->all();
 
-            if (empty($allSkillNames)) {
-                $categoryResumeCounts[$cat->slug] = 0;
-            } else {
-                $categoryResumeCounts[$cat->slug] = $publicResumes->filter(function ($r) use ($allSkillNames) {
-                    if (empty($r->skills) || !is_array($r->skills)) {
-                        return false;
-                    }
-                    $rSkillText = json_encode($r->skills);
-                    foreach ($allSkillNames as $sn) {
-                        if (stripos($rSkillText, $sn) !== false) {
-                            return true;
-                        }
-                    }
-                    return false;
-                })->count();
-            }
+            $categorySkillNames[$cat->slug] = $allSkillNames;
         }
 
-        $popularSkills = \Illuminate\Support\Facades\Cache::remember('ref.skills.popular', 3600, fn () => Skill::active()->orderBy('order')->take(25)->get());
+        $filterSignature = md5(json_encode($request->except(['page', 'category']), JSON_UNESCAPED_UNICODE));
+        $categoryResumeCounts = Cache::remember(
+            'resumes.category-counts.' . $filterSignature,
+            300,
+            function () use ($categorySkillNames, $facetQuery) {
+                $counts = [];
+                foreach ($categorySkillNames as $slug => $allSkillNames) {
+                    if (empty($allSkillNames)) {
+                        $counts[$slug] = 0;
+                        continue;
+                    }
+
+                    $counts[$slug] = (clone $facetQuery)
+                        ->where(function ($query) use ($allSkillNames) {
+                            foreach ($allSkillNames as $skillName) {
+                                $query->orWhereJsonContains('skills', $skillName);
+                            }
+                        })
+                        ->count();
+                }
+
+                return $counts;
+            }
+        );
+
+        $popularSkills = Cache::remember('ref.skills.popular', 3600, fn () => Skill::active()->orderBy('order')->take(25)->get());
 
         $isAjax = ($request->ajax() || $request->header('X-Partial') || $request->wantsJson()) && !$request->acceptsHtml();
 

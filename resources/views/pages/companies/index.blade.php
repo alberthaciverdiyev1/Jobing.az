@@ -12,10 +12,14 @@ window.__COMPANIES_CONFIG__ = {
     initialHasJobs: @json(request('has_jobs', '')),
     initialLocation: @json(request('location', '')),
     initialTotal: {{ (int) $companies->total() }},
+    filterErrorMessage: @json(__('Filters could not be loaded. Please try again.')),
 };
 </script>
 
 <div class="bg-gray-50 min-h-screen pb-16" x-data="companiesManager()">
+    <div x-show="errorMessage" x-cloak class="container mx-auto px-4 pt-3">
+        <div class="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700" x-text="errorMessage"></div>
+    </div>
 
     <!-- Hero -->
     <x-list-hero :title="__('Companies')" :placeholder="__('Search company...')" />

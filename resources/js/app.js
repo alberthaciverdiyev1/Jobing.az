@@ -1,6 +1,5 @@
 import './bootstrap';
 import Alpine from 'alpinejs';
-import { createIcons, icons } from 'lucide';
 import jobsManager from './jobs';
 import resumesManager from './resumes';
 import companiesManager from './companies';
@@ -53,19 +52,8 @@ Alpine.data('contactReveal', contactReveal);
 
 window.Favorites = Favorites;
 
-// Initialize Lucide icons helper
-window.renderLucideIcons = () => {
-    createIcons({ icons });
-};
-
 document.addEventListener('DOMContentLoaded', () => {
-    window.renderLucideIcons();
     Favorites.init();
-});
-
-// Re-render icons on Alpine mutations/transitions
-document.addEventListener('alpine:initialized', () => {
-    window.renderLucideIcons();
 });
 
 Alpine.start();

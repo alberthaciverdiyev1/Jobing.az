@@ -1121,5 +1121,19 @@
     "Visitors": "Ziyaretçiler",
     "Visits": "Ziyaretler",
     "New vacancy awaiting approval": "Onay bekleyen yeni ilan",
-    "Rejection Reason": "Red Sebebi"
+    "Rejection Reason": "Red Sebebi",
+    "All subcategories": "Tüm alt kategoriler",
+    "City (Baku...)": "Şehir (Bakü...)",
+    "Clear skills": "Becerileri temizle",
+    "Companies with active vacancies": "Aktif ilanı olan şirketler",
+    "Detailed candidate filters and skills": "Ayrıntılı aday filtreleri ve beceriler",
+    "Detailed filters and skills": "Ayrıntılı filtreler ve beceriler",
+    "Filters could not be loaded. Please try again.": "Filtreler yüklenemedi. Lütfen tekrar deneyin.",
+    "Loading skills...": "Beceriler yükleniyor...",
+    "More filters": "Daha fazla filtre",
+    "No skills match your search.": "Aramanızla eşleşen beceri bulunamadı.",
+    "Remote": "Uzaktan",
+    "Select a category above to view and filter by relevant skills.": "İlgili becerileri görüntülemek ve filtrelemek için yukarıdan bir kategori seçin.",
+    "Skills (Tags)": "Beceriler (Etiketler)",
+    "Verified companies only": "Yalnızca doğrulanmış şirketler"
 }

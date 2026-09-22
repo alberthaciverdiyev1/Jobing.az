@@ -1,3 +1,5 @@
+import { fetchFilterJson } from './filterRequest';
+
 export default function resumesManager(config = null) {
     if (!config && typeof window !== 'undefined' && window.__RESUMES_CONFIG__) {
         config = window.__RESUMES_CONFIG__;
@@ -7,6 +9,9 @@ export default function resumesManager(config = null) {
     return {
         mobileFiltersOpen: false,
         isLoading: false,
+        errorMessage: '',
+        requestController: null,
+        filterErrorMessage: config.filterErrorMessage || '',
         q: config.initialQuery || '',
         category: config.initialCategory || '',
         skills: Array.isArray(config.initialSkills) ? config.initialSkills : (config.initialSkills ? [config.initialSkills] : []),
@@ -135,16 +140,8 @@ export default function resumesManager(config = null) {
             this.isLoading = true;
 
             try {
-                const response = await fetch(url, {
-                    cache: 'no-store',
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest',
-                        'Accept': 'application/json'
-                    }
-                });
-
-                if (response.ok) {
-                    const data = await response.json();
+                const data = await fetchFilterJson(this, url);
+                if (data) {
                     const container = document.getElementById('resumes-container');
                     if (container) {
                         container.innerHTML = data.html;
@@ -174,16 +171,8 @@ export default function resumesManager(config = null) {
             this.isLoading = true;
 
             try {
-                const response = await fetch(url, {
-                    cache: 'no-store',
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest',
-                        'Accept': 'application/json'
-                    }
-                });
-
-                if (response.ok) {
-                    const data = await response.json();
+                const data = await fetchFilterJson(this, url);
+                if (data) {
                     const container = document.getElementById('resumes-container');
                     if (container) {
                         container.innerHTML = data.html;

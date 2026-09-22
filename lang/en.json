@@ -1121,5 +1121,19 @@
     "Visitors": "Visitors",
     "Visits": "Visits",
     "New vacancy awaiting approval": "New vacancy awaiting approval",
-    "Rejection Reason": "Rejection Reason"
+    "Rejection Reason": "Rejection Reason",
+    "All subcategories": "All subcategories",
+    "City (Baku...)": "City (Baku...)",
+    "Clear skills": "Clear skills",
+    "Companies with active vacancies": "Companies with active vacancies",
+    "Detailed candidate filters and skills": "Detailed candidate filters and skills",
+    "Detailed filters and skills": "Detailed filters and skills",
+    "Filters could not be loaded. Please try again.": "Filters could not be loaded. Please try again.",
+    "Loading skills...": "Loading skills...",
+    "More filters": "More filters",
+    "No skills match your search.": "No skills match your search.",
+    "Remote": "Remote",
+    "Select a category above to view and filter by relevant skills.": "Select a category above to view and filter by relevant skills.",
+    "Skills (Tags)": "Skills (Tags)",
+    "Verified companies only": "Verified companies only"
 }

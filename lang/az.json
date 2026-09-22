@@ -48,7 +48,7 @@
     "Job Seeking Listing": "İş Axtarış Elanı",
     "This resume is private and can only be viewed by its owner.": "Bu CV gizlidir və yalnız sahibi tərəfindən baxıla bilər.",
     "Modern Job Board & Career Platform": "Modern İş İlanları və Karyera Platforması",
-    "Instantly apply to open positions at leading technology companies in software, design, product, data and marketing.": "Yazılım, tasarım, ürün, veri ve pazarlama alanlarında önde gelen teknoloji şirketlerinin açık pozisyonlarına anında başvurun.",
+    "Instantly apply to open positions at leading technology companies in software, design, product, data and marketing.": "Proqramlaşdırma, dizayn, məhsul, data və marketinq sahələrində aparıcı texnologiya şirkətlərinin açıq vəzifələrinə dərhal müraciət edin.",
     "Vacancies": "Vakansiyalar",
     "Companies": "Şirkətlər",
     "I'm Hiring Myself": "İş axtarıram",
@@ -1136,5 +1136,6 @@
     "City (Baku...)": "Şəhər (Bakı...)",
     "Verified companies only": "Yalnız təsdiqlənmiş şirkətlər",
     "Companies with active vacancies": "Aktiv vakansiyası olan şirkətlər",
-    "Remote": "Uzaqdan"
+    "Remote": "Uzaqdan",
+    "Filters could not be loaded. Please try again.": "Filtrlər yüklənə bilmədi. Yenidən cəhd edin."
 }
