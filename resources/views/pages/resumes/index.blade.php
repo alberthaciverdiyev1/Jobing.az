@@ -104,9 +104,17 @@ window.__RESUMES_CONFIG__ = {
 
         <div class="flex flex-col gap-6 max-w-5xl mx-auto">
 
-            <!-- Sidebar Filters -->
-            <div class="w-full" x-show="mobileFiltersOpen" x-collapse>
-                <div class="bg-white rounded-xl border border-gray-200 p-5 sticky top-24 space-y-5 shadow-2xs">
+            <!-- More Filters Modal -->
+            <div x-show="mobileFiltersOpen"
+                 x-cloak
+                 @keydown.escape.window="mobileFiltersOpen = false"
+                 class="fixed inset-0 z-50 overflow-y-auto"
+                 role="dialog"
+                 aria-modal="true">
+                <div class="fixed inset-0 bg-gray-900/40 backdrop-blur-xs" @click="mobileFiltersOpen = false"></div>
+                <div class="min-h-full flex items-center justify-center p-4">
+                <div class="relative bg-white rounded-2xl border border-gray-200 p-5 w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl"
+                     @click.outside="mobileFiltersOpen = false">
                     <div class="space-y-5">
 
                         <!-- Filter Top Header -->
@@ -115,13 +123,20 @@ window.__RESUMES_CONFIG__ = {
                                 <i class="fas fa-filter text-xs text-primary"></i>
                                 <span>{{ __('Filters') }}</span>
                             </h3>
-                            <button type="button"
-                                    x-show="hasActiveFilters"
-                                    x-cloak
-                                    @click="resetAllFilters()"
-                                    class="text-xs text-primary hover:text-primary-dark font-medium transition cursor-pointer">
-                                {{ __('Clear') }}
-                            </button>
+                            <div class="flex items-center gap-2">
+                                <button type="button"
+                                        x-show="hasActiveFilters"
+                                        x-cloak
+                                        @click="resetAllFilters()"
+                                        class="text-xs text-primary hover:text-primary-dark font-medium transition cursor-pointer">
+                                    {{ __('Clear') }}
+                                </button>
+                                <button type="button" @click="mobileFiltersOpen = false"
+                                        class="w-8 h-8 inline-flex items-center justify-center rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition cursor-pointer"
+                                        aria-label="{{ __('Close') }}">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
                         </div>
 
                         <!-- Category Selection (Dynamically switches skills below) -->
@@ -235,6 +250,7 @@ window.__RESUMES_CONFIG__ = {
                         </div>
 
                     </div>
+                </div>
                 </div>
             </div>
 

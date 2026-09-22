@@ -24,6 +24,12 @@ export default function resumesManager(config = null) {
         allSkills: config.allSkills || [],
 
         init() {
+            this.$watch('mobileFiltersOpen', (isOpen) => {
+                window.dispatchEvent(new CustomEvent('mobile-navbar-visibility', {
+                    detail: { visible: !isOpen },
+                }));
+            });
+
             // Popstate for browser back/forward buttons
             window.addEventListener('popstate', () => {
                 const params = new URLSearchParams(window.location.search);
