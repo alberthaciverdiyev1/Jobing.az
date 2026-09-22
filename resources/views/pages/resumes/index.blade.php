@@ -183,9 +183,18 @@ window.__RESUMES_CONFIG__ = {
                         </div>
 
                         <!-- City Filter -->
-                        <div class="pt-3 border-t border-gray-100">
-                            <h4 class="text-xs font-medium text-gray-800 mb-2.5">{{ __('City') }}</h4>
-                            <div class="space-y-1 text-xs" x-data="{ showAll: false }">
+                        <div class="pt-3 border-t border-gray-100 space-y-2">
+                            <label for="resume-modal-city" class="block text-xs font-semibold text-gray-800">{{ __('City') }}</label>
+                            <select id="resume-modal-city"
+                                    :value="city[0] || ''"
+                                    @change="city = $event.target.value ? [$event.target.value] : []; applyFilters()"
+                                    class="w-full h-11 bg-gray-50 border border-gray-200 rounded-xl px-3 text-sm font-medium text-gray-800 focus:bg-white focus:outline-hidden focus:border-primary cursor-pointer">
+                                <option value="">{{ __('All cities') }}</option>
+                                @foreach($cities as $c)
+                                    <option value="{{ $c }}">{{ $c }}</option>
+                                @endforeach
+                            </select>
+                            <div class="hidden" x-data="{ showAll: false }">
                                 @foreach($cities as $c)
                                 <label x-show="showAll || {{ $loop->index }} < 5"
                                        class="w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg transition text-left cursor-pointer select-none"
