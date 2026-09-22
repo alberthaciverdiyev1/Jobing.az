@@ -77,7 +77,8 @@ window.__JOBS_CONFIG__ = {
 
             <!-- Headline / Subtitle -->
             <div class="max-w-2xl mx-auto mb-6">
-                <h1 class="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 tracking-tight mb-2">
+                <h1 class="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 tracking-tight mb-2"
+                    x-text="selectedParentCategoryLabel || '{{ __('Vacancies') }}'">
                     {{ $selectedCategory?->name ?: __('Vacancies') }}
                 </h1>
                 <p class="text-xs sm:text-sm md:text-base text-gray-500">
