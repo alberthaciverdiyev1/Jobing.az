@@ -13,7 +13,7 @@
             <div class="space-y-1 flex-1 min-w-0">
                 <div class="flex items-center justify-between">
                     <span class="text-xs font-medium text-gray-500">{{ $job->company->name ?? '' }}</span>
-                    @if($job->match_percentage !== null)
+                    @if($job->match_percentage !== null && $job->matched_skill_count > 0)
                     <span class="relative z-10 group/match inline-flex min-w-11 h-7 items-center justify-center rounded-lg px-2 text-[11px] font-bold font-mono cursor-help {{ $job->match_percentage >= 70 ? 'bg-emerald-500 text-white' : ($job->match_percentage >= 40 ? 'bg-amber-500 text-white' : 'bg-slate-600 text-white') }}">
                         {{ $job->matched_skill_count }}/{{ $job->required_skill_count }}
                         <span class="pointer-events-none absolute right-0 bottom-full mb-2 hidden group-hover/match:block whitespace-nowrap rounded-lg bg-gray-900 px-2.5 py-1.5 text-[11px] font-semibold font-sans text-white shadow-lg">
