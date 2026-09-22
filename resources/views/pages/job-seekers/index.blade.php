@@ -50,7 +50,7 @@ window.__JOB_SEEKERS_CONFIG__ = {
     </div>
 
     <!-- Hero & Main Filter Section -->
-    <section class="relative z-30 bg-gradient-to-b from-orange-50/70 via-orange-50/40 to-gray-50 border-b border-gray-200/80 pt-10 pb-12">
+    <section class="relative z-30 bg-gradient-to-b from-orange-50/70 via-orange-50/40 to-gray-50 border-b border-gray-200/80 pt-10 pb-8 md:pb-10">
         <!-- Floating background decorative icons -->
         <div class="absolute inset-0 overflow-hidden pointer-events-none">
             @foreach($heroIcons as [$icon, $x, $y, $size, $rot])
@@ -72,10 +72,10 @@ window.__JOB_SEEKERS_CONFIG__ = {
             </div>
 
             <!-- White Search & Filter Card -->
-            <div class="max-w-5xl mx-auto bg-white rounded-2xl md:rounded-3xl shadow-sm border border-gray-200/90 p-3 sm:p-4 text-left relative z-20">
+            <div class="max-w-5xl mx-auto bg-white/95 backdrop-blur-sm rounded-2xl md:rounded-3xl border border-orange-100 p-3.5 sm:p-5 text-left relative z-20">
 
                 <!-- Row 1: Search Keyword, City Selector, Action Button -->
-                <div class="flex flex-col md:flex-row items-stretch md:items-center gap-2.5">
+                <div class="grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_14rem_auto] lg:grid-cols-[minmax(0,1fr)_16rem_auto] items-stretch gap-2.5">
 
                     <!-- Search Input -->
                     <div class="relative flex-1">
@@ -85,7 +85,7 @@ window.__JOB_SEEKERS_CONFIG__ = {
                                @input.debounce.400ms="applyFilters()"
                                @keydown.enter.prevent="applyFilters()"
                                placeholder="{{ __('Position, skill, name...') }}"
-                               class="w-full pl-11 pr-10 py-3 bg-gray-50/70 hover:bg-white focus:bg-white border border-gray-200 rounded-xl text-sm text-gray-800 placeholder-gray-400 focus:outline-hidden focus:border-primary focus:ring-1 focus:ring-primary transition">
+                               class="w-full h-12 pl-11 pr-10 bg-gray-50/70 hover:bg-white focus:bg-white border border-gray-200 rounded-xl text-sm text-gray-800 placeholder-gray-400 focus:outline-hidden focus:border-primary focus:ring-2 focus:ring-orange-100 transition">
                         <button type="button"
                                 x-show="q"
                                 x-cloak
@@ -96,10 +96,10 @@ window.__JOB_SEEKERS_CONFIG__ = {
                     </div>
 
                     <!-- City Selector -->
-                    <div class="relative w-full md:w-56 lg:w-64" :class="cityOpen ? 'z-50' : 'z-auto'" x-data="{ cityOpen: false }" @click.outside="cityOpen = false">
+                    <div class="relative w-full" :class="cityOpen ? 'z-50' : 'z-auto'" x-data="{ cityOpen: false }" @click.outside="cityOpen = false">
                         <button type="button"
                                 @click="cityOpen = !cityOpen"
-                                class="w-full flex items-center justify-between pl-10 pr-3.5 py-3 bg-gray-50/70 hover:bg-white border border-gray-200 rounded-xl text-sm transition cursor-pointer text-left focus:outline-hidden focus:border-primary focus:ring-1 focus:ring-primary">
+                                class="w-full h-12 flex items-center justify-between pl-10 pr-3.5 bg-gray-50/70 hover:bg-white border border-gray-200 rounded-xl text-sm transition cursor-pointer text-left focus:outline-hidden focus:border-primary focus:ring-2 focus:ring-orange-100">
                             <i class="fas fa-map-marker-alt absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm pointer-events-none"></i>
                             <span class="truncate" :class="city.length ? 'text-gray-900 font-medium' : 'text-gray-400'"
                                   x-text="selectedCityLabel || '{{ __('City (Baku...)') }}'"></span>
@@ -142,7 +142,7 @@ window.__JOB_SEEKERS_CONFIG__ = {
                     <!-- Search Button -->
                     <button type="button"
                             @click="applyFilters()"
-                            class="bg-primary hover:bg-primary-dark text-white font-semibold px-7 py-3 rounded-xl transition-colors flex items-center justify-center gap-2 text-sm shadow-xs cursor-pointer whitespace-nowrap">
+                            class="hidden md:flex h-12 bg-primary hover:bg-primary-dark text-white font-semibold px-7 rounded-xl transition-all items-center justify-center gap-2 text-sm active:scale-[0.98] cursor-pointer whitespace-nowrap">
                         <i class="fas fa-search text-xs"></i>
                         <span>{{ __('Search') }}</span>
                     </button>
@@ -150,15 +150,16 @@ window.__JOB_SEEKERS_CONFIG__ = {
                 </div>
 
                 <!-- Row 2: Filter Pills & Reset Button -->
-                <div class="flex flex-wrap items-center gap-2 pt-3 mt-3 border-t border-gray-100 relative" :class="activeDropdown ? 'z-40' : 'z-10'">
+                <div class="grid grid-cols-2 md:flex md:flex-wrap xl:flex-nowrap items-center gap-2 xl:gap-1.5 p-2.5 mt-3 rounded-xl bg-slate-50/80 border border-slate-100 relative" :class="activeDropdown ? 'z-40' : 'z-10'">
 
                     <!-- 1. Category Filter Dropdown -->
                     <div class="relative" :class="activeDropdown === 'category' ? 'z-50' : 'z-auto'" @click.outside="closeDropdown('category')">
+                        <span class="block md:hidden text-[11px] font-medium text-gray-500 mb-1.5 px-0.5">{{ __('Category') }}</span>
                         <button type="button"
                                 @click="toggleDropdown('category')"
-                                class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border text-xs sm:text-sm font-medium transition cursor-pointer"
-                                :class="selectedParentCategorySlug ? 'bg-orange-50 border-orange-200 text-primary font-semibold shadow-2xs' : 'bg-gray-50/80 border-gray-200/80 text-gray-700 hover:bg-white hover:border-gray-300'">
-                            <span class="text-gray-400 font-normal">{{ __('Category') }}:</span>
+                                class="w-full md:w-auto inline-flex items-center justify-between md:justify-start gap-1.5 px-3.5 xl:px-2.5 py-2 rounded-xl border text-xs sm:text-sm font-medium transition cursor-pointer"
+                                :class="selectedParentCategorySlug ? 'bg-orange-50 border-orange-200 text-primary font-semibold' : 'bg-gray-50/80 border-gray-200/80 text-gray-700 hover:bg-white hover:border-gray-300'">
+                            <span class="hidden md:inline text-gray-400 font-normal">{{ __('Category') }}:</span>
                             <span class="truncate max-w-[140px]" :class="selectedParentCategorySlug ? 'text-primary font-semibold' : 'text-gray-800 font-medium'" x-text="selectedParentCategoryLabel || '{{ __('All') }}'"></span>
                             <i class="fas fa-chevron-down text-[10px] transition-transform ml-0.5" :class="activeDropdown === 'category' ? 'rotate-180 text-primary' : 'text-gray-400'"></i>
                         </button>
@@ -194,16 +195,17 @@ window.__JOB_SEEKERS_CONFIG__ = {
 
                     <!-- 2. Subcategory Filter Dropdown -->
                     <div class="relative" :class="activeDropdown === 'subcategory' ? 'z-50' : 'z-auto'" @click.outside="closeDropdown('subcategory')">
+                        <span class="block md:hidden text-[11px] font-medium text-gray-500 mb-1.5 px-0.5">{{ __('Subcategory') }}</span>
                         <button type="button"
                                 @click="if (availableSubcategories.length) { toggleDropdown('subcategory'); }"
                                 :disabled="!availableSubcategories.length"
-                                class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border text-xs sm:text-sm font-medium transition"
+                                class="w-full md:w-auto inline-flex items-center justify-between md:justify-start gap-1.5 px-3.5 xl:px-2.5 py-2 rounded-xl border text-xs sm:text-sm font-medium transition"
                                 :class="{
                                     'opacity-40 cursor-not-allowed bg-gray-50 border-gray-200 text-gray-400': !availableSubcategories.length,
-                                    'cursor-pointer bg-orange-50 border-orange-200 text-primary font-semibold shadow-2xs': availableSubcategories.length && selectedSubcategorySlugs.length > 0,
+                                    'cursor-pointer bg-orange-50 border-orange-200 text-primary font-semibold': availableSubcategories.length && selectedSubcategorySlugs.length > 0,
                                     'cursor-pointer bg-gray-50/80 border-gray-200/80 text-gray-700 hover:bg-white hover:border-gray-300': availableSubcategories.length && selectedSubcategorySlugs.length === 0
                                 }">
-                            <span class="text-gray-400 font-normal">{{ __('Subcategory') }}:</span>
+                            <span class="hidden md:inline text-gray-400 font-normal">{{ __('Subcategory') }}:</span>
                             <span class="truncate max-w-[140px]" :class="selectedSubcategorySlugs.length > 0 ? 'text-primary font-semibold' : 'text-gray-800 font-medium'" x-text="!availableSubcategories.length ? '—' : (selectedSubcategoryLabel || '{{ __('All') }}')"></span>
                             <i class="fas fa-chevron-down text-[10px] transition-transform ml-0.5"
                                :class="{
@@ -249,11 +251,11 @@ window.__JOB_SEEKERS_CONFIG__ = {
 
                     <!-- 3. Workplace Type (İş rejimi) Dropdown -->
                     @if($workplaceTypes->count() > 0)
-                    <div class="relative" :class="activeDropdown === 'workplace' ? 'z-50' : 'z-auto'" @click.outside="closeDropdown('workplace')">
+                    <div class="hidden md:block relative" :class="activeDropdown === 'workplace' ? 'z-50' : 'z-auto'" @click.outside="closeDropdown('workplace')">
                         <button type="button"
                                 @click="toggleDropdown('workplace')"
-                                class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border text-xs sm:text-sm font-medium transition cursor-pointer"
-                                :class="workplaceType.length > 0 ? 'bg-orange-50 border-orange-200 text-primary font-semibold shadow-2xs' : 'bg-gray-50/80 border-gray-200/80 text-gray-700 hover:bg-white hover:border-gray-300'">
+                                class="w-full md:w-auto inline-flex items-center justify-between md:justify-start gap-1.5 px-3.5 xl:px-2.5 py-2 rounded-xl border text-xs sm:text-sm font-medium transition cursor-pointer"
+                                :class="workplaceType.length > 0 ? 'bg-orange-50 border-orange-200 text-primary font-semibold' : 'bg-gray-50/80 border-gray-200/80 text-gray-700 hover:bg-white hover:border-gray-300'">
                             <span class="text-gray-400 font-normal">{{ __('Workplace') }}:</span>
                             <span class="truncate max-w-[130px]" :class="workplaceType.length > 0 ? 'text-primary font-semibold' : 'text-gray-800 font-medium'" x-text="selectedWorkplaceLabel || '{{ __('All') }}'"></span>
                             <i class="fas fa-chevron-down text-[10px] transition-transform" :class="activeDropdown === 'workplace' ? 'rotate-180 text-primary' : 'text-gray-400'"></i>
@@ -296,11 +298,11 @@ window.__JOB_SEEKERS_CONFIG__ = {
 
                     <!-- 4. Experience Level (Təcrübə) Dropdown -->
                     @if($experienceLevels->count() > 0)
-                    <div class="relative" :class="activeDropdown === 'experience' ? 'z-50' : 'z-auto'" @click.outside="closeDropdown('experience')">
+                    <div class="hidden md:block relative" :class="activeDropdown === 'experience' ? 'z-50' : 'z-auto'" @click.outside="closeDropdown('experience')">
                         <button type="button"
                                 @click="toggleDropdown('experience')"
-                                class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border text-xs sm:text-sm font-medium transition cursor-pointer"
-                                :class="experienceLevel.length > 0 ? 'bg-orange-50 border-orange-200 text-primary font-semibold shadow-2xs' : 'bg-gray-50/80 border-gray-200/80 text-gray-700 hover:bg-white hover:border-gray-300'">
+                                class="w-full md:w-auto inline-flex items-center justify-between md:justify-start gap-1.5 px-3.5 xl:px-2.5 py-2 rounded-xl border text-xs sm:text-sm font-medium transition cursor-pointer"
+                                :class="experienceLevel.length > 0 ? 'bg-orange-50 border-orange-200 text-primary font-semibold' : 'bg-gray-50/80 border-gray-200/80 text-gray-700 hover:bg-white hover:border-gray-300'">
                             <span class="text-gray-400 font-normal">{{ __('Experience') }}:</span>
                             <span class="truncate max-w-[130px]" :class="experienceLevel.length > 0 ? 'text-primary font-semibold' : 'text-gray-800 font-medium'" x-text="selectedExperienceLabel || '{{ __('All') }}'"></span>
                             <i class="fas fa-chevron-down text-[10px] transition-transform" :class="activeDropdown === 'experience' ? 'rotate-180 text-primary' : 'text-gray-400'"></i>
@@ -343,11 +345,12 @@ window.__JOB_SEEKERS_CONFIG__ = {
 
                     <!-- 5. Salary (Maaş) Dropdown -->
                     <div class="relative" :class="activeDropdown === 'salary' ? 'z-50' : 'z-auto'" @click.outside="closeDropdown('salary')">
+                        <span class="block md:hidden text-[11px] font-medium text-gray-500 mb-1.5 px-0.5">{{ __('Salary') }}</span>
                         <button type="button"
                                 @click="toggleDropdown('salary')"
-                                class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border text-xs sm:text-sm font-medium transition cursor-pointer"
-                                :class="(minSalary || maxSalary) ? 'bg-orange-50 border-orange-200 text-primary font-semibold shadow-2xs' : 'bg-gray-50/80 border-gray-200/80 text-gray-700 hover:bg-white hover:border-gray-300'">
-                            <span class="text-gray-400 font-normal">{{ __('Salary') }}:</span>
+                                class="w-full md:w-auto inline-flex items-center justify-between md:justify-start gap-1.5 px-3.5 xl:px-2.5 py-2 rounded-xl border text-xs sm:text-sm font-medium transition cursor-pointer"
+                                :class="(minSalary || maxSalary) ? 'bg-orange-50 border-orange-200 text-primary font-semibold' : 'bg-gray-50/80 border-gray-200/80 text-gray-700 hover:bg-white hover:border-gray-300'">
+                            <span class="hidden md:inline text-gray-400 font-normal">{{ __('Salary') }}:</span>
                             <span class="truncate max-w-[140px]" :class="(minSalary || maxSalary) ? 'text-primary font-semibold' : 'text-gray-800 font-medium'" x-text="salaryLabel || '{{ __('All') }}'"></span>
                             <i class="fas fa-chevron-down text-[10px] transition-transform" :class="activeDropdown === 'salary' ? 'rotate-180 text-primary' : 'text-gray-400'"></i>
                         </button>
@@ -410,26 +413,37 @@ window.__JOB_SEEKERS_CONFIG__ = {
                     </div>
 
                     <!-- 6. More Filters (Daha çox filtr) -->
-                    <button type="button"
-                            @click="moreFiltersOpen = true"
-                            class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-gray-200/80 bg-gray-50/80 text-gray-700 hover:bg-white hover:border-gray-300 text-xs sm:text-sm font-medium transition cursor-pointer"
-                            :class="moreFiltersCount > 0 ? 'bg-orange-50 border-orange-200 text-primary font-semibold shadow-2xs' : ''">
-                        <i class="fas fa-sliders-h text-xs" :class="moreFiltersCount > 0 ? 'text-primary' : 'text-gray-400'"></i>
-                        <span>{{ __('More filters') }}</span>
-                        <span x-show="moreFiltersCount > 0" x-cloak class="px-1.5 py-0.5 rounded-full bg-primary text-white text-[10px] font-bold leading-none" x-text="moreFiltersCount"></span>
-                    </button>
+                    <div class="md:contents">
+                        <span class="block md:hidden text-[11px] font-medium text-gray-500 mb-1.5 px-0.5">{{ __('More filters') }}</span>
+                        <button type="button"
+                                @click="moreFiltersOpen = true"
+                                class="w-full md:w-auto inline-flex shrink-0 items-center justify-center md:justify-start gap-1.5 px-3.5 xl:px-2.5 py-2 rounded-xl border border-gray-200/80 bg-gray-50/80 text-gray-700 hover:bg-white hover:border-gray-300 text-xs sm:text-sm font-medium whitespace-nowrap transition cursor-pointer"
+                                :class="moreFiltersCount > 0 ? 'bg-orange-50 border-orange-200 text-primary font-semibold' : ''">
+                            <i class="fas fa-sliders-h text-xs" :class="moreFiltersCount > 0 ? 'text-primary' : 'text-gray-400'"></i>
+                            <span>{{ __('More filters') }}</span>
+                            <span x-show="moreFiltersCount > 0" x-cloak class="px-1.5 py-0.5 rounded-full bg-primary text-white text-[10px] font-bold leading-none" x-text="moreFiltersCount"></span>
+                        </button>
+                    </div>
 
                     <!-- 7. Reset Filters -->
                     <button type="button"
                             x-show="hasActiveFilters"
                             x-cloak
                             @click="resetAllFilters()"
-                            class="text-xs text-gray-400 hover:text-primary flex items-center gap-1.5 font-medium transition cursor-pointer sm:ml-auto py-1.5 px-2 rounded-lg hover:bg-gray-50">
+                            class="col-span-2 md:col-span-1 text-xs text-gray-400 hover:text-primary flex items-center justify-center gap-1.5 font-medium transition cursor-pointer md:ml-auto py-1.5 px-2 rounded-lg hover:bg-gray-50">
                         <i class="fas fa-rotate-left text-[11px]"></i>
                         <span>{{ __('Reset filters') }}</span>
                     </button>
 
                 </div>
+
+                <!-- Mobile Action Button -->
+                <button type="button"
+                        @click="applyFilters()"
+                        class="md:hidden mt-3 w-full h-12 bg-primary hover:bg-primary-dark text-white font-semibold px-7 rounded-xl transition-all flex items-center justify-center gap-2 text-sm active:scale-[0.98] cursor-pointer">
+                    <i class="fas fa-search text-xs"></i>
+                    <span>{{ __('Search') }}</span>
+                </button>
 
             </div>
 
@@ -473,6 +487,7 @@ window.__JOB_SEEKERS_CONFIG__ = {
     <!-- More Filters Modal -->
     <div x-show="moreFiltersOpen"
          x-cloak
+         @keydown.escape.window="moreFiltersOpen = false"
          class="fixed inset-0 z-50 overflow-y-auto"
          role="dialog"
          aria-modal="true">

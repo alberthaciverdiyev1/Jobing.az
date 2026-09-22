@@ -42,6 +42,12 @@ export default function jobSeekersManager(config = null) {
         moreFiltersOpen: false,
 
         init() {
+            this.$watch('moreFiltersOpen', (isOpen) => {
+                window.dispatchEvent(new CustomEvent('mobile-navbar-visibility', {
+                    detail: { visible: !isOpen },
+                }));
+            });
+
             this.loadSkills();
             if (this.category.length) {
                 const first = this.category[0];
