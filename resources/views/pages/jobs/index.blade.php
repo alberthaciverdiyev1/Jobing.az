@@ -164,13 +164,13 @@ window.__JOBS_CONFIG__ = {
                 </div>
 
                 <!-- Row 2: Filter Pills & Reset Button -->
-                <div class="flex flex-wrap items-center gap-2 pt-3 mt-3 border-t border-gray-100 relative" :class="activeDropdown ? 'z-40' : 'z-10'">
+                <div class="flex flex-wrap xl:flex-nowrap items-center gap-2 xl:gap-1.5 pt-3 mt-3 border-t border-gray-100 relative" :class="activeDropdown ? 'z-40' : 'z-10'">
 
                     <!-- 1. Category Filter Dropdown -->
                     <div class="relative" :class="activeDropdown === 'category' ? 'z-50' : 'z-auto'" @click.outside="closeDropdown('category')">
                         <button type="button"
                                 @click="toggleDropdown('category')"
-                                class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border text-xs sm:text-sm font-medium transition cursor-pointer"
+                                class="inline-flex items-center gap-1.5 px-3.5 xl:px-2.5 py-2 rounded-xl border text-xs sm:text-sm font-medium transition cursor-pointer"
                                 :class="selectedParentCategorySlug ? 'bg-orange-50 border-orange-200 text-primary font-semibold shadow-2xs' : 'bg-gray-50/80 border-gray-200/80 text-gray-700 hover:bg-white hover:border-gray-300'">
                             <span class="text-gray-400 font-normal">{{ __('Category') }}:</span>
                             <span class="truncate max-w-[140px]" :class="selectedParentCategorySlug ? 'text-primary font-semibold' : 'text-gray-800 font-medium'" x-text="selectedParentCategoryLabel || '{{ __('All') }}'"></span>
@@ -211,7 +211,7 @@ window.__JOBS_CONFIG__ = {
                         <button type="button"
                                 @click="if (availableSubcategories.length) { toggleDropdown('subcategory'); }"
                                 :disabled="!availableSubcategories.length"
-                                class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border text-xs sm:text-sm font-medium transition"
+                                class="inline-flex items-center gap-1.5 px-3.5 xl:px-2.5 py-2 rounded-xl border text-xs sm:text-sm font-medium transition"
                                 :class="{
                                     'opacity-40 cursor-not-allowed bg-gray-50 border-gray-200 text-gray-400': !availableSubcategories.length,
                                     'cursor-pointer bg-orange-50 border-orange-200 text-primary font-semibold shadow-2xs': availableSubcategories.length && selectedSubcategorySlugs.length > 0,
@@ -266,7 +266,7 @@ window.__JOBS_CONFIG__ = {
                     <div class="relative" :class="activeDropdown === 'workplace' ? 'z-50' : 'z-auto'" @click.outside="closeDropdown('workplace')">
                         <button type="button"
                                 @click="toggleDropdown('workplace')"
-                                class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border text-xs sm:text-sm font-medium transition cursor-pointer"
+                                class="inline-flex items-center gap-1.5 px-3.5 xl:px-2.5 py-2 rounded-xl border text-xs sm:text-sm font-medium transition cursor-pointer"
                                 :class="workplace.length > 0 ? 'bg-orange-50 border-orange-200 text-primary font-semibold shadow-2xs' : 'bg-gray-50/80 border-gray-200/80 text-gray-700 hover:bg-white hover:border-gray-300'">
                             <span class="text-gray-400 font-normal">{{ __('Workplace') }}:</span>
                             <span class="truncate max-w-[130px]" :class="workplace.length > 0 ? 'text-primary font-semibold' : 'text-gray-800 font-medium'" x-text="selectedWorkplaceLabel || '{{ __('All') }}'"></span>
@@ -313,7 +313,7 @@ window.__JOBS_CONFIG__ = {
                     <div class="relative" :class="activeDropdown === 'experience' ? 'z-50' : 'z-auto'" @click.outside="closeDropdown('experience')">
                         <button type="button"
                                 @click="toggleDropdown('experience')"
-                                class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border text-xs sm:text-sm font-medium transition cursor-pointer"
+                                class="inline-flex items-center gap-1.5 px-3.5 xl:px-2.5 py-2 rounded-xl border text-xs sm:text-sm font-medium transition cursor-pointer"
                                 :class="experience.length > 0 ? 'bg-orange-50 border-orange-200 text-primary font-semibold shadow-2xs' : 'bg-gray-50/80 border-gray-200/80 text-gray-700 hover:bg-white hover:border-gray-300'">
                             <span class="text-gray-400 font-normal">{{ __('Experience') }}:</span>
                             <span class="truncate max-w-[130px]" :class="experience.length > 0 ? 'text-primary font-semibold' : 'text-gray-800 font-medium'" x-text="selectedExperienceLabel || '{{ __('All') }}'"></span>
@@ -359,7 +359,7 @@ window.__JOBS_CONFIG__ = {
                     <div class="relative" :class="activeDropdown === 'salary' ? 'z-50' : 'z-auto'" @click.outside="closeDropdown('salary')">
                         <button type="button"
                                 @click="toggleDropdown('salary')"
-                                class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border text-xs sm:text-sm font-medium transition cursor-pointer"
+                                class="inline-flex items-center gap-1.5 px-3.5 xl:px-2.5 py-2 rounded-xl border text-xs sm:text-sm font-medium transition cursor-pointer"
                                 :class="(min_salary || max_salary) ? 'bg-orange-50 border-orange-200 text-primary font-semibold shadow-2xs' : 'bg-gray-50/80 border-gray-200/80 text-gray-700 hover:bg-white hover:border-gray-300'">
                             <span class="text-gray-400 font-normal">{{ __('Salary') }}:</span>
                             <span class="truncate max-w-[140px]" :class="(min_salary || max_salary) ? 'text-primary font-semibold' : 'text-gray-800 font-medium'" x-text="salaryLabel || '{{ __('All') }}'"></span>
@@ -426,7 +426,7 @@ window.__JOBS_CONFIG__ = {
                     <!-- 6. More Filters (Daha çox filtr) -->
                     <button type="button"
                             @click="moreFiltersOpen = true"
-                            class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-gray-200/80 bg-gray-50/80 text-gray-700 hover:bg-white hover:border-gray-300 text-xs sm:text-sm font-medium transition cursor-pointer"
+                            class="inline-flex shrink-0 items-center gap-1.5 px-3.5 xl:px-2.5 py-2 rounded-xl border border-gray-200/80 bg-gray-50/80 text-gray-700 hover:bg-white hover:border-gray-300 text-xs sm:text-sm font-medium whitespace-nowrap transition cursor-pointer"
                             :class="moreFiltersCount > 0 ? 'bg-orange-50 border-orange-200 text-primary font-semibold shadow-2xs' : ''">
                         <i class="fas fa-sliders-h text-xs" :class="moreFiltersCount > 0 ? 'text-primary' : 'text-gray-400'"></i>
                         <span>{{ __('More filters') }}</span>
