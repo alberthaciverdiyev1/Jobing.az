@@ -25,29 +25,87 @@ window.__RESUMES_CONFIG__ = {
         <div class="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700" x-text="errorMessage"></div>
     </div>
 
-    <!-- Hero -->
-    <x-list-hero :title="__('Resume Database')" :placeholder="__('Position, name, skill...')" />
+    <!-- Hero & Main Filters -->
+    <x-list-hero :title="__('Resume Database')" :show-search="false">
+        <div class="max-w-5xl mx-auto bg-white/95 backdrop-blur-sm rounded-2xl md:rounded-3xl border border-orange-100 p-3.5 sm:p-5 text-left">
+            <div class="grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_auto] items-stretch gap-2.5">
+                <div class="relative">
+                    <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm pointer-events-none"></i>
+                    <input type="text"
+                           x-model="q"
+                           @input.debounce.400ms="applyFilters()"
+                           @keydown.enter.prevent="applyFilters()"
+                           placeholder="{{ __('Position, name, skill...') }}"
+                           class="w-full h-12 pl-11 pr-10 bg-gray-50/70 hover:bg-white focus:bg-white border border-gray-200 rounded-xl text-sm text-gray-800 placeholder-gray-400 focus:outline-hidden focus:border-primary focus:ring-2 focus:ring-orange-100 transition">
+                    <button type="button" x-show="q" x-cloak @click="q = ''; applyFilters()"
+                            class="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 cursor-pointer p-1 text-xs">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+
+                <button type="button" @click="applyFilters()"
+                        class="hidden md:flex h-12 bg-primary hover:bg-primary-dark text-white font-semibold px-7 rounded-xl transition-all items-center justify-center gap-2 text-sm active:scale-[0.98] cursor-pointer whitespace-nowrap">
+                    <i class="fas fa-search text-xs"></i>
+                    <span>{{ __('Search') }}</span>
+                </button>
+            </div>
+
+            <div class="grid grid-cols-2 md:flex md:flex-wrap items-end gap-2 p-2.5 mt-3 rounded-xl bg-slate-50/80 border border-slate-100">
+                <label class="block min-w-0 md:w-64">
+                    <span class="block md:hidden text-[11px] font-medium text-gray-500 mb-1.5 px-0.5">{{ __('Category') }}</span>
+                    <select x-model="category" @change="applyFilters()"
+                            class="w-full h-10 bg-gray-50/80 border border-gray-200/80 rounded-xl px-3 text-xs sm:text-sm font-medium text-gray-800 focus:outline-hidden focus:border-primary cursor-pointer">
+                        <option value="">{{ __('All categories') }}</option>
+                        @foreach($categories as $cat)
+                            <option value="{{ $cat->slug }}">{{ $cat->name }}</option>
+                        @endforeach
+                    </select>
+                </label>
+
+                <label class="block min-w-0 md:w-56">
+                    <span class="block md:hidden text-[11px] font-medium text-gray-500 mb-1.5 px-0.5">{{ __('City') }}</span>
+                    <select :value="city[0] || ''"
+                            @change="city = $event.target.value ? [$event.target.value] : []; applyFilters()"
+                            class="w-full h-10 bg-gray-50/80 border border-gray-200/80 rounded-xl px-3 text-xs sm:text-sm font-medium text-gray-800 focus:outline-hidden focus:border-primary cursor-pointer">
+                        <option value="">{{ __('All cities') }}</option>
+                        @foreach($cities as $c)
+                            <option value="{{ $c }}">{{ $c }}</option>
+                        @endforeach
+                    </select>
+                </label>
+
+                <div class="col-span-2 md:col-span-1 md:contents">
+                    <span class="block md:hidden text-[11px] font-medium text-gray-500 mb-1.5 px-0.5">{{ __('More filters') }}</span>
+                    <button type="button" @click="mobileFiltersOpen = !mobileFiltersOpen"
+                            class="w-full md:w-auto h-10 inline-flex items-center justify-center gap-1.5 px-3.5 rounded-xl border border-gray-200/80 bg-gray-50/80 text-gray-700 hover:bg-white hover:border-gray-300 text-xs sm:text-sm font-medium transition cursor-pointer">
+                        <i class="fas fa-sliders-h text-gray-400 text-xs"></i>
+                        <span>{{ __('More filters') }}</span>
+                        <span x-show="skills.length" x-cloak class="px-1.5 py-0.5 rounded-full bg-primary text-white text-[10px] font-bold" x-text="skills.length"></span>
+                    </button>
+                </div>
+
+                <button type="button" x-show="hasActiveFilters" x-cloak @click="resetAllFilters()"
+                        class="col-span-2 md:col-span-1 text-xs text-gray-400 hover:text-primary flex items-center justify-center gap-1.5 font-medium cursor-pointer md:ml-auto py-2 px-2 rounded-lg hover:bg-gray-50">
+                    <i class="fas fa-rotate-left text-[11px]"></i>
+                    <span>{{ __('Reset filters') }}</span>
+                </button>
+            </div>
+
+            <button type="button" @click="applyFilters()"
+                    class="md:hidden mt-3 w-full h-12 bg-primary hover:bg-primary-dark text-white font-semibold px-7 rounded-xl transition-all flex items-center justify-center gap-2 text-sm active:scale-[0.98] cursor-pointer">
+                <i class="fas fa-search text-xs"></i>
+                <span>{{ __('Search') }}</span>
+            </button>
+        </div>
+    </x-list-hero>
 
     <!-- Main Content Container -->
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
-        <!-- Mobile Filter Trigger -->
-        <div class="lg:hidden mb-4">
-            <button type="button"
-                    @click="mobileFiltersOpen = !mobileFiltersOpen"
-                    class="w-full flex items-center justify-between px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-xs font-semibold text-gray-700 shadow-2xs cursor-pointer">
-                <span class="flex items-center gap-2">
-                    <i class="fas fa-sliders-h text-primary"></i>
-                    <span>{{ __('Filters') }}</span>
-                </span>
-                <i class="fas fa-chevron-down text-[11px] text-gray-400 transition-transform" :class="mobileFiltersOpen ? 'rotate-180' : ''"></i>
-            </button>
-        </div>
-
-        <div class="flex flex-col lg:flex-row gap-6">
+        <div class="flex flex-col gap-6 max-w-5xl mx-auto">
 
             <!-- Sidebar Filters -->
-            <div class="lg:w-1/4 w-full" :class="mobileFiltersOpen ? 'block' : 'hidden lg:block'">
+            <div class="w-full" x-show="mobileFiltersOpen" x-collapse>
                 <div class="bg-white rounded-xl border border-gray-200 p-5 sticky top-24 space-y-5 shadow-2xs">
                     <div class="space-y-5">
 
@@ -181,7 +239,7 @@ window.__RESUMES_CONFIG__ = {
             </div>
 
             <!-- List Area -->
-            <div class="lg:w-3/4 w-full">
+            <div class="w-full">
 
                 <!-- List Header (Count + Sorting) -->
                 <div class="flex flex-row justify-between items-center gap-2 sm:gap-3 mb-5 pb-3 border-b border-gray-200">

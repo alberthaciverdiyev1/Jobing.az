@@ -1,6 +1,7 @@
 @props([
     'title',
     'placeholder' => null,
+    'showSearch' => true,
 ])
 
 @php
@@ -54,6 +55,7 @@
             {{ $title }}
         </h2>
 
+        @if($showSearch)
         <form @submit.prevent="applyFilters()" class="flex flex-col lg:flex-row gap-2.5 lg:gap-3 max-w-4xl mx-auto">
             <div class="relative flex-1">
                 <i class="fas fa-search absolute left-4 lg:left-6 top-1/2 -translate-y-1/2 text-gray-400 text-base lg:text-lg"></i>
@@ -75,6 +77,11 @@
                 {{ __('Search') }}
             </button>
         </form>
+        @endif
+
+        @if(!$slot->isEmpty())
+            {{ $slot }}
+        @endif
 
         @isset($chips)
         <div class="flex flex-wrap items-center justify-center gap-2 mt-6">
