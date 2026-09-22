@@ -455,9 +455,9 @@ window.__JOBS_CONFIG__ = {
         <div class="max-w-5xl mx-auto w-full">
 
             <!-- List Header: Count & Sort -->
-            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-5 pb-3 border-b border-gray-200">
-                <div class="flex items-center gap-2">
-                    <p class="text-sm text-gray-500">
+            <div class="flex flex-row justify-between items-center gap-2 sm:gap-3 mb-5 pb-3 border-b border-gray-200">
+                <div class="flex items-center gap-2 min-w-0">
+                    <p class="text-xs sm:text-sm text-gray-500 leading-tight">
                         <span class="font-semibold text-primary" x-text="totalCount">{{ $jobs->total() }}</span> {{ __('active job listings found') }}
                     </p>
                     <span x-show="isLoading" x-cloak class="inline-block animate-spin text-primary text-xs">
@@ -465,11 +465,11 @@ window.__JOBS_CONFIG__ = {
                     </span>
                 </div>
 
-                <div class="flex items-center gap-2 text-xs">
+                <div class="flex items-center gap-2 text-xs shrink-0">
                     <span class="text-gray-500 hidden sm:inline">{{ __('Sort by:') }}</span>
                     <select x-model="sort"
                             @change="applyFilters()"
-                            class="text-xs border border-gray-200 rounded-lg px-3 py-1.5 bg-white focus:outline-hidden focus:border-primary text-gray-700 shadow-2xs cursor-pointer">
+                            class="w-[180px] sm:w-auto text-xs border border-gray-200 rounded-lg px-2.5 sm:px-3 py-1.5 bg-white focus:outline-hidden focus:border-primary text-gray-700 shadow-2xs cursor-pointer">
                         <option value="latest">{{ __('By date (newest)') }}</option>
                         <option value="oldest">{{ __('By date (oldest)') }}</option>
                         <option value="salary_desc">{{ __('Sort by salary (high to low)') }}</option>
