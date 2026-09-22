@@ -54,17 +54,22 @@ log "Cache'ler"
 sudo -u "$APP_USER" "$PHP_BIN" artisan optimize:clear
 sudo -u "$APP_USER" "$PHP_BIN" artisan optimize
 
+log "Queue worker grace restart"
+sudo -u "$APP_USER" "$PHP_BIN" artisan queue:restart || true
+
+# ÖNEMLİ: Bu blok ən sonda olmalıdır. Yuxarıdaki root kimi işləyən artisan
+# əmrləri (queue:restart və s.) storage/framework/cache altında 0755/root
+# qovluqlar yaradır; php-fpm isə www-data kimi işləyir. Ona görə storage və
+# bootstrap/cache-i ən son mərhələdə www-data-ya veririk.
 log "İzinler"
 chown -R "$APP_USER":www-data "$APP_DIR"
+chown -R www-data:www-data "$APP_DIR/storage" "$APP_DIR/bootstrap/cache"
 chmod -R ug+rwX "$APP_DIR/storage" "$APP_DIR/bootstrap/cache"
-# setgid: yeni alt qovluqlar www-data qrupunu miras alsın (php-fpm yaza bilsin).
-find "$APP_DIR/storage" "$APP_DIR/bootstrap/cache" -type d -exec chmod g+s {} +
+# setgid: yeni alt qovluqlar www-data qrupunu miras alsın.
+find "$APP_DIR/storage" "$APP_DIR/bootstrap/cache" -type d -exec chmod 2775 {} +
 
 log "PHP-FPM reload (kesintisiz)"
 sudo systemctl reload "php${PHP_VER}-fpm"
-
-log "Queue worker grace restart"
-sudo -u "$APP_USER" "$PHP_BIN" artisan queue:restart || true
 
 log "Sağlık kontrolü"
 URL="${HEALTH_URL:-https://127.0.0.1}"
