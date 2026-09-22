@@ -25,9 +25,9 @@ window.__COMPANIES_CONFIG__ = {
     <x-list-hero :title="__('Companies')" :placeholder="__('Search company...')" />
 
     <!-- Main Content -->
-    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 pt-5 pb-8">
 
-        <div class="mb-6 grid grid-cols-1 sm:grid-cols-3 gap-3 rounded-2xl border border-gray-200 bg-white p-4 shadow-2xs">
+        <div class="mb-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 rounded-2xl border border-gray-200 bg-white p-4 shadow-2xs">
             <label class="space-y-1.5 text-xs font-medium text-gray-700">
                 <span>{{ __('City') }}</span>
                 <select x-model="location" @change="applyFilters()"
@@ -52,36 +52,35 @@ window.__COMPANIES_CONFIG__ = {
                        class="rounded border-gray-300 text-primary focus:ring-primary">
                 <span>{{ __('Companies with active vacancies') }}</span>
             </label>
+
+            <label class="space-y-1.5 text-xs font-medium text-gray-700">
+                <span>{{ __('Sorting') }}</span>
+                <select x-model="sort"
+                        @change="applyFilters()"
+                        class="w-full rounded-xl border border-gray-200 bg-gray-50 px-3 py-2.5 text-xs text-gray-700 shadow-2xs cursor-pointer focus:border-primary focus:bg-white focus:outline-hidden">
+                    <option value="latest">{{ __('By date (newest)') }}</option>
+                    <option value="popular">{{ __('With the most vacancies') }}</option>
+                    <option value="verified">{{ __('Verified first') }}</option>
+                    <option value="alphabetical">{{ __('Alphabetical order (A-Z)') }}</option>
+                </select>
+            </label>
         </div>
 
-        <!-- List Header (Count + Sorting) -->
-        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 pb-4 border-b border-gray-200">
+        <!-- List Header -->
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-5 pb-3 border-b border-gray-200">
             <p class="text-sm text-gray-500">
                 <span class="font-semibold text-primary" x-text="totalCount">{{ $companies->total() }}</span> {{ __('companies found') }}
             </p>
 
-            <!-- Right Controls: Sorting -->
-            <div class="w-full md:w-auto flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 text-xs">
-                <!-- Sorting Select -->
-                <div class="flex items-center gap-2 shrink-0">
-                    <select x-model="sort"
-                            @change="applyFilters()"
-                            class="w-full sm:w-auto text-xs border border-gray-200 rounded-lg px-2.5 py-1.5 bg-white focus:outline-hidden focus:border-primary text-gray-700 shadow-2xs cursor-pointer">
-                        <option value="latest">{{ __('By date (newest)') }}</option>
-                        <option value="popular">{{ __('With the most vacancies') }}</option>
-                        <option value="verified">{{ __('Verified first') }}</option>
-                        <option value="alphabetical">{{ __('Alphabetical order (A-Z)') }}</option>
-                    </select>
-                </div>
-
+            <div class="flex items-center text-xs">
                 <button type="button"
                         x-show="hasActiveFilters"
                         x-cloak
                         @click="resetAllFilters()"
-                        class="text-xs text-primary hover:underline font-semibold flex items-center gap-1 shrink-0 self-center sm:self-auto cursor-pointer"
+                        class="text-xs text-primary hover:underline font-semibold flex items-center gap-1 shrink-0 cursor-pointer"
                         title="{{ __('Reset all filters') }}">
                     <i class="fas fa-sync-alt text-[11px]"></i>
-                    <span class="sm:hidden">{{ __('Reset') }}</span>
+                    <span>{{ __('Reset') }}</span>
                 </button>
             </div>
         </div>
