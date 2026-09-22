@@ -15,7 +15,9 @@ return new class extends Migration
             $table->dropUnique(['name']);
         });
 
-        DB::statement('ALTER TABLE skills ALTER COLUMN name TYPE json USING json_build_object(\'az\', name)');
+        if (DB::getDriverName() === 'pgsql') {
+            DB::statement('ALTER TABLE skills ALTER COLUMN name TYPE json USING json_build_object(\'az\', name)');
+        }
 
         foreach ($existingSkills as $skill) {
             $nameStr = is_string($skill->name) ? $skill->name : '';
@@ -34,6 +36,8 @@ return new class extends Migration
 
     public function down(): void
     {
-        DB::statement('ALTER TABLE skills ALTER COLUMN name TYPE varchar(255) USING name->>\'az\'');
+        if (DB::getDriverName() === 'pgsql') {
+            DB::statement('ALTER TABLE skills ALTER COLUMN name TYPE varchar(255) USING name->>\'az\'');
+        }
     }
 };

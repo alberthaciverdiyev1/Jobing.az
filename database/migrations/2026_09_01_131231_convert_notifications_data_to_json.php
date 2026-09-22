@@ -7,11 +7,15 @@ return new class extends Migration
 {
     public function up(): void
     {
-        DB::statement('ALTER TABLE notifications ALTER COLUMN data TYPE json USING data::json');
+        if (DB::getDriverName() === 'pgsql') {
+            DB::statement('ALTER TABLE notifications ALTER COLUMN data TYPE json USING data::json');
+        }
     }
 
     public function down(): void
     {
-        DB::statement('ALTER TABLE notifications ALTER COLUMN data TYPE text USING data::text');
+        if (DB::getDriverName() === 'pgsql') {
+            DB::statement('ALTER TABLE notifications ALTER COLUMN data TYPE text USING data::text');
+        }
     }
 };

@@ -2,6 +2,7 @@
 
 namespace App\Modules\Vacancy\Requests;
 
+use App\Modules\Company\Models\Company;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreVacancyRequest extends FormRequest
@@ -31,7 +32,24 @@ class StoreVacancyRequest extends FormRequest
             // If the user already has a linked company profile, company_name is disabled in the form
             // (not sent by browser) and resolved from their profile in VacancyService.
             // For guests or users without a linked company profile, company_name is required.
-            'company_name' => $hasCompany ? 'nullable|string|max:255' : 'required|string|max:255',
+            'company_name' => $hasCompany
+                ? 'nullable|string|max:255'
+                : [
+                    'required',
+                    'string',
+                    'max:255',
+                    function (string $attribute, mixed $value, \Closure $fail): void {
+                        $normalizedName = mb_strtolower(trim((string) $value));
+
+                        $companyExists = Company::query()
+                            ->whereRaw('LOWER(TRIM(name)) = ?', [$normalizedName])
+                            ->exists();
+
+                        if ($companyExists) {
+                            $fail('Bu şirkət adı artıq istifadə olunur. Şirkət hesabına daxil olun və ya fərqli ad seçin.');
+                        }
+                    },
+                ],
             'company_website' => 'nullable|url|max:255',
             'company_email' => 'nullable|email|max:255',
             'company_location' => 'nullable|string|max:255',
@@ -42,7 +60,7 @@ class StoreVacancyRequest extends FormRequest
             'experience_level_id' => 'required|exists:experience_levels,id',
             'location' => 'nullable|string|max:255',
             'salary_min' => 'nullable|numeric|min:0',
-            'salary_max' => 'nullable|numeric|min:0',
+            'salary_max' => 'nullable|numeric|min:0|gte:salary_min',
             'salary_negotiable' => 'nullable|boolean',
             'currency' => 'nullable|string|max:10',
             'description' => 'required|string',
@@ -69,13 +87,14 @@ class StoreVacancyRequest extends FormRequest
             'category_id.required' => 'Zəhmət olmasa, kateqoriya seçin.',
             'category_id.exists' => 'Seçilmiş kateqoriya etibarsızdır.',
             'job_type_id.required' => 'İş rejimini seçin.',
-            'workplace_type_id.required' => 'Çalışma yerini seçin.',
+            'workplace_type_id.required' => 'İş yerini seçin.',
             'experience_level_id.required' => 'Təcrübə səviyyəsini seçin.',
             'currency.required' => 'Valyutanı seçin.',
             'description.required' => 'İş təsviri və öhdəliklər mütləq doldurulmalıdır.',
             'application_email.required' => 'Müraciətlərin qəbul ediləcəyi e-poçt ünvanını daxil edin.',
             'application_email.email' => 'Düzgün e-poçt ünvanı daxil edin.',
             'deadline.after' => 'Son müraciət tarixi bugündən sonra olmalıdır.',
+            'salary_max.gte' => 'Maksimum maaş minimum maaşdan az ola bilməz.',
         ];
     }
 }

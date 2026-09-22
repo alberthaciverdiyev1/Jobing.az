@@ -10,11 +10,13 @@ use App\Modules\Core\Traits\HasSlug;
 use App\Modules\JobAttribute\Models\City;
 use App\Modules\JobAttribute\Models\ExperienceLevel;
 use App\Modules\JobAttribute\Models\JobType;
+use App\Modules\JobAttribute\Models\Skill;
 use App\Modules\JobAttribute\Models\WorkplaceType;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Vacancy extends Model
@@ -38,7 +40,6 @@ class Vacancy extends Model
         'currency',
         'description',
         'requirements',
-        'skills',
         'is_featured',
         'featured_until',
         'bumped_at',
@@ -51,7 +52,6 @@ class Vacancy extends Model
     ];
 
     protected $casts = [
-        'skills' => 'array',
         'application_fields' => 'array',
         'is_featured' => 'boolean',
         'featured_until' => 'datetime',
@@ -96,6 +96,19 @@ class Vacancy extends Model
                 \Illuminate\Support\Facades\Log::warning('Vakansiya təsdiq bildirişi alınmadı: ' . $e->getMessage());
             }
         });
+    }
+
+    public function skillRecords(): BelongsToMany
+    {
+        return $this->belongsToMany(Skill::class, 'skill_vacancy')->withTimestamps();
+    }
+
+    public function getSkillsAttribute(): array
+    {
+        return $this->skillRecords
+            ->map(fn (Skill $skill): string => (string) $skill->name)
+            ->values()
+            ->all();
     }
 
     public function company(): BelongsTo

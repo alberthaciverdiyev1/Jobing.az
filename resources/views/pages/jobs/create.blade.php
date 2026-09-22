@@ -74,7 +74,17 @@
                     if (!this.parentCat) {
                         return [];
                     }
-                    return this.allSkills.filter(s => !s.category_id || s.category_id == this.parentCat);
+                    const seen = new Set();
+                    return this.allSkills
+                        .filter(s => !s.category_id || s.category_id == this.parentCat)
+                        .filter(s => {
+                            const key = s.name.trim().toLocaleLowerCase();
+                            if (seen.has(key)) {
+                                return false;
+                            }
+                            seen.add(key);
+                            return true;
+                        });
                 },
                 get filteredSkills() {
                     const list = this.categorySkills;

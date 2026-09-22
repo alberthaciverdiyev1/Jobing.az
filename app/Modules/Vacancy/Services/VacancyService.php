@@ -22,7 +22,7 @@ class VacancyService
      */
     public function getPaginatedVacancies(array $filters = [], int $perPage = 12): array
     {
-        $query = Vacancy::with(['company', 'category', 'city', 'jobType', 'workplaceType', 'experienceLevel'])->active();
+        $query = Vacancy::with(['company', 'category', 'city', 'jobType', 'workplaceType', 'experienceLevel', 'skillRecords'])->active();
 
         // 1. Keyword search
         if (!empty($filters['q'])) {
@@ -108,11 +108,8 @@ class VacancyService
         // 5.6 Skills Filter (multi-select)
         $selectedSkills = array_filter((array) ($filters['skills'] ?? []));
         if (!empty($selectedSkills)) {
-            $query->where(function ($q) use ($selectedSkills) {
-                foreach ($selectedSkills as $s) {
-                    $q->orWhereJsonContains('skills', $s);
-                }
-            });
+            $skillIds = $this->resolveSkillIds($selectedSkills);
+            $query->whereHas('skillRecords', fn ($skillQuery) => $skillQuery->whereIn('skills.id', $skillIds));
         }
 
         // 6. Salary Filter (Min & Max)
@@ -210,11 +207,8 @@ class VacancyService
                     $q->whereHas('city', fn ($cq) => $cq->whereIn('slug', $selectedCities));
                 }
                 if (!empty($selectedSkills)) {
-                    $q->where(function ($sub) use ($selectedSkills) {
-                        foreach ($selectedSkills as $s) {
-                            $sub->orWhereJsonContains('skills', $s);
-                        }
-                    });
+                    $skillIds = $this->resolveSkillIds($selectedSkills);
+                    $q->whereHas('skillRecords', fn ($skillQuery) => $skillQuery->whereIn('skills.id', $skillIds));
                 }
                 if (!empty($filters['min_salary'])) {
                     $minSalary = (float) $filters['min_salary'];
@@ -307,7 +301,7 @@ class VacancyService
      */
     public function getVacancyDetails(string $slug): array
     {
-        $job = Vacancy::with(['company', 'category', 'jobType', 'workplaceType', 'experienceLevel'])
+        $job = Vacancy::with(['company', 'category', 'jobType', 'workplaceType', 'experienceLevel', 'skillRecords'])
             ->where('slug', $slug)
             ->firstOrFail();
 
@@ -315,7 +309,7 @@ class VacancyService
             $job->increment('views_count');
         }
 
-        $relatedJobs = Vacancy::with(['company', 'city', 'category', 'jobType', 'workplaceType', 'experienceLevel'])
+        $relatedJobs = Vacancy::with(['company', 'city', 'category', 'jobType', 'workplaceType', 'experienceLevel', 'skillRecords'])
             ->active()
             ->where('id', '!=', $job->id)
             ->where(function ($q) use ($job) {
@@ -452,22 +446,15 @@ class VacancyService
                 $company->save();
             }
         } else {
-            $company = Company::firstOrCreate(
-                ['name' => $data['company_name']],
-                [
-                    'email' => $data['company_email'] ?? $data['application_email'] ?? null,
-                    'website' => $data['company_website'] ?? null,
-                    'city_id' => $cityId,
-                    'is_verified' => false,
-                ]
-            );
-            if (empty($company->email) && !empty($data['application_email'])) {
-                $company->email = $data['application_email'];
-            }
-            if ($cityId && empty($company->city_id)) {
-                $company->city_id = $cityId;
-            }
-            $company->save();
+            // Unlinked users may only create a new company identity. Reusing an
+            // existing record would allow a vacancy to impersonate that company.
+            $company = Company::create([
+                'name' => trim($data['company_name']),
+                'email' => $data['company_email'] ?? $data['application_email'] ?? null,
+                'website' => $data['company_website'] ?? null,
+                'city_id' => $cityId,
+                'is_verified' => false,
+            ]);
         }
 
         // 3. Parse skills if string or array
@@ -491,7 +478,7 @@ class VacancyService
         $applicationType = $canUseInternal ? ($data['application_type'] ?? 'internal') : 'email';
 
         // 5. Create Vacancy
-        return Vacancy::create([
+        $vacancy = Vacancy::create([
             'company_id' => $company->id,
             'category_id' => $data['category_id'] ?? null,
             'city_id' => $cityId ?? $company->city_id,
@@ -509,7 +496,6 @@ class VacancyService
             'description' => $data['description'],
             'requirements' => $data['requirements'] ?? null,
             'benefits' => $data['benefits'] ?? null,
-            'skills' => $skills,
             'deadline' => $data['deadline'] ?? null,
             'application_type' => $applicationType,
             'application_email' => $data['application_email'] ?? $company->email,
@@ -517,6 +503,23 @@ class VacancyService
             'is_active' => false, // Requires admin approval before appearing publicly
             'is_featured' => false,
         ]);
+
+        $vacancy->skillRecords()->sync($this->resolveSkillIds($skills ?? []));
+
+        return $vacancy->load('skillRecords');
+    }
+
+    /** @return array<int, int> */
+    private function resolveSkillIds(array $names): array
+    {
+        $normalized = array_map(fn ($name) => mb_strtolower(trim((string) $name)), $names);
+
+        return Skill::cachedActive()
+            ->filter(fn (Skill $skill) => in_array(mb_strtolower((string) $skill->name), $normalized, true))
+            ->pluck('id')
+            ->map(fn ($id) => (int) $id)
+            ->values()
+            ->all();
     }
 
     /**

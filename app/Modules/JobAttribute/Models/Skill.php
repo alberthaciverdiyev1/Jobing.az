@@ -47,6 +47,12 @@ class Skill extends Model
             ->withTimestamps();
     }
 
+    public function vacancies(): BelongsToMany
+    {
+        return $this->belongsToMany(\App\Modules\Vacancy\Models\Vacancy::class, 'skill_vacancy')
+            ->withTimestamps();
+    }
+
     public function scopeActive(Builder $query): Builder
     {
         return $query->where('is_active', true)->orderBy('order')->orderBy('id');

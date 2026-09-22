@@ -89,7 +89,7 @@ class VacancyResource extends Resource
                                     ->live()
                                     ->afterStateUpdated(function (Forms\Set $set) {
                                         $set('category_id', null);
-                                        $set('skills', []);
+                                        $set('skillRecords', []);
                                     })
                                     ->dehydrated(false)
                                     ->default(function ($record) {
@@ -115,7 +115,7 @@ class VacancyResource extends Resource
                                     ->preload()
                                     ->required()
                                     ->live()
-                                    ->afterStateUpdated(fn (Forms\Set $set) => $set('skills', [])),
+                                    ->afterStateUpdated(fn (Forms\Set $set) => $set('skillRecords', [])),
                             ])->columns(2),
 
                         Forms\Components\Section::make(__('Job Description & Details'))
@@ -197,7 +197,7 @@ class VacancyResource extends Resource
                                     ->label(__('Salary negotiable'))
                                     ->live(),
 
-                                Forms\Components\Select::make('skills')
+                                Forms\Components\Select::make('skillRecords')
                                     ->label(__('Required Skills (Tags)'))
                                     ->options(function (Forms\Get $get) {
                                         // Seçilen kategoriye (ana + alt) bağlı etiketleri göster.
@@ -209,18 +209,14 @@ class VacancyResource extends Resource
                                         $query = \App\Modules\JobAttribute\Models\Skill::active();
 
                                         $options = $ids
-                                            ? $query->whereIn('category_id', $ids)->pluck('name', 'name')->all()
-                                            : $query->pluck('name', 'name')->all();
+                                            ? $query->whereIn('category_id', $ids)->get()
+                                            : $query->get();
 
-                                        // Düzenlemede mevcut seçimler kaybolmasın diye koru.
-                                        foreach ((array) $get('skills') as $selected) {
-                                            if ($selected && ! array_key_exists($selected, $options)) {
-                                                $options[$selected] = $selected;
-                                            }
-                                        }
-
-                                        return $options;
+                                        return $options
+                                            ->mapWithKeys(fn ($skill) => [$skill->id => (string) $skill->name])
+                                            ->all();
                                     })
+                                    ->relationship('skillRecords', 'name')
                                     ->multiple()
                                     ->searchable()
                                     ->preload(),

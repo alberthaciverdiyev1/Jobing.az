@@ -11,6 +11,11 @@ return new class extends Migration
         \Illuminate\Support\Facades\DB::table('vacancy_favorites')->whereNull('user_id')->delete();
 
         Schema::table('vacancy_favorites', function (Blueprint $table) {
+            $table->dropIndex(['session_id', 'vacancy_id']);
+            $table->dropIndex(['session_id']);
+        });
+
+        Schema::table('vacancy_favorites', function (Blueprint $table) {
             if (Schema::hasColumn('vacancy_favorites', 'session_id')) {
                 $table->dropColumn('session_id');
             }
@@ -21,6 +26,7 @@ return new class extends Migration
     {
         Schema::table('vacancy_favorites', function (Blueprint $table) {
             $table->string('session_id', 100)->nullable()->index();
+            $table->index(['session_id', 'vacancy_id']);
         });
     }
 };

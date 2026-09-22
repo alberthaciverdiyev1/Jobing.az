@@ -21,12 +21,16 @@ return new class extends Migration
             }
         });
 
-        DB::statement("ALTER TABLE companies ALTER COLUMN about TYPE json USING json_build_object('az', COALESCE(about, ''));");
+        if (DB::getDriverName() === 'pgsql') {
+            DB::statement("ALTER TABLE companies ALTER COLUMN about TYPE json USING json_build_object('az', COALESCE(about, ''));");
+        }
     }
 
     public function down(): void
     {
-        DB::statement("ALTER TABLE companies ALTER COLUMN about TYPE text USING about->>'az';");
+        if (DB::getDriverName() === 'pgsql') {
+            DB::statement("ALTER TABLE companies ALTER COLUMN about TYPE text USING about->>'az';");
+        }
 
         Schema::table('companies', function (Blueprint $table) {
             $table->string('location')->nullable();
