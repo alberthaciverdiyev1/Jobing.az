@@ -6,6 +6,7 @@ use App\Modules\Scraper\Models\ScraperRun;
 use App\Modules\Scraper\Models\ScraperSetting;
 use App\Modules\Scraper\Models\ScraperSourceStatus;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Filament\Pages\Page;
 
 class ScraperStatus extends Page
@@ -32,6 +33,17 @@ class ScraperStatus extends Page
             'other' => $this->nextWeeklyAt($now, Carbon::SATURDAY, 21),
         ];
 
+        // Son 24 saatte eklenen ilanlar (kaynak bazında)
+        $since = Carbon::now()->subDay();
+        $perSource24h = DB::table('scraped_vacancies')
+            ->where('created_at', '>=', $since)
+            ->selectRaw("split_part(slug, '-', 1) as src, count(*) as c")
+            ->groupBy('src')->pluck('c', 'src');
+        $last24h = (int) $perSource24h->sum();
+
+        // Trend: son 14 çalışmanın eklenen ilan sayısı (eskiden yeniye)
+        $trend = ScraperRun::latest('id')->limit(14)->get()->reverse()->values();
+
         return [
             'sources' => ScraperSourceStatus::orderBy('source')->get(),
             'runs' => ScraperRun::latest('id')->limit(10)->get(),
@@ -39,6 +51,16 @@ class ScraperStatus extends Page
             'next' => $next,
             'now' => $now,
             'lastRun' => ScraperRun::latest('id')->first(),
+            'last24h' => $last24h,
+            'perSource24h' => $perSource24h,
+            'trend' => $trend,
+            'trendMax' => max(1, (int) ($trend->max('inserted') ?? 1)),
+            'cron' => [
+                ['Bakü (günde 3, 4 saat arayla)', '0 0 * * *', 'scripts/cron-baku-daily.sh (08:00–13:00 rastgele başlangıç)'],
+                ['boss.az (günde 1)', '0 3 * * *', 'scripts/cron-boss.sh'],
+                ['Digər şəhərlər (həftə sonu)', '0 21 * * 6', 'scripts/cron-other-weekend.sh'],
+                ['Facet/cache isitme (günde 3)', '0 */8 * * *', 'php artisan facets:refresh --warm'],
+            ],
             'totals' => [
                 'listings' => ScraperSourceStatus::sum('inserted'),
                 'sources' => ScraperSourceStatus::count(),
