@@ -2,7 +2,6 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
-use Throwable;
 
 return new class extends Migration
 {
@@ -12,7 +11,7 @@ return new class extends Migration
         if (! $this->hasTrgm()) {
             try {
                 DB::statement('CREATE EXTENSION IF NOT EXISTS pg_trgm');
-            } catch (Throwable) {
+            } catch (\Throwable) {
                 // yetki yoksa indeksler bir sonraki adımda atlanır
             }
         }
