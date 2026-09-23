@@ -13,6 +13,8 @@ class ScraperStatsOverview extends StatsOverviewWidget
 {
     protected static ?int $sort = -10;
 
+    protected static bool $isLazy = false;
+
     protected function getStats(): array
     {
         $tz = 'Asia/Baku';
