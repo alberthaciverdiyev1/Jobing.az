@@ -79,6 +79,7 @@ class AdminPanelProvider extends PanelProvider
                 \App\Modules\Setting\Filament\Pages\ManageSiteSettings::class,
                 \App\Modules\Seo\Filament\Pages\ManageSeoSettings::class,
                 \App\Modules\Seo\Filament\Pages\ManageSitemap::class,
+                \App\Modules\Scraper\Filament\Pages\ScraperStatus::class,
             ])
             ->widgets([
                 \App\Modules\Home\Filament\Widgets\StatsOverview::class,
