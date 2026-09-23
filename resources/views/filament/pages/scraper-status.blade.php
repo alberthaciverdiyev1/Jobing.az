@@ -1,5 +1,5 @@
 <x-filament-panels::page>
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
         <div class="rounded-xl bg-white p-5 shadow-sm ring-1 ring-gray-950/5 dark:bg-gray-900 dark:ring-white/10">
             <div class="text-sm text-gray-500">Son tarama</div>
             <div class="mt-1 text-2xl font-bold text-gray-900 dark:text-white">{{ $lastRun?->finished_at?->timezone($tz)->format('d.m.Y H:i') ?? '—' }}</div>
@@ -19,6 +19,12 @@
             <div class="text-sm text-gray-500">Saat dilimi</div>
             <div class="mt-1 text-2xl font-bold text-gray-900 dark:text-white">{{ $tz }}</div>
             <div class="mt-1 text-xs text-gray-500">Şimdi: {{ $now->format('d.m.Y H:i') }}</div>
+        </div>
+        <div class="rounded-xl bg-white p-5 shadow-sm ring-1 ring-gray-950/5 dark:bg-gray-900 dark:ring-white/10">
+            <div class="text-sm text-gray-500">Ortalama çalışma süresi</div>
+            @php($avg = (int) round($avgSeconds))
+            <div class="mt-1 text-2xl font-bold text-gray-900 dark:text-white">{{ $avg >= 60 ? floor($avg/60).' dəq '.($avg%60).' sn' : $avg.' sn' }}</div>
+            <div class="mt-1 text-xs text-gray-500">son çalışmalara görə</div>
         </div>
     </div>
 
@@ -64,6 +70,18 @@
         </div>
     </div>
 
+    <div class="mt-6 rounded-xl bg-white p-5 shadow-sm ring-1 ring-gray-950/5 dark:bg-gray-900 dark:ring-white/10">
+        <h3 class="text-base font-semibold text-gray-900 dark:text-white">Günlük eklenen ilan (son 14 gün)</h3>
+        <div class="mt-4 flex items-end gap-1 h-32">
+            @foreach($dailySeries as $day => $v)
+                <div class="flex-1 flex flex-col items-center justify-end h-full" title="{{ $day }} — {{ $v }}">
+                    <div class="w-full rounded-t bg-emerald-500" style="height: {{ max(1, (int) round(($v / $dailyMax) * 100)) }}%"></div>
+                    <span class="text-[9px] text-gray-400 mt-1">{{ \Carbon\Carbon::parse($day)->format('d.m') }}</span>
+                </div>
+            @endforeach
+        </div>
+    </div>
+
     <div class="mt-6 rounded-xl bg-white shadow-sm ring-1 ring-gray-950/5 dark:bg-gray-900 dark:ring-white/10 overflow-hidden">
         <div class="p-5 text-base font-semibold text-gray-900 dark:text-white">Kaynak durumu</div>
         <div class="overflow-x-auto">
@@ -76,6 +94,7 @@
                         <th class="text-right px-3 py-2">Hazır</th>
                         <th class="text-right px-3 py-2">Eklenen</th>
                         <th class="text-right px-3 py-2">24s</th>
+                        <th class="text-left px-3 py-2">Trend</th>
                         <th class="text-right px-3 py-2">Tekrar</th>
                         <th class="text-right px-3 py-2">Atlanan</th>
                         <th class="text-right px-5 py-2">Hata</th>
@@ -91,12 +110,21 @@
                             <td class="px-3 py-2 text-right">{{ number_format($s->ready) }}</td>
                             <td class="px-3 py-2 text-right font-semibold text-emerald-600">{{ number_format($s->inserted) }}</td>
                             <td class="px-3 py-2 text-right">{{ number_format($perSource24h[$key] ?? 0) }}</td>
+                            @php($ser = $perSourceTrend[$s->source] ?? collect())
+                            @php($sermax = max(1, (int) ($ser->max() ?? 1)))
+                            <td class="px-3 py-2">
+                                <div class="flex items-end gap-0.5 h-5">
+                                    @foreach($ser as $v)
+                                        <div class="w-1 rounded-sm bg-primary-500" style="height: {{ max(1, (int) round(($v / $sermax) * 20)) }}px"></div>
+                                    @endforeach
+                                </div>
+                            </td>
                             <td class="px-3 py-2 text-right">{{ number_format($s->duplicates) }}</td>
                             <td class="px-3 py-2 text-right">{{ number_format($s->skipped) }}</td>
                             <td class="px-5 py-2 text-right {{ $s->errors ? 'text-red-600 font-semibold' : '' }}">{{ number_format($s->errors) }}</td>
                         </tr>
                     @empty
-                        <tr><td colspan="9" class="px-5 py-6 text-center text-gray-500">Hələ məlumat yoxdur.</td></tr>
+                        <tr><td colspan="10" class="px-5 py-6 text-center text-gray-500">Hələ məlumat yoxdur.</td></tr>
                     @endforelse
                 </tbody>
             </table>

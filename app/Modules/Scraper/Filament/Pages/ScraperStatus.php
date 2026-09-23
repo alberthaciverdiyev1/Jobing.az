@@ -3,6 +3,7 @@
 namespace App\Modules\Scraper\Filament\Pages;
 
 use App\Modules\Scraper\Models\ScraperRun;
+use App\Modules\Scraper\Models\ScraperSourceRun;
 use App\Modules\Scraper\Models\ScraperSetting;
 use App\Modules\Scraper\Models\ScraperSourceStatus;
 use Carbon\Carbon;
@@ -44,6 +45,29 @@ class ScraperStatus extends Page
         // Trend: son 14 çalışmanın eklenen ilan sayısı (eskiden yeniye)
         $trend = ScraperRun::latest('id')->limit(14)->get()->reverse()->values();
 
+        // Ortalama çalışma süresi (saniyə)
+        $avgSeconds = (float) (DB::table('scraper_runs')
+            ->whereNotNull('started_at')->whereNotNull('finished_at')
+            ->selectRaw('avg(extract(epoch from (finished_at - started_at))) as s')
+            ->value('s') ?? 0);
+
+        // Günlük toplamlar (son 14 gün)
+        $dailyRaw = DB::table('scraper_runs')->whereNotNull('finished_at')
+            ->where('finished_at', '>=', Carbon::now()->subDays(13)->startOfDay())
+            ->selectRaw("to_char(finished_at, 'YYYY-MM-DD') as d, sum(inserted) as ins")
+            ->groupBy('d')->pluck('ins', 'd');
+        $dailySeries = [];
+        for ($i = 13; $i >= 0; $i--) {
+            $day = Carbon::now()->subDays($i)->format('Y-m-d');
+            $dailySeries[$day] = (int) ($dailyRaw[$day] ?? 0);
+        }
+        $dailyMax = max(1, max($dailySeries));
+
+        // Kaynak bazında trend (son 10 çalışma)
+        $perSourceTrend = ScraperSourceRun::orderBy('run_at')->get()
+            ->groupBy('source')
+            ->map(fn ($group) => $group->pluck('inserted')->take(-10)->values());
+
         return [
             'sources' => ScraperSourceStatus::orderBy('source')->get(),
             'runs' => ScraperRun::latest('id')->limit(10)->get(),
@@ -55,6 +79,10 @@ class ScraperStatus extends Page
             'perSource24h' => $perSource24h,
             'trend' => $trend,
             'trendMax' => max(1, (int) ($trend->max('inserted') ?? 1)),
+            'avgSeconds' => $avgSeconds,
+            'dailySeries' => $dailySeries,
+            'dailyMax' => $dailyMax,
+            'perSourceTrend' => $perSourceTrend,
             'cron' => [
                 ['Bakü (günde 3, 4 saat arayla)', '0 0 * * *', 'scripts/cron-baku-daily.sh (08:00–13:00 rastgele başlangıç)'],
                 ['boss.az (günde 1)', '0 3 * * *', 'scripts/cron-boss.sh'],
