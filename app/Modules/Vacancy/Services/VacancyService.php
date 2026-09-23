@@ -22,7 +22,7 @@ class VacancyService
     /**
      * Get paginated vacancies with filters, categories, and sidebar attributes.
      */
-    public function getPaginatedVacancies(array $filters = [], int $perPage = 12): array
+    public function getPaginatedVacancies(array $filters = [], int $perPage = 12, bool $includeScraped = false): array
     {
         $query = Vacancy::with(['company', 'category', 'city', 'jobType', 'workplaceType', 'experienceLevel', 'skillRecords'])->active();
 
@@ -155,81 +155,86 @@ class VacancyService
             $query->orderBy('is_featured', 'desc')->orderByRaw('vacancies.updated_at DESC');
         }
 
-        $scrapedQuery = ScrapedVacancy::with(['category', 'city', 'jobType', 'workplaceType', 'experienceLevel'])->active();
-
-        if (!empty($filters['q'])) {
-            $search = $filters['q'];
-            $scrapedQuery->where(function ($q) use ($search) {
-                $q->where('title', 'ilike', "%{$search}%")
-                    ->orWhere('company_name', 'ilike', "%{$search}%")
-                    ->orWhereHas('city', fn ($cityQuery) => $cityQuery->where('slug', 'ilike', "%{$search}%"));
-            });
-        }
-        if (!empty($selectedCategories)) {
-            $categoryIds = $resolveCategoryIds($selectedCategories);
-            $scrapedQuery->whereIn('category_id', $categoryIds ?: [-1]);
-        }
-        if (!empty($selectedWorkplaces)) {
-            $scrapedQuery->whereHas('workplaceType', fn ($q) => $q->whereIn('slug', $selectedWorkplaces));
-        }
-        if (!empty($selectedTypes)) {
-            $scrapedQuery->whereHas('jobType', fn ($q) => $q->whereIn('slug', $selectedTypes));
-        }
-        if (!empty($selectedExperiences)) {
-            $scrapedQuery->whereHas('experienceLevel', fn ($q) => $q->whereIn('slug', $selectedExperiences));
-        }
-        if (!empty($selectedCities)) {
-            $scrapedQuery->whereHas('city', fn ($q) => $q->whereIn('slug', $selectedCities));
-        }
-        if (!empty($selectedSkills)) {
-            $scrapedQuery->where(function ($q) use ($selectedSkills) {
-                foreach ($selectedSkills as $skill) {
-                    $q->orWhereJsonContains('skills', $skill);
-                }
-            });
-        }
-        if (!empty($filters['min_salary'])) {
-            $minSalary = (float) $filters['min_salary'];
-            $scrapedQuery->where(fn ($q) => $q->where('salary_max', '>=', $minSalary)->orWhere('salary_min', '>=', $minSalary));
-        }
-        if (!empty($filters['max_salary'])) {
-            $maxSalary = (float) $filters['max_salary'];
-            $scrapedQuery->where(function ($q) use ($maxSalary) {
-                $q->where('salary_min', '<=', $maxSalary)
-                    ->orWhere(fn ($sub) => $sub->whereNull('salary_min')->where('salary_max', '<=', $maxSalary));
-            });
-        }
-
-        $this->applyListingSort($scrapedQuery, $sort, 'scraped_vacancies');
-
-        // First exhaust native vacancies, then fill the page with scraped items.
-        // This keeps platform listings ahead of external listings on every query.
-        $page = LengthAwarePaginator::resolveCurrentPage();
-        $offset = ($page - 1) * $perPage;
-        $nativeTotal = (clone $query)->reorder()->count();
-        $scrapedTotal = (clone $scrapedQuery)->reorder()->count();
-        $items = collect();
-
-        if ($offset < $nativeTotal) {
-            $nativeItems = (clone $query)->skip($offset)->take($perPage)->get();
-            $items = $items->concat($nativeItems);
-            $scrapedOffset = 0;
+        if (! $includeScraped) {
+            // Normal siyahı: yalnız platforma vakansiyaları (vacancies cədvəli).
+            $jobs = $query->paginate($perPage)->withQueryString();
         } else {
-            $scrapedOffset = $offset - $nativeTotal;
-        }
+            $scrapedQuery = ScrapedVacancy::with(['category', 'city', 'jobType', 'workplaceType', 'experienceLevel'])->active();
 
-        $remaining = $perPage - $items->count();
-        if ($remaining > 0) {
-            $items = $items->concat((clone $scrapedQuery)->skip($scrapedOffset)->take($remaining)->get());
-        }
+            if (!empty($filters['q'])) {
+                $search = $filters['q'];
+                $scrapedQuery->where(function ($q) use ($search) {
+                    $q->where('title', 'ilike', "%{$search}%")
+                        ->orWhere('company_name', 'ilike', "%{$search}%")
+                        ->orWhereHas('city', fn ($cityQuery) => $cityQuery->where('slug', 'ilike', "%{$search}%"));
+                });
+            }
+            if (!empty($selectedCategories)) {
+                $categoryIds = $resolveCategoryIds($selectedCategories);
+                $scrapedQuery->whereIn('category_id', $categoryIds ?: [-1]);
+            }
+            if (!empty($selectedWorkplaces)) {
+                $scrapedQuery->whereHas('workplaceType', fn ($q) => $q->whereIn('slug', $selectedWorkplaces));
+            }
+            if (!empty($selectedTypes)) {
+                $scrapedQuery->whereHas('jobType', fn ($q) => $q->whereIn('slug', $selectedTypes));
+            }
+            if (!empty($selectedExperiences)) {
+                $scrapedQuery->whereHas('experienceLevel', fn ($q) => $q->whereIn('slug', $selectedExperiences));
+            }
+            if (!empty($selectedCities)) {
+                $scrapedQuery->whereHas('city', fn ($q) => $q->whereIn('slug', $selectedCities));
+            }
+            if (!empty($selectedSkills)) {
+                $scrapedQuery->where(function ($q) use ($selectedSkills) {
+                    foreach ($selectedSkills as $skill) {
+                        $q->orWhereJsonContains('skills', $skill);
+                    }
+                });
+            }
+            if (!empty($filters['min_salary'])) {
+                $minSalary = (float) $filters['min_salary'];
+                $scrapedQuery->where(fn ($q) => $q->where('salary_max', '>=', $minSalary)->orWhere('salary_min', '>=', $minSalary));
+            }
+            if (!empty($filters['max_salary'])) {
+                $maxSalary = (float) $filters['max_salary'];
+                $scrapedQuery->where(function ($q) use ($maxSalary) {
+                    $q->where('salary_min', '<=', $maxSalary)
+                        ->orWhere(fn ($sub) => $sub->whereNull('salary_min')->where('salary_max', '<=', $maxSalary));
+                });
+            }
 
-        $jobs = new LengthAwarePaginator(
-            $items,
-            $nativeTotal + $scrapedTotal,
-            $perPage,
-            $page,
-            ['path' => request()->url(), 'query' => request()->query()]
-        );
+            $this->applyListingSort($scrapedQuery, $sort, 'scraped_vacancies');
+
+            // First exhaust native vacancies, then fill the page with scraped items.
+            // This keeps platform listings ahead of external listings on every query.
+            $page = LengthAwarePaginator::resolveCurrentPage();
+            $offset = ($page - 1) * $perPage;
+            $nativeTotal = (clone $query)->reorder()->count();
+            $scrapedTotal = (clone $scrapedQuery)->reorder()->count();
+            $items = collect();
+
+            if ($offset < $nativeTotal) {
+                $nativeItems = (clone $query)->skip($offset)->take($perPage)->get();
+                $items = $items->concat($nativeItems);
+                $scrapedOffset = 0;
+            } else {
+                $scrapedOffset = $offset - $nativeTotal;
+            }
+
+            $remaining = $perPage - $items->count();
+            if ($remaining > 0) {
+                $items = $items->concat((clone $scrapedQuery)->skip($scrapedOffset)->take($remaining)->get());
+            }
+
+            $jobs = new LengthAwarePaginator(
+                $items,
+                $nativeTotal + $scrapedTotal,
+                $perPage,
+                $page,
+                ['path' => request()->url(), 'query' => request()->query()]
+            );
+        }
 
         $mainResume = null;
         if (auth()->check() && auth()->user()->isUser()) {
@@ -305,28 +310,129 @@ class VacancyService
             };
         };
 
+        // Scraped elanlar üçün eyni filtr məntiqi (company_name və JSON skills fərqlidir).
+        $makeScrapedScope = function (bool $includeCategory) use ($selectedCategories, $selectedWorkplaces, $selectedTypes, $selectedExperiences, $selectedCities, $selectedSkills, $filters, $resolveCategoryIds) {
+            return function ($q) use ($includeCategory, $selectedCategories, $selectedWorkplaces, $selectedTypes, $selectedExperiences, $selectedCities, $selectedSkills, $filters, $resolveCategoryIds) {
+                $q->active();
+                if ($includeCategory && !empty($selectedCategories)) {
+                    $categoryIds = $resolveCategoryIds($selectedCategories);
+                    if (!empty($categoryIds)) {
+                        $q->whereIn('category_id', $categoryIds);
+                    }
+                }
+                if (!empty($filters['q'])) {
+                    $search = $filters['q'];
+                    $q->where(function ($sub) use ($search) {
+                        $sub->where('title', 'ilike', "%{$search}%")
+                            ->orWhere('company_name', 'ilike', "%{$search}%")
+                            ->orWhereHas('city', fn ($cq) => $cq->where('slug', 'ilike', "%{$search}%"));
+                    });
+                }
+                if (!empty($selectedWorkplaces)) {
+                    $q->whereHas('workplaceType', fn ($wq) => $wq->whereIn('slug', $selectedWorkplaces));
+                }
+                if (!empty($selectedTypes)) {
+                    $q->whereHas('jobType', fn ($jq) => $jq->whereIn('slug', $selectedTypes));
+                }
+                if (!empty($selectedExperiences)) {
+                    $q->whereHas('experienceLevel', fn ($eq) => $eq->whereIn('slug', $selectedExperiences));
+                }
+                if (!empty($selectedCities)) {
+                    $q->whereHas('city', fn ($cq) => $cq->whereIn('slug', $selectedCities));
+                }
+                if (!empty($selectedSkills)) {
+                    $q->where(function ($sub) use ($selectedSkills) {
+                        foreach ($selectedSkills as $skill) {
+                            $sub->orWhereJsonContains('skills', $skill);
+                        }
+                    });
+                }
+                if (!empty($filters['min_salary'])) {
+                    $minSalary = (float) $filters['min_salary'];
+                    $q->where(function ($sub) use ($minSalary) {
+                        $sub->where('salary_max', '>=', $minSalary)
+                            ->orWhere('salary_min', '>=', $minSalary);
+                    });
+                }
+                if (!empty($filters['max_salary'])) {
+                    $maxSalary = (float) $filters['max_salary'];
+                    $q->where(function ($sub) use ($maxSalary) {
+                        $sub->where('salary_min', '<=', $maxSalary)
+                            ->orWhere(function ($sub2) use ($maxSalary) {
+                                $sub2->whereNull('salary_min')->where('salary_max', '<=', $maxSalary);
+                            });
+                    });
+                }
+            };
+        };
+
         // Facet (say) sorğuları filtr imzasına görə keşlənir — ağır withCount subquery-ləri təkrarlanmasın.
         $facetSignature = serialize([
             $selectedCategories, $selectedWorkplaces, $selectedTypes,
             $selectedExperiences, $selectedCities, $selectedSkills,
             $filters['q'] ?? '', $filters['min_salary'] ?? '', $filters['max_salary'] ?? '',
+            $includeScraped,
         ]);
 
-        $facets = \App\Modules\Vacancy\Support\FacetCache::remember($facetSignature, function () use ($makeScope) {
+        $facets = \App\Modules\Vacancy\Support\FacetCache::remember($facetSignature, function () use ($makeScope, $makeScrapedScope, $includeScraped) {
             $attributeScope = $makeScope(true);
             $categoryCountScope = $makeScope(false);
 
-            $categories = Category::parents()
-                ->with(['children' => fn ($q) => $q->withCount(['vacancies' => $categoryCountScope])])
-                ->withCount(['vacancies' => $categoryCountScope])
-                ->get()
-                ->each(function ($cat) {
-                    $cat->vacancies_count += $cat->children->sum('vacancies_count');
+            $mergeScrapedCounts = function ($models) {
+                return $models->each(function ($model) {
+                    $model->vacancies_count = (int) $model->vacancies_count + (int) $model->scraped_vacancies_count;
                 });
+            };
 
-            $jobTypes = JobType::active()->withCount(['vacancies' => $attributeScope])->get();
-            $workplaceTypes = WorkplaceType::active()->withCount(['vacancies' => $attributeScope])->get();
-            $experienceLevels = ExperienceLevel::active()->withCount(['vacancies' => $attributeScope])->get();
+            if ($includeScraped) {
+                $scrapedAttributeScope = $makeScrapedScope(true);
+                $scrapedCategoryCountScope = $makeScrapedScope(false);
+
+                $categories = Category::parents()
+                    ->with(['children' => fn ($q) => $q->withCount([
+                        'vacancies' => $categoryCountScope,
+                        'scrapedVacancies' => $scrapedCategoryCountScope,
+                    ])])
+                    ->withCount([
+                        'vacancies' => $categoryCountScope,
+                        'scrapedVacancies' => $scrapedCategoryCountScope,
+                    ])
+                    ->get()
+                    ->each(function ($cat) {
+                        foreach ($cat->children as $child) {
+                            $child->vacancies_count = (int) $child->vacancies_count + (int) $child->scraped_vacancies_count;
+                        }
+                        $cat->vacancies_count = (int) $cat->vacancies_count
+                            + (int) $cat->scraped_vacancies_count
+                            + $cat->children->sum('vacancies_count');
+                    });
+
+                $jobTypes = $mergeScrapedCounts(
+                    JobType::active()->withCount(['vacancies' => $attributeScope, 'scrapedVacancies' => $scrapedAttributeScope])->get()
+                );
+                $workplaceTypes = $mergeScrapedCounts(
+                    WorkplaceType::active()->withCount(['vacancies' => $attributeScope, 'scrapedVacancies' => $scrapedAttributeScope])->get()
+                );
+                $experienceLevels = $mergeScrapedCounts(
+                    ExperienceLevel::active()->withCount(['vacancies' => $attributeScope, 'scrapedVacancies' => $scrapedAttributeScope])->get()
+                );
+                $cities = $mergeScrapedCounts(
+                    \App\Modules\JobAttribute\Models\City::active()->withCount(['vacancies' => $attributeScope, 'scrapedVacancies' => $scrapedAttributeScope])->get()
+                );
+            } else {
+                $categories = Category::parents()
+                    ->with(['children' => fn ($q) => $q->withCount(['vacancies' => $categoryCountScope])])
+                    ->withCount(['vacancies' => $categoryCountScope])
+                    ->get()
+                    ->each(function ($cat) {
+                        $cat->vacancies_count += $cat->children->sum('vacancies_count');
+                    });
+
+                $jobTypes = JobType::active()->withCount(['vacancies' => $attributeScope])->get();
+                $workplaceTypes = WorkplaceType::active()->withCount(['vacancies' => $attributeScope])->get();
+                $experienceLevels = ExperienceLevel::active()->withCount(['vacancies' => $attributeScope])->get();
+                $cities = \App\Modules\JobAttribute\Models\City::active()->withCount(['vacancies' => $attributeScope])->get();
+            }
 
             $categoryCounts = $categories->flatMap(function ($cat) {
                 $map = [$cat->slug => $cat->vacancies_count];
@@ -335,8 +441,6 @@ class VacancyService
                 }
                 return $map;
             });
-
-            $cities = \App\Modules\JobAttribute\Models\City::active()->withCount(['vacancies' => $attributeScope])->get();
 
             $categoryParentMap = [];
             foreach ($categories as $parent) {

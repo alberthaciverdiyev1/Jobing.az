@@ -1,6 +1,6 @@
 <!-- Candidate Cards List -->
 @if($jobSeekers->count() > 0)
-<div class="space-y-3">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-3">
     @foreach($jobSeekers as $seeker)
     <x-candidate-card :seeker="$seeker" />
     @endforeach

@@ -37,6 +37,7 @@ class AppServiceProvider extends ServiceProvider
         // (admin paneldən əlavə/redaktə/silmə daxil) → köhnə keş avtomatik etibarsız olur.
         foreach ([
             \App\Modules\Vacancy\Models\Vacancy::class,
+            \App\Modules\Vacancy\Models\ScrapedVacancy::class,
             \App\Modules\Category\Models\Category::class,
             \App\Modules\JobAttribute\Models\City::class,
             \App\Modules\JobAttribute\Models\JobType::class,

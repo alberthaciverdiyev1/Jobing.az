@@ -16,8 +16,11 @@
 
             <!-- Center: Desktop Menu -->
             <nav class="flex items-center justify-center space-x-6 lg:space-x-8">
-                <a href="{{ route('jobs.index') }}" class="{{ request()->routeIs('jobs.*') && !request()->routeIs('jobs.create') ? 'text-primary font-semibold' : 'text-gray-600 hover:text-primary' }} font-medium transition-colors text-[15px]">
+                <a href="{{ route('jobs.index') }}" class="{{ request()->routeIs('jobs.*') && !request()->routeIs('jobs.create') && !request()->routeIs('jobs.external') ? 'text-primary font-semibold' : 'text-gray-600 hover:text-primary' }} font-medium transition-colors text-[15px]">
                     {{ __('Vacancies') }}
+                </a>
+                <a href="{{ route('jobs.external') }}" class="{{ request()->routeIs('jobs.external') ? 'text-primary font-semibold' : 'text-gray-600 hover:text-primary' }} font-medium transition-colors text-[15px]">
+                    {{ __('From other sites') }}
                 </a>
                 <a href="{{ route('companies.index') }}" class="{{ request()->routeIs('companies.*') ? 'text-primary font-semibold' : 'text-gray-600 hover:text-primary' }} font-medium transition-colors text-[15px]">
                     {{ __('Companies') }}

@@ -72,7 +72,7 @@ window.__JOB_SEEKERS_CONFIG__ = {
             </div>
 
             <!-- White Search & Filter Card -->
-            <div class="max-w-5xl mx-auto bg-white/95 backdrop-blur-sm rounded-2xl md:rounded-3xl border border-orange-100 p-3.5 sm:p-5 text-left relative z-20">
+            <div class="max-w-7xl mx-auto bg-white/95 backdrop-blur-sm rounded-2xl md:rounded-3xl border border-orange-100 p-3.5 sm:p-5 text-left relative z-20">
 
                 <!-- Row 1: Search Keyword, City Selector, Action Button -->
                 <div class="grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_14rem_auto] lg:grid-cols-[minmax(0,1fr)_16rem_auto] items-stretch gap-2.5">
@@ -452,7 +452,7 @@ window.__JOB_SEEKERS_CONFIG__ = {
 
     <!-- Main Content: Job Seekers List (Full-Width) -->
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-0">
-        <div class="max-w-5xl mx-auto w-full">
+        <div class="max-w-full mx-auto w-full">
 
             <!-- List Header: Count & Sort -->
             <div class="flex flex-row justify-between items-center gap-2 sm:gap-3 mb-5 pb-3 border-b border-gray-200">

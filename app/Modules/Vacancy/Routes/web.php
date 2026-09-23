@@ -6,6 +6,9 @@ use Illuminate\Support\Facades\Route;
 // Kök, vakansiya siyahısını göstərir (jobs.index adı qorunur).
 Route::get('/', [VacancyController::class, 'index'])->name('jobs.index');
 
+// Digər saytlardan: platforma + xarici (scraped) elanlar birlikdə.
+Route::get('/diger-saytlardan', [VacancyController::class, 'external'])->name('jobs.external');
+
 // Vakansiyalar
 Route::prefix('vakansiya')->name('jobs.')->group(function () {
     Route::get('/yarat', [VacancyController::class, 'create'])->name('create');

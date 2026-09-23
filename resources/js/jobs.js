@@ -46,6 +46,10 @@ export default function jobsManager(config = null) {
         parentCategory: config.activeParentCategory || '',
         activeDropdown: null,
         moreFiltersOpen: false,
+        // Digər saytların vakansiyaları səhifəsi: filtrlər path yerinə query ilə
+        // bu baza ünvana göndərilir ki, scraped elanlar da nəticəyə daxil olsun.
+        externalMode: !!config.externalMode,
+        externalBasePath: config.externalBasePath || '',
 
         init() {
             this.$watch('moreFiltersOpen', (isOpen) => {
@@ -82,20 +86,24 @@ export default function jobsManager(config = null) {
             // Popstate for browser back/forward buttons
             window.addEventListener('popstate', () => {
                 const pathname = window.location.pathname;
-                const pathParts = pathname.replace(/^\/jobs\/?/, '').split('/').filter(Boolean);
 
                 let pathCity = null;
                 let pathCategory = null;
 
-                if (pathParts.length === 2) {
-                    pathCity = decodeURIComponent(pathParts[0]);
-                    pathCategory = decodeURIComponent(pathParts[1]);
-                } else if (pathParts.length === 1) {
-                    const segment = decodeURIComponent(pathParts[0]);
-                    if (this.citySlugs && this.citySlugs.includes(segment)) {
-                        pathCity = segment;
-                    } else {
-                        pathCategory = segment;
+                // Xarici (scraped) siyahıda filtr məlumatı yalnız query string-dədir.
+                if (!this.externalMode) {
+                    const pathParts = pathname.replace(/^\/jobs\/?/, '').split('/').filter(Boolean);
+
+                    if (pathParts.length === 2) {
+                        pathCity = decodeURIComponent(pathParts[0]);
+                        pathCategory = decodeURIComponent(pathParts[1]);
+                    } else if (pathParts.length === 1) {
+                        const segment = decodeURIComponent(pathParts[0]);
+                        if (this.citySlugs && this.citySlugs.includes(segment)) {
+                            pathCity = segment;
+                        } else {
+                            pathCategory = segment;
+                        }
                     }
                 }
 
@@ -124,8 +132,8 @@ export default function jobsManager(config = null) {
                 if (pathCity) {
                     this.city = [pathCity];
                 } else {
-                    const queryCity = params.get('city');
-                    this.city = queryCity ? [queryCity] : [];
+                    const queryCities = params.getAll('city[]').concat(params.getAll('city')).filter(Boolean);
+                    this.city = queryCities;
                 }
 
                 this.q = params.get('q') || '';
@@ -529,17 +537,25 @@ export default function jobsManager(config = null) {
 
             // 3. Şəhər və kateqoriya yol (path) üzərində göstərilir:
             //    /{category}  |  /{city}  |  /{city}/{category}
-            let pathname = '/';
-            if (citySlug && categorySlug) {
-                pathname = `/${encodeURIComponent(citySlug)}/${encodeURIComponent(categorySlug)}`;
-            } else if (citySlug) {
-                pathname = `/${encodeURIComponent(citySlug)}`;
-            } else if (categorySlug) {
-                pathname = `/${encodeURIComponent(categorySlug)}`;
+            // Xarici (scraped) siyahıda isə hər şey query string ilə baza ünvana yazılır.
+            let pathname = this.externalMode ? (this.externalBasePath || '/') : '/';
+            if (!this.externalMode) {
+                if (citySlug && categorySlug) {
+                    pathname = `/${encodeURIComponent(citySlug)}/${encodeURIComponent(categorySlug)}`;
+                } else if (citySlug) {
+                    pathname = `/${encodeURIComponent(citySlug)}`;
+                } else if (categorySlug) {
+                    pathname = `/${encodeURIComponent(categorySlug)}`;
+                }
             }
 
             // 4. Qalan filtrlər query string ilə
             const params = new URLSearchParams();
+
+            if (this.externalMode) {
+                if (categorySlug) params.append('category[]', categorySlug);
+                if (citySlug) params.append('city[]', citySlug);
+            }
 
             // Alt kateqoriya(lar)
             if (subcategorySlugs.length === 1) {

@@ -23,7 +23,25 @@ class VacancyController extends Controller
 
     public function index(Request $request): View|JsonResponse|Response
     {
-        $data = $this->vacancyService->getPaginatedVacancies($request->all());
+        return $this->listingResponse($request, false);
+    }
+
+    /**
+     * Digər saytların (scraped) vakansiyaları.
+     * Platforma elanları + xarici saytlardan toplanan elanlar birlikdə göstərilir.
+     */
+    public function external(Request $request): View|JsonResponse|Response
+    {
+        return $this->listingResponse($request, true);
+    }
+
+    /**
+     * Shared listing renderer for the native list and the external (scraped) list.
+     */
+    private function listingResponse(Request $request, bool $includeScraped): View|JsonResponse|Response
+    {
+        $data = $this->vacancyService->getPaginatedVacancies($request->all(), 12, $includeScraped);
+        $data['isExternal'] = $includeScraped;
 
         // Only return JSON if this is an explicit AJAX fetch call and not standard browser page navigation.
         // When navigating back, browsers send Accept: text/html, which must receive the full HTML view.

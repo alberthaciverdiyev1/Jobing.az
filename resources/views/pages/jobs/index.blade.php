@@ -1,6 +1,11 @@
 @extends('layouts.app')
 
-@section('title', ($selectedCategory?->name ? $selectedCategory->name . ' | ' : '') . __('Vacancies') . ' - ' . config('app.full_name'))
+@php
+    $isExternal = $isExternal ?? false;
+    $listingTitle = $isExternal ? __('From other sites') : __('Vacancies');
+@endphp
+
+@section('title', ($selectedCategory?->name ? $selectedCategory->name . ' | ' : '') . $listingTitle . ' - ' . config('app.full_name'))
 @section('meta_description', $selectedCategory?->name
     ? __('Category') . ' ' . $selectedCategory->name . ' — ' . __('browse all vacancies in this category and apply.')
     : __('Instantly apply to open positions at leading technology companies in software, design, product, data and marketing.'))
@@ -41,6 +46,8 @@ window.__JOBS_CONFIG__ = {
     experienceLevelNameMap: @json($experienceLevels->pluck('name', 'slug')),
     jobTypeNameMap: @json($jobTypes->pluck('name', 'slug')),
     cityNameMap: @json($cities->pluck('name', 'slug')),
+    externalMode: @json($isExternal),
+    externalBasePath: @json(route('jobs.external')),
     filterErrorMessage: @json(__('Filters could not be loaded. Please try again.'))
 };
 </script>
@@ -78,8 +85,8 @@ window.__JOBS_CONFIG__ = {
             <!-- Headline / Subtitle -->
             <div class="max-w-2xl mx-auto mb-6">
                 <h1 class="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 tracking-tight mb-2"
-                    x-text="selectedParentCategoryLabel || '{{ __('Vacancies') }}'">
-                    {{ $selectedCategory?->name ?: __('Vacancies') }}
+                    x-text="selectedParentCategoryLabel || '{{ $listingTitle }}'">
+                    {{ $selectedCategory?->name ?: $listingTitle }}
                 </h1>
                 <p class="text-xs sm:text-sm md:text-base text-gray-500">
                     {{ __('Azərbaycanın aparıcı şirkətlərində minlərlə aktiv iş elanı və karyera imkanları') }}
@@ -87,7 +94,7 @@ window.__JOBS_CONFIG__ = {
             </div>
 
             <!-- White Search & Filter Card -->
-            <div class="max-w-5xl mx-auto bg-white/95 backdrop-blur-sm rounded-2xl md:rounded-3xl border border-orange-100 p-3.5 sm:p-5 text-left relative z-20">
+            <div class="max-w-7xl mx-auto bg-white/95 backdrop-blur-sm rounded-2xl md:rounded-3xl border border-orange-100 p-3.5 sm:p-5 text-left relative z-20">
 
                 <!-- Row 1: Search Keyword, City Selector, Desktop Action Button -->
                 <div class="grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_14rem_auto] lg:grid-cols-[minmax(0,1fr)_16rem_auto] items-stretch gap-2.5">
@@ -469,7 +476,7 @@ window.__JOBS_CONFIG__ = {
 
     <!-- Main Content: Vacancies List (Full-Width) -->
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-0">
-        <div class="max-w-5xl mx-auto w-full">
+        <div class="max-w-full mx-auto w-full">
 
             <!-- List Header: Count & Sort -->
             <div class="flex flex-row justify-between items-center gap-2 sm:gap-3 mb-5 pb-3 border-b border-gray-200">
@@ -502,7 +509,7 @@ window.__JOBS_CONFIG__ = {
 
             <!-- Async Jobs Container with Loading State -->
             <div id="jobs-container" class="relative min-h-[300px]" :class="isLoading ? 'opacity-50 pointer-events-none transition-opacity duration-150' : ''">
-                @include('pages.jobs.partials.job-list', ['jobs' => $jobs, 'selectedCategory' => $selectedCategory])
+                @include('pages.jobs.partials.job-list', ['jobs' => $jobs, 'selectedCategory' => $selectedCategory, 'isExternal' => $isExternal])
             </div>
 
         </div>

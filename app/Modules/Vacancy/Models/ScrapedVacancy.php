@@ -87,6 +87,20 @@ class ScrapedVacancy extends Model
         return (string) ($this->city?->name ?? '');
     }
 
+    /**
+     * Elanın gəldiyi saytın adı (redirect_url host-undan çıxarılır).
+     */
+    public function getSourceNameAttribute(): ?string
+    {
+        $host = parse_url((string) $this->redirect_url, PHP_URL_HOST);
+
+        if (! $host) {
+            return null;
+        }
+
+        return preg_replace('/^www\./i', '', $host) ?: null;
+    }
+
     public function getFormattedSalaryAttribute(): string
     {
         if ($this->salary_negotiable) {

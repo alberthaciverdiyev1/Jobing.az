@@ -4,6 +4,7 @@ namespace App\Modules\JobAttribute\Models;
 
 use App\Modules\Core\Traits\HasSlug;
 use App\Modules\Localization\Traits\HasTranslations;
+use App\Modules\Vacancy\Models\ScrapedVacancy;
 use App\Modules\Vacancy\Models\Vacancy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -35,6 +36,11 @@ class City extends Model
     public function vacancies(): HasMany
     {
         return $this->hasMany(Vacancy::class);
+    }
+
+    public function scrapedVacancies(): HasMany
+    {
+        return $this->hasMany(ScrapedVacancy::class);
     }
 
     public function scopeActive(Builder $query): Builder

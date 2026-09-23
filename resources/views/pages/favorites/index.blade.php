@@ -26,7 +26,7 @@
 
         <!-- Favorites List -->
         @if($favorites->count() > 0)
-        <div class="space-y-3" id="favorites-list">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3" id="favorites-list">
             @foreach($favorites as $fav)
             @if($fav->vacancy)
             <x-job-card :job="$fav->vacancy" />

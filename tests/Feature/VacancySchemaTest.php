@@ -31,7 +31,63 @@ class VacancySchemaTest extends TestCase
         $this->assertFalse(Schema::hasColumn('vacancies', 'skills'));
     }
 
-    public function test_web_listing_prioritizes_native_vacancies_before_scraped_vacancies(): void
+    public function test_native_listing_excludes_scraped_vacancies(): void
+    {
+        $this->createNativeAndScrapedVacancies();
+
+        $jobs = app(VacancyService::class)->getPaginatedVacancies([], 12, false)['jobs'];
+
+        $this->assertSame(1, $jobs->total());
+        $this->assertInstanceOf(Vacancy::class, $jobs->items()[0]);
+    }
+
+    public function test_external_listing_prioritizes_native_vacancies_before_scraped_vacancies(): void
+    {
+        $this->createNativeAndScrapedVacancies();
+
+        $jobs = app(VacancyService::class)->getPaginatedVacancies([], 12, true)['jobs'];
+
+        $this->assertSame(2, $jobs->total());
+        $this->assertInstanceOf(Vacancy::class, $jobs->items()[0]);
+        $this->assertInstanceOf(ScrapedVacancy::class, $jobs->items()[1]);
+    }
+
+    public function test_native_listing_page_hides_scraped_vacancies(): void
+    {
+        $this->createNativeAndScrapedVacancies();
+
+        $this->get('/')
+            ->assertOk()
+            ->assertSee('Native vacancy')
+            ->assertDontSee('Scraped vacancy');
+    }
+
+    public function test_external_listing_page_shows_native_and_scraped_vacancies(): void
+    {
+        $this->createNativeAndScrapedVacancies();
+
+        $this->get('/diger-saytlardan')
+            ->assertOk()
+            ->assertSee('Native vacancy')
+            ->assertSee('Scraped vacancy')
+            ->assertSee('example.com');
+    }
+
+    public function test_empty_native_listing_suggests_external_listings(): void
+    {
+        $this->get('/?city[]=zzzznomatch')
+            ->assertOk()
+            ->assertSee('data-external-listing-suggestion', false);
+    }
+
+    public function test_empty_external_listing_does_not_suggest_itself(): void
+    {
+        $this->get('/diger-saytlardan?city[]=zzzznomatch')
+            ->assertOk()
+            ->assertDontSee('data-external-listing-suggestion', false);
+    }
+
+    private function createNativeAndScrapedVacancies(): void
     {
         Vacancy::withoutEvents(fn () => Vacancy::create([
             'title' => 'Native vacancy',
@@ -47,11 +103,5 @@ class VacancySchemaTest extends TestCase
             'description' => 'Scraped description',
             'is_active' => true,
         ]);
-
-        $jobs = app(VacancyService::class)->getPaginatedVacancies([], 12)['jobs'];
-
-        $this->assertSame(2, $jobs->total());
-        $this->assertInstanceOf(Vacancy::class, $jobs->items()[0]);
-        $this->assertInstanceOf(ScrapedVacancy::class, $jobs->items()[1]);
     }
 }
