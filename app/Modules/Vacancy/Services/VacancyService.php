@@ -379,7 +379,9 @@ class VacancyService
                 // Facet sayıları: onlarca withCount yerine bir neçə GROUP BY sorğusu.
                 $grouped = function (string $modelClass, string $fk, bool $includeCategory, bool $scraped) use ($makeScope, $makeScrapedScope) {
                     $scope = $scraped ? $makeScrapedScope($includeCategory) : $makeScope($includeCategory);
-                    return $scope($modelClass::query())
+                    $builder = $modelClass::query();
+                    $scope($builder); // scope closure mutasiya edir, dəyər qaytarmır
+                    return $builder
                         ->selectRaw($fk . ' as k, count(*) as c')
                         ->groupBy($fk)
                         ->pluck('c', 'k');
