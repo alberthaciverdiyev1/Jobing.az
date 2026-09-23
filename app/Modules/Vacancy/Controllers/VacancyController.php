@@ -9,7 +9,9 @@ use App\Modules\Vacancy\Models\Vacancy;
 use App\Modules\Vacancy\Requests\ApplyVacancyRequest;
 use App\Modules\Vacancy\Requests\StoreVacancyRequest;
 use App\Modules\Vacancy\Services\VacancyService;
+use App\Modules\Vacancy\Support\FacetCache;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -40,15 +42,29 @@ class VacancyController extends Controller
      */
     private function listingResponse(Request $request, bool $includeScraped): View|JsonResponse|Response
     {
+        // Yalnız explic AJAX sorğusunda JSON qaytarılır (brauzer geri naviqasiyası HTML almalıdır).
+        $isAjax = ($request->ajax() || $request->header('X-Partial') || $request->wantsJson()) && ! $request->acceptsHtml();
+
+        // Misafir istifadəçilər üçün tam cavab keşlənir: servis + view tamamilə atlanır (~ms).
+        $cacheKey = null;
+        if ($request->isMethod('get') && ! auth()->check()) {
+            $cacheKey = 'listing.response.' . app()->environment() . '.' . FacetCache::version() . '.'
+                . md5($request->fullUrl() . '|' . ($isAjax ? 'json' : 'html'));
+            if (Cache::has($cacheKey)) {
+                $cached = Cache::get($cacheKey);
+                return response($cached['body'], 200, [
+                    'Content-Type' => $cached['content_type'],
+                    'Vary' => 'X-Requested-With, Accept',
+                    'X-Listing-Cache' => 'HIT',
+                ])->header('Cache-Control', 'public, max-age=60');
+            }
+        }
+
         $data = $this->vacancyService->getPaginatedVacancies($request->all(), 30, $includeScraped);
         $data['isExternal'] = $includeScraped;
 
-        // Only return JSON if this is an explicit AJAX fetch call and not standard browser page navigation.
-        // When navigating back, browsers send Accept: text/html, which must receive the full HTML view.
-        $isAjax = ($request->ajax() || $request->header('X-Partial') || $request->wantsJson()) && !$request->acceptsHtml();
-
         if ($isAjax) {
-            return response()->json([
+            $response = response()->json([
                 'html' => view('pages.jobs.partials.job-list', $data)->render(),
                 'total' => $data['jobs']->total(),
                 'selectedCategory' => $data['selectedCategory'] ? [
@@ -66,16 +82,25 @@ class VacancyController extends Controller
                     'cities' => $data['cities']->pluck('vacancies_count', 'slug'),
                     'categories' => $data['categoryCounts'],
                 ],
-            ])
-            ->header('Vary', 'X-Requested-With, Accept')
-            ->header('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0, private')
-            ->header('Pragma', 'no-cache')
-            ->header('Expires', '0');
+            ])->header('Vary', 'X-Requested-With, Accept')->header('Cache-Control', 'public, max-age=60');
+
+            if ($cacheKey) {
+                Cache::put($cacheKey, ['body' => $response->getContent(), 'content_type' => 'application/json'], 3600);
+            }
+
+            return $response;
         }
 
-        return response()
-            ->view('pages.jobs.index', $data)
-            ->header('Vary', 'X-Requested-With, Accept');
+        $html = view('pages.jobs.index', $data)->render();
+
+        if ($cacheKey) {
+            Cache::put($cacheKey, ['body' => $html, 'content_type' => 'text/html; charset=UTF-8'], 3600);
+        }
+
+        return response($html, 200, [
+            'Content-Type' => 'text/html; charset=UTF-8',
+            'Vary' => 'X-Requested-With, Accept',
+        ])->header('Cache-Control', 'public, max-age=60');
     }
 
     public function show(string $slug): View
