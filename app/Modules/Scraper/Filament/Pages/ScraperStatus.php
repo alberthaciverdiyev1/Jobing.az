@@ -34,7 +34,7 @@ class ScraperStatus extends Page
         $schedule = ScraperSetting::where('key', 'schedule')->first()?->value ?? [];
 
         $next = [
-            'baku' => $this->nextDailyWindow($now, 8, 13),
+            'baku' => $this->nextAtTimes($now, [9, 14, 19]),
             'boss' => $this->nextDailyAt($now, 3),
             'other' => $this->nextWeeklyAt($now, Carbon::SATURDAY, 21),
         ];
@@ -89,7 +89,7 @@ class ScraperStatus extends Page
             'dailyMax' => $dailyMax,
             'perSourceTrend' => $perSourceTrend,
             'cron' => [
-                ['Bakü (günde 3, 4 saat arayla)', '0 0 * * *', 'scripts/cron-baku-daily.sh (08:00–13:00 rastgele başlangıç)'],
+                ['Bakü (günde 3)', '0 9,14,19 * * *', 'scripts/cron-baku-daily.sh'],
                 ['boss.az (günde 1)', '0 3 * * *', 'scripts/cron-boss.sh'],
                 ['Digər şəhərlər (həftə sonu)', '0 21 * * 6', 'scripts/cron-other-weekend.sh'],
                 ['Facet/cache isitme (günde 3)', '0 */8 * * *', 'php artisan facets:refresh --warm'],
@@ -108,10 +108,15 @@ class ScraperStatus extends Page
         return $candidate->lessThanOrEqualTo($now) ? $candidate->addDay() : $candidate;
     }
 
-    private function nextDailyWindow(Carbon $now, int $startHour, int $lastStartHour): Carbon
+    private function nextAtTimes(Carbon $now, array $hours): Carbon
     {
-        $start = $now->copy()->setTime($startHour, 0);
-        return $start->lessThanOrEqualTo($now) ? $start->addDay() : $start;
+        foreach ($hours as $hour) {
+            $candidate = $now->copy()->setTime($hour, 0);
+            if ($candidate->greaterThan($now)) {
+                return $candidate;
+            }
+        }
+        return $now->copy()->addDay()->setTime($hours[0], 0);
     }
 
     private function nextWeeklyAt(Carbon $now, int $dayOfWeek, int $hour): Carbon

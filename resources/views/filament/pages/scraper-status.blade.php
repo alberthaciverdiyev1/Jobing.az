@@ -2,7 +2,7 @@
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px">
         <x-filament::section heading="Növbəti taramalar" icon="heroicon-o-clock">
             <div style="display:flex;flex-direction:column;gap:8px;font-size:14px">
-                <div><span style="color:#6b7280">Bakü (günde 3, 4 saat arayla):</span> <b>{{ $next['baku']->format('d.m.Y') }}</b> 08:00–13:00 arası rastgele başlangıç</div>
+                <div><span style="color:#6b7280">Bakü (günde 3: 09:00, 14:00, 19:00):</span> <b>{{ $next['baku']->format('d.m.Y H:i') }}</b></div>
                 <div><span style="color:#6b7280">boss.az (günde 1):</span> <b>{{ $next['boss']->format('d.m.Y H:i') }}</b></div>
                 <div><span style="color:#6b7280">Digər şəhərlər (həftə sonu):</span> <b>{{ $next['other']->format('d.m.Y H:i') }}</b></div>
             </div>
