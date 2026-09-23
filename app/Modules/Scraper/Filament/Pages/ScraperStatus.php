@@ -22,6 +22,11 @@ class ScraperStatus extends Page
 
     protected static ?int $navigationSort = 90;
 
+    protected function getHeaderWidgets(): array
+    {
+        return [\App\Modules\Scraper\Filament\Widgets\ScraperStatsOverview::class];
+    }
+
     public function getViewData(): array
     {
         $tz = 'Asia/Baku';

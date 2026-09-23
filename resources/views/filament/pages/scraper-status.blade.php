@@ -1,165 +1,132 @@
 <x-filament-panels::page>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-        <div class="rounded-xl bg-white p-5 shadow-sm ring-1 ring-gray-950/5 dark:bg-gray-900 dark:ring-white/10">
-            <div class="text-sm text-gray-500">Son tarama</div>
-            <div class="mt-1 text-2xl font-bold text-gray-900 dark:text-white">{{ $lastRun?->finished_at?->timezone($tz)->format('d.m.Y H:i') ?? '—' }}</div>
-            <div class="mt-1 text-xs text-gray-500">{{ $lastRun?->region ? 'region: '.$lastRun->region : '' }} {{ $lastRun?->mode }}</div>
-        </div>
-        <div class="rounded-xl bg-white p-5 shadow-sm ring-1 ring-gray-950/5 dark:bg-gray-900 dark:ring-white/10">
-            <div class="text-sm text-gray-500">Toplam eklenen ilan</div>
-            <div class="mt-1 text-2xl font-bold text-gray-900 dark:text-white">{{ number_format($totals['listings']) }}</div>
-            <div class="mt-1 text-xs text-gray-500">{{ $totals['sources'] }} kaynak</div>
-        </div>
-        <div class="rounded-xl bg-white p-5 shadow-sm ring-1 ring-gray-950/5 dark:bg-gray-900 dark:ring-white/10">
-            <div class="text-sm text-gray-500">Son 24 saatte eklenen</div>
-            <div class="mt-1 text-2xl font-bold text-emerald-600">{{ number_format($last24h) }}</div>
-            <div class="mt-1 text-xs text-gray-500">scraped_vacancies (created_at)</div>
-        </div>
-        <div class="rounded-xl bg-white p-5 shadow-sm ring-1 ring-gray-950/5 dark:bg-gray-900 dark:ring-white/10">
-            <div class="text-sm text-gray-500">Saat dilimi</div>
-            <div class="mt-1 text-2xl font-bold text-gray-900 dark:text-white">{{ $tz }}</div>
-            <div class="mt-1 text-xs text-gray-500">Şimdi: {{ $now->format('d.m.Y H:i') }}</div>
-        </div>
-        <div class="rounded-xl bg-white p-5 shadow-sm ring-1 ring-gray-950/5 dark:bg-gray-900 dark:ring-white/10">
-            <div class="text-sm text-gray-500">Ortalama çalışma süresi</div>
-            @php($avg = (int) round($avgSeconds))
-            <div class="mt-1 text-2xl font-bold text-gray-900 dark:text-white">{{ $avg >= 60 ? floor($avg/60).' dəq '.($avg%60).' sn' : $avg.' sn' }}</div>
-            <div class="mt-1 text-xs text-gray-500">son çalışmalara görə</div>
-        </div>
-    </div>
-
-    <div class="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <div class="rounded-xl bg-white p-5 shadow-sm ring-1 ring-gray-950/5 dark:bg-gray-900 dark:ring-white/10">
-            <h3 class="text-base font-semibold text-gray-900 dark:text-white">Növbəti taramalar</h3>
-            <div class="mt-3 grid grid-cols-1 gap-3 text-sm">
-                <div><span class="text-gray-500">Bakü (günde 3, 4 saat arayla):</span> <b>{{ $next['baku']->format('d.m.Y') }}</b> 08:00–13:00 rastgele başlangıç</div>
-                <div><span class="text-gray-500">boss.az (günde 1):</span> <b>{{ $next['boss']->format('d.m.Y H:i') }}</b></div>
-                <div><span class="text-gray-500">Digər şəhərlər (həftə sonu):</span> <b>{{ $next['other']->format('d.m.Y H:i') }}</b></div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px">
+        <x-filament::section heading="Növbəti taramalar" icon="heroicon-o-clock">
+            <div style="display:flex;flex-direction:column;gap:8px;font-size:14px">
+                <div><span style="color:#6b7280">Bakü (günde 3, 4 saat arayla):</span> <b>{{ $next['baku']->format('d.m.Y') }}</b> 08:00–13:00 arası rastgele başlangıç</div>
+                <div><span style="color:#6b7280">boss.az (günde 1):</span> <b>{{ $next['boss']->format('d.m.Y H:i') }}</b></div>
+                <div><span style="color:#6b7280">Digər şəhərlər (həftə sonu):</span> <b>{{ $next['other']->format('d.m.Y H:i') }}</b></div>
             </div>
-        </div>
+        </x-filament::section>
 
-        <div class="rounded-xl bg-white p-5 shadow-sm ring-1 ring-gray-950/5 dark:bg-gray-900 dark:ring-white/10">
-            <h3 class="text-base font-semibold text-gray-900 dark:text-white">Cron cədvəli</h3>
-            <table class="mt-3 w-full text-sm">
-                <tbody class="divide-y divide-gray-100 dark:divide-white/5">
-                    @foreach($cron as $c)
-                        <tr>
-                            <td class="py-2 pr-3 text-gray-700 dark:text-gray-300">{{ $c[0] }}</td>
-                            <td class="py-2 pr-3"><code class="rounded bg-gray-100 px-2 py-0.5 dark:bg-gray-800">{{ $c[1] }}</code></td>
-                            <td class="py-2 text-xs text-gray-500">{{ $c[2] }}</td>
-                        </tr>
-                    @endforeach
+        <x-filament::section heading="Cron cədvəli" icon="heroicon-o-command-line">
+            <table style="width:100%;border-collapse:collapse;font-size:14px">
+                <tbody>
+                @foreach($cron as $c)
+                    <tr style="border-top:1px solid rgba(128,128,128,.2)">
+                        <td style="padding:6px 8px 6px 0">{{ $c[0] }}</td>
+                        <td style="padding:6px 8px">
+                            <code style="background:rgba(128,128,128,.15);border-radius:4px;padding:2px 6px">{{ $c[1] }}</code>
+                        </td>
+                        <td style="padding:6px 0;color:#6b7280;font-size:12px">{{ $c[2] }}</td>
+                    </tr>
+                @endforeach
                 </tbody>
             </table>
-        </div>
+        </x-filament::section>
     </div>
 
-    <div class="mt-6 rounded-xl bg-white p-5 shadow-sm ring-1 ring-gray-950/5 dark:bg-gray-900 dark:ring-white/10">
-        <h3 class="text-base font-semibold text-gray-900 dark:text-white">Trend — son çalışmalarda eklenen ilan</h3>
-        <div class="mt-4 flex items-end gap-2 h-40">
-            @foreach($trend as $t)
-                <div class="flex-1 flex flex-col items-center justify-end h-full" title="{{ $t->finished_at?->timezone($tz)->format('d.m H:i') }} — {{ $t->inserted }}">
-                    <span class="text-[10px] text-gray-500 mb-1">{{ $t->inserted }}</span>
-                    <div class="w-full rounded-t bg-primary-500" style="height: {{ max(2, (int) round(($t->inserted / $trendMax) * 100)) }}%"></div>
-                    <span class="text-[9px] text-gray-400 mt-1">{{ $t->finished_at?->timezone($tz)->format('d.m') }}</span>
+    <x-filament::section heading="Trend — son çalışmalarda eklenen ilan">
+        <div style="display:flex;align-items:flex-end;gap:6px;height:160px">
+            @forelse($trend as $t)
+                <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%"
+                     title="{{ $t->finished_at?->timezone($tz)->format('d.m H:i') }} — {{ $t->inserted }}">
+                    <span style="font-size:10px;color:#6b7280;margin-bottom:2px">{{ $t->inserted }}</span>
+                    <div style="width:100%;border-radius:4px 4px 0 0;background:#f59e0b;height:{{ max(2, (int) round(($t->inserted / $trendMax) * 100)) }}%"></div>
+                    <span style="font-size:9px;color:#9ca3af;margin-top:2px">{{ $t->finished_at?->timezone($tz)->format('d.m') }}</span>
                 </div>
-            @endforeach
-            @if($trend->isEmpty())
-                <div class="text-sm text-gray-500">Hələ çalışma qeydi yoxdur.</div>
-            @endif
+            @empty
+                <div style="color:#6b7280">Hələ çalışma qeydi yoxdur.</div>
+            @endforelse
         </div>
-    </div>
+    </x-filament::section>
 
-    <div class="mt-6 rounded-xl bg-white p-5 shadow-sm ring-1 ring-gray-950/5 dark:bg-gray-900 dark:ring-white/10">
-        <h3 class="text-base font-semibold text-gray-900 dark:text-white">Günlük eklenen ilan (son 14 gün)</h3>
-        <div class="mt-4 flex items-end gap-1 h-32">
+    <x-filament::section heading="Günlük eklenen ilan (son 14 gün)">
+        <div style="display:flex;align-items:flex-end;gap:3px;height:130px">
             @foreach($dailySeries as $day => $v)
-                <div class="flex-1 flex flex-col items-center justify-end h-full" title="{{ $day }} — {{ $v }}">
-                    <div class="w-full rounded-t bg-emerald-500" style="height: {{ max(1, (int) round(($v / $dailyMax) * 100)) }}%"></div>
-                    <span class="text-[9px] text-gray-400 mt-1">{{ \Carbon\Carbon::parse($day)->format('d.m') }}</span>
+                <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%" title="{{ $day }} — {{ $v }}">
+                    <div style="width:100%;border-radius:4px 4px 0 0;background:#10b981;height:{{ max(1, (int) round(($v / $dailyMax) * 100)) }}%"></div>
+                    <span style="font-size:9px;color:#9ca3af;margin-top:2px">{{ \Carbon\Carbon::parse($day)->format('d.m') }}</span>
                 </div>
             @endforeach
         </div>
-    </div>
+    </x-filament::section>
 
-    <div class="mt-6 rounded-xl bg-white shadow-sm ring-1 ring-gray-950/5 dark:bg-gray-900 dark:ring-white/10 overflow-hidden">
-        <div class="p-5 text-base font-semibold text-gray-900 dark:text-white">Kaynak durumu</div>
-        <div class="overflow-x-auto">
-            <table class="w-full text-sm">
-                <thead class="bg-gray-50 text-gray-500 dark:bg-gray-800">
-                    <tr>
-                        <th class="text-left px-5 py-2">Kaynak</th>
-                        <th class="text-left px-3 py-2">Son tarama</th>
-                        <th class="text-right px-3 py-2">Çekilen</th>
-                        <th class="text-right px-3 py-2">Hazır</th>
-                        <th class="text-right px-3 py-2">Eklenen</th>
-                        <th class="text-right px-3 py-2">24s</th>
-                        <th class="text-left px-3 py-2">Trend</th>
-                        <th class="text-right px-3 py-2">Tekrar</th>
-                        <th class="text-right px-3 py-2">Atlanan</th>
-                        <th class="text-right px-5 py-2">Hata</th>
+    <x-filament::section heading="Kaynak durumu">
+        <div style="overflow-x:auto">
+            <table style="width:100%;border-collapse:collapse;font-size:13px">
+                <thead>
+                    <tr style="text-align:left;color:#6b7280;border-bottom:2px solid rgba(128,128,128,.25)">
+                        <th style="padding:8px 10px">Kaynak</th>
+                        <th style="padding:8px 10px">Son tarama</th>
+                        <th style="padding:8px 10px;text-align:right">Çekilen</th>
+                        <th style="padding:8px 10px;text-align:right">Hazır</th>
+                        <th style="padding:8px 10px;text-align:right">Eklenen</th>
+                        <th style="padding:8px 10px;text-align:right">24s</th>
+                        <th style="padding:8px 10px">Trend</th>
+                        <th style="padding:8px 10px;text-align:right">Tekrar</th>
+                        <th style="padding:8px 10px;text-align:right">Atlanan</th>
+                        <th style="padding:8px 10px;text-align:right">Hata</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-gray-100 dark:divide-white/5">
-                    @forelse($sources as $s)
-                        @php($key = str_replace('.az', '', $s->source))
-                        <tr>
-                            <td class="px-5 py-2 font-medium text-gray-900 dark:text-white">{{ $s->label ?? $s->source }}</td>
-                            <td class="px-3 py-2 text-gray-600 dark:text-gray-300">{{ $s->last_run_at?->timezone($tz)->format('d.m.Y H:i') ?? '—' }}</td>
-                            <td class="px-3 py-2 text-right">{{ number_format($s->fetched) }}</td>
-                            <td class="px-3 py-2 text-right">{{ number_format($s->ready) }}</td>
-                            <td class="px-3 py-2 text-right font-semibold text-emerald-600">{{ number_format($s->inserted) }}</td>
-                            <td class="px-3 py-2 text-right">{{ number_format($perSource24h[$key] ?? 0) }}</td>
-                            @php($ser = $perSourceTrend[$s->source] ?? collect())
-                            @php($sermax = max(1, (int) ($ser->max() ?? 1)))
-                            <td class="px-3 py-2">
-                                <div class="flex items-end gap-0.5 h-5">
-                                    @foreach($ser as $v)
-                                        <div class="w-1 rounded-sm bg-primary-500" style="height: {{ max(1, (int) round(($v / $sermax) * 20)) }}px"></div>
-                                    @endforeach
-                                </div>
-                            </td>
-                            <td class="px-3 py-2 text-right">{{ number_format($s->duplicates) }}</td>
-                            <td class="px-3 py-2 text-right">{{ number_format($s->skipped) }}</td>
-                            <td class="px-5 py-2 text-right {{ $s->errors ? 'text-red-600 font-semibold' : '' }}">{{ number_format($s->errors) }}</td>
-                        </tr>
-                    @empty
-                        <tr><td colspan="10" class="px-5 py-6 text-center text-gray-500">Hələ məlumat yoxdur.</td></tr>
-                    @endforelse
+                <tbody>
+                @forelse($sources as $s)
+                    @php($key = str_replace('.az', '', $s->source))
+                    @php($ser = $perSourceTrend[$s->source] ?? collect())
+                    @php($sermax = max(1, (int) ($ser->max() ?? 1)))
+                    <tr style="border-bottom:1px solid rgba(128,128,128,.15)">
+                        <td style="padding:6px 10px;font-weight:600">{{ $s->label ?? $s->source }}</td>
+                        <td style="padding:6px 10px;color:#6b7280">{{ $s->last_run_at?->timezone($tz)->format('d.m.Y H:i') ?? '—' }}</td>
+                        <td style="padding:6px 10px;text-align:right">{{ number_format($s->fetched) }}</td>
+                        <td style="padding:6px 10px;text-align:right">{{ number_format($s->ready) }}</td>
+                        <td style="padding:6px 10px;text-align:right;font-weight:700;color:#10b981">{{ number_format($s->inserted) }}</td>
+                        <td style="padding:6px 10px;text-align:right">{{ number_format($perSource24h[$key] ?? 0) }}</td>
+                        <td style="padding:6px 10px">
+                            <div style="display:flex;align-items:flex-end;gap:2px;height:20px">
+                                @foreach($ser as $v)
+                                    <div style="width:3px;border-radius:2px;background:#f59e0b;height:{{ max(1, (int) round(($v / $sermax) * 20)) }}px"></div>
+                                @endforeach
+                            </div>
+                        </td>
+                        <td style="padding:6px 10px;text-align:right">{{ number_format($s->duplicates) }}</td>
+                        <td style="padding:6px 10px;text-align:right">{{ number_format($s->skipped) }}</td>
+                        <td style="padding:6px 10px;text-align:right;{{ $s->errors ? 'color:#dc2626;font-weight:700' : '' }}">{{ number_format($s->errors) }}</td>
+                    </tr>
+                @empty
+                    <tr><td colspan="10" style="padding:24px;text-align:center;color:#6b7280">Hələ məlumat yoxdur.</td></tr>
+                @endforelse
                 </tbody>
             </table>
         </div>
-    </div>
+    </x-filament::section>
 
-    <div class="mt-6 rounded-xl bg-white shadow-sm ring-1 ring-gray-950/5 dark:bg-gray-900 dark:ring-white/10 overflow-hidden">
-        <div class="p-5 text-base font-semibold text-gray-900 dark:text-white">Son çalışmalar</div>
-        <div class="overflow-x-auto">
-            <table class="w-full text-sm">
-                <thead class="bg-gray-50 text-gray-500 dark:bg-gray-800">
-                    <tr>
-                        <th class="text-left px-5 py-2">Tarix</th>
-                        <th class="text-left px-3 py-2">Bölgə</th>
-                        <th class="text-right px-3 py-2">Çekilen</th>
-                        <th class="text-right px-3 py-2">Eklenen</th>
-                        <th class="text-right px-3 py-2">Tekrar</th>
-                        <th class="text-right px-5 py-2">Hata</th>
+    <x-filament::section heading="Son çalışmalar">
+        <div style="overflow-x:auto">
+            <table style="width:100%;border-collapse:collapse;font-size:13px">
+                <thead>
+                    <tr style="text-align:left;color:#6b7280;border-bottom:2px solid rgba(128,128,128,.25)">
+                        <th style="padding:8px 10px">Tarix</th>
+                        <th style="padding:8px 10px">Bölgə</th>
+                        <th style="padding:8px 10px;text-align:right">Çekilen</th>
+                        <th style="padding:8px 10px;text-align:right">Eklenen</th>
+                        <th style="padding:8px 10px;text-align:right">Tekrar</th>
+                        <th style="padding:8px 10px;text-align:right">Hata</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-gray-100 dark:divide-white/5">
-                    @forelse($runs as $r)
-                        <tr>
-                            <td class="px-5 py-2">{{ ($r->finished_at ?? $r->created_at)?->timezone($tz)->format('d.m.Y H:i') }}</td>
-                            <td class="px-3 py-2">{{ $r->region }}</td>
-                            <td class="px-3 py-2 text-right">{{ number_format($r->fetched) }}</td>
-                            <td class="px-3 py-2 text-right text-emerald-600 font-semibold">{{ number_format($r->inserted) }}</td>
-                            <td class="px-3 py-2 text-right">{{ number_format($r->duplicates) }}</td>
-                            <td class="px-5 py-2 text-right {{ $r->errors ? 'text-red-600' : '' }}">{{ number_format($r->errors) }}</td>
-                        </tr>
-                    @empty
-                        <tr><td colspan="6" class="px-5 py-6 text-center text-gray-500">Çalışma qeydi yoxdur.</td></tr>
-                    @endforelse
+                <tbody>
+                @forelse($runs as $r)
+                    <tr style="border-bottom:1px solid rgba(128,128,128,.15)">
+                        <td style="padding:6px 10px">{{ ($r->finished_at ?? $r->created_at)?->timezone($tz)->format('d.m.Y H:i') }}</td>
+                        <td style="padding:6px 10px">{{ $r->region }}</td>
+                        <td style="padding:6px 10px;text-align:right">{{ number_format($r->fetched) }}</td>
+                        <td style="padding:6px 10px;text-align:right;font-weight:700;color:#10b981">{{ number_format($r->inserted) }}</td>
+                        <td style="padding:6px 10px;text-align:right">{{ number_format($r->duplicates) }}</td>
+                        <td style="padding:6px 10px;text-align:right;{{ $r->errors ? 'color:#dc2626' : '' }}">{{ number_format($r->errors) }}</td>
+                    </tr>
+                @empty
+                    <tr><td colspan="6" style="padding:24px;text-align:center;color:#6b7280">Çalışma qeydi yoxdur.</td></tr>
+                @endforelse
                 </tbody>
             </table>
         </div>
-    </div>
+    </x-filament::section>
 </x-filament-panels::page>
