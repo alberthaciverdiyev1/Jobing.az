@@ -485,9 +485,9 @@ class VacancyService
      */
     private function paginateMergedListing($nativeQuery, $scrapedQuery, string $sort, int $perPage): LengthAwarePaginator
     {
-        $columns = "'v' as src, id, is_featured, updated_at, salary_min, salary_max, views_count, deadline, title";
-        $nativeQuery->selectRaw($columns);
-        $scrapedQuery->selectRaw($columns);
+        $columns = 'id, is_featured, updated_at, salary_min, salary_max, views_count, deadline, title';
+        $nativeQuery->selectRaw("'v' as src, " . $columns);
+        $scrapedQuery->selectRaw("'s' as src, " . $columns);
 
         $makeUnion = fn () => DB::query()
             ->fromSub($nativeQuery, 'v')
