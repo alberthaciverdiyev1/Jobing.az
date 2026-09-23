@@ -376,40 +376,53 @@ class VacancyService
             };
 
             if ($includeScraped) {
-                $scrapedAttributeScope = $makeScrapedScope(true);
-                $scrapedCategoryCountScope = $makeScrapedScope(false);
+                // Facet sayıları: onlarca withCount yerine bir neçə GROUP BY sorğusu.
+                $grouped = function (string $modelClass, string $fk, bool $includeCategory, bool $scraped) use ($makeScope, $makeScrapedScope) {
+                    $scope = $scraped ? $makeScrapedScope($includeCategory) : $makeScope($includeCategory);
+                    return $scope($modelClass::query())
+                        ->selectRaw($fk . ' as k, count(*) as c')
+                        ->groupBy($fk)
+                        ->pluck('c', 'k');
+                };
 
-                $categories = Category::parents()
-                    ->with(['children' => fn ($q) => $q->withCount([
-                        'vacancies' => $categoryCountScope,
-                        'scrapedVacancies' => $scrapedCategoryCountScope,
-                    ])])
-                    ->withCount([
-                        'vacancies' => $categoryCountScope,
-                        'scrapedVacancies' => $scrapedCategoryCountScope,
-                    ])
-                    ->get()
-                    ->each(function ($cat) {
-                        foreach ($cat->children as $child) {
-                            $child->vacancies_count = (int) $child->vacancies_count + (int) $child->scraped_vacancies_count;
+                $mergeMaps = function (...$maps): array {
+                    $out = [];
+                    foreach ($maps as $map) {
+                        foreach ($map as $id => $count) {
+                            $out[$id] = ($out[$id] ?? 0) + (int) $count;
                         }
-                        $cat->vacancies_count = (int) $cat->vacancies_count
-                            + (int) $cat->scraped_vacancies_count
-                            + $cat->children->sum('vacancies_count');
+                    }
+                    return $out;
+                };
+
+                $catCounts = $mergeMaps(
+                    $grouped(Vacancy::class, 'category_id', false, false),
+                    $grouped(ScrapedVacancy::class, 'category_id', false, true),
+                );
+
+                $categories = Category::parents()->with('children')->get()
+                    ->each(function ($cat) use ($catCounts) {
+                        $cat->vacancies_count = (int) ($catCounts[$cat->id] ?? 0);
+                        foreach ($cat->children as $child) {
+                            $child->vacancies_count = (int) ($catCounts[$child->id] ?? 0);
+                            $cat->vacancies_count += $child->vacancies_count;
+                        }
                     });
 
-                $jobTypes = $mergeScrapedCounts(
-                    JobType::active()->withCount(['vacancies' => $attributeScope, 'scrapedVacancies' => $scrapedAttributeScope])->get()
+                $attributeCounts = fn (string $fk): array => $mergeMaps(
+                    $grouped(Vacancy::class, $fk, true, false),
+                    $grouped(ScrapedVacancy::class, $fk, true, true),
                 );
-                $workplaceTypes = $mergeScrapedCounts(
-                    WorkplaceType::active()->withCount(['vacancies' => $attributeScope, 'scrapedVacancies' => $scrapedAttributeScope])->get()
-                );
-                $experienceLevels = $mergeScrapedCounts(
-                    ExperienceLevel::active()->withCount(['vacancies' => $attributeScope, 'scrapedVacancies' => $scrapedAttributeScope])->get()
-                );
-                $cities = $mergeScrapedCounts(
-                    \App\Modules\JobAttribute\Models\City::active()->withCount(['vacancies' => $attributeScope, 'scrapedVacancies' => $scrapedAttributeScope])->get()
-                );
+                $attachCounts = function ($models, array $counts) {
+                    return $models->each(function ($model) use ($counts) {
+                        $model->vacancies_count = (int) ($counts[$model->id] ?? 0);
+                    });
+                };
+
+                $jobTypes = $attachCounts(JobType::active()->get(), $attributeCounts('job_type_id'));
+                $workplaceTypes = $attachCounts(WorkplaceType::active()->get(), $attributeCounts('workplace_type_id'));
+                $experienceLevels = $attachCounts(ExperienceLevel::active()->get(), $attributeCounts('experience_level_id'));
+                $cities = $attachCounts(\App\Modules\JobAttribute\Models\City::active()->get(), $attributeCounts('city_id'));
             } else {
                 $categories = Category::parents()
                     ->with(['children' => fn ($q) => $q->withCount(['vacancies' => $categoryCountScope])])
