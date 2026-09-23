@@ -40,7 +40,7 @@ class VacancyController extends Controller
      */
     private function listingResponse(Request $request, bool $includeScraped): View|JsonResponse|Response
     {
-        $data = $this->vacancyService->getPaginatedVacancies($request->all(), 12, $includeScraped);
+        $data = $this->vacancyService->getPaginatedVacancies($request->all(), 30, $includeScraped);
         $data['isExternal'] = $includeScraped;
 
         // Only return JSON if this is an explicit AJAX fetch call and not standard browser page navigation.

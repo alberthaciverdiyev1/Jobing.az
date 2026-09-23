@@ -21,7 +21,7 @@ class VacancyService
     /**
      * Get paginated vacancies with filters, categories, and sidebar attributes.
      */
-    public function getPaginatedVacancies(array $filters = [], int $perPage = 12, bool $includeScraped = false): array
+    public function getPaginatedVacancies(array $filters = [], int $perPage = 30, bool $includeScraped = false): array
     {
         $query = Vacancy::with(['company', 'category', 'city', 'jobType', 'workplaceType', 'experienceLevel', 'skillRecords'])->active();
 
