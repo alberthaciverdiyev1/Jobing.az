@@ -23,6 +23,23 @@ class VacancyService
      */
     public function getPaginatedVacancies(array $filters = [], int $perPage = 30, bool $includeScraped = false): array
     {
+        // Ağır merge/sort nəticəsi imza üzrə keşlənir; yeni veri (FacetCache::bump) və ya TTL ilə yenilənir.
+        $signatureFilters = $filters;
+        ksort($signatureFilters);
+        $signature = serialize([
+            $signatureFilters, $perPage, $includeScraped,
+            \Illuminate\Pagination\LengthAwarePaginator::resolveCurrentPage(), auth()->id(),
+        ]);
+
+        return \App\Modules\Vacancy\Support\FacetCache::rememberListing(
+            $signature,
+            fn () => $this->buildPaginatedVacancies($filters, $perPage, $includeScraped),
+            600
+        );
+    }
+
+    private function buildPaginatedVacancies(array $filters = [], int $perPage = 30, bool $includeScraped = false): array
+    {
         $query = Vacancy::with(['company', 'category', 'city', 'jobType', 'workplaceType', 'experienceLevel', 'skillRecords'])->active();
 
         // 1. Keyword search

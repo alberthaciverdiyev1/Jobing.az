@@ -45,4 +45,17 @@ class FacetCache
             $callback,
         );
     }
+
+    /**
+     * Siyahı (listing) cavabı üçün keş. Ağır merge/sort nəticəsini imza üzrə saxlayır;
+     * yeni veri gələndə (FacetCache::bump) və ya TTL bitəndə yenilənir.
+     */
+    public static function rememberListing(string $signature, Closure $callback, int $seconds = 600): mixed
+    {
+        return Cache::remember(
+            'vacancies.listing.' . self::environment() . '.' . self::version() . '.' . md5($signature),
+            $seconds,
+            $callback,
+        );
+    }
 }
