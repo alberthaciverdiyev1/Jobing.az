@@ -15,6 +15,7 @@ use App\Modules\Vacancy\Models\ScrapedVacancy;
 use App\Modules\Vacancy\Support\ResumeSkillMatcher;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\DB;
 
 class VacancyService
 {
@@ -222,19 +223,8 @@ class VacancyService
 
             // Platforma və xarici elanlar birlikdə, seçilmiş sıralamaya görə
             // qarışdırılır (native elanlar həmişə yuxarıda saxlanılmır).
-            $merged = $query->get()->concat($scrapedQuery->get())->values();
-            $sorted = $this->sortMergedListing($merged, $sort);
-
-            $page = LengthAwarePaginator::resolveCurrentPage();
-            $offset = ($page - 1) * $perPage;
-
-            $jobs = new LengthAwarePaginator(
-                $sorted->slice($offset, $perPage)->values(),
-                $sorted->count(),
-                $perPage,
-                $page,
-                ['path' => request()->url(), 'query' => request()->query()]
-            );
+            // SQL səviyyəsində UNION + ORDER BY + LIMIT/OFFSET: yalnız görünən səhifə hydrate olunur.
+            $jobs = $this->paginateMergedListing($query, $scrapedQuery, $sort, $perPage);
         }
 
         $mainResume = null;
@@ -480,6 +470,63 @@ class VacancyService
     /**
      * Get a single vacancy by slug with relations and increment view count.
      */
+    /**
+     * Native (vacancies) + xarici (scraped_vacancies) elanları SQL UNION ilə birləşdirir,
+     * ORDER BY + LIMIT/OFFSET tətbiq edir və yalnız cari səhifəni hydrate edir.
+     * (Bütün sətirləri PHP-yə çəkmək 10k+ gündəlik data ilə ölçəklənmir.)
+     */
+    private function paginateMergedListing($nativeQuery, $scrapedQuery, string $sort, int $perPage): LengthAwarePaginator
+    {
+        $columns = "'v' as src, id, is_featured, updated_at, salary_min, salary_max, views_count, deadline, title";
+        $nativeQuery->selectRaw($columns);
+        $scrapedQuery->selectRaw($columns);
+
+        $makeUnion = fn () => DB::query()
+            ->fromSub($nativeQuery, 'v')
+            ->unionAll(DB::query()->fromSub($scrapedQuery, 's'));
+
+        $total = DB::query()->fromSub($makeUnion(), 'u')->count();
+        $page = LengthAwarePaginator::resolveCurrentPage();
+
+        $rows = DB::query()->fromSub($makeUnion(), 'u')
+            ->orderByRaw($this->mergedOrderBy($sort))
+            ->forPage($page, $perPage)
+            ->get();
+
+        $nativeIds = $rows->where('src', 'v')->pluck('id')->all();
+        $scrapedIds = $rows->where('src', 's')->pluck('id')->all();
+
+        $native = $nativeIds
+            ? Vacancy::with(['company', 'category', 'city', 'jobType', 'workplaceType', 'experienceLevel', 'skillRecords'])->whereIn('id', $nativeIds)->get()->keyBy('id')
+            : collect();
+        $scraped = $scrapedIds
+            ? ScrapedVacancy::with(['category', 'city', 'jobType', 'workplaceType', 'experienceLevel'])->whereIn('id', $scrapedIds)->get()->keyBy('id')
+            : collect();
+
+        $items = $rows->map(fn ($row) => $row->src === 'v' ? ($native[$row->id] ?? null) : ($scraped[$row->id] ?? null))
+            ->filter()
+            ->values();
+
+        return new LengthAwarePaginator($items, $total, $perPage, $page, [
+            'path' => request()->url(), 'query' => request()->query(),
+        ]);
+    }
+
+    private function mergedOrderBy(string $sort): string
+    {
+        $featured = 'is_featured desc';
+        return match ($sort) {
+            'title_asc', 'alphabetical' => 'title asc',
+            'title_desc' => 'title desc',
+            'oldest' => "$featured, updated_at asc",
+            'salary_desc', 'salary_high' => "$featured, coalesce(salary_max, salary_min) desc nulls last, updated_at desc",
+            'salary_asc' => "$featured, coalesce(salary_min, salary_max) asc nulls last, updated_at desc",
+            'views' => "$featured, views_count desc nulls last, updated_at desc",
+            'deadline' => "$featured, deadline asc nulls last, updated_at desc",
+            default => "$featured, updated_at desc",
+        };
+    }
+
     public function getVacancyDetails(string $slug): array
     {
         $job = Vacancy::with(['company', 'category', 'jobType', 'workplaceType', 'experienceLevel', 'skillRecords'])
