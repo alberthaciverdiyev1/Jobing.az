@@ -8,6 +8,8 @@ use App\Modules\Scraper\Models\ScraperSetting;
 use App\Modules\Scraper\Models\ScraperSourceStatus;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Filament\Actions\Action;
+use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 
 class ScraperStatus extends Page
@@ -25,6 +27,39 @@ class ScraperStatus extends Page
     protected function getHeaderWidgets(): array
     {
         return [\App\Modules\Scraper\Filament\Widgets\ScraperStatsOverview::class];
+    }
+
+    protected function getHeaderActions(): array
+    {
+        return [
+            Action::make('runBaku')->label('Bakü — İndi başlat')->icon('heroicon-o-play')
+                ->requiresConfirmation()->action(fn () => $this->runScript('cron-baku-daily.sh')),
+            Action::make('runBoss')->label('boss.az — İndi başlat')->icon('heroicon-o-play')
+                ->requiresConfirmation()->action(fn () => $this->runScript('cron-boss.sh')),
+            Action::make('runOther')->label('Digər şəhərlər — İndi başlat')->icon('heroicon-o-play')
+                ->requiresConfirmation()->action(fn () => $this->runScript('cron-other-weekend.sh')),
+            Action::make('warmFacets')->label('Facet isitme')->icon('heroicon-o-bolt')
+                ->action(fn () => $this->runFacets()),
+        ];
+    }
+
+    protected function runScript(string $script): void
+    {
+        $root = '/var/www/JobScraper';
+        $env = 'JOBING_ARTISAN=/var/www/new-jobing/artisan '
+            . 'COMPANY_LOGO_PUBLISH_DIR=/var/www/new-jobing/storage/app/public/scraped-companies';
+        $cmd = sprintf(
+            'cd %s && nohup env %s bash %s >> /dev/null 2>&1 &',
+            escapeshellarg($root), $env, escapeshellarg($root . '/scripts/' . $script)
+        );
+        exec($cmd);
+        Notification::make()->title($script . ' başladı')->body('Arxa planda işə salındı.')->success()->send();
+    }
+
+    protected function runFacets(): void
+    {
+        exec('nohup php /var/www/new-jobing/artisan facets:refresh --warm >> /dev/null 2>&1 &');
+        Notification::make()->title('Facet isitme başladı')->success()->send();
     }
 
     public function getViewData(): array
