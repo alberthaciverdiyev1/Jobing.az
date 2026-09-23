@@ -34,8 +34,7 @@ class VacancyService
 
         return \App\Modules\Vacancy\Support\FacetCache::rememberListing(
             $signature,
-            fn () => $this->buildPaginatedVacancies($filters, $perPage, $includeScraped),
-            600
+            fn () => $this->buildPaginatedVacancies($filters, $perPage, $includeScraped)
         );
     }
 
@@ -368,12 +367,6 @@ class VacancyService
         $facets = \App\Modules\Vacancy\Support\FacetCache::remember($facetSignature, function () use ($makeScope, $makeScrapedScope, $includeScraped) {
             $attributeScope = $makeScope(true);
             $categoryCountScope = $makeScope(false);
-
-            $mergeScrapedCounts = function ($models) {
-                return $models->each(function ($model) {
-                    $model->vacancies_count = (int) $model->vacancies_count + (int) $model->scraped_vacancies_count;
-                });
-            };
 
             if ($includeScraped) {
                 // Facet sayıları: onlarca withCount yerine bir neçə GROUP BY sorğusu.

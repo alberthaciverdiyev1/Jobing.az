@@ -37,7 +37,7 @@ class FacetCache
         Cache::forever(self::versionKey(), self::version() + 1);
     }
 
-    public static function remember(string $signature, Closure $callback, int $seconds = 300): mixed
+    public static function remember(string $signature, Closure $callback, int $seconds = 3600): mixed
     {
         return Cache::remember(
             'vacancies.facets.' . self::environment() . '.' . self::version() . '.' . md5($signature),
@@ -50,7 +50,7 @@ class FacetCache
      * Siyahı (listing) cavabı üçün keş. Ağır merge/sort nəticəsini imza üzrə saxlayır;
      * yeni veri gələndə (FacetCache::bump) və ya TTL bitəndə yenilənir.
      */
-    public static function rememberListing(string $signature, Closure $callback, int $seconds = 600): mixed
+    public static function rememberListing(string $signature, Closure $callback, int $seconds = 3600): mixed
     {
         return Cache::remember(
             'vacancies.listing.' . self::environment() . '.' . self::version() . '.' . md5($signature),

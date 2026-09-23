@@ -9,9 +9,9 @@ use Illuminate\Console\Command;
 
 class RefreshFacetsCommand extends Command
 {
-    protected $signature = 'facets:refresh {--warm : Əsas siyahının ilk səhifələrini də isindir} {--pages=3 : İsidiləcək səhifə sayı}';
+    protected $signature = 'facets:refresh {--warm : Əsas siyahının ilk səhifələrini də isindir} {--pages=5 : İsidiləcək səhifə sayı}';
 
-    protected $description = 'Facet və listing keşini təzələ (yeni veri sonrası)';
+    protected $description = 'Facet və listing keşini təzələ və isindir (yeni veri sonrası)';
 
     public function handle(): int
     {
@@ -22,14 +22,18 @@ class RefreshFacetsCommand extends Command
         if ($this->option('warm')) {
             $service = app(VacancyService::class);
             $pages = max(1, (int) $this->option('pages'));
+            // Yaygın sıralamalar + ilk səhifələr (soyuq istəklərin qarşısını alır).
+            $sortVariants = [[], ['sort' => 'views'], ['sort' => 'salary_desc']];
 
-            for ($page = 1; $page <= $pages; $page++) {
-                LengthAwarePaginator::currentPageResolver(fn () => $page);
-                $service->getPaginatedVacancies([], 30, true);
+            foreach ($sortVariants as $filters) {
+                for ($page = 1; $page <= $pages; $page++) {
+                    LengthAwarePaginator::currentPageResolver(fn () => $page);
+                    $service->getPaginatedVacancies($filters, 30, true);
+                }
             }
 
             LengthAwarePaginator::currentPageResolver(fn () => LengthAwarePaginator::resolveCurrentPage());
-            $this->info("Listing cache isindi (1-{$pages} səhifə).");
+            $this->info("Listing cache isindi ({$pages} səhifə × " . count($sortVariants) . ' sıralama).');
         }
 
         return self::SUCCESS;
