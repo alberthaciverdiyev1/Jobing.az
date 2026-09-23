@@ -15,7 +15,6 @@ use App\Modules\Vacancy\Models\ScrapedVacancy;
 use App\Modules\Vacancy\Support\ResumeSkillMatcher;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Database\Eloquent\Builder;
 
 class VacancyService
 {
@@ -204,32 +203,17 @@ class VacancyService
                 });
             }
 
-            $this->applyListingSort($scrapedQuery, $sort, 'scraped_vacancies');
+            // Platforma və xarici elanlar birlikdə, seçilmiş sıralamaya görə
+            // qarışdırılır (native elanlar həmişə yuxarıda saxlanılmır).
+            $merged = $query->get()->concat($scrapedQuery->get())->values();
+            $sorted = $this->sortMergedListing($merged, $sort);
 
-            // First exhaust native vacancies, then fill the page with scraped items.
-            // This keeps platform listings ahead of external listings on every query.
             $page = LengthAwarePaginator::resolveCurrentPage();
             $offset = ($page - 1) * $perPage;
-            $nativeTotal = (clone $query)->reorder()->count();
-            $scrapedTotal = (clone $scrapedQuery)->reorder()->count();
-            $items = collect();
-
-            if ($offset < $nativeTotal) {
-                $nativeItems = (clone $query)->skip($offset)->take($perPage)->get();
-                $items = $items->concat($nativeItems);
-                $scrapedOffset = 0;
-            } else {
-                $scrapedOffset = $offset - $nativeTotal;
-            }
-
-            $remaining = $perPage - $items->count();
-            if ($remaining > 0) {
-                $items = $items->concat((clone $scrapedQuery)->skip($scrapedOffset)->take($remaining)->get());
-            }
 
             $jobs = new LengthAwarePaginator(
-                $items,
-                $nativeTotal + $scrapedTotal,
+                $sorted->slice($offset, $perPage)->values(),
+                $sorted->count(),
                 $perPage,
                 $page,
                 ['path' => request()->url(), 'query' => request()->query()]
@@ -702,27 +686,71 @@ class VacancyService
             ->all();
     }
 
-    private function applyListingSort(Builder $query, string $sort, string $table): void
+    /**
+     * Yerli (vacancies) və xarici (scraped_vacancies) elanları vahid siyahıda
+     * seçilmiş sıralama ilə qarışdırır. Beləliklə platforma elanları həmişə
+     * yuxarıda saxlanılmır — hamısı updated_at (və digər meyarlar) üzrə sıralanır.
+     *
+     * @param  \Illuminate\Support\Collection<int, \Illuminate\Database\Eloquent\Model>  $items
+     */
+    private function sortMergedListing(\Illuminate\Support\Collection $items, string $sort): \Illuminate\Support\Collection
     {
-        if ($sort === 'oldest') {
-            $query->orderBy('is_featured', 'desc')->orderBy("{$table}.updated_at");
-        } elseif ($sort === 'salary_desc' || $sort === 'salary_high') {
-            $query->orderBy('is_featured', 'desc')->orderByRaw('COALESCE(salary_max, salary_min) DESC NULLS LAST')->orderByDesc("{$table}.updated_at");
-        } elseif ($sort === 'salary_asc') {
-            $query->orderBy('is_featured', 'desc')->orderByRaw('COALESCE(salary_min, salary_max) ASC NULLS LAST')->orderByDesc("{$table}.updated_at");
-        } elseif ($sort === 'views') {
-            $query->orderBy('is_featured', 'desc')->orderByDesc('views_count')->orderByDesc("{$table}.updated_at");
-        } elseif ($sort === 'deadline') {
-            $query->orderBy('is_featured', 'desc')->orderByRaw('deadline ASC NULLS LAST')->orderByDesc("{$table}.updated_at");
-        } elseif ($sort === 'featured') {
-            $query->orderByDesc('is_featured')->orderByDesc("{$table}.updated_at");
-        } elseif ($sort === 'title_asc' || $sort === 'alphabetical') {
-            $query->orderBy('title');
-        } elseif ($sort === 'title_desc') {
-            $query->orderByDesc('title');
-        } else {
-            $query->orderByDesc('is_featured')->orderByDesc("{$table}.updated_at");
-        }
+        $sort = $sort ?: 'latest';
+
+        $compareNullable = static function (?float $a, ?float $b, bool $asc): int {
+            if ($a === null && $b === null) {
+                return 0;
+            }
+            // Null dəyərlər həmişə sona düşür.
+            if ($a === null) {
+                return 1;
+            }
+            if ($b === null) {
+                return -1;
+            }
+
+            return $asc ? ($a <=> $b) : ($b <=> $a);
+        };
+
+        $salary = static function ($job, bool $preferMax): ?float {
+            $min = $job->salary_min !== null ? (float) $job->salary_min : null;
+            $max = $job->salary_max !== null ? (float) $job->salary_max : null;
+
+            return $preferMax ? ($max ?? $min) : ($min ?? $max);
+        };
+
+        $updatedAt = static fn ($job): int => $job->updated_at ? $job->updated_at->getTimestamp() : 0;
+        $deadlineAt = static fn ($job): ?int => $job->deadline ? $job->deadline->getTimestamp() : null;
+
+        return $items->sort(function ($a, $b) use ($sort, $compareNullable, $salary, $updatedAt, $deadlineAt) {
+            // Başlıq sıralaması premium vəziyyətindən asılı olmayaraq işləyir.
+            if ($sort === 'title_asc' || $sort === 'alphabetical') {
+                return strcasecmp((string) $a->title, (string) $b->title);
+            }
+            if ($sort === 'title_desc') {
+                return strcasecmp((string) $b->title, (string) $a->title);
+            }
+
+            // Bütün digər sıralamalarda premium elanlar əvvəlcə gəlir.
+            $featured = (int) ($b->is_featured ?? false) <=> (int) ($a->is_featured ?? false);
+            if ($featured !== 0) {
+                return $featured;
+            }
+
+            return match ($sort) {
+                'oldest' => $updatedAt($a) <=> $updatedAt($b),
+                'salary_desc', 'salary_high' => $compareNullable($salary($a, true), $salary($b, true), false) ?: ($updatedAt($b) <=> $updatedAt($a)),
+                'salary_asc' => $compareNullable($salary($a, false), $salary($b, false), true) ?: ($updatedAt($b) <=> $updatedAt($a)),
+                'views' => ((int) ($b->views_count ?? 0) <=> (int) ($a->views_count ?? 0)) ?: ($updatedAt($b) <=> $updatedAt($a)),
+                'deadline' => $compareNullable(
+                    $deadlineAt($a) !== null ? (float) $deadlineAt($a) : null,
+                    $deadlineAt($b) !== null ? (float) $deadlineAt($b) : null,
+                    true
+                ) ?: ($updatedAt($b) <=> $updatedAt($a)),
+                'featured' => $updatedAt($b) <=> $updatedAt($a),
+                default => $updatedAt($b) <=> $updatedAt($a), // latest
+            };
+        })->values();
     }
 
     /**

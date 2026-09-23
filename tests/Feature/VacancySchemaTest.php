@@ -41,13 +41,29 @@ class VacancySchemaTest extends TestCase
         $this->assertInstanceOf(Vacancy::class, $jobs->items()[0]);
     }
 
-    public function test_external_listing_prioritizes_native_vacancies_before_scraped_vacancies(): void
+    public function test_external_listing_merges_native_and_scraped_by_updated_at(): void
     {
         $this->createNativeAndScrapedVacancies();
+
+        // Köhnə native elan + daha yeni scraped elan → scraped yuxarıda olmalıdır
+        // (native elanlar həmişə yuxarıda saxlanılmır).
+        Vacancy::query()->where('slug', 'native-vacancy')->update(['updated_at' => now()->subDays(3)]);
 
         $jobs = app(VacancyService::class)->getPaginatedVacancies([], 12, true)['jobs'];
 
         $this->assertSame(2, $jobs->total());
+        $this->assertInstanceOf(ScrapedVacancy::class, $jobs->items()[0]);
+        $this->assertInstanceOf(Vacancy::class, $jobs->items()[1]);
+    }
+
+    public function test_external_listing_keeps_newer_native_vacancy_above_older_scraped(): void
+    {
+        $this->createNativeAndScrapedVacancies();
+
+        ScrapedVacancy::query()->where('slug', 'scraped-vacancy')->update(['updated_at' => now()->subDays(3)]);
+
+        $jobs = app(VacancyService::class)->getPaginatedVacancies([], 12, true)['jobs'];
+
         $this->assertInstanceOf(Vacancy::class, $jobs->items()[0]);
         $this->assertInstanceOf(ScrapedVacancy::class, $jobs->items()[1]);
     }
