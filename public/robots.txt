@@ -2,4 +2,4 @@ User-agent: *
 Disallow:
 Allow: /
 
-Sitemap: https://jobing.az/sitemap.xml
+Sitemap: https://kariyer.kibriskare.com/sitemap.xml

@@ -74,10 +74,10 @@ class SeoSetting extends Model
                     'ru' => 'Мгновенно откликайтесь на открытые вакансии в сфере ПО, дизайна и данных.',
                 ],
                 'default_meta_keywords' => [
-                    'az' => 'iş elanları, vakansiya, iş axtaran, kariyera, jobing',
-                    'tr' => 'iş ilanları, vaka, iş arayan, kariyer, jobing',
-                    'en' => 'job listings, vacancies, hiring, careers, jobing',
-                    'ru' => 'вакансии, работа, резюме, карьера, jobing',
+                    'az' => 'iş elanları, vakansiya, iş axtaran, kariyera, kibriskare',
+                    'tr' => 'iş ilanları, vaka, iş arayan, kariyer, kibriskare',
+                    'en' => 'job listings, vacancies, hiring, careers, kibriskare',
+                    'ru' => 'вакансии, работа, резюме, карьера, kibriskare',
                 ],
             ]);
         }
@@ -93,7 +93,7 @@ class SeoSetting extends Model
         $values = $this->{$field};
 
         if (is_array($values)) {
-            return $values[$locale] ?? $values['az'] ?? $values['tr'] ?? $values['en'] ?? reset($values) ?: $default;
+            return $values[$locale] ?? $values['tr'] ?? $values['az'] ?? $values['en'] ?? reset($values) ?: $default;
         }
 
         return (string) ($values ?: $default);

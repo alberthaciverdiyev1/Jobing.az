@@ -122,40 +122,40 @@ class PageSeo extends Model
         $values = $this->{$field};
 
         if (is_array($values)) {
-            return (string) ($values[$locale] ?? $values['az'] ?? reset($values) ?: $default);
+            return (string) ($values[$locale] ?? $values['tr'] ?? $values['az'] ?? reset($values) ?: $default);
         }
 
         return (string) ($values ?: $default);
     }
 
     /**
-     * Seed defaults for the main Jobing pages.
+     * Seed defaults for the main KibrisKare pages.
      */
     public static function ensureDefaults(): void
     {
         $defaults = [
             [
                 'page_key' => 'home',
-                'page_name' => 'Ana Səhifə',
+                'page_name' => 'Ana Sayfa',
                 'route_name' => 'home',
                 'sort_order' => 1,
-                'title' => ['az' => 'Jobing.az — Modern İş Elanları və Karyera Platforması', 'tr' => 'Jobing.az — Modern İş İlanları ve Kariyer Platforması', 'en' => 'Jobing.az — Modern Job Board & Career Platform', 'ru' => 'Jobing.az — Современная платформа вакансий и карьеры'],
+                'title' => ['az' => 'KibrisKare.com — Modern İş Elanları və Karyera Platforması', 'tr' => 'KibrisKare.com — Modern İş İlanları ve Kariyer Platforması', 'en' => 'KibrisKare.com — Modern Job Board & Career Platform', 'ru' => 'KibrisKare.com — Современная платформа вакансий и карьеры'],
                 'description' => ['az' => 'Yazılım, dizayn, məhsul, data və marketinq sahələrində açıq vakansiyalara ani müraciət edin.', 'tr' => 'Yazılım, tasarım, ürün, veri ve pazarlama alanlarında açık pozisyonlara anında başvurun.', 'en' => 'Apply instantly to open positions across software, design, product, data and marketing.', 'ru' => 'Мгновенно откликайтесь на открытые вакансии в сфере ПО, дизайна и данных.'],
             ],
             [
                 'page_key' => 'jobs',
-                'page_name' => 'Vakansiyalar',
+                'page_name' => 'İş İlanları',
                 'route_name' => 'jobs.index',
                 'sort_order' => 2,
-                'title' => ['az' => 'Vakansiyalar — Jobing.az', 'tr' => 'Vakansiyalar — Jobing.az', 'en' => 'Job Vacancies — Jobing.az', 'ru' => 'Вакансии — Jobing.az'],
+                'title' => ['az' => 'İş İlanları — KibrisKare.com', 'tr' => 'İş İlanları — KibrisKare.com', 'en' => 'Job Vacancies — KibrisKare.com', 'ru' => 'Вакансии — KibrisKare.com'],
                 'description' => ['az' => 'Bütün aktiv iş elanlarına baxın və filtrələyin.', 'tr' => 'Tüm aktif iş ilanlarını görüntüleyin ve filtreleyin.', 'en' => 'Browse and filter all active job vacancies.', 'ru' => 'Просматривайте и фильтруйте все активные вакансии.'],
             ],
             [
                 'page_key' => 'companies',
-                'page_name' => 'Şirkətlər',
+                'page_name' => 'Şirketler',
                 'route_name' => 'companies.index',
                 'sort_order' => 3,
-                'title' => ['az' => 'Şirkətlər — Jobing.az', 'tr' => 'Şirketler — Jobing.az', 'en' => 'Companies — Jobing.az', 'ru' => 'Компании — Jobing.az'],
+                'title' => ['az' => 'Şirkətlər — KibrisKare.com', 'tr' => 'Şirketler — KibrisKare.com', 'en' => 'Companies — KibrisKare.com', 'ru' => 'Компании — KibrisKare.com'],
                 'description' => ['az' => 'İşə götürən şirkətlərin kataloquna baxın.', 'tr' => 'İş veren şirketlerin kataloğunu görüntüleyin.', 'en' => 'Browse the catalog of hiring companies.', 'ru' => 'Каталог нанимающих компаний.'],
             ],
             [
@@ -163,15 +163,15 @@ class PageSeo extends Model
                 'page_name' => __('Job Seeking'),
                 'route_name' => 'job-seekers.index',
                 'sort_order' => 4,
-                'title' => ['az' => 'İş Axtarıram — Jobing.az', 'tr' => 'İş Arıyorum — Jobing.az', 'en' => 'I Am Looking for Work — Jobing.az', 'ru' => 'Ищу работу — Jobing.az'],
+                'title' => ['az' => 'İş Axtarıram — KibrisKare.com', 'tr' => 'İş Arıyorum — KibrisKare.com', 'en' => 'I Am Looking for Work — KibrisKare.com', 'ru' => 'Ищу работу — KibrisKare.com'],
                 'description' => ['az' => 'İş axtaranların elanlarına baxın və namizədlərlə əlaqə saxlayın.', 'tr' => 'İş arayanların ilanlarına göz atın ve adaylarla iletişime geçin.', 'en' => 'Browse job-seeker listings and contact candidates.', 'ru' => 'Объявления соискателей работы.'],
             ],
             [
                 'page_key' => 'blog',
-                'page_name' => 'Karyera Bloğu',
+                'page_name' => 'Kariyer Bloğu',
                 'route_name' => 'blog.index',
                 'sort_order' => 5,
-                'title' => ['az' => 'Karyera Bloğu — Jobing.az', 'tr' => 'Kariyer Bloğu — Jobing.az', 'en' => 'Career Blog — Jobing.az', 'ru' => 'Карьерный блог — Jobing.az'],
+                'title' => ['az' => 'Karyera Bloğu — KibrisKare.com', 'tr' => 'Kariyer Bloğu — KibrisKare.com', 'en' => 'Career Blog — KibrisKare.com', 'ru' => 'Карьерный блог — KibrisKare.com'],
                 'description' => ['az' => 'İş axtarışı, CV və mülakat məsləhətləri.', 'tr' => 'İş arama, CV ve mülakat ipuçları.', 'en' => 'Job search, CV and interview tips.', 'ru' => 'Советы по поиску работы и собеседованиям.'],
             ],
             [
@@ -179,16 +179,16 @@ class PageSeo extends Model
                 'page_name' => __('Frequently Asked Questions'),
                 'route_name' => 'faq.index',
                 'sort_order' => 6,
-                'title' => ['az' => 'Tez-tez Verilən Suallar — Jobing.az', 'tr' => 'Sıkça Sorulan Sorular — Jobing.az', 'en' => 'FAQ — Jobing.az', 'ru' => 'Часто задаваемые вопросы — Jobing.az'],
+                'title' => ['az' => 'Tez-tez Verilən Suallar — KibrisKare.com', 'tr' => 'Sıkça Sorulan Sorular — KibrisKare.com', 'en' => 'FAQ — KibrisKare.com', 'ru' => 'Часто задаваемые вопросы — KibrisKare.com'],
                 'description' => ['az' => 'İş axtarışı və vakansiya prosesləri haqqında suallar.', 'tr' => 'İş arama ve vakansiya süreçleri hakkında sorular.', 'en' => 'Questions about job search and hiring.', 'ru' => 'Вопросы о поиске работы.'],
             ],
             [
                 'page_key' => 'contact',
-                'page_name' => 'Əlaqə',
+                'page_name' => 'İletişim',
                 'route_name' => 'contact.index',
                 'sort_order' => 7,
-                'title' => ['az' => 'Əlaqə — Jobing.az', 'tr' => 'İletişim — Jobing.az', 'en' => 'Contact — Jobing.az', 'ru' => 'Контакты — Jobing.az'],
-                'description' => ['az' => 'Jobing.az ilə əlaqə saxlayın.', 'tr' => 'Jobing.az ile iletişime geçin.', 'en' => 'Get in touch with Jobing.az.', 'ru' => 'Свяжитесь с Jobing.az.'],
+                'title' => ['az' => 'Əlaqə — KibrisKare.com', 'tr' => 'İletişim — KibrisKare.com', 'en' => 'Contact — KibrisKare.com', 'ru' => 'Контакты — KibrisKare.com'],
+                'description' => ['az' => 'KibrisKare.com ilə əlaqə saxlayın.', 'tr' => 'KibrisKare.com ile iletişime geçin.', 'en' => 'Get in touch with KibrisKare.com.', 'ru' => 'Свяжитесь с KibrisKare.com.'],
             ],
         ];
 

@@ -102,7 +102,7 @@ class ManageSeoSettings extends Page implements HasForms
                         ])
                         ->collapsible(),
 
-                    Section::make("{$p->page_name} — SEO Təsviri (Meta Description)")
+                    Section::make("{$p->page_name} — SEO Açıklaması (Meta Description)")
                         ->schema([
                             Grid::make(2)->schema([
                                 Textarea::make("pages.{$key}.description.az")->label(__('Description (Azerbaijani)'))->rows(2),
@@ -113,7 +113,7 @@ class ManageSeoSettings extends Page implements HasForms
                         ])
                         ->collapsible(),
 
-                    Section::make("{$p->page_name} — Açar Sözlər (Meta Keywords)")
+                    Section::make("{$p->page_name} — Anahtar Kelimeler (Meta Keywords)")
                         ->schema([
                             Grid::make(2)->schema([
                                 TextInput::make("pages.{$key}.keywords.az")->label(__('Keywords (Azerbaijani)'))->placeholder(__('Comma separated')),
@@ -125,7 +125,7 @@ class ManageSeoSettings extends Page implements HasForms
                         ->collapsible()
                         ->collapsed(),
 
-                    Section::make("{$p->page_name} — Qabaqcıl")
+                    Section::make("{$p->page_name} — Gelişmiş")
                         ->description(__('Canonical URL and social (OG) image.'))
                         ->schema([
                             Grid::make(2)->schema([
@@ -216,7 +216,7 @@ class ManageSeoSettings extends Page implements HasForms
                                     ]),
                                 TextInput::make('og_image')
                                     ->label(__('Default Social Image (OG:Image URL)'))
-                                    ->placeholder('https://jobing.az/uploads/og-share.jpg'),
+                                    ->placeholder('https://kariyer.kibriskare.com/uploads/og-share.jpg'),
                             ]),
                     ]),
             ])

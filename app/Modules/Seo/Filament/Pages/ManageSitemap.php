@@ -87,7 +87,7 @@ class ManageSitemap extends Page
 
             Notification::make()
                 ->title(__('Sitemap XML files generated successfully!'))
-                ->body('Ümumi ' . count($results) . ' fayl yeniləndi.')
+                ->body('Toplam ' . count($results) . ' dosya güncellendi.')
                 ->success()
                 ->send();
         } catch (\Throwable $e) {
