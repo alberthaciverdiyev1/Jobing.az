@@ -46,7 +46,7 @@ class StoreVacancyRequest extends FormRequest
                             ->exists();
 
                         if ($companyExists) {
-                            $fail('Bu şirkət adı artıq istifadə olunur. Şirkət hesabına daxil olun və ya fərqli ad seçin.');
+                            $fail('Bu şirket adı zaten kullanılıyor. Şirket hesabına girin veya farklı bir ad seçin.');
                         }
                     },
                 ],
@@ -82,19 +82,19 @@ class StoreVacancyRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'company_name.required' => 'Şirkət adını qeyd edin.',
+            'company_name.required' => 'Şirket adını girin.',
             'title.required' => 'Vakansiya / Pozisiya adını daxil edin.',
-            'category_id.required' => 'Zəhmət olmasa, kateqoriya seçin.',
+            'category_id.required' => 'Lütfen kategori seçin.',
             'category_id.exists' => 'Seçilmiş kateqoriya etibarsızdır.',
             'job_type_id.required' => 'İş rejimini seçin.',
             'workplace_type_id.required' => 'İş yerini seçin.',
-            'experience_level_id.required' => 'Təcrübə səviyyəsini seçin.',
+            'experience_level_id.required' => 'Deneyim seviyesini seçin.',
             'currency.required' => 'Valyutanı seçin.',
-            'description.required' => 'İş təsviri və öhdəliklər mütləq doldurulmalıdır.',
-            'application_email.required' => 'Müraciətlərin qəbul ediləcəyi e-poçt ünvanını daxil edin.',
+            'description.required' => 'İş tanımı ve sorumluluklar doldurulmalıdır.',
+            'application_email.required' => 'Başvuruların alınacağı e-posta adresini girin.',
             'application_email.email' => 'Düzgün e-poçt ünvanı daxil edin.',
-            'deadline.after' => 'Son müraciət tarixi bugündən sonra olmalıdır.',
-            'salary_max.gte' => 'Maksimum maaş minimum maaşdan az ola bilməz.',
+            'deadline.after' => 'Son başvuru tarihi bugünden sonra olmalıdır.',
+            'salary_max.gte' => 'Maksimum maaş minimum maaştan az olamaz.',
         ];
     }
 }

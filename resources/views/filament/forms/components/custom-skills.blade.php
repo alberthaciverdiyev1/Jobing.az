@@ -14,7 +14,7 @@
     <div class="flex items-center justify-between">
         <span class="text-xs font-semibold text-gray-500 dark:text-gray-400">{{ __('Skills') }}</span>
         <x-filament::button type="button" size="xs" color="warning" icon="heroicon-m-plus" x-on:click="addItem()">
-            Bacarıq Əlavə Et
+            Beceri Ekle
         </x-filament::button>
     </div>
 
@@ -25,7 +25,7 @@
                     <label class="text-[12px] font-semibold text-gray-500 dark:text-gray-400 block">{{ __('Skill Name') }}</label>
                     <x-filament::input.wrapper>
                         <select x-model="item.skill" class="w-full text-xs bg-transparent border-none focus:ring-0 text-gray-900 dark:text-white py-2">
-                            <option value="">-- Bacarıq seçin --</option>
+                            <option value="">-- Beceri seçin --</option>
                             @foreach($getViewData()['skillOptions'] as $sk)
                                 <option value="{{ $sk->name }}">{{ $sk->name }}</option>
                             @endforeach

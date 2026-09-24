@@ -231,9 +231,9 @@ class VacancyResource extends Resource
                                 Forms\Components\Select::make('application_type')
                                     ->label(__('Application Type'))
                                     ->options([
-                                        'internal' => 'CV ilə (Daxili)',
-                                        'email' => 'E-Posta ilə',
-                                        'both' => 'Hər İkisi (CV + E-Posta)',
+                                        'internal' => 'CV ile (Dahili)',
+                                        'email' => 'E-posta ile',
+                                        'both' => 'Her İkisi (CV + E-posta)',
                                     ])
                                     ->default('internal')
                                     ->required()
@@ -251,10 +251,10 @@ class VacancyResource extends Resource
                                     ->label(__('Application Form Fields'))
                                     ->helperText(__('Choose which fields appear when a candidate applies internally.'))
                                     ->options([
-                                        'phone' => 'Telefon nömrəsi',
+                                        'phone' => 'Telefon numarası',
                                         'linkedin' => 'LinkedIn profili',
                                         'portfolio' => 'Portfolyo / GitHub',
-                                        'cover_letter' => 'Ön yazı / Qeydlər',
+                                        'cover_letter' => 'Ön yazı / Notlar',
                                     ])
                                     ->default(['phone', 'linkedin', 'portfolio', 'cover_letter'])
                                     ->visible(fn (Forms\Get $get): bool => in_array($get('application_type'), ['internal', 'both'], true)),
@@ -310,7 +310,7 @@ class VacancyResource extends Resource
                     ->formatStateUsing(fn (string $state): string => match ($state) {
                         'internal' => 'CV (Daxili)',
                         'email' => 'E-Posta',
-                        'both' => 'Hər İkisi',
+                        'both' => 'Her İkisi',
                         default => ucfirst($state),
                     })
                     ->color(fn (string $state): string => match ($state) {
@@ -329,7 +329,7 @@ class VacancyResource extends Resource
                 Tables\Columns\TextColumn::make('is_active')
                     ->label(__('Status'))
                     ->badge()
-                    ->formatStateUsing(fn (bool $state): string => $state ? 'Yayında' : 'Təsdiq Gözləyir')
+                    ->formatStateUsing(fn (bool $state): string => $state ? 'Yayında' : 'Onay Bekliyor')
                     ->color(fn (bool $state): string => $state ? 'success' : 'warning')
                     ->sortable(),
 
@@ -366,7 +366,7 @@ class VacancyResource extends Resource
                     ->label(__('Status'))
                     ->placeholder(__('All Vacancies'))
                     ->trueLabel('Yayında Olanlar')
-                    ->falseLabel('Təsdiq Gözləyənlər'),
+                    ->falseLabel('Onay Bekleyenler'),
 
                 Tables\Filters\TernaryFilter::make('is_featured')
                     ->label(__('Featured Status')),
@@ -403,11 +403,11 @@ class VacancyResource extends Resource
                     ->visible(fn (): bool => Filament::getCurrentPanel()?->getId() === 'company'),
 
                 Tables\Actions\Action::make('toggle_featured')
-                    ->label(fn (Vacancy $record): string => $record->is_featured ? 'Premiumu Ləğv Et' : 'Premium Et')
+                    ->label(fn (Vacancy $record): string => $record->is_featured ? 'Premiumu Kaldır' : 'Premium Et')
                     ->icon('heroicon-o-sparkles')
                     ->color('amber')
                     ->requiresConfirmation()
-                    ->modalHeading(fn (Vacancy $record): string => $record->is_featured ? 'Premium Statusunu Ləğv Et' : 'Premium Statusu Ver')
+                    ->modalHeading(fn (Vacancy $record): string => $record->is_featured ? 'Premium Durumunu Kaldır' : 'Premium Durumu Ver')
                     ->action(function (Vacancy $record) {
                         $record->is_featured = !$record->is_featured;
                         if ($record->is_featured) {
@@ -417,7 +417,7 @@ class VacancyResource extends Resource
                         }
                         $record->save();
                         \Filament\Notifications\Notification::make()
-                            ->title($record->is_featured ? 'Vakansiyaya Premium statusu verildi!' : 'Premium statusu ləğv edildi.')
+                            ->title($record->is_featured ? 'İlana Premium durumu verildi!' : 'Premium durumu kaldırıldı.')
                             ->success()
                             ->send();
                     })
@@ -436,7 +436,7 @@ class VacancyResource extends Resource
                     ->visible(fn (): bool => Filament::getCurrentPanel()?->getId() === 'company'),
 
                 Tables\Actions\Action::make('toggle_approve')
-                    ->label(fn (Vacancy $record): string => $record->is_active ? 'Təsdiqi Ləğv Et' : 'Təsdiqlə')
+                    ->label(fn (Vacancy $record): string => $record->is_active ? 'Onayı Kaldır' : 'Onayla')
                     ->icon(fn (Vacancy $record): string => $record->is_active ? 'heroicon-o-x-circle' : 'heroicon-o-check-circle')
                     ->color(fn (Vacancy $record): string => $record->is_active ? 'danger' : 'success')
                     ->requiresConfirmation()
@@ -447,7 +447,7 @@ class VacancyResource extends Resource
                         }
                         $record->save();
                         \Filament\Notifications\Notification::make()
-                            ->title($record->is_active ? 'Vakansiya təsdiqləndi və yayına alındı.' : 'Vakansiya təsdiqi ləğv edildi.')
+                            ->title($record->is_active ? 'İlan onaylandı ve yayına alındı.' : 'İlan onayı kaldırıldı.')
                             ->success()
                             ->send();
                     })

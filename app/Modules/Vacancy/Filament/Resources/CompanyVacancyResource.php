@@ -10,10 +10,7 @@ use Filament\Resources\Resource;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 
-/**
- * Company panelinin öz vakansiya yönetimi.
- * Form/şema admin ilə eynidir; kapsam yalnız şirkətin öz elanlarıdır.
- */
+
 class CompanyVacancyResource extends Resource
 {
     protected static ?string $model = Vacancy::class;

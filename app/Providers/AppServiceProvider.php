@@ -22,7 +22,6 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        // Production-da bütün URL-lər https olsun (Cloudflare/proxy arxasında mixed content-in qarşısı).
         if ($this->app->environment('production')) {
             \Illuminate\Support\Facades\URL::forceScheme('https');
         }
@@ -33,8 +32,6 @@ class AppServiceProvider extends ServiceProvider
         // "Yarat & yenisini yarat" düğmesini tüm Filament create sayfalarında kapat.
         \Filament\Resources\Pages\CreateRecord::disableCreateAnother();
 
-        // İş elanı facet keşi: vakansiya və ya referans məlumat dəyişdikdə versiyanı artır
-        // (admin paneldən əlavə/redaktə/silmə daxil) → köhnə keş avtomatik etibarsız olur.
         foreach ([
             \App\Modules\Vacancy\Models\Vacancy::class,
             \App\Modules\Vacancy\Models\ScrapedVacancy::class,

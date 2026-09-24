@@ -3,10 +3,8 @@
 use App\Modules\Vacancy\Controllers\VacancyController;
 use Illuminate\Support\Facades\Route;
 
-// Kök, vakansiya siyahısını göstərir (jobs.index adı qorunur).
 Route::get('/', [VacancyController::class, 'index'])->name('jobs.index');
 
-// Digər saytlardan: platforma + xarici (scraped) elanlar birlikdə.
 Route::get('/diger-sitelerden', [VacancyController::class, 'external'])->name('jobs.external');
 
 // Vakansiyalar
@@ -18,10 +16,7 @@ Route::prefix('ilanlar')->name('jobs.')->group(function () {
     // İki seqmentli URL: /vakansiya/{citySlug}/{categorySlug}
     Route::get('/{param1}/{param2}', [VacancyController::class, 'filterTwoParams'])->name('filter.two');
 
-    // Tək seqmentli URL: /vakansiya/{slug}
     Route::get('/{slug}', [VacancyController::class, 'resolveSlug'])->name('show');
 });
 
-// Kök səviyyəli SEO yolları (/kateqoriya və /şəhər/kateqoriya).
-// Fallback ən sonda işləyir — statik route-ları (blog, cv, admin, elaqe və s.) kölgələmir.
 Route::fallback([VacancyController::class, 'fallback'])->name('jobs.fallback');

@@ -18,7 +18,7 @@
     <div class="flex items-center justify-between">
         <span class="text-xs font-semibold text-gray-500 dark:text-gray-400">{{ __('Foreign Languages') }}</span>
         <x-filament::button type="button" size="xs" color="warning" icon="heroicon-m-plus" x-on:click="addItem()">
-            Dil Əlavə Et
+            Dil Ekle
         </x-filament::button>
     </div>
 

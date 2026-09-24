@@ -155,7 +155,7 @@ class PageSeo extends Model
                 'page_name' => 'Şirketler',
                 'route_name' => 'companies.index',
                 'sort_order' => 3,
-                'title' => ['az' => 'Şirkətlər — Kariyer.KibrisKare', 'tr' => 'Şirketler — Kariyer.KibrisKare', 'en' => 'Companies — Kariyer.KibrisKare', 'ru' => 'Компании — Kariyer.KibrisKare'],
+                'title' => ['az' => 'Şirketler — Kariyer.KibrisKare', 'tr' => 'Şirketler — Kariyer.KibrisKare', 'en' => 'Companies — Kariyer.KibrisKare', 'ru' => 'Компании — Kariyer.KibrisKare'],
                 'description' => ['az' => 'İşə götürən şirkətlərin kataloquna baxın.', 'tr' => 'İş veren şirketlerin kataloğunu görüntüleyin.', 'en' => 'Browse the catalog of hiring companies.', 'ru' => 'Каталог нанимающих компаний.'],
             ],
             [
@@ -187,7 +187,7 @@ class PageSeo extends Model
                 'page_name' => 'İletişim',
                 'route_name' => 'contact.index',
                 'sort_order' => 7,
-                'title' => ['az' => 'Əlaqə — Kariyer.KibrisKare', 'tr' => 'İletişim — Kariyer.KibrisKare', 'en' => 'Contact — Kariyer.KibrisKare', 'ru' => 'Контакты — Kariyer.KibrisKare'],
+                'title' => ['az' => 'İletişim — Kariyer.KibrisKare', 'tr' => 'İletişim — Kariyer.KibrisKare', 'en' => 'Contact — Kariyer.KibrisKare', 'ru' => 'Контакты — Kariyer.KibrisKare'],
                 'description' => ['az' => 'Kariyer.KibrisKare ilə əlaqə saxlayın.', 'tr' => 'Kariyer.KibrisKare ile iletişime geçin.', 'en' => 'Get in touch with Kariyer.KibrisKare.', 'ru' => 'Свяжитесь с Kariyer.KibrisKare.'],
             ],
         ];

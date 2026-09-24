@@ -85,7 +85,6 @@ class ScraperStatus extends Page
         // Trend: son 14 çalışmanın eklenen ilan sayısı (eskiden yeniye)
         $trend = ScraperRun::latest('id')->limit(14)->get()->reverse()->values();
 
-        // Ortalama çalışma süresi (saniyə)
         $avgSeconds = (float) (DB::table('scraper_runs')
             ->whereNotNull('started_at')->whereNotNull('finished_at')
             ->selectRaw('avg(extract(epoch from (finished_at - started_at))) as s')

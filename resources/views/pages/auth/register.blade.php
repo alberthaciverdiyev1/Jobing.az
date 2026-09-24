@@ -88,7 +88,7 @@
                     </label>
                     <div class="relative">
                         <i class="fas fa-building absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
-                        <input type="text" name="company_name" value="{{ old('company_name') }}" placeholder="Şirkət adı"
+                        <input type="text" name="company_name" value="{{ old('company_name') }}" placeholder="Şirket adı"
                                :required="userType === 'company'"
                                class="w-full pl-10 pr-4 py-3 bg-gray-50/50 hover:bg-white focus:bg-white border border-gray-200 rounded-xl text-xs sm:text-sm focus:ring-1 focus:ring-primary focus:border-primary focus:outline-hidden transition shadow-2xs">
                     </div>
@@ -105,7 +105,7 @@
                     <div class="relative">
                         <i class="far fa-envelope absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
                         <input type="email" name="email" value="{{ old('email') }}" required
-                               placeholder="nümunə@domain.com"
+                               placeholder="ornek@domain.com"
                                class="w-full pl-10 pr-4 py-3 bg-gray-50/50 hover:bg-white focus:bg-white border border-gray-200 rounded-xl text-xs sm:text-sm focus:ring-1 focus:ring-primary focus:border-primary focus:outline-hidden transition shadow-2xs">
                     </div>
                 </div>

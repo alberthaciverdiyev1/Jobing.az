@@ -4,13 +4,10 @@ namespace App\Modules\Company\Support;
 
 use App\Modules\Application\Models\Application;
 
-/**
- * Mesaj şablonlarındakı {..} yer tutucularını gerçek veriyle dəyişir.
- * Şablonlarda dəyişənlər mətndə ayrıca göstərilir; göndərmə anında avtomatik doldurulur.
- */
+
 class MessagePlaceholders
 {
-    /** Formda göstəriləcək istifadə edilə bilən parametr siyahısı. */
+    
     public static function tokensText(): string
     {
         return __('{user} or {applicant_name} — candidate name, ')
@@ -19,9 +16,7 @@ class MessagePlaceholders
             . __('{date} — date.');
     }
 
-    /**
-     * Mətndəki {..} parametrlərini dəyişir.
-     */
+    
     public static function resolve(string $text, ?Application $application, ?string $fallbackName = null): string
     {
         $candidate = $application?->applicant_name ?: ($fallbackName ?: '');
@@ -40,7 +35,6 @@ class MessagePlaceholders
             '{date}' => now()->format('d.m.Y'),
         ];
 
-        // Dəyəri olmayan parametrlər toxunulmaz qalır (yer tutucu görünür).
         return strtr($text, array_filter($map, fn ($value) => $value !== null && $value !== ''));
     }
 }

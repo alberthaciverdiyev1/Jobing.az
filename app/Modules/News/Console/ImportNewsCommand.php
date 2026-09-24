@@ -9,20 +9,20 @@ class ImportNewsCommand extends Command
 {
     protected $signature = 'news:import';
 
-    protected $description = 'RSS mənbələrindən xəbərləri idxal edir.';
+    protected $description = 'RSS kaynaklarından haberleri içe aktarır.';
 
     public function handle(RssImportService $service): int
     {
         $result = $service->importAll();
 
         if (empty($result)) {
-            $this->warn('Aktiv RSS mənbəyi yoxdur.');
+            $this->warn('Aktif RSS kaynağı yok.');
 
             return self::SUCCESS;
         }
 
         foreach ($result as $name => $count) {
-            $this->info("{$name}: {$count} yeni xəbər");
+            $this->info("{$name}: {$count} yeni haber");
         }
 
         return self::SUCCESS;

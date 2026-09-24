@@ -17,7 +17,6 @@ return Application::configure(basePath: dirname(__DIR__))
         \App\Modules\Telegram\Console\SetWebhookCommand::class,
     ])
     ->withMiddleware(function (Middleware $middleware): void {
-        // Cloudflare/reverse proxy arxasında düzgün https URL-ləri üçün.
         $middleware->trustProxies(at: '*');
 
         $middleware->web(append: [
@@ -28,7 +27,6 @@ return Application::configure(basePath: dirname(__DIR__))
             \App\Http\Middleware\RedirectCompanyFromUserPanel::class,
         ]);
 
-        // Telegram webhook xarici POST-dur → CSRF-dən azad.
         $middleware->validateCsrfTokens(except: ['api/telegram/webhook']);
 
         $middleware->alias([
@@ -43,7 +41,6 @@ return Application::configure(basePath: dirname(__DIR__))
             }
         });
 
-        // Bütün gözlənilməz xətaları ayrı log bazasına yaz (404/validasiya istisna).
         $exceptions->report(function (\Throwable $e): void {
             if ($e instanceof \Illuminate\Http\Exceptions\HttpResponseException
                 || $e instanceof \Illuminate\Validation\ValidationException

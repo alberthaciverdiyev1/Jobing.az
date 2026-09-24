@@ -149,7 +149,7 @@
                 <li>
                     <strong class="text-slate-900">{{ $sk['skill'] ?? '' }}:</strong>
                     @if(!empty($sk['level']))
-                    <span class="text-slate-700">{{ match($sk['level']) { 'beginner' => 'Başlanğıc', 'intermediate' => 'Orta', 'advanced' => 'Yüksək', 'expert' => 'Uzman', default => $sk['level'] } }}</span>
+                    <span class="text-slate-700">{{ match($sk['level']) { 'beginner' => 'Başlangıç', 'intermediate' => 'Orta', 'advanced' => 'İleri', 'expert' => 'Uzman', default => $sk['level'] } }}</span>
                     @endif
                 </li>
                 @endforeach

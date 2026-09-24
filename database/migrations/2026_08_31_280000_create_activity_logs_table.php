@@ -4,10 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-/**
- * Aktivlik loqları AYRI verilənlər bazasında ("logs" bağlantısı) saxlanılır.
- * Qeyd: users cədvəli əsas bazadadır → cross-DB olduğu üçün FK qoyulmur.
- */
+
 return new class extends Migration
 {
     public function up(): void

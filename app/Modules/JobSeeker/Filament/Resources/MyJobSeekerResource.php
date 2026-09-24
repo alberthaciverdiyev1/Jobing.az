@@ -106,9 +106,9 @@ class MyJobSeekerResource extends Resource
                         Forms\Components\Select::make('availability')
                             ->label(__('Start Frequency'))
                             ->options([
-                                'immediate' => 'Dərhal başlaya bilər',
-                                'two_weeks' => '2 həftə içində',
-                                'one_month' => '1 ay içində',
+                                'immediate' => 'Hemen başlayabilir',
+                                'two_weeks' => '2 hafta içinde',
+                                'one_month' => '1 ay içinde',
                                 'flexible' => 'Esnek',
                             ])
                             ->default('immediate'),
@@ -186,7 +186,7 @@ class MyJobSeekerResource extends Resource
                         Forms\Components\Select::make('status')
                             ->label(__('Status'))
                             ->options([
-                                \App\Modules\JobSeeker\Models\JobSeeker::STATUS_PENDING => 'Gözləmədə (Admin onayı)',
+                                \App\Modules\JobSeeker\Models\JobSeeker::STATUS_PENDING => 'Beklemede (Admin onayı)',
                                 'draft' => 'Qaralama (Gizli)',
                             ])
                             // Kullanıcı kendi elanını yayınlayamaz; onayı admin (JobSeekerResource) verir.
@@ -248,7 +248,6 @@ class MyJobSeekerResource extends Resource
             ->defaultSort('updated_at', 'desc')
             ->actions([
 
-                // İrəli çək (WhatsApp siparişi — web modalı)
                 Tables\Actions\Action::make('promote_bump')
                     ->label(__('Boost'))
                     ->icon('heroicon-o-arrow-up-circle')

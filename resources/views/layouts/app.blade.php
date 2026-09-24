@@ -6,11 +6,9 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     @php
-        // Səhifə SEO (admin idarə edir) + qlobal SEO tənzimləmələri.
         $curPageSeo = \App\Modules\Seo\Models\PageSeo::findForCurrentRoute();
         $seoConf = \App\Modules\Seo\Models\SeoSetting::current();
 
-        // @section ilə override varsa onu, yoxsa PageSeo → SeoSetting → default sırası ilə.
         $sectionOr = function (string $key, $fallback) {
             if (View::hasSection($key)) {
                 $value = trim((string) View::getSection($key));
@@ -22,7 +20,6 @@
             return $fallback;
         };
 
-        // OG şəkli: URL verilibsə olduğu kimi, yoxsa storage yolu kimi istifadə olunur.
         $toOgUrl = function (?string $value) {
             if (empty($value)) {
                 return null;
@@ -95,14 +92,14 @@
         [x-cloak] { display: none !important; }
     </style>
 
-    {{-- Qlobal <head> skriptləri (admin paneldən, RAW) — GA, GTM, Pixel və s. --}}
+    
     @if(!empty($seoConf?->head_scripts))
         {!! $seoConf->head_scripts !!}
     @endif
 </head>
 <body class="h-full antialiased font-sans text-gray-800 flex flex-col min-h-screen selection:bg-orange-500 selection:text-white" x-data="{ mobileDrawerOpen: false }">
 
-    {{-- Qlobal <body> skriptləri (RAW) — məs. GTM <noscript> --}}
+    
     @if(!empty($seoConf?->body_scripts))
         {!! $seoConf->body_scripts !!}
     @endif
@@ -126,7 +123,7 @@
 
     @stack('scripts')
 
-    {{-- Qlobal footer / </body> skriptləri (RAW) — canlı çat, widget və s. --}}
+    
     @if(!empty($seoConf?->footer_scripts))
         {!! $seoConf->footer_scripts !!}
     @endif

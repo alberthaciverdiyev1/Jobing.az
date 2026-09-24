@@ -100,7 +100,6 @@ return [
         ],
 
         // Ayrı log veritabanı (activity log + sistem logları).
-        // LOG_DB_DATABASE set deyilsə, əsas baza ilə eyni olur (təhlükəsiz fallback).
         'logs' => [
             'driver' => 'pgsql',
             'host' => env('LOG_DB_HOST', env('DB_HOST', '127.0.0.1')),

@@ -8,9 +8,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 
-/**
- * Company panelinin aday CV gözlemi. Yalnız public CV-lər; sadece görüntüleme.
- */
+
 class CompanyResumeResource extends Resource
 {
     protected static ?string $model = Resume::class;

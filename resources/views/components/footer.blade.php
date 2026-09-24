@@ -3,7 +3,6 @@
     $locales = config('app.available_locales');
     $currentLocale = app()->getLocale();
 
-    // SiteSetting dəyəri varsa onu, yoxsa config fallback-ını istifadə et.
     $socialUrl = fn (string $field) => $siteSetting->{$field} ?: config('site.social_fallbacks.' . $field);
 
     $socialLinks = array_filter([
@@ -26,7 +25,7 @@
 <footer {{ $attributes->merge(['class' => 'bg-white border-t border-gray-200 mt-auto']) }}>
     <div class="container mx-auto px-4 sm:px-6 lg:px-8">
 
-        {{-- Üst sıra: marka + təsvir + əlaqə (sol) / sosial + dil (sağ) --}}
+        
         <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-8 py-10 border-b border-gray-100">
             <div class="max-w-xl">
                 <a href="{{ url('/') }}" class="inline-flex items-center mb-4">
@@ -111,7 +110,7 @@
             </div>
         </div>
 
-        {{-- Alt sıra: telif (sol) / linklər (sağ) --}}
+        
         <div class="flex flex-col sm:flex-row items-center justify-between gap-3 py-6 text-xs text-gray-500">
             <p>
                 &copy; {{ date('Y') }} {{ $siteSetting->copyright_text ?: config('app.full_name') }}. {{ __('All Rights Reserved') }}.

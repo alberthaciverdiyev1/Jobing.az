@@ -7,9 +7,7 @@ use App\Modules\News\Models\RssSource;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 
-/**
- * RSS/Atom lentlərini oxuyub xəbər yaradır. Xarici paket tələb etmir (SimpleXML).
- */
+
 class RssImportService
 {
     public function importAll(): array

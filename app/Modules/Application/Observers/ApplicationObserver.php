@@ -70,12 +70,12 @@ class ApplicationObserver
         foreach ($companyUsers as $companyUser) {
             self::notifyUser(
                 $companyUser,
-                'Yeni Vakansiya Müraciəti!',
-                "{$application->applicant_name} sizin '{$vacancy->title}' vakansiyanıza müraciət etdi.",
+                'Yeni İlan Başvurusu!',
+                "{$application->applicant_name} sizin '{$vacancy->title}' ilanınıza başvurdu.",
                 'heroicon-o-document-text',
                 'primary',
                 '/company/applications/' . $application->id . '/edit',
-                'Müraciətə Bax'
+                'Başvuruya Bak'
             );
         }
     }
@@ -95,21 +95,21 @@ class ApplicationObserver
             $vacancyTitle = $application->vacancy?->title ?? __('Vacancy');
             $status = $application->status;
 
-            if (in_array($status, ['Interview', 'Mülakat', 'Müsahibə', 'Shortlisted', 'Seçilənlər'])) {
+            if (in_array($status, ['Interview', 'Mülakat', 'Mülakat', 'Shortlisted', 'Kısa Liste'])) {
                 self::notifyUser(
                     $candidateUser,
-                    'Müsahibəyə Dəvət!',
-                    "{$companyName} şirkəti sizə '{$vacancyTitle}' vakansiyası üzrə müsahibə mərhələsinə keçdiyinizi bildirdi.",
+                    'Mülakata Davet!',
+                    "{$companyName} şirketi size '{$vacancyTitle}' ilanı için mülakat aşamasına geçtiğinizi bildirdi.",
                     'heroicon-o-chat-bubble-left-right',
                     'warning',
                     '/user/my-applications',
                     __('My Applications')
                 );
-            } elseif (in_array($status, ['Accepted', 'Kabul', 'Teklif', 'Qəbul Edildi'])) {
+            } elseif (in_array($status, ['Accepted', 'Kabul', 'Teklif', 'Kabul Edildi'])) {
                 self::notifyUser(
                     $candidateUser,
-                    'Təbriklər! Müraciətiniz Qəbul Olundu',
-                    "{$companyName} şirkəti '{$vacancyTitle}' vakansiyası üzrə müraciətinizi qəbul etdi!",
+                    'Tebrikler! Başvurunuz Kabul Edildi',
+                    "{$companyName} şirketi '{$vacancyTitle}' ilanı için başvurunuzu kabul etti!",
                     'heroicon-o-check-circle',
                     'success',
                     '/user/my-applications',
@@ -118,8 +118,8 @@ class ApplicationObserver
             } elseif (in_array($status, ['Rejected', 'Red', 'İmtina Edildi'])) {
                 self::notifyUser(
                     $candidateUser,
-                    'Müraciət Statusu Yeniləndi',
-                    "{$companyName} şirkəti '{$vacancyTitle}' vakansiyası üzrə müraciətinizə imtina cavabı verdi.",
+                    'Başvuru Durumu Güncellendi',
+                    "{$companyName} şirketi '{$vacancyTitle}' ilanı için başvurunuza ret cevabı verdi.",
                     'heroicon-o-x-circle',
                     'danger',
                     '/user/my-applications',
@@ -128,8 +128,8 @@ class ApplicationObserver
             } elseif (in_array($status, ['Reviewed', 'İncelendi', 'Baxıldı'])) {
                 self::notifyUser(
                     $candidateUser,
-                    'Müraciətinizə Baxıldı',
-                    "{$companyName} şirkəti '{$vacancyTitle}' vakansiyası üzrə müraciətinizin statusunu nəzərdən keçirdi.",
+                    'Başvurunuz İncelendi',
+                    "{$companyName} şirketi '{$vacancyTitle}' ilanı için başvurunuzun durumunu inceledi.",
                     'heroicon-o-eye',
                     'info',
                     '/user/my-applications',
@@ -138,8 +138,8 @@ class ApplicationObserver
             } else {
                 self::notifyUser(
                     $candidateUser,
-                    'Müraciət Statusu Yeniləndi: ' . $status,
-                    "{$companyName} şirkəti '{$vacancyTitle}' vakansiyası üzrə müraciətinizin statusunu yenilədi.",
+                    'Başvuru Durumu Güncellendi: ' . $status,
+                    "{$companyName} şirketi '{$vacancyTitle}' ilanı için başvurunuzun durumunu güncelledi.",
                     'heroicon-o-bell',
                     'gray',
                     '/user/my-applications',

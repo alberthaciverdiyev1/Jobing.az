@@ -66,7 +66,6 @@ class Vacancy extends Model
 
     protected static function booted(): void
     {
-        // Yeni vakansiya yaradıldıqda (təsdiq gözləyən) adminlərə + Telegram-a bildiriş.
         static::created(function (Vacancy $vacancy) {
             if ($vacancy->is_active) {
                 return;
@@ -93,7 +92,7 @@ class Vacancy extends Model
 
                 app(\App\Modules\Core\Services\TelegramService::class)->sendVacancyApprovalRequest($vacancy);
             } catch (\Throwable $e) {
-                \Illuminate\Support\Facades\Log::warning('Vakansiya təsdiq bildirişi alınmadı: ' . $e->getMessage());
+                \Illuminate\Support\Facades\Log::warning('İlan onay bildirimi alınamadı: ' . $e->getMessage());
             }
         });
     }

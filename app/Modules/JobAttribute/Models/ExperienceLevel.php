@@ -60,7 +60,7 @@ class ExperienceLevel extends Model
         return [self::CACHE_KEY];
     }
 
-    /** Aktiv siyahı (keşlənmiş). Admin əlavə/redaktə etdikdə avtomatik sıfırlanır. */
+    
     public static function cachedActive(): \Illuminate\Database\Eloquent\Collection
     {
         return static::remember(self::CACHE_KEY, fn () => static::active()->get());

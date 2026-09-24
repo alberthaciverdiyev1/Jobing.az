@@ -1,4 +1,4 @@
-{{-- Promotion Modals Component for Vacancy & JobSeeker Details (3 Options: 1 dəfə, 3 dəfə, 7 dəfə) --}}
+
 @props([
     'type' => 'vacancy', // 'vacancy' or 'job_seeker'
     'title' => '',
@@ -18,7 +18,7 @@
     $premiumPriceLabels = array_map(fn ($p) => $p . ' ₺', $premiumPrices);
 @endphp
 
-<!-- 1. İRƏLİ ÇƏK MODAL (BUMP) -->
+
 <div x-show="bumpModalOpen" x-cloak
      x-data="{ selectedBump: '1', bumpPrices: @js($bumpPriceLabels) }"
      class="fixed inset-0 z-50 overflow-y-auto"
@@ -81,11 +81,11 @@
                     </div>
                 </div>
 
-                <!-- 3 Options Selection: 1 dəfə, 3 dəfə, 7 dəfə -->
+                
                 <div class="space-y-1.5">
                     <label class="block text-[12px] font-medium text-gray-700">{{ __('Choose a package:') }}</label>
                     <div class="grid grid-cols-3 gap-2.5">
-                        <!-- Option 1: 1 dəfə -->
+                        
                         <button type="button" @click="selectedBump = '1'"
                                 class="p-3 rounded-xl border text-center transition cursor-pointer"
                                 :class="selectedBump === '1' ? 'border-primary bg-orange-50 ring-1 ring-primary shadow-xs' : 'border-gray-200 hover:border-gray-300 bg-white'">
@@ -94,7 +94,7 @@
                             <span class="text-[11px] text-gray-400 block mt-0.5">{{ __('Standard') }}</span>
                         </button>
 
-                        <!-- Option 2: 3 dəfə -->
+                        
                         <button type="button" @click="selectedBump = '3'"
                                 class="p-3 rounded-xl border text-center transition cursor-pointer relative"
                                 :class="selectedBump === '3' ? 'border-primary bg-orange-50 ring-1 ring-primary shadow-xs' : 'border-gray-200 hover:border-gray-300 bg-white'">
@@ -104,7 +104,7 @@
                             <span class="text-[11px] text-emerald-600 font-semibold block mt-0.5">{{ __('Savings') }}</span>
                         </button>
 
-                        <!-- Option 3: 7 dəfə -->
+                        
                         <button type="button" @click="selectedBump = '7'"
                                 class="p-3 rounded-xl border text-center transition cursor-pointer"
                                 :class="selectedBump === '7' ? 'border-primary bg-orange-50 ring-1 ring-primary shadow-xs' : 'border-gray-200 hover:border-gray-300 bg-white'">
@@ -203,11 +203,11 @@
                     </div>
                 </div>
 
-                <!-- 3 Options Selection: 1 dəfə, 3 dəfə, 7 dəfə -->
+                
                 <div class="space-y-1.5">
                     <label class="block text-[12px] font-medium text-gray-700">{{ __('Choose a package:') }}</label>
                     <div class="grid grid-cols-3 gap-2.5">
-                        <!-- Option 1: 1 dəfə -->
+                        
                         <button type="button" @click="selectedPremium = '1'"
                                 class="p-3 rounded-xl border text-center transition cursor-pointer"
                                 :class="selectedPremium === '1' ? 'border-amber-500 bg-amber-50 ring-1 ring-amber-500 shadow-xs' : 'border-gray-200 hover:border-amber-300 bg-white'">
@@ -216,7 +216,7 @@
                             <span class="text-[11px] text-gray-400 block mt-0.5">{{ __('Trial') }}</span>
                         </button>
 
-                        <!-- Option 2: 3 dəfə -->
+                        
                         <button type="button" @click="selectedPremium = '3'"
                                 class="p-3 rounded-xl border text-center transition cursor-pointer relative"
                                 :class="selectedPremium === '3' ? 'border-amber-500 bg-amber-50 ring-1 ring-amber-500 shadow-xs' : 'border-gray-200 hover:border-amber-300 bg-white'">
@@ -226,7 +226,7 @@
                             <span class="text-[11px] text-gray-700 font-semibold block mt-0.5">{{ __('Recommendation') }}</span>
                         </button>
 
-                        <!-- Option 3: 7 dəfə -->
+                        
                         <button type="button" @click="selectedPremium = '7'"
                                 class="p-3 rounded-xl border text-center transition cursor-pointer"
                                 :class="selectedPremium === '7' ? 'border-amber-500 bg-amber-50 ring-1 ring-amber-500 shadow-xs' : 'border-gray-200 hover:border-amber-300 bg-white'">

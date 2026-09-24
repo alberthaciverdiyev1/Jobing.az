@@ -10,7 +10,7 @@
     $applyEmail = $job->application_email ?: ($job->company?->email ?? '');
     $canInternal = $appType === 'internal' || $appType === 'both';
     $canEmail = $appType === 'email' || $appType === 'both';
-    $mailtoHref = $applyEmail ? 'mailto:' . $applyEmail . '?subject=' . rawurlencode('Müraciət: ' . $job->title) : '#';
+    $mailtoHref = $applyEmail ? 'mailto:' . $applyEmail . '?subject=' . rawurlencode('Başvuru: ' . $job->title) : '#';
 @endphp
 
 <div x-data="jobApplicationModal('{{ route('jobs.apply', $job->slug) }}')" class="bg-gray-50 min-h-screen pb-16">
@@ -293,7 +293,7 @@
                 <div class="hidden lg:block">
                     @include('pages.jobs.partials.company-info', ['job' => $job])
                 </div>
-                <!-- Promote Vacancy Card (İrəli çək & Premium et) -->
+                
                 <div class="bg-white rounded-xl border border-gray-200 p-5 shadow-2xs space-y-3">
                     <div>
                         <h4 class="font-medium text-gray-900 text-xs">{{ __('Promote & Stand Out') }}</h4>
@@ -318,7 +318,7 @@
         </div>
     </div>
 
-    <!-- Promotion Modals (İrəli çək & Premium et) -->
+    
     <x-promotion-modals type="vacancy" :title="$job->title" :id="$job->id" />
 
     <!-- Application Modal (Alpine.js) -->
@@ -552,14 +552,14 @@ function jobApplicationModal(actionUrl) {
 
                 if (response.ok) {
                     this.formError = '';
-                    this.formMessage = resData.message || 'Müraciətiniz uğurla göndərildi!';
+                    this.formMessage = resData.message || 'Başvurunuz başarıyla gönderildi!';
                     setTimeout(() => this.closeModal(), 1500);
                 } else {
                     this.formMessage = '';
-                    this.formError = resData.message || 'Xəta baş verdi. Zəhmət olmasa xanaları yoxlayın.';
+                    this.formError = resData.message || 'Bir hata oluştu. Lütfen alanları kontrol edin.';
                 }
             } catch (err) {
-                this.formError = 'Sistem xətası baş verdi.';
+                this.formError = 'Sistem hatası oluştu.';
             } finally {
                 this.isLoading = false;
             }

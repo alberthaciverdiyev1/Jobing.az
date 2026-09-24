@@ -70,11 +70,7 @@ trait HasSkillPicker
             ->all();
     }
 
-    /**
-     * Backend'deki City kayıtlarından şehir seçenekleri.
-     *
-     * @return array<string, string>  [şəhər adı => şəhər adı]
-     */
+    
     public static function cityOptions(): array
     {
         return City::cachedActive()

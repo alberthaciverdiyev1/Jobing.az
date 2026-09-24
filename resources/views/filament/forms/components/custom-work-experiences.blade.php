@@ -14,7 +14,7 @@
     <div class="flex items-center justify-between">
         <span class="text-xs font-semibold text-gray-500 dark:text-gray-400">{{ __('Workplaces List') }}</span>
         <x-filament::button type="button" size="xs" color="warning" icon="heroicon-m-plus" x-on:click="addItem()">
-            İş Yeri Əlavə Et
+            İş Yeri Ekle
         </x-filament::button>
     </div>
 
@@ -79,7 +79,7 @@
                 <div class="md:col-span-2 space-y-1.5">
                     <label class="font-semibold text-gray-700 dark:text-gray-300 block">{{ __('Responsibilities & Achievements') }}</label>
                     <x-filament::input.wrapper>
-                        <textarea x-model="item.description" rows="3" placeholder="Vəzifə öhdəlikləriniz və yerinə yetirdiyiniz işlər haqqında qısa məlumat..." class="w-full text-xs bg-transparent border-none focus:ring-0 text-gray-900 dark:text-white p-2.5 leading-relaxed"></textarea>
+                        <textarea x-model="item.description" rows="3" placeholder="Görev ve sorumluluklarınız hakkında kısa bilgi..." class="w-full text-xs bg-transparent border-none focus:ring-0 text-gray-900 dark:text-white p-2.5 leading-relaxed"></textarea>
                     </x-filament::input.wrapper>
                 </div>
             </div>

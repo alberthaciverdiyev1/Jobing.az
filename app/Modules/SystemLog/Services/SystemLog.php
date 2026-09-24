@@ -5,9 +5,7 @@ namespace App\Modules\SystemLog\Services;
 use App\Modules\SystemLog\Models\AppLog;
 use Illuminate\Support\Facades\Log;
 
-/**
- * Detallı sistem loqlama. Xəta halında heç vaxt tətbiqi çökdürmür.
- */
+
 class SystemLog
 {
     public static function record(string $level, string $message, ?string $source = null, ?array $metadata = null): void
@@ -25,8 +23,7 @@ class SystemLog
                 'ip' => $request?->ip(),
             ]);
         } catch (\Throwable $e) {
-            // Log bazası əlçatmaz olsa belə tətbiq davam etsin.
-            Log::warning('SystemLog yazıla bilmədi: ' . $e->getMessage());
+            Log::warning('SystemLog yazılamadı: ' . $e->getMessage());
         }
     }
 

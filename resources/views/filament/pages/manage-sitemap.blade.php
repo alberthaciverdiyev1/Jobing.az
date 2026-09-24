@@ -4,12 +4,12 @@
             <div class="max-w-3xl">
                 <h3 class="text-lg font-bold text-gray-900 dark:text-white">{{ __('Create New Sitemap') }}</h3>
                 <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                    Bu alət vakansiyaları, şirkətləri, bloq yazılarını və iş arayan elanlarını sitemap.xml faylına əlavə edir.
-                    Hər faylda maksimum 10.000 keçid ola bilər; limit aşılarsa avtomatik olaraq sitemap_1.xml, sitemap_2.xml və sitemap indeks faylı yaradılır.
+                    Bu araç ilanları, şirketleri, blog yazılarını ve iş arayan ilanlarını sitemap.xml dosyasına ekler.
+                    Her dosyada en fazla 10.000 bağlantı olabilir; limit aşılırsa otomatik olarak sitemap_1.xml, sitemap_2.xml ve sitemap indeks dosyası oluşturulur.
                 </p>
             </div>
             <x-filament::button wire:click="generateSitemap" size="lg" color="warning" icon="heroicon-o-cpu-chip" class="flex-shrink-0">
-                Sitemap XML-ləri Yarat
+                Sitemap XML'lerini Oluştur
             </x-filament::button>
         </div>
 
@@ -20,7 +20,7 @@
 
             @if(empty($sitemaps))
                 <div class="p-8 text-center text-gray-500 dark:text-gray-400">
-                    <span>Hazırda heç bir sitemap.xml faylı yoxdur. Yuxarıdakı düymə ilə yaradın.</span>
+                    <span>Şu anda hiçbir sitemap.xml dosyası yok. Yukarıdaki düğmeyle oluşturun.</span>
                 </div>
             @else
                 <div class="overflow-x-auto">

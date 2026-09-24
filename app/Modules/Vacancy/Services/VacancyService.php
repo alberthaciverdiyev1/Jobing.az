@@ -24,7 +24,6 @@ class VacancyService
      */
     public function getPaginatedVacancies(array $filters = [], int $perPage = 30, bool $includeScraped = false): array
     {
-        // Ağır merge/sort nəticəsi imza üzrə keşlənir; yeni veri (FacetCache::bump) və ya TTL ilə yenilənir.
         $signatureFilters = $filters;
         ksort($signatureFilters);
         $signature = serialize([
@@ -63,7 +62,6 @@ class VacancyService
         $selectedExperiences = array_filter((array) ($filters['experience'] ?? []));
 
         // 2. Category / Subcategory (multi-select: if a child is selected, parent is excluded)
-        // Nəticə memoizasiya olunur — eyni sorğuda facet sorguları üçün təkrar DB sorğusu olmasın.
         $resolveCategoryIdsCache = [];
         $resolveCategoryIds = function (array $catSlugs) use (&$resolveCategoryIdsCache): array {
             if (empty($catSlugs)) {
@@ -172,7 +170,6 @@ class VacancyService
         }
 
         if (! $includeScraped) {
-            // Normal siyahı: yalnız platforma vakansiyaları (vacancies cədvəli).
             $jobs = $query->paginate($perPage)->withQueryString();
         } else {
             $scrapedQuery = ScrapedVacancy::with(['category', 'city', 'jobType', 'workplaceType', 'experienceLevel'])->active();
@@ -220,9 +217,6 @@ class VacancyService
                 });
             }
 
-            // Platforma və xarici elanlar birlikdə, seçilmiş sıralamaya görə
-            // qarışdırılır (native elanlar həmişə yuxarıda saxlanılmır).
-            // SQL səviyyəsində UNION + ORDER BY + LIMIT/OFFSET: yalnız görünən səhifə hydrate olunur.
             $jobs = $this->paginateMergedListing($query, $scrapedQuery, $sort, $perPage);
         }
 
@@ -300,7 +294,6 @@ class VacancyService
             };
         };
 
-        // Scraped elanlar üçün eyni filtr məntiqi (company_name və JSON skills fərqlidir).
         $makeScrapedScope = function (bool $includeCategory) use ($selectedCategories, $selectedWorkplaces, $selectedTypes, $selectedExperiences, $selectedCities, $selectedSkills, $filters, $resolveCategoryIds) {
             return function ($q) use ($includeCategory, $selectedCategories, $selectedWorkplaces, $selectedTypes, $selectedExperiences, $selectedCities, $selectedSkills, $filters, $resolveCategoryIds) {
                 $q->active();
@@ -356,7 +349,6 @@ class VacancyService
             };
         };
 
-        // Facet (say) sorğuları filtr imzasına görə keşlənir — ağır withCount subquery-ləri təkrarlanmasın.
         $facetSignature = serialize([
             $selectedCategories, $selectedWorkplaces, $selectedTypes,
             $selectedExperiences, $selectedCities, $selectedSkills,
@@ -369,11 +361,10 @@ class VacancyService
             $categoryCountScope = $makeScope(false);
 
             if ($includeScraped) {
-                // Facet sayıları: onlarca withCount yerine bir neçə GROUP BY sorğusu.
                 $grouped = function (string $modelClass, string $fk, bool $includeCategory, bool $scraped) use ($makeScope, $makeScrapedScope) {
                     $scope = $scraped ? $makeScrapedScope($includeCategory) : $makeScope($includeCategory);
                     $builder = $modelClass::query();
-                    $scope($builder); // scope closure mutasiya edir, dəyər qaytarmır
+                    $scope($builder);
                     return $builder
                         ->selectRaw($fk . ' as k, count(*) as c')
                         ->groupBy($fk)
@@ -453,7 +444,6 @@ class VacancyService
 
         extract($facets);
 
-        // Seçilmiş kateqoriyalar (filtrdən asılı — keşlənmir)
         $selectedCategoryModels = Category::with('parent')->whereIn('slug', $selectedCategories)->get();
         $companies = Company::withCount('vacancies')->orderByDesc('vacancies_count')->take(10)->get();
 
@@ -478,11 +468,7 @@ class VacancyService
     /**
      * Get a single vacancy by slug with relations and increment view count.
      */
-    /**
-     * Native (vacancies) + xarici (scraped_vacancies) elanları SQL UNION ilə birləşdirir,
-     * ORDER BY + LIMIT/OFFSET tətbiq edir və yalnız cari səhifəni hydrate edir.
-     * (Bütün sətirləri PHP-yə çəkmək 10k+ gündəlik data ilə ölçəklənmir.)
-     */
+    
     private function paginateMergedListing($nativeQuery, $scrapedQuery, string $sort, int $perPage): LengthAwarePaginator
     {
         $columns = 'id, is_featured, updated_at, salary_min, salary_max, views_count, deadline, title';
@@ -767,13 +753,7 @@ class VacancyService
             ->all();
     }
 
-    /**
-     * Yerli (vacancies) və xarici (scraped_vacancies) elanları vahid siyahıda
-     * seçilmiş sıralama ilə qarışdırır. Beləliklə platforma elanları həmişə
-     * yuxarıda saxlanılmır — hamısı updated_at (və digər meyarlar) üzrə sıralanır.
-     *
-     * @param  \Illuminate\Support\Collection<int, \Illuminate\Database\Eloquent\Model>  $items
-     */
+    
     private function sortMergedListing(\Illuminate\Support\Collection $items, string $sort): \Illuminate\Support\Collection
     {
         $sort = $sort ?: 'latest';
@@ -782,7 +762,6 @@ class VacancyService
             if ($a === null && $b === null) {
                 return 0;
             }
-            // Null dəyərlər həmişə sona düşür.
             if ($a === null) {
                 return 1;
             }
@@ -804,7 +783,6 @@ class VacancyService
         $deadlineAt = static fn ($job): ?int => $job->deadline ? $job->deadline->getTimestamp() : null;
 
         return $items->sort(function ($a, $b) use ($sort, $compareNullable, $salary, $updatedAt, $deadlineAt) {
-            // Başlıq sıralaması premium vəziyyətindən asılı olmayaraq işləyir.
             if ($sort === 'title_asc' || $sort === 'alphabetical') {
                 return strcasecmp((string) $a->title, (string) $b->title);
             }
@@ -812,7 +790,6 @@ class VacancyService
                 return strcasecmp((string) $b->title, (string) $a->title);
             }
 
-            // Bütün digər sıralamalarda premium elanlar əvvəlcə gəlir.
             $featured = (int) ($b->is_featured ?? false) <=> (int) ($a->is_featured ?? false);
             if ($featured !== 0) {
                 return $featured;

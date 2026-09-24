@@ -13,14 +13,14 @@
     $isPremium = $mode === 'premium';
     $accent = $isPremium ? '#b45309' : '#c2410c';      // koyu amber / turuncu
     $accentSoft = $isPremium ? '#fffbeb' : '#fff7ed';  // açık zemin
-    $verb = $isPremium ? 'PREMIUM ETMƏK' : 'İRƏLİ ÇƏKMƏK';
+    $verb = $isPremium ? 'PREMIUM YAPMAK' : 'ÖNE ÇIKARMAK';
 
     $prices = config('site.promotions.' . $mode . '.prices', [1 => 5, 3 => 12, 7 => 25]);
     $priceLabels = array_map(fn ($p) => $p . ' ₺', $prices);
 
     $tags = $isPremium
-        ? [1 => 'Sınaq', 3 => 'Tövsiyə', 7 => 'VIP']
-        : [1 => 'Standart', 3 => 'Qənaət', 7 => 'Maksimum'];
+        ? [1 => 'Deneme', 3 => 'Önerilen', 7 => 'VIP']
+        : [1 => 'Standart', 3 => 'Ekonomik', 7 => 'Maksimum'];
 
     $heading = $isPremium ? __('Earn Premium Status') : __('Boost Your Listing');
     $subtitle = $isPremium
@@ -36,7 +36,7 @@
         prices: @js($priceLabels),
         sending: false,
         async send() {
-            const wa = 'https://wa.me/{{ $cleanWa }}?text=' + encodeURIComponent('Salam, {{ $siteName }} saytındakı #{{ $id }} nömrəli {{ $itemLabel }}nı (\'{{ $safeTitle }}\') ' + this.selected + ' DƏFƏ {{ $verb }} istəyirəm (' + this.prices[this.selected] + ').');
+            const wa = 'https:
             @if($vacancyId ?? $id)
             try {
                 this.sending = true;
@@ -93,7 +93,7 @@
     </div>
 
     <!-- WhatsApp CTA -->
-    <a @click.prevent="send()" :href="'https://wa.me/{{ $cleanWa }}?text=' + encodeURIComponent('Salam, {{ $siteName }} saytındakı #{{ $id }} nömrəli {{ $itemLabel }}nı (\'{{ $safeTitle }}\') ' + selected + ' DƏFƏ {{ $verb }} istəyirəm (' + prices[selected] + ').')"
+    <a @click.prevent="send()" :href="'https:
        target="_blank" rel="noopener"
        style="display:flex;align-items:center;justify-content:center;gap:9px;width:100%;background:#25D366;color:#fff;font-size:13px;font-weight:700;padding:12px 16px;border-radius:12px;text-decoration:none;box-sizing:border-box;">
         <span style="display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:#fff;color:#25D366;font-weight:900;font-size:12px;">W</span>

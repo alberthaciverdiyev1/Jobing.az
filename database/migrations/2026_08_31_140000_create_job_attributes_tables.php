@@ -21,7 +21,6 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        // 2. Workplace Types (Çalışma Yeri / Məkanı)
         Schema::create('workplace_types', function (Blueprint $table) {
             $table->id();
             $table->json('name'); // Multilingual: az, tr, en, ru
@@ -32,7 +31,6 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        // 3. Experience Levels (Deneyim / Təcrübə Səviyyəsi)
         Schema::create('experience_levels', function (Blueprint $table) {
             $table->id();
             $table->json('name'); // Multilingual: az, tr, en, ru

@@ -51,7 +51,6 @@ Yaptığı: `git reset --hard origin/main` → `composer install --no-dev` → `
 - `main` dışında deploy etmek istersen workflow'daki `branches` ve `deploy.sh` içindeki `BRANCH`'i güncelle.
 - Lokal geliştirmede cache/session `file`; production'da `install-server.sh` bunları **Redis**'e çevirir.
 
-## 3) `backup-databases.sh` — deploy öncesi yedək + Telegram
 
 `deploy.sh` her deploy'dan **önce** bunu otomatik çalıştırır:
 - Serverdəki **bütün PostgreSQL bazalarını** (əsas + `kariyer.kibriskare_logs`) `pg_dump` ilə yedəkləyir
@@ -66,7 +65,6 @@ DATABASE_BACKUP_TELEGRAM_BOT_CHAT_ID=... # sənin chat id-in
 > Təhlükəsizlik üçün chat_id **avtomatik aşkarlanmır** — yalnız göstərdiyin chat-a göndərilir.
 > Chat id-ni tapmaq üçün bot-a `/start` yaz, sonra: `curl "https://api.telegram.org/bot<TOKEN>/getUpdates"`
 
-## 4) Telegram ilə vakansiya təsdiqi
 
 Yeni vakansiya əlavə edildikdə (təsdiq gözləyən):
 1. Adminlərə panel bildirişi gedir
@@ -78,7 +76,6 @@ Webhook qeydiyyatı (deploy-dan sonra bir dəfə):
 php artisan telegram:set-webhook
 ```
 
-## 5) Loglar üçün ayrı verilənlər bazası
 
 `activity_logs` və `app_logs` əsas bazada deyil — **`kariyer.kibriskare_logs`** bazasındadır (`logs` bağlantısı).
 `.env`:

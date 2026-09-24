@@ -28,10 +28,7 @@ class VacancyController extends Controller
         return $this->listingResponse($request, false);
     }
 
-    /**
-     * Digər saytların (scraped) vakansiyaları.
-     * Platforma elanları + xarici saytlardan toplanan elanlar birlikdə göstərilir.
-     */
+    
     public function external(Request $request): View|JsonResponse|Response
     {
         return $this->listingResponse($request, true);
@@ -131,16 +128,12 @@ class VacancyController extends Controller
         abort(404);
     }
 
-    /**
-     * Kök səviyyəli siyahı yolu: /{categorySlug}
-     * Yalnız şəhər və ya kateqoriya həll edir (vakansiya detalı burada AÇILMIR —
-     * detal üçün /vakansiya/{slug} istifadə olunur).
-     */
+    
     public function resolveListingSlug(Request $request, string $slug): View|JsonResponse|Response
     {
         $cleanSlug = strtolower(trim($slug));
 
-        // 1. Şəhər?
+        // 1. Şehir?
         $city = City::where('slug', $cleanSlug)->first();
         if ($city) {
             $existingCities = (array) $request->input('city', []);
@@ -152,7 +145,6 @@ class VacancyController extends Controller
             return $this->index($request);
         }
 
-        // 2. Kateqoriya (alt kateqoriya ilə birlikdə mümkündür → ?subcategory=)
         $category = Category::where('slug', $cleanSlug)->first();
         if ($category) {
             $existingCats = array_filter((array) $request->input('category', []));
@@ -171,12 +163,7 @@ class VacancyController extends Controller
         abort(404);
     }
 
-    /**
-     * Fallback: statik route'lara uyğun gəlməyən kök yolları siyahıya çevirir.
-     *   /{category}            → kateqoriya siyahısı
-     *   /{city}                → şəhər siyahısı
-     *   /{city}/{category}     → şəhər + kateqoriya
-     */
+    
     public function fallback(Request $request): View|JsonResponse|Response
     {
         if (! $request->isMethod('GET') && ! $request->isMethod('HEAD')) {
@@ -189,7 +176,6 @@ class VacancyController extends Controller
             $a = strtolower(trim(urldecode($segments[0])));
             $b = strtolower(trim(urldecode($segments[1])));
 
-            // Yalnız {şəhər}/{kateqoriya} və ya {kateqoriya}/{şəhər} cütləri keçərlidir.
             $isCityA = City::where('slug', $a)->exists();
             $isCatA = Category::where('slug', $a)->exists();
             $isCityB = City::where('slug', $b)->exists();

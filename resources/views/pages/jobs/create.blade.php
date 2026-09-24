@@ -181,7 +181,7 @@
                 <div class="space-y-4">
                     <div>
                         <label class="block text-xs font-semibold text-gray-700 mb-1">{{ __('Position / Job Title') }} *</label>
-                        <input type="text" name="title" x-model="jobTitle" required placeholder="Məsələn: Senior Laravel Developer"
+                        <input type="text" name="title" x-model="jobTitle" required placeholder="Örn: Senior Laravel Developer"
                                class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs focus:ring-1 focus:ring-primary focus:border-primary focus:outline-hidden">
                     </div>
 
@@ -612,7 +612,7 @@
 
             const quill = new Quill(container, {
                 theme: 'snow',
-                placeholder: 'Məzmunu bura yazın...',
+                placeholder: 'İçeriği buraya yazın...',
             });
 
             // Restore previously entered content (e.g. on validation errors)

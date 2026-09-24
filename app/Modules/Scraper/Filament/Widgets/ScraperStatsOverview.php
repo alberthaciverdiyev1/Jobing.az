@@ -35,7 +35,7 @@ class ScraperStatsOverview extends StatsOverviewWidget
             Stat::make('Son 24 saatte eklenen', number_format($last24h))
                 ->description('scraped_vacancies')
                 ->color('success'),
-            Stat::make('Ortalama süre', $avg >= 60 ? floor($avg / 60) . ' dəq ' . ($avg % 60) . ' sn' : $avg . ' sn')
+            Stat::make('Ortalama süre', $avg >= 60 ? floor($avg / 60) . ' dk ' . ($avg % 60) . ' sn' : $avg . ' sn')
                 ->description('saat dilimi: ' . $tz)
                 ->color('gray'),
         ];

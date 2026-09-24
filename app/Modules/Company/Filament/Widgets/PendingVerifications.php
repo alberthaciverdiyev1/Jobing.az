@@ -11,7 +11,7 @@ use Filament\Widgets\TableWidget as BaseWidget;
 
 class PendingVerifications extends BaseWidget
 {
-    protected static ?string $heading = 'Doğrulama Gözləyən Şirkətlər';
+    protected static ?string $heading = 'Doğrulama Bekleyen Şirketler';
 
     protected int|string|array $columnSpan = 'full';
 

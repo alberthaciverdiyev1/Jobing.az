@@ -46,8 +46,6 @@ export default function jobsManager(config = null) {
         parentCategory: config.activeParentCategory || '',
         activeDropdown: null,
         moreFiltersOpen: false,
-        // Digər saytların vakansiyaları səhifəsi: filtrlər path yerinə query ilə
-        // bu baza ünvana göndərilir ki, scraped elanlar da nəticəyə daxil olsun.
         externalMode: !!config.externalMode,
         externalBasePath: config.externalBasePath || '',
 
@@ -90,7 +88,6 @@ export default function jobsManager(config = null) {
                 let pathCity = null;
                 let pathCategory = null;
 
-                // Xarici (scraped) siyahıda filtr məlumatı yalnız query string-dədir.
                 if (!this.externalMode) {
                     const pathParts = pathname.replace(/^\/jobs\/?/, '').split('/').filter(Boolean);
 
@@ -535,9 +532,7 @@ export default function jobsManager(config = null) {
             const subcategorySlugs = this.selectedSubcategorySlugs;
             let categorySlug = parentSlug ? parentSlug.toLowerCase().trim().replace(/\s+/g, '-') : null;
 
-            // 3. Şəhər və kateqoriya yol (path) üzərində göstərilir:
             //    /{category}  |  /{city}  |  /{city}/{category}
-            // Xarici (scraped) siyahıda isə hər şey query string ilə baza ünvana yazılır.
             let pathname = this.externalMode ? (this.externalBasePath || '/') : '/';
             if (!this.externalMode) {
                 if (citySlug && categorySlug) {
@@ -549,7 +544,6 @@ export default function jobsManager(config = null) {
                 }
             }
 
-            // 4. Qalan filtrlər query string ilə
             const params = new URLSearchParams();
 
             if (this.externalMode) {

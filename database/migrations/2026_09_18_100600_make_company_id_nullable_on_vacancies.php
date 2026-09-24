@@ -8,7 +8,6 @@ return new class extends Migration
 {
     public function up(): void
     {
-        // Bəzi ilanlar şirkətsiz ola bilər (kökdən əlavə edilmiş elanlar).
         Schema::table('vacancies', function (Blueprint $table) {
             $table->unsignedBigInteger('company_id')->nullable()->change();
         });

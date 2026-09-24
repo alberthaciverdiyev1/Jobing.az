@@ -9,16 +9,13 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 
-/**
- * Telegram webhook: yeni vakansiyaları Təsdiqlə / Rədd et + rədd səbəbi.
- */
+
 class TelegramWebhookController extends Controller
 {
     public function handle(Request $request, TelegramService $telegram): JsonResponse
     {
         $update = $request->all();
 
-        // ── Düymə basıldı (approve / reject) ──
         if (isset($update['callback_query'])) {
             $cb = $update['callback_query'];
             $data = (string) ($cb['data'] ?? '');
@@ -36,18 +33,17 @@ class TelegramWebhookController extends Controller
 
             if ($action === 'vac_approve') {
                 $vacancy->update(['is_active' => true, 'rejection_reason' => null]);
-                $telegram->answerCallbackQuery($cbId, '✅ Təsdiqləndi');
-                $telegram->sendToChat($chatId, "✅ <b>Təsdiqləndi</b>\n#{$vacancy->id} — " . e($vacancy->title));
+                $telegram->answerCallbackQuery($cbId, '✅ Onaylandi');
+                $telegram->sendToChat($chatId, "✅ <b>Onaylandı</b>\n#{$vacancy->id} — " . e($vacancy->title));
             } elseif ($action === 'vac_reject') {
                 Cache::put("telegram:reject:{$chatId}", $vacancy->id, now()->addMinutes(30));
-                $telegram->answerCallbackQuery($cbId, 'Rədd səbəbini yaz');
-                $telegram->sendToChat($chatId, "❌ <b>#{$vacancy->id}</b> üçün rədd səbəbini yazın (30 dəqiqə ərzində):");
+                $telegram->answerCallbackQuery($cbId, 'Red sebebini yaz');
+                $telegram->sendToChat($chatId, "❌ <b>#{$vacancy->id}</b> üçün red sebebini yazın (30 dakika içinde):");
             }
 
             return response()->json(['ok' => true]);
         }
 
-        // ── Mətn mesajı (rədd səbəbi) ──
         if (isset($update['message']['text'])) {
             $chatId = (string) ($update['message']['chat']['id'] ?? '');
             $text = trim((string) $update['message']['text']);
@@ -57,7 +53,7 @@ class TelegramWebhookController extends Controller
                 $vacancy = Vacancy::find((int) $vacancyId);
                 if ($vacancy) {
                     $vacancy->update(['is_active' => false, 'rejection_reason' => $text]);
-                    $telegram->sendToChat($chatId, "📝 <b>Rədd edildi</b>\n#{$vacancy->id} — " . e($vacancy->title) . "\n<b>Səbəb:</b> " . e($text));
+                    $telegram->sendToChat($chatId, "📝 <b>Reddedildi</b>\n#{$vacancy->id} — " . e($vacancy->title) . "\n<b>Sebep:</b> " . e($text));
                 }
             }
         }

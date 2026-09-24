@@ -53,9 +53,7 @@ class Application extends Model
         'reply_seen_at' => 'datetime',
     ];
 
-    /**
-     * Şirkət cavabı varsa və hələ oxunmayıbsa true (rozet göstərilir).
-     */
+    
     public function hasUnseenReply(): bool
     {
         if (! filled($this->notes)) {

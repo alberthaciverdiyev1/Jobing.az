@@ -97,7 +97,7 @@ class ApplicationResource extends Resource
                                                     <a href="' . route('resumes.show', $resume->id) . '" target="_blank"
                                                        class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs shadow-xs transition">
                                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
-                                                        <span>CV-yə Tam Bax</span>
+                                                        <span>CV Tam Görüntüle</span>
                                                     </a>
                                                     <a href="' . route('resumes.show', ['resume' => $resume->id, 'print' => 1]) . '" target="_blank"
                                                        class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-xs transition">
@@ -108,9 +108,9 @@ class ApplicationResource extends Resource
                                             </div>
                                             ' . ($resume->summary ? '<div class="text-xs text-gray-600 dark:text-gray-300 line-clamp-2 bg-white/70 dark:bg-gray-900/40 p-2.5 rounded-xl border border-orange-100">' . e($resume->summary) . '</div>' : '') . '
                                             <div class="flex flex-wrap items-center gap-2 pt-1 text-[11px] text-gray-500">
-                                                <span class="px-2 py-0.5 rounded-md bg-white border border-gray-200 font-semibold">' . $expCount . ' İş təcrübəsi</span>
-                                                <span class="px-2 py-0.5 rounded-md bg-white border border-gray-200 font-semibold">' . $eduCount . ' Təhsil</span>
-                                                <span class="px-2 py-0.5 rounded-md bg-white border border-gray-200 font-semibold">' . $skillsCount . ' Bacarıq</span>
+                                                <span class="px-2 py-0.5 rounded-md bg-white border border-gray-200 font-semibold">' . $expCount . ' İş deneyimi</span>
+                                                <span class="px-2 py-0.5 rounded-md bg-white border border-gray-200 font-semibold">' . $eduCount . ' Eğitim</span>
+                                                <span class="px-2 py-0.5 rounded-md bg-white border border-gray-200 font-semibold">' . $skillsCount . ' Beceri</span>
                                             </div>
                                         </div>
                                     ');
@@ -122,7 +122,7 @@ class ApplicationResource extends Resource
                                             <div>
                                                 <div class="font-bold text-xs text-gray-900 dark:text-white flex items-center gap-2">
                                                     <span class="px-2 py-0.5 rounded-full bg-blue-100 text-blue-800 text-[10px] font-bold">Fayl</span>
-                                                    <span>Yüklənmiş CV Sənədi</span>
+                                                    <span>Yüklenmiş CV Belgesi</span>
                                                 </div>
                                                 <div class="text-[11px] text-gray-500 mt-1">' . e(basename($record->resume_path)) . '</div>
                                             </div>

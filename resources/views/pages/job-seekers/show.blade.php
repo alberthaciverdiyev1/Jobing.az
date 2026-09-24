@@ -195,7 +195,7 @@
                     @endif
                 </div>
 
-                <!-- Promote JobSeeker Card (İrəli çək & Premium et) -->
+                
                 <div class="bg-white rounded-xl border border-gray-200 p-5 shadow-2xs space-y-3">
                     <div>
                         <h4 class="font-medium text-gray-900 text-xs">{{ __('Promote & Stand Out') }}</h4>
@@ -221,7 +221,7 @@
         </div>
     </div>
 
-    <!-- Promotion Modals (İrəli çək & Premium et) -->
+    
     <x-promotion-modals type="job_seeker" :title="$jobSeeker->title" :id="$jobSeeker->id" />
 </div>
 @endsection

@@ -88,7 +88,7 @@
             <!-- Left 2 cols: About FIRST, then Open Vacancies -->
             <div class="lg:col-span-2 space-y-8">
 
-                <!-- 1. Şirkət Haqqında (About) -->
+                <!-- 1. Şirket Haqqında (About) -->
                 <div class="bg-white rounded-xl border border-gray-200 p-4 sm:p-6 shadow-2xs space-y-3">
                     <h2 class="text-sm font-semibold text-gray-900 flex items-center gap-2 pb-3 border-b border-gray-100">
                         <span>{{ __('About Company') }}</span>
@@ -98,7 +98,7 @@
                     </div>
                 </div>
 
-                <!-- 2. Şirkətin Açık Vakansiyaları (Open Vacancies) -->
+                <!-- 2. Şirketin Açık Vakansiyaları (Open Vacancies) -->
                 <div class="space-y-4">
                     <div class="flex items-center justify-between pb-2 border-b border-gray-200">
                         <h2 class="text-sm font-semibold text-gray-900 flex items-center gap-2">

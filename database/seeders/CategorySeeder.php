@@ -13,7 +13,6 @@ class CategorySeeder extends Seeder
     public function run(): void
     {
         $categoriesData = [
-            // 1. Marketinq, Reklam və PR
             [
                 'name' => [
                     'az' => 'Marketinq, Reklam və PR',
@@ -108,7 +107,6 @@ class CategorySeeder extends Seeder
                 ],
             ],
 
-            // 2. Maliyyə və Mühasibatlıq
             [
                 'name' => [
                     'az' => 'Maliyyə və Mühasibatlıq',
@@ -307,7 +305,6 @@ class CategorySeeder extends Seeder
                 ],
             ],
 
-            // 4. İnzibati heyət
             [
                 'name' => [
                     'az' => 'İnzibati heyət',
@@ -393,7 +390,6 @@ class CategorySeeder extends Seeder
                 ],
             ],
 
-            // 5. Satış və müştəri xidməti
             [
                 'name' => [
                     'az' => 'Satış və müştəri xidməti',
@@ -615,7 +611,6 @@ class CategorySeeder extends Seeder
                 ],
             ],
 
-            // 8. Təhsil və elm
             [
                 'name' => [
                     'az' => 'Təhsil və elm',
@@ -674,7 +669,6 @@ class CategorySeeder extends Seeder
                 ],
             ],
 
-            // 9. Kənd təsərrüfatı
             [
                 'name' => [
                     'az' => 'Kənd təsərrüfatı',
@@ -733,7 +727,6 @@ class CategorySeeder extends Seeder
                 ],
             ],
 
-            // 10. Xidmət Personalı
             [
                 'name' => [
                     'az' => 'Xidmət Personalı',
@@ -819,7 +812,6 @@ class CategorySeeder extends Seeder
                 ],
             ],
 
-            // 11. Tibb və əczaçılıq
             [
                 'name' => [
                     'az' => 'Tibb və əczaçılıq',
@@ -878,7 +870,6 @@ class CategorySeeder extends Seeder
                 ],
             ],
 
-            // 12. Müxtəlif
             [
                 'name' => [
                     'az' => 'Müxtəlif',
@@ -910,7 +901,6 @@ class CategorySeeder extends Seeder
                 ],
             ],
 
-            // 13. Turizm, otellər, restoranlar
             [
                 'name' => [
                     'az' => 'Turizm, otellər, restoranlar',
@@ -1005,7 +995,6 @@ class CategorySeeder extends Seeder
                 ],
             ],
 
-            // 14. İdman zalları, fitness, gözəllik salonları
             [
                 'name' => [
                     'az' => 'İdman zalları, fitness, gözəllik salonları',
@@ -1073,7 +1062,6 @@ class CategorySeeder extends Seeder
                 ],
             ],
 
-            // 15. Nəqliyyat, daşınma və logistika
             [
                 'name' => [
                     'az' => 'Nəqliyyat, daşınma və logistika',
@@ -1132,7 +1120,6 @@ class CategorySeeder extends Seeder
                 ],
             ],
 
-            // 16. Sənaye, tikinti və istehsalat
             [
                 'name' => [
                     'az' => 'Sənaye, tikinti və istehsalat',
@@ -1245,7 +1232,6 @@ class CategorySeeder extends Seeder
                 ],
             ],
 
-            // 17. Satınalma və təchizat
             [
                 'name' => [
                     'az' => 'Satınalma və təchizat',

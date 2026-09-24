@@ -112,7 +112,6 @@ if [[ ! -f .env ]]; then
   sed -i "s#^SESSION_DRIVER=.*#SESSION_DRIVER=redis#" .env
   sed -i "s#^QUEUE_CONNECTION=.*#QUEUE_CONNECTION=redis#" .env
   sed -i "s#^REDIS_CLIENT=.*#REDIS_CLIENT=phpredis#" .env
-  # Ayrı log verilənlər bazası
   cat >> .env <<LOGDENV
 
 LOG_DB_HOST=${DB_HOST}
@@ -121,7 +120,6 @@ LOG_DB_DATABASE=${LOG_DB_NAME}
 LOG_DB_USERNAME=${DB_USER}
 LOG_DB_PASSWORD=${DB_PASS}
 
-# Deploy öncəsi bütün bazaların yedəyi Telegram-a göndərilir
 DATABASE_BACKUP_TELEGRAM_BOT_TOKEN=
 DATABASE_BACKUP_TELEGRAM_BOT_CHAT_ID=
 LOGDENV

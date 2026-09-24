@@ -60,14 +60,14 @@ class MessageTemplateResource extends Resource
         return $form
             ->schema([
                 Forms\Components\Section::make(__('Template Information'))
-                    ->description('Mesaj şablonunu 4 dildə tənzimləyin. Göndərmə zamanı { } içindəki parametrlər avtomatik dolur: '
+                    ->description('Mesaj şablonunu 4 dilde düzenleyin. Gönderim sırasında { } içindeki parametreler otomatik doldurulur: '
                         . \App\Modules\Company\Support\MessagePlaceholders::tokensText())
                     ->schema([
                         Forms\Components\Select::make('type')
                             ->label(__('Template Type'))
                             ->options([
-                                'rejected' => 'İmtina Məktubu (Reject)',
-                                'interview' => 'Müsahibə Dəvəti (Interview)',
+                                'rejected' => 'Ret Mektubu (Reject)',
+                                'interview' => 'Mülakat Daveti (Interview)',
                                 'accepted' => __('Job Offer (Accept)'),
                                 'custom' => 'Xüsusi Şablon (Custom)',
                             ])
@@ -149,14 +149,14 @@ class MessageTemplateResource extends Resource
                     })
                     ->formatStateUsing(fn (string $state): string => match ($state) {
                         'rejected' => 'İmtina',
-                        'interview' => 'Müsahibə',
+                        'interview' => 'Mülakat',
                         'accepted' => __('Job Offer'),
                         default => 'Xüsusi',
                     }),
 
                 Tables\Columns\TextColumn::make('company_id')
                     ->label(__('Source'))
-                    ->formatStateUsing(fn ($state) => $state ? 'Şirkətinizə Özəl' : 'Sistem Standartı')
+                    ->formatStateUsing(fn ($state) => $state ? 'Şirketinize Özel' : 'Sistem Standardı')
                     ->badge()
                     ->color(fn ($state) => $state ? 'primary' : 'gray'),
 
@@ -172,8 +172,8 @@ class MessageTemplateResource extends Resource
             ->filters([
                 Tables\Filters\SelectFilter::make('type')
                     ->options([
-                        'rejected' => 'İmtina Məktubu',
-                        'interview' => 'Müsahibə Dəvəti',
+                        'rejected' => 'Ret Mektubu',
+                        'interview' => 'Mülakat Daveti',
                         'accepted' => __('Job Offer'),
                         'custom' => 'Xüsusi',
                     ])

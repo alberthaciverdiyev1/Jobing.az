@@ -12,15 +12,11 @@ use App\Modules\JobAttribute\Models\WorkplaceType;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
-/**
- * Yalnız zəruri (referans) məlumatları yaradır — saxta vakansiya/şirkət YOXDUR.
- * Şirkət olaraq yalnız "Kariyer.KibrisKare" saxlanılır.
- */
+
 class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        // 1. Admin istifadəçi
         User::updateOrCreate(
             ['email' => 'admin@kariyer.kibriskare.com'],
             [
@@ -31,7 +27,6 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        // 2. Kateqoriyalar və Şəhərlər (referans məlumat)
         $this->call([
             CategorySeeder::class,
             CitySeeder::class,
@@ -68,7 +63,6 @@ class DatabaseSeeder extends Seeder
             ExperienceLevel::updateOrCreate(['slug' => $el['slug']], $el);
         }
 
-        // 4. Yeganə şirkət: Kariyer.KibrisKare
         $bakuCity = City::where('slug', 'lefkosa')->first();
 
         Company::updateOrCreate(

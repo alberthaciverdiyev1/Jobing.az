@@ -20,7 +20,7 @@ export async function fetchFilterJson(manager, url) {
         return await response.json();
     } catch (error) {
         if (error.name !== 'AbortError') {
-            manager.errorMessage = manager.filterErrorMessage || 'Filtrlər yüklənərkən xəta baş verdi.';
+            manager.errorMessage = manager.filterErrorMessage || 'Filtreler yüklenirken hata oluştu.';
             console.error('Filter request failed:', error);
         }
         return null;

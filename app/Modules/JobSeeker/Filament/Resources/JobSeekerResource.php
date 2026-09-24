@@ -91,8 +91,8 @@ class JobSeekerResource extends Resource
                         Forms\Components\TextInput::make('currency')->label(__('Currency'))->default('TRY'),
                         Forms\Components\Toggle::make('salary_negotiable')->label(__('Negotiable')),
                         Forms\Components\Select::make('availability')->label(__('Competition'))->options([
-                            'immediate' => 'Dərhal',
-                            'two_weeks' => '2 həftə',
+                            'immediate' => 'Hemen',
+                            'two_weeks' => '2 hafta',
                             'one_month' => '1 ay',
                             'flexible' => 'Esnek',
                         ]),
@@ -166,11 +166,11 @@ class JobSeekerResource extends Resource
                     }),
 
                 Tables\Actions\Action::make('toggle_featured')
-                    ->label(fn (JobSeeker $record): string => $record->is_featured ? 'Premiumu Ləğv Et' : 'Premium Et')
+                    ->label(fn (JobSeeker $record): string => $record->is_featured ? 'Premiumu Kaldır' : 'Premium Et')
                     ->icon('heroicon-o-sparkles')
                     ->color('amber')
                     ->requiresConfirmation()
-                    ->modalHeading(fn (JobSeeker $record): string => $record->is_featured ? 'Premium Statusunu Ləğv Et' : 'Premium Statusu Ver')
+                    ->modalHeading(fn (JobSeeker $record): string => $record->is_featured ? 'Premium Durumunu Kaldır' : 'Premium Durumu Ver')
                     ->action(function (JobSeeker $record) {
                         $record->is_featured = !$record->is_featured;
                         if ($record->is_featured) {
@@ -180,7 +180,7 @@ class JobSeekerResource extends Resource
                         }
                         $record->save();
                         \Filament\Notifications\Notification::make()
-                            ->title($record->is_featured ? 'Elana Premium statusu verildi!' : 'Premium statusu ləğv edildi.')
+                            ->title($record->is_featured ? 'İlana Premium durumu verildi!' : 'Premium durumu kaldırıldı.')
                             ->success()
                             ->send();
                     }),

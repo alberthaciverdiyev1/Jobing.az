@@ -52,7 +52,6 @@ class MyApplicationsResource extends Resource
         $query = parent::getEloquentQuery()
             ->where('user_id', auth()->id());
 
-        // Mesajı olanlar üstte (ən son cavaba görə), mesajı olmayanlar isə tarixə görə.
         $query->orderByRaw("
             CASE WHEN notes IS NOT NULL AND TRIM(notes) <> '' THEN 0 ELSE 1 END ASC,
             CASE WHEN notes IS NOT NULL AND TRIM(notes) <> '' THEN COALESCE(updated_at, created_at) ELSE created_at END DESC
@@ -88,7 +87,6 @@ class MyApplicationsResource extends Resource
                         default => 'primary',
                     }),
 
-                // Şirkət cavabı varsa və hələ oxunmayıbsa "Yeni mesaj" göstər.
                 Tables\Columns\TextColumn::make('reply_marker')
                     ->label(__('Answer'))
                     ->state(fn (Application $record): string => $record->hasUnseenReply()

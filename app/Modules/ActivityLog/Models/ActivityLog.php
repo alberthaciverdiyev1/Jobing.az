@@ -9,10 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-/**
- * Detallı aktivlik loqu — AYRI "logs" verilənlər bazasında saxlanılır.
- * Geo (ölkə/şəhər/koordinat/ISP), cihaz, brauzer, OS, müddət, status, payload.
- */
+
 class ActivityLog extends Model
 {
     use HasFactory;
@@ -53,14 +50,14 @@ class ActivityLog extends Model
 
     public function getLocationTextAttribute(): string
     {
-        $city = $this->city && $this->city !== 'Naməlum' ? $this->city : '';
+        $city = $this->city && $this->city !== 'Bilinmiyor' ? $this->city : '';
         $country = $this->country_name ?: $this->country_code;
 
         if ($city && $country && $city !== $country) {
             return "{$this->flag_emoji} {$city}, {$country}";
         }
 
-        return $this->flag_emoji . ' ' . ($city ?: $country ?: 'Naməlum');
+        return $this->flag_emoji . ' ' . ($city ?: $country ?: 'Bilinmiyor');
     }
 
     public function getHasCoordinatesAttribute(): bool
@@ -75,7 +72,7 @@ class ActivityLog extends Model
             : null;
     }
 
-    /** Asinxron log (istifadəçi cavabı gözləmir). */
+    
     public static function logAsync(
         string $action,
         ?string $modelType = null,
@@ -109,9 +106,7 @@ class ActivityLog extends Model
         }
     }
 
-    /**
-     * Sinxron qeyd (fallback / CLI). Detallı middleware bunun yerinə logAsync istifadə edir.
-     */
+    
     public static function record(
         string $action,
         ?string $modelType = null,

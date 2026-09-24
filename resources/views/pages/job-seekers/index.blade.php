@@ -296,7 +296,7 @@ window.__JOB_SEEKERS_CONFIG__ = {
                     </div>
                     @endif
 
-                    <!-- 4. Experience Level (Təcrübə) Dropdown -->
+                    
                     @if($experienceLevels->count() > 0)
                     <div class="hidden md:block relative" :class="activeDropdown === 'experience' ? 'z-50' : 'z-auto'" @click.outside="closeDropdown('experience')">
                         <button type="button"

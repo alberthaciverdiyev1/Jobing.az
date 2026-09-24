@@ -79,13 +79,13 @@ class Category extends Model
         return [self::CACHE_KEY_TREE, 'ref.categories.with_skills'];
     }
 
-    /** Ana kateqoriyalar + alt kateqoriyalar (keşlənmiş ağac). */
+    
     public static function cachedTree(): \Illuminate\Database\Eloquent\Collection
     {
         return static::remember(self::CACHE_KEY_TREE, fn () => static::parents()->with('children')->get());
     }
 
-    /** Yalnız ana kateqoriyalar (keşlənmiş). */
+    
     public static function cachedParents(): \Illuminate\Database\Eloquent\Collection
     {
         return static::cachedTree();

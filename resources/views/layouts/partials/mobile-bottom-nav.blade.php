@@ -6,7 +6,7 @@
     <span class="text-[12px] font-semibold">{{ __('Vacancies') }}</span>
   </a>
 
-  <!-- 2. DİGƏR SAYTLAR -->
+  
   <a href="{{ route('jobs.external') }}" class="flex flex-col items-center justify-center flex-1 py-1 text-center transition {{ request()->routeIs('jobs.external') ? 'text-primary font-semibold' : 'text-gray-400 hover:text-gray-700' }}">
     <i class="fa-solid fa-globe text-xl mb-0.5"></i>
     <span class="text-[12px] font-semibold">{{ __('From other sites') }}</span>

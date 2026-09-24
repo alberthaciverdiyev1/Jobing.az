@@ -73,7 +73,7 @@
             </div>
 
             @if($isScraped && $job->source_name)
-            <!-- Source site (həmişə kartın ən sağında, iş rejimi sətri ilə eyni səviyyədə) -->
+            
             <div class="mt-1 @sm:mt-0 flex items-center gap-1.5 @sm:justify-end text-[12px] text-gray-500">
                 <i class="fas fa-globe text-[10px] text-gray-400"></i>
                 <span>{{ __('Source') }}: <span class="font-medium text-gray-700">{{ $job->source_name }}</span></span>

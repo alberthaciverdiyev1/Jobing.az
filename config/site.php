@@ -12,12 +12,7 @@ return [
 
     'whatsapp_fallback' => env('SITE_WHATSAPP_FALLBACK', '905000000000'),
 
-    /*
-    |--------------------------------------------------------------------------
-    | Social media fallbacks
-    |--------------------------------------------------------------------------
-    | SiteSetting boş olduqda istifadə olunan sosial şəbəkə ünvanları.
-    */
+    
     'social_fallbacks' => [
         'facebook_url' => env('SITE_FACEBOOK_URL'),
         'instagram_url' => env('SITE_INSTAGRAM_URL'),

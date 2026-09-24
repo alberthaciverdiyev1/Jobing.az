@@ -69,8 +69,8 @@ class UserResource extends Resource
                         Forms\Components\Select::make('user_type')
                             ->label(__('Account Type'))
                             ->options([
-                                'user' => 'Şəxsi istifadəçi',
-                                'company' => 'Şirkət',
+                                'user' => 'Bireysel kullanıcı',
+                                'company' => 'Şirket',
                                 'admin' => 'Admin',
                             ])
                             ->required()
@@ -111,7 +111,7 @@ class UserResource extends Resource
                     ->label(__('Type'))
                     ->badge()
                     ->formatStateUsing(fn (string $state): string => match ($state) {
-                        'company' => 'Şirkət',
+                        'company' => 'Şirket',
                         'admin' => 'Admin',
                         default => __('User'),
                     })
@@ -150,7 +150,7 @@ class UserResource extends Resource
                     ->label(__('Account Type'))
                     ->options([
                         'user' => __('User'),
-                        'company' => 'Şirkət',
+                        'company' => 'Şirket',
                         'admin' => 'Admin',
                     ]),
                 Tables\Filters\TernaryFilter::make('is_admin')

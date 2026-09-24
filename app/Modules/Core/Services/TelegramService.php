@@ -29,7 +29,7 @@ class TelegramService
     public function send(string $message): bool
     {
         if (! $this->token() || ! $this->chatId()) {
-            Log::warning('Telegram bildirişi göndərilmədi: token və ya chat_id təyin edilməyib.');
+            Log::warning('Telegram bildirimi gönderilemedi: token veya chat_id tanımlı değil.');
             return false;
         }
 
@@ -42,12 +42,12 @@ class TelegramService
             ]);
 
             if (! $response->json('ok', false)) {
-                Log::warning('Telegram göndəriş xətası: ' . $response->body());
+                Log::warning('Telegram gönderme hatası: ' . $response->body());
             }
 
             return (bool) $response->json('ok', false);
         } catch (\Throwable $e) {
-            Log::warning('Telegram xətası: ' . $e->getMessage());
+            Log::warning('Telegram hatası: ' . $e->getMessage());
             return false;
         }
     }
@@ -59,12 +59,12 @@ class TelegramService
     {
         $vacancy = $application->vacancy;
 
-        $message = "📄 <b>YENİ İŞ MÜRACİƏTİ</b>\n"
-            . "👤 <b>Namizəd:</b> " . e($application->applicant_name) . "\n"
+        $message = "📄 <b>YENİ İŞ BAŞVURUSU</b>\n"
+            . "👤 <b>Aday:</b> " . e($application->applicant_name) . "\n"
             . "📮 <b>E-poçt:</b> " . e($application->applicant_email ?? '-') . "\n"
             . "📞 <b>Telefon:</b> " . e($application->applicant_phone ?? '-') . "\n"
             . "💼 <b>Vakansiya:</b> " . e($vacancy?->title ?? '-') . "\n"
-            . "🏢 <b>Şirkət:</b> " . e($vacancy?->company?->name ?? '-') . "\n"
+            . "🏢 <b>Şirket:</b> " . e($vacancy?->company?->name ?? '-') . "\n"
             . "🆔 <b>ID:</b> #{$application->id}";
 
         $this->send($message);
@@ -75,7 +75,7 @@ class TelegramService
      */
     public function sendNewLead(\App\Modules\Inquiry\Models\Inquiry $inquiry): void
     {
-        $message = "✉️ <b>YENİ ƏLAQƏ MÜRACİƏTİ</b>\n"
+        $message = "✉️ <b>YENİ İLETİŞİM TALEBİ</b>\n"
             . "👤 <b>Ad:</b> " . e($inquiry->name) . "\n"
             . "📮 <b>E-poçt:</b> " . e($inquiry->email ?? '-') . "\n"
             . "📞 <b>Telefon:</b> " . e($inquiry->phone ?? '-') . "\n"
@@ -92,20 +92,18 @@ class TelegramService
     {
         $message = "🧑‍💼 <b>YENİ İŞ AXTARAN ELANI</b>\n"
             . "🏷️ <b>Başlıq:</b> " . e($jobSeeker->title) . "\n"
-            . "👤 <b>Əlaqə:</b> " . e($jobSeeker->contact_name) . "\n"
+            . "👤 <b>İletişim:</b> " . e($jobSeeker->contact_name) . "\n"
             . "📮 <b>E-poçt:</b> " . e($jobSeeker->contact_email ?? '-') . "\n"
             . "📞 <b>Telefon:</b> " . e($jobSeeker->contact_phone ?? '-') . "\n"
             . "🆔 <b>ID:</b> #{$jobSeeker->id}";
 
         $this->send($message);
     }
-    /**
-     * Inline klaviatura ilə mesaj göndərir (Təsdiq / Rədd düymələri).
-     */
+    
     public function sendWithKeyboard(string $message, array $keyboard): bool
     {
         if (! $this->token() || ! $this->chatId()) {
-            Log::warning('Telegram bildirişi göndərilmədi: token və ya chat_id təyin edilməyib.');
+            Log::warning('Telegram bildirimi gönderilemedi: token veya chat_id tanımlı değil.');
             return false;
         }
 
@@ -120,30 +118,30 @@ class TelegramService
 
             return (bool) $response->json('ok', false);
         } catch (\Throwable $e) {
-            Log::warning('Telegram xətası: ' . $e->getMessage());
+            Log::warning('Telegram hatası: ' . $e->getMessage());
             return false;
         }
     }
 
-    /** Yeni vakansiya üçün Təsdiq/Rədd sorğusu göndərir. */
+    
     public function sendVacancyApprovalRequest(\App\Modules\Vacancy\Models\Vacancy $vacancy): void
     {
-        $message = "🆕 <b>YENİ VAKANSİYA (təsdiq gözləyir)</b>\n"
-            . "💼 <b>Vəzifə:</b> " . e($vacancy->title) . "\n"
-            . "🏢 <b>Şirkət:</b> " . e($vacancy->company?->name ?? '-') . "\n"
-            . "📍 <b>Şəhər:</b> " . e($vacancy->city_name ?: '-') . "\n"
+        $message = "🆕 <b>YENİ İLAN (onay bekliyor)</b>\n"
+            . "💼 <b>Pozisyon:</b> " . e($vacancy->title) . "\n"
+            . "🏢 <b>Şirket:</b> " . e($vacancy->company?->name ?? '-') . "\n"
+            . "📍 <b>Şehir:</b> " . e($vacancy->city_name ?: '-') . "\n"
             . "💰 <b>Maaş:</b> " . e($vacancy->formatted_salary) . "\n"
             . "🆔 <b>ID:</b> #{$vacancy->id}";
 
         $this->sendWithKeyboard($message, [
             [
-                ['text' => '✅ Təsdiqlə', 'callback_data' => 'vac_approve:' . $vacancy->id],
-                ['text' => '❌ Rədd et', 'callback_data' => 'vac_reject:' . $vacancy->id],
+                ['text' => '✅ Onayla', 'callback_data' => 'vac_approve:' . $vacancy->id],
+                ['text' => '❌ Reddet', 'callback_data' => 'vac_reject:' . $vacancy->id],
             ],
         ]);
     }
 
-    /** Callback sorğusuna cavab (düyməni "yüklənir" vəziyyətindən çıxarır). */
+    
     public function answerCallbackQuery(string $callbackQueryId, string $text = ''): void
     {
         if (! $this->token()) {
@@ -156,11 +154,11 @@ class TelegramService
                 'text' => $text,
             ]);
         } catch (\Throwable $e) {
-            Log::warning('Telegram callback xətası: ' . $e->getMessage());
+            Log::warning('Telegram callback hatası: ' . $e->getMessage());
         }
     }
 
-    /** Konkret chat-a mesaj göndərir (webhook cavabları üçün). */
+    
     public function sendToChat(string $chatId, string $message, ?array $keyboard = null): bool
     {
         if (! $this->token()) {
@@ -175,7 +173,7 @@ class TelegramService
         try {
             return (bool) Http::timeout(5)->post($this->apiUrl() . '/sendMessage', $payload)->json('ok', false);
         } catch (\Throwable $e) {
-            Log::warning('Telegram xətası: ' . $e->getMessage());
+            Log::warning('Telegram hatası: ' . $e->getMessage());
             return false;
         }
     }
@@ -193,7 +191,7 @@ class TelegramService
                 'allowed_updates' => ['message', 'callback_query'],
             ])->json('ok', false);
         } catch (\Throwable $e) {
-            Log::warning('Telegram setWebhook xətası: ' . $e->getMessage());
+            Log::warning('Telegram setWebhook hatası: ' . $e->getMessage());
             return false;
         }
     }

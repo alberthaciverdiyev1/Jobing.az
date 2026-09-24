@@ -319,7 +319,7 @@ window.__JOBS_CONFIG__ = {
                     </div>
                     @endif
 
-                    <!-- 4. Experience Level (Təcrübə) Dropdown -->
+                    
                     @if($experienceLevels->count() > 0)
                     <div class="hidden md:block relative" :class="activeDropdown === 'experience' ? 'z-50' : 'z-auto'" @click.outside="closeDropdown('experience')">
                         <span class="block md:hidden text-[11px] font-medium text-gray-500 mb-1.5 px-0.5">{{ __('Experience') }}</span>

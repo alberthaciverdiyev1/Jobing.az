@@ -39,7 +39,6 @@ class EditCompanyApplications extends EditRecord
     protected function mutateFormDataBeforeSave(array $data): array
     {
         if (isset($data['notes'])) {
-            // {user}, {position}, {company} ... yer tutucularını gerçek veriyle dəyiş.
             $data['notes'] = \App\Modules\Company\Support\MessagePlaceholders::resolve($data['notes'], $this->record);
         }
 

@@ -14,14 +14,14 @@
     <div class="flex items-center justify-between">
         <span class="text-xs font-semibold text-gray-500 dark:text-gray-400">{{ __('Education List') }}</span>
         <x-filament::button type="button" size="xs" color="warning" icon="heroicon-m-plus" x-on:click="addItem()">
-            Təhsil Əlavə Et
+            Eğitim Ekle
         </x-filament::button>
     </div>
 
     <template x-for="(item, index) in state" :key="index">
         <div class="p-4 rounded-xl bg-gray-50/70 dark:bg-gray-800/50 space-y-4">
             <div class="flex items-center justify-between border-b border-gray-200/60 dark:border-gray-700/60 pb-2.5">
-                <span class="text-xs font-semibold text-orange-600 dark:text-orange-400" x-text="(index + 1) + '. Təhsil' + (item.institution ? ' (' + item.institution + ')' : '')"></span>
+                <span class="text-xs font-semibold text-orange-600 dark:text-orange-400" x-text="(index + 1) + '. Eğitim' + (item.institution ? ' (' + item.institution + ')' : '')"></span>
                 <x-filament::button type="button" size="xs" color="danger" icon="heroicon-m-trash" x-on:click="removeItem(index)">
                     Sil
                 </x-filament::button>
@@ -38,7 +38,7 @@
                 <div class="space-y-1.5">
                     <label class="font-semibold text-gray-700 dark:text-gray-300 block">{{ __('Major / Department *') }}</label>
                     <x-filament::input.wrapper>
-                        <x-filament::input type="text" x-model="item.field_of_study" placeholder="Örn: Kompüter Elmləri" />
+                        <x-filament::input type="text" x-model="item.field_of_study" placeholder="Örn: Bilgisayar Bilimleri" />
                     </x-filament::input.wrapper>
                 </div>
 

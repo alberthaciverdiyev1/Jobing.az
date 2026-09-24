@@ -66,7 +66,7 @@ class Company extends Model
      * (registered user account, verified, logo, or about description),
      * rather than just an ad-hoc name entered during unauthenticated job posting.
      */
-    /** Memoized nəticə (eyni sorğuda təkrar DB sorğusunun qarşısını alır). */
+    
     protected ?bool $hasPublicProfileMemo = null;
 
     public function hasPublicProfile(): bool
@@ -75,7 +75,6 @@ class Company extends Model
             return $this->hasPublicProfileMemo;
         }
 
-        // Ucuz şərtlərə əvvəlcə bax — DB sorğusuna ehtiyac qalmaya bilər.
         if ($this->is_verified || ! empty($this->logo) || ! empty($this->about)) {
             return $this->hasPublicProfileMemo = true;
         }

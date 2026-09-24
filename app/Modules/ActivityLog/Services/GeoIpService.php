@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Http;
 
 class GeoIpService
 {
-    /** IP üçün geo məlumat (30 gün keşlənir). */
+    
     public static function resolve(?string $ip, ?string $cfCountry = null): array
     {
         if (empty($ip) || in_array($ip, ['127.0.0.1', '::1'], true)
@@ -15,7 +15,7 @@ class GeoIpService
             || str_starts_with($ip, '172.16.')) {
             return [
                 'country_code' => $cfCountry ?: 'LOC',
-                'country_name' => $cfCountry ? self::countryNameFromCode($cfCountry) : 'Lokal Şəbəkə',
+                'country_name' => $cfCountry ? self::countryNameFromCode($cfCountry) : 'Yerel Ağ',
                 'city' => 'Lokal',
                 'region' => '',
                 'latitude' => 40.4093,
@@ -32,7 +32,7 @@ class GeoIpService
                     return [
                         'country_code' => strtoupper($d['countryCode'] ?? $cfCountry ?? 'XX'),
                         'country_name' => $d['country'] ?? self::countryNameFromCode($cfCountry),
-                        'city' => $d['city'] ?? 'Naməlum',
+                        'city' => $d['city'] ?? 'Bilinmiyor',
                         'region' => $d['regionName'] ?? '',
                         'latitude' => isset($d['lat']) ? (float) $d['lat'] : null,
                         'longitude' => isset($d['lon']) ? (float) $d['lon'] : null,
@@ -45,7 +45,7 @@ class GeoIpService
             return [
                 'country_code' => strtoupper($cfCountry ?? 'XX'),
                 'country_name' => self::countryNameFromCode($cfCountry),
-                'city' => 'Naməlum',
+                'city' => 'Bilinmiyor',
                 'region' => '',
                 'latitude' => null,
                 'longitude' => null,
@@ -54,7 +54,7 @@ class GeoIpService
         });
     }
 
-    /** User-Agent-dən cihaz / brauzer / OS çıxarır. */
+    
     public static function parseUserAgent(?string $ua): array
     {
         $ua = strtolower((string) $ua);

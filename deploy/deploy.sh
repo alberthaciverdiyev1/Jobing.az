@@ -7,7 +7,6 @@
 #
 set -euo pipefail
 
-# Kök kullanıcı olarak üretilen faylların qrup (www-data) tərəfindən yazıla bilməsi üçün.
 umask 002
 
 APP_DIR="${APP_DIR:-/var/www/kariyer.kibriskare}"
@@ -19,10 +18,6 @@ PHP_BIN="${PHP_BIN:-/usr/bin/php}"
 
 log() { echo -e "\n\033[1;36m▶ $*\033[0m"; }
 
-# storage/bootstrap/cache php-fpm (www-data) tərəfindən yazıla bilməlidir.
-# `sudo` umask-i 0022-yə salır, ona görə root kimi yaradılan qovluqlar qrup
-# üçün yazıla bilmir (məs. cache/data/ee 2755 root:www-data → 500 xətası).
-# Hər deploy-da bu iki qovluğu www-data-ya veririk.
 fix_write_perms() {
   chown -R "$WEB_USER":www-data "$APP_DIR/storage" "$APP_DIR/bootstrap/cache" 2>/dev/null || true
   find "$APP_DIR/storage" "$APP_DIR/bootstrap/cache" -type d -exec chmod 2775 {} + 2>/dev/null || true
@@ -31,7 +26,6 @@ fix_write_perms() {
 
 cd "$APP_DIR"
 
-# ── Deploy-dan ƏVVƏL: bütün verilənlər bazalarını yedəklə + Telegram-a göndər ──
 if [ -x "deploy/backup-databases.sh" ]; then
   log "Verilənlər bazası yedəyi (deploy öncəsi)"
   bash deploy/backup-databases.sh || echo "⚠ Yedək alınmadı, deploy davam edir"
@@ -41,14 +35,12 @@ log "Kod çekiliyor ($BRANCH)"
 sudo -u "$APP_USER" git fetch --all --prune
 sudo -u "$APP_USER" git reset --hard "origin/$BRANCH"
 
-# Qismən deploy olsa belə sayt işləsin deyə storage-i dərhal yazıla bilən et.
 fix_write_perms
 
 log "Composer (production)"
 sudo -u "$APP_USER" composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist
 
 log "Frontend derleme (Vite)"
-# Serverdə Node köhnədirsə, /opt/node20 istifadə et; hələ də <18-dirsə, commit edilmiş assetlər qalır.
 export PATH="/opt/node20/bin:$PATH"
 NODE_MAJOR="$(node -v 2>/dev/null | sed 's/^v\([0-9]*\).*$/\1/')"
 if [ -n "$NODE_MAJOR" ] && [ "$NODE_MAJOR" -ge 18 ]; then

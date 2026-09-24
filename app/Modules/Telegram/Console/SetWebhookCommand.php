@@ -21,7 +21,7 @@ class SetWebhookCommand extends Command
             return self::SUCCESS;
         }
 
-        $this->error('Webhook qeyd edilə bilmədi. Token/URL-i yoxlayın.');
+        $this->error('Webhook kaydedilemedi. Token/URL kontrol edin.');
 
         return self::FAILURE;
     }

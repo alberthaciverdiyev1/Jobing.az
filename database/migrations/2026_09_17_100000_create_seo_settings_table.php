@@ -11,7 +11,6 @@ return new class extends Migration
         Schema::create('seo_settings', function (Blueprint $table) {
             $table->id();
 
-            // Global skriptlər (RAW HTML/JS) — GA, GTM, Pixel, canlı çat vb.
             $table->mediumText('head_scripts')->nullable();
             $table->mediumText('body_scripts')->nullable();
             $table->mediumText('footer_scripts')->nullable();

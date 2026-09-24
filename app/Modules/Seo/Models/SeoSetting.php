@@ -5,10 +5,7 @@ namespace App\Modules\Seo\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 
-/**
- * Qlobal SEO tənzimləmələri: <head>/<body>/<footer> RAW skriptlər,
- * standart meta məlumatlar (çoxdilli) və standart OG şəkli.
- */
+
 class SeoSetting extends Model
 {
     protected $table = 'seo_settings';

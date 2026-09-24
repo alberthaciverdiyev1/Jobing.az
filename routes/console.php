@@ -10,5 +10,4 @@ Artisan::command('inspire', function () {
 
 Schedule::command('promotions:expire')->hourly()->withoutOverlapping();
 
-// RSS xəbərlərini saatlıq idxal et.
 Schedule::command('news:import')->hourly()->withoutOverlapping();
