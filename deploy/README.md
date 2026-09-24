@@ -53,31 +53,31 @@ Yaptığı: `git reset --hard origin/main` → `composer install --no-dev` → `
 
 
 `deploy.sh` her deploy'dan **önce** bunu otomatik çalıştırır:
-- Serverdəki **bütün PostgreSQL bazalarını** (əsas + `kariyer.kibriskare_logs`) `pg_dump` ilə yedəkləyir
-- `tar.gz` edib `/var/backups/kariyer.kibriskare/`-də saxlayır (14 gün saxlanır)
-- Telegram bot vasitəsilə yedəyi sənə göndərir
+- Sunucudaki **tüm PostgreSQL veritabanlarını** (ana + `kariyer.kibriskare_logs`) `pg_dump` ile yedekler
+- `tar.gz` yapıp `/var/backups/kariyer.kibriskare/` altında tutar (14 gün saklanır)
+- Telegram bot aracılığıyla yedeği sana gönderir
 
-Gərəkli `.env` dəyişənləri:
+Gerekli `.env` değişkenleri:
 ```
-DATABASE_BACKUP_TELEGRAM_BOT_TOKEN=...   # @BotFather-dən
-DATABASE_BACKUP_TELEGRAM_BOT_CHAT_ID=... # sənin chat id-in
+DATABASE_BACKUP_TELEGRAM_BOT_TOKEN=...   # @BotFather'dan
+DATABASE_BACKUP_TELEGRAM_BOT_CHAT_ID=... # senin chat id'in
 ```
-> Təhlükəsizlik üçün chat_id **avtomatik aşkarlanmır** — yalnız göstərdiyin chat-a göndərilir.
-> Chat id-ni tapmaq üçün bot-a `/start` yaz, sonra: `curl "https://api.telegram.org/bot<TOKEN>/getUpdates"`
+> Güvenlik için chat_id **otomatik algılanmaz** — yalnızca belirttiğin chat'e gönderilir.
+> Chat id'ini bulmak için bota `/start` yaz, sonra: `curl "https://api.telegram.org/bot<TOKEN>/getUpdates"`
 
 
-Yeni vakansiya əlavə edildikdə (təsdiq gözləyən):
-1. Adminlərə panel bildirişi gedir
-2. Telegram-a **✅ Təsdiqlə / ❌ Rədd et** düymələri ilə mesaj gedir
-3. Rədd edərsənsə, bot səndən **rədd səbəbini** soruşur və onu saxlayır
+Yeni ilan eklendiğinde (onay bekleyen):
+1. Adminlere panel bildirimi gider
+2. Telegram'a **✅ Onayla / ❌ Reddet** düğmeleriyle mesaj gider
+3. Reddedersen bot senden **red sebebini** sorar ve onu kaydeder
 
-Webhook qeydiyyatı (deploy-dan sonra bir dəfə):
+Webhook kaydı (deploy'dan sonra bir kez):
 ```bash
 php artisan telegram:set-webhook
 ```
 
 
-`activity_logs` və `app_logs` əsas bazada deyil — **`kariyer.kibriskare_logs`** bazasındadır (`logs` bağlantısı).
+`activity_logs` ve `app_logs` ana veritabanında değil — **`kariyer.kibriskare_logs`** veritabanındadır (`logs` bağlantısı).
 `.env`:
 ```
 LOG_DB_DATABASE=kariyer.kibriskare_logs
@@ -87,5 +87,5 @@ LOG_DB_HOST / PORT / USERNAME / PASSWORD
 ## Zamanlanmış tapşırıqlar (cron)
 ```
 promotions:expire  → saatlıq
-news:import        → saatlıq (RSS xəbərləri)
+news:import        → saatlık (RSS haberleri)
 ```

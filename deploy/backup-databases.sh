@@ -24,9 +24,9 @@ mkdir -p "$BACKUP_DIR"
 STAMP="$(date '+%Y-%m-%d_%H-%M-%S')"
 WORK="$(mktemp -d)"
 
-log "Verilənlər bazaları yedəklənir ($DB_HOST:$DB_PORT)"
+log "Veritabanları yedekleniyor ($DB_HOST:$DB_PORT)"
 DBS="$(psql -tAc "SELECT datname FROM pg_database WHERE datistemplate=false AND datallowconn=true" 2>/dev/null || true)"
-[ -z "$DBS" ] && warn "Baza tapılmadı və ya PostgreSQL əlçatmazdır."
+[ -z "$DBS" ] && warn "Veritabanı bulunamadı veya PostgreSQL erişilemez."
 
 COUNT=0
 for db in $DBS; do
@@ -40,21 +40,21 @@ ARCHIVE="$BACKUP_DIR/kariyer.kibriskare-backup-${STAMP}.tar.gz"
 tar -czf "$ARCHIVE" -C "$WORK" . 2>/dev/null || true
 rm -rf "$WORK"
 SIZE="$(du -h "$ARCHIVE" | cut -f1)"
-log "Yedək hazırdır: $ARCHIVE ($SIZE, $COUNT baza)"
+log "Yedek hazır: $ARCHIVE ($SIZE, $COUNT veritabanı)"
 find "$BACKUP_DIR" -name 'kariyer.kibriskare-backup-*.tar.gz' -mtime +"$KEEP_DAYS" -delete 2>/dev/null || true
 
 if [ -z "$TG_TOKEN" ]; then
-  warn "Telegram bot token yoxdur. Yedək yalnız serverdə saxlanıldı."
+  warn "Telegram bot token yok. Yedek yalnızca sunucuda tutuldu."
   exit 0
 fi
 
 if [ -z "$TG_CHAT" ]; then
-  warn "chat_id təyin olunmayıb. .env → DATABASE_BACKUP_TELEGRAM_BOT_CHAT_ID dəyərini yaz."
-  warn "(Təhlükəsizlik: avtomatik aşkarlama qəsdən söndürülüb — yedək yalnız sənin chat_id-nə gedir.)"
+  warn "chat_id tanımlı değil. .env → DATABASE_BACKUP_TELEGRAM_BOT_CHAT_ID değerini yaz."
+  warn "(Güvenlik: otomatik algılama bilinçli kapatıldı — yedek yalnızca senin chat_id'ine gider.)"
   exit 0
 fi
 
-CAPTION="🗄 Kariyer.KibrisKare deploy öncəsi yedək
+CAPTION="🗄 Kariyer.KibrisKare deploy öncesi yedek
 📅 $STAMP
 🗃 $COUNT baza
 📦 $SIZE"
@@ -63,4 +63,4 @@ HTTP=$(curl -s -o /dev/null -w '%{http_code}' \
   -F "chat_id=${TG_CHAT}" -F "document=@${ARCHIVE}" -F "caption=${CAPTION}" \
   "https://api.telegram.org/bot${TG_TOKEN}/sendDocument" || echo 000)
 
-[ "$HTTP" = "200" ] && log "Telegram-a göndərildi ✅" || warn "Telegram göndərişi alınmadı (HTTP $HTTP). Yedək: $ARCHIVE"
+[ "$HTTP" = "200" ] && log "Telegram'a gönderildi ✅" || warn "Telegram gönderilemedi (HTTP $HTTP). Yedek: $ARCHIVE"

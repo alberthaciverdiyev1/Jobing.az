@@ -27,8 +27,8 @@ fix_write_perms() {
 cd "$APP_DIR"
 
 if [ -x "deploy/backup-databases.sh" ]; then
-  log "Verilənlər bazası yedəyi (deploy öncəsi)"
-  bash deploy/backup-databases.sh || echo "⚠ Yedək alınmadı, deploy davam edir"
+  log "Veritabanı yedeği (deploy öncesi)"
+  bash deploy/backup-databases.sh || echo "⚠ Yedek alınamadı, deploy devam ediyor"
 fi
 
 log "Kod çekiliyor ($BRANCH)"
@@ -47,7 +47,7 @@ if [ -n "$NODE_MAJOR" ] && [ "$NODE_MAJOR" -ge 18 ]; then
   sudo -u "$APP_USER" env PATH="/opt/node20/bin:$PATH" npm ci
   sudo -u "$APP_USER" env PATH="/opt/node20/bin:$PATH" npm run build
 else
-  echo "⚠ Node < 18 — commit edilmiş public/build istifadə olunur"
+  echo "⚠ Node < 18 — commit edilmiş public/build kullanılıyor"
 fi
 
 log "storage/bootstrap/cache izinleri"
