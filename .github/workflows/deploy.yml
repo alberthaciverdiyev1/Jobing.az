@@ -39,7 +39,7 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           script_stop: true
           script: |
-            # deploy.sh bu değerleri env'den okur; verilmezse /var/www/kibriskare + deploy kullanıcısına düşer.
+            # deploy.sh bu değerleri env'den okur; verilmezse /var/www/kariyer.kibriskare + deploy kullanıcısına düşer.
             export APP_DIR="${{ secrets.APP_DIR }}"
             export APP_USER="root"
             export PHP_VER="8.4"

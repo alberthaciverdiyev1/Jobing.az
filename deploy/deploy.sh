@@ -10,7 +10,7 @@ set -euo pipefail
 # Kök kullanıcı olarak üretilen faylların qrup (www-data) tərəfindən yazıla bilməsi üçün.
 umask 002
 
-APP_DIR="${APP_DIR:-/var/www/kibriskare}"
+APP_DIR="${APP_DIR:-/var/www/kariyer.kibriskare}"
 PHP_VER="${PHP_VER:-8.3}"
 BRANCH="${BRANCH:-main}"
 APP_USER="${APP_USER:-deploy}"

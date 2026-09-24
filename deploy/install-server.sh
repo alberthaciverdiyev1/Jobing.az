@@ -17,18 +17,18 @@ set -euo pipefail
 # ──────────────────────────── AYARLAR (düzenle) ────────────────────────────
 DOMAIN="${DOMAIN:-kariyer.kibriskare.com}"
 SITE_NAME="${SITE_NAME:-${DOMAIN//./-}}"
-APP_DIR="${APP_DIR:-/var/www/kibriskare}"
+APP_DIR="${APP_DIR:-/var/www/kariyer.kibriskare}"
 APP_USER="${APP_USER:-deploy}"
-DB_NAME="${DB_NAME:-kibriskare}"
-DB_USER="${DB_USER:-kibriskare}"
+DB_NAME="${DB_NAME:-kariyer.kibriskare}"
+DB_USER="${DB_USER:-kariyer.kibriskare}"
 DB_PASS="${DB_PASS:-$(openssl rand -hex 16)}"
-LOG_DB_NAME="${LOG_DB_NAME:-kibriskare_logs}"
-REPO_URL="${REPO_URL:-git@github.com:CHANGE_ME/kibriskare.git}"
+LOG_DB_NAME="${LOG_DB_NAME:-kariyer.kibriskare_logs}"
+REPO_URL="${REPO_URL:-git@github.com:CHANGE_ME/kariyer.kibriskare.git}"
 BRANCH="${BRANCH:-main}"
 PHP_VER="${PHP_VER:-8.3}"
 NODE_MAJOR="${NODE_MAJOR:-20}"
 WITH_SSL="${WITH_SSL:-yes}"          # yes|no
-LE_EMAIL="${LE_EMAIL:-admin@kibriskare.com}"
+LE_EMAIL="${LE_EMAIL:-admin@kariyer.kibriskare.com}"
 # ───────────────────────────────────────────────────────────────────────────
 
 log() { echo -e "\n\033[1;36m▶ $*\033[0m"; }
@@ -80,7 +80,7 @@ chown -R "$APP_USER":"$APP_USER" "$APP_DIR"
 # ── 3. Veritabanı ───────────────────────────────────────────────────────────
 log "PostgreSQL veritabanı"
 sudo -u postgres psql -tc "SELECT 1 FROM pg_roles WHERE rolname='${DB_USER}'" | grep -q 1 \
-  || sudo -u postgres psql -c "CREATE ROLE ${DB_USER} LOGIN PASSWORD '${DB_PASS}';"
+  || sudo -u postgres psql -c "CREATE ROLE \"${DB_USER}\" LOGIN PASSWORD '${DB_PASS}';"
 sudo -u postgres psql -tc "SELECT 1 FROM pg_database WHERE datname='${DB_NAME}'" | grep -q 1 \
   || sudo -u postgres createdb -O "${DB_USER}" "${DB_NAME}"
 
@@ -248,6 +248,6 @@ cat <<INFO
   DB_PASS   : ${DB_PASS}   ← .env içinde, kaydet!
   URL       : https://${DOMAIN}
 
-  Servisler : php${PHP_VER}-fpm, nginx, kibriskare-queue, redis-server, cron(scheduler)
+  Servisler : php${PHP_VER}-fpm, nginx, kariyer.kibriskare-queue, redis-server, cron(scheduler)
   Hepsi boot'ta otomatik başlar; PHP-FPM "ondemand" DEĞİL, sürekli ayakta.
 INFO
