@@ -53,7 +53,7 @@ class SkillSeeder extends Seeder
                         ['slug' => Str::slug($skill).'-'.$cat->id],
                         [
                             'category_id' => $cat->id,
-                            'name' => ['az' => $skill],
+                            'name' => ['tr' => $skill],
                             'order' => $i,
                             'is_active' => true,
                         ]
