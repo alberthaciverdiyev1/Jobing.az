@@ -96,11 +96,12 @@ class GeoIpService
     {
         $code = strtoupper((string) $code);
         $map = [
-            'AZ' => 'Azərbaycan', 'TR' => 'Türkiyə', 'RU' => 'Rusiya', 'US' => 'ABŞ',
-            'GB' => 'Böyük Britaniya', 'DE' => 'Almaniya', 'FR' => 'Fransa', 'UA' => 'Ukrayna',
-            'IR' => 'İran', 'GE' => 'Gürcüstan', 'KZ' => 'Qazaxıstan', 'NL' => 'Hollandiya',
+            'TR' => 'Türkiye', 'CY' => 'Kıbrıs', 'AZ' => 'Azerbaycan', 'RU' => 'Rusya',
+            'US' => 'ABD', 'GB' => 'Birleşik Krallık', 'DE' => 'Almanya', 'FR' => 'Fransa',
+            'UA' => 'Ukrayna', 'IR' => 'İran', 'GE' => 'Gürcistan', 'KZ' => 'Kazakistan',
+            'NL' => 'Hollanda',
         ];
 
-        return $map[$code] ?? ($code ?: 'Naməlum');
+        return $map[$code] ?? ($code ?: 'Bilinmiyor');
     }
 }

@@ -87,13 +87,13 @@ class ResumeResource extends Resource
                             ->label(__('Phone'))
                             ->tel()
                             ->prefixIcon('heroicon-o-phone')
-                            ->placeholder('+994 50 123 45 67'),
+                            ->placeholder('+90 533 000 00 00'),
 
                         Forms\Components\TextInput::make('whatsapp')
                             ->label(__('WhatsApp Number'))
                             ->tel()
                             ->prefixIcon('heroicon-o-chat-bubble-left-right')
-                            ->placeholder('+994 50 123 45 67')
+                            ->placeholder('+90 533 000 00 00')
                             ->helperText(__('Companies can contact you directly via WhatsApp')),
 
                         Forms\Components\TextInput::make('email')

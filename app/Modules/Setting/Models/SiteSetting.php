@@ -70,9 +70,9 @@ class SiteSetting extends Model
         if (! $setting) {
             $setting = self::create([
                 'id' => 1,
-                'email' => 'info@jobing.az',
-                'support_email' => 'support@jobing.az',
-                'phone' => '+994 00 000 00 00',
+                'email' => 'info@kibriskare.com',
+                'support_email' => 'support@kibriskare.com',
+                'phone' => '+90 392 000 00 00',
                 'working_hours' => 'Mon – Fri · 09:00 – 18:00',
                 'tagline' => [
                     'az' => 'Modern iş elanları və karyera platforması',
@@ -87,12 +87,12 @@ class SiteSetting extends Model
                     'ru' => 'Мгновенно откликайтесь на открытые вакансии ведущих компаний в сфере ПО, дизайна, продукта, данных и маркетинга.',
                 ],
                 'address' => [
-                    'az' => 'Bakı, Azərbaycan',
-                    'tr' => 'Bakü, Azerbaycan',
-                    'en' => 'Baku, Azerbaijan',
-                    'ru' => 'Баку, Азербайджан',
+                    'tr' => 'Lefkoşa, KKTC',
+                    'en' => 'Nicosia, TRNC',
+                    'az' => 'Lefkoşa, KKTC',
+                    'ru' => 'Никосия, ТРСК',
                 ],
-                'copyright_text' => 'Jobing.az',
+                'copyright_text' => 'KibrisKare.com',
             ]);
         }
 

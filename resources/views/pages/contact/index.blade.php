@@ -47,7 +47,7 @@
                             <label for="phone" class="block text-xs font-semibold text-gray-700 mb-1.5">{{ __('Phone') }}</label>
                             <input type="tel" id="phone" name="phone" value="{{ old('phone') }}" maxlength="50"
                                    class="w-full px-4 py-2.5 bg-gray-50 hover:bg-white focus:bg-white border border-gray-200 rounded-lg focus:outline-hidden focus:border-primary focus:ring-1 focus:ring-primary text-sm transition"
-                                   placeholder="+994 __ ___ __ __">
+                                   placeholder="+90 392 __ ___ __ __">
                             @error('phone')<p class="text-xs text-red-500 mt-1">{{ $message }}</p>@enderror
                         </div>
 
@@ -102,7 +102,7 @@
                         <i class="fas fa-phone"></i>
                     </div>
                     <p class="text-xs text-gray-400 font-medium">{{ __('Phone') }}</p>
-                    <p class="text-sm font-semibold text-gray-800 mt-1">{{ $siteSetting->phone ?: '+994 00 000 00 00' }}</p>
+                    <p class="text-sm font-semibold text-gray-800 mt-1">{{ $siteSetting->phone ?: '+90 392 000 00 00' }}</p>
                 </div>
                 <div class="bg-white rounded-xl border border-gray-200 p-5 text-center shadow-2xs">
                     <div class="w-10 h-10 bg-orange-50 text-primary rounded-lg flex items-center justify-center mx-auto mb-3">

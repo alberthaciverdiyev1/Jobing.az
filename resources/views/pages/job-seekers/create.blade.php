@@ -182,7 +182,7 @@
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-gray-700 mb-1.5">{{ __('Phone') }}</label>
-                        <input type="text" name="contact_phone" value="{{ old('contact_phone') }}" maxlength="50" placeholder="+994 __ ___ __ __"
+                        <input type="text" name="contact_phone" value="{{ old('contact_phone') }}" maxlength="50" placeholder="+90 392 __ ___ __ __"
                                class="w-full px-4 py-2.5 bg-gray-50 hover:bg-white focus:bg-white border border-gray-200 rounded-lg focus:outline-hidden focus:border-primary focus:ring-1 focus:ring-primary text-sm transition">
                     </div>
                 </div>
