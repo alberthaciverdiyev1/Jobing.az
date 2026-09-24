@@ -39,7 +39,7 @@ class SkillSeeder extends Seeder
         $created = 0;
 
         foreach ($parents as $parent) {
-            $skills = $domain[$parent->name] ?? ($domain['Müxtəlif'] ?? []);
+            $skills = $domain[$parent->getTranslation('name', 'az')] ?? ($domain['Müxtəlif'] ?? []);
             if (empty($skills)) {
                 continue;
             }

@@ -6,7 +6,7 @@
 set -euo pipefail
 
 ENV_FILE="${ENV_FILE:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/.env}"
-BACKUP_DIR="${BACKUP_DIR:-/var/backups/jobing}"
+BACKUP_DIR="${BACKUP_DIR:-/var/backups/kibriskare}"
 KEEP_DAYS="${KEEP_DAYS:-14}"
 
 log() { echo -e "\033[1;36m▶ $*\033[0m"; }
@@ -38,12 +38,12 @@ for db in $DBS; do
   COUNT=$((COUNT+1))
 done
 
-ARCHIVE="$BACKUP_DIR/jobing-backup-${STAMP}.tar.gz"
+ARCHIVE="$BACKUP_DIR/kibriskare-backup-${STAMP}.tar.gz"
 tar -czf "$ARCHIVE" -C "$WORK" . 2>/dev/null || true
 rm -rf "$WORK"
 SIZE="$(du -h "$ARCHIVE" | cut -f1)"
 log "Yedək hazırdır: $ARCHIVE ($SIZE, $COUNT baza)"
-find "$BACKUP_DIR" -name 'jobing-backup-*.tar.gz' -mtime +"$KEEP_DAYS" -delete 2>/dev/null || true
+find "$BACKUP_DIR" -name 'kibriskare-backup-*.tar.gz' -mtime +"$KEEP_DAYS" -delete 2>/dev/null || true
 
 if [ -z "$TG_TOKEN" ]; then
   warn "Telegram bot token yoxdur. Yedək yalnız serverdə saxlanıldı."
@@ -56,7 +56,7 @@ if [ -z "$TG_CHAT" ]; then
   exit 0
 fi
 
-CAPTION="🗄 Jobing deploy öncəsi yedək
+CAPTION="🗄 KibrisKare deploy öncəsi yedək
 📅 $STAMP
 🗃 $COUNT baza
 📦 $SIZE"

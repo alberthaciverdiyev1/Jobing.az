@@ -21,7 +21,7 @@ class CategorySeeder extends Seeder
                     'tr' => 'Pazarlama, Reklam ve PR',
                     'ru' => 'Маркетинг, Реклама и PR',
                 ],
-                'slug' => 'marketinq-reklam-pr',
+                'slug' => 'pazarlama-reklam-ve-pr',
                 'icon' => 'fa-bullhorn',
                 'children' => [
                     [
@@ -31,7 +31,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Pazarlama Müdürü / Dijital Pazarlamacı',
                             'ru' => 'Маркетинг-менеджер / Digital-маркетолог',
                         ],
-                        'slug' => 'marketinq-meneceri-reqemsal-marketoloq',
+                        'slug' => 'pazarlama-muduru-dijital-pazarlamaci',
                     ],
                     [
                         'name' => [
@@ -40,7 +40,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'PR Müdürü',
                             'ru' => 'PR-менеджер',
                         ],
-                        'slug' => 'pr-menecer',
+                        'slug' => 'pr-muduru',
                     ],
                     [
                         'name' => [
@@ -49,7 +49,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Pazarlama ve PR Direktörü (CMO)',
                             'ru' => 'Директор по маркетингу и PR (CMO)',
                         ],
-                        'slug' => 'marketinq-ve-pr-direktoru-cmo',
+                        'slug' => 'pazarlama-ve-pr-direktoru-cmo',
                     ],
                     [
                         'name' => [
@@ -58,7 +58,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Metin Yazarı, Editör',
                             'ru' => 'Копирайтер, автор текстов, редактор',
                         ],
-                        'slug' => 'kopirayter-metn-yazari-redaktor',
+                        'slug' => 'metin-yazari-editor',
                     ],
                     [
                         'name' => [
@@ -67,7 +67,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'İçerik Yöneticisi',
                             'ru' => 'Контент-менеджер',
                         ],
-                        'slug' => 'kontent-menecer',
+                        'slug' => 'icerik-yoneticisi',
                     ],
                     [
                         'name' => [
@@ -76,7 +76,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Pazarlama Analisti',
                             'ru' => 'Маркетинговый аналитик',
                         ],
-                        'slug' => 'marketinq-analitiki',
+                        'slug' => 'pazarlama-analisti',
                     ],
                     [
                         'name' => [
@@ -85,7 +85,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Sanat Yönetmeni, Kreatif Direktör',
                             'ru' => 'Арт-директор, креативный директор',
                         ],
-                        'slug' => 'art-direktor-kreativ-direktor',
+                        'slug' => 'sanat-yonetmeni-kreatif-direktor',
                     ],
                     [
                         'name' => [
@@ -94,7 +94,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'SMM Yöneticisi / Sosyal Medya Uzmanı',
                             'ru' => 'SMM-менеджер / Специалист по соцсетям',
                         ],
-                        'slug' => 'smm-menecer-kontent-menecer',
+                        'slug' => 'smm-yoneticisi-sosyal-medya-uzmani',
                     ],
                     [
                         'name' => [
@@ -103,7 +103,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Grafik Tasarımcı',
                             'ru' => 'Графический дизайнер',
                         ],
-                        'slug' => 'qrafik-dizayner-marketinq',
+                        'slug' => 'grafik-tasarimci',
                     ],
                 ],
             ],
@@ -116,7 +116,7 @@ class CategorySeeder extends Seeder
                     'tr' => 'Finans ve Muhasebe',
                     'ru' => 'Финансы и Бухгалтерия',
                 ],
-                'slug' => 'maliyye-ve-muhasibatliq',
+                'slug' => 'finans-ve-muhasebe',
                 'icon' => 'fa-coins',
                 'children' => [
                     [
@@ -126,7 +126,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Kredi Uzmanı',
                             'ru' => 'Кредитный специалист',
                         ],
-                        'slug' => 'kredit-mutexessisi',
+                        'slug' => 'kredi-uzmani',
                     ],
                     [
                         'name' => [
@@ -135,7 +135,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Denetçi / Denetmen',
                             'ru' => 'Аудитор',
                         ],
-                        'slug' => 'auditor',
+                        'slug' => 'denetci-denetmen',
                     ],
                     [
                         'name' => [
@@ -144,7 +144,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Muhasebeci',
                             'ru' => 'Бухгалтер',
                         ],
-                        'slug' => 'muhasib',
+                        'slug' => 'muhasebeci',
                     ],
                     [
                         'name' => [
@@ -153,7 +153,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Finansal Analist / Yatırım Analisti',
                             'ru' => 'Финансовый аналитик / Инвестиционный аналитик',
                         ],
-                        'slug' => 'maliyye-analitiki-investisiya-analitiki',
+                        'slug' => 'finansal-analist-yatirim-analisti',
                     ],
                     [
                         'name' => [
@@ -162,7 +162,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Kasiyer',
                             'ru' => 'Кассир',
                         ],
-                        'slug' => 'kassir-maliyye',
+                        'slug' => 'kasiyer',
                     ],
                     [
                         'name' => [
@@ -171,7 +171,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'İktisatçı / Ekonomist',
                             'ru' => 'Экономист',
                         ],
-                        'slug' => 'iqtisadci',
+                        'slug' => 'iktisatci-ekonomist',
                     ],
                     [
                         'name' => [
@@ -180,7 +180,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Finans Müdürü',
                             'ru' => 'Финансовый менеджер',
                         ],
-                        'slug' => 'maliyye-meneceri',
+                        'slug' => 'finans-muduru',
                     ],
                     [
                         'name' => [
@@ -189,7 +189,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Uyum (Compliance) Müdürü',
                             'ru' => 'Комплаенс-менеджер',
                         ],
-                        'slug' => 'komplayens-meneceri',
+                        'slug' => 'uyum-compliance-muduru',
                     ],
                     [
                         'name' => [
@@ -207,7 +207,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Tahsilat Uzmanı',
                             'ru' => 'Специалист по взысканию задолженности',
                         ],
-                        'slug' => 'borc-yigimi-mutexessisi',
+                        'slug' => 'tahsilat-uzmani',
                     ],
                     [
                         'name' => [
@@ -216,7 +216,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Mali İşler Direktörü (CFO)',
                             'ru' => 'Финансовый директор (CFO)',
                         ],
-                        'slug' => 'maliyye-direktoru-cfo',
+                        'slug' => 'mali-isler-direktoru-cfo',
                     ],
                     [
                         'name' => [
@@ -225,7 +225,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Diğer Finans Rolleri',
                             'ru' => 'Другое в финансах',
                         ],
-                        'slug' => 'diger-maliyye',
+                        'slug' => 'diger-finans-rolleri',
                     ],
                 ],
             ],
@@ -238,7 +238,7 @@ class CategorySeeder extends Seeder
                     'tr' => 'Bilişim Teknolojileri (IT)',
                     'ru' => 'Информационные технологии (IT)',
                 ],
-                'slug' => 'informasiya-texnologiyalari',
+                'slug' => 'bilisim-teknolojileri-it',
                 'icon' => 'fa-laptop-code',
                 'children' => [
                     [
@@ -248,7 +248,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Yazılım Geliştirme & Programlama',
                             'ru' => 'Программирование и разработка ПО',
                         ],
-                        'slug' => 'proqramlasdirma',
+                        'slug' => 'yazilim-gelistirme-programlama',
                     ],
                     [
                         'name' => [
@@ -257,7 +257,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Sistem Yönetimi & DevOps',
                             'ru' => 'Системное администрирование & DevOps',
                         ],
-                        'slug' => 'sistem-idareetmesi',
+                        'slug' => 'sistem-yonetimi-devops',
                     ],
                     [
                         'name' => [
@@ -266,7 +266,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Veritabanı Yönetimi ve Geliştirme (DBA)',
                             'ru' => 'Администрирование и разработка баз данных',
                         ],
-                        'slug' => 'melumat-bazasinin-idare-edilmesi-ve-inkisafi',
+                        'slug' => 'veritabani-yonetimi-ve-gelistirme-dba',
                     ],
                     [
                         'name' => [
@@ -275,7 +275,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'IT Uzmanı / BT Danışmanı',
                             'ru' => 'IT-специалист / IT-консультант',
                         ],
-                        'slug' => 'it-mutexessisi-meslehetci',
+                        'slug' => 'it-uzmani-bt-danismani',
                     ],
                     [
                         'name' => [
@@ -284,7 +284,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'BT Proje Yönetimi / Scrum Master',
                             'ru' => 'Управление IT-проектами / Scrum Master',
                         ],
-                        'slug' => 'it-layihelerin-idare-edilmesi',
+                        'slug' => 'bt-proje-yonetimi-scrum-master',
                     ],
                     [
                         'name' => [
@@ -293,7 +293,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Donanım ve Teknik Destek Uzmanı',
                             'ru' => 'Специалист по аппаратному обеспечению и техподдержке',
                         ],
-                        'slug' => 'texniki-avadanliq-mutexessisi',
+                        'slug' => 'donanim-ve-teknik-destek-uzmani',
                     ],
                     [
                         'name' => [
@@ -302,7 +302,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Diğer BT Rolleri',
                             'ru' => 'Другое в IT',
                         ],
-                        'slug' => 'diger-it',
+                        'slug' => 'diger-bt-rolleri',
                     ],
                 ],
             ],
@@ -315,7 +315,7 @@ class CategorySeeder extends Seeder
                     'tr' => 'İdari Kadro ve İK',
                     'ru' => 'Административный персонал и HR',
                 ],
-                'slug' => 'inzibati-heyet',
+                'slug' => 'idari-kadro-ve-ik',
                 'icon' => 'fa-user-tie',
                 'children' => [
                     [
@@ -325,7 +325,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'İdari Destek',
                             'ru' => 'Административная поддержка',
                         ],
-                        'slug' => 'inzibati-destek',
+                        'slug' => 'idari-destek',
                     ],
                     [
                         'name' => [
@@ -334,7 +334,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Yönetim / Operasyon',
                             'ru' => 'Менеджмент / Операции',
                         ],
-                        'slug' => 'menecment-inzibati',
+                        'slug' => 'yonetim-operasyon',
                     ],
                     [
                         'name' => [
@@ -343,7 +343,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Ofis Müdürü',
                             'ru' => 'Офис-менеджер',
                         ],
-                        'slug' => 'ofis-meneceri',
+                        'slug' => 'ofis-muduru',
                     ],
                     [
                         'name' => [
@@ -352,7 +352,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Sekreter, Resepsiyonist, Asistan',
                             'ru' => 'Секретарь, ресепшионист, помощник',
                         ],
-                        'slug' => 'katibe-resepisn-komekci',
+                        'slug' => 'sekreter-resepsiyonist-asistan',
                     ],
                     [
                         'name' => [
@@ -361,7 +361,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'İnsan Kaynakları (İK) ve İşe Alım',
                             'ru' => 'Управление персоналом (HR) и рекрутинг',
                         ],
-                        'slug' => 'heyetin-idareolunmasi',
+                        'slug' => 'insan-kaynaklari-ik-ve-ise-alim',
                     ],
                     [
                         'name' => [
@@ -370,7 +370,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Yönetici / Administrator',
                             'ru' => 'Администратор',
                         ],
-                        'slug' => 'administrator-inzibati',
+                        'slug' => 'yonetici-administrator',
                     ],
                     [
                         'name' => [
@@ -379,7 +379,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Tercüman / Çevirmen',
                             'ru' => 'Переводчик',
                         ],
-                        'slug' => 'tercumeci',
+                        'slug' => 'tercuman-cevirmen',
                     ],
                     [
                         'name' => [
@@ -388,7 +388,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Diğer İdari Roller',
                             'ru' => 'Другое в административной сфере',
                         ],
-                        'slug' => 'diger-inzibati',
+                        'slug' => 'diger-idari-roller',
                     ],
                 ],
             ],
@@ -401,7 +401,7 @@ class CategorySeeder extends Seeder
                     'tr' => 'Satış ve Müşteri Hizmetleri',
                     'ru' => 'Продажи и Клиентский сервис',
                 ],
-                'slug' => 'satis-ve-musteri-xidmeti',
+                'slug' => 'satis-ve-musteri-hizmetleri',
                 'icon' => 'fa-headset',
                 'children' => [
                     [
@@ -411,7 +411,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Satış Uzmanı',
                             'ru' => 'Специалист по продажам',
                         ],
-                        'slug' => 'satis-uzre-mutexessis',
+                        'slug' => 'satis-uzmani',
                     ],
                     [
                         'name' => [
@@ -420,7 +420,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Satış Müdürü / Yöneticisi',
                             'ru' => 'Менеджер по продажам',
                         ],
-                        'slug' => 'satis-meneceri',
+                        'slug' => 'satis-muduru-yoneticisi',
                     ],
                     [
                         'name' => [
@@ -429,7 +429,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Satış Danışmanı',
                             'ru' => 'Продавец-консультант',
                         ],
-                        'slug' => 'satis-meslehetcisi',
+                        'slug' => 'satis-danismani',
                     ],
                     [
                         'name' => [
@@ -438,7 +438,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Müşteri Yöneticisi / Portföy Yöneticisi',
                             'ru' => 'Менеджер по работе с клиентами',
                         ],
-                        'slug' => 'musteri-meneceri',
+                        'slug' => 'musteri-yoneticisi-portfoy-yoneticisi',
                     ],
                     [
                         'name' => [
@@ -456,7 +456,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Sigorta Temsilcisi / Acentesi',
                             'ru' => 'Страховой агент',
                         ],
-                        'slug' => 'sigorta-agenti',
+                        'slug' => 'sigorta-temsilcisi-acentesi',
                     ],
                     [
                         'name' => [
@@ -465,7 +465,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Gayrimenkul Danışmanı / Emlakçı',
                             'ru' => 'Агент по недвижимости / Риелтор',
                         ],
-                        'slug' => 'dasinmaz-emlak-agenti-makler',
+                        'slug' => 'gayrimenkul-danismani-emlakci',
                     ],
                     [
                         'name' => [
@@ -474,7 +474,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Kasiyer Operatörü',
                             'ru' => 'Кассир-оператор',
                         ],
-                        'slug' => 'kassir-operator',
+                        'slug' => 'kasiyer-operatoru',
                     ],
                     [
                         'name' => [
@@ -483,7 +483,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Satış Departmanı Başkanı',
                             'ru' => 'Руководитель отдела продаж',
                         ],
-                        'slug' => 'satis-sobesinin-rehberi',
+                        'slug' => 'satis-departmani-baskani',
                     ],
                     [
                         'name' => [
@@ -492,7 +492,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Şube Müdürü / Mağaza Müdürü',
                             'ru' => 'Директор филиала / Управляющий магазином',
                         ],
-                        'slug' => 'filial-rehberi-magaza-rehberi',
+                        'slug' => 'sube-muduru-magaza-muduru',
                     ],
                     [
                         'name' => [
@@ -501,7 +501,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Ticari Direktör (CCO)',
                             'ru' => 'Коммерческий директор (CCO)',
                         ],
-                        'slug' => 'kommersiya-direktoru-cco',
+                        'slug' => 'ticari-direktor-cco',
                     ],
                 ],
             ],
@@ -514,7 +514,7 @@ class CategorySeeder extends Seeder
                     'tr' => 'Tasarım ve Kreatif Sanatlar',
                     'ru' => 'Дизайн и Искусство',
                 ],
-                'slug' => 'dizayn',
+                'slug' => 'tasarim-ve-kreatif-sanatlar',
                 'icon' => 'fa-palette',
                 'children' => [
                     [
@@ -524,7 +524,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Web Tasarımı (UI/UX)',
                             'ru' => 'Веб-дизайн (UI/UX)',
                         ],
-                        'slug' => 'veb-dizayn-ui-ux',
+                        'slug' => 'web-tasarimi-ui-ux',
                     ],
                     [
                         'name' => [
@@ -533,7 +533,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Mimar / İç Mimar',
                             'ru' => 'Архитектор / Дизайнер интерьера',
                         ],
-                        'slug' => 'memar-interyer-dizayni',
+                        'slug' => 'mimar-ic-mimar',
                     ],
                     [
                         'name' => [
@@ -542,7 +542,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Moda & Giyim Tasarımcısı',
                             'ru' => 'Дизайнер одежды и моды',
                         ],
-                        'slug' => 'geyim-dizayni',
+                        'slug' => 'moda-giyim-tasarimcisi',
                     ],
                     [
                         'name' => [
@@ -551,7 +551,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Sanatçı / İllüstratör',
                             'ru' => 'Художник / Иллюстратор',
                         ],
-                        'slug' => 'ressam-illustrator',
+                        'slug' => 'sanatci-illustrator',
                     ],
                     [
                         'name' => [
@@ -560,7 +560,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Diğer Tasarım Rolleri',
                             'ru' => 'Другое в дизайне',
                         ],
-                        'slug' => 'diger-dizayn',
+                        'slug' => 'diger-tasarim-rolleri',
                     ],
                 ],
             ],
@@ -573,7 +573,7 @@ class CategorySeeder extends Seeder
                     'tr' => 'Hukuk ve Yargı',
                     'ru' => 'Юриспруденция и Право',
                 ],
-                'slug' => 'huquqsunasliq',
+                'slug' => 'hukuk-ve-yargi',
                 'icon' => 'fa-scale-balanced',
                 'children' => [
                     [
@@ -583,7 +583,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Hukuk Müşaviri / Avukat',
                             'ru' => 'Юрист / Юрисконсульт',
                         ],
-                        'slug' => 'huquqsunas-legal',
+                        'slug' => 'hukuk-musaviri-avukat',
                     ],
                     [
                         'name' => [
@@ -592,7 +592,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Dava Vekili / Avukat',
                             'ru' => 'Адвокат',
                         ],
-                        'slug' => 'vekil-advocate',
+                        'slug' => 'dava-vekili-avukat',
                     ],
                     [
                         'name' => [
@@ -601,7 +601,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Ceza Hukuku Uzmanı',
                             'ru' => 'Специалист по уголовному праву',
                         ],
-                        'slug' => 'cinayet-huququ-specialist',
+                        'slug' => 'ceza-hukuku-uzmani',
                     ],
                     [
                         'name' => [
@@ -610,7 +610,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Diğer Hukuk Rolleri',
                             'ru' => 'Другое в юриспруденции',
                         ],
-                        'slug' => 'diger-huquq',
+                        'slug' => 'diger-hukuk-rolleri',
                     ],
                 ],
             ],
@@ -623,7 +623,7 @@ class CategorySeeder extends Seeder
                     'tr' => 'Eğitim ve Bilim',
                     'ru' => 'Образование и Наука',
                 ],
-                'slug' => 'tehsil-ve-elm',
+                'slug' => 'egitim-ve-bilim',
                 'icon' => 'fa-graduation-cap',
                 'children' => [
                     [
@@ -633,7 +633,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Okul Öğretmenliği',
                             'ru' => 'Школьное преподавание',
                         ],
-                        'slug' => 'mekteb-tedrisi',
+                        'slug' => 'okul-ogretmenligi',
                     ],
                     [
                         'name' => [
@@ -642,7 +642,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Üniversite Akademik Kadro / Eğitmen',
                             'ru' => 'Преподавание в ВУЗе / Профессура',
                         ],
-                        'slug' => 'universitet-tedrisi',
+                        'slug' => 'universite-akademik-kadro-egitmen',
                     ],
                     [
                         'name' => [
@@ -651,7 +651,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Özel Ders Öğretmeni / Rehber',
                             'ru' => 'Репетитор / Частный преподаватель',
                         ],
-                        'slug' => 'repetitor',
+                        'slug' => 'ozel-ders-ogretmeni-rehber',
                     ],
                     [
                         'name' => [
@@ -660,7 +660,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Özel Eğitim / Kurumsal Eğitmen',
                             'ru' => 'Специальное образование / Корпоративный тренер',
                         ],
-                        'slug' => 'xususi-tehsil-telim',
+                        'slug' => 'ozel-egitim-kurumsal-egitmen',
                     ],
                     [
                         'name' => [
@@ -669,7 +669,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Diğer Eğitim Rolleri',
                             'ru' => 'Другое в образовании',
                         ],
-                        'slug' => 'diger-tehsil',
+                        'slug' => 'diger-egitim-rolleri',
                     ],
                 ],
             ],
@@ -682,7 +682,7 @@ class CategorySeeder extends Seeder
                     'tr' => 'Tarım ve Çevre',
                     'ru' => 'Сельское хозяйство и Экология',
                 ],
-                'slug' => 'kend-teserrufati',
+                'slug' => 'tarim-ve-cevre',
                 'icon' => 'fa-seedling',
                 'children' => [
                     [
@@ -692,7 +692,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Ziraat Mühendisi / Agronom',
                             'ru' => 'Агроном',
                         ],
-                        'slug' => 'aqronom',
+                        'slug' => 'ziraat-muhendisi-agronom',
                     ],
                     [
                         'name' => [
@@ -701,7 +701,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Jeoloji ve Çevre Bilimi',
                             'ru' => 'Геология и охрана окружающей среды',
                         ],
-                        'slug' => 'geologiya-ve-etraf-muhit',
+                        'slug' => 'jeoloji-ve-cevre-bilimi',
                     ],
                     [
                         'name' => [
@@ -710,7 +710,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Gıda & Tarım Teknologu',
                             'ru' => 'Технолог пищевого и сельского хозяйства',
                         ],
-                        'slug' => 'texnoloq-kend-teserrufati',
+                        'slug' => 'gida-tarim-teknologu',
                     ],
                     [
                         'name' => [
@@ -719,7 +719,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Bahçıvan / Peyzajcı',
                             'ru' => 'Садовник / Озеленитель',
                         ],
-                        'slug' => 'bagban',
+                        'slug' => 'bahcivan-peyzajci',
                     ],
                     [
                         'name' => [
@@ -728,7 +728,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Diğer Tarım Rolleri',
                             'ru' => 'Другое в сельском хозяйстве',
                         ],
-                        'slug' => 'diger-kend-teserrufati',
+                        'slug' => 'diger-tarim-rolleri',
                     ],
                 ],
             ],
@@ -741,7 +741,7 @@ class CategorySeeder extends Seeder
                     'tr' => 'Hizmet Personeli',
                     'ru' => 'Обслуживающий персонал',
                 ],
-                'slug' => 'xidmet-personali',
+                'slug' => 'hizmet-personeli',
                 'icon' => 'fa-hands-helping',
                 'children' => [
                     [
@@ -751,7 +751,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Temizlik Görevlisi',
                             'ru' => 'Уборщица / Клинер',
                         ],
-                        'slug' => 'xadime-service',
+                        'slug' => 'temizlik-gorevlisi',
                     ],
                     [
                         'name' => [
@@ -760,7 +760,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Bakıcı / Dadı',
                             'ru' => 'Няня / Сиделка',
                         ],
-                        'slug' => 'daye',
+                        'slug' => 'bakici-dadi',
                     ],
                     [
                         'name' => [
@@ -769,7 +769,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Vasıfsız İşçi / Beden İşçisi',
                             'ru' => 'Разнорабочий / Грузчик',
                         ],
-                        'slug' => 'fehle-worker',
+                        'slug' => 'vasifsiz-isci-beden-iscisi',
                     ],
                     [
                         'name' => [
@@ -778,7 +778,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Güvenlik Görevlisi',
                             'ru' => 'Служба охраны / Охранник',
                         ],
-                        'slug' => 'muhafize-xidmeti',
+                        'slug' => 'guvenlik-gorevlisi',
                     ],
                     [
                         'name' => [
@@ -787,7 +787,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Kurye / Dağıtım Görevlisi',
                             'ru' => 'Курьер / Доставщик',
                         ],
-                        'slug' => 'kuryer-service',
+                        'slug' => 'kurye-dagitim-gorevlisi',
                     ],
                     [
                         'name' => [
@@ -796,7 +796,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Depo Elemanı / Depocu',
                             'ru' => 'Кладовщик / Работник склада',
                         ],
-                        'slug' => 'anbardar-service',
+                        'slug' => 'depo-elemani-depocu',
                     ],
                     [
                         'name' => [
@@ -805,7 +805,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Çağrı Merkezi ve Destek Uzmanı',
                             'ru' => 'Оператор колл-центра, специалист поддержки',
                         ],
-                        'slug' => 'cagri-merkezi-ve-musteri-xidmetleri',
+                        'slug' => 'cagri-merkezi-ve-destek-uzmani',
                     ],
                     [
                         'name' => [
@@ -814,7 +814,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Diğer Hizmet Rolleri',
                             'ru' => 'Другой обслуживающий персонал',
                         ],
-                        'slug' => 'diger-xidmet',
+                        'slug' => 'diger-hizmet-rolleri',
                     ],
                 ],
             ],
@@ -827,7 +827,7 @@ class CategorySeeder extends Seeder
                     'tr' => 'Tıp ve Eczacılık',
                     'ru' => 'Медицина и Фармацевтика',
                 ],
-                'slug' => 'tibb-ve-eczaciliq',
+                'slug' => 'tip-ve-eczacilik',
                 'icon' => 'fa-stethoscope',
                 'children' => [
                     [
@@ -837,7 +837,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Doktor / Hekim',
                             'ru' => 'Врач / Доктор',
                         ],
-                        'slug' => 'hekim',
+                        'slug' => 'doktor-hekim',
                     ],
                     [
                         'name' => [
@@ -846,7 +846,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Sağlık Personeli (Hemşire / Hasta Bakıcı)',
                             'ru' => 'Медицинский персонал (Медсестра / Медбрат)',
                         ],
-                        'slug' => 'tibbi-personal',
+                        'slug' => 'saglik-personeli-hemsire-hasta-bakici',
                     ],
                     [
                         'name' => [
@@ -855,7 +855,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Tıbbi Satış Mümessili / Eczacı',
                             'ru' => 'Медицинский представитель / Фармацевт',
                         ],
-                        'slug' => 'tibbi-numayende-eczaci',
+                        'slug' => 'tibbi-satis-mumessili-eczaci',
                     ],
                     [
                         'name' => [
@@ -864,7 +864,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Laborant / Laboratuvar Teknikeri',
                             'ru' => 'Лаборант / Техник лаборатории',
                         ],
-                        'slug' => 'laborant',
+                        'slug' => 'laborant-laboratuvar-teknikeri',
                     ],
                     [
                         'name' => [
@@ -873,7 +873,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Veteriner Hekim',
                             'ru' => 'Ветеринарный врач',
                         ],
-                        'slug' => 'baytarliq-hekimi',
+                        'slug' => 'veteriner-hekim',
                     ],
                 ],
             ],
@@ -886,7 +886,7 @@ class CategorySeeder extends Seeder
                     'tr' => 'Çeşitli & Genel',
                     'ru' => 'Разное & Общее',
                 ],
-                'slug' => 'muxtelif',
+                'slug' => 'cesitli-genel',
                 'icon' => 'fa-cubes',
                 'children' => [
                     [
@@ -896,7 +896,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Gazetecilik ve Medya',
                             'ru' => 'Журналистика и СМИ',
                         ],
-                        'slug' => 'jurnalistika-ve-media',
+                        'slug' => 'gazetecilik-ve-medya',
                     ],
                     [
                         'name' => [
@@ -905,7 +905,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Öğrenciler ve Stajyerler İçin',
                             'ru' => 'Для студентов и стажеров',
                         ],
-                        'slug' => 'telebeler-ve-tecrubeciler-ucun',
+                        'slug' => 'ogrenciler-ve-stajyerler-icin',
                     ],
                 ],
             ],
@@ -918,7 +918,7 @@ class CategorySeeder extends Seeder
                     'tr' => 'Turizm, Otelcilik ve Restoran (HoReCa)',
                     'ru' => 'Туризм, Отели и Рестораны (HoReCa)',
                 ],
-                'slug' => 'turizm-oteller-restoranlar',
+                'slug' => 'turizm-otelcilik-ve-restoran-horeca',
                 'icon' => 'fa-utensils',
                 'children' => [
                     [
@@ -928,7 +928,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Restoran İşletmeciliği',
                             'ru' => 'Ресторанный бизнес',
                         ],
-                        'slug' => 'restoran-isi',
+                        'slug' => 'restoran-isletmeciligi',
                     ],
                     [
                         'name' => [
@@ -937,7 +937,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Turizm ve Otelcilik',
                             'ru' => 'Туризм и гостиничное дело',
                         ],
-                        'slug' => 'turizm-ve-mehmanxana-isi',
+                        'slug' => 'turizm-ve-otelcilik',
                     ],
                     [
                         'name' => [
@@ -946,7 +946,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Turizm Müdürü / Seyahat Danışmanı',
                             'ru' => 'Менеджер по туризму / Турагент',
                         ],
-                        'slug' => 'turizm-meneceri',
+                        'slug' => 'turizm-muduru-seyahat-danismani',
                     ],
                     [
                         'name' => [
@@ -955,7 +955,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Restoran Müdürü',
                             'ru' => 'Управляющий рестораном',
                         ],
-                        'slug' => 'restoran-meneceri',
+                        'slug' => 'restoran-muduru',
                     ],
                     [
                         'name' => [
@@ -964,7 +964,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Garson, Barmen, Barista',
                             'ru' => 'Официант, бармен, бариста',
                         ],
-                        'slug' => 'ofisiant-barmen-barista',
+                        'slug' => 'garson-barmen-barista',
                     ],
                     [
                         'name' => [
@@ -973,7 +973,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Aşçı, Fırıncı, Pastacı',
                             'ru' => 'Повар, пекарь, кондитер',
                         ],
-                        'slug' => 'aspaz-corekci-sirniyyatci',
+                        'slug' => 'asci-firinci-pastaci',
                     ],
                     [
                         'name' => [
@@ -982,7 +982,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Yönetici (Otel / Restoran)',
                             'ru' => 'Администратор (Отель / Ресторан)',
                         ],
-                        'slug' => 'administrator-turizm',
+                        'slug' => 'yonetici-otel-restoran',
                     ],
                     [
                         'name' => [
@@ -991,7 +991,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Host / Hostes',
                             'ru' => 'Хостес',
                         ],
-                        'slug' => 'hostes',
+                        'slug' => 'host-hostes',
                     ],
                     [
                         'name' => [
@@ -1000,7 +1000,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Kat Hizmetleri / Temizlikçi (Otel)',
                             'ru' => 'Горничная / Уборщик (Отель)',
                         ],
-                        'slug' => 'temizlik-uzre-xidmetci-xadime-otel',
+                        'slug' => 'kat-hizmetleri-temizlikci-otel',
                     ],
                 ],
             ],
@@ -1013,7 +1013,7 @@ class CategorySeeder extends Seeder
                     'tr' => 'Spor Salonları, Fitness ve Güzellik Merkezleri',
                     'ru' => 'Спортзалы, Фитнес и Салоны красоты',
                 ],
-                'slug' => 'idman-zallari-fitness-gozellik-salonlari',
+                'slug' => 'spor-salonlari-fitness-ve-guzellik-merkezleri',
                 'icon' => 'fa-dumbbell',
                 'children' => [
                     [
@@ -1023,7 +1023,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'SPA ve Güzellik',
                             'ru' => 'SPA и косметология',
                         ],
-                        'slug' => 'spa-ve-gozellik',
+                        'slug' => 'spa-ve-guzellik',
                     ],
                     [
                         'name' => [
@@ -1032,7 +1032,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Kuaför, Berber',
                             'ru' => 'Парикмахер, барбер',
                         ],
-                        'slug' => 'sac-ustasi-berber',
+                        'slug' => 'kuafor-berber',
                     ],
                     [
                         'name' => [
@@ -1041,7 +1041,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Fitness Eğitmeni, Spor Antrenörü',
                             'ru' => 'Фитнес-тренер, инструктор тренажерного зала',
                         ],
-                        'slug' => 'fitnes-mesqcisi-idman-zali-telimatcisi',
+                        'slug' => 'fitness-egitmeni-spor-antrenoru',
                     ],
                     [
                         'name' => [
@@ -1050,7 +1050,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Tırnak Uzmanı / Manikürist',
                             'ru' => 'Мастер маникюра и педикюра',
                         ],
-                        'slug' => 'dirnaq-ustasi',
+                        'slug' => 'tirnak-uzmani-manikurist',
                     ],
                     [
                         'name' => [
@@ -1059,7 +1059,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Masör / Masöz',
                             'ru' => 'Массажист',
                         ],
-                        'slug' => 'masajci',
+                        'slug' => 'masor-masoz',
                     ],
                     [
                         'name' => [
@@ -1068,7 +1068,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Güzellik Uzmanı / Kozmetolog',
                             'ru' => 'Косметолог',
                         ],
-                        'slug' => 'kosmetoloq',
+                        'slug' => 'guzellik-uzmani-kozmetolog',
                     ],
                 ],
             ],
@@ -1081,7 +1081,7 @@ class CategorySeeder extends Seeder
                     'tr' => 'Ulaştırma, Taşımacılık ve Lojistik',
                     'ru' => 'Транспорт, Перевозки и Логистика',
                 ],
-                'slug' => 'neqliyyat-dasinma-ve-logistika',
+                'slug' => 'ulastirma-tasimacilik-ve-lojistik',
                 'icon' => 'fa-truck-fast',
                 'children' => [
                     [
@@ -1091,7 +1091,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Şoför / Sürücü',
                             'ru' => 'Водитель / Шофер',
                         ],
-                        'slug' => 'surucu-driver',
+                        'slug' => 'sofor-surucu',
                     ],
                     [
                         'name' => [
@@ -1100,7 +1100,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Depo Sorumlusu / Anbar Memuru',
                             'ru' => 'Заведующий складом / Кладовщик',
                         ],
-                        'slug' => 'anbardar-logistika',
+                        'slug' => 'depo-sorumlusu-anbar-memuru',
                     ],
                     [
                         'name' => [
@@ -1109,7 +1109,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Yükleme İşçisi / Taşıyıcı',
                             'ru' => 'Грузчик / Экспедитор',
                         ],
-                        'slug' => 'yukvuran-fehle',
+                        'slug' => 'yukleme-iscisi-tasiyici',
                     ],
                     [
                         'name' => [
@@ -1118,7 +1118,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Hızlı Kurye',
                             'ru' => 'Экспресс-курьер',
                         ],
-                        'slug' => 'kuryer-logistika',
+                        'slug' => 'hizli-kurye',
                     ],
                     [
                         'name' => [
@@ -1127,7 +1127,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Lojistik Uzmanı / Koordinatörü',
                             'ru' => 'Специалист по логистике / Логист',
                         ],
-                        'slug' => 'logistika-uzre-mutexessis-menecer',
+                        'slug' => 'lojistik-uzmani-koordinatoru',
                     ],
                 ],
             ],
@@ -1140,7 +1140,7 @@ class CategorySeeder extends Seeder
                     'tr' => 'Sanayi, İnşaat ve İmalat',
                     'ru' => 'Промышленность, Строительство и Производство',
                 ],
-                'slug' => 'senaye-tikinti-ve-istehsalat',
+                'slug' => 'sanayi-insaat-ve-imalat',
                 'icon' => 'fa-industry',
                 'children' => [
                     [
@@ -1150,7 +1150,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Endüstriyel Otomasyon & PLC',
                             'ru' => 'Автоматизированное управление (АСУ ТП)',
                         ],
-                        'slug' => 'avtomatlasdirilmis-idareetme',
+                        'slug' => 'endustriyel-otomasyon-plc',
                     ],
                     [
                         'name' => [
@@ -1159,7 +1159,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'İnşaat Mühendisliği & Saha',
                             'ru' => 'Строительная инженерия и мастерство',
                         ],
-                        'slug' => 'tikinti-muhendisliyi',
+                        'slug' => 'insaat-muhendisligi-saha',
                     ],
                     [
                         'name' => [
@@ -1168,7 +1168,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Mühendis (Makine / Elektrik / Proses)',
                             'ru' => 'Инженер (Механик / Электрик / Технолог)',
                         ],
-                        'slug' => 'muhendis-general',
+                        'slug' => 'muhendis-makine-elektrik-proses',
                     ],
                     [
                         'name' => [
@@ -1177,7 +1177,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Oto Tamircisi / Oto Mekaniker',
                             'ru' => 'Автомеханик, автослесарь',
                         ],
-                        'slug' => 'avtomexanik-avtocilinger',
+                        'slug' => 'oto-tamircisi-oto-mekaniker',
                     ],
                     [
                         'name' => [
@@ -1186,7 +1186,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Sıvacı, Boyacı',
                             'ru' => 'Штукатур, маляр',
                         ],
-                        'slug' => 'suvaqci-rengsaz',
+                        'slug' => 'sivaci-boyaci',
                     ],
                     [
                         'name' => [
@@ -1195,7 +1195,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Mekanik Teknisyeni',
                             'ru' => 'Механик / Техник',
                         ],
-                        'slug' => 'mexanik',
+                        'slug' => 'mekanik-teknisyeni',
                     ],
                     [
                         'name' => [
@@ -1204,7 +1204,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Montaj Elemanı / Montör',
                             'ru' => 'Монтажник / Сборщик',
                         ],
-                        'slug' => 'montajci',
+                        'slug' => 'montaj-elemani-montor',
                     ],
                     [
                         'name' => [
@@ -1213,7 +1213,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Kaynakçı',
                             'ru' => 'Сварщик',
                         ],
-                        'slug' => 'qaynaqci',
+                        'slug' => 'kaynakci',
                     ],
                     [
                         'name' => [
@@ -1222,7 +1222,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Çilingir, Sıhhi Tesisatçı',
                             'ru' => 'Слесарь, сантехник',
                         ],
-                        'slug' => 'cilinger-santexnik',
+                        'slug' => 'cilingir-sihhi-tesisatci',
                     ],
                     [
                         'name' => [
@@ -1231,7 +1231,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Elektrikçi / Elektrik Teknisyeni',
                             'ru' => 'Электрик / Электромонтер',
                         ],
-                        'slug' => 'elektrik-usta',
+                        'slug' => 'elektrikci-elektrik-teknisyeni',
                     ],
                     [
                         'name' => [
@@ -1240,7 +1240,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Usta / Formen',
                             'ru' => 'Мастер / Бригадир',
                         ],
-                        'slug' => 'usta-senaye',
+                        'slug' => 'usta-formen',
                     ],
                 ],
             ],
@@ -1253,7 +1253,7 @@ class CategorySeeder extends Seeder
                     'tr' => 'Satınalma ve Tedarik Zinciri',
                     'ru' => 'Закупки и Снабжение',
                 ],
-                'slug' => 'satinalma-ve-techizat',
+                'slug' => 'satinalma-ve-tedarik-zinciri',
                 'icon' => 'fa-cart-flatbed',
                 'children' => [
                     [
@@ -1263,7 +1263,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'İhale & Teklif Uzmanı',
                             'ru' => 'Специалист по тендерам и торгам',
                         ],
-                        'slug' => 'tender-mutexessisi',
+                        'slug' => 'ihale-teklif-uzmani',
                     ],
                     [
                         'name' => [
@@ -1272,7 +1272,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Satınalma Müdürü',
                             'ru' => 'Менеджер по закупкам',
                         ],
-                        'slug' => 'satinalma-meneceri',
+                        'slug' => 'satinalma-muduru',
                     ],
                     [
                         'name' => [
@@ -1281,7 +1281,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Kategori Yöneticisi',
                             'ru' => 'Категорийный менеджер',
                         ],
-                        'slug' => 'kateqoriya-meneceri',
+                        'slug' => 'kategori-yoneticisi',
                     ],
                     [
                         'name' => [
@@ -1290,7 +1290,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Satınalma Uzmanı / Buyer',
                             'ru' => 'Байер / Закупщик',
                         ],
-                        'slug' => 'bayer-alici',
+                        'slug' => 'satinalma-uzmani-buyer',
                     ],
                     [
                         'name' => [
@@ -1299,7 +1299,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'Tedarik Uzmanı',
                             'ru' => 'Специалист по снабжению',
                         ],
-                        'slug' => 'techizat-mutexessisi',
+                        'slug' => 'tedarik-uzmani',
                     ],
                     [
                         'name' => [
@@ -1308,7 +1308,7 @@ class CategorySeeder extends Seeder
                             'tr' => 'İthalat / İhracat Uzmanı',
                             'ru' => 'Специалист по импорту / экспорту',
                         ],
-                        'slug' => 'idxal-mutexessisi',
+                        'slug' => 'ithalat-ihracat-uzmani',
                     ],
                     [
                         'name' => [
@@ -1355,7 +1355,7 @@ class CategorySeeder extends Seeder
         // Cleanup any legacy categories not in the new list
         $legacyCategories = Category::whereNotIn('slug', $validSlugs)->get();
         if ($legacyCategories->isNotEmpty()) {
-            $fallbackCategory = Category::where('slug', 'informasiya-texnologiyalari')->first()
+            $fallbackCategory = Category::where('slug', 'bilisim-teknolojileri-it')->first()
                 ?? Category::first();
 
             if ($fallbackCategory) {

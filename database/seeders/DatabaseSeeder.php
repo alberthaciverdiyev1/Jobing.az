@@ -37,7 +37,7 @@ class DatabaseSeeder extends Seeder
             CitySeeder::class,
         ]);
 
-        // 3. İş atributları (Azərbaycanca slug-lar)
+        // 3. İş nitelikleri (Türkçe slug'lar)
         $jobTypesData = [
             ['slug' => 'tam-zamanli', 'name' => ['az' => 'Tam Ştat', 'tr' => 'Tam Zamanlı', 'en' => 'Full-time', 'ru' => 'Полная занятость'], 'order' => 1],
             ['slug' => 'yari-zamanli', 'name' => ['az' => 'Yarım Ştat', 'tr' => 'Yarı Zamanlı', 'en' => 'Part-time', 'ru' => 'Частичная занятость'], 'order' => 2],

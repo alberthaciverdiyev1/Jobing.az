@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# install-server.sh — Jobing.az için SIFIRDAN sunucu kurulumu (Ubuntu 22.04 / 24.04)
+# install-server.sh — KibrisKare.com için SIFIRDAN sunucu kurulumu (Ubuntu 22.04 / 24.04)
 #
 # Ne yapar:
 #   - Nginx, PHP-FPM (+ gerekli eklentiler), PostgreSQL, Node.js, Composer, Redis kurar
@@ -15,20 +15,20 @@
 set -euo pipefail
 
 # ──────────────────────────── AYARLAR (düzenle) ────────────────────────────
-DOMAIN="${DOMAIN:-new.jobing.az}"
+DOMAIN="${DOMAIN:-kariyer.kibriskare.com}"
 SITE_NAME="${SITE_NAME:-${DOMAIN//./-}}"
-APP_DIR="${APP_DIR:-/var/www/jobing}"
+APP_DIR="${APP_DIR:-/var/www/kibriskare}"
 APP_USER="${APP_USER:-deploy}"
-DB_NAME="${DB_NAME:-jobing}"
-DB_USER="${DB_USER:-jobing}"
+DB_NAME="${DB_NAME:-kibriskare}"
+DB_USER="${DB_USER:-kibriskare}"
 DB_PASS="${DB_PASS:-$(openssl rand -hex 16)}"
-LOG_DB_NAME="${LOG_DB_NAME:-jobing_logs}"
-REPO_URL="${REPO_URL:-git@github.com:CHANGE_ME/jobing.git}"
+LOG_DB_NAME="${LOG_DB_NAME:-kibriskare_logs}"
+REPO_URL="${REPO_URL:-git@github.com:CHANGE_ME/kibriskare.git}"
 BRANCH="${BRANCH:-main}"
 PHP_VER="${PHP_VER:-8.3}"
 NODE_MAJOR="${NODE_MAJOR:-20}"
 WITH_SSL="${WITH_SSL:-yes}"          # yes|no
-LE_EMAIL="${LE_EMAIL:-admin@jobing.az}"
+LE_EMAIL="${LE_EMAIL:-admin@kibriskare.com}"
 # ───────────────────────────────────────────────────────────────────────────
 
 log() { echo -e "\n\033[1;36m▶ $*\033[0m"; }
@@ -197,7 +197,7 @@ systemctl restart php${PHP_VER}-fpm
 log "Queue worker servisi"
 cat >/etc/systemd/system/${SITE_NAME}-queue.service <<UNIT
 [Unit]
-Description=Jobing queue worker
+Description=KibrisKare queue worker
 After=network.target postgresql.service redis-server.service
 
 [Service]
@@ -248,6 +248,6 @@ cat <<INFO
   DB_PASS   : ${DB_PASS}   ← .env içinde, kaydet!
   URL       : https://${DOMAIN}
 
-  Servisler : php${PHP_VER}-fpm, nginx, jobing-queue, redis-server, cron(scheduler)
+  Servisler : php${PHP_VER}-fpm, nginx, kibriskare-queue, redis-server, cron(scheduler)
   Hepsi boot'ta otomatik başlar; PHP-FPM "ondemand" DEĞİL, sürekli ayakta.
 INFO

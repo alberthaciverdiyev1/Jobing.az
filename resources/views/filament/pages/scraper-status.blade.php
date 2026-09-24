@@ -1,14 +1,14 @@
 <x-filament-panels::page>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px">
-        <x-filament::section heading="Növbəti taramalar" icon="heroicon-o-clock">
+        <x-filament::section heading="Sonraki taramalar" icon="heroicon-o-clock">
             <div style="display:flex;flex-direction:column;gap:8px;font-size:14px">
-                <div><span style="color:#6b7280">Bakü (günde 3: 09:00, 14:00, 19:00):</span> <b>{{ $next['baku']->format('d.m.Y H:i') }}</b></div>
-                <div><span style="color:#6b7280">boss.az (günde 1):</span> <b>{{ $next['boss']->format('d.m.Y H:i') }}</b></div>
-                <div><span style="color:#6b7280">Digər şəhərlər (həftə sonu):</span> <b>{{ $next['other']->format('d.m.Y H:i') }}</b></div>
+                <div><span style="color:#6b7280">Lefkoşa (günde 3: 09:00, 14:00, 19:00):</span> <b>{{ $next['lefkosa']->format('d.m.Y H:i') }}</b></div>
+                <div><span style="color:#6b7280">Kıbrıs iş siteleri (günde 1):</span> <b>{{ $next['sources']->format('d.m.Y H:i') }}</b></div>
+                <div><span style="color:#6b7280">Diğer bölgeler (hafta sonu):</span> <b>{{ $next['other']->format('d.m.Y H:i') }}</b></div>
             </div>
         </x-filament::section>
 
-        <x-filament::section heading="Cron cədvəli" icon="heroicon-o-command-line">
+        <x-filament::section heading="Cron tablosu" icon="heroicon-o-command-line">
             <table style="width:100%;border-collapse:collapse;font-size:14px">
                 <tbody>
                 @foreach($cron as $c)
@@ -35,7 +35,7 @@
                     <span style="font-size:9px;color:#9ca3af;margin-top:2px">{{ $t->finished_at?->timezone($tz)->format('d.m') }}</span>
                 </div>
             @empty
-                <div style="color:#6b7280">Hələ çalışma qeydi yoxdur.</div>
+                <div style="color:#6b7280">Henüz çalışma kaydı yok.</div>
             @endforelse
         </div>
     </x-filament::section>
@@ -70,7 +70,7 @@
                 </thead>
                 <tbody>
                 @forelse($sources as $s)
-                    @php($key = str_replace('.az', '', $s->source))
+                    @php($key = str_replace('.com', '', $s->source))
                     @php($ser = $perSourceTrend[$s->source] ?? collect())
                     @php($sermax = max(1, (int) ($ser->max() ?? 1)))
                     <tr style="border-bottom:1px solid rgba(128,128,128,.15)">
@@ -92,7 +92,7 @@
                         <td style="padding:6px 10px;text-align:right;{{ $s->errors ? 'color:#dc2626;font-weight:700' : '' }}">{{ number_format($s->errors) }}</td>
                     </tr>
                 @empty
-                    <tr><td colspan="10" style="padding:24px;text-align:center;color:#6b7280">Hələ məlumat yoxdur.</td></tr>
+                    <tr><td colspan="10" style="padding:24px;text-align:center;color:#6b7280">Henüz veri yok.</td></tr>
                 @endforelse
                 </tbody>
             </table>
@@ -104,8 +104,8 @@
             <table style="width:100%;border-collapse:collapse;font-size:13px">
                 <thead>
                     <tr style="text-align:left;color:#6b7280;border-bottom:2px solid rgba(128,128,128,.25)">
-                        <th style="padding:8px 10px">Tarix</th>
-                        <th style="padding:8px 10px">Bölgə</th>
+                        <th style="padding:8px 10px">Tarih</th>
+                        <th style="padding:8px 10px">Bölge</th>
                         <th style="padding:8px 10px;text-align:right">Çekilen</th>
                         <th style="padding:8px 10px;text-align:right">Eklenen</th>
                         <th style="padding:8px 10px;text-align:right">Tekrar</th>
@@ -123,7 +123,7 @@
                         <td style="padding:6px 10px;text-align:right;{{ $r->errors ? 'color:#dc2626' : '' }}">{{ number_format($r->errors) }}</td>
                     </tr>
                 @empty
-                    <tr><td colspan="6" style="padding:24px;text-align:center;color:#6b7280">Çalışma qeydi yoxdur.</td></tr>
+                    <tr><td colspan="6" style="padding:24px;text-align:center;color:#6b7280">Çalışma kaydı yok.</td></tr>
                 @endforelse
                 </tbody>
             </table>

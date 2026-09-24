@@ -5,11 +5,11 @@
 ## 1) `install-server.sh` — sıfırdan sunucu kurulumu (Ubuntu 22.04/24.04)
 
 ```bash
-sudo DOMAIN=jobing.az \
-     APP_DIR=/var/www/jobing \
+sudo DOMAIN=kibriskare.com \
+     APP_DIR=/var/www/kibriskare \
      DB_PASS='guclu-bir-sifre' \
-     REPO_URL=git@github.com:alberthacirverdiyev1/Jobing.az.git \
-     LE_EMAIL=admin@jobing.az \
+     REPO_URL=git@github.com:alberthacirverdiyev1/KibrisKare.com.git \
+     LE_EMAIL=admin@kibriskare.com \
      bash deploy/install-server.sh
 ```
 
@@ -19,7 +19,7 @@ Kurduğu ve ayarladığı şeyler:
 - `composer install`, `npm ci && npm run build`, `migrate`, `storage:link`, `optimize`
 - Nginx site + SSL (certbot, opsiyonel)
 - **PHP-FPM `pm = dynamic`** → sürekli ayakta, **ondemand değil**
-- **systemd `jobing-queue`** servisi → queue worker her zaman çalışır
+- **systemd `kibriskare-queue`** servisi → queue worker her zaman çalışır
 - **cron** → her dakika `schedule:run` (premium süresi dolanlar vb.)
 - UFW (22/80/443)
 
@@ -28,7 +28,7 @@ Kurduğu ve ayarladığı şeyler:
 Sunucuda çalışır; `.github/workflows/deploy.yml` bunu SSH ile tetikler:
 
 ```bash
-cd /var/www/jobing && bash deploy/deploy.sh
+cd /var/www/kibriskare && bash deploy/deploy.sh
 ```
 
 Yaptığı: `git reset --hard origin/main` → `composer install --no-dev` → `npm ci && npm run build` → `migrate --force` → `storage:link` → `optimize` → izinler → `systemctl reload php-fpm` → `queue:restart` → `/up` sağlık kontrolü.
@@ -43,8 +43,8 @@ Yaptığı: `git reset --hard origin/main` → `composer install --no-dev` → `
 | `SSH_USER` | `deploy` |
 | `SSH_PRIVATE_KEY` | deploy kullanıcısının özel anahtarı (deploy key) |
 | `SSH_PORT` | `22` |
-| `APP_DIR` | `/var/www/jobing` |
-| `HEALTH_URL` | `https://jobing.az` |
+| `APP_DIR` | `/var/www/kibriskare` |
+| `HEALTH_URL` | `https://kariyer.kibriskare.com` |
 
 ## Notlar
 - Sunucuda `deploy` kullanıcısına `sudo systemctl reload php8.3-fpm` için yetki ver (veya `deploy.sh`'ı root/systemd ile çalıştır).
@@ -54,8 +54,8 @@ Yaptığı: `git reset --hard origin/main` → `composer install --no-dev` → `
 ## 3) `backup-databases.sh` — deploy öncesi yedək + Telegram
 
 `deploy.sh` her deploy'dan **önce** bunu otomatik çalıştırır:
-- Serverdəki **bütün PostgreSQL bazalarını** (əsas + `jobing_logs`) `pg_dump` ilə yedəkləyir
-- `tar.gz` edib `/var/backups/jobing/`-də saxlayır (14 gün saxlanır)
+- Serverdəki **bütün PostgreSQL bazalarını** (əsas + `kibriskare_logs`) `pg_dump` ilə yedəkləyir
+- `tar.gz` edib `/var/backups/kibriskare/`-də saxlayır (14 gün saxlanır)
 - Telegram bot vasitəsilə yedəyi sənə göndərir
 
 Gərəkli `.env` dəyişənləri:
@@ -80,10 +80,10 @@ php artisan telegram:set-webhook
 
 ## 5) Loglar üçün ayrı verilənlər bazası
 
-`activity_logs` və `app_logs` əsas bazada deyil — **`jobing_logs`** bazasındadır (`logs` bağlantısı).
+`activity_logs` və `app_logs` əsas bazada deyil — **`kibriskare_logs`** bazasındadır (`logs` bağlantısı).
 `.env`:
 ```
-LOG_DB_DATABASE=jobing_logs
+LOG_DB_DATABASE=kibriskare_logs
 LOG_DB_HOST / PORT / USERNAME / PASSWORD
 ```
 

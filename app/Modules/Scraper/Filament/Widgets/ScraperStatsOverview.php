@@ -17,7 +17,7 @@ class ScraperStatsOverview extends StatsOverviewWidget
 
     protected function getStats(): array
     {
-        $tz = 'Asia/Baku';
+        $tz = 'Europe/Istanbul';
         $last = ScraperRun::latest('id')->first();
         $listing = (int) ScraperSourceStatus::sum('inserted');
         $last24h = (int) DB::table('scraped_vacancies')->where('created_at', '>=', Carbon::now()->subDay())->count();

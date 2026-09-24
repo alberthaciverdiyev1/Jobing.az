@@ -32,45 +32,45 @@ class ScraperStatus extends Page
     protected function getHeaderActions(): array
     {
         return [
-            Action::make('runBaku')->label('Bakü — İndi başlat')->icon('heroicon-o-play')
-                ->requiresConfirmation()->action(fn () => $this->runScript('cron-baku-daily.sh')),
-            Action::make('runBoss')->label('boss.az — İndi başlat')->icon('heroicon-o-play')
-                ->requiresConfirmation()->action(fn () => $this->runScript('cron-boss.sh')),
-            Action::make('runOther')->label('Digər şəhərlər — İndi başlat')->icon('heroicon-o-play')
+            Action::make('runLefkosa')->label('Lefkoşa — Başlat')->icon('heroicon-o-play')
+                ->requiresConfirmation()->action(fn () => $this->runScript('cron-lefkosa-daily.sh')),
+            Action::make('runSources')->label('Kıbrıs iş siteleri — Başlat')->icon('heroicon-o-play')
+                ->requiresConfirmation()->action(fn () => $this->runScript('cron-cyprus-sources.sh')),
+            Action::make('runOther')->label('Diğer bölgeler — Başlat')->icon('heroicon-o-play')
                 ->requiresConfirmation()->action(fn () => $this->runScript('cron-other-weekend.sh')),
-            Action::make('warmFacets')->label('Facet isitme')->icon('heroicon-o-bolt')
+            Action::make('warmFacets')->label('Facet ısıtma')->icon('heroicon-o-bolt')
                 ->action(fn () => $this->runFacets()),
         ];
     }
 
     protected function runScript(string $script): void
     {
-        $root = '/var/www/JobScraper';
-        $env = 'JOBING_ARTISAN=/var/www/new-jobing/artisan '
-            . 'COMPANY_LOGO_PUBLISH_DIR=/var/www/new-jobing/storage/app/public/scraped-companies';
+        $root = '/var/www/kibriskare-scraper';
+        $env = 'KIBRISKARE_ARTISAN=/var/www/kibriskare/artisan '
+            . 'COMPANY_LOGO_PUBLISH_DIR=/var/www/kibriskare/storage/app/public/scraped-companies';
         $cmd = sprintf(
             'cd %s && nohup env %s bash %s >> /dev/null 2>&1 &',
             escapeshellarg($root), $env, escapeshellarg($root . '/scripts/' . $script)
         );
         exec($cmd);
-        Notification::make()->title($script . ' başladı')->body('Arxa planda işə salındı.')->success()->send();
+        Notification::make()->title($script . ' başladı')->body('Arka planda başlatıldı.')->success()->send();
     }
 
     protected function runFacets(): void
     {
-        exec('nohup php /var/www/new-jobing/artisan facets:refresh --warm >> /dev/null 2>&1 &');
-        Notification::make()->title('Facet isitme başladı')->success()->send();
+        exec('nohup php /var/www/kibriskare/artisan facets:refresh --warm >> /dev/null 2>&1 &');
+        Notification::make()->title('Facet ısıtma başladı')->success()->send();
     }
 
     public function getViewData(): array
     {
-        $tz = 'Asia/Baku';
+        $tz = 'Europe/Istanbul';
         $now = Carbon::now($tz);
         $schedule = ScraperSetting::where('key', 'schedule')->first()?->value ?? [];
 
         $next = [
-            'baku' => $this->nextAtTimes($now, [9, 14, 19]),
-            'boss' => $this->nextDailyAt($now, 3),
+            'lefkosa' => $this->nextAtTimes($now, [9, 14, 19]),
+            'sources' => $this->nextDailyAt($now, 3),
             'other' => $this->nextWeeklyAt($now, Carbon::SATURDAY, 21),
         ];
 
@@ -124,10 +124,10 @@ class ScraperStatus extends Page
             'dailyMax' => $dailyMax,
             'perSourceTrend' => $perSourceTrend,
             'cron' => [
-                ['Bakü (günde 3)', '0 9,14,19 * * *', 'scripts/cron-baku-daily.sh'],
-                ['boss.az (günde 1)', '0 3 * * *', 'scripts/cron-boss.sh'],
-                ['Digər şəhərlər (həftə sonu)', '0 21 * * 6', 'scripts/cron-other-weekend.sh'],
-                ['Facet/cache isitme (günde 3)', '0 */8 * * *', 'php artisan facets:refresh --warm'],
+                ['Lefkoşa (günde 3)', '0 9,14,19 * * *', 'scripts/cron-lefkosa-daily.sh'],
+                ['Kıbrıs iş siteleri (günde 1)', '0 3 * * *', 'scripts/cron-cyprus-sources.sh'],
+                ['Diğer bölgeler (hafta sonu)', '0 21 * * 6', 'scripts/cron-other-weekend.sh'],
+                ['Facet/cache ısıtma (günde 3)', '0 */8 * * *', 'php artisan facets:refresh --warm'],
             ],
             'totals' => [
                 'listings' => ScraperSourceStatus::sum('inserted'),

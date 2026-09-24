@@ -39,14 +39,14 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           script_stop: true
           script: |
-            # deploy.sh bu değerleri env'den okur; verilmezse /var/www/jobing + deploy kullanıcısına düşer.
+            # deploy.sh bu değerleri env'den okur; verilmezse /var/www/kibriskare + deploy kullanıcısına düşer.
             export APP_DIR="${{ secrets.APP_DIR }}"
             export APP_USER="root"
             export PHP_VER="8.4"
             export PHP_BIN="/usr/bin/php"
             export BRANCH="main"
             # deploy.sh sağlık kontrolü bu URL'e gider (şema dahil olmalı, yoksa 301 alır).
-            export HEALTH_URL="https://new.jobing.az"
+            export HEALTH_URL="https://kariyer.kibriskare.com"
             cd "$APP_DIR"
             bash deploy/deploy.sh
 
@@ -54,4 +54,4 @@ jobs:
         run: |
           sleep 3
           # Şema (https://) dahil sabit URL kullanılıyor; aksi halde 301 döner.
-          curl -fsS "https://new.jobing.az/up" && echo "Sağlık kontrolü OK"
+          curl -fsS "https://kariyer.kibriskare.com/up" && echo "Sağlık kontrolü OK"
