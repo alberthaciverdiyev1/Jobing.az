@@ -60,15 +60,15 @@ class LogActivity
         } elseif ($request->isMethod('GET')) {
             if (array_intersect(array_keys($request->query()), ['q', 'category', 'subcategory', 'city', 'type', 'workplace', 'experience', 'sort'])) {
                 $action = 'search_filter';
-            } elseif (str_starts_with($path, '/vakansiya/') && $path !== '/vakansiya/yarat') {
+            } elseif (str_starts_with($path, '/ilanlar/') && $path !== '/ilanlar/olustur') {
                 $action = 'vacancy_view';
             } elseif (str_starts_with($path, '/sirketler/')) {
                 $action = 'company_page_view';
             } elseif (str_starts_with($path, '/blog/')) {
                 $action = 'blog_view';
-            } elseif (str_starts_with($path, '/cv/')) {
+            } elseif (str_starts_with($path, '/ozgecmis/')) {
                 $action = 'resume_view';
-            } elseif (str_starts_with($path, '/is-axtariram/')) {
+            } elseif (str_starts_with($path, '/is-ariyorum/')) {
                 $action = 'jobseeker_view';
             } else {
                 $action = 'page_view';

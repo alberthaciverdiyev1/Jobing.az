@@ -7,13 +7,13 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [VacancyController::class, 'index'])->name('jobs.index');
 
 // Digər saytlardan: platforma + xarici (scraped) elanlar birlikdə.
-Route::get('/diger-saytlardan', [VacancyController::class, 'external'])->name('jobs.external');
+Route::get('/diger-sitelerden', [VacancyController::class, 'external'])->name('jobs.external');
 
 // Vakansiyalar
-Route::prefix('vakansiya')->name('jobs.')->group(function () {
-    Route::get('/yarat', [VacancyController::class, 'create'])->name('create');
+Route::prefix('ilanlar')->name('jobs.')->group(function () {
+    Route::get('/olustur', [VacancyController::class, 'create'])->name('create');
     Route::post('/', [VacancyController::class, 'store'])->name('store');
-    Route::post('/{slug}/muraciet', [VacancyController::class, 'apply'])->name('apply')->middleware('throttle:6,1');
+    Route::post('/{slug}/basvuru', [VacancyController::class, 'apply'])->name('apply')->middleware('throttle:6,1');
 
     // İki seqmentli URL: /vakansiya/{citySlug}/{categorySlug}
     Route::get('/{param1}/{param2}', [VacancyController::class, 'filterTwoParams'])->name('filter.two');

@@ -82,7 +82,7 @@ class VacancySchemaTest extends TestCase
     {
         $this->createNativeAndScrapedVacancies();
 
-        $this->get('/diger-saytlardan')
+        $this->get('/diger-sitelerden')
             ->assertOk()
             ->assertSee('Native vacancy')
             ->assertSee('Scraped vacancy')
@@ -98,7 +98,7 @@ class VacancySchemaTest extends TestCase
 
     public function test_empty_external_listing_does_not_suggest_itself(): void
     {
-        $this->get('/diger-saytlardan?city[]=zzzznomatch')
+        $this->get('/diger-sitelerden?city[]=zzzznomatch')
             ->assertOk()
             ->assertDontSee('data-external-listing-suggestion', false);
     }
