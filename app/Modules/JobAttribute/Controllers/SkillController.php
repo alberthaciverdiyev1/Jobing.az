@@ -10,18 +10,11 @@ use Illuminate\Http\Request;
 
 class SkillController extends Controller
 {
-    /**
-     * Get skills by category or subcategory slugs.
-     * - If subcategories are selected: returns skills of those subcategories.
-     * - If parent category is selected: returns all skills belonging to the parent and its children.
-     * - If none: returns popular active skills.
-     */
     public function byCategory(Request $request): JsonResponse
     {
         $subcategories = array_filter((array) $request->input('subcategory', []));
         $categorySlug = $request->input('category');
 
-        // 1. If subcategory (or subcategories) specified
         if (!empty($subcategories)) {
             $subCatIds = Category::whereIn('slug', $subcategories)->pluck('id');
             $skills = Skill::active()
@@ -42,7 +35,6 @@ class SkillController extends Controller
             ]);
         }
 
-        // 2. If parent category specified
         if (!empty($categorySlug)) {
             $parentCat = Category::with('children')->where('slug', $categorySlug)->first();
             if ($parentCat) {
@@ -66,7 +58,6 @@ class SkillController extends Controller
             }
         }
 
-        // 3. Fallback: if no category or subcategory specified, return empty array
         return response()->json([
             'skills' => [],
             'mode' => 'none',

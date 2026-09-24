@@ -44,7 +44,6 @@ class VacancyResource extends Resource
     {
         $query = parent::getEloquentQuery();
 
-        // In the company panel, only show the logged-in company's vacancies.
         if (Filament::getCurrentPanel()?->getId() === 'company') {
             $query->where('company_id', Auth::user()?->company_id);
         }
@@ -200,7 +199,6 @@ class VacancyResource extends Resource
                                 Forms\Components\Select::make('skillRecords')
                                     ->label(__('Required Skills (Tags)'))
                                     ->options(function (Forms\Get $get) {
-                                        // Seçilen kategoriye (ana + alt) bağlı etiketleri göster.
                                         $ids = array_filter([
                                             $get('parent_category_id'),
                                             $get('category_id'),
@@ -390,7 +388,6 @@ class VacancyResource extends Resource
                     })
                     ->visible(fn (): bool => Filament::getCurrentPanel()?->getId() !== 'company'),
 
-                // Company panel: choose a package and send the request to the admin via WhatsApp.
                 Tables\Actions\Action::make('bump_request')
                     ->label(__('Boost'))
                     ->icon('heroicon-o-arrow-up-circle')
@@ -423,7 +420,6 @@ class VacancyResource extends Resource
                     })
                     ->visible(fn (): bool => Filament::getCurrentPanel()?->getId() !== 'company'),
 
-                // Company panel: choose a package and send the premium request via WhatsApp.
                 Tables\Actions\Action::make('premium_request')
                     ->label(__('Make Premium'))
                     ->icon('heroicon-o-sparkles')

@@ -12,15 +12,10 @@ use App\Modules\JobAttribute\Models\WorkplaceType;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
-/**
- * Yalnız zəruri (referans) məlumatları yaradır — saxta vakansiya/şirkət YOXDUR.
- * Şirkət olaraq yalnız "Jobing" saxlanılır.
- */
 class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        // 1. Admin istifadəçi
         User::updateOrCreate(
             ['email' => 'admin@jobing.com'],
             [
@@ -31,13 +26,11 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        // 2. Kateqoriyalar və Şəhərlər (referans məlumat)
         $this->call([
             CategorySeeder::class,
             CitySeeder::class,
         ]);
 
-        // 3. İş atributları (Azərbaycanca slug-lar)
         $jobTypesData = [
             ['slug' => 'tam-zamanli', 'name' => ['az' => 'Tam Ştat', 'tr' => 'Tam Zamanlı', 'en' => 'Full-time', 'ru' => 'Полная занятость'], 'order' => 1],
             ['slug' => 'yari-zamanli', 'name' => ['az' => 'Yarım Ştat', 'tr' => 'Yarı Zamanlı', 'en' => 'Part-time', 'ru' => 'Частичная занятость'], 'order' => 2],
@@ -68,7 +61,6 @@ class DatabaseSeeder extends Seeder
             ExperienceLevel::updateOrCreate(['slug' => $el['slug']], $el);
         }
 
-        // 4. Yeganə şirkət: Jobing
         $bakuCity = City::where('slug', 'baki')->first();
 
         Company::updateOrCreate(
@@ -88,7 +80,6 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        // 5. Qlobal mesaj şablonları (referans)
         $this->call(MessageTemplateSeeder::class);
         $this->call(SkillSeeder::class);
     }

@@ -66,7 +66,6 @@ class Vacancy extends Model
 
     protected static function booted(): void
     {
-        // Yeni vakansiya yaradıldıqda (təsdiq gözləyən) adminlərə + Telegram-a bildiriş.
         static::created(function (Vacancy $vacancy) {
             if ($vacancy->is_active) {
                 return;

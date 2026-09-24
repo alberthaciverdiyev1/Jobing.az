@@ -6,7 +6,6 @@
 <div class="bg-gray-50 min-h-screen py-12 sm:py-16 flex items-center justify-center px-4 sm:px-6 lg:px-8">
     <div class="w-full max-w-xl">
 
-        <!-- Top Title / Logo -->
         <div class="text-center mb-8">
             <h2 class="text-2xl sm:text-3xl font-semibold text-gray-900 tracking-tight">
                 {{ __('Sign in to your account') }}
@@ -30,7 +29,6 @@
         </div>
         @endif
 
-        <!-- Big Login Card -->
         <div class="bg-white p-8 sm:p-10 rounded-2xl border border-gray-200 shadow-sm space-y-6">
             <form action="{{ route('login.attempt') }}" method="POST" class="space-y-5">
                 @csrf
@@ -80,7 +78,6 @@
                 </button>
             </form>
 
-            <!-- Switch to Register Banner -->
             <div class="pt-6 border-t border-gray-100 text-center">
                 <p class="text-xs text-gray-600">
                     {{ __("Don't have an account?") }}

@@ -32,7 +32,6 @@ class CreateVacancy extends CreateRecord
             }
 
             $data['company_id'] = $companyId;
-            // Vacancies created by company require Admin Approval before going active
             $data['is_active'] = false;
         }
 

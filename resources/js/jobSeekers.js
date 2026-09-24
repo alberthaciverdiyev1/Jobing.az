@@ -60,7 +60,6 @@ export default function jobSeekersManager(config = null) {
                 });
             }
 
-            // Popstate for browser back/forward buttons
             window.addEventListener('popstate', () => {
                 const params = new URLSearchParams(window.location.search);
                 this.q = params.get('q') || '';
@@ -96,7 +95,6 @@ export default function jobSeekersManager(config = null) {
                 this.fetchSeekers(false);
             });
 
-            // Delegate pagination clicks
             document.addEventListener('click', (e) => {
                 const pageLink = e.target.closest('.pagination-wrapper a');
                 if (pageLink && pageLink.href) {
@@ -371,8 +369,6 @@ export default function jobSeekersManager(config = null) {
                 this.category.splice(idx, 1);
             } else {
                 if (parentSlug) {
-                    // Subcategory clicked:
-                    // Keep only sibling subcategories of the SAME parent category, remove other parents/children
                     const allowedChildren = this.categoryChildrenMap[parentSlug] || [];
                     this.category = this.category.filter(c => allowedChildren.includes(c) && c !== parentSlug);
                     this.category.push(slug);
@@ -381,8 +377,6 @@ export default function jobSeekersManager(config = null) {
                         this.openAccordions.push(parentSlug);
                     }
                 } else {
-                    // Parent category clicked:
-                    // Parent categories cannot be multi-selected: clear other parents & their subcategories
                     this.category = [slug];
 
                     if (!this.openAccordions.includes(slug)) {

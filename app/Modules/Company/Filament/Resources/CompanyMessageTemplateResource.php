@@ -10,9 +10,6 @@ use Filament\Resources\Resource;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 
-/**
- * Company panelinə özel mesaj şablonu yönetimi (yalnız şirkətin öz şablonları).
- */
 class CompanyMessageTemplateResource extends Resource
 {
     protected static ?string $model = MessageTemplate::class;

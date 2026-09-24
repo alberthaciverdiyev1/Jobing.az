@@ -4,10 +4,6 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-/**
- * Aktivlik loqları AYRI verilənlər bazasında ("logs" bağlantısı) saxlanılır.
- * Qeyd: users cədvəli əsas bazadadır → cross-DB olduğu üçün FK qoyulmur.
- */
 return new class extends Migration
 {
     public function up(): void
@@ -16,7 +12,6 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id')->nullable();
 
-            // Geo
             $table->string('ip_address', 45)->nullable();
             $table->string('country_code', 5)->nullable();
             $table->string('country_name', 100)->nullable();
@@ -26,18 +21,15 @@ return new class extends Migration
             $table->decimal('longitude', 10, 7)->nullable();
             $table->string('isp', 150)->nullable();
 
-            // Cihaz
             $table->string('user_agent', 500)->nullable();
             $table->string('device_type', 20)->nullable();
             $table->string('browser', 50)->nullable();
             $table->string('os', 50)->nullable();
 
-            // Sorğu
             $table->string('method', 10)->nullable();
             $table->text('url')->nullable();
             $table->text('referer')->nullable();
 
-            // Aksiya
             $table->string('action', 50)->nullable();
             $table->string('model_type', 150)->nullable();
             $table->unsignedBigInteger('model_id')->nullable();

@@ -16,7 +16,6 @@ class ResumeController extends Controller
     {
         $query = Resume::where('is_public', true)->with('user');
 
-        // Search query (title, name, summary, location, skills, experiences)
         if ($search = $request->input('q')) {
             $search = trim($search);
             $query->where(function ($q) use ($search) {
@@ -32,7 +31,6 @@ class ResumeController extends Controller
             });
         }
 
-        // Category filter
         $selectedSkills = (array) $request->input('skills', []);
         $selectedSkills = array_filter($selectedSkills);
         if ($categorySlug = $request->input('category')) {
@@ -49,7 +47,6 @@ class ResumeController extends Controller
             }
         }
 
-        // Skill filter
         if (!empty($selectedSkills)) {
             $selectedNormalized = collect($selectedSkills)->map(fn ($skill) => mb_strtolower(trim($skill)))->all();
             $selectedSkillIds = Skill::cachedActive()->filter(function (Skill $skill) use ($selectedNormalized) {
@@ -64,14 +61,12 @@ class ResumeController extends Controller
             $query->whereHas('skillRecords', fn ($q) => $q->whereIn('skills.id', $selectedSkillIds));
         }
 
-        // City filter
         $selectedCities = (array) $request->input('city', []);
         $selectedCities = array_filter($selectedCities);
         if (!empty($selectedCities)) {
             $query->whereIn('location', $selectedCities);
         }
 
-        // Sorting
         $sort = $request->input('sort', 'latest');
         if ($sort === 'oldest') {
             $query->oldest();
@@ -99,7 +94,6 @@ class ResumeController extends Controller
             ->with(['skills' => fn ($q) => $q->active(), 'children.skills' => fn ($q) => $q->active()])
             ->get());
 
-        // Build array of skills and resume count per category
         $categorySkillsMap = [];
         $categorySkillIds = [];
         foreach ($categories as $cat) {
@@ -172,11 +166,6 @@ class ResumeController extends Controller
     {
         $user = auth()->user();
 
-        // 1. Owner can always view their own CV
-        // 2. Admin can always view
-        // 3. Logged-in Company accounts can view
-        // 4. Company that received an application with this CV can view
-        // 5. If public, anyone can view
         $isOwner = $user && $user->id === $resume->user_id;
         $isAdmin = $user && (bool) $user->is_admin;
         $isCompany = $user && ($user->isCompany() || $user->user_type === 'company' || (bool) $user->company_id);

@@ -9,16 +9,12 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 
-/**
- * Telegram webhook: yeni vakansiyaları Təsdiqlə / Rədd et + rədd səbəbi.
- */
 class TelegramWebhookController extends Controller
 {
     public function handle(Request $request, TelegramService $telegram): JsonResponse
     {
         $update = $request->all();
 
-        // ── Düymə basıldı (approve / reject) ──
         if (isset($update['callback_query'])) {
             $cb = $update['callback_query'];
             $data = (string) ($cb['data'] ?? '');
@@ -47,7 +43,6 @@ class TelegramWebhookController extends Controller
             return response()->json(['ok' => true]);
         }
 
-        // ── Mətn mesajı (rədd səbəbi) ──
         if (isset($update['message']['text'])) {
             $chatId = (string) ($update['message']['chat']['id'] ?? '');
             $text = trim((string) $update['message']['text']);

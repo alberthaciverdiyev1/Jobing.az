@@ -13,10 +13,6 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 
-/**
- * Admin paneline özel, global başvuru yönetimi.
- * (Company: CompanyApplicationResource, User: MyApplicationsResource.)
- */
 class ApplicationResource extends Resource
 {
     protected static ?string $model = Application::class;

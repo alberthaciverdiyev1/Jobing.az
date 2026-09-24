@@ -13,7 +13,6 @@ class ViewMyApplications extends ViewRecord
     {
         parent::mount($record);
 
-        // Kullanıcı mesajı gördüyse rozet sönsün.
         $application = $this->record;
         if ($application && $application->user_id === auth()->id() && $application->hasUnseenReply()) {
             $application->update(['reply_seen_at' => now()]);

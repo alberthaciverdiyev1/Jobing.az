@@ -12,7 +12,6 @@ export default function jobsManager(config = null) {
         errorMessage: '',
         requestController: null,
         filterErrorMessage: config.filterErrorMessage || '',
-        // Multi-select values are stored as arrays
         category: Array.isArray(config.initialCategory) ? config.initialCategory : (config.initialCategory ? [config.initialCategory] : []),
         categoryName: '',
         q: config.initialQuery || '',
@@ -46,8 +45,6 @@ export default function jobsManager(config = null) {
         parentCategory: config.activeParentCategory || '',
         activeDropdown: null,
         moreFiltersOpen: false,
-        // Digər saytların vakansiyaları səhifəsi: filtrlər path yerinə query ilə
-        // bu baza ünvana göndərilir ki, scraped elanlar da nəticəyə daxil olsun.
         externalMode: !!config.externalMode,
         externalBasePath: config.externalBasePath || '',
 
@@ -83,14 +80,12 @@ export default function jobsManager(config = null) {
                 });
             }
 
-            // Popstate for browser back/forward buttons
             window.addEventListener('popstate', () => {
                 const pathname = window.location.pathname;
 
                 let pathCity = null;
                 let pathCategory = null;
 
-                // Xarici (scraped) siyahıda filtr məlumatı yalnız query string-dədir.
                 if (!this.externalMode) {
                     const pathParts = pathname.replace(/^\/jobs\/?/, '').split('/').filter(Boolean);
 
@@ -157,7 +152,6 @@ export default function jobsManager(config = null) {
                 this.fetchJobs(false);
             });
 
-            // Delegate pagination clicks
             document.addEventListener('click', (e) => {
                 const pageLink = e.target.closest('.pagination-wrapper a');
                 if (pageLink && pageLink.href) {
@@ -439,7 +433,6 @@ export default function jobsManager(config = null) {
             return this.category.includes(slug);
         },
 
-        // Category toggle (parent categories are single-select, subcategories belong to one parent family)
         toggleCategory(slug, parentSlug = null) {
             const idx = this.category.indexOf(slug);
             const wasActive = idx > -1;
@@ -448,8 +441,6 @@ export default function jobsManager(config = null) {
                 this.category.splice(idx, 1);
             } else {
                 if (parentSlug) {
-                    // Subcategory clicked:
-                    // Keep only sibling subcategories of the SAME parent category, remove other parents/children
                     const allowedChildren = this.categoryChildrenMap[parentSlug] || [];
                     this.category = this.category.filter(c => allowedChildren.includes(c) && c !== parentSlug);
                     this.category.push(slug);
@@ -458,8 +449,6 @@ export default function jobsManager(config = null) {
                         this.openAccordions.push(parentSlug);
                     }
                 } else {
-                    // Parent category clicked:
-                    // Parent categories cannot be multi-selected: clear other parents & their subcategories
                     this.category = [slug];
 
                     if (!this.openAccordions.includes(slug)) {
@@ -524,20 +513,15 @@ export default function jobsManager(config = null) {
         },
 
         buildUrl() {
-            // 1. Identify primary city slug (if any)
             let citySlug = null;
             if (this.city.length > 0) {
                 citySlug = this.city[0].toLowerCase().trim().replace(/\s+/g, '-');
             }
 
-            // 2. Identify category & subcategory slugs
             const parentSlug = this.selectedParentCategorySlug;
             const subcategorySlugs = this.selectedSubcategorySlugs;
             let categorySlug = parentSlug ? parentSlug.toLowerCase().trim().replace(/\s+/g, '-') : null;
 
-            // 3. Şəhər və kateqoriya yol (path) üzərində göstərilir:
-            //    /{category}  |  /{city}  |  /{city}/{category}
-            // Xarici (scraped) siyahıda isə hər şey query string ilə baza ünvana yazılır.
             let pathname = this.externalMode ? (this.externalBasePath || '/') : '/';
             if (!this.externalMode) {
                 if (citySlug && categorySlug) {
@@ -549,7 +533,6 @@ export default function jobsManager(config = null) {
                 }
             }
 
-            // 4. Qalan filtrlər query string ilə
             const params = new URLSearchParams();
 
             if (this.externalMode) {
@@ -557,7 +540,6 @@ export default function jobsManager(config = null) {
                 if (citySlug) params.append('city[]', citySlug);
             }
 
-            // Alt kateqoriya(lar)
             if (subcategorySlugs.length === 1) {
                 params.set('subcategory', subcategorySlugs[0]);
             } else if (subcategorySlugs.length > 1) {

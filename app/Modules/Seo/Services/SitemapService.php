@@ -17,7 +17,6 @@ class SitemapService
         $baseUrl = rtrim(config('app.url'), '/');
         $urls = [];
 
-        // 1. Statik səhifələr
         $staticRoutes = [
             [url('/'), 'daily', '1.0'],
             [route('companies.index'), 'daily', '0.8'],
@@ -38,7 +37,6 @@ class SitemapService
             ];
         }
 
-        // 2. Aktiv vakansiyalar
         Vacancy::active()->orderByDesc('id')->chunk(500, function ($items) use (&$urls) {
             foreach ($items as $v) {
                 $urls[] = [
@@ -50,7 +48,6 @@ class SitemapService
             }
         });
 
-        // 3. Şirkət profilləri
         Company::publicProfile()->orderByDesc('id')->chunk(500, function ($items) use (&$urls) {
             foreach ($items as $c) {
                 $urls[] = [
@@ -62,7 +59,6 @@ class SitemapService
             }
         });
 
-        // 4. Blog yazıları
         Blog::published()->orderByDesc('id')->chunk(500, function ($items) use (&$urls) {
             foreach ($items as $b) {
                 $urls[] = [
@@ -74,7 +70,6 @@ class SitemapService
             }
         });
 
-        // 5. İş arayan elanları
         JobSeeker::query()->whereNotNull('slug')->orderByDesc('id')->chunk(500, function ($items) use (&$urls) {
             foreach ($items as $s) {
                 $urls[] = [

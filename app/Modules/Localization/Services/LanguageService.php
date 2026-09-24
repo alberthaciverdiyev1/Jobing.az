@@ -6,12 +6,6 @@ use Illuminate\Support\Facades\Session;
 
 class LanguageService
 {
-    /**
-     * Switch application locale if it is within configured available locales.
-     *
-     * @param string $locale
-     * @return bool
-     */
     public function switchLocale(string $locale): bool
     {
         $supported = array_keys(config('app.available_locales', [

@@ -42,7 +42,6 @@
 </head>
 <body class="py-8 px-4 sm:px-6">
 
-    <!-- Top Action Bar (Hidden when Printing) -->
     <div class="no-print max-w-4xl mx-auto mb-6 flex items-center justify-between bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
         <button onclick="window.history.back()" class="inline-flex items-center gap-2 text-xs font-semibold text-slate-700 hover:text-slate-900 cursor-pointer">
             <i class="fas fa-arrow-left text-xs"></i>
@@ -55,10 +54,8 @@
         </button>
     </div>
 
-    <!-- Authentic PDF Template CV Sheet -->
     <div class="cv-paper max-w-4xl mx-auto bg-white border border-slate-300 shadow-md p-8 sm:p-12 space-y-6">
         
-        <!-- Header Section -->
         <div class="flex flex-col sm:flex-row items-center sm:items-start gap-6 pb-6 border-b-2 border-slate-700">
             
             @if(!empty($resume->photo))
@@ -79,7 +76,6 @@
                 </p>
                 @endif
 
-                <!-- Contact Grid (2 columns) -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-1.5 text-xs font-medium text-slate-800 pt-2">
                     @if($resume->phone)
                     <div class="flex items-center justify-center sm:justify-start gap-2">
@@ -126,7 +122,6 @@
             </div>
         </div>
 
-        <!-- Profile Section -->
         @if($resume->summary)
         <div class="space-y-2">
             <h2 class="text-xl sm:text-2xl font-semibold text-slate-900 text-center tracking-wide uppercase pt-2">
@@ -138,7 +133,6 @@
         </div>
         @endif
 
-        <!-- Skills Section -->
         @if(!empty($resume->skills) && count($resume->skills) > 0)
         <div class="space-y-2 pt-2">
             <h2 class="text-xl sm:text-2xl font-semibold text-slate-900 text-center tracking-wide uppercase">
@@ -157,7 +151,6 @@
         </div>
         @endif
 
-        <!-- Work Experience Section -->
         @if(!empty($resume->work_experiences) && count($resume->work_experiences) > 0)
         <div class="space-y-4 pt-2">
             <h2 class="text-xl sm:text-2xl font-semibold text-slate-900 text-center tracking-wide uppercase">
@@ -167,7 +160,6 @@
             <div class="space-y-4">
                 @foreach($resume->work_experiences as $exp)
                 <div class="space-y-2 page-break-inside-avoid">
-                    <!-- Underlined Header Line -->
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-900 pb-1 text-xs font-semibold text-slate-900">
                         <div class="text-sm">
                             <span class="font-semibold uppercase">{{ $exp['company'] ?? '' }}</span>
@@ -196,7 +188,6 @@
         </div>
         @endif
 
-        <!-- Education Section -->
         @if(!empty($resume->education) && count($resume->education) > 0)
         <div class="space-y-3 pt-2">
             <h2 class="text-xl sm:text-2xl font-semibold text-slate-900 text-center tracking-wide uppercase">
@@ -225,7 +216,6 @@
         </div>
         @endif
 
-        <!-- Languages Section -->
         @if(!empty($resume->languages) && count($resume->languages) > 0)
         <div class="space-y-3 pt-2">
             <h2 class="text-xl sm:text-2xl font-semibold text-slate-900 text-center tracking-wide uppercase">
@@ -254,7 +244,6 @@
         </div>
         @endif
 
-        <!-- Projects Section -->
         @if(!empty($resume->projects) && count($resume->projects) > 0)
         <div class="space-y-3 pt-2">
             <h2 class="text-xl sm:text-2xl font-semibold text-slate-900 text-center tracking-wide uppercase">
@@ -283,7 +272,6 @@
         </div>
         @endif
 
-        <!-- Certificates & Awards Section -->
         @if((!empty($resume->certificates) && count($resume->certificates) > 0) || (!empty($resume->awards) && count($resume->awards) > 0))
         <div class="space-y-3 pt-2">
             <h2 class="text-xl sm:text-2xl font-semibold text-slate-900 text-center tracking-wide uppercase">

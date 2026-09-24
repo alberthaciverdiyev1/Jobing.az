@@ -9,20 +9,12 @@ use Illuminate\Support\Facades\Cache;
 
 class CompanyService
 {
-    /**
-     * Get paginated companies with active vacancy counts, recent open jobs, and filters.
-     *
-     * @param array $filters
-     * @param int $perPage
-     * @return array
-     */
     public function getPaginatedCompanies(array $filters = [], int $perPage = 12): array
     {
         $query = Company::publicProfile()
             ->withCount(['vacancies' => fn ($q) => $q->active()])
             ->with(['city', 'vacancies' => fn ($q) => $q->active()->with(['company', 'city', 'jobType', 'workplaceType'])->orderByDesc('updated_at')->take(3)]);
 
-        // Search query (name, city, about)
         if (!empty($filters['q'])) {
             $search = trim($filters['q']);
             $query->where(function ($q) use ($search) {
@@ -32,7 +24,6 @@ class CompanyService
             });
         }
 
-        // Sorting (Default: created_at desc)
         $sort = $filters['sort'] ?? 'latest';
         if ($sort === 'active_jobs') {
             $query->has('vacancies', '>=', 1, 'and', fn ($q) => $q->active())
@@ -62,12 +53,6 @@ class CompanyService
         ];
     }
 
-    /**
-     * Find company by slug with active vacancies.
-     *
-     * @param string $slug
-     * @return Company
-     */
     public function getCompanyBySlug(string $slug): Company
     {
         return Company::with(['vacancies' => fn ($q) => $q->active()->with(['company', 'city', 'category', 'jobType', 'workplaceType', 'experienceLevel'])->orderByDesc('updated_at')])

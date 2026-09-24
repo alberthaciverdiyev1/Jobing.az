@@ -45,8 +45,6 @@ class VacancySchemaTest extends TestCase
     {
         $this->createNativeAndScrapedVacancies();
 
-        // Köhnə native elan + daha yeni scraped elan → scraped yuxarıda olmalıdır
-        // (native elanlar həmişə yuxarıda saxlanılmır).
         Vacancy::query()->where('slug', 'native-vacancy')->update(['updated_at' => now()->subDays(3)]);
 
         $jobs = app(VacancyService::class)->getPaginatedVacancies([], 12, true)['jobs'];

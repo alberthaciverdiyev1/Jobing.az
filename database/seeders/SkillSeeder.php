@@ -7,10 +7,6 @@ use App\Modules\JobAttribute\Models\Skill;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 
-/**
- * Hər kateqoriya (və alt kateqoriya) üçün 20-30 aid bacarıq yaradır.
- * slug unikal olduğu üçün slug-a kateqoriya id-si əlavə olunur.
- */
 class SkillSeeder extends Seeder
 {
     public function run(): void
@@ -44,7 +40,6 @@ class SkillSeeder extends Seeder
                 continue;
             }
 
-            // Ana kateqoriya + bütün alt kateqoriyalar
             $categories = collect([$parent])->merge($parent->children ?? Category::where('parent_id', $parent->id)->get());
 
             foreach ($categories as $cat) {

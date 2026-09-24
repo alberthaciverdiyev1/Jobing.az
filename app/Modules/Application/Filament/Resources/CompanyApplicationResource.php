@@ -15,13 +15,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
-/**
- * Company panelinin başvuru yönetimi.
- * Admin'in global ApplicationResource'undan ayrıdır:
- * şirket yalnız öz vakansiyalarının başvurularını görür, adayın
- * gönderdiği bilgileri düzenleyemez; yalnızca inceleyip durum günceller
- * ve adaya mesaj (şablon veya serbest) gönderir.
- */
 class CompanyApplicationResource extends Resource
 {
     protected static ?string $model = Application::class;
@@ -87,7 +80,6 @@ class CompanyApplicationResource extends Resource
     {
         return $form
             ->schema([
-                // Aday bilgileri yalnızca inceleme içindir; düzenlenemez.
                 Forms\Components\Section::make(__('Candidate Information (view only)'))
                     ->schema([
                         Forms\Components\TextInput::make('applicant_name')->label(__('Candidate Full Name'))->disabled(),

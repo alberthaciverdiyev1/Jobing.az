@@ -18,13 +18,10 @@ window.__COMPANIES_CONFIG__ = {
         <div class="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700" x-text="errorMessage"></div>
     </div>
 
-    <!-- Hero -->
     <x-list-hero :title="__('Companies')" :placeholder="__('Search company...')" />
 
-    <!-- Main Content -->
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 pt-5 pb-8">
 
-        <!-- List Header: Count + Sorting -->
         <div class="flex flex-row justify-between items-center gap-2 sm:gap-3 mb-5 pb-3 border-b border-gray-200">
             <p class="text-xs sm:text-sm text-gray-500 leading-tight">
                 <span class="font-semibold text-primary" x-text="totalCount">{{ $companies->total() }}</span> {{ __('companies found') }}
@@ -41,7 +38,6 @@ window.__COMPANIES_CONFIG__ = {
             </select>
         </div>
 
-        <!-- Companies Container -->
         <div id="companies-container" class="relative min-h-[300px]" :class="isLoading ? 'opacity-50 pointer-events-none transition-opacity duration-150' : ''">
             @include('pages.companies.partials.company-list', ['companies' => $companies])
         </div>

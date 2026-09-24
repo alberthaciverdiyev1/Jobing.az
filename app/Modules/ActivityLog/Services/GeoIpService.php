@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Http;
 
 class GeoIpService
 {
-    /** IP üçün geo məlumat (30 gün keşlənir). */
     public static function resolve(?string $ip, ?string $cfCountry = null): array
     {
         if (empty($ip) || in_array($ip, ['127.0.0.1', '::1'], true)
@@ -54,7 +53,6 @@ class GeoIpService
         });
     }
 
-    /** User-Agent-dən cihaz / brauzer / OS çıxarır. */
     public static function parseUserAgent(?string $ua): array
     {
         $ua = strtolower((string) $ua);

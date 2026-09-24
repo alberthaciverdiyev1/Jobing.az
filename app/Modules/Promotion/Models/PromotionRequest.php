@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-/** Premium / İrəli çək sorğusu — admin təsdiqi ilə tətbiq olunur. */
 class PromotionRequest extends Model
 {
     use HasFactory;
@@ -32,7 +31,6 @@ class PromotionRequest extends Model
         return $this->belongsTo(\App\Models\User::class);
     }
 
-    /** Təsdiqlə → vakansiyaya tətbiq et. */
     public function approve(): void
     {
         $vacancy = $this->vacancy;
@@ -41,7 +39,7 @@ class PromotionRequest extends Model
             if ($this->mode === 'premium') {
                 $vacancy->is_featured = true;
                 $vacancy->featured_until = now()->addDays(30);
-            } else { // boost / irəli çək
+            } else {
                 $vacancy->bumped_at = now();
             }
             $vacancy->save();

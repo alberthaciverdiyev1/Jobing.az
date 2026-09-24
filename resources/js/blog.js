@@ -16,7 +16,6 @@ export default function blogManager(config = null) {
         totalCount: config.initialTotal || 0,
 
         init() {
-            // Popstate for browser back/forward buttons
             window.addEventListener('popstate', () => {
                 const params = new URLSearchParams(window.location.search);
                 this.category = params.get('category') || '';
@@ -24,7 +23,6 @@ export default function blogManager(config = null) {
                 this.fetchBlogs(false);
             });
 
-            // Delegate pagination clicks
             document.addEventListener('click', (e) => {
                 const pageLink = e.target.closest('.pagination-wrapper a');
                 if (pageLink && pageLink.href) {

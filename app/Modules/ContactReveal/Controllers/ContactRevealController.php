@@ -11,9 +11,6 @@ use Illuminate\Http\Request;
 
 class ContactRevealController extends Controller
 {
-    /**
-     * Only authenticated employers (companies) or admins may reveal contact details.
-     */
     protected function authorizeReveal(): ?JsonResponse
     {
         $user = auth()->user();
@@ -28,9 +25,6 @@ class ContactRevealController extends Controller
         return null;
     }
 
-    /**
-     * Reveal a job-seeker's contact details and log the interaction.
-     */
     public function revealJobSeeker(Request $request, int $id): JsonResponse
     {
         if ($deny = $this->authorizeReveal()) {
@@ -54,9 +48,6 @@ class ContactRevealController extends Controller
         ]);
     }
 
-    /**
-     * Reveal a vacancy's contact details (employer email) and log the interaction.
-     */
     public function revealVacancy(Request $request, int $id): JsonResponse
     {
         if ($deny = $this->authorizeReveal()) {

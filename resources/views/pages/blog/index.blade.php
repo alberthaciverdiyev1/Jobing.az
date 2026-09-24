@@ -17,12 +17,10 @@ window.__BLOG_CONFIG__ = {
         <div class="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700" x-text="errorMessage"></div>
     </div>
 
-    <!-- Hero -->
     <x-list-hero :title="__('Career Blog')" :placeholder="__('Search in articles...')" />
 
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-10">
 
-        <!-- Category filter -->
         @if($categories->isNotEmpty())
         <div class="flex flex-wrap justify-center gap-2 mb-8">
             <button type="button"
@@ -42,7 +40,6 @@ window.__BLOG_CONFIG__ = {
         </div>
         @endif
 
-        <!-- Blog Container -->
         <div id="blog-container" class="relative min-h-[300px]" :class="isLoading ? 'opacity-50 pointer-events-none transition-opacity duration-150' : ''">
             @include('pages.blog.partials.blog-list', ['blogs' => $blogs])
         </div>

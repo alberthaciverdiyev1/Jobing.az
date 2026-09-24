@@ -2,22 +2,9 @@
 
 return [
 
-    /*
-    |--------------------------------------------------------------------------
-    | WhatsApp Fallback
-    |--------------------------------------------------------------------------
-    | SiteSetting'te whatsapp tanımlı değilse kullanılacak varsayılan numara.
-    |
-    */
 
     'whatsapp_fallback' => env('SITE_WHATSAPP_FALLBACK', '994500000000'),
 
-    /*
-    |--------------------------------------------------------------------------
-    | Social media fallbacks
-    |--------------------------------------------------------------------------
-    | SiteSetting boş olduqda istifadə olunan sosial şəbəkə ünvanları.
-    */
     'social_fallbacks' => [
         'facebook_url' => env('SITE_FACEBOOK_URL', 'https://www.facebook.com/profile.php?id=61569206672024'),
         'instagram_url' => env('SITE_INSTAGRAM_URL', 'https://www.instagram.com/jobing.az/'),
@@ -27,26 +14,9 @@ return [
         'youtube_url' => env('SITE_YOUTUBE_URL'),
     ],
 
-    /*
-    |--------------------------------------------------------------------------
-    | Remote Workplace Slugs
-    |--------------------------------------------------------------------------
-    | "Remote/Uzaktan" kabul edilen çalışma yeri slug'ları. İstatistik
-    | (remote ilan sayısı) bu listeye göre hesaplanır; veride değişirse
-    | buradan güncellenir — blade/servis içinde sabit string aranmaz.
-    |
-    */
 
     'remote_workplace_slugs' => ['uzaktan', 'remote'],
 
-    /*
-    |--------------------------------------------------------------------------
-    | Promotion Pricing (bump & premium)
-    |--------------------------------------------------------------------------
-    | Promosyon paket fiyatları (₼) blade yerine config'de tutulur.
-    | Anahtar = "kaç kez" (1/3/7), değer = fiyat.
-    |
-    */
 
     'promotions' => [
         'bump' => [
@@ -57,13 +27,6 @@ return [
         ],
     ],
 
-    /*
-    |--------------------------------------------------------------------------
-    | Panel URLs
-    |--------------------------------------------------------------------------
-    | Rol bazlı panel yolları (admin / company / user) tek noktadan.
-    |
-    */
 
     'panels' => [
         'admin' => '/admin',

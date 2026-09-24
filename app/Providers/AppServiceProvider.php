@@ -8,12 +8,8 @@ use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     */
     public function register(): void
     {
-        // Filament panelinden çıkışta kullanıcı sitenin giriş sayfasına gider.
         $this->app->bind(
             \Filament\Http\Responses\Auth\Contracts\LogoutResponse::class,
             \App\Http\Responses\FilamentLogoutResponse::class,
@@ -22,19 +18,14 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        // Production-da bütün URL-lər https olsun (Cloudflare/proxy arxasında mixed content-in qarşısı).
         if ($this->app->environment('production')) {
             \Illuminate\Support\Facades\URL::forceScheme('https');
         }
 
-        // Navbar bildirim verisini blade dışında (composer) hazırla.
         View::composer(['components.navbar', 'layouts.partials.*'], NavbarComposer::class);
 
-        // "Yarat & yenisini yarat" düğmesini tüm Filament create sayfalarında kapat.
         \Filament\Resources\Pages\CreateRecord::disableCreateAnother();
 
-        // İş elanı facet keşi: vakansiya və ya referans məlumat dəyişdikdə versiyanı artır
-        // (admin paneldən əlavə/redaktə/silmə daxil) → köhnə keş avtomatik etibarsız olur.
         foreach ([
             \App\Modules\Vacancy\Models\Vacancy::class,
             \App\Modules\Vacancy\Models\ScrapedVacancy::class,

@@ -1,4 +1,3 @@
-<!-- Selected categories banner (multi-select) -->
 @if(!empty($selectedCategories) && $selectedCategories->isNotEmpty())
 <div class="bg-orange-50/70 border border-orange-100 rounded-xl p-4 mb-4 flex items-center justify-between gap-3">
     <div>
@@ -16,7 +15,6 @@
 </div>
 @endif
 
-<!-- Job List Items -->
 @if($jobs->count() > 0)
 <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
     @foreach($jobs as $job)
@@ -24,12 +22,10 @@
     @endforeach
 </div>
 
-<!-- Pagination -->
 <div class="mt-8 flex justify-center pagination-wrapper">
     {{ $jobs->links() }}
 </div>
 @else
-<!-- Empty State -->
 <x-empty-state icon="fa-search"
                :title="__('No vacancies matching your search')"
                :description="__('You can try again by changing your search term or resetting filters.')">

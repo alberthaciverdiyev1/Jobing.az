@@ -9,10 +9,6 @@ use Filament\Resources\Resource;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 
-/**
- * User panelinin kendi CV yönetimi. Yalnızca kullanıcının kendi CV-ləri.
- * Form/şema ResumeResource (admin) ilə eynidir, yalnız kapsam ayrıdır.
- */
 class MyResumeResource extends Resource
 {
     protected static ?string $model = Resume::class;

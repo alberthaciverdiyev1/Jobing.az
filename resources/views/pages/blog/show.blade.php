@@ -9,7 +9,6 @@
 <div class="bg-gray-50 min-h-screen pb-16">
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-10 max-w-3xl">
 
-        <!-- Breadcrumbs -->
         <nav class="flex items-center gap-2 text-xs text-gray-500 mb-6">
             <a href="{{ route('jobs.index') }}" class="hover:text-primary transition">{{ __('Home') }}</a>
             <span>/</span>
@@ -18,7 +17,6 @@
             <span class="text-gray-900 font-medium truncate">{{ $blog->title }}</span>
         </nav>
 
-        <!-- Cover -->
         <div class="h-52 sm:h-64 rounded-2xl bg-gradient-to-br from-slate-800 to-slate-900 flex items-center justify-center overflow-hidden mb-8 shadow-2xs">
             @if($blog->cover_image)
             <img src="{{ asset('storage/' . $blog->cover_image) }}" alt="{{ $blog->title }}" class="w-full h-full object-cover">
@@ -27,7 +25,6 @@
             @endif
         </div>
 
-        <!-- Meta -->
         <div class="flex flex-wrap items-center gap-3 text-xs text-gray-400 mb-4">
             @if($blog->category)
             <span class="px-2.5 py-1 bg-orange-50 text-gray-700 font-semibold rounded-full border border-orange-100">{{ $blog->category }}</span>
@@ -41,12 +38,10 @@
 
         <h2 class="text-2xl sm:text-3xl font-semibold text-gray-900 tracking-tight leading-tight mb-6">{{ $blog->title }}</h2>
 
-        <!-- Content -->
         <article class="prose prose-sm sm:prose-base max-w-none text-gray-700 leading-relaxed">
             {!! sanitize_html($blog->content) !!}
         </article>
 
-        <!-- Related -->
         @if($related->isNotEmpty())
         <div class="mt-12 pt-8 border-t border-gray-200">
             <h3 class="font-semibold text-gray-900 text-sm mb-4">{{ __('Related articles') }}</h3>

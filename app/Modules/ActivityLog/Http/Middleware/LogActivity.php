@@ -7,11 +7,6 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-/**
- * Detallı aktivlik loqu (Metraj üslubu):
- *  - bot aşkarlanması, aksiya kateqoriyası, query/input, istifadəçi rolu, duration_ms, status_code
- *  - yanıt göndərildikdən sonra növbəyə verilir (istifadəçiyə 0ms yük)
- */
 class LogActivity
 {
     public function handle(Request $request, Closure $next): Response
@@ -22,7 +17,6 @@ class LogActivity
 
         $uri = $request->getRequestUri();
 
-        // Səs-küyü filtrlə: asset, livewire, debug və s.
         foreach ([
             '/filament/assets/', '/livewire/livewire.js', '/livewire/update', '/livewire/preview-file',
             '/assets/', '/storage/', '/vendor/', '/favicon.ico', '/robots.txt',
@@ -38,13 +32,11 @@ class LogActivity
         $path = $request->getPathInfo();
         $statusCode = $response->getStatusCode();
 
-        // Bot aşkarlanması
         $botName = null;
         if (preg_match('/(googlebot|bingbot|yandexbot|duckduckbot|baiduspider|facebot|facebookexternalhit|twitterbot|telegrambot|ahrefsbot|semrushbot|gptbot|applebot)/i', $userAgent, $m)) {
             $botName = ucfirst(strtolower($m[1]));
         }
 
-        // Aksiya kateqoriyası
         if ($botName) {
             $action = 'bot_visit';
         } elseif ($statusCode >= 500) {
@@ -83,7 +75,6 @@ class LogActivity
             $action = 'request';
         }
 
-        // Strukturlaşdırılmış payload
         $payload = [];
 
         if ($botName) {
@@ -123,7 +114,6 @@ class LogActivity
         try {
             dispatch(new ProcessActivityLogJob($logData))->afterResponse();
         } catch (\Throwable $e) {
-            // sükutla keç
         }
 
         return $response;

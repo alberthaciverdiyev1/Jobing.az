@@ -64,7 +64,6 @@ class Skill extends Model
         return [self::CACHE_KEY, 'ref.skills.popular'];
     }
 
-    /** Aktiv bacarıqlar, adla sıralı (keşlənmiş). */
     public static function cachedActive(): \Illuminate\Database\Eloquent\Collection
     {
         return static::remember(self::CACHE_KEY, fn () => static::active()->get()->sortBy('name')->values());

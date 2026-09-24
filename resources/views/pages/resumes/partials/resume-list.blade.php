@@ -22,14 +22,12 @@
 </div>
 @endif
 
-<!-- Resumes Grid (3 cards per row) -->
 @if($resumes->count() > 0)
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
     @foreach($resumes as $resume)
     <div class="bg-white rounded-2xl p-5 border border-gray-200 hover:border-orange-300 hover:shadow-md transition-all duration-200 group flex flex-col justify-between relative cursor-pointer">
 
         <div>
-            <!-- Top: Avatar + Name, Position & Location side by side -->
             <div class="flex items-start gap-3.5">
                 <div class="w-13 h-13 rounded-xl bg-slate-900 border border-gray-100 flex items-center justify-center font-semibold text-white text-lg shrink-0 shadow-2xs overflow-hidden">
                     @if($resume->photo)
@@ -52,7 +50,6 @@
                 </div>
             </div>
 
-            <!-- Skills Tags -->
             <div class="flex flex-wrap items-center gap-1.5 mt-3.5">
                 @if(!empty($resume->skills) && is_array($resume->skills))
                     @php
@@ -75,7 +72,6 @@
             </div>
         </div>
 
-        <!-- Card Bottom: Date & View CTA -->
         <div class="pt-3 mt-3 border-t border-gray-100 flex items-center justify-between text-xs">
             <span class="text-[12px] text-gray-400 flex items-center gap-1">
                 <i class="far fa-clock text-[11px]"></i>
@@ -92,13 +88,11 @@
     @endforeach
 </div>
 
-<!-- Pagination -->
 <div class="mt-8 pagination-wrapper">
     {{ $resumes->links() }}
 </div>
 
 @else
-<!-- Empty State -->
 <div class="text-center py-16 bg-white rounded-xl border border-gray-200 p-8 shadow-2xs">
     <div class="w-14 h-14 bg-orange-50 text-primary rounded-xl flex items-center justify-center mx-auto mb-3 border border-orange-100">
         <i class="fas fa-file-alt text-xl"></i>

@@ -1,4 +1,3 @@
-<!-- Candidate Cards List -->
 @if($jobSeekers->count() > 0)
 <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
     @foreach($jobSeekers as $seeker)
@@ -6,13 +5,11 @@
     @endforeach
 </div>
 
-<!-- Pagination -->
 <div class="mt-8 pagination-wrapper">
     {{ $jobSeekers->links() }}
 </div>
 
 @else
-<!-- Empty State -->
 <x-empty-state icon="fa-user-tie" :tight="true"
                :title="__('No candidate listings matching your search')"
                :description="__('Try again by changing your search criteria or resetting the filters.')">

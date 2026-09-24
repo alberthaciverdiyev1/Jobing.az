@@ -10,9 +10,6 @@ use App\Modules\Vacancy\Models\Vacancy;
 
 class HomeService
 {
-    /**
-     * About sayfası için ortak istatistikler (tek kaynak).
-     */
     public function getAboutStats(): array
     {
         return [
@@ -23,11 +20,6 @@ class HomeService
         ];
     }
 
-    /**
-     * Retrieve aggregated data for the homepage.
-     *
-     * @return array
-     */
     public function getHomeData(): array
     {
         $featuredJobs = Vacancy::with(['company', 'category', 'jobType', 'workplaceType', 'experienceLevel'])
@@ -58,7 +50,6 @@ class HomeService
             ->where('created_at', '>=', now()->subDays(7))
             ->count();
 
-        // Verified companies for the "trusted companies" marquee (only verified companies)
         $topCompanies = Company::where('is_verified', true)
             ->withCount('vacancies')
             ->orderByDesc('vacancies_count')

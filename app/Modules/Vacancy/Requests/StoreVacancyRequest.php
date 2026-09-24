@@ -29,9 +29,6 @@ class StoreVacancyRequest extends FormRequest
         $isInternalOnly = $this->input('application_type') === 'internal';
 
         return [
-            // If the user already has a linked company profile, company_name is disabled in the form
-            // (not sent by browser) and resolved from their profile in VacancyService.
-            // For guests or users without a linked company profile, company_name is required.
             'company_name' => $hasCompany
                 ? 'nullable|string|max:255'
                 : [
@@ -69,8 +66,6 @@ class StoreVacancyRequest extends FormRequest
             'skills.*' => 'string|max:100',
             'deadline' => 'nullable|date|after:today',
             'application_type' => $canUseInternal ? 'required|in:internal,email,both' : 'required|in:email',
-            // application_email is NEVER required if application_type is 'internal'.
-            // For 'email' or 'both', it is required ONLY if the user has no company email to fall back to.
             'application_email' => ($isInternalOnly && $canUseInternal)
                 ? 'nullable|email|max:255'
                 : ($hasCompanyEmail ? 'nullable|email|max:255' : 'required|email|max:255'),

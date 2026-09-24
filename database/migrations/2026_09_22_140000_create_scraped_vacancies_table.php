@@ -11,8 +11,6 @@ return new class extends Migration
         Schema::create('scraped_vacancies', function (Blueprint $table) {
             $table->id();
 
-            // Scraped listings intentionally keep a company snapshot instead
-            // of belonging to a company account in this application.
             $table->string('company_name');
             $table->string('company_logo', 2048)->nullable();
             $table->text('redirect_url');

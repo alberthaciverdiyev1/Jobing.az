@@ -6,7 +6,6 @@
 <div class="bg-gray-50 min-h-screen pb-16">
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
-        <!-- Header -->
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
             <div>
                 <h2 class="text-2xl font-semibold text-gray-900 flex items-center gap-3">
@@ -24,7 +23,6 @@
             </a>
         </div>
 
-        <!-- Favorites List -->
         @if($favorites->count() > 0)
         <div class="grid grid-cols-1 md:grid-cols-2 gap-3" id="favorites-list">
             @foreach($favorites as $fav)
@@ -34,13 +32,11 @@
             @endforeach
         </div>
 
-        <!-- Pagination -->
         <div class="mt-8 pagination-wrapper">
             {{ $favorites->links() }}
         </div>
 
         @else
-        <!-- Empty State -->
         <div class="text-center py-16 bg-white rounded-2xl border border-gray-200 p-8 shadow-2xs">
             <i class="fas fa-heart text-2xl text-gray-300 mb-4 block"></i>
             <h3 class="text-base font-semibold text-gray-900 mb-1">{{ __('No saved jobs yet') }}</h3>

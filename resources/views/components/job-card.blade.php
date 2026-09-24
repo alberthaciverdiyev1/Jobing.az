@@ -11,7 +11,6 @@
 <div {{ $attributes->merge(['class' => ($isFeatured ? 'bg-white border-amber-300 hover:border-amber-400' : 'bg-white border-gray-200 hover:border-gray-300') . ' rounded-xl p-4 md:p-5 border hover:shadow-xs transition-all duration-200 group flex flex-col justify-between relative @container']) }}>
     <div class="flex flex-col @sm:flex-row @sm:items-start justify-between gap-4">
 
-        <!-- Left: Logo & Details -->
         <div class="flex items-start gap-4 flex-1 min-w-0">
             <x-company-avatar :name="$companyName" :logo="$companyLogo" :featured="$isFeatured" size="md" />
             <div class="space-y-1 flex-1 min-w-0">
@@ -35,7 +34,7 @@
                     </span>
                     @endif
                 </div>
-                <h3 class="text-base font-semibold text-gray-900 group-hover:text-primary transition leading-tight">
+                <h3 class="text-md sm:text-base font-semibold text-gray-900 group-hover:text-primary transition leading-tight">
                     <a href="{{ $jobUrl }}"
                        @if($isScraped) target="_blank" rel="noopener noreferrer nofollow" @endif
                        class="focus:outline-hidden before:absolute before:inset-0">
@@ -59,7 +58,6 @@
             </div>
         </div>
 
-        <!-- Right: Location, Date & Source (mobile: city + salary justified between) -->
         <div class="@sm:text-right shrink-0 flex flex-col @sm:items-end @sm:self-stretch @sm:justify-between border-t @sm:border-t-0 pt-2 @sm:pt-0 border-gray-100">
             <div class="flex flex-col @sm:items-end w-full @sm:w-auto">
                 <div class="flex items-center justify-between @sm:justify-end gap-3 text-xs w-full @sm:w-auto">
@@ -67,13 +65,12 @@
                         <i class="fas fa-map-marker-alt text-primary text-xs"></i>
                         <span>{{ $job->city_name ?: ($isScraped ? '' : ($job->company?->location ?? '')) }}</span>
                     </div>
-                    <span class="@sm:hidden text-sm font-semibold text-gray-900 font-mono">{{ $job->formatted_salary }}</span>
+                    <span class="@sm:hidden text-xs font-semibold text-gray-900 font-mono">{{ $job->formatted_salary }}</span>
                 </div>
                 <div class="hidden @sm:block text-gray-400 text-[12px] mt-0.5 @sm:mt-0">{{ $job->created_at?->diffForHumans() }}</div>
             </div>
 
             @if($isScraped && $job->source_name)
-            <!-- Source site (həmişə kartın ən sağında, iş rejimi sətri ilə eyni səviyyədə) -->
             <div class="mt-1 @sm:mt-0 flex items-center gap-1.5 @sm:justify-end text-[12px] text-gray-500">
                 <i class="fas fa-globe text-[10px] text-gray-400"></i>
                 <span>{{ __('Source') }}: <span class="font-medium text-gray-700">{{ $job->source_name }}</span></span>
@@ -83,7 +80,6 @@
 
     </div>
 
-    <!-- Footer: Skills & Salary (desktop only, so tags are hidden on mobile) -->
     <div class="hidden @sm:flex mt-3 pt-3 border-t border-gray-100 items-center justify-between gap-2">
         <x-skill-tags :skills="$job->skills" />
         <span class="text-sm font-semibold text-gray-900 font-mono @sm:ml-auto">{{ $job->formatted_salary }}</span>

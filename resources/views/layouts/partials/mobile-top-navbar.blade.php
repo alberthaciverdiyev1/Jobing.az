@@ -4,7 +4,6 @@
     $activeLocaleInfo = $locales[$currentLocale] ?? reset($locales);
 @endphp
 
-{{-- Mobile Top Navbar: Brand on Left, Language Dropdown & Notifications on Right --}}
 <header class="xl:hidden bg-white border-b border-gray-200/80 sticky top-0 z-[60] px-3.5 flex items-center justify-between shadow-2xs select-none"
         x-data="{ hiddenByOverlay: false }"
         x-show="!hiddenByOverlay"
@@ -16,14 +15,11 @@
         x-transition:enter-start="opacity-0 -translate-y-full"
         x-transition:enter-end="opacity-100 -translate-y-0"
         style="height: 56px; min-height: 56px;">
-    {{-- Left: Brand Logo --}}
     <a href="{{ route('jobs.index') }}" class="shrink-0 flex items-center">
         <img src="{{ asset('images/logo/jobing-wordmark.png') }}" alt="{{ config('app.full_name') }}" class="h-7 sm:h-9 w-auto">
     </a>
 
-    {{-- Right: Language Dropdown + Notification / User Icon --}}
     <div class="flex items-center gap-2 shrink-0">
-        {{-- Language Custom Dropdown (Alpine.js) --}}
         <div class="relative" x-data="{ mobileLangOpen: false }" @click.outside="mobileLangOpen = false">
             <button type="button"
                     @click="mobileLangOpen = !mobileLangOpen"
@@ -34,7 +30,6 @@
                 <i class="fa-solid fa-chevron-down text-[9px] text-gray-400 transition-transform duration-200 pointer-events-none" :class="mobileLangOpen ? 'rotate-180' : ''"></i>
             </button>
 
-            {{-- Language Menu Dropdown --}}
             <div x-show="mobileLangOpen" x-cloak
                  x-transition:enter="transition ease-out duration-100"
                  x-transition:enter-start="transform opacity-0 scale-95"
@@ -63,7 +58,6 @@
             </div>
         </div>
 
-        {{-- Auth Notifications or Login --}}
         @auth
         <a href="{{ auth()->user()->panelPath() }}"
            class="relative inline-flex items-center justify-center w-9 h-9 rounded-xl bg-gray-50 border border-gray-200/80 text-gray-600 hover:text-primary transition">

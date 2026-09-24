@@ -70,9 +70,7 @@ window.__JOBS_CONFIG__ = {
         <div class="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700" x-text="errorMessage"></div>
     </div>
 
-    <!-- Hero & Main Filter Section -->
     <section class="relative z-30 bg-gradient-to-b from-orange-50/70 via-orange-50/40 to-gray-50 border-b border-gray-200/80 pt-10 pb-8 md:pb-10">
-        <!-- Floating background decorative icons -->
         <div class="absolute inset-0 overflow-hidden pointer-events-none">
             @foreach($heroIcons as [$icon, $x, $y, $size, $rot])
             <i class="fas {{ $icon }} absolute text-primary/10 hidden md:block"
@@ -82,7 +80,6 @@ window.__JOBS_CONFIG__ = {
 
         <div class="relative container mx-auto px-4 sm:px-6 lg:px-8 text-center">
 
-            <!-- Headline / Subtitle -->
             <div class="max-w-2xl mx-auto mb-6">
                 <h1 class="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 tracking-tight mb-2"
                     x-text="selectedParentCategoryLabel || '{{ $listingTitle }}'">
@@ -93,13 +90,10 @@ window.__JOBS_CONFIG__ = {
                 </p>
             </div>
 
-            <!-- White Search & Filter Card -->
             <div class="max-w-7xl mx-auto bg-white/95 backdrop-blur-sm rounded-2xl md:rounded-3xl border border-orange-100 p-3.5 sm:p-5 text-left relative z-20">
 
-                <!-- Row 1: Search Keyword, City Selector, Desktop Action Button -->
                 <div class="grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_14rem_auto] lg:grid-cols-[minmax(0,1fr)_16rem_auto] items-stretch gap-2.5">
 
-                    <!-- Search Input -->
                     <div class="relative flex-1">
                         <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm pointer-events-none"></i>
                         <input type="text"
@@ -117,7 +111,6 @@ window.__JOBS_CONFIG__ = {
                         </button>
                     </div>
 
-                    <!-- City Selector -->
                     <div class="relative w-full" :class="cityOpen ? 'z-50' : 'z-auto'" x-data="{ cityOpen: false }" @click.outside="cityOpen = false">
                         <button type="button"
                                 @click="cityOpen = !cityOpen"
@@ -128,7 +121,6 @@ window.__JOBS_CONFIG__ = {
                             <i class="fas fa-chevron-down text-[10px] text-gray-400 transition-transform ml-2 shrink-0" :class="cityOpen ? 'rotate-180 text-primary' : ''"></i>
                         </button>
 
-                        <!-- City Dropdown Popover -->
                         <div x-show="cityOpen"
                              x-cloak
                              x-transition:enter="transition ease-out duration-100"
@@ -161,7 +153,6 @@ window.__JOBS_CONFIG__ = {
                         </div>
                     </div>
 
-                    <!-- Search Button -->
                     <button type="button"
                             @click="applyFilters()"
                             class="hidden md:flex h-12 bg-primary hover:bg-primary-dark text-white font-semibold px-7 rounded-xl transition-all items-center justify-center gap-2 text-sm active:scale-[0.98] cursor-pointer whitespace-nowrap">
@@ -171,10 +162,8 @@ window.__JOBS_CONFIG__ = {
 
                 </div>
 
-                <!-- Row 2: Filter Pills & Reset Button -->
                 <div class="grid grid-cols-2 md:flex md:flex-wrap xl:flex-nowrap items-center gap-2 xl:gap-1.5 p-2.5 mt-3 rounded-xl bg-slate-50/80 border border-slate-100 relative" :class="activeDropdown ? 'z-40' : 'z-10'">
 
-                    <!-- 1. Category Filter Dropdown -->
                     <div class="relative" :class="activeDropdown === 'category' ? 'z-50' : 'z-auto'" @click.outside="closeDropdown('category')">
                         <span class="block md:hidden text-[11px] font-medium text-gray-500 mb-1.5 px-0.5">{{ __('Category') }}</span>
                         <button type="button"
@@ -215,7 +204,6 @@ window.__JOBS_CONFIG__ = {
                         </div>
                     </div>
 
-                    <!-- 2. Subcategory Filter Dropdown -->
                     <div class="relative" :class="activeDropdown === 'subcategory' ? 'z-50' : 'z-auto'" @click.outside="closeDropdown('subcategory')">
                         <span class="block md:hidden text-[11px] font-medium text-gray-500 mb-1.5 px-0.5">{{ __('Subcategory') }}</span>
                         <button type="button"
@@ -271,7 +259,6 @@ window.__JOBS_CONFIG__ = {
                         </div>
                     </div>
 
-                    <!-- 3. Workplace Type (İş rejimi) Dropdown -->
                     @if($workplaceTypes->count() > 0)
                     <div class="hidden md:block relative" :class="activeDropdown === 'workplace' ? 'z-50' : 'z-auto'" @click.outside="closeDropdown('workplace')">
                         <span class="block md:hidden text-[11px] font-medium text-gray-500 mb-1.5 px-0.5">{{ __('Workplace') }}</span>
@@ -319,7 +306,6 @@ window.__JOBS_CONFIG__ = {
                     </div>
                     @endif
 
-                    <!-- 4. Experience Level (Təcrübə) Dropdown -->
                     @if($experienceLevels->count() > 0)
                     <div class="hidden md:block relative" :class="activeDropdown === 'experience' ? 'z-50' : 'z-auto'" @click.outside="closeDropdown('experience')">
                         <span class="block md:hidden text-[11px] font-medium text-gray-500 mb-1.5 px-0.5">{{ __('Experience') }}</span>
@@ -367,7 +353,6 @@ window.__JOBS_CONFIG__ = {
                     </div>
                     @endif
 
-                    <!-- 5. Salary (Maaş) Dropdown -->
                     <div class="relative" :class="activeDropdown === 'salary' ? 'z-50' : 'z-auto'" @click.outside="closeDropdown('salary')">
                         <span class="block md:hidden text-[11px] font-medium text-gray-500 mb-1.5 px-0.5">{{ __('Salary') }}</span>
                         <button type="button"
@@ -416,7 +401,6 @@ window.__JOBS_CONFIG__ = {
                                 </div>
                             </div>
 
-                            <!-- Quick Preset Ranges -->
                             <div class="flex flex-wrap gap-1.5 pt-1">
                                 <button type="button" @click="min_salary = '500'; max_salary = '1000'; applyFilters()"
                                         class="px-2.5 py-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-[11px] font-medium text-gray-700 cursor-pointer">500 - 1000</button>
@@ -436,7 +420,6 @@ window.__JOBS_CONFIG__ = {
                         </div>
                     </div>
 
-                    <!-- 6. More Filters (Daha çox filtr) -->
                     <div class="md:contents">
                         <span class="block md:hidden text-[11px] font-medium text-gray-500 mb-1.5 px-0.5">{{ __('More filters') }}</span>
                         <button type="button"
@@ -449,7 +432,6 @@ window.__JOBS_CONFIG__ = {
                         </button>
                     </div>
 
-                    <!-- 7. Reset Filters -->
                     <button type="button"
                             x-show="hasActiveFilters"
                             x-cloak
@@ -461,7 +443,6 @@ window.__JOBS_CONFIG__ = {
 
                 </div>
 
-                <!-- Mobile Action Button -->
                 <button type="button"
                         @click="applyFilters()"
                         class="md:hidden mt-3 w-full h-12 bg-primary hover:bg-primary-dark text-white font-semibold px-7 rounded-xl transition-all flex items-center justify-center gap-2 text-sm active:scale-[0.98] cursor-pointer">
@@ -474,11 +455,9 @@ window.__JOBS_CONFIG__ = {
         </div>
     </section>
 
-    <!-- Main Content: Vacancies List (Full-Width) -->
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-0">
         <div class="max-w-full mx-auto w-full">
 
-            <!-- List Header: Count & Sort -->
             <div class="flex flex-row justify-between items-center gap-2 sm:gap-3 mb-5 pb-3 border-b border-gray-200">
                 <div class="flex items-center gap-2 min-w-0">
                     <p class="text-xs sm:text-sm text-gray-500 leading-tight">
@@ -507,7 +486,6 @@ window.__JOBS_CONFIG__ = {
                 </div>
             </div>
 
-            <!-- Async Jobs Container with Loading State -->
             <div id="jobs-container" class="relative min-h-[300px]" :class="isLoading ? 'opacity-50 pointer-events-none transition-opacity duration-150' : ''">
                 @include('pages.jobs.partials.job-list', ['jobs' => $jobs, 'selectedCategory' => $selectedCategory, 'isExternal' => $isExternal])
             </div>
@@ -515,7 +493,6 @@ window.__JOBS_CONFIG__ = {
         </div>
     </div>
 
-    <!-- More Filters Modal -->
     <div x-show="moreFiltersOpen"
          x-cloak
          @keydown.escape.window="moreFiltersOpen = false"
@@ -528,7 +505,6 @@ window.__JOBS_CONFIG__ = {
             <div class="relative bg-white rounded-2xl max-w-2xl w-full p-6 shadow-2xl flex flex-col max-h-[90vh]"
                  @click.outside="moreFiltersOpen = false">
 
-                <!-- Modal Header -->
                 <div class="flex items-center justify-between pb-4 border-b border-gray-100 shrink-0">
                     <div class="flex items-center gap-2">
                         <div class="w-8 h-8 rounded-xl bg-orange-50 text-primary flex items-center justify-center text-sm font-semibold">
@@ -545,10 +521,8 @@ window.__JOBS_CONFIG__ = {
                     </button>
                 </div>
 
-                <!-- Modal Body (Scrollable) -->
                 <div class="overflow-y-auto py-5 pr-1 space-y-5 text-left flex-1">
 
-                    <!-- 1. Category & Subcategory -->
                     <div class="space-y-3">
                         <div class="flex items-center justify-between">
                             <label class="text-xs font-bold text-gray-800 uppercase tracking-wider flex items-center gap-1.5">
@@ -567,7 +541,6 @@ window.__JOBS_CONFIG__ = {
                             @endforeach
                         </select>
 
-                        <!-- Subcategory chips / multiselect -->
                         <div x-show="availableSubcategories.length > 0" x-cloak class="pt-2 border-t border-gray-100 space-y-2">
                             <div class="flex items-center justify-between">
                                 <span class="text-xs font-semibold text-gray-700">{{ __('Subcategories') }}</span>
@@ -588,7 +561,6 @@ window.__JOBS_CONFIG__ = {
                         </div>
                     </div>
 
-                    <!-- 2. Category Skills -->
                     <div class="space-y-3 pt-4 border-t border-gray-100">
                         <div class="flex items-center justify-between">
                             <div class="flex items-center gap-2">
@@ -605,7 +577,6 @@ window.__JOBS_CONFIG__ = {
                             </button>
                         </div>
 
-                        <!-- Quick Search Input for Skills -->
                         <div class="relative" x-show="availableSkills.length > 6">
                             <i class="fas fa-search absolute left-3 top-2.5 text-xs text-gray-400 pointer-events-none"></i>
                             <input type="text"
@@ -614,13 +585,11 @@ window.__JOBS_CONFIG__ = {
                                    class="w-full pl-8 pr-3 py-2 text-xs bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:outline-hidden focus:border-primary text-gray-700 placeholder-gray-400">
                         </div>
 
-                        <!-- Loading State -->
                         <div x-show="skillsLoading" class="py-4 text-center text-xs text-gray-400 flex items-center justify-center gap-2">
                             <i class="fas fa-spinner animate-spin text-primary"></i>
                             <span>{{ __('Loading skills...') }}</span>
                         </div>
 
-                        <!-- Skills Chips -->
                         <div x-show="!skillsLoading && filteredAvailableSkills.length > 0"
                              class="flex flex-wrap gap-1.5 max-h-48 overflow-y-auto p-2 bg-gray-50/70 rounded-xl border border-gray-100">
                             <template x-for="skill in filteredAvailableSkills" :key="skill.name">
@@ -634,19 +603,16 @@ window.__JOBS_CONFIG__ = {
                             </template>
                         </div>
 
-                        <!-- If no skills match search -->
                         <div x-show="!skillsLoading && availableSkills.length > 0 && filteredAvailableSkills.length === 0" class="py-3 text-center text-xs text-gray-400">
                             {{ __('No skills match your search.') }}
                         </div>
 
-                        <!-- If no category selected -->
                         <div x-show="!skillsLoading && availableSkills.length === 0" class="text-xs text-gray-500 bg-orange-50/70 border border-orange-200/70 rounded-xl p-3 flex items-center gap-2">
                             <i class="fas fa-info-circle text-primary shrink-0"></i>
                             <span>{{ __('Select a category above to view and filter by relevant skills.') }}</span>
                         </div>
                     </div>
 
-                    <!-- 3. City / Location -->
                     @if($cities->count() > 0)
                     <div class="space-y-2 pt-4 border-t border-gray-100">
                         <h4 class="text-xs font-bold text-gray-800 uppercase tracking-wider flex items-center gap-1.5">
@@ -664,7 +630,6 @@ window.__JOBS_CONFIG__ = {
                     </div>
                     @endif
 
-                    <!-- 4. Workplace Type -->
                     @if($workplaceTypes->count() > 0)
                     <div class="space-y-3 pt-4 border-t border-gray-100">
                         <h4 class="text-xs font-bold text-gray-800 uppercase tracking-wider flex items-center gap-1.5">
@@ -692,7 +657,6 @@ window.__JOBS_CONFIG__ = {
                     </div>
                     @endif
 
-                    <!-- 5. Experience Level -->
                     @if($experienceLevels->count() > 0)
                     <div class="space-y-3 pt-4 border-t border-gray-100">
                         <h4 class="text-xs font-bold text-gray-800 uppercase tracking-wider flex items-center gap-1.5">
@@ -720,7 +684,6 @@ window.__JOBS_CONFIG__ = {
                     </div>
                     @endif
 
-                    <!-- 6. Job Type (Employment Type) -->
                     @if($jobTypes->count() > 0)
                     <div class="space-y-3 pt-4 border-t border-gray-100">
                         <h4 class="text-xs font-bold text-gray-800 uppercase tracking-wider flex items-center gap-1.5">
@@ -748,7 +711,6 @@ window.__JOBS_CONFIG__ = {
                     </div>
                     @endif
 
-                    <!-- 7. Salary -->
                     <div class="space-y-3 pt-4 border-t border-gray-100">
                         <div class="flex items-center justify-between">
                             <h4 class="text-xs font-bold text-gray-800 uppercase tracking-wider flex items-center gap-1.5">
@@ -793,7 +755,6 @@ window.__JOBS_CONFIG__ = {
                         </div>
                     </div>
 
-                    <!-- 8. Sort By -->
                     <div class="space-y-2 pt-4 border-t border-gray-100">
                         <h4 class="text-xs font-bold text-gray-800 uppercase tracking-wider flex items-center gap-1.5">
                             <i class="fas fa-sort text-primary text-xs"></i>
@@ -815,7 +776,6 @@ window.__JOBS_CONFIG__ = {
 
                 </div>
 
-                <!-- Footer Actions -->
                 <div class="flex items-center justify-between pt-4 border-t border-gray-100 shrink-0">
                     <button type="button"
                             @click="resetAllFilters()"

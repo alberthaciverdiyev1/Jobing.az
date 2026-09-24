@@ -1,7 +1,5 @@
 @props(['job'])
 
-{{-- Employer company summary card (shared: desktop sidebar + mobile after apply section).
-     Legacy company-less listings (vacancies.company_id = null) must not render this card. --}}
 @if($job->company)
                 <div class="bg-white rounded-xl border border-gray-200 p-5 shadow-2xs space-y-4">
                     <h3 class="text-[11px] font-medium text-gray-400 pb-2 border-b border-gray-100">

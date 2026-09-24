@@ -5,7 +5,6 @@
 @section('content')
 <div class="bg-gray-50 min-h-screen pb-20">
 
-    <!-- Hero Header -->
     <div class="relative bg-white border-b border-gray-200/80 overflow-hidden">
         <div class="absolute inset-0 bg-radial from-orange-50/70 via-transparent to-transparent opacity-70 pointer-events-none"></div>
         <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-20 relative">
@@ -26,7 +25,6 @@
 
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 -mt-8 relative z-10 max-w-6xl space-y-12">
 
-        <!-- Live Platform Stats -->
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
             <div class="bg-white rounded-2xl p-5 border border-gray-200/80 shadow-2xs hover:shadow-xs transition flex items-center gap-4">
                 <div class="w-12 h-12 rounded-xl bg-orange-50 text-primary flex items-center justify-center text-xl shrink-0">
@@ -69,7 +67,6 @@
             </div>
         </div>
 
-        <!-- Mission & Vision Cards -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div class="bg-white rounded-2xl p-7 sm:p-8 border border-gray-200 shadow-2xs space-y-3">
                 <div class="w-10 h-10 rounded-xl bg-orange-50 text-primary flex items-center justify-center text-base font-semibold">
@@ -92,7 +89,6 @@
             </div>
         </div>
 
-        <!-- Why Jobing.az (Core Features) -->
         <div class="space-y-6">
             <div class="text-center max-w-xl mx-auto space-y-2">
                 <h2 class="text-2xl font-semibold text-gray-900">{{ __('Why Jobing.az?') }}</h2>
@@ -142,9 +138,7 @@
             </div>
         </div>
 
-        <!-- For Job Seekers vs For Employers -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <!-- Job Seekers -->
             <div class="bg-white rounded-2xl p-7 sm:p-8 border border-gray-200 shadow-2xs space-y-5">
                 <div class="flex items-center gap-3">
                     <div class="w-10 h-10 rounded-xl bg-orange-50 text-primary flex items-center justify-center text-base font-semibold">
@@ -183,7 +177,6 @@
                 </div>
             </div>
 
-            <!-- Employers -->
             <div class="bg-white rounded-2xl p-7 sm:p-8 border border-gray-200 shadow-2xs space-y-5">
                 <div class="flex items-center gap-3">
                     <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-base font-semibold">
@@ -223,7 +216,6 @@
             </div>
         </div>
 
-        <!-- CTA Card -->
         <div class="rounded-3xl bg-linear-to-r from-orange-500 to-amber-600 p-8 sm:p-12 text-white shadow-xl flex flex-col md:flex-row items-center justify-between gap-6">
             <div class="space-y-2 text-center md:text-left">
                 <h3 class="text-2xl sm:text-3xl font-semibold tracking-tight">{{ __('Reach Your Career Goal with Us') }}</h3>

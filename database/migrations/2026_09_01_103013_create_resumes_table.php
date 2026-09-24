@@ -6,9 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('resumes', function (Blueprint $table) {
@@ -16,7 +13,6 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->string('title');
             
-            // Kişisel Bilgiler
             $table->string('first_name');
             $table->string('last_name');
             $table->string('photo')->nullable();
@@ -27,10 +23,8 @@ return new class extends Migration
             $table->string('github_url')->nullable();
             $table->string('portfolio_url')->nullable();
 
-            // Profesyonel Özet
             $table->text('summary')->nullable();
 
-            // JSON Repeaters
             $table->json('work_experiences')->nullable();
             $table->json('education')->nullable();
             $table->json('skills')->nullable();
@@ -47,9 +41,6 @@ return new class extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('resumes');

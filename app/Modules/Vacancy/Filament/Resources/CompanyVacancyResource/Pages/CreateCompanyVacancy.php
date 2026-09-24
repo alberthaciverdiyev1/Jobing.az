@@ -13,7 +13,6 @@ class CreateCompanyVacancy extends CreateRecord
     protected function mutateFormDataBeforeCreate(array $data): array
     {
         $data['company_id'] = auth()->user()?->company_id;
-        // Şirkət elanı admin onayından sonra aktiv olur.
         $data['is_active'] = false;
 
         return $data;

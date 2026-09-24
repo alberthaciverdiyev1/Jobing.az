@@ -17,13 +17,11 @@ class ExpirePromotionsCommand extends Command
         $dry = (bool) $this->option('dry-run');
         $now = now();
 
-        // 1) Süresi dolan vakansiya premium'ları
         $vacancies = Vacancy::query()
             ->where('is_featured', true)
             ->whereNotNull('featured_until')
             ->where('featured_until', '<', $now);
 
-        // 2) Süresi dolan iş arayan premium'ları
         $seekers = JobSeeker::query()
             ->where('is_featured', true)
             ->whereNotNull('featured_until')

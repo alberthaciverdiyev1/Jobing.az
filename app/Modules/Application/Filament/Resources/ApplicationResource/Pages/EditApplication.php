@@ -42,7 +42,6 @@ class EditApplication extends EditRecord
     {
         parent::mount($record);
 
-        /** @var \App\Modules\Application\Models\Application $appRecord */
         $appRecord = $this->getRecord();
 
         if (is_null($appRecord->viewed_at) && auth()->check() && auth()->user()->isCompany()) {

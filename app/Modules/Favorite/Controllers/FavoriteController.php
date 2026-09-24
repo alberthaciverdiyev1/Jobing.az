@@ -11,9 +11,6 @@ use Illuminate\View\View;
 
 class FavoriteController extends Controller
 {
-    /**
-     * The favorites list page.
-     */
     public function index(Request $request): View
     {
         $userId = auth()->id();
@@ -36,9 +33,6 @@ class FavoriteController extends Controller
         ]);
     }
 
-    /**
-     * Toggle a vacancy in/out of favorites for authenticated users.
-     */
     public function toggle(Request $request): JsonResponse
     {
         $userId = auth()->id();
@@ -79,9 +73,6 @@ class FavoriteController extends Controller
         ]);
     }
 
-    /**
-     * Return all favorite vacancy ids for the logged in user.
-     */
     public function ids(Request $request): JsonResponse
     {
         return response()->json([
@@ -91,9 +82,6 @@ class FavoriteController extends Controller
         ]);
     }
 
-    /**
-     * Remove all favorites for the logged in user.
-     */
     public function clear(Request $request): JsonResponse
     {
         $userId = auth()->id();
@@ -108,17 +96,11 @@ class FavoriteController extends Controller
         ]);
     }
 
-    /**
-     * Count favorites for the logged in user.
-     */
     protected function count(Request $request): int
     {
         return count($this->getIds($request));
     }
 
-    /**
-     * Get favorite vacancy ids for the logged in user.
-     */
     protected function getIds(Request $request): array
     {
         $userId = auth()->id();

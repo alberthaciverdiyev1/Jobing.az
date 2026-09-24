@@ -14,7 +14,6 @@ Alpine.data('companiesManager', companiesManager);
 Alpine.data('jobSeekersManager', jobSeekersManager);
 Alpine.data('blogManager', blogManager);
 
-// Contact reveal (lead tracking): mask contact until clicked, then fetch & log.
 const contactReveal = (url, hasPhone) => ({
     revealed: false,
     loading: false,
@@ -42,7 +41,6 @@ const contactReveal = (url, hasPhone) => ({
                 this.revealed = true;
             }
         } catch (e) {
-            // ignore network errors
         } finally {
             this.loading = false;
         }

@@ -11,8 +11,8 @@
     $cleanWa = preg_replace('/[^0-9]/', '', $whatsapp);
 
     $isPremium = $mode === 'premium';
-    $accent = $isPremium ? '#b45309' : '#c2410c';      // koyu amber / turuncu
-    $accentSoft = $isPremium ? '#fffbeb' : '#fff7ed';  // açık zemin
+    $accent = $isPremium ? '#b45309' : '#c2410c';
+    $accentSoft = $isPremium ? '#fffbeb' : '#fff7ed';
     $verb = $isPremium ? 'PREMIUM ETMƏK' : 'İRƏLİ ÇƏKMƏK';
 
     $prices = config('site.promotions.' . $mode . '.prices', [1 => 5, 3 => 12, 7 => 25]);
@@ -55,7 +55,6 @@
             window.open(wa, '_blank');
         }
     }">
-    <!-- Başlık -->
     <div style="display:flex;align-items:center;gap:12px;padding:2px 2px 14px;">
         <div style="flex:0 0 auto;width:42px;height:42px;border-radius:12px;background:{{ $accent }};color:#fff;font-weight:800;font-size:17px;display:flex;align-items:center;justify-content:center;">
             {{ $isPremium ? '★' : '↥' }}
@@ -66,13 +65,11 @@
         </div>
     </div>
 
-    <!-- Hedef ilan -->
     <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:12px;padding:11px 14px;margin-bottom:16px;">
         <div style="font-size:10px;font-weight:700;color:#9ca3af;text-transform:uppercase;letter-spacing:.06em;">{{ $itemLabel }}</div>
         <div style="font-size:13px;font-weight:700;color:#111827;margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ $title }}</div>
     </div>
 
-    <!-- Paket seçimi -->
     <div style="margin-bottom:16px;">
         <div style="font-size:11px;font-weight:700;color:#374151;text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px;">{{ __('Choose a package') }}</div>
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;">
@@ -92,7 +89,6 @@
         </div>
     </div>
 
-    <!-- WhatsApp CTA -->
     <a @click.prevent="send()" :href="'https://wa.me/{{ $cleanWa }}?text=' + encodeURIComponent('Salam, {{ $siteName }} saytındakı #{{ $id }} nömrəli {{ $itemLabel }}nı (\'{{ $safeTitle }}\') ' + selected + ' DƏFƏ {{ $verb }} istəyirəm (' + prices[selected] + ').')"
        target="_blank" rel="noopener"
        style="display:flex;align-items:center;justify-content:center;gap:9px;width:100%;background:#25D366;color:#fff;font-size:13px;font-weight:700;padding:12px 16px;border-radius:12px;text-decoration:none;box-sizing:border-box;">

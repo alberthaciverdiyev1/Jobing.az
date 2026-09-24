@@ -22,10 +22,6 @@ class TelegramService
         return 'https://api.telegram.org/bot' . $this->token();
     }
 
-    /**
-     * Send a plain text message to the configured admin chat/group.
-     * Silently fails (logs warning) when not configured.
-     */
     public function send(string $message): bool
     {
         if (! $this->token() || ! $this->chatId()) {
@@ -52,9 +48,6 @@ class TelegramService
         }
     }
 
-    /**
-     * Notify admins of a new job application.
-     */
     public function sendNewApplication(\App\Modules\Application\Models\Application $application): void
     {
         $vacancy = $application->vacancy;
@@ -70,9 +63,6 @@ class TelegramService
         $this->send($message);
     }
 
-    /**
-     * Notify admins of a new contact/lead submission.
-     */
     public function sendNewLead(\App\Modules\Inquiry\Models\Inquiry $inquiry): void
     {
         $message = "✉️ <b>YENİ ƏLAQƏ MÜRACİƏTİ</b>\n"
@@ -85,9 +75,6 @@ class TelegramService
         $this->send($message);
     }
 
-    /**
-     * Notify admins of a new job-seeker ad.
-     */
     public function sendNewJobSeeker(\App\Modules\JobSeeker\Models\JobSeeker $jobSeeker): void
     {
         $message = "🧑‍💼 <b>YENİ İŞ AXTARAN ELANI</b>\n"
@@ -99,9 +86,6 @@ class TelegramService
 
         $this->send($message);
     }
-    /**
-     * Inline klaviatura ilə mesaj göndərir (Təsdiq / Rədd düymələri).
-     */
     public function sendWithKeyboard(string $message, array $keyboard): bool
     {
         if (! $this->token() || ! $this->chatId()) {
@@ -125,7 +109,6 @@ class TelegramService
         }
     }
 
-    /** Yeni vakansiya üçün Təsdiq/Rədd sorğusu göndərir. */
     public function sendVacancyApprovalRequest(\App\Modules\Vacancy\Models\Vacancy $vacancy): void
     {
         $message = "🆕 <b>YENİ VAKANSİYA (təsdiq gözləyir)</b>\n"
@@ -143,7 +126,6 @@ class TelegramService
         ]);
     }
 
-    /** Callback sorğusuna cavab (düyməni "yüklənir" vəziyyətindən çıxarır). */
     public function answerCallbackQuery(string $callbackQueryId, string $text = ''): void
     {
         if (! $this->token()) {
@@ -160,7 +142,6 @@ class TelegramService
         }
     }
 
-    /** Konkret chat-a mesaj göndərir (webhook cavabları üçün). */
     public function sendToChat(string $chatId, string $message, ?array $keyboard = null): bool
     {
         if (! $this->token()) {
@@ -180,7 +161,6 @@ class TelegramService
         }
     }
 
-    /** Webhook-u qeyd edir. */
     public function setWebhook(string $url): bool
     {
         if (! $this->token()) {

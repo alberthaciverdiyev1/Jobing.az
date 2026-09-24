@@ -14,14 +14,12 @@ trait HasSlug
             $slugColumn = $model->getSlugColumn();
             $sourceColumn = $model->getSlugSourceColumn();
 
-            // 1. If slug is completely empty, generate from source column
             if (empty($model->{$slugColumn})) {
                 $sourceText = $model->{$sourceColumn} ?? '';
                 $model->{$slugColumn} = $model->generateUniqueSlug($sourceText, $model->getKey());
                 return;
             }
 
-            // 2. If slug was manually provided or modified, ensure it is formatted and unique
             if ($model->isDirty($slugColumn)) {
                 $rawSlug = Str::slug((string) $model->{$slugColumn});
                 $model->{$slugColumn} = $model->generateUniqueSlug($rawSlug ?: $model->{$sourceColumn}, $model->getKey());
@@ -40,7 +38,6 @@ trait HasSlug
             return $this->slugSource;
         }
 
-        // Auto-detect commonly used source column names
         foreach (['title', 'name', 'headline', 'label'] as $candidate) {
             if (array_key_exists($candidate, $this->attributes) || in_array($candidate, $this->fillable ?? [])) {
                 return $candidate;

@@ -8,7 +8,6 @@
 
     <div class="flex flex-col @sm:flex-row @sm:items-start justify-between gap-4">
 
-        <!-- Left: Avatar & Details -->
         <div class="flex items-start gap-4 flex-1 min-w-0">
             <x-company-avatar :name="$seeker->contact_name" size="md" :featured="$isSeekerFeatured" />
 
@@ -54,7 +53,6 @@
             </div>
         </div>
 
-        <!-- Right: Location, Date & Salary (mobile: city + salary justified between) -->
         <div class="@sm:text-right shrink-0 flex flex-col @sm:items-end border-t @sm:border-t-0 pt-2 @sm:pt-0 border-gray-100">
             <div class="flex items-center justify-between @sm:justify-end gap-3 text-xs w-full @sm:w-auto">
                 <div class="font-medium text-gray-700 flex items-center gap-1.5">
@@ -68,7 +66,6 @@
 
     </div>
 
-    <!-- Footer: Skills & Salary (exact match to job-card) -->
     <div class="hidden @sm:flex mt-3 pt-3 border-t border-gray-100 items-center justify-between gap-2">
         <x-skill-tags :skills="$seeker->skills" />
         <span class="text-sm font-semibold text-gray-900 font-mono @sm:ml-auto">{{ $seeker->formatted_salary }}</span>

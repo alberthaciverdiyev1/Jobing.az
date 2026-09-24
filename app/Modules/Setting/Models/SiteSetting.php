@@ -5,10 +5,6 @@ namespace App\Modules\Setting\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 
-/**
- * Singleton row (id = 1) holding site-wide settings.
- * Access via SiteSetting::current() (memoized + cached).
- */
 class SiteSetting extends Model
 {
     protected $table = 'site_settings';
@@ -101,9 +97,6 @@ class SiteSetting extends Model
         return static::$memoized = $setting;
     }
 
-    /**
-     * Return a translated (or plain) field value.
-     */
     public function getTrans(string $field, ?string $locale = null, string $default = ''): string
     {
         $locale = $locale ?: app()->getLocale();

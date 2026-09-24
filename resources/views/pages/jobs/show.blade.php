@@ -37,13 +37,10 @@
     </div>
     @endif
 
-    <!-- Top Header -->
     <div class="bg-white border-b border-gray-200">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-            <!-- Job Title & CTA Header Bar -->
             <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6 py-6">
 
-                <!-- Left: Company Logo + Title + Meta -->
                 <div class="flex items-start sm:items-center gap-4 sm:gap-5">
                     @if($job->company && $job->company->hasPublicProfile())
                     <a href="{{ route('companies.show', $job->company->slug) }}" class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-slate-900 border border-gray-200 shadow-2xs flex items-center justify-center font-semibold text-white text-2xl sm:text-3xl shrink-0 overflow-hidden group/logo">
@@ -88,9 +85,7 @@
                     </div>
                 </div>
 
-                <!-- Right: Action Buttons -->
                 <div class="flex items-center gap-2.5 shrink-0 flex-wrap">
-                    <!-- Favorite / Save Button -->
                     <button type="button"
                             class="js-save-job px-4 py-3 rounded-xl border border-gray-200 hover:border-gray-300 hover:bg-gray-50 text-gray-700 font-semibold text-xs transition duration-150 flex items-center gap-2 cursor-pointer shadow-2xs"
                             data-vacancy-id="{{ $job->id }}"
@@ -129,17 +124,13 @@
         </div>
     </div>
 
-    <!-- Main Content Area -->
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
-            <!-- Left 2 cols: Job Details & Body -->
             <div class="lg:col-span-2 space-y-6">
 
-                <!-- Key Facts Grid (2 Rows) -->
                 <div class="bg-white rounded-xl border border-gray-200 p-5 sm:p-6 shadow-2xs">
                     <div class="grid grid-cols-2 sm:grid-cols-3 gap-6">
-                        <!-- Row 1 -->
                         <div>
                             <span class="text-[11px] font-medium text-gray-400 block">{{ __('Salary Offer') }}</span>
                             <span class="text-sm sm:text-base font-semibold text-primary font-mono mt-1 block">{{ $job->formatted_salary }}</span>
@@ -153,10 +144,8 @@
                             <span class="text-xs sm:text-sm font-semibold text-gray-900 mt-1 block">{{ $job->job_type_name ?: '-' }}</span>
                         </div>
 
-                        <!-- Divider line between rows -->
                         <div class="col-span-full border-t border-gray-100 -my-1"></div>
 
-                        <!-- Row 2 -->
                         <div>
                             <span class="text-[11px] font-medium text-gray-400 block">{{ __('Workplace') }}</span>
                             <span class="text-xs sm:text-sm font-semibold text-gray-900 mt-1 block">{{ $job->workplace_type_name ?: '-' }}</span>
@@ -174,10 +163,8 @@
                     </div>
                 </div>
 
-                <!-- Job Main Article Card -->
                 <div class="bg-white rounded-xl border border-gray-200 p-6 sm:p-8 shadow-2xs space-y-8">
 
-                    <!-- 1. Job Description -->
                     <div>
                         <h2 class="text-sm font-semibold text-gray-900 flex items-center gap-2 pb-3 border-b border-gray-100">
                             <span>{{ __('Job Responsibilities') }}</span>
@@ -187,7 +174,6 @@
                         </div>
                     </div>
 
-                    <!-- 2. Requirements -->
                     @if($job->requirements)
                     <div >
                         <h2 class="text-sm font-semibold text-gray-900 flex items-center gap-2 border-b border-gray-100">
@@ -200,7 +186,6 @@
                     @endif
 
 
-                    <!-- 4. Skills Tags -->
                     @php
                         $skillsList = is_array($job->skills) ? $job->skills : (is_string($job->skills) && trim($job->skills) !== '' ? array_map('trim', explode(',', $job->skills)) : []);
                     @endphp
@@ -217,7 +202,6 @@
                     </div>
                     @endif
 
-                    <!-- Article Footer Meta -->
                     <div class="pt-6 border-t border-gray-100 flex items-center justify-between text-xs text-gray-400">
                         <span>{{ __('Views:') }} <strong class="text-gray-700 font-mono">{{ $job->views_count }}</strong></span>
                         <span>{{ __('Listing ID:') }} <strong class="text-gray-700 font-mono">#{{ $job->id }}</strong></span>
@@ -225,7 +209,6 @@
 
                 </div>
 
-                <!-- Bottom CTA Strip -->
                 @if(isset($hasApplied) && $hasApplied)
                 <div class="p-6 rounded-xl bg-slate-900 border border-slate-800 text-white flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-xs">
                     <div class="flex items-center gap-3">
@@ -263,12 +246,10 @@
                 </div>
                 @endif
 
-                <!-- Company Info (mobile: right after the apply section) -->
                 <div class="lg:hidden">
                     @include('pages.jobs.partials.company-info', ['job' => $job])
                 </div>
 
-                <!-- Similar / Related Jobs Section (Below CTA Strip) -->
                 @if($relatedJobs->count() > 0)
                 <div class="space-y-4 pt-6 border-t border-gray-200">
                     <h3 class="text-base font-semibold text-gray-900 flex items-center gap-2">
@@ -285,15 +266,11 @@
 
             </div>
 
-            <!-- Right Sidebar: Company Info -->
             <div class="space-y-6">
 
-                <!-- Company Profile Summary Card -->
-                <!-- Company Profile Summary Card (desktop sidebar) -->
                 <div class="hidden lg:block">
                     @include('pages.jobs.partials.company-info', ['job' => $job])
                 </div>
-                <!-- Promote Vacancy Card (İrəli çək & Premium et) -->
                 <div class="bg-white rounded-xl border border-gray-200 p-5 shadow-2xs space-y-3">
                     <div>
                         <h4 class="font-medium text-gray-900 text-xs">{{ __('Promote & Stand Out') }}</h4>
@@ -318,15 +295,12 @@
         </div>
     </div>
 
-    <!-- Promotion Modals (İrəli çək & Premium et) -->
     <x-promotion-modals type="vacancy" :title="$job->title" :id="$job->id" />
 
-    <!-- Application Modal (Alpine.js) -->
     <div x-show="isOpen" x-cloak
          class="fixed inset-0 z-50 overflow-y-auto"
          aria-labelledby="modal-title" role="dialog" aria-modal="true">
 
-        <!-- Backdrop -->
         <div x-show="isOpen"
              x-transition:enter="ease-out duration-200"
              x-transition:enter-start="opacity-0"
@@ -347,7 +321,6 @@
                  @click.outside="closeModal()"
                  class="relative transform overflow-hidden rounded-2xl bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg border border-gray-200">
 
-                <!-- Modal Header -->
                 <div class="bg-gray-50 px-6 py-4 border-b border-gray-100 flex items-center justify-between">
                     <div>
                         <div class="text-[11px] font-medium text-primary">{{ __('Job Application') }}</div>
@@ -358,7 +331,6 @@
                     </button>
                 </div>
 
-                <!-- Modal Form -->
                 <form @submit.prevent="submitApplication" class="p-6 space-y-4">
                     @csrf
 
@@ -391,7 +363,6 @@
                     </div>
                     @endif
 
-                    <!-- Manual details (Only shown when not using a created CV) -->
                     <div x-show="!formData.resume_id" class="space-y-4">
                         <div>
                             <label class="block text-xs font-semibold text-gray-700 mb-1">{{ __('Your Full Name') }} *</label>
@@ -457,7 +428,6 @@
                     </div>
                     @endif
 
-                    <!-- Feedback message -->
                     <div x-show="formMessage" x-cloak class="p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-medium">
                         <i class="fas fa-check-circle mr-1"></i><span x-text="formMessage"></span>
                     </div>
@@ -465,7 +435,6 @@
                         <i class="fas fa-exclamation-circle mr-1"></i><span x-text="formError"></span>
                     </div>
 
-                    <!-- Modal Actions -->
                     <div class="pt-3 border-t border-gray-100 flex items-center justify-end gap-2">
                         <button @click="closeModal()" type="button" class="px-4 py-2 rounded-xl text-xs font-semibold text-gray-500 hover:bg-gray-100 transition cursor-pointer">
                             {{ __('Cancel') }}
@@ -548,7 +517,7 @@ function jobApplicationModal(actionUrl) {
                 let resData = {};
                 try {
                     resData = await response.json();
-                } catch (e) { /* non-JSON error body */ }
+                } catch (e) { }
 
                 if (response.ok) {
                     this.formError = '';
@@ -569,7 +538,6 @@ function jobApplicationModal(actionUrl) {
 </script>
 @endpush
 
-{{-- Google Jobs (JobPosting) yapısal verisi --}}
 @push('structured_data')
 @php
     $salaryValue = array_filter([

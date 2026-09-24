@@ -12,11 +12,11 @@ return new class extends Migration
             $table->id();
             $table->foreignId('vacancy_id')->nullable()->constrained()->nullOnDelete();
             $table->foreignId('user_id')->nullable()->constrained()->nullOnDelete();
-            $table->string('mode');            // premium | boost
-            $table->unsignedInteger('times')->default(1);   // 1/3/7 paket
+            $table->string('mode');
+            $table->unsignedInteger('times')->default(1);
             $table->decimal('price', 10, 2)->nullable();
             $table->string('phone')->nullable();
-            $table->string('status')->default('pending')->index(); // pending|approved|rejected
+            $table->string('status')->default('pending')->index();
             $table->text('note')->nullable();
             $table->timestamp('reviewed_at')->nullable();
             $table->timestamps();

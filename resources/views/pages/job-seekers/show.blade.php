@@ -6,14 +6,11 @@
 @section('content')
 <div x-data="{ bumpModalOpen: false, premiumModalOpen: false }" class="bg-gray-50 min-h-screen pb-16">
 
-    <!-- Top Header -->
     <div class="bg-white border-b border-gray-200">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
 
-            <!-- Profile Header Info -->
             <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 py-6">
 
-                <!-- Left: Candidate Avatar + Title + Meta -->
                 <div class="flex items-start sm:items-center gap-4 sm:gap-5">
                     <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-slate-900 border border-gray-200 shadow-2xs flex items-center justify-center font-semibold text-white text-2xl sm:text-3xl shrink-0">
                         {{ mb_substr($jobSeeker->contact_name, 0, 1) }}
@@ -56,7 +53,6 @@
                     </div>
                 </div>
 
-                <!-- Right: Expected Salary Pill -->
                 <div class="shrink-0 self-start md:self-center">
                     <div class="px-5 py-2.5 rounded-xl bg-orange-50/80 border border-orange-100 text-center min-w-[130px] shadow-2xs">
                         <span class="text-lg sm:text-xl font-semibold text-primary font-mono block leading-tight">{{ $jobSeeker->formatted_salary }}</span>
@@ -69,14 +65,11 @@
         </div>
     </div>
 
-    <!-- Main Content Area -->
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
-            <!-- Left 2 cols: Details & Skills -->
             <div class="lg:col-span-2 space-y-6">
 
-                <!-- Key Facts Grid -->
                 <div class="bg-white rounded-xl border border-gray-200 p-5 sm:p-6 shadow-2xs grid grid-cols-2 sm:grid-cols-3 gap-4 divide-y sm:divide-y-0 sm:divide-x divide-gray-100">
                     <div>
                         <span class="text-[11px] font-medium text-gray-400 block">{{ __('Competition / Exit') }}</span>
@@ -92,7 +85,6 @@
                     </div>
                 </div>
 
-                <!-- Bio & Description Card -->
                 <div class="bg-white rounded-xl border border-gray-200 p-6 sm:p-8 shadow-2xs space-y-6">
                     <div class="space-y-3">
                         <h2 class="text-sm font-semibold text-gray-900 flex items-center gap-2 pb-3 border-b border-gray-100">
@@ -124,7 +116,6 @@
 
             </div>
 
-            <!-- Right Sidebar: Contact Reveal Card -->
             <div class="space-y-6">
                 <div class="bg-white rounded-xl border border-gray-200 shadow-2xs p-5 space-y-4 sticky top-24"
                      x-data="contactReveal('{{ route('contact-reveal.job-seeker', $jobSeeker->id) }}', @js($jobSeeker->contact_phone ? true : false))">
@@ -136,7 +127,6 @@
 
                     @php($canReveal = auth()->check() && (auth()->user()->isCompany() || auth()->user()->is_admin))
 
-                    <!-- Blurred / masked state -->
                     <div x-show="!revealed" class="space-y-3">
                         <div class="rounded-xl bg-gray-50 border border-gray-100 p-4 text-center">
                             @if($canReveal)
@@ -165,7 +155,6 @@
                         </div>
                     </div>
 
-                    <!-- Revealed state -->
                     <div x-show="revealed" x-cloak class="space-y-3"
                          x-transition:enter="transition ease-out duration-200"
                          x-transition:enter-start="opacity-0"
@@ -195,7 +184,6 @@
                     @endif
                 </div>
 
-                <!-- Promote JobSeeker Card (İrəli çək & Premium et) -->
                 <div class="bg-white rounded-xl border border-gray-200 p-5 shadow-2xs space-y-3">
                     <div>
                         <h4 class="font-medium text-gray-900 text-xs">{{ __('Promote & Stand Out') }}</h4>
@@ -221,7 +209,6 @@
         </div>
     </div>
 
-    <!-- Promotion Modals (İrəli çək & Premium et) -->
     <x-promotion-modals type="job_seeker" :title="$jobSeeker->title" :id="$jobSeeker->id" />
 </div>
 @endsection

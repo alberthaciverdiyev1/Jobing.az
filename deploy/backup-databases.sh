@@ -1,8 +1,4 @@
 #!/usr/bin/env bash
-#
-# backup-databases.sh — Serverdəki BÜTÜN verilənlər bazalarını yedəkləyib Telegram-a göndərir.
-# deploy.sh tərəfindən hər deploy-dan ƏVVƏL çağırılır.
-#
 set -euo pipefail
 
 ENV_FILE="${ENV_FILE:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/.env}"

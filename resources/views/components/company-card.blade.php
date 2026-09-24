@@ -3,7 +3,6 @@
 <div {{ $attributes->merge(['class' => 'bg-white rounded-2xl border border-gray-200 hover:border-orange-300 hover:shadow-md transition-all duration-200 p-5 md:p-6 flex flex-col justify-between group relative cursor-pointer']) }}>
 
     <div>
-        <!-- Top: Avatar + Vacancies Counter -->
         <div class="flex items-start justify-between gap-3 mb-4">
             <div class="flex items-center gap-3.5">
                 <x-company-avatar :name="$company->name" :logo="$company->logo" size="lg" />
@@ -24,10 +23,8 @@
                 </div>
             </div>
 
-            <!-- Vacancy Count Pill -->
             @if($company->vacancies_count > 0)
             <span class="px-2.5 py-1 rounded-full text-[12px] font-semibold bg-orange-50 text-primary border border-orange-100 font-mono shrink-0 flex items-center gap-1.5 relative z-10">
-{{--                <span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>--}}
                 <span>{{ $company->vacancies_count }} {{ __('listing') }}</span>
             </span>
             @else
@@ -37,13 +34,11 @@
             @endif
         </div>
 
-        <!-- About / Description -->
         <p class="text-xs text-gray-600 line-clamp-3 leading-relaxed mt-1">
             {{ $company->about ?: __('Detailed information about this company will be added soon.') }}
         </p>
     </div>
 
-    <!-- Card Bottom Action -->
     <div class="pt-4 mt-4 border-t border-gray-100 flex items-center justify-between text-xs">
         @if($company->website)
         <a href="{{ $company->website }}" target="_blank" rel="noopener noreferrer"

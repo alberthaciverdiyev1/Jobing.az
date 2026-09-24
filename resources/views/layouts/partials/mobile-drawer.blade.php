@@ -4,18 +4,14 @@
 @endphp
 
 <div x-show="mobileDrawerOpen" x-cloak class="xl:hidden fixed inset-0 z-50">
-  <!-- Backdrop Blur Layer -->
   <div class="w-full h-full flex flex-col justify-end bg-black/60 backdrop-blur-xs transition-opacity duration-300"
        @click="mobileDrawerOpen = false">
     
-    <!-- Spacer click area -->
     <div class="flex-1"></div>
 
-    <!-- Bottom Sheet Container -->
     <div class="bg-white rounded-t-3xl max-h-[90vh] overflow-y-auto shadow-2xl p-5 space-y-4 border-t border-gray-100 transform transition-transform duration-300"
          @click.stop>
 
-      <!-- Drawer Header -->
       <div class="flex items-center justify-between pb-3 border-b border-gray-100">
         <div class="flex items-center space-x-2">
           <img src="{{ asset('images/logo/jobing-wordmark.png') }}" alt="{{ config('app.full_name') }}" class="h-8 w-auto">
@@ -25,7 +21,6 @@
         </button>
       </div>
 
-      <!-- Quick Action Buttons -->
       <div class="grid {{ (auth()->check() && auth()->user()->isCompany()) ? 'grid-cols-1' : 'grid-cols-2' }} gap-2.5">
         <a href="{{ route('jobs.create') }}" class="flex items-center justify-center gap-2 py-3 px-4 bg-primary hover:bg-primary-dark text-white rounded-2xl font-semibold text-sm shadow-sm active:scale-95 transition-all">
           <i class="fa-solid fa-plus text-sm"></i>
@@ -39,7 +34,6 @@
         @endif
       </div>
 
-      <!-- Navigation Links List -->
       <div class="space-y-1 py-1">
         <a href="{{ route('jobs.index') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl {{ request()->routeIs('jobs.*') && !request()->routeIs('jobs.create') && !request()->routeIs('jobs.external') ? 'text-primary bg-orange-50 font-semibold' : 'text-gray-700 hover:bg-gray-50 font-medium' }} text-sm">
           <span class="flex items-center gap-3"><i class="fa-solid fa-briefcase text-gray-400 w-5 text-center"></i> {{ __('Vacancies') }}</span>
@@ -79,7 +73,6 @@
         </a>
       </div>
 
-      <!-- Language Selector with Flags -->
       <div class="pt-3 border-t border-gray-100">
         <div class="text-xs font-medium text-gray-400 mb-2">{{ __('Language selection') }}</div>
         <div class="grid grid-cols-4 gap-1.5">
@@ -92,7 +85,6 @@
         </div>
       </div>
 
-      <!-- Auth / Account Actions -->
       <div class="pt-3 border-t border-gray-100">
         @auth
           <div class="space-y-1">

@@ -22,7 +22,6 @@ class PromotionRequestController extends Controller
         $vacancy = Vacancy::findOrFail($data['vacancy_id']);
         $user = auth()->user();
 
-        // Yalnız vakansiyanın sahibi şirkət (və ya admin)
         if (! $user || (! $user->is_admin && (int) $user->company_id !== (int) $vacancy->company_id)) {
             return response()->json(['success' => false, 'message' => __('Permission denied')], 403);
         }

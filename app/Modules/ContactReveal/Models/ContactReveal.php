@@ -26,9 +26,6 @@ class ContactReveal extends Model
         return $this->belongsTo(User::class);
     }
 
-    /**
-     * Track a reveal for a generic listing (type + id).
-     */
     public static function log(string $type, int $listingId, ?\Illuminate\Http\Request $request = null): void
     {
         try {

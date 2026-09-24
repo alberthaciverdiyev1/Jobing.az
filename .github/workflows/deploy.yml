@@ -1,7 +1,5 @@
 name: Deploy to Production
 
-# main'e push edilince sunucuya SSH ile bağlanıp deploy/deploy.sh çalıştırır.
-# Laravel her zaman ayakta kalır (php-fpm + systemd queue worker); "down" yok.
 on:
   push:
     branches: [ main ]
@@ -34,18 +32,15 @@ jobs:
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
-          # Şifre ile giriş (SSH key kullanılmıyor).
           password: ${{ secrets.SSH_PASSWORD }}
           port: ${{ secrets.SSH_PORT }}
           script_stop: true
           script: |
-            # deploy.sh bu değerleri env'den okur; verilmezse /var/www/jobing + deploy kullanıcısına düşer.
             export APP_DIR="${{ secrets.APP_DIR }}"
             export APP_USER="root"
             export PHP_VER="8.4"
             export PHP_BIN="/usr/bin/php"
             export BRANCH="main"
-            # deploy.sh sağlık kontrolü bu URL'e gider (şema dahil olmalı, yoksa 301 alır).
             export HEALTH_URL="https://new.jobing.az"
             cd "$APP_DIR"
             bash deploy/deploy.sh
@@ -53,5 +48,4 @@ jobs:
       - name: Health check
         run: |
           sleep 3
-          # Şema (https://) dahil sabit URL kullanılıyor; aksi halde 301 döner.
           curl -fsS "https://new.jobing.az/up" && echo "Sağlık kontrolü OK"

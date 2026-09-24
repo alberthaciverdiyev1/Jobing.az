@@ -6,7 +6,6 @@
 <div class="bg-gray-50 min-h-screen pb-16">
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-10 max-w-4xl">
 
-        <!-- Header -->
         <div class="mb-10 pb-6 border-b border-gray-200">
             <h2 class="text-3xl md:text-4xl font-bold text-gray-900 tracking-tight">{{ __('Frequently Asked Questions') }}</h2>
             <p class="text-sm text-gray-500 mt-2 max-w-lg">{{ __('The most frequently asked questions about job search and hiring processes.') }}</p>
@@ -17,7 +16,6 @@
             <p class="text-sm text-gray-500">{{ __('No questions have been added yet.') }}</p>
         </div>
         @else
-        <!-- FAQ Accordion (Alpine.js) -->
         <div class="space-y-4">
             @foreach($faqGroups as $category => $faqs)
             <div>
@@ -58,7 +56,6 @@
         </div>
         @endif
 
-        <!-- Contact CTA -->
         <div class="mt-10 text-center bg-white rounded-2xl border border-gray-200 p-8 shadow-2xs">
             <h3 class="text-base font-semibold text-gray-900 mb-1">{{ __("Couldn't find your answer?") }}</h3>
             <p class="text-xs text-gray-500 mb-5">{{ __("Contact us and we'll be happy to help.") }}</p>

@@ -21,7 +21,6 @@ class JobSeekerController extends Controller
         $query = JobSeeker::with(['category', 'jobType', 'workplaceType', 'experienceLevel'])
             ->published();
 
-        // Search query
         if ($search = $request->input('q')) {
             $search = trim($search);
             $query->where(function ($q) use ($search) {
@@ -33,7 +32,6 @@ class JobSeekerController extends Controller
             });
         }
 
-        // Category filter (array or single string, plus subcategory)
         $selectedCategories = (array) $request->input('category', []);
         if ($request->filled('subcategory')) {
             $selectedCategories = array_merge($selectedCategories, (array) $request->input('subcategory'));
@@ -46,35 +44,30 @@ class JobSeekerController extends Controller
             $query->whereIn('category_id', $catIds);
         }
 
-        // Job Type filter
         $selectedJobTypes = (array) $request->input('job_type', $request->input('type', []));
         $selectedJobTypes = array_filter($selectedJobTypes);
         if (!empty($selectedJobTypes)) {
             $query->whereHas('jobType', fn ($q) => $q->whereIn('slug', $selectedJobTypes));
         }
 
-        // Workplace Type filter
         $selectedWorkplaces = (array) $request->input('workplace_type', []);
         $selectedWorkplaces = array_filter($selectedWorkplaces);
         if (!empty($selectedWorkplaces)) {
             $query->whereHas('workplaceType', fn ($q) => $q->whereIn('slug', $selectedWorkplaces));
         }
 
-        // Experience Level filter
         $selectedExperiences = (array) $request->input('experience_level', []);
         $selectedExperiences = array_filter($selectedExperiences);
         if (!empty($selectedExperiences)) {
             $query->whereHas('experienceLevel', fn ($q) => $q->whereIn('slug', $selectedExperiences));
         }
 
-        // City filter (supports array or single string)
         $selectedCities = (array) $request->input('city', []);
         $selectedCities = array_filter($selectedCities);
         if (!empty($selectedCities)) {
             $query->whereIn('location', $selectedCities);
         }
 
-        // Skills filter
         $selectedSkills = (array) $request->input('skills', []);
         $selectedSkills = array_filter($selectedSkills);
         if (!empty($selectedSkills)) {
@@ -85,7 +78,6 @@ class JobSeekerController extends Controller
             });
         }
 
-        // Min Salary filter
         if ($minSalary = $request->input('min_salary')) {
             $minSalary = (float) $minSalary;
             $query->where(function ($q) use ($minSalary) {
@@ -94,7 +86,6 @@ class JobSeekerController extends Controller
             });
         }
 
-        // Max Salary filter
         if ($maxSalary = $request->input('max_salary')) {
             $maxSalary = (float) $maxSalary;
             $query->where(function ($q) use ($maxSalary) {
@@ -105,7 +96,6 @@ class JobSeekerController extends Controller
             });
         }
 
-        // Sorting
         $sort = $request->input('sort', 'latest');
         if ($sort === 'oldest') {
             $query->orderBy('is_featured', 'desc')->orderByRaw('job_seekers.updated_at ASC');
@@ -120,7 +110,6 @@ class JobSeekerController extends Controller
         } elseif ($sort === 'alphabetical') {
             $query->orderBy('title', 'asc');
         } else {
-            // Default: Premium first, then latest bumped/created
             $query->orderBy('is_featured', 'desc')->orderByRaw('job_seekers.updated_at DESC');
         }
 
@@ -246,7 +235,7 @@ class JobSeekerController extends Controller
             'contact_name' => $data['contact_name'],
             'contact_email' => $data['contact_email'] ?? null,
             'contact_phone' => $data['contact_phone'] ?? null,
-            'status' => JobSeeker::STATUS_PENDING, // Admin onayı bekler; onaylanınca yayınlanır.
+            'status' => JobSeeker::STATUS_PENDING,
         ]);
 
         return redirect()->route('jobs.index')

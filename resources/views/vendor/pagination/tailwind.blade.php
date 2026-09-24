@@ -2,7 +2,6 @@
     <div class="flex flex-col items-center justify-center my-6 w-full max-w-full">
         <nav role="navigation" aria-label="{{ __('Pagination') }}" class="-mx-4 px-4 w-full max-w-full overflow-x-auto sm:mx-0 sm:px-0">
             <ul class="flex items-center justify-center gap-0.5 sm:gap-1.5 p-1 rounded-2xl bg-white shadow-2xs min-w-max mx-auto">
-                {{-- Previous Page Link --}}
                 @if ($paginator->onFirstPage())
                     <li aria-disabled="true" aria-label="{{ __('Previous') }}">
                         <span class="w-8 h-8 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center text-gray-300 bg-gray-50/60 cursor-not-allowed text-xs select-none">
@@ -18,9 +17,7 @@
                     </li>
                 @endif
 
-                {{-- Pagination Elements --}}
                 @foreach ($elements as $element)
-                    {{-- "Three Dots" Separator --}}
                     @if (is_string($element))
                         <li aria-disabled="true">
                             <span class="w-7 h-8 sm:w-8 sm:h-10 flex items-center justify-center text-gray-400 font-semibold text-xs select-none">
@@ -29,7 +26,6 @@
                         </li>
                     @endif
 
-                    {{-- Array Of Links --}}
                     @if (is_array($element))
                         @foreach ($element as $page => $url)
                             @if ($page == $paginator->currentPage())
@@ -50,7 +46,6 @@
                     @endif
                 @endforeach
 
-                {{-- Next Page Link --}}
                 @if ($paginator->hasMorePages())
                     <li>
                         <a href="{{ $paginator->nextPageUrl() }}" rel="next" aria-label="{{ __('Next') }}"
@@ -68,7 +63,6 @@
             </ul>
         </nav>
 
-        {{-- Results Info Under Pagination --}}
         <p class="text-xs text-gray-400 mt-2.5 text-center select-none">
             {!! __('Showing :first - :last of :total results', [
                 'first' => '<span class="font-semibold text-gray-700">' . $paginator->firstItem() . '</span>',

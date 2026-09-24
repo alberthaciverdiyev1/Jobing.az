@@ -10,8 +10,6 @@ abstract class TestCase extends BaseTestCase
     {
         $app = parent::createApplication();
 
-        // Cached local configuration must never make the test suite connect to
-        // the development or production PostgreSQL databases.
         $app['config']->set('database.default', 'sqlite');
         $app['config']->set('database.connections.sqlite.database', ':memory:');
         $app['config']->set('database.connections.logs', $app['config']->get('database.connections.sqlite'));

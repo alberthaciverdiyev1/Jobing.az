@@ -36,10 +36,6 @@ class ResumeResource extends Resource
     }
     protected static ?int $navigationSort = 3;
 
-    /**
-     * Admin panelinə özel, global CV yönetimi.
-     * (User: MyResumeResource, Company: CompanyResumeResource.)
-     */
     public static function canViewAny(): bool
     {
         return true;

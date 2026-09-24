@@ -7,14 +7,12 @@
 <header class="hidden xl:block bg-white sticky top-0 z-50 border-b border-gray-200">
     <div class="mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center h-16 relative">
-            <!-- Left: Logo -->
             <div class="shrink-0 flex items-center">
                 <a href="{{ route('jobs.index') }}" class="flex items-center">
                     <img src="{{ asset('images/logo/jobing-wordmark.png') }}" alt="{{ config('app.full_name') }}" class="h-9 w-auto">
                 </a>
             </div>
 
-            <!-- Center: Desktop Menu -->
             <nav class="flex items-center justify-center space-x-6 lg:space-x-8">
                 <a href="{{ route('jobs.index') }}" class="{{ request()->routeIs('jobs.*') && !request()->routeIs('jobs.create') && !request()->routeIs('jobs.external') ? 'text-primary font-semibold' : 'text-gray-600 hover:text-primary' }} font-medium transition-colors text-[15px]">
                     {{ __('Vacancies') }}
@@ -36,10 +34,8 @@
                 </a>
             </nav>
 
-            <!-- Right Actions: Favorites + Language Switcher + Auth + CTA -->
             <div class="flex items-center space-x-3">
 
-                <!-- Language Selector (Alpine.js) -->
                 <div class="relative" x-data="{ langOpen: false }" @click.outside="langOpen = false">
                     <button type="button" @click="langOpen = !langOpen"
                             class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-gray-200 text-sm font-semibold text-gray-700 hover:bg-gray-50 hover:border-gray-300 transition cursor-pointer">
@@ -67,7 +63,6 @@
                     </div>
                 </div>
 
-                <!-- Favorites Heart Button -->
                 <a href="{{ route('favorites.index') }}"
                    class="relative inline-flex items-center justify-center w-9 h-9 rounded-lg border border-gray-200 text-gray-600 hover:text-primary hover:bg-gray-50 transition cursor-pointer {{ request()->routeIs('favorites.*') ? 'border-primary text-primary bg-orange-50/50' : '' }}"
                    title="{{ __('Favorites') }}">
@@ -75,9 +70,7 @@
                     <span id="favorites-count-nav" class="hidden absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-primary text-white text-[11px] font-semibold items-center justify-center border-2 border-white shadow-2xs"></span>
                 </a>
 
-                <!-- Auth: Guest / User -->
                 @auth
-                <!-- Notification Bell Dropdown -->
                 <div class="relative" x-data="{ notifOpen: false }" @click.outside="notifOpen = false">
                     <button type="button" @click="notifOpen = !notifOpen"
                             class="relative inline-flex items-center justify-center w-9 h-9 rounded-lg border border-gray-200 text-gray-600 hover:text-primary hover:bg-gray-50 transition cursor-pointer">
@@ -218,7 +211,6 @@
                 </a>
                 @endauth
 
-                <!-- Job Seeker CTA Button -->
                 @if(!auth()->check() || !auth()->user()->isCompany())
                 <a href="{{ route('job-seekers.create') }}"
                    class="hidden lg:inline-flex items-center gap-1.5 border border-gray-200 hover:border-primary hover:text-primary bg-white text-gray-700 font-semibold px-3.5 py-2 rounded-lg transition-colors text-sm shadow-2xs">
@@ -227,7 +219,6 @@
                 </a>
                 @endif
 
-                <!-- Post Vacancy CTA Button -->
                 <a href="{{ route('jobs.create') }}" class="bg-primary hover:bg-primary-dark text-white px-3.5 py-2 rounded-lg font-semibold transition-colors shadow-xs hover:shadow-md flex items-center gap-1.5 text-sm whitespace-nowrap">
                     <i class="fas fa-plus text-[11px]"></i>
                     <span>{{ __('Post an ad') }}</span>

@@ -3,15 +3,6 @@
 use Illuminate\Support\Str;
 
 if (!function_exists('generate_unique_slug')) {
-    /**
-     * Generate a unique slug for a given Eloquent model class.
-     *
-     * @param string|object $model Eloquent model class name or instance
-     * @param mixed $title Source string or translatable array to generate slug from
-     * @param string $column Slug column name (default 'slug')
-     * @param int|string|null $ignoreId Model ID to ignore (for updates)
-     * @return string
-     */
     function generate_unique_slug(string|object $model, mixed $title, string $column = 'slug', $ignoreId = null): string
     {
         if (is_array($title)) {
@@ -46,11 +37,6 @@ if (!function_exists('generate_unique_slug')) {
 }
 
 if (! function_exists('sanitize_html')) {
-    /**
-     * RichEditor gibi kaynaklardan gelen zengin HTML'i XSS'e karşı temizler:
-     * etiket/öznitelik allowlist'i uygular, script/style/iframe'i tamamen atar,
-     * javascript/data/vbscript şemalarını ve on* olay özniteliklerini siler.
-     */
     function sanitize_html(?string $html, ?array $allowedTags = null): string
     {
         $html = (string) $html;
@@ -72,7 +58,6 @@ if (! function_exists('sanitize_html')) {
             'td' => ['colspan', 'rowspan'],
         ];
 
-        // İçeriği ve çocuklarını tamamen atacak tehlikeli etiketler.
         $dropTags = ['script', 'style', 'iframe', 'object', 'embed', 'noscript', 'template', 'svg', 'math', 'form'];
 
         $doc = new \DOMDocument();
@@ -105,7 +90,6 @@ if (! function_exists('sanitize_html')) {
             }
 
             if (! in_array($tag, $allowedTags, true)) {
-                // Etiketi at, çocuklarını koru (ve temizlemek için tekrar gez).
                 $parent = $node->parentNode;
                 $children = iterator_to_array($node->childNodes);
                 foreach ($children as $child) {
@@ -156,11 +140,6 @@ if (! function_exists('sanitize_html')) {
 }
 
 if (! function_exists('is_bot_request')) {
-    /**
-     * İsteğin bir arama motoru/sosyal medya botu (crawler) tarafından
-     * yapılıp yapılmadığını User-Agent'e bakarak anlar. view_count gibi
-     * sayaçları şişirmemesi için kullanılır.
-     */
     function is_bot_request(): bool
     {
         $ua = mb_strtolower((string) request()->header('User-Agent', ''));

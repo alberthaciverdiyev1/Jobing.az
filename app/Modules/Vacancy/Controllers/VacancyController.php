@@ -28,24 +28,16 @@ class VacancyController extends Controller
         return $this->listingResponse($request, false);
     }
 
-    /**
-     * Digər saytların (scraped) vakansiyaları.
-     * Platforma elanları + xarici saytlardan toplanan elanlar birlikdə göstərilir.
-     */
     public function external(Request $request): View|JsonResponse|Response
     {
         return $this->listingResponse($request, true);
     }
 
-    /**
-     * Shared listing renderer for the native list and the external (scraped) list.
-     */
     private function listingResponse(Request $request, bool $includeScraped): View|JsonResponse|Response
     {
         $data = $this->vacancyService->getPaginatedVacancies($request->all(), 30, $includeScraped);
         $data['isExternal'] = $includeScraped;
 
-        // Only return JSON if this is an explicit AJAX fetch call and not standard browser page navigation.
         $isAjax = ($request->ajax() || $request->header('X-Partial') || $request->wantsJson()) && ! $request->acceptsHtml();
 
         if ($isAjax) {
@@ -86,15 +78,10 @@ class VacancyController extends Controller
         return view('pages.jobs.show', $data);
     }
 
-    /**
-     * Resolve single segment URL: /jobs/{slug}
-     * Can match City, Category, or individual Vacancy.
-     */
     public function resolveSlug(Request $request, string $slug): View|JsonResponse|Response
     {
         $cleanSlug = strtolower(trim($slug));
 
-        // 1. Check if slug matches a City
         $city = City::where('slug', $cleanSlug)->first();
         if ($city) {
             $existingCities = (array) $request->input('city', []);
@@ -106,7 +93,6 @@ class VacancyController extends Controller
             return $this->index($request);
         }
 
-        // 2. Check if slug matches a Category (parent or subcategory)
         $category = Category::where('slug', $cleanSlug)->first();
         if ($category) {
             $existingCats = array_filter((array) $request->input('category', []));
@@ -122,7 +108,6 @@ class VacancyController extends Controller
             return $this->index($request);
         }
 
-        // 3. Check if slug matches a Vacancy (job detail)
         $vacancy = Vacancy::where('slug', $slug)->first();
         if ($vacancy) {
             return $this->show($slug);
@@ -131,16 +116,10 @@ class VacancyController extends Controller
         abort(404);
     }
 
-    /**
-     * Kök səviyyəli siyahı yolu: /{categorySlug}
-     * Yalnız şəhər və ya kateqoriya həll edir (vakansiya detalı burada AÇILMIR —
-     * detal üçün /vakansiya/{slug} istifadə olunur).
-     */
     public function resolveListingSlug(Request $request, string $slug): View|JsonResponse|Response
     {
         $cleanSlug = strtolower(trim($slug));
 
-        // 1. Şəhər?
         $city = City::where('slug', $cleanSlug)->first();
         if ($city) {
             $existingCities = (array) $request->input('city', []);
@@ -152,7 +131,6 @@ class VacancyController extends Controller
             return $this->index($request);
         }
 
-        // 2. Kateqoriya (alt kateqoriya ilə birlikdə mümkündür → ?subcategory=)
         $category = Category::where('slug', $cleanSlug)->first();
         if ($category) {
             $existingCats = array_filter((array) $request->input('category', []));
@@ -171,12 +149,6 @@ class VacancyController extends Controller
         abort(404);
     }
 
-    /**
-     * Fallback: statik route'lara uyğun gəlməyən kök yolları siyahıya çevirir.
-     *   /{category}            → kateqoriya siyahısı
-     *   /{city}                → şəhər siyahısı
-     *   /{city}/{category}     → şəhər + kateqoriya
-     */
     public function fallback(Request $request): View|JsonResponse|Response
     {
         if (! $request->isMethod('GET') && ! $request->isMethod('HEAD')) {
@@ -189,7 +161,6 @@ class VacancyController extends Controller
             $a = strtolower(trim(urldecode($segments[0])));
             $b = strtolower(trim(urldecode($segments[1])));
 
-            // Yalnız {şəhər}/{kateqoriya} və ya {kateqoriya}/{şəhər} cütləri keçərlidir.
             $isCityA = City::where('slug', $a)->exists();
             $isCatA = Category::where('slug', $a)->exists();
             $isCityB = City::where('slug', $b)->exists();
@@ -209,20 +180,14 @@ class VacancyController extends Controller
         abort(404);
     }
 
-    /**
-     * Resolve two segment URL: /jobs/{citySlug}/{categorySlug}
-     * e.g. /jobs/baki/computer-science or /jobs/baki/computer-science?subcategory=backend
-     */
     public function filterTwoParams(Request $request, string $param1, string $param2): View|JsonResponse|Response
     {
         $cleanParam1 = strtolower(trim($param1));
         $cleanParam2 = strtolower(trim($param2));
 
-        // Case A: /jobs/{citySlug}/{categorySlug}
         $city = City::where('slug', $cleanParam1)->first();
         $category = Category::where('slug', $cleanParam2)->first();
 
-        // Case B: /jobs/{categorySlug}/{citySlug} (fallback)
         if (!$city || !$category) {
             $categoryAlt = Category::where('slug', $cleanParam1)->first();
             $cityAlt = City::where('slug', $cleanParam2)->first();
@@ -259,11 +224,6 @@ class VacancyController extends Controller
         return $this->index($request);
     }
 
-    /**
-     * SEO-friendly category (and optional city) listing URL.
-     * e.g. /isler/backend-developer or /isler/backend-developer/baki
-     * Merges the path segments into the request so the existing index() renders them.
-     */
     public function seo(Request $request, string $categorySlug, ?string $city = null): View|JsonResponse|Response
     {
         $category = Category::where('slug', $categorySlug)
@@ -295,7 +255,6 @@ class VacancyController extends Controller
             return back()->with('error', __('You have already applied to this vacancy.'));
         }
 
-        // Misafir kullanıcılar için e-posta bazlı tekrar kontrolü (spam önleme)
         if (! auth()->check()) {
             $applicantEmail = mb_strtolower(trim((string) ($request->validated()['applicant_email'] ?? '')));
             if ($applicantEmail !== '' && \App\Modules\Application\Models\Application::where('vacancy_id', $vacancy->id)
@@ -309,7 +268,6 @@ class VacancyController extends Controller
             }
         }
 
-        // Reject applications for inactive or expired vacancies
         abort_unless(
             $vacancy->is_active && (!$vacancy->deadline || $vacancy->deadline->gte(today())),
             404,

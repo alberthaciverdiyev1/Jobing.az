@@ -73,7 +73,6 @@ class MyJobSeekerResource extends Resource
                             ->searchable()
                             ->preload()
                             ->live()
-                            // Düzenlemede saklı alt kategorinin üstünü otomatik seç.
                             ->default(fn (?Model $record): ?string => $record?->category?->parent_id ? (string) $record->category->parent_id : null)
                             ->afterStateUpdated(fn (Forms\Set $set) => $set('category_id', null))
                             ->dehydrated(false)
@@ -189,7 +188,6 @@ class MyJobSeekerResource extends Resource
                                 \App\Modules\JobSeeker\Models\JobSeeker::STATUS_PENDING => 'Gözləmədə (Admin onayı)',
                                 'draft' => 'Qaralama (Gizli)',
                             ])
-                            // Kullanıcı kendi elanını yayınlayamaz; onayı admin (JobSeekerResource) verir.
                             ->default(\App\Modules\JobSeeker\Models\JobSeeker::STATUS_PENDING)
                             ->required(),
                     ])->columns(2),
@@ -248,7 +246,6 @@ class MyJobSeekerResource extends Resource
             ->defaultSort('updated_at', 'desc')
             ->actions([
 
-                // İrəli çək (WhatsApp siparişi — web modalı)
                 Tables\Actions\Action::make('promote_bump')
                     ->label(__('Boost'))
                     ->icon('heroicon-o-arrow-up-circle')
@@ -264,7 +261,6 @@ class MyJobSeekerResource extends Resource
                         'id' => $record->id,
                     ])),
 
-                // Premium (WhatsApp siparişi — web modalı)
                 Tables\Actions\Action::make('promote_premium')
                     ->label(__('Make Premium'))
                     ->icon('heroicon-o-sparkles')

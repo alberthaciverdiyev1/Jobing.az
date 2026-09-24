@@ -7,11 +7,6 @@ use Illuminate\Database\Eloquent\Collection;
 
 class CategoryService
 {
-    /**
-     * Get parent categories with active vacancy counts and subcategories.
-     *
-     * @return Collection
-     */
     public function getParentCategoriesWithCounts(): Collection
     {
         return Category::parents()
@@ -20,12 +15,6 @@ class CategoryService
             ->get();
     }
 
-    /**
-     * Find category by slug.
-     *
-     * @param string $slug
-     * @return Category|null
-     */
     public function findBySlug(string $slug): ?Category
     {
         return Category::where('slug', $slug)->first();

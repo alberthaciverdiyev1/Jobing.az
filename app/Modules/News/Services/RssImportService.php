@@ -7,9 +7,6 @@ use App\Modules\News\Models\RssSource;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 
-/**
- * RSS/Atom lentlərini oxuyub xəbər yaradır. Xarici paket tələb etmir (SimpleXML).
- */
 class RssImportService
 {
     public function importAll(): array
@@ -47,7 +44,6 @@ class RssImportService
                 continue;
             }
 
-            // Atom link obyekti
             if ($link === '' && isset($item->link)) {
                 foreach ($item->link as $l) {
                     if ((string) $l['rel'] === 'alternate' || (string) $l['href'] !== '') {

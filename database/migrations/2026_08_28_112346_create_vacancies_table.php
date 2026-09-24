@@ -6,9 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('vacancies', function (Blueprint $table) {
@@ -17,9 +14,9 @@ return new class extends Migration
             $table->foreignId('category_id')->nullable()->constrained()->nullOnDelete();
             $table->string('title');
             $table->string('slug')->unique();
-            $table->string('job_type')->default('Full-time'); // Full-time, Part-time, Contract, Internship, Freelance
-            $table->string('workplace_type')->default('On-site'); // Remote, Hybrid, On-site
-            $table->string('experience_level')->default('Mid'); // Entry, Junior, Mid, Senior, Lead
+            $table->string('job_type')->default('Full-time');
+            $table->string('workplace_type')->default('On-site');
+            $table->string('experience_level')->default('Mid');
             $table->string('location')->nullable();
             $table->decimal('salary_min', 12, 2)->nullable();
             $table->decimal('salary_max', 12, 2)->nullable();
@@ -36,9 +33,6 @@ return new class extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('vacancies');

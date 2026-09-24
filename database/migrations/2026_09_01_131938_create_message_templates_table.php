@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('company_id')->nullable()->constrained()->cascadeOnDelete();
             $table->json('title');
-            $table->string('type')->default('custom'); // rejected, interview, accepted, custom
+            $table->string('type')->default('custom');
             $table->json('content');
             $table->boolean('is_active')->default(true);
             $table->timestamps();

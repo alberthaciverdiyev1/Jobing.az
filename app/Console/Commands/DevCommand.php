@@ -7,11 +7,6 @@ use Symfony\Component\Process\Process;
 
 class DevCommand extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
     protected $signature = 'dev
         {--host=127.0.0.1 : Host the application server binds to}
         {--port=8000 : Port the application server listens on}
@@ -20,16 +15,8 @@ class DevCommand extends Command
         {--no-vite : Do not run Vite at all}
         {--build : Watch with "vite build --watch" instead of the Vite dev server}';
 
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
     protected $description = 'Run the local development stack (server, queue, logs, Vite) with file watching';
 
-    /**
-     * Execute the console command.
-     */
     public function handle(): int
     {
         $processes = $this->buildProcesses();
@@ -57,11 +44,6 @@ class DevCommand extends Command
         return $this->runConcurrently($concurrently, $processes);
     }
 
-    /**
-     * Build the list of processes to run, in the order they should start.
-     *
-     * @return array<int, array{name: string, color: string, command: string}>
-     */
     protected function buildProcesses(): array
     {
         $processes = [
@@ -103,11 +85,6 @@ class DevCommand extends Command
         return $processes;
     }
 
-    /**
-     * Run every process through concurrently and stream its output.
-     *
-     * @param  array<int, array{name: string, color: string, command: string}>  $processes
-     */
     protected function runConcurrently(string $concurrently, array $processes): int
     {
         $command = [
@@ -135,9 +112,6 @@ class DevCommand extends Command
         return (int) $process->getExitCode();
     }
 
-    /**
-     * Kill the child stack when this command is interrupted.
-     */
     protected function forwardSignals(Process $process): void
     {
         if (! function_exists('pcntl_async_signals')) {

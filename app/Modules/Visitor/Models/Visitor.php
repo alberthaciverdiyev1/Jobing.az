@@ -5,7 +5,6 @@ namespace App\Modules\Visitor\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-/** IP bazlı təkrar olmayan ziyarətçi analitikası. */
 class Visitor extends Model
 {
     use HasFactory;

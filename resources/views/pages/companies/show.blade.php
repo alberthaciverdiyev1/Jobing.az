@@ -6,7 +6,6 @@
 @section('content')
 <div class="bg-gray-50 min-h-screen pb-16">
 
-    <!-- Top Cover Banner (Only if banner exists) -->
     @if($company->banner)
     <div class="w-full relative bg-slate-900 overflow-hidden">
         <div class="h-44 sm:h-56 md:h-64 w-full">
@@ -16,14 +15,11 @@
     </div>
     @endif
 
-    <!-- Company Header Bar -->
     <div class="bg-white border-b border-gray-200">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
 
-            <!-- Profile Header Info -->
             <div class="flex items-center justify-between gap-3 sm:gap-6 py-4 sm:py-6 {{ $company->banner ? '-mt-12 sm:-mt-14 relative z-10' : '' }}">
 
-                <!-- Left: Logo + Details -->
                 <div class="flex items-center gap-3 sm:gap-5 min-w-0">
                     <div class="w-14 h-14 sm:w-20 sm:h-20 rounded-xl sm:rounded-2xl bg-slate-900 {{ $company->banner ? 'border-4 border-white shadow-md' : 'border border-gray-200 shadow-2xs' }} flex items-center justify-center font-semibold text-white text-xl sm:text-3xl shrink-0 overflow-hidden bg-white">
                         @if($company->logo)
@@ -68,7 +64,6 @@
                     </div>
                 </div>
 
-                <!-- Right: Active Vacancies Counter Pill -->
                 <div class="shrink-0">
                     <div class="px-2.5 sm:px-5 py-2 rounded-xl bg-orange-50/80 border border-orange-100 text-center min-w-[72px] sm:min-w-[120px] shadow-2xs">
                         <span class="text-lg sm:text-2xl font-semibold text-primary font-mono block leading-none">{{ $company->vacancies->count() }}</span>
@@ -81,14 +76,11 @@
         </div>
     </div>
 
-    <!-- Content Grid -->
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-8">
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
-            <!-- Left 2 cols: About FIRST, then Open Vacancies -->
             <div class="lg:col-span-2 space-y-8">
 
-                <!-- 1. Şirkət Haqqında (About) -->
                 <div class="bg-white rounded-xl border border-gray-200 p-4 sm:p-6 shadow-2xs space-y-3">
                     <h2 class="text-sm font-semibold text-gray-900 flex items-center gap-2 pb-3 border-b border-gray-100">
                         <span>{{ __('About Company') }}</span>
@@ -98,7 +90,6 @@
                     </div>
                 </div>
 
-                <!-- 2. Şirkətin Açık Vakansiyaları (Open Vacancies) -->
                 <div class="space-y-4">
                     <div class="flex items-center justify-between pb-2 border-b border-gray-200">
                         <h2 class="text-sm font-semibold text-gray-900 flex items-center gap-2">
@@ -126,7 +117,6 @@
 
             </div>
 
-            <!-- Right: Contact Info Sidebar -->
             <div class="space-y-6">
                 <div class="bg-white rounded-xl border border-gray-200 p-5 shadow-2xs space-y-4 sticky top-24">
                     <h3 class="text-xs font-medium text-gray-900 pb-3 border-b border-gray-100 flex items-center gap-2">

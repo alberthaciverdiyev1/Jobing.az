@@ -134,7 +134,6 @@ class CompanyProfile extends Page implements HasForms
 
         $company->update(['verification_requested' => true]);
 
-        // Notify every admin so the request shows up in the admin notification bell.
         $reviewUrl = null;
         try {
             $reviewUrl = \App\Modules\Company\Filament\Resources\CompanyResource::getUrl(

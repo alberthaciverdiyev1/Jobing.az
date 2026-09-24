@@ -6,25 +6,20 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
-        // 1. Job Types (İş Rejimi)
         Schema::create('job_types', function (Blueprint $table) {
             $table->id();
-            $table->json('name'); // Multilingual: az, tr, en, ru
+            $table->json('name');
             $table->string('slug')->unique();
             $table->integer('order')->default(0);
             $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
 
-        // 2. Workplace Types (Çalışma Yeri / Məkanı)
         Schema::create('workplace_types', function (Blueprint $table) {
             $table->id();
-            $table->json('name'); // Multilingual: az, tr, en, ru
+            $table->json('name');
             $table->string('slug')->unique();
             $table->string('icon')->nullable();
             $table->integer('order')->default(0);
@@ -32,17 +27,15 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        // 3. Experience Levels (Deneyim / Təcrübə Səviyyəsi)
         Schema::create('experience_levels', function (Blueprint $table) {
             $table->id();
-            $table->json('name'); // Multilingual: az, tr, en, ru
+            $table->json('name');
             $table->string('slug')->unique();
             $table->integer('order')->default(0);
             $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
 
-        // 4. Update Vacancies table with foreign keys
         Schema::table('vacancies', function (Blueprint $table) {
             $table->foreignId('job_type_id')->nullable()->after('category_id')->constrained('job_types')->nullOnDelete();
             $table->foreignId('workplace_type_id')->nullable()->after('job_type_id')->constrained('workplace_types')->nullOnDelete();
@@ -53,9 +46,6 @@ return new class extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::table('vacancies', function (Blueprint $table) {

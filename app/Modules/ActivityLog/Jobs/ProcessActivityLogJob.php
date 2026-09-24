@@ -11,9 +11,6 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 
-/**
- * Activity log-u növbə ilə (async) yazır — istifadəçi cavabı gözləmir.
- */
 class ProcessActivityLogJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;

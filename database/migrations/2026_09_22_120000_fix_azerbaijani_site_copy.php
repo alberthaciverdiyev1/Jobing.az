@@ -32,6 +32,5 @@ return new class extends Migration
 
     public function down(): void
     {
-        // Editorial corrections are intentionally not reverted.
     }
 };

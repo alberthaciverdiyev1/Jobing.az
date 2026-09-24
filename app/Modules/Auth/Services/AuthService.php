@@ -9,11 +9,6 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthService
 {
-    /**
-     * Attempt to log the user in.
-     *
-     * @return bool whether authentication succeeded
-     */
     public function login(array $credentials, bool $remember = false): bool
     {
         return Auth::attempt([
@@ -22,12 +17,6 @@ class AuthService
         ], $remember);
     }
 
-    /**
-     * Register a new user (individual or company).
-     * Company registration is kept minimal; the rest can be filled later.
-     *
-     * @return User
-     */
     public function register(array $data): User
     {
         $type = $data['user_type'] ?? 'user';
@@ -40,7 +29,6 @@ class AuthService
         ];
 
         if ($type === 'company') {
-            // Create a minimal company record (only what we asked at registration).
             $company = Company::firstOrCreate(
                 ['name' => $data['company_name']],
                 ['email' => $data['email'], 'is_verified' => false]
@@ -52,9 +40,6 @@ class AuthService
         return User::create($userData);
     }
 
-    /**
-     * Determine where to send the user after login/registration.
-     */
     public function getRedirectPath(): string
     {
         $user = Auth::user();

@@ -12,7 +12,6 @@ class Application extends Model
 {
     use HasFactory;
 
-    /** Yeni oluşturulan başvurunun durumu (DB değeriyle birebir — tek kaynak). */
     public const STATUS_PENDING = 'Beklemede';
 
     protected static function booted(): void
@@ -26,7 +25,6 @@ class Application extends Model
                 report($e);
             }
 
-            // Başvuru listesi memoize'i bayatlamasın (bkz. User::appliedVacancyIds).
             \App\Models\User::flushAppliedVacancyCache($application->user_id);
         });
     }
@@ -53,9 +51,6 @@ class Application extends Model
         'reply_seen_at' => 'datetime',
     ];
 
-    /**
-     * Şirkət cavabı varsa və hələ oxunmayıbsa true (rozet göstərilir).
-     */
     public function hasUnseenReply(): bool
     {
         if (! filled($this->notes)) {

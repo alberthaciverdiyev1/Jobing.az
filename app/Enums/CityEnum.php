@@ -34,7 +34,6 @@ enum CityEnum: string
     case QUBADLI = 'Qubadlı';
     case REMOTE = 'Remote (Məsafədən)';
 
-    /** İngilis dilində adı (tərcümə açarı kimi istifadə olunur). */
     public function englishName(): string
     {
         return match ($this) {

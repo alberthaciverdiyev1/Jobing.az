@@ -1,6 +1,3 @@
-// Favorites (Kaydedilen İlanlar) - client-side manager.
-// Fetches saved vacancy ids from the server and toggles them via AJAX.
-// Uses event delegation so it works with dynamically-loaded job lists too.
 
 const Favorites = {
     ids: new Set(),
@@ -66,7 +63,6 @@ const Favorites = {
                 this.renderAll();
             }
         } catch (e) {
-            // ignore network errors, keep current state
         } finally {
             btn.disabled = false;
         }

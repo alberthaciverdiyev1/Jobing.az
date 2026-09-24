@@ -43,7 +43,6 @@
 @endphp
 
 <section class="relative overflow-hidden bg-linear-to-br from-orange-50 to-orange-100">
-    <!-- Decorative icons scattered across the hero -->
     @php $mobileIconLimit = 10; @endphp
     @foreach($heroIcons as [$icon, $x, $y, $size, $rot])
     <i class="fas {{ $icon }} hero-icon absolute text-primary/10 pointer-events-none {{ $loop->index >= $mobileIconLimit ? 'hidden lg:block' : '' }}"

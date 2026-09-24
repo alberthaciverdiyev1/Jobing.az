@@ -74,7 +74,6 @@ class ScraperStatus extends Page
             'other' => $this->nextWeeklyAt($now, Carbon::SATURDAY, 21),
         ];
 
-        // Son 24 saatte eklenen ilanlar (kaynak bazında)
         $since = Carbon::now()->subDay();
         $perSource24h = DB::table('scraped_vacancies')
             ->where('created_at', '>=', $since)
@@ -82,16 +81,13 @@ class ScraperStatus extends Page
             ->groupBy('src')->pluck('c', 'src');
         $last24h = (int) $perSource24h->sum();
 
-        // Trend: son 14 çalışmanın eklenen ilan sayısı (eskiden yeniye)
         $trend = ScraperRun::latest('id')->limit(14)->get()->reverse()->values();
 
-        // Ortalama çalışma süresi (saniyə)
         $avgSeconds = (float) (DB::table('scraper_runs')
             ->whereNotNull('started_at')->whereNotNull('finished_at')
             ->selectRaw('avg(extract(epoch from (finished_at - started_at))) as s')
             ->value('s') ?? 0);
 
-        // Günlük toplamlar (son 14 gün)
         $dailyRaw = DB::table('scraper_runs')->whereNotNull('finished_at')
             ->where('finished_at', '>=', Carbon::now()->subDays(13)->startOfDay())
             ->selectRaw("to_char(finished_at, 'YYYY-MM-DD') as d, sum(inserted) as ins")
@@ -103,7 +99,6 @@ class ScraperStatus extends Page
         }
         $dailyMax = max(1, max($dailySeries));
 
-        // Kaynak bazında trend (son 10 çalışma)
         $perSourceTrend = ScraperSourceRun::orderBy('run_at')->get()
             ->groupBy('source')
             ->map(fn ($group) => $group->pluck('inserted')->take(-10)->values());

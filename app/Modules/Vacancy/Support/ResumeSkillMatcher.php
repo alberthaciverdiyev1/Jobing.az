@@ -4,7 +4,6 @@ namespace App\Modules\Vacancy\Support;
 
 class ResumeSkillMatcher
 {
-    /** @return array{percentage: int, matched: int, required: int}|null */
     public static function compare(iterable $resumeSkills, ?array $vacancySkills): ?array
     {
         $required = self::normalize($vacancySkills);
@@ -37,7 +36,6 @@ class ResumeSkillMatcher
         ];
     }
 
-    /** @return list<string> */
     private static function normalize(?array $skills): array
     {
         $normalized = [];

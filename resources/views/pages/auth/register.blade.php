@@ -6,7 +6,6 @@
 <div class="bg-gray-50 min-h-screen py-12 sm:py-16 flex items-center justify-center px-4 sm:px-6 lg:px-8" x-data="{ userType: @js(old('user_type', 'user')) }">
     <div class="w-full max-w-2xl">
 
-        <!-- Top Title / Logo -->
         <div class="text-center mb-8">
             <h2 class="text-2xl sm:text-3xl font-semibold text-gray-900 tracking-tight">
                 {{ __('Create account') }}
@@ -30,13 +29,11 @@
         </div>
         @endif
 
-        <!-- Big Register Card -->
         <div class="bg-white p-8 sm:p-10 rounded-2xl border border-gray-200 shadow-sm space-y-6">
             <form action="{{ route('register.attempt') }}" method="POST" class="space-y-5">
                 @csrf
                 <input type="hidden" name="user_type" :value="userType">
 
-                <!-- Account Type Selector -->
                 <div>
                     <label class="block text-xs font-medium text-gray-700 mb-2.5">
                         {{ __('Choose Account Type') }} <span class="text-rose-500">*</span>
@@ -68,7 +65,6 @@
                     </div>
                 </div>
 
-                <!-- Individual User Fields -->
                 <div x-show="userType === 'user'" x-transition>
                     <label class="block text-xs font-medium text-gray-700 mb-2">
                         {{ __('Your First and Last Name') }} <span class="text-rose-500">*</span>
@@ -81,7 +77,6 @@
                     </div>
                 </div>
 
-                <!-- Company Fields -->
                 <div x-show="userType === 'company'" x-transition>
                     <label class="block text-xs font-medium text-gray-700 mb-2">
                         {{ __('The Official Name of Your Company') }} <span class="text-rose-500">*</span>
@@ -97,7 +92,6 @@
                     </p>
                 </div>
 
-                <!-- Email Field -->
                 <div>
                     <label class="block text-xs font-medium text-gray-700 mb-2">
                         {{ __('Email Address') }} <span class="text-rose-500">*</span>
@@ -110,7 +104,6 @@
                     </div>
                 </div>
 
-                <!-- Password Fields -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-xs font-medium text-gray-700 mb-2">
@@ -153,7 +146,6 @@
                 </button>
             </form>
 
-            <!-- Switch to Login Banner -->
             <div class="pt-6 border-t border-gray-100 text-center">
                 <p class="text-xs text-gray-600">
                     {{ __('Already have an account?') }}

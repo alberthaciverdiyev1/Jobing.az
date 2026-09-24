@@ -76,9 +76,6 @@ class PageSeo extends Model
         return static::$memoizedAll = $all;
     }
 
-    /**
-     * Resolve the PageSeo for the current route (by name or path prefix).
-     */
     public static function findForCurrentRoute(?string $currentRoute = null): ?self
     {
         if ($currentRoute === null && static::$memoizedCurrent !== null) {
@@ -89,7 +86,6 @@ class PageSeo extends Model
         $routeName = $currentRoute ?: request()->route()?->getName();
         $path = trim(request()->path(), '/');
 
-        // 1. Exact route-name match
         if ($routeName) {
             foreach ($all as $pageSeo) {
                 if ($pageSeo->route_name === $routeName || $pageSeo->page_key === $routeName) {
@@ -98,7 +94,6 @@ class PageSeo extends Model
             }
         }
 
-        // 2. Path-based fallbacks
         if ($path === '' || $path === '/') {
             return static::$memoizedCurrent = ($all['home'] ?? null);
         }
@@ -113,9 +108,6 @@ class PageSeo extends Model
         return null;
     }
 
-    /**
-     * Return a translated (or plain) field value.
-     */
     public function getTrans(string $field, ?string $locale = null, string $default = ''): string
     {
         $locale = $locale ?: app()->getLocale();
@@ -128,9 +120,6 @@ class PageSeo extends Model
         return (string) ($values ?: $default);
     }
 
-    /**
-     * Seed defaults for the main Jobing pages.
-     */
     public static function ensureDefaults(): void
     {
         $defaults = [

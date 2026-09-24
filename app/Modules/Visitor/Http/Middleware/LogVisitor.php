@@ -7,10 +7,6 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-/**
- * Təkrarlanmayan ziyarətçi qeydiyyatı (IP üzrə, 1 saat pəncərəsi).
- * Yanıt göndərildikdən sonra işləyir (terminate) — istifadəçiyə 0ms yük.
- */
 class LogVisitor
 {
     public function handle(Request $request, Closure $next): Response
@@ -54,13 +50,11 @@ class LogVisitor
                 return;
             }
 
-            // Yalnız 1 saat keçdikdən sonra yeni ziyarət sayılır
             if (! $visitor->last_visit || $visitor->last_visit->lt(now()->subHour())) {
                 $visitor->increment('visit_count');
                 $visitor->update(['last_visit' => now(), 'user_agent' => substr((string) $request->userAgent(), 0, 500)]);
             }
         } catch (\Throwable $e) {
-            // sükutla
         }
     }
 }

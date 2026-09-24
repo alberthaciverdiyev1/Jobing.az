@@ -5,12 +5,10 @@
 
 @section('content')
 <div class="bg-gray-50 min-h-screen pb-16">
-    <!-- Candidate Profile Banner -->
     <div class="bg-white border-b border-gray-200 shadow-2xs">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
 
-                <!-- Left: Avatar + Details -->
                 <div class="flex items-start sm:items-center gap-5">
                     <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-slate-900 border-2 border-gray-100 flex items-center justify-center font-semibold text-white text-3xl shadow-sm overflow-hidden shrink-0">
                         @if($resume->photo)
@@ -33,7 +31,6 @@
                     </div>
                 </div>
 
-                <!-- Right: Quick Action Buttons -->
                 <div class="flex flex-wrap items-center gap-2.5 shrink-0">
                     @if($resume->whatsapp)
                     <a href="{{ $resume->whatsapp_url }}" target="_blank"
@@ -64,14 +61,11 @@
         </div>
     </div>
 
-    <!-- Main Content Body -->
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
 
-            <!-- Left Main Column (Details) -->
             <div class="lg:col-span-8 space-y-6">
 
-                <!-- Professional Summary -->
                 @if($resume->summary)
                 <div class="bg-white rounded-2xl border border-gray-200 p-6 shadow-2xs">
                     <h3 class="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
@@ -84,7 +78,6 @@
                 </div>
                 @endif
 
-                <!-- Work Experience -->
                 @if(!empty($resume->work_experiences) && is_array($resume->work_experiences))
                 <div class="bg-white rounded-2xl border border-gray-200 p-6 shadow-2xs">
                     <h3 class="text-sm font-semibold text-gray-900 mb-5 flex items-center gap-2">
@@ -95,7 +88,6 @@
                     <div class="space-y-6 relative before:absolute before:inset-0 before:left-3.5 before:w-0.5 before:bg-gray-100">
                         @foreach($resume->work_experiences as $exp)
                         <div class="relative flex items-start gap-4">
-                            <!-- Bullet Icon -->
                             <div class="w-7 h-7 rounded-full bg-orange-50 border-2 border-primary text-primary flex items-center justify-center text-[11px] shrink-0 z-10">
                                 <i class="fas fa-check"></i>
                             </div>
@@ -131,7 +123,6 @@
                 </div>
                 @endif
 
-                <!-- Education -->
                 @if(!empty($resume->education) && is_array($resume->education))
                 <div class="bg-white rounded-2xl border border-gray-200 p-6 shadow-2xs">
                     <h3 class="text-sm font-semibold text-gray-900 mb-5 flex items-center gap-2">
@@ -169,7 +160,6 @@
                 </div>
                 @endif
 
-                <!-- Projects -->
                 @if(!empty($resume->projects) && is_array($resume->projects))
                 <div class="bg-white rounded-2xl border border-gray-200 p-6 shadow-2xs">
                     <h3 class="text-sm font-semibold text-gray-900 mb-4 flex items-center gap-2">
@@ -225,7 +215,6 @@
                 </div>
                 @endif
 
-                <!-- Certificates & Awards -->
                 @if((!empty($resume->certificates) && is_array($resume->certificates)) || (!empty($resume->awards) && is_array($resume->awards)))
                 <div class="bg-white rounded-2xl border border-gray-200 p-6 shadow-2xs">
                     <h3 class="text-sm font-semibold text-gray-900 mb-4 flex items-center gap-2">
@@ -275,7 +264,6 @@
                 </div>
                 @endif
 
-                <!-- Volunteer Experiences -->
                 @if(!empty($resume->volunteer_experiences) && is_array($resume->volunteer_experiences))
                 <div class="bg-white rounded-2xl border border-gray-200 p-6 shadow-2xs">
                     <h3 class="text-sm font-semibold text-gray-900 mb-4 flex items-center gap-2">
@@ -306,10 +294,8 @@
 
             </div>
 
-            <!-- Right Sidebar Column -->
             <div class="lg:col-span-4 space-y-6">
 
-                <!-- Contact Details Card -->
                 <div class="bg-white rounded-2xl border border-gray-200 p-6 shadow-2xs space-y-4">
                     <h3 class="text-xs font-medium text-gray-900 pb-3 border-b border-gray-100 flex items-center gap-2">
                         <i class="fas fa-address-card text-primary text-xs"></i>
@@ -370,7 +356,6 @@
                     </div>
                 </div>
 
-                <!-- Skills Card -->
                 @if(!empty($resume->skills) && is_array($resume->skills))
                 <div class="bg-white rounded-2xl border border-gray-200 p-6 shadow-2xs space-y-4">
                     <h3 class="text-xs font-medium text-gray-900 pb-3 border-b border-gray-100 flex items-center gap-2">
@@ -397,7 +382,6 @@
                 </div>
                 @endif
 
-                <!-- Languages Card -->
                 @if(!empty($resume->languages) && is_array($resume->languages))
                 <div class="bg-white rounded-2xl border border-gray-200 p-6 shadow-2xs space-y-4">
                     <h3 class="text-xs font-medium text-gray-900 pb-3 border-b border-gray-100 flex items-center gap-2">
@@ -418,7 +402,6 @@
                 </div>
                 @endif
 
-                <!-- Links & Social Profiles -->
                 @if($resume->linkedin_url || $resume->github_url || $resume->portfolio_url)
                 <div class="bg-white rounded-2xl border border-gray-200 p-6 shadow-2xs space-y-4">
                     <h3 class="text-xs font-medium text-gray-900 pb-3 border-b border-gray-100 flex items-center gap-2">
@@ -463,7 +446,6 @@
                 </div>
                 @endif
 
-                <!-- Print & PDF CTA Card -->
                 <div class="bg-slate-900 text-white rounded-2xl p-6 shadow-sm space-y-3 text-center">
                     <div class="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center mx-auto text-primary text-lg">
                         <i class="fas fa-file-pdf"></i>

@@ -22,7 +22,6 @@
 <body class="h-full antialiased font-sans text-gray-800">
     <div class="min-h-screen flex flex-col items-center justify-center px-6 py-16">
 
-        {{-- Marka (wordmark) --}}
         <a href="{{ url('/') }}" class="mb-10 flex items-center">
             <span class="font-semibold text-2xl text-dark tracking-tight">{{ config('app.brand_name') }}<span class="text-primary">{{ config('app.brand_suffix') }}</span></span>
         </a>

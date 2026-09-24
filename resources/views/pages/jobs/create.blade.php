@@ -10,7 +10,6 @@
 </style>
 <div class="bg-gray-50 min-h-screen pb-16">
 
-    <!-- Page Header -->
     <div class="bg-white border-b border-gray-200 py-10">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h2 class="text-2xl sm:text-3xl font-semibold text-gray-900 tracking-tight">
@@ -36,7 +35,6 @@
 
         @php
             $canUseInternal = auth()->check() && (auth()->user()->isCompany() || auth()->user()->is_admin);
-            // Determine initial parent/subcategory from the previously submitted value (on validation errors)
             $initialParent = '';
             $initialSub = '';
             $oldCatId = old('category_id');
@@ -130,7 +128,6 @@
               }">
             @csrf
 
-            <!-- Section 1: Company Info -->
             <div class="bg-white p-6 sm:p-8 rounded-2xl border border-gray-200 shadow-2xs space-y-5">
                 <div class="pb-3 border-b border-gray-100 flex items-center gap-2.5">
                     <div class="w-8 h-8 rounded-xl bg-orange-50 text-primary flex items-center justify-center font-semibold text-sm">1</div>
@@ -171,7 +168,6 @@
                 </div>
             </div>
 
-            <!-- Section 2: Vacancy Details -->
             <div class="bg-white p-6 sm:p-8 rounded-2xl border border-gray-200 shadow-2xs space-y-5">
                 <div class="pb-3 border-b border-gray-100 flex items-center gap-2.5">
                     <div class="w-8 h-8 rounded-xl bg-orange-50 text-primary flex items-center justify-center font-semibold text-sm">2</div>
@@ -185,7 +181,6 @@
                                class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs focus:ring-1 focus:ring-primary focus:border-primary focus:outline-hidden">
                     </div>
 
-                    <!-- Category & Subcategory Row (Side by Side) -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div :class="subcategories.length > 0 ? '' : 'sm:col-span-2'">
                             <label class="block text-xs font-semibold text-gray-700 mb-1">{{ __('Category') }} *</label>
@@ -198,7 +193,6 @@
                             </select>
                         </div>
 
-                        {{-- Subcategory: sits right next to Kateqoriya in the 2nd column --}}
                         <div x-show="subcategories.length > 0" x-cloak x-transition>
                             <label class="block text-xs font-semibold text-gray-700 mb-1">{{ __('Subcategory') }}</label>
                             <select x-model="subCat" @change="updateSubCat()"
@@ -210,11 +204,9 @@
                             </select>
                         </div>
 
-                        {{-- Final category_id submitted: subcategory if chosen, otherwise the parent --}}
                         <input type="hidden" name="category_id" id="category_id" :value="subCat || parentCat">
                     </div>
 
-                    <!-- Work Attributes Row -->
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <div>
                             <label class="block text-xs font-semibold text-gray-700 mb-1">{{ __('Workplace') }} *</label>
@@ -253,7 +245,6 @@
                         </div>
                     </div>
 
-                    <!-- Salary Range -->
                     <label class="flex items-start gap-3 p-3.5 rounded-xl border cursor-pointer transition pt-2"
                            :class="salaryNegotiable ? 'border-primary bg-orange-50/60' : 'border-gray-200 hover:border-gray-300'">
                         <input type="checkbox" name="salary_negotiable" value="1" x-model="salaryNegotiable" class="mt-0.5 rounded border-gray-300 text-primary focus:ring-primary">
@@ -297,12 +288,10 @@
                             </span>
                         </div>
 
-                        {{-- Hidden inputs to reliably submit all selectedSkills in form post --}}
                         <template x-for="skill in selectedSkills" :key="skill">
                             <input type="hidden" name="skills[]" :value="skill">
                         </template>
 
-                        <!-- Selected Skills Badges (Shown Above) -->
                         <div x-show="selectedSkills.length > 0" x-cloak x-transition class="mb-3 p-3 rounded-xl bg-orange-50/70 border border-orange-200">
                             <div class="flex items-center justify-between mb-2">
                                 <span class="text-[12px] font-medium text-gray-800 flex items-center gap-1.5">
@@ -331,13 +320,11 @@
                             </div>
                         </div>
 
-                        <!-- Prompt when no category is selected -->
                         <div x-show="!parentCat" class="text-center py-5 px-4 rounded-xl border border-dashed border-gray-200 bg-gray-50/50">
                             <i class="fas fa-layer-group text-gray-300 text-lg mb-1 block"></i>
                             <p class="text-xs text-gray-500">{{ __('First select a Category above to see the relevant skills.') }}</p>
                         </div>
 
-                        <!-- Search within skills (Shown when category is selected and has skills) -->
                         <div x-show="parentCat && categorySkills.length > 0" class="mb-3">
                             <div class="relative">
                                 <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs pointer-events-none"></i>
@@ -348,7 +335,6 @@
                             </div>
                         </div>
 
-                        <!-- Checkboxes Side by Side (Filtered by Selected Category) -->
                         <div x-show="parentCat && filteredSkills.length > 0"
                              class="flex flex-wrap items-center gap-2 max-h-56 overflow-y-auto p-2 border border-gray-200 rounded-xl bg-gray-50/40">
                             <template x-for="sk in filteredSkills" :key="sk.id">
@@ -363,12 +349,10 @@
                             </template>
                         </div>
 
-                        <!-- No skills matching search query -->
                         <div x-show="parentCat && categorySkills.length > 0 && filteredSkills.length === 0" class="text-center py-4 px-3 rounded-xl border border-dashed border-gray-200 bg-gray-50/50">
                             <p class="text-xs text-gray-400">{{ __('No skills matching your search found.') }}</p>
                         </div>
 
-                        <!-- Category has no skills assigned yet -->
                         <div x-show="parentCat && categorySkills.length === 0" class="text-center py-5 px-4 rounded-xl border border-dashed border-gray-200 bg-gray-50/50">
                             <p class="text-xs text-gray-400">{{ __('No skills have been added for this category.') }}</p>
                         </div>
@@ -401,7 +385,6 @@
                 </div>
             </div>
 
-            <!-- Section 3: Application Type -->
             <div class="bg-white p-6 sm:p-8 rounded-2xl border border-gray-200 shadow-2xs space-y-5">
                 <div class="pb-3 border-b border-gray-100 flex items-center gap-2.5">
                     <div class="w-8 h-8 rounded-xl bg-orange-50 text-primary flex items-center justify-center font-semibold text-sm">3</div>
@@ -411,7 +394,6 @@
                 <p class="text-xs text-gray-500 -mt-1">{{ __("Choose how you want to receive candidates' applications.") }}</p>
 
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                    {{-- Internal (CV upload to platform) --}}
                     @if($canUseInternal)
                     <label :class="applicationType === 'internal' ? 'border-primary bg-orange-50/60 ring-1 ring-primary' : 'border-gray-200 hover:border-gray-300'"
                            class="cursor-pointer rounded-2xl border p-4 transition flex flex-col gap-1.5">
@@ -440,7 +422,6 @@
                     </div>
                     @endif
 
-                    {{-- Email --}}
                     <label :class="applicationType === 'email' ? 'border-primary bg-orange-50/60 ring-1 ring-primary' : 'border-gray-200 hover:border-gray-300'"
                            class="cursor-pointer rounded-2xl border p-4 transition flex flex-col gap-1.5">
                         <input type="radio" name="application_type" value="email" x-model="applicationType" class="sr-only">
@@ -455,7 +436,6 @@
                         <span class="text-[12px] text-gray-500 leading-relaxed">{{ __('Candidates send applications directly to your email address.') }}</span>
                     </label>
 
-                    {{-- Both --}}
                     @if($canUseInternal)
                     <label :class="applicationType === 'both' ? 'border-primary bg-orange-50/60 ring-1 ring-primary' : 'border-gray-200 hover:border-gray-300'"
                            class="cursor-pointer rounded-2xl border p-4 transition flex flex-col gap-1.5">
@@ -505,7 +485,6 @@
                 </div>
                 @endguest
 
-                {{-- Email input (shown when email or both is selected) --}}
                 <div x-show="applicationType === 'email' || applicationType === 'both'" x-cloak
                      x-transition:enter="transition ease-out duration-200"
                      x-transition:enter-start="opacity-0 translate-y-1"
@@ -529,7 +508,6 @@
                     </p>
                 </div>
 
-                {{-- Application form fields (shown when internal or both is selected) --}}
                 @php
                     $selectedAppFields = (array) old('application_fields', ['phone', 'linkedin', 'portfolio', 'cover_letter']);
                 @endphp
@@ -582,7 +560,6 @@
                 </div>
             </div>
 
-            <!-- Submit Button -->
             <div class="flex justify-end pt-4">
                 <button type="submit" class="px-8 py-3.5 rounded-xl bg-primary hover:bg-primary-dark text-white font-semibold text-sm shadow-md hover:shadow-lg hover:shadow-orange-500/30 transition duration-200 cursor-pointer">
                     {{ __('Publish Vacancy') }}
@@ -615,7 +592,6 @@
                 placeholder: 'Məzmunu bura yazın...',
             });
 
-            // Restore previously entered content (e.g. on validation errors)
             const initial = container.dataset.initial || '';
             const hidden = document.getElementById(f.hiddenId);
             if (initial) {
@@ -627,7 +603,6 @@
                 if (hidden) hidden.value = initial;
             }
 
-            // Sync on EVERY keystroke/text-change
             quill.on('text-change', function () {
                 if (hidden) {
                     const text = quill.getText().trim();

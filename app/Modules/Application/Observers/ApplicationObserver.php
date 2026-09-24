@@ -8,9 +8,6 @@ use Illuminate\Support\Str;
 
 class ApplicationObserver
 {
-    /**
-     * Send a Filament-compatible database notification to a user.
-     */
     public static function notifyUser(User $user, string $title, string $body, string $icon = 'heroicon-o-bell', string $color = 'primary', ?string $url = null, ?string $urlLabel = null): void
     {
         $actions = [];
@@ -43,9 +40,6 @@ class ApplicationObserver
         ]);
     }
 
-    /**
-     * Handle the Application "created" event (User applies to vacancy -> Notify Company).
-     */
     public function created(Application $application): void
     {
         $vacancy = $application->vacancy;
@@ -58,7 +52,6 @@ class ApplicationObserver
             return;
         }
 
-        // Find company users
         $companyUsers = User::where('company_id', $company->id)->get();
         if ($companyUsers->isEmpty() && $company->email) {
             $companyUsers = User::where('email', $company->email)->get();
@@ -80,9 +73,6 @@ class ApplicationObserver
         }
     }
 
-    /**
-     * Handle the Application "updated" event (Status changes -> Notify Candidate).
-     */
     public function updated(Application $application): void
     {
         if ($application->wasChanged('status')) {

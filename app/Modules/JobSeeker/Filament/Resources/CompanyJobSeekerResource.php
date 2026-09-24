@@ -8,9 +8,6 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 
-/**
- * Company paneli üçün aday "iş axtarıram" elanlarını gözlem. Yalnız oxu.
- */
 class CompanyJobSeekerResource extends Resource
 {
     protected static ?string $model = JobSeeker::class;

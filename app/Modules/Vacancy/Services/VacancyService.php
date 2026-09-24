@@ -19,12 +19,8 @@ use Illuminate\Support\Facades\DB;
 
 class VacancyService
 {
-    /**
-     * Get paginated vacancies with filters, categories, and sidebar attributes.
-     */
     public function getPaginatedVacancies(array $filters = [], int $perPage = 30, bool $includeScraped = false): array
     {
-        // Ağır merge/sort nəticəsi imza üzrə keşlənir; yeni veri (FacetCache::bump) və ya TTL ilə yenilənir.
         $signatureFilters = $filters;
         ksort($signatureFilters);
         $signature = serialize([
@@ -42,7 +38,6 @@ class VacancyService
     {
         $query = Vacancy::with(['company', 'category', 'city', 'jobType', 'workplaceType', 'experienceLevel', 'skillRecords'])->active();
 
-        // 1. Keyword search
         if (!empty($filters['q'])) {
             $search = $filters['q'];
             $query->where(function ($q) use ($search) {
@@ -52,7 +47,6 @@ class VacancyService
             });
         }
 
-        // Normalize filters to arrays for multi-select support (also accept single values)
         $selectedCategories = array_filter((array) ($filters['category'] ?? []));
         if (!empty($filters['subcategory'])) {
             $subcategories = array_filter((array) $filters['subcategory']);
@@ -62,8 +56,6 @@ class VacancyService
         $selectedTypes       = array_filter((array) ($filters['type'] ?? []));
         $selectedExperiences = array_filter((array) ($filters['experience'] ?? []));
 
-        // 2. Category / Subcategory (multi-select: if a child is selected, parent is excluded)
-        // Nəticə memoizasiya olunur — eyni sorğuda facet sorguları üçün təkrar DB sorğusu olmasın.
         $resolveCategoryIdsCache = [];
         $resolveCategoryIds = function (array $catSlugs) use (&$resolveCategoryIdsCache): array {
             if (empty($catSlugs)) {
@@ -102,35 +94,29 @@ class VacancyService
             }
         }
 
-        // 3. Workplace type (multi-select)
         if (!empty($selectedWorkplaces)) {
             $query->whereHas('workplaceType', fn ($wq) => $wq->whereIn('slug', $selectedWorkplaces));
         }
 
-        // 4. Job type (multi-select)
         if (!empty($selectedTypes)) {
             $query->whereHas('jobType', fn ($jq) => $jq->whereIn('slug', $selectedTypes));
         }
 
-        // 5. Experience level (multi-select)
         if (!empty($selectedExperiences)) {
             $query->whereHas('experienceLevel', fn ($eq) => $eq->whereIn('slug', $selectedExperiences));
         }
 
-        // 5.5 City / Location (multi-select)
         $selectedCities = array_filter((array) ($filters['city'] ?? []));
         if (!empty($selectedCities)) {
             $query->whereHas('city', fn ($cq) => $cq->whereIn('slug', $selectedCities));
         }
 
-        // 5.6 Skills Filter (multi-select)
         $selectedSkills = array_filter((array) ($filters['skills'] ?? []));
         if (!empty($selectedSkills)) {
             $skillIds = $this->resolveSkillIds($selectedSkills);
             $query->whereHas('skillRecords', fn ($skillQuery) => $skillQuery->whereIn('skills.id', $skillIds));
         }
 
-        // 6. Salary Filter (Min & Max)
         if (!empty($filters['min_salary'])) {
             $minSalary = (float)$filters['min_salary'];
             $query->where(function ($q) use ($minSalary) {
@@ -148,7 +134,6 @@ class VacancyService
             });
         }
 
-        // 7. Sort
         $sort = $filters['sort'] ?? 'latest';
         if ($sort === 'oldest') {
             $query->orderBy('is_featured', 'desc')->orderByRaw('vacancies.updated_at ASC');
@@ -167,12 +152,10 @@ class VacancyService
         } elseif ($sort === 'title_desc') {
             $query->orderBy('title', 'desc');
         } else {
-            // Default latest: Premium first, then latest bumped/created
             $query->orderBy('is_featured', 'desc')->orderByRaw('vacancies.updated_at DESC');
         }
 
         if (! $includeScraped) {
-            // Normal siyahı: yalnız platforma vakansiyaları (vacancies cədvəli).
             $jobs = $query->paginate($perPage)->withQueryString();
         } else {
             $scrapedQuery = ScrapedVacancy::with(['category', 'city', 'jobType', 'workplaceType', 'experienceLevel'])->active();
@@ -220,9 +203,6 @@ class VacancyService
                 });
             }
 
-            // Platforma və xarici elanlar birlikdə, seçilmiş sıralamaya görə
-            // qarışdırılır (native elanlar həmişə yuxarıda saxlanılmır).
-            // SQL səviyyəsində UNION + ORDER BY + LIMIT/OFFSET: yalnız görünən səhifə hydrate olunur.
             $jobs = $this->paginateMergedListing($query, $scrapedQuery, $sort, $perPage);
         }
 
@@ -245,9 +225,6 @@ class VacancyService
             });
         }
 
-        // Count scopes based on currently applied filters.
-        // $attributeScope includes the selected category; $categoryCountScope does not
-        // (so category counts reflect search/other filters but aren't narrowed by the category itself).
         $makeScope = function (bool $includeCategory) use ($selectedCategories, $selectedWorkplaces, $selectedTypes, $selectedExperiences, $selectedCities, $selectedSkills, $filters, $resolveCategoryIds) {
             return function ($q) use ($includeCategory, $selectedCategories, $selectedWorkplaces, $selectedTypes, $selectedExperiences, $selectedCities, $selectedSkills, $filters, $resolveCategoryIds) {
                 $q->active();
@@ -300,7 +277,6 @@ class VacancyService
             };
         };
 
-        // Scraped elanlar üçün eyni filtr məntiqi (company_name və JSON skills fərqlidir).
         $makeScrapedScope = function (bool $includeCategory) use ($selectedCategories, $selectedWorkplaces, $selectedTypes, $selectedExperiences, $selectedCities, $selectedSkills, $filters, $resolveCategoryIds) {
             return function ($q) use ($includeCategory, $selectedCategories, $selectedWorkplaces, $selectedTypes, $selectedExperiences, $selectedCities, $selectedSkills, $filters, $resolveCategoryIds) {
                 $q->active();
@@ -356,7 +332,6 @@ class VacancyService
             };
         };
 
-        // Facet (say) sorğuları filtr imzasına görə keşlənir — ağır withCount subquery-ləri təkrarlanmasın.
         $facetSignature = serialize([
             $selectedCategories, $selectedWorkplaces, $selectedTypes,
             $selectedExperiences, $selectedCities, $selectedSkills,
@@ -369,11 +344,10 @@ class VacancyService
             $categoryCountScope = $makeScope(false);
 
             if ($includeScraped) {
-                // Facet sayıları: onlarca withCount yerine bir neçə GROUP BY sorğusu.
                 $grouped = function (string $modelClass, string $fk, bool $includeCategory, bool $scraped) use ($makeScope, $makeScrapedScope) {
                     $scope = $scraped ? $makeScrapedScope($includeCategory) : $makeScope($includeCategory);
                     $builder = $modelClass::query();
-                    $scope($builder); // scope closure mutasiya edir, dəyər qaytarmır
+                    $scope($builder);
                     return $builder
                         ->selectRaw($fk . ' as k, count(*) as c')
                         ->groupBy($fk)
@@ -453,7 +427,6 @@ class VacancyService
 
         extract($facets);
 
-        // Seçilmiş kateqoriyalar (filtrdən asılı — keşlənmir)
         $selectedCategoryModels = Category::with('parent')->whereIn('slug', $selectedCategories)->get();
         $companies = Company::withCount('vacancies')->orderByDesc('vacancies_count')->take(10)->get();
 
@@ -475,14 +448,6 @@ class VacancyService
         ];
     }
 
-    /**
-     * Get a single vacancy by slug with relations and increment view count.
-     */
-    /**
-     * Native (vacancies) + xarici (scraped_vacancies) elanları SQL UNION ilə birləşdirir,
-     * ORDER BY + LIMIT/OFFSET tətbiq edir və yalnız cari səhifəni hydrate edir.
-     * (Bütün sətirləri PHP-yə çəkmək 10k+ gündəlik data ilə ölçəklənmir.)
-     */
     private function paginateMergedListing($nativeQuery, $scrapedQuery, string $sort, int $perPage): LengthAwarePaginator
     {
         $columns = 'id, is_featured, updated_at, salary_min, salary_max, views_count, deadline, title';
@@ -574,9 +539,6 @@ class VacancyService
         ];
     }
 
-    /**
-     * Get data required for the create vacancy form.
-     */
     public function getCreationFormData(): array
     {
         $categories = Category::cachedTree();
@@ -584,11 +546,8 @@ class VacancyService
         $workplaceTypes = WorkplaceType::cachedActive();
         $experienceLevels = ExperienceLevel::cachedActive();
 
-        // Skills for the form's tag picker (fetched here, not in blade).
         $skills = Skill::cachedActive();
 
-        // If the logged-in user is registered as a company, pass their info
-        // through so the form can auto-fill the company details.
         $authCompany = null;
         if (auth()->check() && auth()->user()->company) {
             $authCompany = auth()->user()->company;
@@ -605,9 +564,6 @@ class VacancyService
         ];
     }
 
-    /**
-     * City options for dropdowns and filters.
-     */
     public static function cityOptions(): array
     {
         $cities = City::cachedActive()->map(function ($c) {
@@ -645,12 +601,8 @@ class VacancyService
         ];
     }
 
-    /**
-     * Create a new vacancy along with resolving company and attributes.
-     */
     public function createVacancy(array $data): Vacancy
     {
-        // 1. Resolve City from company_location, city_id, or location
         $cityId = null;
         $locationInput = $data['company_location'] ?? $data['city_id'] ?? $data['location'] ?? null;
         if ($locationInput) {
@@ -667,14 +619,9 @@ class VacancyService
             }
         }
 
-        // 2. Resolve or create company
         $authCompany = auth()->check() ? auth()->user()->company : null;
 
         if ($authCompany) {
-            // Logged-in company: reuse their record and keep it up to date.
-            // Company name, email and website are ALWAYS taken from the linked
-            // profile (never from the request), so a company cannot alter its
-            // own identity by tampering with the posted form fields.
             $company = $authCompany;
 
             if ($cityId && empty($company->city_id)) {
@@ -682,8 +629,6 @@ class VacancyService
                 $company->save();
             }
         } else {
-            // Unlinked users may only create a new company identity. Reusing an
-            // existing record would allow a vacancy to impersonate that company.
             $company = Company::create([
                 'name' => trim($data['company_name']),
                 'email' => $data['company_email'] ?? $data['application_email'] ?? null,
@@ -693,7 +638,6 @@ class VacancyService
             ]);
         }
 
-        // 3. Parse skills if string or array
         $skills = $data['skills'] ?? null;
         if (is_string($skills)) {
             $skills = array_filter(array_map('trim', explode(',', $skills)));
@@ -701,7 +645,6 @@ class VacancyService
             $skills = array_values(array_filter(array_map('trim', $skills)));
         }
 
-        // 4. Resolve attribute labels if IDs are provided
         $jobTypeId = $data['job_type_id'] ?? null;
         $workplaceTypeId = $data['workplace_type_id'] ?? null;
         $experienceLevelId = $data['experience_level_id'] ?? null;
@@ -713,7 +656,6 @@ class VacancyService
         $canUseInternal = auth()->check() && (auth()->user()->isCompany() || auth()->user()->is_admin);
         $applicationType = $canUseInternal ? ($data['application_type'] ?? 'internal') : 'email';
 
-        // 5. Create Vacancy
         $vacancy = Vacancy::create([
             'company_id' => $company->id,
             'category_id' => $data['category_id'] ?? null,
@@ -736,7 +678,7 @@ class VacancyService
             'application_type' => $applicationType,
             'application_email' => $data['application_email'] ?? $company->email,
             'application_fields' => $data['application_fields'] ?? ['phone', 'linkedin', 'portfolio', 'cover_letter'],
-            'is_active' => false, // Requires admin approval before appearing publicly
+            'is_active' => false,
             'is_featured' => false,
         ]);
 
@@ -745,7 +687,6 @@ class VacancyService
         return $vacancy->load('skillRecords');
     }
 
-    /** @return array<int, int> */
     private function resolveSkillIds(array $names): array
     {
         $normalized = array_map(fn ($name) => mb_strtolower(trim((string) $name)), $names);
@@ -758,13 +699,6 @@ class VacancyService
             ->all();
     }
 
-    /**
-     * Yerli (vacancies) və xarici (scraped_vacancies) elanları vahid siyahıda
-     * seçilmiş sıralama ilə qarışdırır. Beləliklə platforma elanları həmişə
-     * yuxarıda saxlanılmır — hamısı updated_at (və digər meyarlar) üzrə sıralanır.
-     *
-     * @param  \Illuminate\Support\Collection<int, \Illuminate\Database\Eloquent\Model>  $items
-     */
     private function sortMergedListing(\Illuminate\Support\Collection $items, string $sort): \Illuminate\Support\Collection
     {
         $sort = $sort ?: 'latest';
@@ -773,7 +707,6 @@ class VacancyService
             if ($a === null && $b === null) {
                 return 0;
             }
-            // Null dəyərlər həmişə sona düşür.
             if ($a === null) {
                 return 1;
             }
@@ -795,7 +728,6 @@ class VacancyService
         $deadlineAt = static fn ($job): ?int => $job->deadline ? $job->deadline->getTimestamp() : null;
 
         return $items->sort(function ($a, $b) use ($sort, $compareNullable, $salary, $updatedAt, $deadlineAt) {
-            // Başlıq sıralaması premium vəziyyətindən asılı olmayaraq işləyir.
             if ($sort === 'title_asc' || $sort === 'alphabetical') {
                 return strcasecmp((string) $a->title, (string) $b->title);
             }
@@ -803,7 +735,6 @@ class VacancyService
                 return strcasecmp((string) $b->title, (string) $a->title);
             }
 
-            // Bütün digər sıralamalarda premium elanlar əvvəlcə gəlir.
             $featured = (int) ($b->is_featured ?? false) <=> (int) ($a->is_featured ?? false);
             if ($featured !== 0) {
                 return $featured;
@@ -820,14 +751,11 @@ class VacancyService
                     true
                 ) ?: ($updatedAt($b) <=> $updatedAt($a)),
                 'featured' => $updatedAt($b) <=> $updatedAt($a),
-                default => $updatedAt($b) <=> $updatedAt($a), // latest
+                default => $updatedAt($b) <=> $updatedAt($a),
             };
         })->values();
     }
 
-    /**
-     * Submit an application for a vacancy.
-     */
     public function applyToVacancy(Vacancy $vacancy, array $data, ?UploadedFile $resumeFile = null): Application
     {
         $resumePath = null;

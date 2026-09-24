@@ -10,30 +10,26 @@
     --font-display: 'Space Grotesk', 'Instrument Sans', ui-sans-serif, system-ui, sans-serif;
     --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 
-    /* Type scale: nudged up ~1px across the small end; body reads larger. */
-    --text-xs: 0.8125rem;    /* 13px */
+    --text-xs: 0.8125rem;
     --text-xs--line-height: 1.125rem;
-    --text-sm: 0.9375rem;    /* 15px */
+    --text-sm: 0.9375rem;
     --text-sm--line-height: 1.375rem;
-    --text-base: 1.0625rem;  /* 17px */
+    --text-base: 1.0625rem;
     --text-base--line-height: 1.625rem;
-    --text-lg: 1.1875rem;    /* 19px */
-    --text-xl: 1.3125rem;    /* 21px */
-    --text-2xl: 1.5rem;      /* 24px */
+    --text-lg: 1.1875rem;
+    --text-xl: 1.3125rem;
+    --text-2xl: 1.5rem;
 
-    /* Brand palette: jobing.az (orange #FF8C00 / #CC7000), neutral Tailwind greys. */
     --color-primary: #ff8c00;
     --color-primary-dark: #cc7000;
     --color-secondary: #f9fafb;
     --color-accent: #ff8c00;
     --color-dark: #1f2937;
 
-    /* Align Tailwind's orange scale with the brand where it differs. */
     --color-orange-500: #ff8c00;
     --color-orange-600: #cc7000;
     --color-orange-700: #a35a00;
 
-    /* Shape language: softly rounded — between the sharp 2px and the old 16px. */
     --radius-sm: 0.125rem;
     --radius-md: 0.375rem;
     --radius-lg: 0.375rem;
@@ -42,13 +38,11 @@
     --radius-3xl: 0.75rem;
     --radius-4xl: 1rem;
 
-    /* Elevation: whisper-light lift; separation still comes mostly from borders. */
     --shadow-2xs: 0 1px 2px 0 rgb(0 0 0 / 0.04);
     --shadow-xs: 0 1px 3px 0 rgb(0 0 0 / 0.06);
     --shadow-sm: 0 1px 4px 0 rgb(0 0 0 / 0.07);
 }
 
-/* Hero decorative icons: gentle floating drift. */
 @keyframes heroFloat {
     0%, 100% { transform: translate3d(0, 0, 0) rotate(var(--hero-rot, 0deg)); }
     50%      { transform: translate3d(0, -26px, 0) rotate(var(--hero-rot, 0deg)); }
@@ -63,7 +57,6 @@
     .hero-icon { animation: none; }
 }
 
-/* Headings use the display face at a single weight (600); hierarchy comes from size, not weight. */
 @layer base {
     h1, h2, h3, h4, h5, h6 {
         font-family: var(--font-display);

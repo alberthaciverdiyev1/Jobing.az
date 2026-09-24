@@ -7,12 +7,10 @@ return new class extends Migration
 {
     public function up(): void
     {
-        // pg_trgm süper kullanıcı gerektirir; yoksa sessizce atlanır (kurulum adımında eklenir).
         if (! $this->hasTrgm()) {
             try {
                 DB::statement('CREATE EXTENSION IF NOT EXISTS pg_trgm');
             } catch (\Throwable) {
-                // yetki yoksa indeksler bir sonraki adımda atlanır
             }
         }
 

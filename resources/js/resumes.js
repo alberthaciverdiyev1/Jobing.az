@@ -30,7 +30,6 @@ export default function resumesManager(config = null) {
                 }));
             });
 
-            // Popstate for browser back/forward buttons
             window.addEventListener('popstate', () => {
                 const params = new URLSearchParams(window.location.search);
                 this.q = params.get('q') || '';
@@ -41,7 +40,6 @@ export default function resumesManager(config = null) {
                 this.fetchResumes(false);
             });
 
-            // Delegate pagination clicks
             document.addEventListener('click', (e) => {
                 const pageLink = e.target.closest('.pagination-wrapper a');
                 if (pageLink && pageLink.href) {

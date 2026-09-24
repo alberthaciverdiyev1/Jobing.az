@@ -25,7 +25,6 @@ window.__RESUMES_CONFIG__ = {
         <div class="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700" x-text="errorMessage"></div>
     </div>
 
-    <!-- Hero & Main Filters -->
     <x-list-hero :title="__('Resume Database')" :show-search="false">
         <div class="max-w-5xl mx-auto bg-white/95 backdrop-blur-sm rounded-2xl md:rounded-3xl border border-orange-100 p-3.5 sm:p-5 text-left">
             <div class="grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_auto] items-stretch gap-2.5">
@@ -99,12 +98,10 @@ window.__RESUMES_CONFIG__ = {
         </div>
     </x-list-hero>
 
-    <!-- Main Content Container -->
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
         <div class="flex flex-col gap-6 max-w-5xl mx-auto">
 
-            <!-- More Filters Modal -->
             <div x-show="mobileFiltersOpen"
                  x-cloak
                  @keydown.escape.window="mobileFiltersOpen = false"
@@ -117,7 +114,6 @@ window.__RESUMES_CONFIG__ = {
                      @click.outside="mobileFiltersOpen = false">
                     <div class="space-y-5">
 
-                        <!-- Filter Top Header -->
                         <div class="flex justify-between items-center pb-3 border-b border-gray-100">
                             <h3 class="font-semibold text-gray-900 text-sm flex items-center gap-2">
                                 <i class="fas fa-filter text-xs text-primary"></i>
@@ -139,7 +135,6 @@ window.__RESUMES_CONFIG__ = {
                             </div>
                         </div>
 
-                        <!-- Category Select -->
                         <div class="space-y-2">
                             <label for="resume-modal-category" class="block text-xs font-semibold text-gray-800">
                                 {{ __('Category') }}
@@ -155,7 +150,6 @@ window.__RESUMES_CONFIG__ = {
                             </select>
                         </div>
 
-                        <!-- Skills Filter (Dynamically changes based on selected category) -->
                         <div class="pt-3 border-t border-gray-100">
                             <div class="flex items-center justify-between mb-2">
                                 <h4 class="text-xs font-semibold text-gray-800">{{ __('Skills (Tags)') }}</h4>
@@ -165,7 +159,6 @@ window.__RESUMES_CONFIG__ = {
                                 </button>
                             </div>
 
-                            <!-- Skills Tags -->
                             <div class="flex flex-wrap gap-1.5 text-xs max-h-60 overflow-y-auto p-2 bg-gray-50/70 rounded-xl border border-gray-100">
                                 <template x-for="sk in filteredSkills" :key="sk.name">
                                     <button type="button" @click="toggleSkill(sk.name)"
@@ -182,7 +175,6 @@ window.__RESUMES_CONFIG__ = {
                             </div>
                         </div>
 
-                        <!-- City Filter -->
                         <div class="pt-3 border-t border-gray-100 space-y-2">
                             <label for="resume-modal-city" class="block text-xs font-semibold text-gray-800">{{ __('City') }}</label>
                             <select id="resume-modal-city"
@@ -232,10 +224,8 @@ window.__RESUMES_CONFIG__ = {
                 </div>
             </div>
 
-            <!-- List Area -->
             <div class="w-full">
 
-                <!-- List Header (Count + Sorting) -->
                 <div class="flex flex-row justify-between items-center gap-2 sm:gap-3 mb-5 pb-3 border-b border-gray-200">
                     <p class="text-xs sm:text-sm text-gray-500 leading-tight">
                         <span class="font-semibold text-primary" x-text="totalCount">{{ $resumes->total() }}</span> {{ __('candidate resumes found') }}
@@ -254,7 +244,6 @@ window.__RESUMES_CONFIG__ = {
                     </div>
                 </div>
 
-                <!-- Resumes Container -->
                 <div id="resumes-container" class="relative min-h-[300px]" :class="isLoading ? 'opacity-50 pointer-events-none transition-opacity duration-150' : ''">
                     @include('pages.resumes.partials.resume-list', ['resumes' => $resumes])
                 </div>

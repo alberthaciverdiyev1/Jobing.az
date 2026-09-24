@@ -5,9 +5,6 @@ namespace App\Modules\SystemLog\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-/**
- * Sistem loqu (level/source/message/metadata) — AYRI "logs" bazasında.
- */
 class AppLog extends Model
 {
     use HasFactory;

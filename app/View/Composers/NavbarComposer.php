@@ -6,11 +6,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\View\View;
 
-/**
- * Navbar için bildirim verisini controller/servis katmanında hazırlar.
- * Böylece blade içinde doğrudan DB sorgusu yazılmaz; ayrıca sonuç
- * kısa süreliğine cache'lenerek her istekte 2 sorgu yükü alınmaz.
- */
 class NavbarComposer
 {
     public function compose(View $view): void

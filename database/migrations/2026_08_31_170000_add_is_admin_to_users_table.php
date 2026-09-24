@@ -12,7 +12,6 @@ return new class extends Migration
             $table->boolean('is_admin')->default(false)->after('user_type');
         });
 
-        // Give the seeded admin account panel access.
         \Illuminate\Support\Facades\DB::table('users')
             ->where('email', 'admin@jobing.com')
             ->update(['is_admin' => true, 'user_type' => 'admin']);

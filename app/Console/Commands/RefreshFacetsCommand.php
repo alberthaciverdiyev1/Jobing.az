@@ -22,7 +22,6 @@ class RefreshFacetsCommand extends Command
         if ($this->option('warm')) {
             $service = app(VacancyService::class);
             $pages = max(1, (int) $this->option('pages'));
-            // Yaygın sıralamalar + ilk səhifələr (soyuq istəklərin qarşısını alır).
             $sortVariants = [[], ['sort' => 'views'], ['sort' => 'salary_desc']];
 
             foreach ($sortVariants as $filters) {

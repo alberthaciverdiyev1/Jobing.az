@@ -5,7 +5,6 @@
 @section('content')
 <div class="bg-gray-50 min-h-screen pb-16">
 
-    <!-- Page Header -->
     <div class="bg-white border-b border-gray-200 py-10">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h2 class="text-2xl sm:text-3xl font-semibold text-gray-900 tracking-tight">
@@ -32,7 +31,6 @@
         <form method="POST" action="{{ route('job-seekers.store') }}" class="space-y-6">
             @csrf
 
-            <!-- Basic Info -->
             <div class="bg-white rounded-2xl border border-gray-200 shadow-2xs p-6">
                 <h2 class="font-semibold text-gray-900 text-sm mb-5 flex items-center gap-2">
                     <span class="w-7 h-7 rounded-lg bg-primary/10 text-primary flex items-center justify-center text-xs"><i class="fas fa-user"></i></span>
@@ -101,7 +99,6 @@
                 </div>
             </div>
 
-            <!-- About -->
             <div class="bg-white rounded-2xl border border-gray-200 shadow-2xs p-6">
                 <h2 class="font-semibold text-gray-900 text-sm mb-5 flex items-center gap-2">
                     <span class="w-7 h-7 rounded-lg bg-primary/10 text-primary flex items-center justify-center text-xs"><i class="fas fa-file-alt"></i></span>
@@ -121,7 +118,6 @@
                 </div>
             </div>
 
-            <!-- Salary & Availability -->
             <div class="bg-white rounded-2xl border border-gray-200 shadow-2xs p-6">
                 <h2 class="font-semibold text-gray-900 text-sm mb-5 flex items-center gap-2">
                     <span class="w-7 h-7 rounded-lg bg-primary/10 text-primary flex items-center justify-center text-xs"><i class="fas fa-money-bill-wave"></i></span>
@@ -163,7 +159,6 @@
                 </div>
             </div>
 
-            <!-- Contact -->
             <div class="bg-white rounded-2xl border border-gray-200 shadow-2xs p-6">
                 <h2 class="font-semibold text-gray-900 text-sm mb-5 flex items-center gap-2">
                     <span class="w-7 h-7 rounded-lg bg-primary/10 text-primary flex items-center justify-center text-xs"><i class="fas fa-address-book"></i></span>

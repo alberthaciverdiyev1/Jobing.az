@@ -1,7 +1,6 @@
 <x-filament-panels::page>
     @php $company = auth()->user()->company; @endphp
 
-    {{-- Verification status --}}
     <div class="rounded-xl border p-4 @if($company->is_verified) border-emerald-200 bg-emerald-50 text-emerald-800 @elseif($company->verification_requested) border-amber-200 bg-amber-50 text-amber-800 @else border-gray-200 bg-gray-50 text-gray-700 @endif flex flex-wrap items-center justify-between gap-3">
         <div class="flex items-center gap-2 text-sm font-semibold">
             @if($company->is_verified)

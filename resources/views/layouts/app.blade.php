@@ -6,11 +6,9 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     @php
-        // Səhifə SEO (admin idarə edir) + qlobal SEO tənzimləmələri.
         $curPageSeo = \App\Modules\Seo\Models\PageSeo::findForCurrentRoute();
         $seoConf = \App\Modules\Seo\Models\SeoSetting::current();
 
-        // @section ilə override varsa onu, yoxsa PageSeo → SeoSetting → default sırası ilə.
         $sectionOr = function (string $key, $fallback) {
             if (View::hasSection($key)) {
                 $value = trim((string) View::getSection($key));
@@ -22,7 +20,6 @@
             return $fallback;
         };
 
-        // OG şəkli: URL verilibsə olduğu kimi, yoxsa storage yolu kimi istifadə olunur.
         $toOgUrl = function (?string $value) {
             if (empty($value)) {
                 return null;
@@ -51,7 +48,6 @@
     <meta name="keywords" content="{{ $resolvedKeywords }}">
     @endif
 
-    <!-- Open Graph / Twitter -->
     <meta property="og:site_name" content="{{ config('app.full_name') }}">
     <meta property="og:type" content="{{ $resolvedOgType }}">
     <meta property="og:url" content="{{ url()->current() }}">
@@ -70,22 +66,18 @@
 
     @stack('structured_data')
 
-    <!-- Google Fonts: Space Grotesk (headings), Instrument Sans (body), JetBrains Mono (prices/code) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Space+Grotesk:wght@400..700&family=JetBrains+Mono:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
 
-    <!-- Favicons -->
     <link rel="icon" href="{{ asset('favicon.ico') }}" sizes="any">
     <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('images/favicons/favicon-32x32.png') }}">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('images/favicons/favicon-16x16.png') }}">
     <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('images/favicons/apple-touch-icon.png') }}">
     <link rel="manifest" href="{{ asset('images/favicons/site.webmanifest') }}">
 
-    <!-- FontAwesome 6 Icons -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
 
-    <!-- Vite Assets -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <style>
@@ -95,25 +87,20 @@
         [x-cloak] { display: none !important; }
     </style>
 
-    {{-- Qlobal <head> skriptləri (admin paneldən, RAW) — GA, GTM, Pixel və s. --}}
     @if(!empty($seoConf?->head_scripts))
         {!! $seoConf->head_scripts !!}
     @endif
 </head>
 <body class="h-full antialiased font-sans text-gray-800 flex flex-col min-h-screen selection:bg-orange-500 selection:text-white" x-data="{ mobileDrawerOpen: false }">
 
-    {{-- Qlobal <body> skriptləri (RAW) — məs. GTM <noscript> --}}
     @if(!empty($seoConf?->body_scripts))
         {!! $seoConf->body_scripts !!}
     @endif
 
-    <!-- Flash Messages (component) -->
     <x-flash-messages />
 
-    <!-- Header / Navbar (component) -->
     <x-navbar />
 
-    <!-- Main Content Body -->
     <main class="flex-grow pb-16 xl:pb-0">
         @if(!empty($resolvedH1))
         <h1 class="sr-only">{{ $resolvedH1 }}</h1>
@@ -121,12 +108,10 @@
         @yield('content')
     </main>
 
-    <!-- Footer (component) -->
     <x-footer />
 
     @stack('scripts')
 
-    {{-- Qlobal footer / </body> skriptləri (RAW) — canlı çat, widget və s. --}}
     @if(!empty($seoConf?->footer_scripts))
         {!! $seoConf->footer_scripts !!}
     @endif
