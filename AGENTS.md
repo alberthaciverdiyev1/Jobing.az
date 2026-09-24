@@ -1,4 +1,4 @@
-# KibrisKare.com Codex Guide
+# kariyer.kibriskare.com Codex Guide
 
 ## Project
 

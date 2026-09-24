@@ -18,7 +18,7 @@
         style="height: 56px; min-height: 56px;">
     {{-- Left: Brand Logo --}}
     <a href="{{ route('jobs.index') }}" class="shrink-0 flex items-center">
-        <img src="{{ asset('images/logo/kibriskare-wordmark.png') }}" alt="{{ config('app.full_name') }}" class="h-7 sm:h-9 w-auto">
+        <img src="{{ asset('images/logo/kariyer-kibriskare-wordmark.png') }}" alt="{{ config('app.full_name') }}" class="h-7 sm:h-9 w-auto">
     </a>
 
     {{-- Right: Language Dropdown + Notification / User Icon --}}

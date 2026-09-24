@@ -18,7 +18,7 @@
       <!-- Drawer Header -->
       <div class="flex items-center justify-between pb-3 border-b border-gray-100">
         <div class="flex items-center space-x-2">
-          <img src="{{ asset('images/logo/kibriskare-wordmark.png') }}" alt="{{ config('app.full_name') }}" class="h-8 w-auto">
+          <img src="{{ asset('images/logo/kariyer-kibriskare-wordmark.png') }}" alt="{{ config('app.full_name') }}" class="h-8 w-auto">
         </div>
         <button type="button" @click="mobileDrawerOpen = false" class="w-9 h-9 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-500 flex items-center justify-center transition cursor-pointer">
           <i class="fa-solid fa-xmark text-sm"></i>

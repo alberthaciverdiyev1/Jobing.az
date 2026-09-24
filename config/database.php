@@ -105,7 +105,7 @@ return [
             'driver' => 'pgsql',
             'host' => env('LOG_DB_HOST', env('DB_HOST', '127.0.0.1')),
             'port' => env('LOG_DB_PORT', env('DB_PORT', '5432')),
-            'database' => env('LOG_DB_DATABASE', env('DB_DATABASE', 'kibriskare')),
+            'database' => env('LOG_DB_DATABASE', env('DB_DATABASE', 'kariyer.kibriskare')),
             'username' => env('LOG_DB_USERNAME', env('DB_USERNAME', 'admin')),
             'password' => env('LOG_DB_PASSWORD', env('DB_PASSWORD', 'secret')),
             'charset' => env('DB_CHARSET', 'utf8'),

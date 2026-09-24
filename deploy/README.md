@@ -8,7 +8,7 @@
 sudo DOMAIN=kariyer.kibriskare.com \
      APP_DIR=/var/www/kariyer.kibriskare \
      DB_PASS='guclu-bir-sifre' \
-     REPO_URL=git@github.com:alberthacirverdiyev1/KibrisKare.com.git \
+     REPO_URL=git@github.com:alberthacirverdiyev1/kariyer.kibriskare.com.git \
      LE_EMAIL=admin@kariyer.kibriskare.com \
      bash deploy/install-server.sh
 ```

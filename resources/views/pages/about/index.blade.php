@@ -12,13 +12,13 @@
             <div class="max-w-3xl mx-auto text-center space-y-4">
                 <span class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-orange-50 border border-orange-100 text-primary text-xs font-medium">
                     <i class="fas fa-sparkles text-[11px]"></i>
-                    {{ __('About KibrisKare.com') }}
+                    {{ __('About kariyer.kibriskare.com') }}
                 </span>
                 <h2 class="text-3xl sm:text-4xl lg:text-5xl font-semibold text-gray-900 tracking-tight leading-tight">
                     {{ __("Northern Cyprus' Modern") }} <span class="text-primary">{{ __('Career') }}</span> {{ __('and Talent Ecosystem') }}
                 </h2>
                 <p class="text-sm sm:text-base text-gray-600 max-w-2xl mx-auto leading-relaxed">
-                    {{ __("KibrisKare.com is a digital career platform that connects Northern Cyprus' leading companies with talent across programming, design, marketing, management and other professions in the fastest and most transparent way.") }}
+                    {{ __("kariyer.kibriskare.com is a digital career platform that connects Northern Cyprus' leading companies with talent across programming, design, marketing, management and other professions in the fastest and most transparent way.") }}
                 </p>
             </div>
         </div>
@@ -92,10 +92,10 @@
             </div>
         </div>
 
-        <!-- Why KibrisKare.com (Core Features) -->
+        <!-- Why kariyer.kibriskare.com (Core Features) -->
         <div class="space-y-6">
             <div class="text-center max-w-xl mx-auto space-y-2">
-                <h2 class="text-2xl font-semibold text-gray-900">{{ __('Why KibrisKare.com?') }}</h2>
+                <h2 class="text-2xl font-semibold text-gray-900">{{ __('Why kariyer.kibriskare.com?') }}</h2>
                 <p class="text-xs sm:text-sm text-gray-500">{{ __('The key principles that set our platform apart from others.') }}</p>
             </div>
 
@@ -228,7 +228,7 @@
             <div class="space-y-2 text-center md:text-left">
                 <h3 class="text-2xl sm:text-3xl font-semibold tracking-tight">{{ __('Reach Your Career Goal with Us') }}</h3>
                 <p class="text-white/90 text-xs sm:text-sm max-w-xl">
-                    {{ __('Whether you are looking for a new job or bringing a new professional to your team - KibrisKare.com is always by your side.') }}
+                    {{ __('Whether you are looking for a new job or bringing a new professional to your team - kariyer.kibriskare.com is always by your side.') }}
                 </p>
             </div>
             <div class="flex items-center gap-3 shrink-0">

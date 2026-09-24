@@ -28,7 +28,7 @@
         : __('Rise to the top of search results');
 
     $safeTitle = addslashes($title);
-    $siteName = config('app.full_name', 'KibrisKare.com');
+    $siteName = config('app.full_name', 'kariyer.kibriskare.com');
 @endphp
 
 <div x-data="{

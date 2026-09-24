@@ -70,8 +70,8 @@ class SiteSetting extends Model
         if (! $setting) {
             $setting = self::create([
                 'id' => 1,
-                'email' => 'info@kibriskare.com',
-                'support_email' => 'support@kibriskare.com',
+                'email' => 'info@kariyer.kibriskare.com',
+                'support_email' => 'support@kariyer.kibriskare.com',
                 'phone' => '+90 392 000 00 00',
                 'working_hours' => 'Mon – Fri · 09:00 – 18:00',
                 'tagline' => [
@@ -92,7 +92,7 @@ class SiteSetting extends Model
                     'az' => 'Lefkoşa, KKTC',
                     'ru' => 'Никосия, ТРСК',
                 ],
-                'copyright_text' => 'KibrisKare.com',
+                'copyright_text' => 'kariyer.kibriskare.com',
             ]);
         }
 

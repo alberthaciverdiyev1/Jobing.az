@@ -12,7 +12,7 @@
                 {{ __('Sign in to your account') }}
             </h2>
             <p class="text-xs sm:text-sm text-gray-500 mt-1.5">
-                {{ __('Welcome to KibrisKare.com. Please enter your details.') }}
+                {{ __('Welcome to kariyer.kibriskare.com. Please enter your details.') }}
             </p>
         </div>
 

@@ -28,7 +28,7 @@ class CompanyPanelProvider extends PanelProvider
             ->path('company')
             // ->login() kaldırıldı: tek giriş noktası sitenin /login sayfası.
             ->profile()
-            ->brandName('KibrisKare Şirket')
+            ->brandName('kariyer.kibriskare.com Şirket')
             ->colors([
                 'primary' => Color::Sky,
             ])

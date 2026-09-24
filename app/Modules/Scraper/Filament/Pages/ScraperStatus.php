@@ -45,9 +45,9 @@ class ScraperStatus extends Page
 
     protected function runScript(string $script): void
     {
-        $root = '/var/www/kibriskare-scraper';
-        $env = 'KIBRISKARE_ARTISAN=/var/www/kibriskare/artisan '
-            . 'COMPANY_LOGO_PUBLISH_DIR=/var/www/kibriskare/storage/app/public/scraped-companies';
+        $root = '/var/www/kariyer.kibriskare-scraper';
+        $env = 'KARIYER_KIBRISKARE_ARTISAN=/var/www/kariyer.kibriskare/artisan '
+            . 'COMPANY_LOGO_PUBLISH_DIR=/var/www/kariyer.kibriskare/storage/app/public/scraped-companies';
         $cmd = sprintf(
             'cd %s && nohup env %s bash %s >> /dev/null 2>&1 &',
             escapeshellarg($root), $env, escapeshellarg($root . '/scripts/' . $script)
@@ -58,7 +58,7 @@ class ScraperStatus extends Page
 
     protected function runFacets(): void
     {
-        exec('nohup php /var/www/kibriskare/artisan facets:refresh --warm >> /dev/null 2>&1 &');
+        exec('nohup php /var/www/kariyer.kibriskare/artisan facets:refresh --warm >> /dev/null 2>&1 &');
         Notification::make()->title('Facet ısıtma başladı')->success()->send();
     }
 

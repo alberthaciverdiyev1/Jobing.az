@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# install-server.sh — KibrisKare.com için SIFIRDAN sunucu kurulumu (Ubuntu 22.04 / 24.04)
+# install-server.sh — kariyer.kibriskare.com için SIFIRDAN sunucu kurulumu (Ubuntu 22.04 / 24.04)
 #
 # Ne yapar:
 #   - Nginx, PHP-FPM (+ gerekli eklentiler), PostgreSQL, Node.js, Composer, Redis kurar
@@ -197,7 +197,7 @@ systemctl restart php${PHP_VER}-fpm
 log "Queue worker servisi"
 cat >/etc/systemd/system/${SITE_NAME}-queue.service <<UNIT
 [Unit]
-Description=KibrisKare queue worker
+Description=kariyer.kibriskare.com queue worker
 After=network.target postgresql.service redis-server.service
 
 [Service]

@@ -74,10 +74,10 @@ class SeoSetting extends Model
                     'ru' => 'Мгновенно откликайтесь на открытые вакансии в сфере ПО, дизайна и данных.',
                 ],
                 'default_meta_keywords' => [
-                    'az' => 'iş elanları, vakansiya, iş axtaran, kariyera, kibriskare',
-                    'tr' => 'iş ilanları, vaka, iş arayan, kariyer, kibriskare',
-                    'en' => 'job listings, vacancies, hiring, careers, kibriskare',
-                    'ru' => 'вакансии, работа, резюме, карьера, kibriskare',
+                    'az' => 'iş elanları, vakansiya, iş axtaran, kariyera, kariyer kibriskare',
+                    'tr' => 'iş ilanları, vaka, iş arayan, kariyer, kariyer kibriskare',
+                    'en' => 'job listings, vacancies, hiring, careers, kariyer kibriskare',
+                    'ru' => 'вакансии, работа, резюме, карьера, kariyer kibriskare',
                 ],
             ]);
         }

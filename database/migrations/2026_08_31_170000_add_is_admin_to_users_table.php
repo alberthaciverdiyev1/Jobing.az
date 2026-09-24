@@ -14,7 +14,7 @@ return new class extends Migration
 
         // Give the seeded admin account panel access.
         \Illuminate\Support\Facades\DB::table('users')
-            ->where('email', 'admin@kibriskare.com')
+            ->where('email', 'admin@kariyer.kibriskare.com')
             ->update(['is_admin' => true, 'user_type' => 'admin']);
     }
 

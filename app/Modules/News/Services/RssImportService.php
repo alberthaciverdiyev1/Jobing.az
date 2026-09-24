@@ -85,7 +85,7 @@ class RssImportService
     protected function fetch(string $url): ?string
     {
         try {
-            $res = Http::timeout(15)->withHeaders(['User-Agent' => 'KibrisKareBot/1.0'])->get($url);
+            $res = Http::timeout(15)->withHeaders(['User-Agent' => 'KariyerKibrisKareBot/1.0'])->get($url);
 
             return $res->successful() ? $res->body() : null;
         } catch (\Throwable $e) {

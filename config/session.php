@@ -129,7 +129,7 @@ return [
 
     'cookie' => env(
         'SESSION_COOKIE',
-        'kibriskare_new_session'
+        'kariyer_kibriskare_new_session'
     ),
 
     /*

@@ -129,7 +129,7 @@ class PageSeo extends Model
     }
 
     /**
-     * Seed defaults for the main KibrisKare pages.
+     * Seed defaults for the main kariyer.kibriskare.com pages.
      */
     public static function ensureDefaults(): void
     {
@@ -139,7 +139,7 @@ class PageSeo extends Model
                 'page_name' => 'Ana Sayfa',
                 'route_name' => 'home',
                 'sort_order' => 1,
-                'title' => ['az' => 'KibrisKare.com — Modern İş Elanları və Karyera Platforması', 'tr' => 'KibrisKare.com — Modern İş İlanları ve Kariyer Platforması', 'en' => 'KibrisKare.com — Modern Job Board & Career Platform', 'ru' => 'KibrisKare.com — Современная платформа вакансий и карьеры'],
+                'title' => ['az' => 'kariyer.kibriskare.com — Modern İş Elanları və Karyera Platforması', 'tr' => 'kariyer.kibriskare.com — Modern İş İlanları ve Kariyer Platforması', 'en' => 'kariyer.kibriskare.com — Modern Job Board & Career Platform', 'ru' => 'kariyer.kibriskare.com — Современная платформа вакансий и карьеры'],
                 'description' => ['az' => 'Yazılım, dizayn, məhsul, data və marketinq sahələrində açıq vakansiyalara ani müraciət edin.', 'tr' => 'Yazılım, tasarım, ürün, veri ve pazarlama alanlarında açık pozisyonlara anında başvurun.', 'en' => 'Apply instantly to open positions across software, design, product, data and marketing.', 'ru' => 'Мгновенно откликайтесь на открытые вакансии в сфере ПО, дизайна и данных.'],
             ],
             [
@@ -147,7 +147,7 @@ class PageSeo extends Model
                 'page_name' => 'İş İlanları',
                 'route_name' => 'jobs.index',
                 'sort_order' => 2,
-                'title' => ['az' => 'İş İlanları — KibrisKare.com', 'tr' => 'İş İlanları — KibrisKare.com', 'en' => 'Job Vacancies — KibrisKare.com', 'ru' => 'Вакансии — KibrisKare.com'],
+                'title' => ['az' => 'İş İlanları — kariyer.kibriskare.com', 'tr' => 'İş İlanları — kariyer.kibriskare.com', 'en' => 'Job Vacancies — kariyer.kibriskare.com', 'ru' => 'Вакансии — kariyer.kibriskare.com'],
                 'description' => ['az' => 'Bütün aktiv iş elanlarına baxın və filtrələyin.', 'tr' => 'Tüm aktif iş ilanlarını görüntüleyin ve filtreleyin.', 'en' => 'Browse and filter all active job vacancies.', 'ru' => 'Просматривайте и фильтруйте все активные вакансии.'],
             ],
             [
@@ -155,7 +155,7 @@ class PageSeo extends Model
                 'page_name' => 'Şirketler',
                 'route_name' => 'companies.index',
                 'sort_order' => 3,
-                'title' => ['az' => 'Şirkətlər — KibrisKare.com', 'tr' => 'Şirketler — KibrisKare.com', 'en' => 'Companies — KibrisKare.com', 'ru' => 'Компании — KibrisKare.com'],
+                'title' => ['az' => 'Şirkətlər — kariyer.kibriskare.com', 'tr' => 'Şirketler — kariyer.kibriskare.com', 'en' => 'Companies — kariyer.kibriskare.com', 'ru' => 'Компании — kariyer.kibriskare.com'],
                 'description' => ['az' => 'İşə götürən şirkətlərin kataloquna baxın.', 'tr' => 'İş veren şirketlerin kataloğunu görüntüleyin.', 'en' => 'Browse the catalog of hiring companies.', 'ru' => 'Каталог нанимающих компаний.'],
             ],
             [
@@ -163,7 +163,7 @@ class PageSeo extends Model
                 'page_name' => __('Job Seeking'),
                 'route_name' => 'job-seekers.index',
                 'sort_order' => 4,
-                'title' => ['az' => 'İş Axtarıram — KibrisKare.com', 'tr' => 'İş Arıyorum — KibrisKare.com', 'en' => 'I Am Looking for Work — KibrisKare.com', 'ru' => 'Ищу работу — KibrisKare.com'],
+                'title' => ['az' => 'İş Axtarıram — kariyer.kibriskare.com', 'tr' => 'İş Arıyorum — kariyer.kibriskare.com', 'en' => 'I Am Looking for Work — kariyer.kibriskare.com', 'ru' => 'Ищу работу — kariyer.kibriskare.com'],
                 'description' => ['az' => 'İş axtaranların elanlarına baxın və namizədlərlə əlaqə saxlayın.', 'tr' => 'İş arayanların ilanlarına göz atın ve adaylarla iletişime geçin.', 'en' => 'Browse job-seeker listings and contact candidates.', 'ru' => 'Объявления соискателей работы.'],
             ],
             [
@@ -171,7 +171,7 @@ class PageSeo extends Model
                 'page_name' => 'Kariyer Bloğu',
                 'route_name' => 'blog.index',
                 'sort_order' => 5,
-                'title' => ['az' => 'Karyera Bloğu — KibrisKare.com', 'tr' => 'Kariyer Bloğu — KibrisKare.com', 'en' => 'Career Blog — KibrisKare.com', 'ru' => 'Карьерный блог — KibrisKare.com'],
+                'title' => ['az' => 'Karyera Bloğu — kariyer.kibriskare.com', 'tr' => 'Kariyer Bloğu — kariyer.kibriskare.com', 'en' => 'Career Blog — kariyer.kibriskare.com', 'ru' => 'Карьерный блог — kariyer.kibriskare.com'],
                 'description' => ['az' => 'İş axtarışı, CV və mülakat məsləhətləri.', 'tr' => 'İş arama, CV ve mülakat ipuçları.', 'en' => 'Job search, CV and interview tips.', 'ru' => 'Советы по поиску работы и собеседованиям.'],
             ],
             [
@@ -179,7 +179,7 @@ class PageSeo extends Model
                 'page_name' => __('Frequently Asked Questions'),
                 'route_name' => 'faq.index',
                 'sort_order' => 6,
-                'title' => ['az' => 'Tez-tez Verilən Suallar — KibrisKare.com', 'tr' => 'Sıkça Sorulan Sorular — KibrisKare.com', 'en' => 'FAQ — KibrisKare.com', 'ru' => 'Часто задаваемые вопросы — KibrisKare.com'],
+                'title' => ['az' => 'Tez-tez Verilən Suallar — kariyer.kibriskare.com', 'tr' => 'Sıkça Sorulan Sorular — kariyer.kibriskare.com', 'en' => 'FAQ — kariyer.kibriskare.com', 'ru' => 'Часто задаваемые вопросы — kariyer.kibriskare.com'],
                 'description' => ['az' => 'İş axtarışı və vakansiya prosesləri haqqında suallar.', 'tr' => 'İş arama ve vakansiya süreçleri hakkında sorular.', 'en' => 'Questions about job search and hiring.', 'ru' => 'Вопросы о поиске работы.'],
             ],
             [
@@ -187,8 +187,8 @@ class PageSeo extends Model
                 'page_name' => 'İletişim',
                 'route_name' => 'contact.index',
                 'sort_order' => 7,
-                'title' => ['az' => 'Əlaqə — KibrisKare.com', 'tr' => 'İletişim — KibrisKare.com', 'en' => 'Contact — KibrisKare.com', 'ru' => 'Контакты — KibrisKare.com'],
-                'description' => ['az' => 'KibrisKare.com ilə əlaqə saxlayın.', 'tr' => 'KibrisKare.com ile iletişime geçin.', 'en' => 'Get in touch with KibrisKare.com.', 'ru' => 'Свяжитесь с KibrisKare.com.'],
+                'title' => ['az' => 'Əlaqə — kariyer.kibriskare.com', 'tr' => 'İletişim — kariyer.kibriskare.com', 'en' => 'Contact — kariyer.kibriskare.com', 'ru' => 'Контакты — kariyer.kibriskare.com'],
+                'description' => ['az' => 'kariyer.kibriskare.com ilə əlaqə saxlayın.', 'tr' => 'kariyer.kibriskare.com ile iletişime geçin.', 'en' => 'Get in touch with kariyer.kibriskare.com.', 'ru' => 'Свяжитесь с kariyer.kibriskare.com.'],
             ],
         ];
 

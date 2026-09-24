@@ -16,7 +16,7 @@ class DemoVacancySeeder extends Seeder
 {
     public function run(): void
     {
-        $company = Company::where('slug', 'kibriskare')->firstOrFail();
+        $company = Company::where('slug', 'kariyer-kibriskare')->firstOrFail();
         $categories = Category::whereNotNull('parent_id')->get();
         $cities = City::active()->get();
         $jobTypes = JobType::active()->get();
@@ -58,7 +58,7 @@ class DemoVacancySeeder extends Seeder
                     'workplace_type_id' => $workplaces[$index % $workplaces->count()]->id,
                     'experience_level_id' => $experiences[$index % $experiences->count()]->id,
                     'title' => $title,
-                    'description' => 'KibrisKare.com filtre ve liste işlevlerini test etmek için oluşturulmuş örnek bir ilandır.',
+                    'description' => 'kariyer.kibriskare.com filtre ve liste işlevlerini test etmek için oluşturulmuş örnek bir ilandır.',
                     'requirements' => 'Müvafiq sahədə bilik, məsuliyyətli yanaşma və komanda ilə işləmək bacarığı.',
                     'skills' => $skills,
                     'salary_min' => $salaryMin,
@@ -70,7 +70,7 @@ class DemoVacancySeeder extends Seeder
                     'views_count' => 25 + ($index * 17),
                     'deadline' => now()->addDays(30 + $index)->toDateString(),
                     'application_type' => 'email',
-                    'application_email' => 'info@kibriskare.com',
+                    'application_email' => 'info@kariyer.kibriskare.com',
                 ]
             );
         }

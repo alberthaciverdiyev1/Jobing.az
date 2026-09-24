@@ -30,7 +30,7 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             // ->login() kaldırıldı: tek giriş noktası sitenin /login sayfası.
             ->profile()
-            ->brandName('KibrisKare Portal')
+            ->brandName('kariyer.kibriskare.com Portal')
             ->colors([
                 'primary' => Color::Orange,
             ])
