@@ -56,7 +56,7 @@ if [ -z "$TG_CHAT" ]; then
   exit 0
 fi
 
-CAPTION="🗄 kariyer.kibriskare.com deploy öncəsi yedək
+CAPTION="🗄 Kariyer.KibrisKare deploy öncəsi yedək
 📅 $STAMP
 🗃 $COUNT baza
 📦 $SIZE"

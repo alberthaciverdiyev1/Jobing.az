@@ -92,7 +92,7 @@ class SiteSetting extends Model
                     'az' => 'Lefkoşa, KKTC',
                     'ru' => 'Никосия, ТРСК',
                 ],
-                'copyright_text' => 'kariyer.kibriskare.com',
+                'copyright_text' => 'Kariyer.KibrisKare',
             ]);
         }
 

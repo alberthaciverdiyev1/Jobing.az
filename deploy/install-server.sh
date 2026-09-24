@@ -197,7 +197,7 @@ systemctl restart php${PHP_VER}-fpm
 log "Queue worker servisi"
 cat >/etc/systemd/system/${SITE_NAME}-queue.service <<UNIT
 [Unit]
-Description=kariyer.kibriskare.com queue worker
+Description=Kariyer.KibrisKare queue worker
 After=network.target postgresql.service redis-server.service
 
 [Service]

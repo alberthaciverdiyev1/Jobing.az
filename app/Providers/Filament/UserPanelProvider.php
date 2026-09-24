@@ -28,7 +28,7 @@ class UserPanelProvider extends PanelProvider
             ->path('user')
             // ->login() kaldırıldı: tek giriş noktası sitenin /login sayfası.
             ->profile()
-            ->brandName('kariyer.kibriskare.com Hesabım')
+            ->brandName('Kariyer.KibrisKare Hesabım')
             ->colors([
                 'primary' => Color::Orange,
             ])

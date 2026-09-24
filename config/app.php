@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'kariyer.kibriskare.com'),
+    'name' => env('APP_NAME', 'Kariyer.KibrisKare'),
 
     /*
     |--------------------------------------------------------------------------
@@ -27,9 +27,9 @@ return [
     |
     */
 
-    'brand_name' => env('APP_NAME', 'kariyer.kibriskare.com'),
+    'brand_name' => env('APP_NAME', 'Kariyer.KibrisKare'),
     'brand_suffix' => env('APP_SUFFIX', ''),
-    'full_name' => trim(env('APP_NAME', 'kariyer.kibriskare.com')) . env('APP_SUFFIX', ''),
+    'full_name' => trim(env('APP_NAME', 'Kariyer.KibrisKare')) . env('APP_SUFFIX', ''),
 
     /*
     |--------------------------------------------------------------------------

@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Hash;
 
 /**
  * Yalnız zəruri (referans) məlumatları yaradır — saxta vakansiya/şirkət YOXDUR.
- * Şirkət olaraq yalnız "kariyer.kibriskare.com" saxlanılır.
+ * Şirkət olaraq yalnız "Kariyer.KibrisKare" saxlanılır.
  */
 class DatabaseSeeder extends Seeder
 {
@@ -68,21 +68,21 @@ class DatabaseSeeder extends Seeder
             ExperienceLevel::updateOrCreate(['slug' => $el['slug']], $el);
         }
 
-        // 4. Yeganə şirkət: kariyer.kibriskare.com
+        // 4. Yeganə şirkət: Kariyer.KibrisKare
         $bakuCity = City::where('slug', 'lefkosa')->first();
 
         Company::updateOrCreate(
             ['slug' => 'kariyer-kibriskare'],
             [
-                'name' => 'kariyer.kibriskare.com',
+                'name' => 'Kariyer.KibrisKare',
                 'website' => config('app.url'),
                 'email' => 'info@kariyer.kibriskare.com',
                 'city_id' => $bakuCity?->id,
                 'about' => [
-                    'az' => 'kariyer.kibriskare.com — Şimali Kiprdə iş elanları və karyera platforması.',
-                    'tr' => 'kariyer.kibriskare.com — Kuzey Kıbrıs\'ta iş ilanları ve kariyer platformu.',
-                    'en' => 'kariyer.kibriskare.com — Job listings and career platform in Northern Cyprus.',
-                    'ru' => 'kariyer.kibriskare.com — платформа вакансий и карьеры на Северном Кипре.',
+                    'az' => 'Kariyer.KibrisKare — Şimali Kiprdə iş elanları və karyera platforması.',
+                    'tr' => 'Kariyer.KibrisKare — Kuzey Kıbrıs\'ta iş ilanları ve kariyer platformu.',
+                    'en' => 'Kariyer.KibrisKare — Job listings and career platform in Northern Cyprus.',
+                    'ru' => 'Kariyer.KibrisKare — платформа вакансий и карьеры на Северном Кипре.',
                 ],
                 'is_verified' => true,
             ]
