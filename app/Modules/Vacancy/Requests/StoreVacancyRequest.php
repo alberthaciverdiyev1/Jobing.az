@@ -16,7 +16,7 @@ class StoreVacancyRequest extends FormRequest
     {
         if (empty($this->currency)) {
             $this->merge([
-                'currency' => 'AZN',
+                'currency' => 'TRY',
             ]);
         }
     }

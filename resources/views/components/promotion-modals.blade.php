@@ -14,8 +14,8 @@
     // Promosyon fiyatları config'ten gelir.
     $bumpPrices = config('site.promotions.bump.prices');      // [1 => 5, 3 => 12, 7 => 25]
     $premiumPrices = config('site.promotions.premium.prices'); // [1 => 7, 3 => 18, 7 => 35]
-    $bumpPriceLabels = array_map(fn ($p) => $p . ' ₼', $bumpPrices);
-    $premiumPriceLabels = array_map(fn ($p) => $p . ' ₼', $premiumPrices);
+    $bumpPriceLabels = array_map(fn ($p) => $p . ' ₺', $bumpPrices);
+    $premiumPriceLabels = array_map(fn ($p) => $p . ' ₺', $premiumPrices);
 @endphp
 
 <!-- 1. İRƏLİ ÇƏK MODAL (BUMP) -->
@@ -90,7 +90,7 @@
                                 class="p-3 rounded-xl border text-center transition cursor-pointer"
                                 :class="selectedBump === '1' ? 'border-primary bg-orange-50 ring-1 ring-primary shadow-xs' : 'border-gray-200 hover:border-gray-300 bg-white'">
                             <span class="text-xs font-semibold text-gray-800 block">{{ __('1 time') }}</span>
-                            <span class="text-base sm:text-lg font-semibold text-primary font-mono block mt-1">{{ $bumpPrices[1] }} ₼</span>
+                            <span class="text-base sm:text-lg font-semibold text-primary font-mono block mt-1">{{ $bumpPrices[1] }} ₺</span>
                             <span class="text-[11px] text-gray-400 block mt-0.5">{{ __('Standard') }}</span>
                         </button>
 
@@ -100,7 +100,7 @@
                                 :class="selectedBump === '3' ? 'border-primary bg-orange-50 ring-1 ring-primary shadow-xs' : 'border-gray-200 hover:border-gray-300 bg-white'">
                             <span class="absolute -top-2 left-1/2 -translate-x-1/2 px-1.5 py-0.2 rounded-full bg-primary text-[9px] font-semibold text-white">{{ __('Popular') }}</span>
                             <span class="text-xs font-semibold text-gray-800 block">{{ __('3 times') }}</span>
-                            <span class="text-base sm:text-lg font-semibold text-primary font-mono block mt-1">{{ $bumpPrices[3] }} ₼</span>
+                            <span class="text-base sm:text-lg font-semibold text-primary font-mono block mt-1">{{ $bumpPrices[3] }} ₺</span>
                             <span class="text-[11px] text-emerald-600 font-semibold block mt-0.5">{{ __('Savings') }}</span>
                         </button>
 
@@ -109,7 +109,7 @@
                                 class="p-3 rounded-xl border text-center transition cursor-pointer"
                                 :class="selectedBump === '7' ? 'border-primary bg-orange-50 ring-1 ring-primary shadow-xs' : 'border-gray-200 hover:border-gray-300 bg-white'">
                             <span class="text-xs font-semibold text-gray-800 block">{{ __('7 times') }}</span>
-                            <span class="text-base sm:text-lg font-semibold text-primary font-mono block mt-1">{{ $bumpPrices[7] }} ₼</span>
+                            <span class="text-base sm:text-lg font-semibold text-primary font-mono block mt-1">{{ $bumpPrices[7] }} ₺</span>
                             <span class="text-[11px] text-emerald-600 font-semibold block mt-0.5">{{ __('Maximum') }}</span>
                         </button>
                     </div>
@@ -212,7 +212,7 @@
                                 class="p-3 rounded-xl border text-center transition cursor-pointer"
                                 :class="selectedPremium === '1' ? 'border-amber-500 bg-amber-50 ring-1 ring-amber-500 shadow-xs' : 'border-gray-200 hover:border-amber-300 bg-white'">
                             <span class="text-xs font-semibold text-gray-800 block">{{ __('1 time') }}</span>
-                            <span class="text-base sm:text-lg font-semibold text-gray-900 font-mono block mt-1">{{ $premiumPrices[1] }} ₼</span>
+                            <span class="text-base sm:text-lg font-semibold text-gray-900 font-mono block mt-1">{{ $premiumPrices[1] }} ₺</span>
                             <span class="text-[11px] text-gray-400 block mt-0.5">{{ __('Trial') }}</span>
                         </button>
 
@@ -222,7 +222,7 @@
                                 :class="selectedPremium === '3' ? 'border-amber-500 bg-amber-50 ring-1 ring-amber-500 shadow-xs' : 'border-gray-200 hover:border-amber-300 bg-white'">
                             <span class="absolute -top-2 left-1/2 -translate-x-1/2 px-1.5 py-0.2 rounded-full bg-amber-500 text-[9px] font-semibold text-white">{{ __('Popular') }}</span>
                             <span class="text-xs font-semibold text-gray-800 block">{{ __('3 times') }}</span>
-                            <span class="text-base sm:text-lg font-semibold text-gray-900 font-mono block mt-1">{{ $premiumPrices[3] }} ₼</span>
+                            <span class="text-base sm:text-lg font-semibold text-gray-900 font-mono block mt-1">{{ $premiumPrices[3] }} ₺</span>
                             <span class="text-[11px] text-gray-700 font-semibold block mt-0.5">{{ __('Recommendation') }}</span>
                         </button>
 
@@ -231,7 +231,7 @@
                                 class="p-3 rounded-xl border text-center transition cursor-pointer"
                                 :class="selectedPremium === '7' ? 'border-amber-500 bg-amber-50 ring-1 ring-amber-500 shadow-xs' : 'border-gray-200 hover:border-amber-300 bg-white'">
                             <span class="text-xs font-semibold text-gray-800 block">{{ __('7 times') }}</span>
-                            <span class="text-base sm:text-lg font-semibold text-gray-900 font-mono block mt-1">{{ $premiumPrices[7] }} ₼</span>
+                            <span class="text-base sm:text-lg font-semibold text-gray-900 font-mono block mt-1">{{ $premiumPrices[7] }} ₺</span>
                             <span class="text-[11px] text-emerald-600 font-semibold block mt-0.5">{{ __('VIP') }}</span>
                         </button>
                     </div>

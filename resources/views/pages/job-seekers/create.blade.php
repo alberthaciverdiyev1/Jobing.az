@@ -141,8 +141,8 @@
                     <div>
                         <label class="block text-xs font-semibold text-gray-700 mb-1.5">{{ __('Currency') }}</label>
                         <select name="currency" class="w-full px-4 py-2.5 bg-gray-50 hover:bg-white focus:bg-white border border-gray-200 rounded-lg focus:outline-hidden focus:border-primary text-sm cursor-pointer">
-                            @foreach(['AZN','USD','EUR','TRY'] as $cur)
-                            <option value="{{ $cur }}" @selected(old('currency', 'AZN') === $cur)>{{ $cur }}</option>
+                            @foreach(['TRY','USD','EUR','AZN'] as $cur)
+                            <option value="{{ $cur }}" @selected(old('currency', 'TRY') === $cur)>{{ $cur }}</option>
                             @endforeach
                         </select>
                     </div>

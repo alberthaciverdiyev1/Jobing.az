@@ -240,7 +240,7 @@ class JobSeekerController extends Controller
             'salary_min' => ($data['salary_negotiable'] ?? false) ? null : ($data['salary_min'] ?? null),
             'salary_max' => ($data['salary_negotiable'] ?? false) ? null : ($data['salary_max'] ?? null),
             'salary_negotiable' => $data['salary_negotiable'] ?? false,
-            'currency' => $data['currency'] ?? 'AZN',
+            'currency' => $data['currency'] ?? 'TRY',
             'location' => $data['location'] ?? null,
             'availability' => $data['availability'] ?? 'immediate',
             'contact_name' => $data['contact_name'],

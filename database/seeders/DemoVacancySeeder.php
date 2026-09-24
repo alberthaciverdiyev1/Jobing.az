@@ -64,7 +64,7 @@ class DemoVacancySeeder extends Seeder
                     'salary_min' => $salaryMin,
                     'salary_max' => $salaryMax,
                     'salary_negotiable' => false,
-                    'currency' => 'AZN',
+                    'currency' => 'TRY',
                     'is_featured' => $index < 3,
                     'is_active' => true,
                     'views_count' => 25 + ($index * 17),

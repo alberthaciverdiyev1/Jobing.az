@@ -361,7 +361,7 @@ window.__JOB_SEEKERS_CONFIG__ = {
                              class="absolute left-0 sm:left-auto sm:right-0 top-full mt-2 w-72 rounded-2xl bg-white border border-gray-100 shadow-2xl p-4 z-[100] space-y-3">
 
                             <div class="flex items-center justify-between">
-                                <span class="text-xs font-semibold text-gray-800">{{ __('Salary (AZN)') }}</span>
+                                <span class="text-xs font-semibold text-gray-800">{{ __('Salary (TRY)') }}</span>
                                 <button type="button"
                                         x-show="minSalary || maxSalary"
                                         x-cloak
@@ -373,7 +373,7 @@ window.__JOB_SEEKERS_CONFIG__ = {
 
                             <div class="grid grid-cols-2 gap-2">
                                 <div class="relative flex items-center">
-                                    <span class="absolute left-3 text-gray-400 text-xs font-medium pointer-events-none select-none">₼</span>
+                                    <span class="absolute left-3 text-gray-400 text-xs font-medium pointer-events-none select-none">₺</span>
                                     <input type="number"
                                            x-model="minSalary"
                                            @keydown.enter.prevent="applyFilters(); closeDropdown('salary')"
@@ -382,7 +382,7 @@ window.__JOB_SEEKERS_CONFIG__ = {
                                            class="w-full pl-7 pr-2 py-2 bg-gray-50 focus:bg-white border border-gray-200 rounded-lg text-xs text-gray-800 placeholder-gray-400 focus:outline-hidden focus:border-primary">
                                 </div>
                                 <div class="relative flex items-center">
-                                    <span class="absolute left-3 text-gray-400 text-xs font-medium pointer-events-none select-none">₼</span>
+                                    <span class="absolute left-3 text-gray-400 text-xs font-medium pointer-events-none select-none">₺</span>
                                     <input type="number"
                                            x-model="maxSalary"
                                            @keydown.enter.prevent="applyFilters(); closeDropdown('salary')"
@@ -395,13 +395,13 @@ window.__JOB_SEEKERS_CONFIG__ = {
                             <!-- Quick Preset Ranges -->
                             <div class="flex flex-wrap gap-1.5 pt-1">
                                 <button type="button" @click="minSalary = '500'; maxSalary = '1000'; applyFilters()"
-                                        class="px-2.5 py-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-[11px] font-medium text-gray-700 cursor-pointer">500 - 1000</button>
+                                        class="px-2.5 py-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-[11px] font-medium text-gray-700 cursor-pointer">20.000 - 40.000</button>
                                 <button type="button" @click="minSalary = '1000'; maxSalary = '2000'; applyFilters()"
-                                        class="px-2.5 py-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-[11px] font-medium text-gray-700 cursor-pointer">1000 - 2000</button>
+                                        class="px-2.5 py-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-[11px] font-medium text-gray-700 cursor-pointer">40.000 - 60.000</button>
                                 <button type="button" @click="minSalary = '2000'; maxSalary = '3000'; applyFilters()"
-                                        class="px-2.5 py-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-[11px] font-medium text-gray-700 cursor-pointer">2000 - 3000</button>
+                                        class="px-2.5 py-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-[11px] font-medium text-gray-700 cursor-pointer">60.000 - 100.000</button>
                                 <button type="button" @click="minSalary = '3000'; maxSalary = ''; applyFilters()"
-                                        class="px-2.5 py-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-[11px] font-medium text-gray-700 cursor-pointer">3000+ ₼</button>
+                                        class="px-2.5 py-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-[11px] font-medium text-gray-700 cursor-pointer">100.000+ ₺</button>
                             </div>
 
                             <button type="button"
@@ -722,7 +722,7 @@ window.__JOB_SEEKERS_CONFIG__ = {
                         <div class="flex items-center justify-between">
                             <h4 class="text-xs font-bold text-gray-800 uppercase tracking-wider flex items-center gap-1.5">
                                 <i class="fas fa-wallet text-primary text-xs"></i>
-                                <span>{{ __('Salary (AZN)') }}</span>
+                                <span>{{ __('Salary (TRY)') }}</span>
                             </h4>
                             <button type="button"
                                     x-show="minSalary || maxSalary"
@@ -734,7 +734,7 @@ window.__JOB_SEEKERS_CONFIG__ = {
                         </div>
                         <div class="grid grid-cols-2 gap-2">
                             <div class="relative flex items-center">
-                                <span class="absolute left-3 text-gray-400 text-xs font-medium pointer-events-none select-none">₼</span>
+                                <span class="absolute left-3 text-gray-400 text-xs font-medium pointer-events-none select-none">₺</span>
                                 <input type="number"
                                        x-model="minSalary"
                                        placeholder="{{ __('Min') }}"
@@ -742,7 +742,7 @@ window.__JOB_SEEKERS_CONFIG__ = {
                                        class="w-full pl-7 pr-2 py-2 bg-gray-50 focus:bg-white border border-gray-200 rounded-xl text-xs text-gray-800 placeholder-gray-400 focus:outline-hidden focus:border-primary">
                             </div>
                             <div class="relative flex items-center">
-                                <span class="absolute left-3 text-gray-400 text-xs font-medium pointer-events-none select-none">₼</span>
+                                <span class="absolute left-3 text-gray-400 text-xs font-medium pointer-events-none select-none">₺</span>
                                 <input type="number"
                                        x-model="maxSalary"
                                        placeholder="{{ __('Max') }}"
@@ -752,13 +752,13 @@ window.__JOB_SEEKERS_CONFIG__ = {
                         </div>
                         <div class="flex flex-wrap gap-1.5 pt-1">
                             <button type="button" @click="minSalary = '500'; maxSalary = '1000'"
-                                    class="px-2.5 py-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-[11px] font-medium text-gray-700 cursor-pointer">500 - 1000</button>
+                                    class="px-2.5 py-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-[11px] font-medium text-gray-700 cursor-pointer">20.000 - 40.000</button>
                             <button type="button" @click="minSalary = '1000'; maxSalary = '2000'"
-                                    class="px-2.5 py-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-[11px] font-medium text-gray-700 cursor-pointer">1000 - 2000</button>
+                                    class="px-2.5 py-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-[11px] font-medium text-gray-700 cursor-pointer">40.000 - 60.000</button>
                             <button type="button" @click="minSalary = '2000'; maxSalary = '3000'"
-                                    class="px-2.5 py-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-[11px] font-medium text-gray-700 cursor-pointer">2000 - 3000</button>
+                                    class="px-2.5 py-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-[11px] font-medium text-gray-700 cursor-pointer">60.000 - 100.000</button>
                             <button type="button" @click="minSalary = '3000'; maxSalary = ''"
-                                    class="px-2.5 py-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-[11px] font-medium text-gray-700 cursor-pointer">3000+ ₼</button>
+                                    class="px-2.5 py-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-[11px] font-medium text-gray-700 cursor-pointer">100.000+ ₺</button>
                         </div>
                     </div>
 

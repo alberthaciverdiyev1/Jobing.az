@@ -737,7 +737,7 @@ class VacancyService
             'salary_min' => $data['salary_negotiable'] ?? false ? null : ($data['salary_min'] ?? null),
             'salary_max' => $data['salary_negotiable'] ?? false ? null : ($data['salary_max'] ?? null),
             'salary_negotiable' => $data['salary_negotiable'] ?? false,
-            'currency' => $data['currency'] ?? 'AZN',
+            'currency' => $data['currency'] ?? 'TRY',
             'description' => $data['description'],
             'requirements' => $data['requirements'] ?? null,
             'benefits' => $data['benefits'] ?? null,

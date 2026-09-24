@@ -140,12 +140,12 @@ class MyJobSeekerResource extends Resource
                         Forms\Components\Select::make('currency')
                             ->label(__('Currency'))
                             ->options([
-                                'AZN' => 'AZN (₼)',
+                                'TRY' => 'TRY (₺)',
                                 'USD' => 'USD ($)',
                                 'EUR' => 'EUR (€)',
-                                'TRY' => 'TRY (₺)',
+                                'AZN' => 'AZN (₼)',
                             ])
-                            ->default('AZN')
+                            ->default('TRY')
                             ->hidden(fn (Forms\Get $get) => (bool) $get('salary_negotiable')),
                     ])->columns(3),
 

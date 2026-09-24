@@ -16,7 +16,7 @@
     $verb = $isPremium ? 'PREMIUM ETMƏK' : 'İRƏLİ ÇƏKMƏK';
 
     $prices = config('site.promotions.' . $mode . '.prices', [1 => 5, 3 => 12, 7 => 25]);
-    $priceLabels = array_map(fn ($p) => $p . ' ₼', $prices);
+    $priceLabels = array_map(fn ($p) => $p . ' ₺', $prices);
 
     $tags = $isPremium
         ? [1 => 'Sınaq', 3 => 'Tövsiyə', 7 => 'VIP']

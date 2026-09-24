@@ -43,17 +43,17 @@ return [
     |--------------------------------------------------------------------------
     | Promotion Pricing (bump & premium)
     |--------------------------------------------------------------------------
-    | Promosyon paket fiyatları (₼) blade yerine config'de tutulur.
+    | Promosyon paket fiyatları (₺) blade yerine config'de tutulur.
     | Anahtar = "kaç kez" (1/3/7), değer = fiyat.
     |
     */
 
     'promotions' => [
         'bump' => [
-            'prices' => [1 => 5, 3 => 12, 7 => 25],
+            'prices' => [1 => 100, 3 => 250, 7 => 500],
         ],
         'premium' => [
-            'prices' => [1 => 7, 3 => 18, 7 => 35],
+            'prices' => [1 => 150, 3 => 350, 7 => 700],
         ],
     ],
 

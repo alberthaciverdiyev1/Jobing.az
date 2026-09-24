@@ -603,7 +603,7 @@ function jobApplicationModal(actionUrl) {
         ],
         'baseSalary' => ($job->salary_min || $job->salary_max) ? [
             '@type' => 'MonetaryAmount',
-            'currency' => 'AZN',
+            'currency' => 'TRY',
             'value' => $salaryValue,
         ] : null,
         'identifier' => [

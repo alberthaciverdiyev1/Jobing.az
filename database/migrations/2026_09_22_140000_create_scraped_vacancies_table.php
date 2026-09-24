@@ -28,7 +28,7 @@ return new class extends Migration
             $table->decimal('salary_min', 12, 2)->nullable();
             $table->decimal('salary_max', 12, 2)->nullable();
             $table->boolean('salary_negotiable')->default(false);
-            $table->string('currency', 10)->default('AZN');
+            $table->string('currency', 10)->default('TRY');
             $table->longText('description');
             $table->longText('requirements')->nullable();
             $table->json('skills')->nullable();

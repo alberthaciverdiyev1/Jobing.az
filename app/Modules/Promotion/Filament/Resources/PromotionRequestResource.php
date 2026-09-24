@@ -57,7 +57,7 @@ class PromotionRequestResource extends Resource
                     ->formatStateUsing(fn (string $state): string => $state === 'premium' ? __('Premium') : __('Boost'))
                     ->color(fn (string $state): string => $state === 'premium' ? 'warning' : 'primary'),
                 Tables\Columns\TextColumn::make('times')->label(__('Package'))->suffix('×')->badge()->color('gray'),
-                Tables\Columns\TextColumn::make('price')->label(__('Price'))->money('AZN'),
+                Tables\Columns\TextColumn::make('price')->label(__('Price'))->money('TRY'),
                 Tables\Columns\TextColumn::make('phone')->label(__('Phone'))->copyable()->toggleable(),
                 Tables\Columns\TextColumn::make('status')
                     ->label(__('Status'))

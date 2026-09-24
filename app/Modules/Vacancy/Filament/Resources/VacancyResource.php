@@ -185,12 +185,12 @@ class VacancyResource extends Resource
                                         Forms\Components\Select::make('currency')
                                             ->label(__('Unit'))
                                             ->options([
-                                                'AZN' => 'AZN (₼)',
                                                 'TRY' => 'TRY (₺)',
                                                 'USD' => 'USD ($)',
                                                 'EUR' => 'EUR (€)',
+                                                'AZN' => 'AZN (₼)',
                                             ])
-                                            ->default('AZN'),
+                                            ->default('TRY'),
                                     ]),
 
                                 Forms\Components\Toggle::make('salary_negotiable')

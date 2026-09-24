@@ -88,7 +88,7 @@ class JobSeekerResource extends Resource
                     ->schema([
                         Forms\Components\TextInput::make('salary_min')->label(__('Min salary'))->numeric()->nullable(),
                         Forms\Components\TextInput::make('salary_max')->label(__('Max salary'))->numeric()->nullable(),
-                        Forms\Components\TextInput::make('currency')->label(__('Currency'))->default('AZN'),
+                        Forms\Components\TextInput::make('currency')->label(__('Currency'))->default('TRY'),
                         Forms\Components\Toggle::make('salary_negotiable')->label(__('Negotiable')),
                         Forms\Components\Select::make('availability')->label(__('Competition'))->options([
                             'immediate' => 'Dərhal',
