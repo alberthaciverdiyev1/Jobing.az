@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Jobing'),
+    'name' => env('APP_NAME', 'KibrisKare'),
 
     /*
     |--------------------------------------------------------------------------
@@ -27,9 +27,9 @@ return [
     |
     */
 
-    'brand_name' => env('APP_NAME', 'Jobing'),
-    'brand_suffix' => env('APP_SUFFIX', '.az'),
-    'full_name' => trim(env('APP_NAME', 'Jobing')) . env('APP_SUFFIX', '.az'),
+    'brand_name' => env('APP_NAME', 'KibrisKare'),
+    'brand_suffix' => env('APP_SUFFIX', '.com'),
+    'full_name' => trim(env('APP_NAME', 'KibrisKare')) . env('APP_SUFFIX', '.com'),
 
     /*
     |--------------------------------------------------------------------------
@@ -94,17 +94,17 @@ return [
     |
     */
 
-    'locale' => env('APP_LOCALE', 'az'),
+    'locale' => env('APP_LOCALE', 'tr'),
 
-    'fallback_locale' => env('APP_FALLBACK_LOCALE', 'az'),
+    'fallback_locale' => env('APP_FALLBACK_LOCALE', 'tr'),
 
-    'faker_locale' => env('APP_FAKER_LOCALE', 'az_AZ'),
+    'faker_locale' => env('APP_FAKER_LOCALE', 'tr_TR'),
 
     'available_locales' => [
-        'az' => ['name' => 'Azərbaycan', 'flag' => '🇦🇿', 'code' => 'AZ'],
+        'tr' => ['name' => 'Türkçe', 'flag' => '🇹🇷', 'code' => 'TR'],
         'en' => ['name' => 'English', 'flag' => '🇬🇧', 'code' => 'EN'],
         'ru' => ['name' => 'Русский', 'flag' => '🇷🇺', 'code' => 'RU'],
-        'tr' => ['name' => 'Türkçe', 'flag' => '🇹🇷', 'code' => 'TR'],
+        'az' => ['name' => 'Azərbaycan', 'flag' => '🇦🇿', 'code' => 'AZ'],
     ],
 
     /*

@@ -64,15 +64,10 @@ class WorkplaceTypeResource extends Resource
 
                 Forms\Components\Tabs::make('Translations')
                     ->tabs([
-                        Forms\Components\Tabs\Tab::make('🇦🇿 ' . __('languages.Azerbaijani') . ' (' . __('Default') . ')')
+                        Forms\Components\Tabs\Tab::make('🇦🇿 ' . __('languages.Azerbaijani'))
                             ->schema([
                                 Forms\Components\TextInput::make('name.az')
-                                    ->label(__('Workplace Name (AZ)'))
-                                    ->required()
-                                    ->live(onBlur: true)
-                                    ->afterStateUpdated(fn (string $operation, $state, Forms\Set $set, Forms\Get $get) => 
-                                        $operation === 'create' && empty($get('slug')) ? $set('slug', \Illuminate\Support\Str::slug($state)) : null
-                                    ),
+                                    ->label(__('Workplace Name (AZ)')),
                             ]),
 
                         Forms\Components\Tabs\Tab::make('🇬🇧 ' . __('languages.English'))
@@ -81,10 +76,15 @@ class WorkplaceTypeResource extends Resource
                                     ->label(__('Workplace Type Name (EN)')),
                             ]),
 
-                        Forms\Components\Tabs\Tab::make('🇹🇷 ' . __('languages.Turkish'))
+                        Forms\Components\Tabs\Tab::make('🇹🇷 ' . __('languages.Turkish') . ' (' . __('Default') . ')')
                             ->schema([
                                 Forms\Components\TextInput::make('name.tr')
-                                    ->label(__('Workplace Name (TR)')),
+                                    ->label(__('Workplace Name (TR)'))
+                                    ->required()
+                                    ->live(onBlur: true)
+                                    ->afterStateUpdated(fn (string $operation, $state, Forms\Set $set, Forms\Get $get) => 
+                                        $operation === 'create' && empty($get('slug')) ? $set('slug', \Illuminate\Support\Str::slug($state)) : null
+                                    ),
                             ]),
 
                         Forms\Components\Tabs\Tab::make('🇷🇺 ' . __('languages.Russian'))

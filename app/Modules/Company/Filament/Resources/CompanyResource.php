@@ -104,7 +104,7 @@ class CompanyResource extends Resource
                                             ->label(__('About Company (EN)'))
                                             ->rows(4),
                                     ]),
-                                Forms\Components\Tabs\Tab::make('🇹🇷 ' . __('languages.Turkish'))
+                                Forms\Components\Tabs\Tab::make('🇹🇷 ' . __('languages.Turkish') . ' (' . __('Default') . ')')
                                     ->schema([
                                         Forms\Components\Textarea::make('about.tr')
                                             ->label(__('About Company (TR)'))

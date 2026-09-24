@@ -46,12 +46,7 @@ class SkillResource extends Resource
                                     ->schema([
                                         Forms\Components\TextInput::make('name.az')
                                             ->label(__('Skill Name (AZ)'))
-                                            ->required()
-                                            ->maxLength(255)
-                                            ->live(onBlur: true)
-                                            ->afterStateUpdated(fn (string $operation, $state, Forms\Set $set) => 
-                                                $operation === 'create' ? $set('slug', \Illuminate\Support\Str::slug($state)) : null
-                                            ),
+                                            ->maxLength(255),
                                     ]),
                                 Forms\Components\Tabs\Tab::make('🇬🇧 ' . __('languages.English'))
                                     ->schema([
@@ -59,11 +54,16 @@ class SkillResource extends Resource
                                             ->label(__('Skill Name (EN)'))
                                             ->maxLength(255),
                                     ]),
-                                Forms\Components\Tabs\Tab::make('🇹🇷 ' . __('languages.Turkish'))
+                                Forms\Components\Tabs\Tab::make('🇹🇷 ' . __('languages.Turkish') . ' (' . __('Default') . ')')
                                     ->schema([
                                         Forms\Components\TextInput::make('name.tr')
                                             ->label(__('Skill Name (TR)'))
-                                            ->maxLength(255),
+                                            ->maxLength(255)
+                                            ->required()
+                                            ->live(onBlur: true)
+                                            ->afterStateUpdated(fn (string $operation, $state, Forms\Set $set) =>
+                                                $operation === 'create' ? $set('slug', \Illuminate\Support\Str::slug($state)) : null
+                                            ),
                                     ]),
                                 Forms\Components\Tabs\Tab::make('🇷🇺 ' . __('languages.Russian'))
                                     ->schema([

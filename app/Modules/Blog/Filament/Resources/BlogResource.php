@@ -52,10 +52,9 @@ class BlogResource extends Resource
                     ->tabs([
                         Forms\Components\Tabs\Tab::make('🇦🇿 ' . __('languages.Azerbaijani'))
                             ->schema([
-                                Forms\Components\TextInput::make('title.az')->label(__('Title (AZ)'))->required()->live(onBlur: true)
-                                    ->afterStateUpdated(fn (string $operation, $state, Forms\Set $set, Forms\Get $get) => $operation === 'create' && empty($get('slug')) ? $set('slug', \Illuminate\Support\Str::slug($state)) : null),
+                                Forms\Components\TextInput::make('title.az')->label(__('Title (AZ)')),
                                 Forms\Components\Textarea::make('excerpt.az')->label(__('Short Text (AZ)'))->rows(2),
-                                Forms\Components\RichEditor::make('content.az')->label(__('Content (AZ)'))->required(),
+                                Forms\Components\RichEditor::make('content.az')->label(__('Content (AZ)')),
                             ]),
                         Forms\Components\Tabs\Tab::make('🇬🇧 ' . __('languages.English'))
                             ->schema([
@@ -63,11 +62,12 @@ class BlogResource extends Resource
                                 Forms\Components\Textarea::make('excerpt.en')->label(__('Excerpt (EN)'))->rows(2),
                                 Forms\Components\RichEditor::make('content.en')->label(__('Content (EN)')),
                             ]),
-                        Forms\Components\Tabs\Tab::make('🇹🇷 ' . __('languages.Turkish'))
+                        Forms\Components\Tabs\Tab::make('🇹🇷 ' . __('languages.Turkish') . ' (' . __('Default') . ')')
                             ->schema([
-                                Forms\Components\TextInput::make('title.tr')->label(__('Title (TR)')),
+                                Forms\Components\TextInput::make('title.tr')->label(__('Title (TR)'))->required()->live(onBlur: true)
+                                    ->afterStateUpdated(fn (string $operation, $state, Forms\Set $set, Forms\Get $get) => $operation === 'create' && empty($get('slug')) ? $set('slug', \Illuminate\Support\Str::slug($state)) : null),
                                 Forms\Components\Textarea::make('excerpt.tr')->label(__('Summary (TR)'))->rows(2),
-                                Forms\Components\RichEditor::make('content.tr')->label(__('Content (TR)')),
+                                Forms\Components\RichEditor::make('content.tr')->label(__('Content (TR)'))->required(),
                             ]),
                         Forms\Components\Tabs\Tab::make('🇷🇺 ' . __('languages.Russian'))
                             ->schema([

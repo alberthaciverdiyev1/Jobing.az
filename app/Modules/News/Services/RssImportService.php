@@ -65,10 +65,10 @@ class RssImportService
             News::firstOrCreate(
                 ['slug' => $slug],
                 [
-                    'title' => ['az' => $title],
+                    'title' => ['tr' => $title],
                     'category' => (string) ($item->category ?? $source->category ?? ''),
-                    'description' => ['az' => Str::limit(strip_tags($description), 300)],
-                    'content' => ['az' => $description],
+                    'description' => ['tr' => Str::limit(strip_tags($description), 300)],
+                    'content' => ['tr' => $description],
                     'source_name' => $source->name,
                     'source_url' => $link ?: null,
                     'is_active' => true,
@@ -85,7 +85,7 @@ class RssImportService
     protected function fetch(string $url): ?string
     {
         try {
-            $res = Http::timeout(15)->withHeaders(['User-Agent' => 'JobingBot/1.0'])->get($url);
+            $res = Http::timeout(15)->withHeaders(['User-Agent' => 'KibrisKareBot/1.0'])->get($url);
 
             return $res->successful() ? $res->body() : null;
         } catch (\Throwable $e) {

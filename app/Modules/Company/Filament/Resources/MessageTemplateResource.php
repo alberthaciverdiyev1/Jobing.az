@@ -84,11 +84,9 @@ class MessageTemplateResource extends Resource
                                     ->schema([
                                         Forms\Components\TextInput::make('title.az')
                                             ->label(__('Template Title (AZ)'))
-                                            ->required()
                                             ->maxLength(255),
                                         Forms\Components\Textarea::make('content.az')
                                             ->label(__('Message Text (AZ)'))
-                                            ->required()
                                             ->rows(6),
                                     ]),
 
@@ -102,14 +100,16 @@ class MessageTemplateResource extends Resource
                                             ->rows(6),
                                     ]),
 
-                                Forms\Components\Tabs\Tab::make('🇹🇷 ' . __('languages.Turkish'))
+                                Forms\Components\Tabs\Tab::make('🇹🇷 ' . __('languages.Turkish') . ' (' . __('Default') . ')')
                                     ->schema([
                                         Forms\Components\TextInput::make('title.tr')
                                             ->label(__('Template Title (TR)'))
-                                            ->maxLength(255),
+                                            ->maxLength(255)
+                                            ->required(),
                                         Forms\Components\Textarea::make('content.tr')
                                             ->label(__('Message Content (TR)'))
-                                            ->rows(6),
+                                            ->rows(6)
+                                            ->required(),
                                     ]),
 
                                 Forms\Components\Tabs\Tab::make('🇷🇺 ' . __('languages.Russian'))

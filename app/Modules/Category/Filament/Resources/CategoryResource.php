@@ -63,22 +63,17 @@ class CategoryResource extends Resource
 
                         Forms\Components\TextInput::make('slug')
                             ->label(__('Slug / URL (Unique Code)'))
-                            ->helperText(__('If left empty, it will be auto-generated from the Azerbaijani name'))
+                            ->helperText(__('If left empty, it will be auto-generated from the Turkish name'))
                             ->maxLength(255)
                             ->columnSpanFull(),
                     ])->columns(2),
 
                 Forms\Components\Tabs::make('Translations')
                     ->tabs([
-                        Forms\Components\Tabs\Tab::make('🇦🇿 ' . __('languages.Azerbaijani') . ' (' . __('Default') . ')')
+                        Forms\Components\Tabs\Tab::make('🇦🇿 ' . __('languages.Azerbaijani'))
                             ->schema([
                                 Forms\Components\TextInput::make('name.az')
-                                    ->label(__('Category Name (AZ)'))
-                                    ->required()
-                                    ->live(onBlur: true)
-                                    ->afterStateUpdated(fn (string $operation, $state, Forms\Set $set, Forms\Get $get) => 
-                                        $operation === 'create' && empty($get('slug')) ? $set('slug', \Illuminate\Support\Str::slug($state)) : null
-                                    ),
+                                    ->label(__('Category Name (AZ)')),
                             ]),
 
                         Forms\Components\Tabs\Tab::make('🇬🇧 ' . __('languages.English'))
@@ -87,10 +82,15 @@ class CategoryResource extends Resource
                                     ->label(__('Category Name (EN)')),
                             ]),
 
-                        Forms\Components\Tabs\Tab::make('🇹🇷 ' . __('languages.Turkish'))
+                        Forms\Components\Tabs\Tab::make('🇹🇷 ' . __('languages.Turkish') . ' (' . __('Default') . ')')
                             ->schema([
                                 Forms\Components\TextInput::make('name.tr')
-                                    ->label(__('Category Name (TR)')),
+                                    ->label(__('Category Name (TR)'))
+                                    ->required()
+                                    ->live(onBlur: true)
+                                    ->afterStateUpdated(fn (string $operation, $state, Forms\Set $set, Forms\Get $get) => 
+                                        $operation === 'create' && empty($get('slug')) ? $set('slug', \Illuminate\Support\Str::slug($state)) : null
+                                    ),
                             ]),
 
                         Forms\Components\Tabs\Tab::make('🇷🇺 ' . __('languages.Russian'))
@@ -174,18 +174,18 @@ class CategoryResource extends Resource
                                 Forms\Components\Tabs\Tab::make('🇦🇿 ' . __('languages.Azerbaijani'))
                                     ->schema([
                                         Forms\Components\TextInput::make('name.az')
-                                            ->label(__('Subcategory Name (AZ)'))
-                                            ->required(),
+                                            ->label(__('Subcategory Name (AZ)')),
                                     ]),
                                 Forms\Components\Tabs\Tab::make('🇬🇧 ' . __('languages.English'))
                                     ->schema([
                                         Forms\Components\TextInput::make('name.en')
                                             ->label(__('Subcategory Name (EN)')),
                                     ]),
-                                Forms\Components\Tabs\Tab::make('🇹🇷 ' . __('languages.Turkish'))
+                                Forms\Components\Tabs\Tab::make('🇹🇷 ' . __('languages.Turkish') . ' (' . __('Default') . ')')
                                     ->schema([
                                         Forms\Components\TextInput::make('name.tr')
-                                            ->label(__('Subcategory Name (TR)')),
+                                            ->label(__('Subcategory Name (TR)'))
+                                            ->required(),
                                     ]),
                                 Forms\Components\Tabs\Tab::make('🇷🇺 ' . __('languages.Russian'))
                                     ->schema([

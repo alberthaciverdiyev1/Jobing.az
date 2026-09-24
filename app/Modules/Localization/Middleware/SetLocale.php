@@ -18,16 +18,16 @@ class SetLocale
     public function handle(Request $request, Closure $next): Response
     {
         $availableLocales = array_keys(config('app.available_locales', [
-            'az' => [],
+            'tr' => [],
             'en' => [],
             'ru' => [],
-            'tr' => [],
+            'az' => [],
         ]));
 
-        $locale = Session::get('locale', config('app.locale', 'az'));
+        $locale = Session::get('locale', config('app.locale', 'tr'));
 
         if (!in_array($locale, $availableLocales, true)) {
-            $locale = config('app.fallback_locale', 'az');
+            $locale = config('app.fallback_locale', 'tr');
         }
 
         App::setLocale($locale);

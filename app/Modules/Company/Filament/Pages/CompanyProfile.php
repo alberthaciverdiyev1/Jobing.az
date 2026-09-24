@@ -83,7 +83,7 @@ class CompanyProfile extends Page implements HasForms
                                             ->label(__('About Company (EN)'))
                                             ->rows(4),
                                     ]),
-                                Tabs\Tab::make('🇹🇷 ' . __('languages.Turkish'))
+                                Tabs\Tab::make('🇹🇷 ' . __('languages.Turkish') . ' (' . __('Default') . ')')
                                     ->schema([
                                         Textarea::make('about.tr')
                                             ->label(__('About Company (TR)'))

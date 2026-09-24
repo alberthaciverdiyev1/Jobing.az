@@ -33,7 +33,7 @@ trait HasTranslations
             return $translations[$locale];
         }
 
-        $fallbackLocale = config('app.fallback_locale', 'az');
+        $fallbackLocale = config('app.fallback_locale', 'tr');
         if (!empty($translations[$fallbackLocale])) {
             return $translations[$fallbackLocale];
         }

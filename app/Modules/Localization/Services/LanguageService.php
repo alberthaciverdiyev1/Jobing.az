@@ -15,10 +15,10 @@ class LanguageService
     public function switchLocale(string $locale): bool
     {
         $supported = array_keys(config('app.available_locales', [
-            'az' => [],
+            'tr' => [],
             'en' => [],
             'ru' => [],
-            'tr' => [],
+            'az' => [],
         ]));
 
         if (in_array($locale, $supported, true)) {

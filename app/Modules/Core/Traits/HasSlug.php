@@ -53,7 +53,7 @@ trait HasSlug
     public function generateUniqueSlug(mixed $text, $ignoreId = null): string
     {
         if (is_array($text)) {
-            $text = $text['az'] ?? $text['tr'] ?? $text['en'] ?? $text['ru'] ?? reset($text) ?: '';
+            $text = $text['tr'] ?? $text['en'] ?? $text['ru'] ?? $text['az'] ?? reset($text) ?: '';
         }
 
         $baseSlug = Str::slug((string) $text);

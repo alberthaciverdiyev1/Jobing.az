@@ -60,15 +60,13 @@ class FaqResource extends Resource
 
                 Forms\Components\Tabs::make('Translations')
                     ->tabs([
-                        Forms\Components\Tabs\Tab::make('🇦🇿 ' . __('languages.Azerbaijani') . ' (' . __('Default') . ')')
+                        Forms\Components\Tabs\Tab::make('🇦🇿 ' . __('languages.Azerbaijani'))
                             ->schema([
                                 Forms\Components\TextInput::make('question.az')
-                                    ->label(__('Question (AZ)'))
-                                    ->required(),
+                                    ->label(__('Question (AZ)')),
                                 Forms\Components\Textarea::make('answer.az')
                                     ->label(__('Answer (AZ)'))
-                                    ->rows(4)
-                                    ->required(),
+                                    ->rows(4),
                             ]),
                         Forms\Components\Tabs\Tab::make('🇬🇧 ' . __('languages.English'))
                             ->schema([
@@ -78,13 +76,15 @@ class FaqResource extends Resource
                                     ->label(__('Answer (EN)'))
                                     ->rows(4),
                             ]),
-                        Forms\Components\Tabs\Tab::make('🇹🇷 ' . __('languages.Turkish'))
+                        Forms\Components\Tabs\Tab::make('🇹🇷 ' . __('languages.Turkish') . ' (' . __('Default') . ')')
                             ->schema([
                                 Forms\Components\TextInput::make('question.tr')
-                                    ->label(__('Question (TR)')),
+                                    ->label(__('Question (TR)'))
+                                    ->required(),
                                 Forms\Components\Textarea::make('answer.tr')
                                     ->label(__('Answer (TR)'))
-                                    ->rows(4),
+                                    ->rows(4)
+                                    ->required(),
                             ]),
                         Forms\Components\Tabs\Tab::make('🇷🇺 ' . __('languages.Russian'))
                             ->schema([

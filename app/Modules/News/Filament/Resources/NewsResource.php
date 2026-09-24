@@ -46,7 +46,7 @@ class NewsResource extends Resource
 
             Forms\Components\Tabs::make('translations')->tabs([
                 Forms\Components\Tabs\Tab::make('🇦🇿 ' . __('languages.Azerbaijani'))->schema([
-                    Forms\Components\TextInput::make('title.az')->label(__('Title'))->required()->maxLength(255),
+                    Forms\Components\TextInput::make('title.az')->label(__('Title'))->maxLength(255),
                     Forms\Components\Textarea::make('description.az')->label(__('Description'))->rows(2),
                     Forms\Components\RichEditor::make('content.az')->label(__('Content')),
                 ]),
@@ -55,8 +55,8 @@ class NewsResource extends Resource
                     Forms\Components\Textarea::make('description.en')->label(__('Description'))->rows(2),
                     Forms\Components\RichEditor::make('content.en')->label(__('Content')),
                 ]),
-                Forms\Components\Tabs\Tab::make('🇹🇷 ' . __('languages.Turkish'))->schema([
-                    Forms\Components\TextInput::make('title.tr')->label(__('Title'))->maxLength(255),
+                Forms\Components\Tabs\Tab::make('🇹🇷 ' . __('languages.Turkish') . ' (' . __('Default') . ')')->schema([
+                    Forms\Components\TextInput::make('title.tr')->label(__('Title'))->maxLength(255)->required(),
                     Forms\Components\Textarea::make('description.tr')->label(__('Description'))->rows(2),
                     Forms\Components\RichEditor::make('content.tr')->label(__('Content')),
                 ]),
