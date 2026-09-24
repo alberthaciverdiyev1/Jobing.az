@@ -67,7 +67,7 @@ window.__JOB_SEEKERS_CONFIG__ = {
                     {{ __('Job Seekers') }}
                 </h1>
                 <p class="text-xs sm:text-sm md:text-base text-gray-500">
-                    {{ __('Kuzey Kıbrıs'ın önde gelen şirketlerinde binlerce aktif iş ilanı ve kariyer imkanı') }}
+                    {{ __('Kuzey Kıbrıs\'ın önde gelen şirketlerinde binlerce aktif iş ilanı ve kariyer imkanı') }}
                 </p>
             </div>
 
