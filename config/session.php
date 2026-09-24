@@ -129,7 +129,7 @@ return [
 
     'cookie' => env(
         'SESSION_COOKIE',
-        'jobing_new_session'
+        'kibriskare_new_session'
     ),
 
     /*

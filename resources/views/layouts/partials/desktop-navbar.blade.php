@@ -10,7 +10,7 @@
             <!-- Left: Logo -->
             <div class="shrink-0 flex items-center">
                 <a href="{{ route('jobs.index') }}" class="flex items-center">
-                    <img src="{{ asset('images/logo/jobing-wordmark.png') }}" alt="{{ config('app.full_name') }}" class="h-9 w-auto">
+                    <img src="{{ asset('images/logo/kibriskare-wordmark.png') }}" alt="{{ config('app.full_name') }}" class="h-9 w-auto">
                 </a>
             </div>
 

@@ -10,7 +10,7 @@ use Illuminate\Support\ServiceProvider;
  * Auto-loads each module's Routes/web.php so route definitions live inside
  * their own module (mirrors Metraj's modular route architecture).
  *
- * Jobing uses session-based locale switching (SetLocale middleware), so module
+ * KibrisKare uses session-based locale switching (SetLocale middleware), so module
  * routes are registered WITHOUT a {locale} URL prefix.
  */
 class ModuleServiceProvider extends ServiceProvider

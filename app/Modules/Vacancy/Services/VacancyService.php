@@ -854,7 +854,7 @@ class VacancyService
             'user_id' => auth()->check() ? auth()->id() : null,
             'resume_id' => $data['resume_id'] ?? null,
             'applicant_name' => $applicantName ?: __('User'),
-            'applicant_email' => $applicantEmail ?: 'user@jobing.az',
+            'applicant_email' => $applicantEmail ?: 'user@kibriskare.com',
             'applicant_phone' => $applicantPhone,
             'resume_path' => $resumePath,
             'portfolio_url' => $data['portfolio_url'] ?? ($resume ? $resume->portfolio_url : null),

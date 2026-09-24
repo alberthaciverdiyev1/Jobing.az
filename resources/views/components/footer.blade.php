@@ -17,7 +17,7 @@
 
     $cleanPhone = $siteSetting->phone ? preg_replace('/[^0-9+]/', '', $siteSetting->phone) : null;
 
-    $footerDesc = $siteSetting->getTrans('footer_description', null, __('The ideal platform for job seekers and employers in Azerbaijan. Start your career growth with us.'));
+    $footerDesc = $siteSetting->getTrans('footer_description', null, __('The ideal platform for job seekers and employers in Northern Cyprus. Start your career growth with us.'));
 
     $linkClass = 'text-sm text-gray-500 hover:text-primary transition-colors';
     $headingClass = 'text-sm font-semibold text-gray-900 mb-4';
@@ -30,7 +30,7 @@
         <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-8 py-10 border-b border-gray-100">
             <div class="max-w-xl">
                 <a href="{{ url('/') }}" class="inline-flex items-center mb-4">
-                    <img src="{{ asset('images/logo/jobing-wordmark.png') }}" alt="{{ config('app.full_name') }}" class="h-9 w-auto">
+                    <img src="{{ asset('images/logo/kibriskare-wordmark.png') }}" alt="{{ config('app.full_name') }}" class="h-9 w-auto">
                 </a>
 
                 <p class="text-sm text-gray-500 leading-relaxed mb-5">{{ $footerDesc }}</p>

@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class CachePublicListings
 {
-    private const TOKEN_PLACEHOLDER = '__JOBING_CSRF_TOKEN__';
+    private const TOKEN_PLACEHOLDER = '__KIBRISKARE_CSRF_TOKEN__';
 
     public function handle(Request $request, Closure $next): Response
     {

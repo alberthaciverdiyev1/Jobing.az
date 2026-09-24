@@ -47,7 +47,6 @@ class CitySeeder extends Seeder
             ['name' => ['az' => 'Lefke', 'en' => 'Lefka', 'tr' => 'Lefke', 'ru' => 'Лефка'], 'slug' => 'lefke', 'order' => 32],
             ['name' => ['az' => 'Gemikonağı', 'en' => 'Gemikonagi', 'tr' => 'Gemikonağı', 'ru' => 'Гемиконагы'], 'slug' => 'gemikonagi', 'order' => 33],
             ['name' => ['az' => 'Ercan', 'en' => 'Ercan', 'tr' => 'Ercan', 'ru' => 'Эрджан'], 'slug' => 'ercan', 'order' => 34],
-            ['name' => ['az' => 'Məsafədən', 'en' => 'Remote', 'tr' => 'Uzaktan', 'ru' => 'Удалённо'], 'slug' => 'remote', 'order' => 35],
         ];
 
         foreach ($cities as $cityData) {

@@ -117,7 +117,7 @@
 
                 <!-- Action Button -->
                 <div class="space-y-2 pt-1">
-                    <a :href="'https://wa.me/{{ $cleanWa }}?text=' + encodeURIComponent('Salam, Jobing.az saytındakı #{{ $id }} nömrəli {{ $itemTypeLabel }}nı (\'{{ $safeTitle }}\') ' + selectedBump + ' DƏFƏ İRƏLİ ÇƏKMƏK istəyirəm (' + bumpPrices[selectedBump] + ').')"
+                    <a :href="'https://wa.me/{{ $cleanWa }}?text=' + encodeURIComponent('Merhaba, KibrisKare.com sitesindeki #{{ $id }} numaralı {{ $itemTypeLabel }} ilanını (\'{{ $safeTitle }}\') ' + selectedBump + ' KEZ ÖNE ÇIKARMAK istiyorum (' + bumpPrices[selectedBump] + ').')"
                        target="_blank" rel="noopener"
                        class="w-full py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs shadow-xs transition duration-150 flex items-center justify-center gap-2 cursor-pointer">
                         <i class="fab fa-whatsapp text-base"></i>
@@ -239,7 +239,7 @@
 
                 <!-- Action Button (Solid Flat Colors) -->
                 <div class="space-y-2 pt-1">
-                    <a :href="'https://wa.me/{{ $cleanWa }}?text=' + encodeURIComponent('Salam, Jobing.az saytındakı #{{ $id }} nömrəli {{ $itemTypeLabel }}nı (\'{{ $safeTitle }}\') ' + selectedPremium + ' DƏFƏ PREMIUM ETMƏK istəyirəm (' + premiumPrices[selectedPremium] + ').')"
+                    <a :href="'https://wa.me/{{ $cleanWa }}?text=' + encodeURIComponent('Merhaba, KibrisKare.com sitesindeki #{{ $id }} numaralı {{ $itemTypeLabel }} ilanını (\'{{ $safeTitle }}\') ' + selectedPremium + ' KEZ PREMIUM YAPMAK istiyorum (' + premiumPrices[selectedPremium] + ').')"
                        target="_blank" rel="noopener"
                        class="w-full py-3 px-4 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-semibold text-xs shadow-xs transition duration-150 flex items-center justify-center gap-2 cursor-pointer">
                         <i class="fab fa-whatsapp text-base"></i>

@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Hash;
 
 /**
  * Yalnız zəruri (referans) məlumatları yaradır — saxta vakansiya/şirkət YOXDUR.
- * Şirkət olaraq yalnız "Jobing" saxlanılır.
+ * Şirkət olaraq yalnız "KibrisKare" saxlanılır.
  */
 class DatabaseSeeder extends Seeder
 {
@@ -22,9 +22,9 @@ class DatabaseSeeder extends Seeder
     {
         // 1. Admin istifadəçi
         User::updateOrCreate(
-            ['email' => 'admin@jobing.com'],
+            ['email' => 'admin@kibriskare.com'],
             [
-                'name' => 'Jobing Admin',
+                'name' => 'KibrisKare Admin',
                 'password' => Hash::make('password'),
                 'user_type' => 'admin',
                 'is_admin' => true,
@@ -68,21 +68,21 @@ class DatabaseSeeder extends Seeder
             ExperienceLevel::updateOrCreate(['slug' => $el['slug']], $el);
         }
 
-        // 4. Yeganə şirkət: Jobing
+        // 4. Yeganə şirkət: KibrisKare
         $bakuCity = City::where('slug', 'lefkosa')->first();
 
         Company::updateOrCreate(
-            ['slug' => 'jobing'],
+            ['slug' => 'kibriskare'],
             [
-                'name' => 'Jobing',
+                'name' => 'KibrisKare',
                 'website' => config('app.url'),
-                'email' => 'info@jobing.az',
+                'email' => 'info@kibriskare.com',
                 'city_id' => $bakuCity?->id,
                 'about' => [
-                    'az' => 'Jobing.az — Azərbaycanda iş elanları və karyera platforması.',
-                    'tr' => 'Jobing.az — Azerbaycan\'da iş ilanları ve kariyer platformu.',
-                    'en' => 'Jobing.az — Job listings and career platform in Azerbaijan.',
-                    'ru' => 'Jobing.az — платформа вакансий и карьеры в Азербайджане.',
+                    'az' => 'KibrisKare.com — Şimali Kiprdə iş elanları və karyera platforması.',
+                    'tr' => 'KibrisKare.com — Kuzey Kıbrıs\'ta iş ilanları ve kariyer platformu.',
+                    'en' => 'KibrisKare.com — Job listings and career platform in Northern Cyprus.',
+                    'ru' => 'KibrisKare.com — платформа вакансий и карьеры на Северном Кипре.',
                 ],
                 'is_verified' => true,
             ]

@@ -95,7 +95,7 @@
                         <i class="fas fa-envelope"></i>
                     </div>
                     <p class="text-xs text-gray-400 font-medium">{{ __('Email') }}</p>
-                    <p class="text-sm font-semibold text-gray-800 mt-1">{{ $siteSetting->email ?: 'info@jobing.az' }}</p>
+                    <p class="text-sm font-semibold text-gray-800 mt-1">{{ $siteSetting->email ?: 'info@kibriskare.com' }}</p>
                 </div>
                 <div class="bg-white rounded-xl border border-gray-200 p-5 text-center shadow-2xs">
                     <div class="w-10 h-10 bg-orange-50 text-primary rounded-lg flex items-center justify-center mx-auto mb-3">

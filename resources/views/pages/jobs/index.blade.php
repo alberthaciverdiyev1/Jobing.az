@@ -89,7 +89,7 @@ window.__JOBS_CONFIG__ = {
                     {{ $selectedCategory?->name ?: $listingTitle }}
                 </h1>
                 <p class="text-xs sm:text-sm md:text-base text-gray-500">
-                    {{ __('Azərbaycanın aparıcı şirkətlərində minlərlə aktiv iş elanı və karyera imkanları') }}
+                    {{ __('Kuzey Kıbrıs'ın önde gelen şirketlerinde binlerce aktif iş ilanı ve kariyer imkanı') }}
                 </p>
             </div>
 
