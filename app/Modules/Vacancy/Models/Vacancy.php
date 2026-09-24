@@ -167,25 +167,25 @@ class Vacancy extends Model
     public function getJobTypeNameAttribute(): string
     {
         $name = $this->jobType?->name;
-        return is_array($name) ? ($name['az'] ?? reset($name)) : (string) ($name ?? '');
+        return is_array($name) ? ($name['tr'] ?? reset($name)) : (string) ($name ?? '');
     }
 
     public function getWorkplaceTypeNameAttribute(): string
     {
         $name = $this->workplaceType?->name;
-        return is_array($name) ? ($name['az'] ?? reset($name)) : (string) ($name ?? '');
+        return is_array($name) ? ($name['tr'] ?? reset($name)) : (string) ($name ?? '');
     }
 
     public function getExperienceLevelNameAttribute(): string
     {
         $name = $this->experienceLevel?->name;
-        return is_array($name) ? ($name['az'] ?? reset($name)) : (string) ($name ?? '');
+        return is_array($name) ? ($name['tr'] ?? reset($name)) : (string) ($name ?? '');
     }
 
     public function getCityNameAttribute(): string
     {
         $name = $this->city?->name ?: $this->company?->city?->name;
-        return is_array($name) ? ($name['az'] ?? reset($name)) : (string) ($name ?? '');
+        return is_array($name) ? ($name['tr'] ?? reset($name)) : (string) ($name ?? '');
     }
 
     public function getFormattedSalaryAttribute(): string

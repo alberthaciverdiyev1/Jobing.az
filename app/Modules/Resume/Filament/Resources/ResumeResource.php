@@ -106,7 +106,7 @@ class ResumeResource extends Resource
                             ->label(__('City / Location'))
                             ->options(\App\Enums\CityEnum::options())
                             ->searchable()
-                            ->default('Bakı'),
+                            ->default('Lefkoşa'),
                         Forms\Components\TextInput::make('linkedin_url')->label(__('LinkedIn URL'))->url()->placeholder('https://linkedin.com/in/...'),
 
                         Forms\Components\TextInput::make('github_url')->label(__('GitHub URL'))->url()->placeholder('https://github.com/...'),

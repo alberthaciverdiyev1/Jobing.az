@@ -58,7 +58,7 @@ class Company extends Model
     public function getCityNameAttribute(): string
     {
         $name = $this->city?->name;
-        return is_array($name) ? ($name['az'] ?? reset($name)) : (string) ($name ?? '');
+        return is_array($name) ? ($name['tr'] ?? reset($name)) : (string) ($name ?? '');
     }
 
     /**

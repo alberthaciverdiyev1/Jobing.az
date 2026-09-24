@@ -31,7 +31,7 @@
                 <div class="space-y-1.5">
                     <label class="font-semibold text-gray-700 dark:text-gray-300 block">{{ __('University / College *') }}</label>
                     <x-filament::input.wrapper>
-                        <x-filament::input type="text" x-model="item.institution" placeholder="Örn: Bakı Dövlət Universiteti" />
+                        <x-filament::input type="text" x-model="item.institution" placeholder="Örn: Doğu Akdeniz Üniversitesi" />
                     </x-filament::input.wrapper>
                 </div>
 

@@ -601,7 +601,7 @@ class VacancyService
             'experienceLevels' => $experienceLevels,
             'skills' => $skills,
             'authCompany' => $authCompany,
-            'cities' => City::cachedActive()->sortBy(fn ($c) => is_array($c->name) ? ($c->name['az'] ?? reset($c->name)) : $c->name)->values(),
+            'cities' => City::cachedActive()->sortBy(fn ($c) => is_array($c->name) ? ($c->name['tr'] ?? reset($c->name)) : $c->name)->values(),
         ];
     }
 
@@ -611,7 +611,7 @@ class VacancyService
     public static function cityOptions(): array
     {
         $cities = City::cachedActive()->map(function ($c) {
-            return is_array($c->name) ? ($c->name['az'] ?? reset($c->name)) : $c->name;
+            return is_array($c->name) ? ($c->name['tr'] ?? reset($c->name)) : $c->name;
         })->filter()->unique()->values()->toArray();
 
         if (!empty($cities)) {
@@ -619,29 +619,38 @@ class VacancyService
         }
 
         return [
-            'Bakı',
-            'Sumqayıt',
-            'Gəncə',
-            'Mingəçevir',
-            'Xırdalan',
-            'Şəki',
-            'Lənkəran',
-            'Quba',
-            'Naxçıvan',
-            'Şirvan',
-            'Yevlax',
-            'Göyçay',
-            'Zaqatala',
-            'Şamaxı',
-            'İsmayıllı',
-            'Tovuz',
-            'Ağcabədi',
-            'Bərdə',
-            'İmişli',
-            'Qazax',
-            'Qax',
-            'Balakən',
-            'Remote (Məsafədən)',
+            'Lefkoşa',
+            'Gönyeli',
+            'Değirmenlik',
+            'Girne',
+            'Alsancak',
+            'Lapta',
+            'Çatalköy',
+            'Karaoğlanoğlu',
+            'Esentepe',
+            'Dikmen',
+            'Tatlısu',
+            'Gazimağusa',
+            'Maraş',
+            'İskele',
+            'Boğaz',
+            'Yeniboğaziçi',
+            'Geçitkale',
+            'Akdoğan',
+            'Serdarlı',
+            'Beyarmudu',
+            'Paşaköy',
+            'Vadili',
+            'Mehmetçik',
+            'Yenierenköy',
+            'Dipkarpaz',
+            'Büyükkonuk',
+            'Güzelyurt',
+            'Kalkanlı',
+            'Lefke',
+            'Gemikonağı',
+            'Ercan',
+            'Uzaktan',
         ];
     }
 
@@ -658,7 +667,7 @@ class VacancyService
                 $city = City::find($locationInput);
                 $cityId = $city?->id;
             } else {
-                $city = City::where('name->az', $locationInput)
+                $city = City::where('name->tr', $locationInput)
                     ->orWhere('name->en', $locationInput)
                     ->orWhere('slug', \Illuminate\Support\Str::slug($locationInput))
                     ->orWhere('name', 'ilike', '%' . $locationInput . '%')

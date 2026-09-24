@@ -36,7 +36,7 @@
                                 <span class="truncate">{{ $job->company?->name ?? __('Employer Company') }}</span>
                                 @endif
                             </h4>
-                            <span class="text-xs text-gray-500 truncate block">{{ $job->company?->city_name ?: ($job->company?->location ?? __('Baku, Azerbaijan')) }}</span>
+                            <span class="text-xs text-gray-500 truncate block">{{ $job->company?->city_name ?: ($job->company?->location ?? __('Lefkoşa, KKTC')) }}</span>
                         </div>
                     </div>
 

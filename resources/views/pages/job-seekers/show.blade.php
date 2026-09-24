@@ -42,7 +42,7 @@
                         <div class="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-gray-500 pt-0.5">
                             <span class="flex items-center gap-1">
                                 <i class="fas fa-map-marker-alt text-gray-400 text-xs"></i>
-                                <span>{{ $jobSeeker->location ?: __('Baku, Azerbaijan') }}</span>
+                                <span>{{ $jobSeeker->location ?: __('Lefkoşa, KKTC') }}</span>
                             </span>
                             @if($jobSeeker->workplaceType)
                             <span class="text-gray-300">•</span>
@@ -88,7 +88,7 @@
                     </div>
                     <div class="pt-3 sm:pt-0 sm:pl-4">
                         <span class="text-[11px] font-medium text-gray-400 block">{{ __('City / Region') }}</span>
-                        <span class="text-xs font-semibold text-gray-900 mt-1 block">{{ $jobSeeker->location ?: __('Baku') }}</span>
+                        <span class="text-xs font-semibold text-gray-900 mt-1 block">{{ $jobSeeker->location ?: __('Lefkoşa') }}</span>
                     </div>
                 </div>
 

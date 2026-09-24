@@ -107,7 +107,7 @@ class ResumeController extends Controller
             $allSkills = $cat->skills->merge($cat->children->flatMap->skills);
 
             foreach ($allSkills->unique('id') as $sk) {
-                $skillName = is_array($sk->name) ? ($sk->name['az'] ?? reset($sk->name)) : $sk->name;
+                $skillName = is_array($sk->name) ? ($sk->name['tr'] ?? reset($sk->name)) : $sk->name;
                 $catSkills[] = [
                     'id' => $sk->id,
                     'name' => $skillName,

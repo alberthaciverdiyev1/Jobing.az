@@ -78,8 +78,8 @@ trait HasSkillPicker
     public static function cityOptions(): array
     {
         return City::cachedActive()
-            ->sortBy(fn (City $city) => is_array($city->name) ? ($city->name['az'] ?? reset($city->name)) : $city->name)
-            ->map(fn (City $city) => is_array($city->name) ? ($city->name['az'] ?? reset($city->name)) : $city->name)
+            ->sortBy(fn (City $city) => is_array($city->name) ? ($city->name['tr'] ?? reset($city->name)) : $city->name)
+            ->map(fn (City $city) => is_array($city->name) ? ($city->name['tr'] ?? reset($city->name)) : $city->name)
             ->filter()
             ->unique()
             ->values()

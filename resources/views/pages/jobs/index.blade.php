@@ -124,7 +124,7 @@ window.__JOBS_CONFIG__ = {
                                 class="w-full h-12 flex items-center justify-between pl-10 pr-3.5 bg-gray-50/70 hover:bg-white border border-gray-200 rounded-xl text-sm transition cursor-pointer text-left focus:outline-hidden focus:border-primary focus:ring-2 focus:ring-orange-100">
                             <i class="fas fa-map-marker-alt absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm pointer-events-none"></i>
                             <span class="truncate" :class="city.length ? 'text-gray-900 font-medium' : 'text-gray-400'"
-                                  x-text="selectedCityLabel || '{{ __('City (Baku...)') }}'"></span>
+                                  x-text="selectedCityLabel || '{{ __('Şehir (Lefkoşa...)') }}'"></span>
                             <i class="fas fa-chevron-down text-[10px] text-gray-400 transition-transform ml-2 shrink-0" :class="cityOpen ? 'rotate-180 text-primary' : ''"></i>
                         </button>
 

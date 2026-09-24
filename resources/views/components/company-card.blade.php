@@ -19,7 +19,7 @@
                     </h3>
                     <span class="text-xs text-gray-500 flex items-center gap-1 mt-1 truncate">
                         <i class="fas fa-map-marker-alt text-gray-400 text-[12px]"></i>
-                        <span>{{ $company->city_name ?: __('Baku, Azerbaijan') }}</span>
+                        <span>{{ $company->city_name ?: __('Lefkoşa, KKTC') }}</span>
                     </span>
                 </div>
             </div>

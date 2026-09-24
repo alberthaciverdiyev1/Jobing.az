@@ -69,7 +69,7 @@ class DatabaseSeeder extends Seeder
         }
 
         // 4. Yeganə şirkət: Jobing
-        $bakuCity = City::where('slug', 'baki')->first();
+        $bakuCity = City::where('slug', 'lefkosa')->first();
 
         Company::updateOrCreate(
             ['slug' => 'jobing'],
