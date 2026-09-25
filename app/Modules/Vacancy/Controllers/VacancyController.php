@@ -25,7 +25,11 @@ class VacancyController extends Controller
 
     public function index(Request $request): View|JsonResponse|Response
     {
-        return $this->listingResponse($request, false);
+        $includeScraped = $request->has('include_scraped')
+            ? $request->boolean('include_scraped')
+            : true;
+
+        return $this->listingResponse($request, $includeScraped);
     }
 
     
@@ -40,7 +44,8 @@ class VacancyController extends Controller
     private function listingResponse(Request $request, bool $includeScraped): View|JsonResponse|Response
     {
         $data = $this->vacancyService->getPaginatedVacancies($request->all(), 30, $includeScraped);
-        $data['isExternal'] = $includeScraped;
+        $data['isExternal'] = $request->routeIs('jobs.external');
+        $data['includeScraped'] = $includeScraped;
 
         // Only return JSON if this is an explicit AJAX fetch call and not standard browser page navigation.
         $isAjax = ($request->ajax() || $request->header('X-Partial') || $request->wantsJson()) && ! $request->acceptsHtml();
@@ -64,6 +69,7 @@ class VacancyController extends Controller
                     'cities' => $data['cities']->pluck('vacancies_count', 'slug'),
                     'categories' => $data['categoryCounts'],
                 ],
+                'includeScraped' => $includeScraped,
             ])
             ->header('Vary', 'X-Requested-With, Accept')
             ->header('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0, private')
