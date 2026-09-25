@@ -37,7 +37,9 @@ class TelegramWebhookController extends Controller
             } elseif ($action === 'vac_reject') {
                 Cache::put("telegram:reject:{$chatId}", $vacancy->id, now()->addMinutes(30));
                 $telegram->answerCallbackQuery($cbId, 'Rədd səbəbini yaz');
-                $telegram->sendToChat($chatId, "❌ <b>#{$vacancy->id}</b> üçün rədd səbəbini yazın (30 dəqiqə ərzində):");
+                // ForceReply: qrupda bot "privacy mode" açıq olsa belə, bota cavab (reply)
+                // olaraq göndərilən mesaj mütləq çatır. Adi düz mətn çatmır.
+                $telegram->sendToChat($chatId, "❌ <b>#{$vacancy->id}</b> — rədd səbəbini bu mesaja <b>cavab (reply)</b> olaraq yazın (30 dəqiqə):", ['force_reply' => true]);
             }
 
             return response()->json(['ok' => true]);
