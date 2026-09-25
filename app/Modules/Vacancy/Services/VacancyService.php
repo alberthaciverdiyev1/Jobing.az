@@ -450,9 +450,11 @@ class VacancyService
 
     private function paginateMergedListing($nativeQuery, $scrapedQuery, string $sort, int $perPage): LengthAwarePaginator
     {
-        $columns = 'id, is_featured, updated_at, salary_min, salary_max, views_count, deadline, title';
-        $nativeQuery->selectRaw("'v' as src, " . $columns);
-        $scrapedQuery->selectRaw("'s' as src, " . $columns);
+        // Kart created_at gösterir; sıralama da aynı alana göre olsun. Native ilanlar
+        // (promote/bump) updated_at ile kalır; scraped ilanlar eklenme zamanına (created_at) göre.
+        $columns = 'id, is_featured, salary_min, salary_max, views_count, deadline, title';
+        $nativeQuery->selectRaw("'v' as src, updated_at as sort_at, " . $columns);
+        $scrapedQuery->selectRaw("'s' as src, coalesce(created_at, updated_at) as sort_at, " . $columns);
 
         $makeUnion = fn () => DB::query()
             ->fromSub($nativeQuery, 'v')
@@ -491,12 +493,12 @@ class VacancyService
         return match ($sort) {
             'title_asc', 'alphabetical' => 'title asc',
             'title_desc' => 'title desc',
-            'oldest' => "$featured, updated_at asc",
-            'salary_desc', 'salary_high' => "$featured, coalesce(salary_max, salary_min) desc nulls last, updated_at desc",
-            'salary_asc' => "$featured, coalesce(salary_min, salary_max) asc nulls last, updated_at desc",
-            'views' => "$featured, views_count desc nulls last, updated_at desc",
-            'deadline' => "$featured, deadline asc nulls last, updated_at desc",
-            default => "$featured, updated_at desc",
+            'oldest' => "$featured, sort_at asc",
+            'salary_desc', 'salary_high' => "$featured, coalesce(salary_max, salary_min) desc nulls last, sort_at desc",
+            'salary_asc' => "$featured, coalesce(salary_min, salary_max) asc nulls last, sort_at desc",
+            'views' => "$featured, views_count desc nulls last, sort_at desc",
+            'deadline' => "$featured, deadline asc nulls last, sort_at desc",
+            default => "$featured, sort_at desc",
         };
     }
 
