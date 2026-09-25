@@ -184,7 +184,7 @@ export default function jobsManager(config = null) {
         },
 
         get moreFiltersCount() {
-            return (this.type ? this.type.length : 0) + (this.skills ? this.skills.length : 0);
+            return (this.type ? this.type.length : 0) + (this.skills ? this.skills.length : 0) + (this.workplace ? this.workplace.length : 0);
         },
 
         toggleDropdown(name) {

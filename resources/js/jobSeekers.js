@@ -120,7 +120,7 @@ export default function jobSeekersManager(config = null) {
         },
 
         get moreFiltersCount() {
-            return (this.jobType ? this.jobType.length : 0) + (this.skills ? this.skills.length : 0);
+            return (this.jobType ? this.jobType.length : 0) + (this.skills ? this.skills.length : 0) + (this.workplaceType ? this.workplaceType.length : 0);
         },
 
         toggleDropdown(name) {
