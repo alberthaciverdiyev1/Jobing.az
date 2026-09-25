@@ -115,8 +115,15 @@ class TelegramService
             . "💼 <b>Vəzifə:</b> " . e($vacancy->title) . "\n"
             . "🏢 <b>Şirkət:</b> " . e($vacancy->company?->name ?? '-') . "\n"
             . "📍 <b>Şəhər:</b> " . e($vacancy->city_name ?: '-') . "\n"
-            . "💰 <b>Maaş:</b> " . e($vacancy->formatted_salary) . "\n"
-            . "🆔 <b>ID:</b> #{$vacancy->id}";
+            . "💰 <b>Maaş:</b> " . e($vacancy->formatted_salary);
+
+        // Vakansiya təsviri: HTML/entitilər təmizlənir, uzunluq məhdudlaşdırılır, sonra escape edilir.
+        $description = trim(preg_replace('/\s+/u', ' ', strip_tags(html_entity_decode((string) $vacancy->description, ENT_QUOTES | ENT_HTML5, 'UTF-8'))));
+        if ($description !== '') {
+            $message .= "\n📝 <b>Təsvir:</b> " . e(\Illuminate\Support\Str::limit($description, 1200, '…'));
+        }
+
+        $message .= "\n🆔 <b>ID:</b> #{$vacancy->id}";
 
         $this->sendWithKeyboard($message, [
             [
