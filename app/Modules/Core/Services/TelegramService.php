@@ -184,4 +184,26 @@ class TelegramService
             return false;
         }
     }
+
+    /**
+     * Botun komanda menyusunu qeyd edir (Telegram-da "/" yazanda görünür).
+     *
+     * @param  array<int, array{command: string, description: string}>  $commands
+     */
+    public function setMyCommands(array $commands): bool
+    {
+        if (! $this->token() || empty($commands)) {
+            return false;
+        }
+
+        try {
+            return (bool) Http::timeout(10)->post($this->apiUrl() . '/setMyCommands', [
+                'commands' => $commands,
+                'scope' => ['type' => 'default'],
+            ])->json('ok', false);
+        } catch (\Throwable $e) {
+            Log::warning('Telegram setMyCommands xətası: ' . $e->getMessage());
+            return false;
+        }
+    }
 }

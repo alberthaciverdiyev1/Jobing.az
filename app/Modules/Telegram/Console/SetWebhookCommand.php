@@ -18,6 +18,12 @@ class SetWebhookCommand extends Command
         if ($telegram->setWebhook($url)) {
             $this->info("Webhook qeyd edildi: {$url}");
 
+            if ($telegram->setMyCommands([
+                ['command' => 'views', 'description' => 'Saytın günlük ziyarətçi statistikası'],
+            ])) {
+                $this->info('/views komandası bot menyusuna əlavə edildi.');
+            }
+
             return self::SUCCESS;
         }
 
