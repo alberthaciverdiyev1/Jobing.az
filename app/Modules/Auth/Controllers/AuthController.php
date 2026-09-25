@@ -43,7 +43,15 @@ class AuthController extends Controller
 
     public function register(RegisterRequest $request): RedirectResponse
     {
-        $user = $this->authService->register($request->validated());
+        try {
+            $user = $this->authService->register($request->validated());
+        } catch (\Illuminate\Database\UniqueConstraintViolationException) {
+            // Eyni email ilə eyni anda iki sorğu (double-submit) → 500 yerinə
+            // istifadəçiyə normal validasiya xəbərdarlığı göstəririk.
+            return back()
+                ->withErrors(['email' => __('This email is already registered.')])
+                ->onlyInput('email');
+        }
 
         Auth::login($user);
 

@@ -11,10 +11,22 @@ class AuthService
 {
     public function login(array $credentials, bool $remember = false): bool
     {
-        return Auth::attempt([
-            'email' => $credentials['email'],
-            'password' => $credentials['password'],
-        ], $remember);
+        try {
+            return Auth::attempt([
+                'email' => $credentials['email'],
+                'password' => $credentials['password'],
+            ], $remember);
+        } catch (\RuntimeException $e) {
+            // Köhnə/uyğunsuz hash formatı (məs. PHP-nin tanımadığı $2b$) 500
+            // verməsin — sadəcə "email və ya parol yanlışdır" qaytarırıq.
+            if (str_contains($e->getMessage(), 'Bcrypt')) {
+                \Illuminate\Support\Facades\Log::warning('Login hash xətası: ' . $e->getMessage());
+
+                return false;
+            }
+
+            throw $e;
+        }
     }
 
     public function register(array $data): User
