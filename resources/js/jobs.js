@@ -47,6 +47,7 @@ export default function jobsManager(config = null) {
         moreFiltersOpen: false,
         externalMode: !!config.externalMode,
         externalBasePath: config.externalBasePath || '',
+        include_scraped: config.includeScraped !== undefined ? !!config.includeScraped : true,
 
         init() {
             this.$watch('moreFiltersOpen', (isOpen) => {
@@ -139,6 +140,11 @@ export default function jobsManager(config = null) {
                 this.experience = params.getAll('experience');
                 this.skills = params.getAll('skills[]').concat(params.getAll('skills')).filter(Boolean);
                 this.sort = params.get('sort') || 'latest';
+                if (params.has('include_scraped')) {
+                    this.include_scraped = params.get('include_scraped') !== '0' && params.get('include_scraped') !== 'false';
+                } else {
+                    this.include_scraped = true;
+                }
                 this.loadSkills();
 
                 if (this.category.length) {
@@ -172,6 +178,7 @@ export default function jobsManager(config = null) {
                 this.experience.length ||
                 this.city.length ||
                 this.skills.length ||
+                !this.include_scraped ||
                 (this.sort && this.sort !== 'latest')
             );
         },
@@ -505,6 +512,7 @@ export default function jobsManager(config = null) {
             this.experience = [];
             this.city = [];
             this.skills = [];
+            this.include_scraped = true;
             this.skillSearch = '';
             this.sort = 'latest';
             this.openAccordions = [];
@@ -553,6 +561,7 @@ export default function jobsManager(config = null) {
             if (this.workplace.length) this.workplace.forEach(v => params.append('workplace[]', v));
             if (this.experience.length) this.experience.forEach(v => params.append('experience[]', v));
             if (this.skills.length) this.skills.forEach(v => params.append('skills[]', v));
+            if (!this.include_scraped) params.set('include_scraped', '0');
             if (this.sort && this.sort !== 'latest') params.set('sort', this.sort);
 
             const qs = params.toString();

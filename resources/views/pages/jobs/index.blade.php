@@ -48,6 +48,7 @@ window.__JOBS_CONFIG__ = {
     cityNameMap: @json($cities->pluck('name', 'slug')),
     externalMode: @json($isExternal),
     externalBasePath: @json(route('jobs.external')),
+    includeScraped: @json($includeScraped ?? true),
     filterErrorMessage: @json(__('Filters could not be loaded. Please try again.'))
 };
 </script>
@@ -420,7 +421,18 @@ window.__JOBS_CONFIG__ = {
                         </div>
                     </div>
 
-                    <div class="col-span-2 md:contents">
+                    <!-- Search In Other Sites (Digər saytlarda da axtar) -->
+                    <label class="col-span-1 md:w-auto inline-flex shrink-0 items-center justify-center md:justify-start gap-2 px-3 xl:px-2.5 py-2.5 md:py-2 rounded-xl border text-xs sm:text-sm font-medium whitespace-nowrap transition cursor-pointer select-none"
+                           :class="include_scraped ? 'bg-orange-50/80 border-orange-200 text-primary font-semibold' : 'border-gray-200/80 bg-gray-50/80 text-gray-600 hover:bg-white hover:border-gray-300'">
+                        <input type="checkbox"
+                               x-model="include_scraped"
+                               @change="applyFilters()"
+                               class="rounded border-gray-300 text-primary focus:ring-primary h-3.5 w-3.5 shrink-0">
+                        <i class="fas fa-globe text-xs" :class="include_scraped ? 'text-primary' : 'text-gray-400'"></i>
+                        <span class="truncate">{{ __('Search in other sites as well') }}</span>
+                    </label>
+
+                    <div class="col-span-1 md:contents">
                         <button type="button"
                                 @click="moreFiltersOpen = true"
                                 class="w-full md:w-auto inline-flex shrink-0 items-center justify-center md:justify-start gap-1.5 px-3.5 xl:px-2.5 py-2.5 md:py-2 rounded-xl border border-gray-200/80 bg-gray-50/80 text-gray-700 hover:bg-white hover:border-gray-300 text-xs sm:text-sm font-medium whitespace-nowrap transition cursor-pointer"
@@ -771,6 +783,23 @@ window.__JOBS_CONFIG__ = {
                             <option value="title_asc">{{ __('Alphabetical order (A-Z)') }}</option>
                             <option value="title_desc">{{ __('Alphabetical order (Z-A)') }}</option>
                         </select>
+                    </div>
+
+                    <!-- Search in other sites toggle -->
+                    <div class="pt-4 border-t border-gray-100">
+                        <label class="flex items-center justify-between p-3 rounded-xl border transition cursor-pointer select-none"
+                               :class="include_scraped ? 'bg-orange-50/70 border-orange-200' : 'bg-gray-50/60 border-gray-200 hover:bg-gray-100/70'">
+                            <div class="flex items-center gap-2.5">
+                                <i class="fas fa-globe text-sm" :class="include_scraped ? 'text-primary' : 'text-gray-400'"></i>
+                                <div>
+                                    <div class="text-xs font-semibold text-gray-800">{{ __('Search in other sites as well') }}</div>
+                                    <div class="text-[11px] text-gray-500">{{ __('You can also browse vacancies from other sites from here.') }}</div>
+                                </div>
+                            </div>
+                            <input type="checkbox"
+                                   x-model="include_scraped"
+                                   class="rounded border-gray-300 text-primary focus:ring-primary h-4 w-4">
+                        </label>
                     </div>
 
                 </div>
