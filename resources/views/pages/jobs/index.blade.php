@@ -164,7 +164,7 @@ window.__JOBS_CONFIG__ = {
 
                 <div class="grid grid-cols-2 md:flex md:flex-wrap xl:flex-nowrap items-center gap-2 xl:gap-1.5 p-2.5 mt-3 rounded-xl bg-slate-50/80 border border-slate-100 relative" :class="activeDropdown ? 'z-40' : 'z-10'">
 
-                    <div class="relative" :class="activeDropdown === 'category' ? 'z-50' : 'z-auto'" @click.outside="closeDropdown('category')">
+                    <div class="hidden md:block relative" :class="activeDropdown === 'category' ? 'z-50' : 'z-auto'" @click.outside="closeDropdown('category')">
                         <span class="block md:hidden text-[11px] font-medium text-gray-500 mb-1.5 px-0.5">{{ __('Category') }}</span>
                         <button type="button"
                                 @click="toggleDropdown('category')"
@@ -204,7 +204,7 @@ window.__JOBS_CONFIG__ = {
                         </div>
                     </div>
 
-                    <div class="relative" :class="activeDropdown === 'subcategory' ? 'z-50' : 'z-auto'" @click.outside="closeDropdown('subcategory')">
+                    <div class="hidden md:block relative" :class="activeDropdown === 'subcategory' ? 'z-50' : 'z-auto'" @click.outside="closeDropdown('subcategory')">
                         <span class="block md:hidden text-[11px] font-medium text-gray-500 mb-1.5 px-0.5">{{ __('Subcategory') }}</span>
                         <button type="button"
                                 @click="if (availableSubcategories.length) { toggleDropdown('subcategory'); }"
@@ -353,7 +353,7 @@ window.__JOBS_CONFIG__ = {
                     </div>
                     @endif
 
-                    <div class="relative" :class="activeDropdown === 'salary' ? 'z-50' : 'z-auto'" @click.outside="closeDropdown('salary')">
+                    <div class="hidden md:block relative" :class="activeDropdown === 'salary' ? 'z-50' : 'z-auto'" @click.outside="closeDropdown('salary')">
                         <span class="block md:hidden text-[11px] font-medium text-gray-500 mb-1.5 px-0.5">{{ __('Salary') }}</span>
                         <button type="button"
                                 @click="toggleDropdown('salary')"
