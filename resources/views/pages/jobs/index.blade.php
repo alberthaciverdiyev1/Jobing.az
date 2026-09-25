@@ -421,7 +421,8 @@ window.__JOBS_CONFIG__ = {
                         </div>
                     </div>
 
-                    <!-- Search In Other Sites (Digər saytlarda da axtar) -->
+                    <!-- Search In Other Sites (Digər saytlarda da axtar) - Hidden on external page -->
+                    @unless($isExternal)
                     <label class="col-span-1 md:w-auto inline-flex shrink-0 items-center justify-center md:justify-start gap-1.5 px-2.5 xl:px-2.5 py-2.5 md:py-2 rounded-xl border text-xs font-medium whitespace-nowrap transition cursor-pointer select-none"
                            :class="include_scraped ? 'bg-orange-50/80 border-orange-200 text-primary font-semibold' : 'border-gray-200/80 bg-gray-50/80 text-gray-600 hover:bg-white hover:border-gray-300'">
                         <input type="checkbox"
@@ -433,8 +434,9 @@ window.__JOBS_CONFIG__ = {
                             <span class="hidden md:inline">{{ __('Search in other sites as well') }}</span>
                         </span>
                     </label>
+                    @endunless
 
-                    <div class="col-span-1 md:contents">
+                    <div class="{{ $isExternal ? 'col-span-2' : 'col-span-1' }} md:contents">
                         <button type="button"
                                 @click="moreFiltersOpen = true"
                                 class="w-full md:w-auto inline-flex shrink-0 items-center justify-center md:justify-start gap-1.5 px-3.5 xl:px-2.5 py-2.5 md:py-2 rounded-xl border border-gray-200/80 bg-gray-50/80 text-gray-700 hover:bg-white hover:border-gray-300 text-xs sm:text-sm font-medium whitespace-nowrap transition cursor-pointer"
@@ -787,7 +789,8 @@ window.__JOBS_CONFIG__ = {
                         </select>
                     </div>
 
-                    <!-- Search in other sites toggle -->
+                    <!-- Search in other sites toggle - Hidden on external page -->
+                    @unless($isExternal)
                     <div class="pt-4 border-t border-gray-100">
                         <label class="flex items-center justify-between p-3 rounded-xl border transition cursor-pointer select-none"
                                :class="include_scraped ? 'bg-orange-50/70 border-orange-200' : 'bg-gray-50/60 border-gray-200 hover:bg-gray-100/70'">
@@ -800,6 +803,7 @@ window.__JOBS_CONFIG__ = {
                                    class="rounded border-gray-300 text-primary focus:ring-primary h-4 w-4 shrink-0">
                         </label>
                     </div>
+                    @endunless
 
                 </div>
 
