@@ -41,11 +41,11 @@ jobs:
             export PHP_VER="8.4"
             export PHP_BIN="/usr/bin/php"
             export BRANCH="main"
-            export HEALTH_URL="https://new.jobing.az"
+            export HEALTH_URL="https://jobing.az"
             cd "$APP_DIR"
             bash deploy/deploy.sh
 
       - name: Health check
         run: |
           sleep 3
-          curl -fsS "https://new.jobing.az/up" && echo "Sağlık kontrolü OK"
+          curl -fsS "https://jobing.az/up" && echo "Sağlık kontrolü OK"
