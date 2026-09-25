@@ -48,7 +48,7 @@ window.__JOBS_CONFIG__ = {
     cityNameMap: @json($cities->pluck('name', 'slug')),
     externalMode: @json($isExternal),
     externalBasePath: @json(route('jobs.external')),
-    includeScraped: @json($includeScraped ?? true),
+    includeScraped: @json($includeScraped ?? false),
     filterErrorMessage: @json(__('Filters could not be loaded. Please try again.'))
 };
 </script>
