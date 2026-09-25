@@ -175,7 +175,7 @@ window.__JOBS_CONFIG__ = {
                 <div class="grid grid-cols-2 md:flex md:flex-wrap xl:flex-nowrap items-center gap-2 xl:gap-1.5 p-2.5 mt-3 rounded-xl bg-slate-50/80 border border-slate-100 relative" :class="activeDropdown ? 'z-40' : 'z-10'">
 
                     <!-- 1. Category Filter Dropdown -->
-                    <div class="relative" :class="activeDropdown === 'category' ? 'z-50' : 'z-auto'" @click.outside="closeDropdown('category')">
+                    <div class="hidden md:block relative" :class="activeDropdown === 'category' ? 'z-50' : 'z-auto'" @click.outside="closeDropdown('category')">
                         <span class="block md:hidden text-[11px] font-medium text-gray-500 mb-1.5 px-0.5">{{ __('Category') }}</span>
                         <button type="button"
                                 @click="toggleDropdown('category')"
@@ -216,7 +216,7 @@ window.__JOBS_CONFIG__ = {
                     </div>
 
                     <!-- 2. Subcategory Filter Dropdown -->
-                    <div class="relative" :class="activeDropdown === 'subcategory' ? 'z-50' : 'z-auto'" @click.outside="closeDropdown('subcategory')">
+                    <div class="hidden md:block relative" :class="activeDropdown === 'subcategory' ? 'z-50' : 'z-auto'" @click.outside="closeDropdown('subcategory')">
                         <span class="block md:hidden text-[11px] font-medium text-gray-500 mb-1.5 px-0.5">{{ __('Subcategory') }}</span>
                         <button type="button"
                                 @click="if (availableSubcategories.length) { toggleDropdown('subcategory'); }"
@@ -368,7 +368,7 @@ window.__JOBS_CONFIG__ = {
                     @endif
 
                     <!-- 5. Salary (Maaş) Dropdown -->
-                    <div class="relative" :class="activeDropdown === 'salary' ? 'z-50' : 'z-auto'" @click.outside="closeDropdown('salary')">
+                    <div class="hidden md:block relative" :class="activeDropdown === 'salary' ? 'z-50' : 'z-auto'" @click.outside="closeDropdown('salary')">
                         <span class="block md:hidden text-[11px] font-medium text-gray-500 mb-1.5 px-0.5">{{ __('Salary') }}</span>
                         <button type="button"
                                 @click="toggleDropdown('salary')"
@@ -437,11 +437,10 @@ window.__JOBS_CONFIG__ = {
                     </div>
 
                     <!-- 6. More Filters (Daha çox filtr) -->
-                    <div class="md:contents">
-                        <span class="block md:hidden text-[11px] font-medium text-gray-500 mb-1.5 px-0.5">{{ __('More filters') }}</span>
+                    <div class="col-span-2 md:contents">
                         <button type="button"
                                 @click="moreFiltersOpen = true"
-                                class="w-full md:w-auto inline-flex shrink-0 items-center justify-center md:justify-start gap-1.5 px-3.5 xl:px-2.5 py-2 rounded-xl border border-gray-200/80 bg-gray-50/80 text-gray-700 hover:bg-white hover:border-gray-300 text-xs sm:text-sm font-medium whitespace-nowrap transition cursor-pointer"
+                                class="w-full md:w-auto inline-flex shrink-0 items-center justify-center md:justify-start gap-1.5 px-3.5 xl:px-2.5 py-2.5 md:py-2 rounded-xl border border-gray-200/80 bg-gray-50/80 text-gray-700 hover:bg-white hover:border-gray-300 text-xs sm:text-sm font-medium whitespace-nowrap transition cursor-pointer"
                                 :class="moreFiltersCount > 0 ? 'bg-orange-50 border-orange-200 text-primary font-semibold' : ''">
                             <i class="fas fa-sliders-h text-xs" :class="moreFiltersCount > 0 ? 'text-primary' : 'text-gray-400'"></i>
                             <span>{{ __('More filters') }}</span>
