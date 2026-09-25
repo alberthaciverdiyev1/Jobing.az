@@ -205,6 +205,10 @@ class Vacancy extends Model
         };
 
         if ($min !== null && $max !== null) {
+            if ($min === $max) {
+                return number_format($min, 0, ',', '.') . ' ' . $symbol;
+            }
+
             return number_format($min, 0, ',', '.') . ' - ' . number_format($max, 0, ',', '.') . ' ' . $symbol;
         }
 
