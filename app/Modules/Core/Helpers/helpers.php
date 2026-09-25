@@ -149,15 +149,38 @@ if (! function_exists('is_bot_request')) {
         }
 
         $crawlers = [
-            'googlebot', 'bingbot', 'slurp', 'duckduckbot', 'baiduspider',
-            'yandexbot', 'sogou', 'exabot', 'facebookexternalhit', 'facebot',
-            'twitterbot', 'linkedinbot', 'whatsapp', 'telegrambot', 'discordbot',
-            'pinterest', 'semrushbot', 'ahrefsbot', 'mj12bot', 'dotbot',
-            'petalbot', 'applebot', 'gptbot', 'ccbot', 'perplexitybot', 'bytespider',
+            // Google
+            'googlebot', 'googleother', 'google-inspectiontool', 'google-read-aloud',
+            'adsbot-google', 'mediapartners-google', 'apis-google', 'storebot-google',
+            'feedfetcher-google', 'google-site-verification', 'google favicon',
+            // Microsoft / Bing
+            'bingbot', 'bingpreview', 'msnbot', 'adidxbot',
+            // Digər axtarış / SEO
+            'slurp', 'duckduckbot', 'baiduspider', 'yandexbot', 'yandex.com/bots',
+            'sogou', 'exabot', 'seznam', 'qwantify', 'petalbot', 'applebot',
+            'semrushbot', 'ahrefsbot', 'mj12bot', 'dotbot', 'dataforseo',
+            'rogerbot', 'screamingfrog', 'seokicks', 'serpstatbot', 'megaindex',
+            // Sosial / mesajlaşma
+            'facebookexternalhit', 'facebot', 'twitterbot', 'linkedinbot', 'whatsapp',
+            'telegrambot', 'discordbot', 'pinterest', 'slackbot', 'embedly', 'vkshare',
+            // AI / LLM crawler-ləri
+            'gptbot', 'oai-searchbot', 'chatgpt-user', 'ccbot', 'claude-web', 'claudebot',
+            'anthropic-ai', 'perplexitybot', 'bytespider', 'amazonbot', 'cohere-ai',
+            // Headless / alətlər
+            'headlesschrome', 'phantomjs', 'lighthouse', 'pagespeed',
+            'python-requests', 'python-urllib', 'aiohttp', 'httpx', 'go-http-client',
+            'okhttp', 'axios', 'curl/', 'wget', 'libwww-perl',
         ];
 
         foreach ($crawlers as $crawler) {
             if (str_contains($ua, $crawler)) {
+                return true;
+            }
+        }
+
+        // Ümumi bot/spider/crawler nişanları (son çarə).
+        foreach (['bot', 'spider', 'crawler', 'crawl', 'slurp'] as $token) {
+            if (str_contains($ua, $token)) {
                 return true;
             }
         }

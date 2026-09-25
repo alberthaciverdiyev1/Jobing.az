@@ -3,6 +3,7 @@
 namespace App\Modules\Visitor\Http\Middleware;
 
 use App\Modules\Visitor\Models\Visitor;
+use App\Modules\Visitor\Models\VisitorHit;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -37,6 +38,15 @@ class LogVisitor
         }
 
         try {
+            // Hər səhifə baxışını (hit) ayrıca qeyd edirik — günlük/saatlıq
+            // statistika yalnız bu cədvəldən dəqiq hesablanır.
+            VisitorHit::create([
+                'ip' => $ip,
+                'user_agent' => substr((string) $request->userAgent(), 0, 500),
+                'path' => substr($path, 0, 255),
+                'created_at' => now(),
+            ]);
+
             $visitor = Visitor::where('ip', $ip)->first();
 
             if (! $visitor) {
