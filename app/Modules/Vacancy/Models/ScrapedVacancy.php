@@ -100,7 +100,10 @@ class ScrapedVacancy extends Model
 
     public function getFormattedSalaryAttribute(): string
     {
-        if ($this->salary_negotiable) {
+        $min = ((float) $this->salary_min) > 0 ? (float) $this->salary_min : null;
+        $max = ((float) $this->salary_max) > 0 ? (float) $this->salary_max : null;
+
+        if ($this->salary_negotiable || ($min === null && $max === null)) {
             return __('Negotiable');
         }
 
@@ -108,16 +111,13 @@ class ScrapedVacancy extends Model
             'TRY' => '₺', 'USD' => '$', 'EUR' => '€', 'AZN' => '₼', default => $this->currency,
         };
 
-        if (! $this->salary_min && ! $this->salary_max) {
-            return __('Salary not specified');
+        if ($min !== null && $max !== null) {
+            return number_format($min, 0, ',', '.') . ' - ' . number_format($max, 0, ',', '.') . ' ' . $symbol;
         }
-        if ($this->salary_min && $this->salary_max) {
-            return number_format($this->salary_min, 0, ',', '.') . ' - ' . number_format($this->salary_max, 0, ',', '.') . ' ' . $symbol;
-        }
-        if ($this->salary_min) {
-            return number_format($this->salary_min, 0, ',', '.') . '+ ' . $symbol;
+        if ($min !== null) {
+            return number_format($min, 0, ',', '.') . '+ ' . $symbol;
         }
 
-        return __('up to') . ' ' . number_format($this->salary_max, 0, ',', '.') . ' ' . $symbol;
+        return __('up to') . ' ' . number_format($max, 0, ',', '.') . ' ' . $symbol;
     }
 }
