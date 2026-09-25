@@ -25,9 +25,7 @@ class VacancyController extends Controller
 
     public function index(Request $request): View|JsonResponse|Response
     {
-        $includeScraped = $request->has('include_scraped')
-            ? $request->boolean('include_scraped')
-            : true;
+        $includeScraped = $request->boolean('include_scraped');
 
         return $this->listingResponse($request, $includeScraped);
     }
