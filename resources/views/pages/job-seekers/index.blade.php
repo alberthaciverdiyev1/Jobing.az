@@ -249,52 +249,7 @@ window.__JOB_SEEKERS_CONFIG__ = {
                         </div>
                     </div>
 
-                    <!-- 3. Workplace Type (İş rejimi) Dropdown -->
-                    @if($workplaceTypes->count() > 0)
-                    <div class="hidden md:block relative" :class="activeDropdown === 'workplace' ? 'z-50' : 'z-auto'" @click.outside="closeDropdown('workplace')">
-                        <button type="button"
-                                @click="toggleDropdown('workplace')"
-                                class="w-full md:w-auto inline-flex items-center justify-between md:justify-start gap-1.5 px-3.5 xl:px-2.5 py-2 rounded-xl border text-xs sm:text-sm font-medium transition cursor-pointer"
-                                :class="workplaceType.length > 0 ? 'bg-orange-50 border-orange-200 text-primary font-semibold' : 'bg-gray-50/80 border-gray-200/80 text-gray-700 hover:bg-white hover:border-gray-300'">
-                            <span class="text-gray-400 font-normal">{{ __('Workplace') }}:</span>
-                            <span class="truncate max-w-[130px]" :class="workplaceType.length > 0 ? 'text-primary font-semibold' : 'text-gray-800 font-medium'" x-text="selectedWorkplaceLabel || '{{ __('All') }}'"></span>
-                            <i class="fas fa-chevron-down text-[10px] transition-transform" :class="activeDropdown === 'workplace' ? 'rotate-180 text-primary' : 'text-gray-400'"></i>
-                        </button>
 
-                        <div x-show="activeDropdown === 'workplace'"
-                             x-cloak
-                             x-transition
-                             class="absolute left-0 top-full mt-2 w-64 rounded-2xl bg-white border border-gray-100 shadow-2xl p-2 z-[100] space-y-1">
-
-                            <button type="button"
-                                    @click="workplaceType = []; applyFilters(); closeDropdown('workplace')"
-                                    class="w-full text-left px-3 py-2.5 rounded-xl text-xs font-medium hover:bg-gray-50 flex items-center justify-between cursor-pointer transition"
-                                    :class="workplaceType.length === 0 ? 'bg-orange-50 text-primary font-semibold' : 'text-gray-700'">
-                                <span>{{ __('All work modes') }}</span>
-                                <i class="fas fa-check text-[10px]" x-show="workplaceType.length === 0"></i>
-                            </button>
-
-                            <div class="border-t border-gray-100 my-1"></div>
-
-                            @foreach($workplaceTypes as $wt)
-                            <label class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs transition text-left cursor-pointer select-none"
-                                   :class="isFilterSelected('workplaceType', '{{ $wt->slug }}') ? 'bg-orange-50 text-primary font-semibold' : 'text-gray-700 hover:bg-gray-50'">
-                                <span class="flex items-center gap-2">
-                                    <input type="checkbox"
-                                           value="{{ $wt->slug }}"
-                                           :checked="isFilterSelected('workplaceType', '{{ $wt->slug }}')"
-                                           @change="toggleFilter('workplaceType', '{{ $wt->slug }}')"
-                                           class="rounded border-gray-300 text-primary focus:ring-primary h-3.5 w-3.5">
-                                    <span>{{ $wt->name }}</span>
-                                </span>
-                                @if($wt->job_seekers_count > 0)
-                                <span class="text-[11px] text-gray-400 font-mono">({{ $wt->job_seekers_count }})</span>
-                                @endif
-                            </label>
-                            @endforeach
-                        </div>
-                    </div>
-                    @endif
 
                     
                     @if($experienceLevels->count() > 0)
