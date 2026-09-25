@@ -18,6 +18,24 @@ fix_write_perms() {
   find "$APP_DIR/storage" "$APP_DIR/bootstrap/cache" -type f -exec chmod 664 {} + 2>/dev/null || true
 }
 
+# public/ altında runtime yazılan fayllar (sitemap.xml və s.) php-fpm (WEB_USER)
+# tərəfindən yazılır; `chown -R` nəticəsində root-a keçdiyi üçün 500 verirdi.
+fix_public_perms() {
+  mkdir -p "$APP_DIR/public"
+  chgrp www-data "$APP_DIR/public" 2>/dev/null || true
+  chmod 2775 "$APP_DIR/public" 2>/dev/null || true
+
+  for f in "$APP_DIR"/public/sitemap*.xml; do
+    [ -e "$f" ] || continue
+    chown "$WEB_USER":www-data "$f" 2>/dev/null || true
+    chmod 664 "$f" 2>/dev/null || true
+  done
+
+  [ -e "$APP_DIR/public/sitemap.xml" ] || touch "$APP_DIR/public/sitemap.xml"
+  chown "$WEB_USER":www-data "$APP_DIR/public/sitemap.xml" 2>/dev/null || true
+  chmod 664 "$APP_DIR/public/sitemap.xml" 2>/dev/null || true
+}
+
 cd "$APP_DIR"
 
 # Deploy öncəsi yalnız BU layihənin bazalarını yedəklə (bütün server bazaları deyil).
@@ -70,6 +88,7 @@ sudo -u "$WEB_USER" "$PHP_BIN" artisan queue:restart || true
 log "İzinler"
 chown -R "$APP_USER":www-data "$APP_DIR"
 fix_write_perms
+fix_public_perms
 
 log "PHP-FPM reload (kesintisiz)"
 sudo systemctl reload "php${PHP_VER}-fpm"
