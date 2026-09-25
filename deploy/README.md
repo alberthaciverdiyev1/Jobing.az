@@ -53,10 +53,14 @@ Yaptığı: `git reset --hard origin/main` → `composer install --no-dev` → `
 
 ## 3) `backup-databases.sh` — deploy öncesi yedək + Telegram
 
-`deploy.sh` her deploy'dan **önce** bunu otomatik çalıştırır:
-- Serverdəki **bütün PostgreSQL bazalarını** (əsas + `jobing_logs`) `pg_dump` ilə yedəkləyir
-- `tar.gz` edib `/var/backups/jobing/`-də saxlayır (14 gün saxlanır)
-- Telegram bot vasitəsilə yedəyi sənə göndərir
+İki rejim:
+- **Arqumentsiz** → serverdəki **bütün** bazalar (həftəlik cron üçün).
+- **Arqumentli** → yalnız göstərilən bazalar. `deploy.sh` hər deploy'dan **önce** yalnız
+  **o layihənin** bazalarını yedəkləyir (`.env` → `DB_DATABASE` + `LOG_DB_DATABASE`).
+
+Hər baza ayrı-ayrı `pg_dump` edilib Telegram-a `sendDocument` ilə göndərilir; fayllar
+`/var/backups/jobing/<tarix>/`-də saxlanılır (28 gün). Süper istifadəçi (peer auth postgres)
+işlədilir. Həftəlik: `0 4 * * 1 /var/www/new-jobing/deploy/backup-databases.sh`
 
 Gərəkli `.env` dəyişənləri:
 ```

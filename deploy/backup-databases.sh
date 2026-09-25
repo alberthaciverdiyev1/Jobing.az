@@ -1,8 +1,11 @@
 #!/usr/bin/env bash
-# Server geneli PostgreSQL yedəyi: HƏR verilənlər bazasını ayrı-ayrı Telegram-a göndərir.
+# PostgreSQL yedəyi: bazaları ayrı-ayrı Telegram-a göndərir.
+#   • Arqumentsiz  → serverdəki BÜTÜN bazalar (həftəlik cron üçün).
+#   • Arqumentlə   → yalnız verilən bazalar, məs. deploy öncəsi layihənin öz bazaları:
+#                    backup-databases.sh jobing_new jobing_new_logs
 # Bütün DB-lər üçün süper istifadəçi (peer auth ilə postgres) istifadə olunur; .env-dəki
 # DB_USERNAME yalnız tək tətbiq üçün yetkili olduğundan istifadə edilmir.
-# Həftəlik cron nümunəsi: 0 4 * * 1 /var/www/new-jobing/deploy/backup-databases.sh
+# Həftəlik cron: 0 4 * * 1 /var/www/new-jobing/deploy/backup-databases.sh
 set -euo pipefail
 
 ENV_FILE="${ENV_FILE:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/.env}"
@@ -31,18 +34,24 @@ RUN_DIR="$BACKUP_DIR/$STAMP"
 mkdir -p "$RUN_DIR"
 
 if [ -n "$SU" ]; then
-  log "Bazalar yedəklənir (süper istifadəçi=$BACKUP_DB_USER, socket=$PG_SOCKET)"
-  DBS="$($SU psql -h "$PG_SOCKET" -tAc "SELECT datname FROM pg_database WHERE datistemplate=false AND datallowconn=true" 2>/dev/null || true)"
   DUMP() { $SU pg_dump -h "$PG_SOCKET" -Fc "$1"; }
+  ALL_DBS="$($SU psql -h "$PG_SOCKET" -tAc "SELECT datname FROM pg_database WHERE datistemplate=false AND datallowconn=true" 2>/dev/null || true)"
 else
   DB_HOST="$(envval DB_HOST)"; DB_HOST="${DB_HOST:-127.0.0.1}"
   DB_PORT="$(envval DB_PORT)"; DB_PORT="${DB_PORT:-5432}"
   DB_USER="$(envval BACKUP_DB_USER)"; DB_USER="${DB_USER:-$BACKUP_DB_USER}"
   export PGPASSWORD="$(envval DB_PASSWORD)"
-  log "Bazalar yedəklənir ($DB_HOST:$DB_PORT, istifadəçi=$DB_USER)"
-  DBS="$(psql -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USER" -tAc "SELECT datname FROM pg_database WHERE datistemplate=false AND datallowconn=true" 2>/dev/null || true)"
   DUMP() { pg_dump -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USER" -Fc "$1"; }
+  ALL_DBS="$(psql -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USER" -tAc "SELECT datname FROM pg_database WHERE datistemplate=false AND datallowconn=true" 2>/dev/null || true)"
 fi
+
+# Arqument verilibsə yalnız onları, yoxsa bütün bazaları yedəklə.
+if [ "$#" -gt 0 ]; then
+  DBS="$*"; SCOPE="seçilmiş"
+else
+  DBS="$ALL_DBS"; SCOPE="bütün"
+fi
+log "Bazalar yedəklənir ($SCOPE): ${DBS:-—}"
 
 [ -z "$DBS" ] && warn "Baza tapılmadı və ya PostgreSQL əlçatmazdır."
 

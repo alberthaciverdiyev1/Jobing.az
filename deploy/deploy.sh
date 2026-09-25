@@ -20,9 +20,16 @@ fix_write_perms() {
 
 cd "$APP_DIR"
 
+# Deploy öncəsi yalnız BU layihənin bazalarını yedəklə (bütün server bazaları deyil).
+envval() { grep -E "^$1=" .env 2>/dev/null | tail -1 | cut -d= -f2- | tr -d '"' ; }
+PROJECT_DBS=()
+for _k in DB_DATABASE LOG_DB_DATABASE; do
+  _v="$(envval "$_k" || true)"
+  [ -n "$_v" ] && PROJECT_DBS+=("$_v")
+done
 if [ -x "deploy/backup-databases.sh" ]; then
-  log "Verilənlər bazası yedəyi (deploy öncəsi)"
-  bash deploy/backup-databases.sh || echo "⚠ Yedək alınmadı, deploy davam edir"
+  log "Layihə DB yedəyi (deploy öncəsi): ${PROJECT_DBS[*]:-—}"
+  bash deploy/backup-databases.sh "${PROJECT_DBS[@]}" || echo "⚠ Yedək alınmadı, deploy davam edir"
 fi
 
 log "Kod çekiliyor ($BRANCH)"
