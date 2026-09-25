@@ -136,23 +136,23 @@ class VacancyService
 
         $sort = $filters['sort'] ?? 'latest';
         if ($sort === 'oldest') {
-            $query->orderBy('is_featured', 'desc')->orderByRaw('vacancies.updated_at ASC');
+            $query->orderBy('is_featured', 'desc')->orderByRaw('COALESCE(vacancies.bumped_at, vacancies.created_at) ASC');
         } elseif ($sort === 'salary_desc' || $sort === 'salary_high') {
-            $query->orderBy('is_featured', 'desc')->orderByRaw('COALESCE(salary_max, salary_min) DESC NULLS LAST')->orderByRaw('vacancies.updated_at DESC');
+            $query->orderBy('is_featured', 'desc')->orderByRaw('COALESCE(salary_max, salary_min) DESC NULLS LAST')->orderByRaw('COALESCE(vacancies.bumped_at, vacancies.created_at) DESC');
         } elseif ($sort === 'salary_asc') {
-            $query->orderBy('is_featured', 'desc')->orderByRaw('COALESCE(salary_min, salary_max) ASC NULLS LAST')->orderByRaw('vacancies.updated_at DESC');
+            $query->orderBy('is_featured', 'desc')->orderByRaw('COALESCE(salary_min, salary_max) ASC NULLS LAST')->orderByRaw('COALESCE(vacancies.bumped_at, vacancies.created_at) DESC');
         } elseif ($sort === 'views') {
-            $query->orderBy('is_featured', 'desc')->orderByDesc('views_count')->orderByRaw('vacancies.updated_at DESC');
+            $query->orderBy('is_featured', 'desc')->orderByDesc('views_count')->orderByRaw('COALESCE(vacancies.bumped_at, vacancies.created_at) DESC');
         } elseif ($sort === 'deadline') {
-            $query->orderBy('is_featured', 'desc')->orderByRaw('deadline ASC NULLS LAST')->orderByRaw('vacancies.updated_at DESC');
+            $query->orderBy('is_featured', 'desc')->orderByRaw('deadline ASC NULLS LAST')->orderByRaw('COALESCE(vacancies.bumped_at, vacancies.created_at) DESC');
         } elseif ($sort === 'featured') {
-            $query->orderByDesc('is_featured')->orderByRaw('vacancies.updated_at DESC');
+            $query->orderByDesc('is_featured')->orderByRaw('COALESCE(vacancies.bumped_at, vacancies.created_at) DESC');
         } elseif ($sort === 'title_asc' || $sort === 'alphabetical') {
             $query->orderBy('title', 'asc');
         } elseif ($sort === 'title_desc') {
             $query->orderBy('title', 'desc');
         } else {
-            $query->orderBy('is_featured', 'desc')->orderByRaw('vacancies.updated_at DESC');
+            $query->orderBy('is_featured', 'desc')->orderByRaw('COALESCE(vacancies.bumped_at, vacancies.created_at) DESC');
         }
 
         if (! $includeScraped) {
@@ -450,11 +450,12 @@ class VacancyService
 
     private function paginateMergedListing($nativeQuery, $scrapedQuery, string $sort, int $perPage): LengthAwarePaginator
     {
-        // Kart created_at gösterir; sıralama da aynı alana göre olsun. Native ilanlar
-        // (promote/bump) updated_at ile kalır; scraped ilanlar eklenme zamanına (created_at) göre.
+        // Sıralama "elanda görünmə vaxtı"na görə olmalıdır, `updated_at`-ə görə YOX —
+        // çünki `updated_at` hər baxışda (views_count artımı) dəyişir və köhnə native
+        // elanları haqsız yerə önə keçirir. Native üçün: əvvəl bump (promote), yoxsa created_at.
         $columns = 'id, is_featured, salary_min, salary_max, views_count, deadline, title';
-        $nativeQuery->selectRaw("'v' as src, updated_at as sort_at, " . $columns);
-        $scrapedQuery->selectRaw("'s' as src, coalesce(created_at, updated_at) as sort_at, " . $columns);
+        $nativeQuery->selectRaw("'v' as src, coalesce(bumped_at, created_at) as sort_at, " . $columns);
+        $scrapedQuery->selectRaw("'s' as src, coalesce(bumped_at, created_at, updated_at) as sort_at, " . $columns);
 
         $makeUnion = fn () => DB::query()
             ->fromSub($nativeQuery, 'v')
@@ -509,7 +510,10 @@ class VacancyService
             ->firstOrFail();
 
         if (! is_bot_request()) {
-            $job->increment('views_count');
+            // Query builder ilə artırırıq ki, Eloquent `updated_at`-i dəyişməsin —
+            // əks halda hər baxış elanı feed-də önə keçirirdi.
+            DB::table('vacancies')->where('id', $job->id)->increment('views_count');
+            $job->views_count = (int) $job->views_count + 1;
         }
 
         $relatedJobs = Vacancy::with(['company', 'city', 'category', 'jobType', 'workplaceType', 'experienceLevel', 'skillRecords'])
