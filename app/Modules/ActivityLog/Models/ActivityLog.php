@@ -39,7 +39,18 @@ class ActivityLog extends Model
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        // `users` cədvəli əsas bazadadır, `logs` bazasında deyil. Laravel-in
+        // newRelatedInstance davranışı related modelə parent-in connection-ını
+        // mənimsətdiyi üçün (ActivityLog=>logs) `users` sorğusu səhv bazaya
+        // gedirdi və "relation users does not exist" xətası verirdi. Relation-u
+        // açıq şəkildə əsas connection-a bağlayırıq.
+        return $this->newBelongsTo(
+            (new User)->setConnection(config('database.default'))->newQuery(),
+            $this,
+            'user_id',
+            'id',
+            'user'
+        );
     }
 
     public function getFlagEmojiAttribute(): string
