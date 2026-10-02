@@ -688,7 +688,7 @@ class VacancyService
             'is_featured' => false,
         ]);
 
-        $vacancy->skillRecords()->sync($this->resolveSkillIds($skills ?? []));
+        $vacancy->skillRecords()->sync($this->resolveUniqueSkillIds($skills ?? []));
 
         return $vacancy->load('skillRecords');
     }
@@ -701,6 +701,44 @@ class VacancyService
             ->filter(fn (Skill $skill) => in_array(mb_strtolower((string) $skill->name), $normalized, true))
             ->pluck('id')
             ->map(fn ($id) => (int) $id)
+            ->values()
+            ->all();
+    }
+
+    /**
+     * Hər biri üçün yalnız BİR skill ID-si qaytarır.
+     *
+     * Eyni adlı skill-lər müxtəlif kateqoriyalarda təkrar yaradıla bilər
+     * (məs. "SEO" 10 fərqli ID-yə malikdir). Saxlama zamanı adı bütün
+     * variantlarla uyğunlaşdırsaq, tək seçim onlarla kopya kimi yazılır.
+     * Bu metod hər ad üçün ilk uyğun skill-i seçərək bunun qarşısını alır.
+     */
+    private function resolveUniqueSkillIds(array $names): array
+    {
+        $normalized = [];
+        foreach ($names as $name) {
+            $key = mb_strtolower(trim((string) $name));
+            if ($key !== '') {
+                $normalized[$key] = true;
+            }
+        }
+
+        if ($normalized === []) {
+            return [];
+        }
+
+        $skills = Skill::cachedActive();
+
+        return collect(array_keys($normalized))
+            ->map(function (string $name) use ($skills): ?int {
+                $match = $skills->first(
+                    fn (Skill $skill) => mb_strtolower(trim((string) $skill->name)) === $name
+                );
+
+                return $match ? (int) $match->id : null;
+            })
+            ->filter()
+            ->unique()
             ->values()
             ->all();
     }
