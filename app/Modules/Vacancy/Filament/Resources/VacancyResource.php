@@ -198,23 +198,14 @@ class VacancyResource extends Resource
 
                                 Forms\Components\Select::make('skillRecords')
                                     ->label(__('Required Skills (Tags)'))
-                                    ->options(function (Forms\Get $get) {
-                                        $ids = array_filter([
-                                            $get('parent_category_id'),
-                                            $get('category_id'),
-                                        ]);
-
-                                        $query = \App\Modules\JobAttribute\Models\Skill::active();
-
-                                        $options = $ids
-                                            ? $query->whereIn('category_id', $ids)->get()
-                                            : $query->get();
-
-                                        return $options
-                                            ->mapWithKeys(fn ($skill) => [$skill->id => (string) $skill->name])
-                                            ->all();
-                                    })
+                                    // `name` sütunu json-dur; Filament default olaraq
+                                    // `order by skills.name` yazır və PostgreSQL bunu
+                                    // dəstəkləmir (42883 → 500). Option label callback-i
+                                    // verdikdə Filament bu orderBy-ı tətbiq etmir.
                                     ->relationship('skillRecords', 'name')
+                                    ->getOptionLabelFromRecordUsing(
+                                        fn (\App\Modules\JobAttribute\Models\Skill $record): string => (string) $record->name
+                                    )
                                     ->multiple()
                                     ->searchable()
                                     ->preload(),
