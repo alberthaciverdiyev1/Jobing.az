@@ -2,6 +2,18 @@
 
 return [
 
+    /*
+    |--------------------------------------------------------------------------
+    | Canonical Site URL
+    |--------------------------------------------------------------------------
+    |
+    | Absolute public base URL used for SEO artifacts (sitemap.xml, robots.txt)
+    | and canonical links. Independent from APP_URL so that generating these
+    | locally (e.g. on http://localhost) never bakes localhost into the output
+    | that gets deployed. Override with SITE_URL if the domain changes.
+    |
+    */
+    'url' => rtrim(env('SITE_URL', 'https://jobing.az'), '/'),
 
     'whatsapp_fallback' => env('SITE_WHATSAPP_FALLBACK', '994500000000'),
 

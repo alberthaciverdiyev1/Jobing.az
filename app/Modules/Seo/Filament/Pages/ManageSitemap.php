@@ -43,7 +43,7 @@ class ManageSitemap extends Page
     public function loadSitemaps(): void
     {
         $this->sitemaps = [];
-        $baseUrl = rtrim(config('app.url'), '/');
+        $baseUrl = rtrim(config('site.url') ?: config('app.url'), '/');
 
         foreach (File::glob(public_path() . '/sitemap*.xml') as $file) {
             $name = basename($file);

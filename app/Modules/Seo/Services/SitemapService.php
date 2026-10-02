@@ -7,6 +7,7 @@ use App\Modules\Company\Models\Company;
 use App\Modules\JobSeeker\Models\JobSeeker;
 use App\Modules\Vacancy\Models\Vacancy;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\URL;
 
 class SitemapService
 {
@@ -14,7 +15,19 @@ class SitemapService
 
     public function generate(): array
     {
-        $baseUrl = rtrim(config('app.url'), '/');
+        $baseUrl = rtrim(config('site.url') ?: config('app.url'), '/');
+        $scheme = parse_url($baseUrl, PHP_URL_SCHEME) ?: 'https';
+
+        // Make every route()/url() call resolve against the canonical public
+        // domain instead of the current request host or a local APP_URL.
+        URL::forceRootUrl($baseUrl);
+        URL::forceScheme($scheme);
+
+        return $this->build($baseUrl);
+    }
+
+    private function build(string $baseUrl): array
+    {
         $urls = [];
 
         $staticRoutes = [
@@ -115,7 +128,20 @@ class SitemapService
             ]);
         }
 
+        $this->writeRobotsFile($publicPath . '/robots.txt', $baseUrl);
+
         return $generatedFiles;
+    }
+
+    private function writeRobotsFile(string $path, string $baseUrl): void
+    {
+        $content = 'User-agent: *' . PHP_EOL
+            . 'Disallow:' . PHP_EOL
+            . 'Allow: /' . PHP_EOL
+            . PHP_EOL
+            . 'Sitemap: ' . $baseUrl . '/sitemap.xml' . PHP_EOL;
+
+        File::put($path, $content);
     }
 
     private function writeSitemapFile(string $path, array $urls): void
