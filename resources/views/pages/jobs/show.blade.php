@@ -111,8 +111,8 @@
                     @endif
 
                     @if($canEmail && $applyEmail)
-                    <a href="{{ $mailtoHref }}" class="px-5 py-3 rounded-xl border border-gray-200 hover:border-gray-300 hover:bg-gray-50 text-gray-700 font-semibold text-xs transition duration-150 flex items-center gap-2">
-                        <i class="far fa-envelope text-xs text-gray-500"></i>
+                    <a href="{{ $mailtoHref }}" class="px-5 py-3 rounded-xl border border-orange-200 bg-orange-50 hover:bg-orange-100 text-primary font-semibold text-xs transition duration-150 flex items-center gap-2 shadow-2xs">
+                        <i class="far fa-envelope text-xs text-primary"></i>
                         <span>{{ __('Apply by email') }}</span>
                     </a>
                     @endif
@@ -226,19 +226,19 @@
                     </span>
                 </div>
                 @else
-                <div class="p-6 rounded-xl bg-slate-900 text-white flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-xs">
+                <div class="p-6 rounded-xl bg-primary text-white flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-xs">
                     <div>
                         <h3 class="text-sm font-semibold text-white">{{ __('Do you want to apply for this position?') }}</h3>
-                        <p class="text-xs text-slate-300 mt-0.5">{{ __('Submit your CV to deliver your application directly to the employer.') }}</p>
+                        <p class="text-xs text-orange-100 mt-0.5">{{ __('Submit your CV to deliver your application directly to the employer.') }}</p>
                     </div>
                     <div class="shrink-0 flex items-center gap-2">
                         @if($canInternal)
-                        <button @click="openModal()" type="button" class="px-5 py-2.5 rounded-lg bg-primary hover:bg-primary-dark text-white font-semibold text-xs shadow-xs transition duration-150 cursor-pointer">
+                        <button @click="openModal()" type="button" class="px-5 py-2.5 rounded-lg bg-white hover:bg-orange-50 text-primary font-semibold text-xs shadow-xs transition duration-150 cursor-pointer">
                             {{ __('Apply with CV') }}
                         </button>
                         @endif
                         @if($canEmail && $applyEmail)
-                        <a href="{{ $mailtoHref }}" class="px-4 py-2.5 rounded-lg border border-slate-700 hover:bg-slate-800 text-white font-semibold text-xs transition duration-150">
+                        <a href="{{ $mailtoHref }}" class="px-4 py-2.5 rounded-lg border border-white/50 bg-white/10 hover:bg-white/20 text-white font-semibold text-xs transition duration-150">
                             {{ __('By email') }}
                         </a>
                         @endif

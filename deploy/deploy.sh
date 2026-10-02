@@ -18,14 +18,15 @@ fix_write_perms() {
   find "$APP_DIR/storage" "$APP_DIR/bootstrap/cache" -type f -exec chmod 664 {} + 2>/dev/null || true
 }
 
-# public/ altında runtime yazılan fayllar (sitemap.xml və s.) php-fpm (WEB_USER)
-# tərəfindən yazılır; `chown -R` nəticəsində root-a keçdiyi üçün 500 verirdi.
+# public/ altında runtime yazılan fayllar (sitemap.xml, robots.txt və s.) php-fpm
+# (WEB_USER) tərəfindən yazılır; `chown -R` nəticəsində root-a keçdiyi üçün
+# file_put_contents: Permission denied (500) verirdi.
 fix_public_perms() {
   mkdir -p "$APP_DIR/public"
   chgrp www-data "$APP_DIR/public" 2>/dev/null || true
   chmod 2775 "$APP_DIR/public" 2>/dev/null || true
 
-  for f in "$APP_DIR"/public/sitemap*.xml; do
+  for f in "$APP_DIR"/public/sitemap*.xml "$APP_DIR/public/robots.txt"; do
     [ -e "$f" ] || continue
     chown "$WEB_USER":www-data "$f" 2>/dev/null || true
     chmod 664 "$f" 2>/dev/null || true
@@ -34,6 +35,10 @@ fix_public_perms() {
   [ -e "$APP_DIR/public/sitemap.xml" ] || touch "$APP_DIR/public/sitemap.xml"
   chown "$WEB_USER":www-data "$APP_DIR/public/sitemap.xml" 2>/dev/null || true
   chmod 664 "$APP_DIR/public/sitemap.xml" 2>/dev/null || true
+
+  [ -e "$APP_DIR/public/robots.txt" ] || touch "$APP_DIR/public/robots.txt"
+  chown "$WEB_USER":www-data "$APP_DIR/public/robots.txt" 2>/dev/null || true
+  chmod 664 "$APP_DIR/public/robots.txt" 2>/dev/null || true
 }
 
 cd "$APP_DIR"
