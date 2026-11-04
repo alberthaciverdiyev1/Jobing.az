@@ -32,6 +32,10 @@ return new class extends Migration
 
     private function hasTrgm(): bool
     {
+        if (DB::connection()->getDriverName() !== 'pgsql') {
+            return false;
+        }
+
         return (bool) DB::selectOne("SELECT 1 FROM pg_extension WHERE extname = 'pg_trgm'");
     }
 };

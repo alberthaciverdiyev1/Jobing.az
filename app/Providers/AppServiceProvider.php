@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\View\Composers\NavbarComposer;
+use App\View\Composers\StoryBarComposer;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
@@ -23,6 +24,7 @@ class AppServiceProvider extends ServiceProvider
         }
 
         View::composer(['components.navbar', 'layouts.partials.*'], NavbarComposer::class);
+        View::composer('components.story-bar', StoryBarComposer::class);
 
         \Filament\Resources\Pages\CreateRecord::disableCreateAnother();
 

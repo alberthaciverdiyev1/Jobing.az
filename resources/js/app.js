@@ -6,6 +6,7 @@ import companiesManager from './companies';
 import jobSeekersManager from './jobSeekers';
 import blogManager from './blog';
 import Favorites from './favorites';
+import storyViewer, { syncPendingStoryViews } from './stories';
 
 window.Alpine = Alpine;
 Alpine.data('jobsManager', jobsManager);
@@ -13,6 +14,7 @@ Alpine.data('resumesManager', resumesManager);
 Alpine.data('companiesManager', companiesManager);
 Alpine.data('jobSeekersManager', jobSeekersManager);
 Alpine.data('blogManager', blogManager);
+Alpine.data('storyViewer', storyViewer);
 
 const contactReveal = (url, hasPhone) => ({
     revealed: false,
@@ -52,6 +54,7 @@ window.Favorites = Favorites;
 
 document.addEventListener('DOMContentLoaded', () => {
     Favorites.init();
+    syncPendingStoryViews();
 });
 
 Alpine.start();

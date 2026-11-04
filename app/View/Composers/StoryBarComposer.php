@@ -1,0 +1,75 @@
+<?php
+
+namespace App\View\Composers;
+
+use App\Modules\Story\Models\Story;
+use App\Modules\Story\Models\StoryView;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\View\View;
+
+class StoryBarComposer
+{
+    public function compose(View $view): void
+    {
+        $stories = Cache::remember(
+            'stories.bar.'.app()->getLocale(),
+            now()->addSeconds(30),
+            fn (): Collection => Story::query()
+                ->active()
+                ->with([
+                    'user:id,name',
+                    'company:id,name,logo',
+                ])
+                ->orderBy('created_at')
+                ->get(),
+        );
+
+        if ($stories->isEmpty()) {
+            $view->with('storyRings', collect());
+
+            return;
+        }
+
+        $viewedIds = auth()->check()
+            ? StoryView::query()
+                ->where('user_id', auth()->id())
+                ->whereIn('story_id', $stories->pluck('id'))
+                ->pluck('story_id')
+                ->all()
+            : [];
+
+        $rings = $stories
+            ->groupBy(fn (Story $story): string => $story->company_id
+                ? 'company-'.$story->company_id
+                : 'user-'.$story->user_id)
+            ->map(function (Collection $group) use ($viewedIds): array {
+                $first = $group->first();
+
+                $storiesData = $group->map(fn (Story $story): array => [
+                    'id' => $story->id,
+                    'type' => $story->isVideo() ? 'video' : 'image',
+                    'src' => $story->media_url,
+                    'thumb' => $story->thumbnail_url,
+                    'link' => $story->link_url,
+                    'time' => $story->created_at?->diffForHumans(),
+                    'viewed' => in_array($story->id, $viewedIds, true),
+                ])->values();
+
+                return [
+                    'key' => ($first->company_id ? 'company-' : 'user-').($first->company_id ?: $first->user_id),
+                    'name' => $first->owner_name,
+                    'avatar' => $first->owner_avatar,
+                    'initial' => $first->owner_initial,
+                    'viewed' => $storiesData->every(fn (array $story): bool => $story['viewed']),
+                    'latest_at' => $group->max('created_at')?->getTimestamp() ?? 0,
+                    'stories' => $storiesData,
+                ];
+            })
+            ->sortByDesc('latest_at')
+            ->sortBy('viewed')
+            ->values();
+
+        $view->with('storyRings', $rings);
+    }
+}

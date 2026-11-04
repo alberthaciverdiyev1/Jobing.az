@@ -52,6 +52,7 @@ class CompanyPanelProvider extends PanelProvider
                 \App\Modules\JobSeeker\Filament\Resources\CompanyJobSeekerResource::class,
                 \App\Modules\Resume\Filament\Resources\CompanyResumeResource::class,
                 \App\Modules\Company\Filament\Resources\CompanyMessageTemplateResource::class,
+                \App\Modules\Story\Filament\Resources\CompanyStoryResource::class,
             ])
             ->pages([
                 \App\Modules\Company\Filament\Pages\CompanyProfile::class,

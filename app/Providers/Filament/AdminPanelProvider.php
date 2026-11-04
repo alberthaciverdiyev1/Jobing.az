@@ -60,6 +60,7 @@ class AdminPanelProvider extends PanelProvider
                 \App\Modules\Visitor\Filament\Resources\VisitorResource::class,
                 \App\Modules\SystemLog\Filament\Resources\AppLogResource::class,
                 \App\Modules\Blog\Filament\Resources\BlogResource::class,
+                \App\Modules\Story\Filament\Resources\StoryResource::class,
                 \App\Modules\News\Filament\Resources\NewsResource::class,
                 \App\Modules\News\Filament\Resources\RssSourceResource::class,
                 \App\Modules\Inquiry\Filament\Resources\InquiryResource::class,

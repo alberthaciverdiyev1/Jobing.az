@@ -101,6 +101,8 @@
 
     <x-navbar />
 
+    <x-story-bar />
+
     <main class="flex-grow pb-16 xl:pb-0">
         @if(!empty($resolvedH1))
         <h1 class="sr-only">{{ $resolvedH1 }}</h1>
@@ -109,6 +111,11 @@
     </main>
 
     <x-footer />
+
+    <script>
+        window.storyAuth = @json(auth()->check());
+        window.storySyncUrl = @json(auth()->check() ? route('stories.sync') : null);
+    </script>
 
     @stack('scripts')
 

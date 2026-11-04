@@ -34,6 +34,10 @@ return new class extends Migration
 
     private function columnType(string $table): ?string
     {
+        if (DB::connection()->getDriverName() !== 'pgsql') {
+            return null;
+        }
+
         $row = DB::selectOne(
             'select data_type from information_schema.columns where table_name = ? and column_name = ?',
             [$table, 'name']
