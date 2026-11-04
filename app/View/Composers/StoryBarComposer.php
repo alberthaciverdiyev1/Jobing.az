@@ -4,6 +4,7 @@ namespace App\View\Composers;
 
 use App\Modules\Story\Models\Story;
 use App\Modules\Story\Models\StoryView;
+use App\Modules\Story\Services\StoryMediaProcessor;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\View\View;
@@ -15,14 +16,7 @@ class StoryBarComposer
         $stories = Cache::remember(
             'stories.bar.'.app()->getLocale(),
             now()->addSeconds(30),
-            fn (): Collection => Story::query()
-                ->active()
-                ->with([
-                    'user:id,name',
-                    'company:id,name,logo',
-                ])
-                ->orderBy('created_at')
-                ->get(),
+            fn (): Collection => $this->activeStories(),
         );
 
         if ($stories->isEmpty()) {
@@ -60,6 +54,7 @@ class StoryBarComposer
                     'key' => ($first->company_id ? 'company-' : 'user-').($first->company_id ?: $first->user_id),
                     'name' => $first->owner_name,
                     'avatar' => $first->owner_avatar,
+                    'thumb' => $group->last()->thumbnail_url,
                     'initial' => $first->owner_initial,
                     'viewed' => $storiesData->every(fn (array $story): bool => $story['viewed']),
                     'latest_at' => $group->max('created_at')?->getTimestamp() ?? 0,
@@ -71,5 +66,30 @@ class StoryBarComposer
             ->values();
 
         $view->with('storyRings', $rings);
+    }
+
+    protected function activeStories(): Collection
+    {
+        $stories = Story::query()
+            ->active()
+            ->with([
+                'user:id,name',
+                'company:id,name,logo',
+            ])
+            ->orderBy('created_at')
+            ->get();
+
+        // Self-healing for stories uploaded before preview thumbnails existed.
+        $processor = app(StoryMediaProcessor::class);
+        $processed = 0;
+
+        foreach ($stories as $story) {
+            if ($story->media_processed_at === null && $processed < 25) {
+                $processor->process($story);
+                $processed++;
+            }
+        }
+
+        return $stories;
     }
 }

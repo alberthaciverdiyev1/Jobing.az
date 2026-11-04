@@ -54,8 +54,7 @@ class Story extends Model
             static::flushBarCache();
 
             if (
-                $story->media_type === 'video'
-                && $story->media_processed_at === null
+                $story->media_processed_at === null
                 && $story->media_path
             ) {
                 app(StoryMediaProcessor::class)->process($story);

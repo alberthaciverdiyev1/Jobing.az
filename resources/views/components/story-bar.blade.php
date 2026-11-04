@@ -1,7 +1,7 @@
 @if($storyRings->isNotEmpty())
 <div
     x-data="storyViewer"
-    data-stories="{{ Js::from($storyRings) }}"
+    data-stories="{{ json_encode($storyRings) }}"
     data-auth="{{ auth()->check() ? '1' : '0' }}"
     data-view-base="{{ url('/stories') }}"
     class="bg-white border-b border-gray-200/80"
@@ -17,8 +17,13 @@
                     aria-label="{{ __('View story: :name', ['name' => $ring['name']]) }}"
                 >
                     <span class="relative p-[2.5px] rounded-full bg-gradient-to-tr {{ $ring['viewed'] ? 'from-gray-300 via-gray-200 to-gray-300' : 'from-orange-500 via-rose-500 to-violet-500' }} transition-transform duration-200 group-hover:scale-105 group-active:scale-95">
-                        <span class="block p-[2px] bg-white rounded-full">
-                            @if($ring['avatar'])
+                        <span class="relative block p-[2px] bg-white rounded-full">
+                            @if($ring['thumb'])
+                                <img src="{{ $ring['thumb'] }}" alt="{{ $ring['name'] }}" class="w-14 h-14 rounded-full object-cover" loading="lazy">
+                                @if($ring['avatar'])
+                                    <img src="{{ $ring['avatar'] }}" alt="" class="absolute -bottom-0.5 -right-0.5 w-5 h-5 rounded-full object-cover ring-2 ring-white bg-white">
+                                @endif
+                            @elseif($ring['avatar'])
                                 <img src="{{ $ring['avatar'] }}" alt="{{ $ring['name'] }}" class="w-14 h-14 rounded-full object-cover" loading="lazy">
                             @else
                                 <span class="w-14 h-14 rounded-full bg-slate-900 text-white flex items-center justify-center text-lg font-semibold">

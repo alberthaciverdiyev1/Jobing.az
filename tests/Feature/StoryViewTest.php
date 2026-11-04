@@ -56,6 +56,8 @@ class StoryViewTest extends TestCase
         $this->get('/')
             ->assertOk()
             ->assertSee('storyViewer', false)
+            ->assertSee('data-stories="[{&quot;key&quot;', false)
+            ->assertDontSee('data-stories="JSON.parse', false)
             ->assertSee('Story Owner');
     }
 

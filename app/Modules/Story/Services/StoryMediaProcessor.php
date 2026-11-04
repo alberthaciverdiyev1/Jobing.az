@@ -11,14 +11,16 @@ use Symfony\Component\Process\Process;
 class StoryMediaProcessor
 {
     /**
-     * Compress an uploaded story video and generate a poster thumbnail.
+     * Compress an uploaded story video (and generate its poster) or create a
+     * low-resolution preview image for an uploaded photo.
+     *
      * Failures never break the upload; the original file is kept instead.
      */
     public function process(Story $story): void
     {
         $disk = Storage::disk('public');
 
-        if (! $story->isVideo() || ! $disk->exists($story->media_path)) {
+        if (! $story->media_path || ! $disk->exists($story->media_path)) {
             $this->markProcessed($story);
 
             return;
@@ -27,7 +29,7 @@ class StoryMediaProcessor
         $ffmpeg = $this->ffmpegBinary();
 
         if ($ffmpeg === null) {
-            Log::warning('Story video uploaded without compression: ffmpeg binary not found.', [
+            Log::warning('Story media processed without ffmpeg: binary not found.', [
                 'story_id' => $story->id,
             ]);
             $this->markProcessed($story);
@@ -35,6 +37,41 @@ class StoryMediaProcessor
             return;
         }
 
+        if ($story->isVideo()) {
+            $this->processVideo($story, $disk, $ffmpeg);
+
+            return;
+        }
+
+        $this->processImage($story, $disk, $ffmpeg);
+    }
+
+    /**
+     * Generate a small preview image for a photo story.
+     */
+    protected function processImage(Story $story, $disk, string $ffmpeg): void
+    {
+        $baseName = pathinfo($story->media_path, PATHINFO_FILENAME);
+
+        $thumbnailRelative = $this->generateThumbnail(
+            $ffmpeg,
+            $disk,
+            $disk->path($story->media_path),
+            $baseName,
+            seekSecond: false,
+        );
+
+        $story->forceFill([
+            'thumbnail_path' => $thumbnailRelative,
+            'media_processed_at' => now(),
+        ])->saveQuietly();
+    }
+
+    /**
+     * Compress a video story and generate its poster thumbnail.
+     */
+    protected function processVideo(Story $story, $disk, string $ffmpeg): void
+    {
         $sourcePath = $disk->path($story->media_path);
         $directory = dirname($story->media_path);
         $directory = $directory === '.' ? '' : $directory;
@@ -65,7 +102,7 @@ class StoryMediaProcessor
             return;
         }
 
-        $thumbnailRelative = $this->generateThumbnail($ffmpeg, $disk, $outputPath, $baseName);
+        $thumbnailRelative = $this->generateThumbnail($ffmpeg, $disk, $outputPath, $baseName, seekSecond: true);
 
         $disk->delete($story->media_path);
 
@@ -76,8 +113,13 @@ class StoryMediaProcessor
         ])->saveQuietly();
     }
 
-    protected function generateThumbnail(string $ffmpeg, $disk, string $videoPath, string $baseName): ?string
-    {
+    protected function generateThumbnail(
+        string $ffmpeg,
+        $disk,
+        string $inputPath,
+        string $baseName,
+        bool $seekSecond,
+    ): ?string {
         $thumbnailRelative = 'stories/thumbnails/'.$baseName.'.jpg';
         $thumbnailPath = $disk->path($thumbnailRelative);
 
@@ -85,12 +127,18 @@ class StoryMediaProcessor
             @mkdir(dirname($thumbnailPath), 0775, true);
         }
 
+        $arguments = ['-y'];
+
+        if ($seekSecond) {
+            $arguments = [...$arguments, '-ss', '1'];
+        }
+
         $created = $this->run($ffmpeg, [
-            '-y',
-            '-ss', '1',
-            '-i', $videoPath,
+            ...$arguments,
+            '-i', $inputPath,
             '-frames:v', '1',
-            '-vf', "scale='min(720,iw)':-2",
+            '-vf', "scale='min(320,iw)':-2",
+            '-q:v', '4',
             $thumbnailPath,
         ], 60);
 
