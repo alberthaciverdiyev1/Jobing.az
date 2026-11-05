@@ -361,13 +361,9 @@ class JobingPostApiController extends Controller
      */
     private function sortByPriority($vacancies)
     {
-        $tech = [
-            'bilisim-teknolojileri-it', 'yazilim-gelistirme-programlama', 'sistem-yonetimi-devops',
-            'veritabani-yonetimi-ve-gelistirme-dba', 'it-uzmani-bt-danismani', 'bt-proje-yonetimi-scrum-master',
-            'donanim-ve-teknik-destek-uzmani', 'diger-bt-rolleri', 'web-tasarimi-ui-ux', 'grafik-tasarimci',
-        ];
-        $smm = ['smm-yoneticisi-sosyal-medya-uzmani', 'pazarlama-reklam-ve-pr', 'pazarlama-muduru-dijital-pazarlamaci', 'icerik-yoneticisi', 'metin-yazari-editor'];
-        $accounting = ['finans-ve-muhasebe', 'muhasebeci', 'kredi-uzmani', 'denetci-denetmen', 'finansal-analist-yatirim-analisti', 'finans-muduru', 'mali-isler-direktoru-cfo'];
+        $tech = ['informasiya-texnologiyalari', 'proqramlasdirma', 'sistem-idareetmesi', 'veb-dizayn-ui-ux'];
+        $smm = ['smm-menecer-kontent-menecer', 'marketinq-reklam-pr', 'marketinq-meneceri-reqemsal-marketoloq'];
+        $accounting = ['maliyye-ve-muhasibatliq', 'muhasib', 'auditor', 'kredit-mutexessisi'];
 
         return $vacancies->sortByDesc(function (ScrapedVacancy $vacancy) use ($tech, $smm, $accounting) {
             $slug = (string) ($vacancy->category?->slug ?? '');
