@@ -33,11 +33,13 @@ class StoryBarComposer
                 ->all()
             : [];
 
+        $user = auth()->user();
+
         $rings = $stories
             ->groupBy(fn (Story $story): string => $story->company_id
                 ? 'company-'.$story->company_id
                 : 'user-'.$story->user_id)
-            ->map(function (Collection $group) use ($viewedIds): array {
+            ->map(function (Collection $group) use ($viewedIds, $user): array {
                 $first = $group->first();
 
                 $storiesData = $group->map(fn (Story $story): array => [
@@ -48,6 +50,8 @@ class StoryBarComposer
                     'link' => $story->link_url,
                     'time' => $story->created_at?->diffForHumans(),
                     'viewed' => in_array($story->id, $viewedIds, true),
+                    // Baxış sayını yalnız story sahibi (və super admin) görür.
+                    'views' => $user && $this->canSeeViews($user, $story) ? (int) $story->views_count : null,
                 ])->values();
 
                 return [
@@ -66,6 +70,19 @@ class StoryBarComposer
             ->values();
 
         $view->with('storyRings', $rings);
+    }
+
+    protected function canSeeViews($user, Story $story): bool
+    {
+        if ($user->is_admin) {
+            return true;
+        }
+
+        if ((int) $story->user_id === (int) $user->id) {
+            return true;
+        }
+
+        return $story->company_id && (int) $story->company_id === (int) $user->company_id;
     }
 
     protected function activeStories(): Collection

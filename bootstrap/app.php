@@ -27,7 +27,9 @@ return Application::configure(basePath: dirname(__DIR__))
             \App\Http\Middleware\RedirectCompanyFromUserPanel::class,
         ]);
 
-        $middleware->validateCsrfTokens(except: ['api/telegram/webhook']);
+        // `stories/*/view` — sadə baxış sayğacıdır, heç nəyi dəyişmir və qonaqlar üçün
+        // CSRF tokeni köhnə/keşlənmiş səhifələrdə uyğunsuz ola bilər; token tələb etmirik.
+        $middleware->validateCsrfTokens(except: ['api/telegram/webhook', 'stories/*/view']);
 
         $middleware->alias([
             'auth' => \Illuminate\Auth\Middleware\Authenticate::class,

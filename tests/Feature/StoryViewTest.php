@@ -61,6 +61,18 @@ class StoryViewTest extends TestCase
             ->assertSee('Story Owner');
     }
 
+    public function test_only_the_story_owner_sees_the_view_counter(): void
+    {
+        $owner = User::factory()->create();
+        $other = User::factory()->create();
+        $story = $this->makeStory(['user_id' => $owner->id]);
+        $story->increment('views_count', 5);
+
+        $this->actingAs($owner)->get('/')->assertOk()->assertSee('&quot;views&quot;:5', false);
+        $this->actingAs($other)->get('/')->assertOk()->assertSee('&quot;views&quot;:null', false);
+        $this->get('/')->assertOk()->assertSee('&quot;views&quot;:null', false);
+    }
+
     public function test_every_logged_in_view_is_counted_but_the_viewer_is_unique(): void
     {
         $user = User::factory()->create();

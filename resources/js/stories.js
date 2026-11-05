@@ -225,7 +225,21 @@ export default function storyViewer() {
                     'X-Requested-With': 'XMLHttpRequest',
                     'X-CSRF-TOKEN': csrf,
                 },
-            }).catch(() => {});
+            })
+                .then((response) => (response.ok ? response.json() : null))
+                .then((data) => {
+                    if (! data || data.views_count == null) {
+                        return;
+                    }
+
+                    // Sahibə göstərilən sayğacı canlı yenilə.
+                    const story = this.currentStory;
+
+                    if (story && story.id === storyId && story.views !== null) {
+                        story.views = data.views_count;
+                    }
+                })
+                .catch(() => {});
 
             if (this.isAuth) {
                 return;
