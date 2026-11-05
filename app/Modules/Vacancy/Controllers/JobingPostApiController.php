@@ -8,6 +8,7 @@ use App\Modules\Company\Models\Company;
 use App\Modules\JobAttribute\Models\City;
 use App\Modules\JobAttribute\Models\ExperienceLevel;
 use App\Modules\JobAttribute\Models\JobType;
+use App\Modules\JobAttribute\Models\Skill;
 use App\Modules\JobAttribute\Models\WorkplaceType;
 use App\Modules\Vacancy\Models\ScrapedVacancy;
 use App\Modules\Vacancy\Models\Vacancy;
@@ -106,12 +107,24 @@ class JobingPostApiController extends Controller
             'salary_max' => ['nullable', 'numeric', 'min:0'],
             'salary_negotiable' => ['nullable', 'boolean'],
             'currency' => ['nullable', 'string', 'max:10'],
+            'keep_original_description' => ['nullable', 'boolean'],
+            'tag_ids' => ['nullable', 'array', 'max:30'],
+            'tag_ids.*' => ['integer', 'exists:skills,id'],
+            'tags' => ['nullable', 'array', 'max:30'],
+            'tags.*' => ['string', 'max:100'],
         ]);
+
+        // Elanda şirkət göstərilibsə, vakansiya Jobing.az adından deyil,
+        // orijinal şirkətin öz adından yerləşdirilir.
+        $company = $this->resolveCompany(
+            $validated['company_name'] ?? null,
+            $validated['company_logo'] ?? null,
+        );
 
         if ($request->filled('source_vacancy_id')) {
             $existing = Vacancy::query()
                 ->where('title', $validated['title'])
-                ->where('company_id', $this->jobingCompany()->id)
+                ->where('company_id', $company->id)
                 ->where('created_at', '>=', now()->subDays(60))
                 ->first();
 
@@ -123,7 +136,19 @@ class JobingPostApiController extends Controller
             }
         }
 
-        $company = $this->jobingCompany();
+        // Orijinal elanın təsvirini qoruyuruq: mənbə vakansiyanın mətni varsa,
+        // AI tərəfindən yenidən yazılmış variant əvəzinə onu istifadə edirik.
+        $description = $validated['description'];
+        $requirements = $validated['requirements'] ?? null;
+
+        if ($request->boolean('keep_original_description') && $request->filled('source_vacancy_id')) {
+            $source = ScrapedVacancy::find($validated['source_vacancy_id']);
+
+            if ($source) {
+                $description = $source->description ?: $description;
+                $requirements = $source->requirements ?: $requirements;
+            }
+        }
 
         $deadline = Carbon::now()->addDays(30)->toDateString();
 
@@ -144,17 +169,190 @@ class JobingPostApiController extends Controller
             'salary_max' => $validated['salary_max'] ?? null,
             'salary_negotiable' => (bool) ($validated['salary_negotiable'] ?? false),
             'currency' => $validated['currency'] ?? 'AZN',
-            'description' => $validated['description'],
-            'requirements' => $validated['requirements'] ?? null,
+            'description' => $description,
+            'requirements' => $requirements,
             'is_active' => true,
             'deadline' => $deadline,
             'application_type' => 'internal',
         ]);
 
+        $vacancy->skillRecords()->sync($this->resolveSkillIdsForVacancy(
+            $validated['tag_ids'] ?? [],
+            $validated['tags'] ?? [],
+        ));
+
         return response()->json([
             'data' => $this->vacancyPayload($vacancy),
             'meta' => ['duplicated' => false],
         ], 201);
+    }
+
+    /**
+     * Etiketləri (bacarıqları) təmin edir: mövcud olanı qaytarır, olmayanı
+     * 4 dildə (az, en, ru, tr) tərcüməsi ilə yaradır.
+     *
+     * Gövdə: {"tags":[{"name":"SEO","translations":{"az":"SEO","en":"SEO","ru":"SEO","tr":"SEO"},"category_slug":"..."}]}
+     */
+    public function storeTags(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'tags' => ['required', 'array', 'min:1', 'max:30'],
+            'tags.*.name' => ['required', 'string', 'max:100'],
+            'tags.*.translations' => ['nullable', 'array'],
+            'tags.*.translations.az' => ['nullable', 'string', 'max:100'],
+            'tags.*.translations.en' => ['nullable', 'string', 'max:100'],
+            'tags.*.translations.ru' => ['nullable', 'string', 'max:100'],
+            'tags.*.translations.tr' => ['nullable', 'string', 'max:100'],
+            'tags.*.category_slug' => ['nullable', 'string', 'max:255'],
+        ]);
+
+        $data = [];
+
+        foreach ($validated['tags'] as $tag) {
+            [$skill, $created] = $this->ensureSkill($tag);
+            $data[] = $this->skillPayload($skill) + ['created' => $created];
+        }
+
+        return response()->json(['data' => $data]);
+    }
+
+    /**
+     * Etiketi tərcümələri ilə tapır, tapılmasa yaradır.
+     *
+     * @param  array{name?: string, translations?: array<string, string>, category_slug?: string}  $tag
+     * @return array{0: Skill, 1: bool}
+     */
+    private function ensureSkill(array $tag): array
+    {
+        $name = trim((string) ($tag['name'] ?? ''));
+
+        $translations = [
+            'az' => trim((string) ($tag['translations']['az'] ?? '')) ?: $name,
+            'en' => trim((string) ($tag['translations']['en'] ?? '')) ?: $name,
+            'ru' => trim((string) ($tag['translations']['ru'] ?? '')) ?: $name,
+            'tr' => trim((string) ($tag['translations']['tr'] ?? '')) ?: $name,
+        ];
+
+        $skill = $this->findSkillByNames(array_values($translations));
+
+        if ($skill) {
+            return [$skill, false];
+        }
+
+        $categoryId = null;
+        if (! empty($tag['category_slug'])) {
+            $categoryId = $this->resolveByName(Category::class, null, $tag['category_slug'])?->id;
+        }
+
+        $skill = Skill::create([
+            'name' => $translations,
+            'category_id' => $categoryId,
+            'is_active' => true,
+        ]);
+
+        return [$skill, true];
+    }
+
+    /**
+     * @param  array<int, string>  $names
+     */
+    private function findSkillByNames(array $names): ?Skill
+    {
+        $names = array_values(array_filter(array_map(
+            fn ($name) => trim((string) $name),
+            $names,
+        )));
+
+        if ($names === []) {
+            return null;
+        }
+
+        $slugs = array_unique(array_filter(array_map(fn (string $name) => Str::slug($name), $names)));
+
+        return Skill::query()
+            ->where(function ($query) use ($names, $slugs) {
+                if ($slugs !== []) {
+                    $query->orWhereIn('slug', $slugs);
+                }
+
+                foreach (['az', 'en', 'ru', 'tr'] as $locale) {
+                    $query->orWhere(function ($q) use ($names, $locale) {
+                        foreach ($names as $name) {
+                            $q->orWhereRaw("LOWER(TRIM(name->>'{$locale}')) = LOWER(?)", [$name]);
+                        }
+                    });
+                }
+            })
+            ->first();
+    }
+
+    /**
+     * @param  array<int, int>  $ids
+     * @param  array<int, string>  $names
+     * @return array<int, int>
+     */
+    private function resolveSkillIdsForVacancy(array $ids, array $names): array
+    {
+        $skillIds = array_map('intval', $ids);
+
+        foreach ($names as $name) {
+            $name = trim((string) $name);
+            if ($name === '') {
+                continue;
+            }
+
+            [$skill] = $this->ensureSkill(['name' => $name]);
+            $skillIds[] = (int) $skill->id;
+        }
+
+        return array_values(array_unique($skillIds));
+    }
+
+    private function skillPayload(Skill $skill): array
+    {
+        $translations = $skill->getRawOriginal('name');
+        $translations = is_string($translations) ? (json_decode($translations, true) ?: []) : (array) $translations;
+
+        return [
+            'id' => (int) $skill->id,
+            'slug' => $skill->slug,
+            'name' => (string) $skill->name,
+            'translations' => $translations,
+        ];
+    }
+
+    /**
+     * Orijinal şirkət adına uyğun şirkəti qaytarır, yoxdursa yaradır.
+     */
+    private function resolveCompany(?string $name, ?string $logo = null): Company
+    {
+        $name = trim((string) $name);
+
+        if ($name === '') {
+            return $this->jobingCompany();
+        }
+
+        $slug = Str::slug($name);
+
+        $company = Company::query()
+            ->where('slug', $slug)
+            ->orWhereRaw('LOWER(name) = LOWER(?)', [$name])
+            ->first();
+
+        if ($company) {
+            if ($logo && empty($company->logo)) {
+                $company->update(['logo' => $logo]);
+            }
+
+            return $company;
+        }
+
+        return Company::create([
+            'name' => $name,
+            'slug' => $slug ?: null,
+            'logo' => $logo ?: null,
+            'is_verified' => false,
+        ]);
     }
 
     /**

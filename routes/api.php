@@ -20,4 +20,5 @@ Route::prefix('jobing-post')
         Route::get('/candidates', [JobingPostApiController::class, 'candidates'])->name('candidates');
         Route::get('/candidates/{id}', [JobingPostApiController::class, 'candidate'])->whereNumber('id')->name('candidate');
         Route::post('/vacancies', [JobingPostApiController::class, 'storeVacancy'])->name('vacancies.store');
+        Route::post('/tags', [JobingPostApiController::class, 'storeTags'])->name('tags.store');
     });
