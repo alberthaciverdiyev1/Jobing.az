@@ -19,17 +19,24 @@ class StoryController extends Controller
         // Günlük ziyarət statistikası kimi: hər baxış sayılır, unikal deyil.
         $story->increment('views_count');
 
-        StoryView::query()->firstOrCreate(
-            [
-                'story_id' => $story->id,
-                'user_id' => $request->user()->id,
-            ],
-            ['viewed_at' => now()],
-        );
+        if ($user = $request->user()) {
+            StoryView::query()->firstOrCreate(
+                [
+                    'story_id' => $story->id,
+                    'user_id' => $user->id,
+                ],
+                ['viewed_at' => now()],
+            );
+        }
 
         return response()->json(['success' => true, 'views_count' => $story->views_count]);
     }
 
+    /**
+     * Giriş etməzdən əvvəl baxılan story-ləri istifadəçinin hesabına bağlayır.
+     * Baxış sayı artıq açılış anında sayıldığı üçün burada sayaç artırılmır —
+     * yalnız "kim baxdı" qeydi yaradılır (təkrar sayılmasın).
+     */
     public function sync(Request $request): JsonResponse
     {
         $validated = $request->validate([
@@ -37,35 +44,27 @@ class StoryController extends Controller
             'ids.*' => ['integer'],
         ]);
 
-        // Eyni ID bir neçə dəfə gələ bilər — hər təkrar bir baxış sayılır.
-        $counts = array_count_values($validated['ids']);
-
-        $activeIds = Story::query()
+        $storyIds = Story::query()
             ->active()
-            ->whereIn('id', array_keys($counts))
-            ->pluck('id')
-            ->all();
+            ->whereIn('id', array_unique($validated['ids']))
+            ->pluck('id');
 
-        $synced = 0;
-
-        foreach ($counts as $storyId => $count) {
-            if (! in_array($storyId, $activeIds, true)) {
-                continue;
-            }
-
-            Story::query()->whereKey($storyId)->increment('views_count', $count);
-
-            StoryView::query()->firstOrCreate(
-                [
-                    'story_id' => $storyId,
-                    'user_id' => $request->user()->id,
-                ],
-                ['viewed_at' => now()],
-            );
-
-            $synced += $count;
+        if ($storyIds->isEmpty()) {
+            return response()->json(['success' => true, 'synced' => 0]);
         }
 
-        return response()->json(['success' => true, 'synced' => $synced]);
+        $now = now();
+
+        $rows = $storyIds->map(fn (int $storyId): array => [
+            'story_id' => $storyId,
+            'user_id' => $request->user()->id,
+            'viewed_at' => $now,
+            'created_at' => $now,
+            'updated_at' => $now,
+        ])->all();
+
+        StoryView::query()->insertOrIgnore($rows);
+
+        return response()->json(['success' => true, 'synced' => $storyIds->count()]);
     }
 }

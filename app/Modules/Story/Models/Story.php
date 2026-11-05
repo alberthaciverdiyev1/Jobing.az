@@ -119,9 +119,13 @@ class Story extends Model
 
     public function getThumbnailUrlAttribute(): ?string
     {
-        return $this->thumbnail_path
-            ? asset('storage/'.ltrim($this->thumbnail_path, '/'))
-            : null;
+        if ($this->thumbnail_path) {
+            return asset('storage/'.ltrim($this->thumbnail_path, '/'));
+        }
+
+        // Şəkil üçün kiçik önizləmə yaradıla bilməyibsə (məsələn serverdə ffmpeg yoxdursa),
+        // orijinal şəkli önizləmə kimi göstəririk — həlqə boş qalmasın.
+        return $this->isVideo() ? null : $this->media_url;
     }
 
     public function getOwnerNameAttribute(): string

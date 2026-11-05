@@ -73,16 +73,21 @@ class StoryViewTest extends TestCase
         $this->assertDatabaseCount('story_views', 1);
     }
 
-    public function test_guest_cannot_record_a_story_view(): void
+    public function test_guest_view_is_counted_without_a_viewer_row(): void
     {
         $story = $this->makeStory();
 
-        $this->postJson(route('stories.view', $story))->assertUnauthorized();
+        $this->postJson(route('stories.view', $story))
+            ->assertOk()
+            ->assertJson(['success' => true, 'views_count' => 1]);
 
+        $this->postJson(route('stories.view', $story))->assertOk();
+
+        $this->assertSame(2, $story->refresh()->views_count);
         $this->assertDatabaseCount('story_views', 0);
     }
 
-    public function test_sync_counts_every_anonymous_view_after_login(): void
+    public function test_sync_links_guest_views_to_the_account_without_counting_again(): void
     {
         $user = User::factory()->create();
         $first = $this->makeStory(['media_path' => 'stories/a.jpg']);
@@ -93,10 +98,10 @@ class StoryViewTest extends TestCase
                 'ids' => [$first->id, $first->id, $second->id],
             ])
             ->assertOk()
-            ->assertJson(['success' => true, 'synced' => 3]);
+            ->assertJson(['success' => true, 'synced' => 2]);
 
-        $this->assertSame(2, $first->refresh()->views_count);
-        $this->assertSame(1, $second->refresh()->views_count);
+        $this->assertSame(0, $first->refresh()->views_count);
+        $this->assertSame(0, $second->refresh()->views_count);
         $this->assertDatabaseCount('story_views', 2);
     }
 

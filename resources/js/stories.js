@@ -212,24 +212,27 @@ export default function storyViewer() {
                 return;
             }
 
+            // Baxış sayı açılış anında sayılır — giriş etmiş istifadəçi üçün də,
+            // qonaq üçün də. Giriş etmiş istifadəçi üçün server "kim baxdı" qeydini
+            // də yazır.
+            const csrf = document.querySelector('meta[name="csrf-token"]')?.content || '';
+
+            fetch(`${this.viewBase}/${storyId}/view`, {
+                method: 'POST',
+                credentials: 'same-origin',
+                headers: {
+                    'Accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRF-TOKEN': csrf,
+                },
+            }).catch(() => {});
+
             if (this.isAuth) {
-                const csrf = document.querySelector('meta[name="csrf-token"]')?.content || '';
-
-                fetch(`${this.viewBase}/${storyId}/view`, {
-                    method: 'POST',
-                    credentials: 'same-origin',
-                    headers: {
-                        'Accept': 'application/json',
-                        'X-Requested-With': 'XMLHttpRequest',
-                        'X-CSRF-TOKEN': csrf,
-                    },
-                }).catch(() => {});
-
                 return;
             }
 
-            // Giriş etməmiş istifadəçi üçün hər baxış ayrıca saxlanılır;
-            // giriş edəndə hamısı hesabına köçürülür.
+            // Qonaq üçün hər baxış ayrıca saxlanılır; giriş edəndə
+            // yalnız "kim baxdı" bağlantısı hesaba köçürülür.
             const pending = readIds(PENDING_KEY);
             pending.push(storyId);
             writeIds(PENDING_KEY, pending);
