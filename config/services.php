@@ -29,4 +29,9 @@ return [
         'chat_id' => env('TELEGRAM_CHAT_ID'),
     ],
 
+    'jobing_post' => [
+        'token' => env('JOBING_POST_API_TOKEN'),
+        'company_id' => env('JOBING_POST_COMPANY_ID'),
+    ],
+
 ];
