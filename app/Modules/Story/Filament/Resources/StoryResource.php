@@ -119,7 +119,6 @@ class StoryResource extends Resource
 
                 Tables\Columns\TextColumn::make('views_count')
                     ->label(__('Views'))
-                    ->counts('views')
                     ->sortable(),
 
                 Tables\Columns\IconColumn::make('is_active')

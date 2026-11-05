@@ -29,12 +29,14 @@ class Story extends Model
         'is_active',
         'expires_at',
         'media_processed_at',
+        'views_count',
     ];
 
     protected $casts = [
         'is_active' => 'boolean',
         'expires_at' => 'datetime',
         'media_processed_at' => 'datetime',
+        'views_count' => 'integer',
     ];
 
     protected static function booted(): void

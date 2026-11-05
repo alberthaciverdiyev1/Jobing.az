@@ -61,7 +61,7 @@ class StoryViewTest extends TestCase
             ->assertSee('Story Owner');
     }
 
-    public function test_logged_in_view_is_recorded_only_once(): void
+    public function test_every_logged_in_view_is_counted_but_the_viewer_is_unique(): void
     {
         $user = User::factory()->create();
         $story = $this->makeStory();
@@ -69,6 +69,7 @@ class StoryViewTest extends TestCase
         $this->actingAs($user)->postJson(route('stories.view', $story))->assertOk();
         $this->actingAs($user)->postJson(route('stories.view', $story))->assertOk();
 
+        $this->assertSame(2, $story->refresh()->views_count);
         $this->assertDatabaseCount('story_views', 1);
     }
 
@@ -81,17 +82,21 @@ class StoryViewTest extends TestCase
         $this->assertDatabaseCount('story_views', 0);
     }
 
-    public function test_sync_records_anonymous_views_after_login(): void
+    public function test_sync_counts_every_anonymous_view_after_login(): void
     {
         $user = User::factory()->create();
         $first = $this->makeStory(['media_path' => 'stories/a.jpg']);
         $second = $this->makeStory(['media_path' => 'stories/b.jpg']);
 
         $this->actingAs($user)
-            ->postJson(route('stories.sync'), ['ids' => [$first->id, $second->id]])
+            ->postJson(route('stories.sync'), [
+                'ids' => [$first->id, $first->id, $second->id],
+            ])
             ->assertOk()
-            ->assertJson(['success' => true, 'synced' => 2]);
+            ->assertJson(['success' => true, 'synced' => 3]);
 
+        $this->assertSame(2, $first->refresh()->views_count);
+        $this->assertSame(1, $second->refresh()->views_count);
         $this->assertDatabaseCount('story_views', 2);
     }
 

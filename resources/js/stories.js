@@ -1,5 +1,24 @@
-const STORAGE_KEY = 'story_viewed_ids';
+const SEEN_KEY = 'story_viewed_ids';
+const PENDING_KEY = 'story_pending_views';
 const IMAGE_DURATION = 5000;
+
+function readIds(key) {
+    try {
+        const value = JSON.parse(localStorage.getItem(key) || '[]');
+
+        return Array.isArray(value) ? value : [];
+    } catch (e) {
+        return [];
+    }
+}
+
+function writeIds(key, ids) {
+    try {
+        localStorage.setItem(key, JSON.stringify(ids));
+    } catch (e) {
+        // Storage may be unavailable (private mode); viewing still works.
+    }
+}
 
 export default function storyViewer() {
     return {
@@ -22,6 +41,10 @@ export default function storyViewer() {
 
             this.isAuth = this.$el.dataset.auth === '1';
             this.viewBase = (this.$el.dataset.viewBase || '/stories').replace(/\/+$/, '');
+
+            if (! this.isAuth) {
+                this.applyLocalSeen();
+            }
         },
 
         get currentRing() {
@@ -33,7 +56,7 @@ export default function storyViewer() {
         },
 
         openRing(index) {
-            if (!this.rings[index]) {
+            if (! this.rings[index]) {
                 return;
             }
 
@@ -169,11 +192,11 @@ export default function storyViewer() {
             }
         },
 
+        /**
+         * Hər açılış bir baxış sayılır (Telegram günlük ziyarət statistikası kimi).
+         * "Görülüb" vəziyyəti isə hələ də unikaldır — həlqə boz rəngə keçir.
+         */
         markViewed(story) {
-            if (story.viewed) {
-                return;
-            }
-
             story.viewed = true;
 
             const ring = this.rings[this.ringIndex];
@@ -181,10 +204,18 @@ export default function storyViewer() {
                 ring.viewed = ring.stories.every((item) => item.viewed);
             }
 
-            if (this.isAuth && story.id) {
+            this.recordView(story.id);
+        },
+
+        recordView(storyId) {
+            if (! storyId) {
+                return;
+            }
+
+            if (this.isAuth) {
                 const csrf = document.querySelector('meta[name="csrf-token"]')?.content || '';
 
-                fetch(`${this.viewBase}/${story.id}/view`, {
+                fetch(`${this.viewBase}/${storyId}/view`, {
                     method: 'POST',
                     credentials: 'same-origin',
                     headers: {
@@ -197,26 +228,35 @@ export default function storyViewer() {
                 return;
             }
 
-            this.rememberLocally(story.id);
+            // Giriş etməmiş istifadəçi üçün hər baxış ayrıca saxlanılır;
+            // giriş edəndə hamısı hesabına köçürülür.
+            const pending = readIds(PENDING_KEY);
+            pending.push(storyId);
+            writeIds(PENDING_KEY, pending);
+
+            const seen = readIds(SEEN_KEY);
+            if (! seen.includes(storyId)) {
+                seen.push(storyId);
+                writeIds(SEEN_KEY, seen);
+            }
         },
 
-        rememberLocally(storyId) {
-            try {
-                const ids = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+        applyLocalSeen() {
+            const seen = new Set(readIds(SEEN_KEY));
 
-                if (! Array.isArray(ids)) {
-                    localStorage.setItem(STORAGE_KEY, JSON.stringify([storyId]));
-
-                    return;
-                }
-
-                if (! ids.includes(storyId)) {
-                    ids.push(storyId);
-                    localStorage.setItem(STORAGE_KEY, JSON.stringify(ids));
-                }
-            } catch (e) {
-                // Storage may be unavailable (private mode); viewing still works.
+            if (seen.size === 0) {
+                return;
             }
+
+            this.rings.forEach((ring) => {
+                ring.stories.forEach((story) => {
+                    if (seen.has(story.id)) {
+                        story.viewed = true;
+                    }
+                });
+
+                ring.viewed = ring.stories.every((story) => story.viewed);
+            });
         },
     };
 }
@@ -226,20 +266,19 @@ export function syncPendingStoryViews() {
         return;
     }
 
-    let ids = [];
+    // Hər təkrar bir baxışdır; köhnə versiyadan qalan unikal siyahı da köçürülür.
+    let pending = readIds(PENDING_KEY);
 
-    try {
-        ids = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-    } catch (e) {
-        ids = [];
+    if (pending.length === 0) {
+        pending = readIds(SEEN_KEY);
     }
 
-    if (! Array.isArray(ids) || ids.length === 0) {
+    if (pending.length === 0) {
         return;
     }
 
     const csrf = document.querySelector('meta[name="csrf-token"]')?.content || '';
-    const batch = ids.slice(0, 200);
+    const batch = pending.slice(0, 200);
 
     fetch(window.storySyncUrl, {
         method: 'POST',
@@ -258,13 +297,13 @@ export function syncPendingStoryViews() {
                 return;
             }
 
-            const remaining = ids.slice(batch.length);
+            const remaining = pending.slice(batch.length);
+
+            writeIds(PENDING_KEY, remaining);
 
             try {
-                if (remaining.length > 0) {
-                    localStorage.setItem(STORAGE_KEY, JSON.stringify(remaining));
-                } else {
-                    localStorage.removeItem(STORAGE_KEY);
+                if (remaining.length === 0) {
+                    localStorage.removeItem(SEEN_KEY);
                 }
             } catch (e) {
                 // Storage may be unavailable; server-side views are already saved.
