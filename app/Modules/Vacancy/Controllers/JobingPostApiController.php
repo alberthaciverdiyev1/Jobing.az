@@ -188,6 +188,75 @@ class JobingPostApiController extends Controller
     }
 
     /**
+     * JobingPost tərəfindən yaradılmış vakansiyanı yeniləyir.
+     * Mövcud elanın təsviri/filtrləri səhvən AI mətni ilə yazılıbsa,
+     * orijinal mətnlə düzəltmək üçün istifadə olunur.
+     */
+    public function updateVacancy(Request $request, int $id): JsonResponse
+    {
+        $vacancy = Vacancy::findOrFail($id);
+
+        $validated = $request->validate([
+            'title' => ['nullable', 'string', 'max:255'],
+            'description' => ['nullable', 'string'],
+            'requirements' => ['nullable', 'string'],
+            'category_slug' => ['nullable', 'string', 'max:255'],
+            'category_name' => ['nullable', 'string', 'max:255'],
+            'city_name' => ['nullable', 'string', 'max:255'],
+            'job_type_name' => ['nullable', 'string', 'max:255'],
+            'workplace_type_name' => ['nullable', 'string', 'max:255'],
+            'experience_level_name' => ['nullable', 'string', 'max:255'],
+            'salary_min' => ['nullable', 'numeric', 'min:0'],
+            'salary_max' => ['nullable', 'numeric', 'min:0'],
+            'salary_negotiable' => ['nullable', 'boolean'],
+            'currency' => ['nullable', 'string', 'max:10'],
+            'tag_ids' => ['nullable', 'array', 'max:30'],
+            'tag_ids.*' => ['integer', 'exists:skills,id'],
+            'tags' => ['nullable', 'array', 'max:30'],
+            'tags.*' => ['string', 'max:100'],
+        ]);
+
+        $attributes = [];
+
+        foreach (['title', 'description', 'requirements'] as $field) {
+            if (array_key_exists($field, $validated) && $validated[$field] !== null) {
+                $attributes[$field] = $validated[$field];
+            }
+        }
+
+        foreach (['salary_min', 'salary_max', 'salary_negotiable', 'currency'] as $field) {
+            if (array_key_exists($field, $validated) && $validated[$field] !== null) {
+                $attributes[$field] = $validated[$field];
+            }
+        }
+
+        $relations = [
+            'category_id' => $this->resolveByName(Category::class, $validated['category_name'] ?? null, $validated['category_slug'] ?? null)?->id,
+            'city_id' => $this->resolveByName(City::class, $validated['city_name'] ?? null)?->id,
+            'job_type_id' => $this->resolveByName(JobType::class, $validated['job_type_name'] ?? null)?->id,
+            'workplace_type_id' => $this->resolveByName(WorkplaceType::class, $validated['workplace_type_name'] ?? null)?->id,
+            'experience_level_id' => $this->resolveByName(ExperienceLevel::class, $validated['experience_level_name'] ?? null)?->id,
+        ];
+
+        foreach ($relations as $field => $value) {
+            if ($value) {
+                $attributes[$field] = $value;
+            }
+        }
+
+        $vacancy->update($attributes);
+
+        if ($request->has('tag_ids') || $request->has('tags')) {
+            $vacancy->skillRecords()->sync($this->resolveSkillIdsForVacancy(
+                $validated['tag_ids'] ?? [],
+                $validated['tags'] ?? [],
+            ));
+        }
+
+        return response()->json(['data' => $this->vacancyPayload($vacancy)]);
+    }
+
+    /**
      * Etiketləri (bacarıqları) təmin edir: mövcud olanı qaytarır, olmayanı
      * 4 dildə (az, en, ru, tr) tərcüməsi ilə yaradır.
      *
